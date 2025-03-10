@@ -87,19 +87,16 @@ final class JobDispatch extends Command
             $fullPathCurrent = $path.DIRECTORY_SEPARATOR.$item;
             if (is_file($fullPathCurrent)) continue;
 
-            // Comprobar si existe la carpeta "Infrastructure" en la ruta actual
-            $fullPathInfra = $fullPathCurrent.DIRECTORY_SEPARATOR.'Infrastructure';
-            if (!is_dir($fullPathInfra)) {
+            // Comprobar si existe la carpeta "Jobs" en la ruta actual
+            $fullPathJobs = $fullPathCurrent.DIRECTORY_SEPARATOR.'Jobs';
+            if (!is_dir($fullPathJobs)) {
                 // Si no existe volver a llama al metodo "scanJobDirsProject" recursivamente para buscar dentro
                 $pathsWithJobs = array_merge($pathsWithJobs, $this->scanJobDirsProject($fullPathCurrent));
                 continue;
             }
 
-            // En caso de que la carpeta "Infrastructure" buscamos si existe "Jobs" dentro y la guardamos en el array "$pathsWithJobs"
-            $fullPathJobs = $fullPathInfra.DIRECTORY_SEPARATOR.'Jobs';
-            if (is_dir($fullPathJobs)) {
-                $pathsWithJobs[] = $fullPathJobs;
-            }
+            // En caso de que se encuentre la carpeta "Jobs" la guardamos en el array "$pathsWithJobs"
+            $pathsWithJobs[] = $fullPathJobs;
         }
         return $pathsWithJobs;
     }
