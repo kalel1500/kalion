@@ -82,14 +82,16 @@ final class JobDispatch extends Command
             if (is_file($fullPathCurrent)) continue;
             $fullPathInfra = $fullPathCurrent.DIRECTORY_SEPARATOR.'Infrastructure';
             $currentHasInfra = is_dir($fullPathInfra);
-            if ($currentHasInfra) {
-                $fullPathJobs = $fullPathInfra.DIRECTORY_SEPARATOR.'Jobs';
-                $infraHasJobs = is_dir($fullPathJobs);
-                if ($infraHasJobs) {
-                    $pathsWithJobs[] = $fullPathJobs;
-                }
-            } else {
+
+            if (!$currentHasInfra) {
                 $this->scanJobDirsProject($fullPathCurrent);
+                continue;
+            }
+
+            $fullPathJobs = $fullPathInfra.DIRECTORY_SEPARATOR.'Jobs';
+            $infraHasJobs = is_dir($fullPathJobs);
+            if ($infraHasJobs) {
+                $pathsWithJobs[] = $fullPathJobs;
             }
         }
         return $pathsWithJobs;
