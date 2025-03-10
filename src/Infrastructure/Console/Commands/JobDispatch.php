@@ -79,8 +79,8 @@ final class JobDispatch extends Command
         foreach ($dirs as $item) {
             if (in_array($item, array(".",".."))) continue;
             $fullPathCurrent = $path.DIRECTORY_SEPARATOR.$item;
-            $fullPathInfra = $fullPathCurrent.DIRECTORY_SEPARATOR.'Infrastructure';
             if (is_file($fullPathCurrent)) continue;
+            $fullPathInfra = $fullPathCurrent.DIRECTORY_SEPARATOR.'Infrastructure';
             $currentHasInfra = is_dir($fullPathInfra);
             if ($currentHasInfra) {
                 $fullPathJobs = $fullPathInfra.DIRECTORY_SEPARATOR.'Jobs';
