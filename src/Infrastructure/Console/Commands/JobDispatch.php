@@ -91,7 +91,7 @@ final class JobDispatch extends Command
             $fullPathInfra = $fullPathCurrent.DIRECTORY_SEPARATOR.'Infrastructure';
             if (!is_dir($fullPathInfra)) {
                 // Si no existe volver a llama al metodo "scanJobDirsProject" recursivamente para buscar dentro
-                $this->scanJobDirsProject($fullPathCurrent);
+                $pathsWithJobs = array_merge($pathsWithJobs, $this->scanJobDirsProject($fullPathCurrent));
                 continue;
             }
 
