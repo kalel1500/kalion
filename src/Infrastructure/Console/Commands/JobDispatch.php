@@ -52,8 +52,8 @@ final class JobDispatch extends Command
 
         // Escanear el proyecto (/scr) para ver si existe el Job y ejecutarlo
         $paths = array_merge(
-            $this->scanJobDirsProject(src_path()),
-            $this->scanJobDirsProject(app_path())
+            $this->findJobDirsOnPath(src_path()),
+            $this->findJobDirsOnPath(app_path())
         );
         foreach ($paths as $path) {
             $pos = strpos($path, 'src')+1;
@@ -75,7 +75,7 @@ final class JobDispatch extends Command
         return $executed;
     }
 
-    private function scanJobDirsProject($path): array
+    private function findJobDirsOnPath($path): array
     {
         $pathsWithJobs = [];
 
@@ -93,8 +93,8 @@ final class JobDispatch extends Command
             // Comprobar si existe la carpeta "Jobs" en la ruta actual
             $fullPathJobs = $fullPathCurrent.DIRECTORY_SEPARATOR.'Jobs';
             if (!is_dir($fullPathJobs)) {
-                // Si no existe volver a llama al metodo "scanJobDirsProject" recursivamente para buscar dentro
-                $pathsWithJobs = array_merge($pathsWithJobs, $this->scanJobDirsProject($fullPathCurrent));
+                // Si no existe volver a llama al metodo "findJobDirsOnPath" recursivamente para buscar dentro
+                $pathsWithJobs = array_merge($pathsWithJobs, $this->findJobDirsOnPath($fullPathCurrent));
                 continue;
             }
 
