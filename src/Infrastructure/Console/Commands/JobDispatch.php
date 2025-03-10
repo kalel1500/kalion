@@ -75,22 +75,29 @@ final class JobDispatch extends Command
     private function scanJobDirsProject($path): array
     {
         $pathsWithJobs = [];
+
+        // Obtener y recorrer todos los archivos que hay en la ruta recibida
         $dirs = scandir($path);
         foreach ($dirs as $item) {
-            if (in_array($item, array(".",".."))) continue;
+
+            // Saltar los primeros elementos que devuelve la función "scandir()"
+            if (in_array($item, [".",".."])) continue;
+
+            // Comprobar que el item actual no sea un archivo
             $fullPathCurrent = $path.DIRECTORY_SEPARATOR.$item;
             if (is_file($fullPathCurrent)) continue;
-            $fullPathInfra = $fullPathCurrent.DIRECTORY_SEPARATOR.'Infrastructure';
-            $currentHasInfra = is_dir($fullPathInfra);
 
-            if (!$currentHasInfra) {
+            // Comprobar si existe la carpeta "Infrastructure" en la ruta actual
+            $fullPathInfra = $fullPathCurrent.DIRECTORY_SEPARATOR.'Infrastructure';
+            if (!is_dir($fullPathInfra)) {
+                // Si no existe volver a llama al metodo "scanJobDirsProject" recursivamente para buscar dentro
                 $this->scanJobDirsProject($fullPathCurrent);
                 continue;
             }
 
+            // En caso de que la carpeta "Infrastructure" buscamos si existe "Jobs" dentro y la guardamos en el array "$pathsWithJobs"
             $fullPathJobs = $fullPathInfra.DIRECTORY_SEPARATOR.'Jobs';
-            $infraHasJobs = is_dir($fullPathJobs);
-            if ($infraHasJobs) {
+            if (is_dir($fullPathJobs)) {
                 $pathsWithJobs[] = $fullPathJobs;
             }
         }
