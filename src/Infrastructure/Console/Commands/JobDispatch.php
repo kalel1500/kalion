@@ -51,7 +51,10 @@ final class JobDispatch extends Command
         }
 
         // Escanear el proyecto (/scr) para ver si existe el Job y ejecutarlo
-        $paths = $this->scanJobDirsProject(src_path());
+        $paths = array_merge(
+            $this->scanJobDirsProject(src_path()),
+            $this->scanJobDirsProject(app_path())
+        );
         foreach ($paths as $path) {
             $pos = strpos($path, 'src')+1;
             $namespace  = substr_replace($path, 'S', 0, $pos);
