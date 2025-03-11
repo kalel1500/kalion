@@ -40,13 +40,14 @@ final class JobDispatch extends Command
     public function handle(): void
     {
         // Buscar el Job en este paquete para ver si existe y ejecutarlo
-        $namespace = 'Thehouseofel'.DIRECTORY_SEPARATOR.'Kalion'.DIRECTORY_SEPARATOR.'Infrastructure'.DIRECTORY_SEPARATOR.'Jobs';
-        $executed = $this->tryExecJobInNamespace($namespace);
+        $executed = $this->scanPathAndRunJobIfExists(KALION_PATH);
         if ($executed) return;
 
         // Escanear las carpetas de otros paquetes definidas en la configuración para ver si existe el Job y ejecutarlo
-        foreach (config('kalion.job_paths_from_other_packages') as $namespace) {
-            $executed = $this->tryExecJobInNamespace($namespace);
+        if (!is_null($packages = config('kalion.packages_to_scan_for_jobs'))) {
+            $packages = is_array($packages) ? $packages : explode(';', $packages);
+            $packages = array_map(fn($item) => base_path().'/vendor/'.$item, $packages);
+            $executed = $this->scanPathAndRunJobIfExists($packages);
             if ($executed) return;
         }
 
@@ -54,24 +55,23 @@ final class JobDispatch extends Command
         $this->scanPathAndRunJobIfExists([src_path(), app_path()]);
     }
 
-    private function scanPathAndRunJobIfExists($path)
+    private function scanPathAndRunJobIfExists($searchPath): bool
     {
-        $paths = is_array($path) ? $path : [$path];
+        $paths = is_array($searchPath) ? $searchPath : [$searchPath];
         $paths = array_merge(...array_map([$this, 'findJobDirsOnPath'], $paths));
         foreach ($paths as $path) {
-            $pos = strpos($path, 'src')+1;
-            $namespace  = substr_replace($path, 'S', 0, $pos);
-            $executed = $this->tryExecJobInNamespace($namespace);
-            if ($executed) return;
+            $executed = $this->tryDispatchJobFromPath($path);
+            if ($executed) return true;
         }
+        return false;
     }
 
-    private function tryExecJobInNamespace(string $namespace): bool
+    private function tryDispatchJobFromPath(string $jobPath): bool
     {
         $executed = false;
-        $class = $namespace.DIRECTORY_SEPARATOR.$this->argument('job');
-        $class = str_replace('/', '\\', $class);
-        if (class_exists($class)) {
+        $filePath = $jobPath . DIRECTORY_SEPARATOR . $this->argument('job') . '.php';
+        $class = get_class_from_file($filePath);
+        if (!is_null($class) && class_exists($class)) {
             dispatch(new $class($this->option('param1'), $this->option('param2'), $this->option('param3')));
             $executed = true;
         }

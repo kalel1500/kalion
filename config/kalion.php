@@ -106,13 +106,15 @@ return [
     | Jobs
     |--------------------------------------------------------------------------
     |
-    | In the following array you can define the namespaces of the jobs of
-    | other packages that you want to be able to launch with the command
-    | job:dispatch {job}.
+    | In the next option you can define the namespaces of the jobs of other
+    | packages that you want to be able to start with the command job:dispatch {job}.
+    |
+    | You can define an array of strings or a string with several packages
+    | separated by ";"
     |
     */
 
-    'job_paths_from_other_packages' => [],
+    'packages_to_scan_for_jobs' => env('KALION_PACKAGES_TO_SCAN_FOR_JOBS'),
 
     /*
     |--------------------------------------------------------------------------
