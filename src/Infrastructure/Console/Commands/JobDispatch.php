@@ -39,10 +39,17 @@ final class JobDispatch extends Command
      */
     public function handle(): void
     {
+        // Obtener parámetros
+        $jobName = $this->argument('job');
+        $options = [
+            $this->option('param1'),
+            $this->option('param2'),
+            $this->option('param3'),
+        ];
         $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
 
-        // Obtener la ruta del propio paquete "kalion"
-        $kalionPath = $vendorPath . 'kalel1500\kalion';
+        // Mensaje inicial
+        $this->info('Escaneando Jobs...');
 
         // Obtener las rutas de todos los paquetes definidos en la configuración
         if (!is_null($packages = config('kalion.packages_to_scan_for_jobs'))) {
@@ -51,30 +58,13 @@ final class JobDispatch extends Command
         }
         if (is_null($packages)) $packages = [];
 
-        // Escanear todas las rutas (paquete, configuracion, aplicación) para ver si existe el Job y ejecutarlo
-        $this->scanPathAndRunJobIfExists([
-            $kalionPath,
-            ...$packages,
-            src_path(),
-            app_path()
-        ]);
-    }
-
-    private function scanPathAndRunJobIfExists($searchPath)
-    {
-        $this->info('Escaneando Jobs...');
-
-        // Obtener parámetros
-        $jobName = $this->argument('job');
-        $options = [
-            $this->option('param1'),
-            $this->option('param2'),
-            $this->option('param3'),
-        ];
-
-        // Escanear todas las carpetas "Job" dentro de las rutas recibidas
-        $paths = is_array($searchPath) ? $searchPath : [$searchPath];
-        $paths = array_merge(...array_map([$this, 'findJobDirsOnPath'], $paths));
+        // Escanear todas las carpetas "Job" dentro de las siguientes rutas:
+        $paths = array_merge(
+            $this->findJobDirsOnPath($vendorPath . 'kalel1500\kalion'), // Escanear el propio paquete "kalion"
+            $this->findJobDirsOnPath(...$packages),  // Escanear los paquetes configurados en el ".env"
+            $this->findJobDirsOnPath(src_path()), // Escanear la carpeta "src" de la propia aplicación
+            $this->findJobDirsOnPath(app_path()), // Escanear la carpeta "app" de la propia aplicación
+        );
 
         // Buscar todos los Jobs que coincidan con el Job recibido [$this->argument('job')] dentro de las carpetas "escaneadas"
         $jobs = [];
@@ -91,7 +81,7 @@ final class JobDispatch extends Command
                 // Obtener la ruta relativa
                 $relativePathDir = str_replace(base_path(), '', $fullPathDir);
 
-                // Guardar el Job si no esta ya guardado y coincide con el job Recibido [$this->argument('job')]
+                // Guardar el Job si no está ya guardado y coincide con el job Recibido [$this->argument('job')]
                 if (!in_array($relativePathDir, $jobs) && str_contains($dir, $jobName)) {
                     $jobs[] = $relativePathDir;
                 }
