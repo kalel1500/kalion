@@ -90,25 +90,24 @@ final class JobDispatch extends Command
             if (in_array($item, [".",".."])) continue;
 
             // Comprobar que el item actual no sea un archivo
-            $fullPathCurrent = $path.DIRECTORY_SEPARATOR.$item;
+            $fullPathCurrent = $path . DIRECTORY_SEPARATOR . $item;
             if (is_file($fullPathCurrent)) continue;
 
-            // Comprobar si la carpeta actual ya es la de Jobs
+            // Comprobar si la carpeta actual ya es la de Jobs. En ese caso guardamos la ruta en el array "$pathsWithJobs"
             if ($item === 'Jobs') {
                 $pathsWithJobs[] = $fullPathCurrent;
                 continue;
             }
 
-            // Comprobar si existe la carpeta "Jobs" en la ruta actual
-            $fullPathJobs = $fullPathCurrent.DIRECTORY_SEPARATOR.'Jobs';
-            if (!is_dir($fullPathJobs)) {
-                // Si no existe volver a llama al metodo "findJobDirsOnPath" recursivamente para buscar dentro
-                $pathsWithJobs = array_merge($pathsWithJobs, $this->findJobDirsOnPath($fullPathCurrent));
+            // Comprobar si existe la carpeta "Jobs" en la ruta actual. En ese caso guardamos la ruta en el array "$pathsWithJobs"
+            $fullPathJobs = $fullPathCurrent .DIRECTORY_SEPARATOR . 'Jobs';
+            if (is_dir($fullPathJobs)) {
+                $pathsWithJobs[] = $fullPathJobs;
                 continue;
             }
 
-            // En caso de que se encuentre la carpeta "Jobs" la guardamos en el array "$pathsWithJobs"
-            $pathsWithJobs[] = $fullPathJobs;
+            // Si no se ha encontrado la carpeta Jobs en esta ruta, rellamar recursivamente al metodo "findJobDirsOnPath" para buscar dentro
+            $pathsWithJobs = array_merge($pathsWithJobs, $this->findJobDirsOnPath($fullPathCurrent));
         }
         return $pathsWithJobs;
     }
