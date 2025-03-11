@@ -22,8 +22,6 @@ final class JobDispatch extends Command
      */
     protected $description = 'Dispatch Job received';
 
-    protected $jobName;
-
     /**
      * Create a new command instance.
      *
@@ -42,7 +40,6 @@ final class JobDispatch extends Command
     public function handle(): void
     {
         $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
-        $this->jobName = $this->argument('job');
 
         // Obtener la ruta del propio paquete "kalion"
         $kalionPath = $vendorPath . 'kalel1500\kalion';
@@ -65,6 +62,7 @@ final class JobDispatch extends Command
     private function scanPathAndRunJobIfExists($searchPath)
     {
         $this->info('Escaneando Jobs...');
+        $jobName = $this->argument('job');
 
         // Escanear todas las carpetas "Job" dentro de las rutas recibidas
         $paths = is_array($searchPath) ? $searchPath : [$searchPath];
@@ -86,7 +84,7 @@ final class JobDispatch extends Command
                 $relativePathDir = str_replace(base_path(), '', $fullPathDir);
 
                 // Guardar el Job si no esta ya guardado y coincide con el job Recibido [$this->argument('job')]
-                if (!in_array($relativePathDir, $jobs) && str_contains($dir, $this->jobName)) {
+                if (!in_array($relativePathDir, $jobs) && str_contains($dir, $jobName)) {
                     $jobs[] = $relativePathDir;
                 }
             }
@@ -98,17 +96,19 @@ final class JobDispatch extends Command
 
         // Rehacer la ruta absoluta
         $job = base_path() . $job;
-        $this->tryDispatchJobFromPath($job);
-    }
 
-    private function tryDispatchJobFromPath(string $jobFilePath)
-    {
-        $class = get_class_from_file($jobFilePath);
-        if (!is_null($class) && class_exists($class)) {
-            $this->info("Ejecutando Job $this->jobName");
-            dispatch_sync(new $class($this->option('param1'), $this->option('param2'), $this->option('param3')));
-            $this->info("Job $this->jobName ejecutado");
+        // Obtener la clase del Job (namespace + classname)
+        $class = get_class_from_file($job);
+
+        // Comprobar que la clase no sea null y exista
+        if (is_null($class) || !class_exists($class)) {
+            return;
         }
+
+        // Ejecutar job
+        $this->info("Ejecutando Job $jobName");
+        dispatch_sync(new $class($this->option('param1'), $this->option('param2'), $this->option('param3')));
+        $this->info("Job $jobName ejecutado");
     }
 
     private function findJobDirsOnPath($path): array
