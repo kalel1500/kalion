@@ -39,14 +39,16 @@ final class JobDispatch extends Command
      */
     public function handle(): void
     {
+        $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
+
         // Buscar el Job en este paquete para ver si existe y ejecutarlo
-        $executed = $this->scanPathAndRunJobIfExists(KALION_PATH);
+        $executed = $this->scanPathAndRunJobIfExists($vendorPath . 'kalel1500\kalion');
         if ($executed) return;
 
         // Escanear las carpetas de otros paquetes definidas en la configuración para ver si existe el Job y ejecutarlo
         if (!is_null($packages = config('kalion.packages_to_scan_for_jobs'))) {
             $packages = is_array($packages) ? $packages : explode(';', $packages);
-            $packages = array_map(fn($item) => base_path().'/vendor/'.$item, $packages);
+            $packages = array_map(fn($item) => $vendorPath . $item, $packages);
             $executed = $this->scanPathAndRunJobIfExists($packages);
             if ($executed) return;
         }
