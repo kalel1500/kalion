@@ -3,12 +3,13 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Thehouseofel\Kalion\Domain\Services\TailwindClassFilter;
 
 class ComponentsTests extends TestCase
 {
     private function assertClasses($default_classes, $custom_classes, $expected)
     {
-        $filteredDefault = filterTailwindClasses($default_classes, $custom_classes);
+        $filteredDefault = TailwindClassFilter::new()->filter($default_classes, $custom_classes);
 
         $array_filtered = explode(' ', $filteredDefault);
         $array_expected = explode(' ', $expected);

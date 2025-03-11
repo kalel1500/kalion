@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Services;
 
-final class TailwindClassFilter {
+use Thehouseofel\Kalion\Domain\Traits\Instantiable;
+
+final class TailwindClassFilter
+{
+    use Instantiable;
+
     protected array $specials = [
         'position' => [
             'static',

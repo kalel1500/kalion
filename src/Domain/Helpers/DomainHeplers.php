@@ -716,15 +716,6 @@ if (!function_exists('pipe_str_to_array')) {
     }
 }
 
-if (!function_exists('filterTailwindClasses')) {
-    function filterTailwindClasses($default_classes, $custom_classes): string
-    {
-        $filter = new \Thehouseofel\Kalion\Domain\Services\TailwindClassFilter();
-        return $filter->filter($default_classes, $custom_classes);
-    }
-
-}
-
 if (!function_exists('get_class_from_file')) {
     function get_class_from_file($filePath): ?string
     {

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\View\ComponentAttributeBag;
+use Thehouseofel\Kalion\Domain\Services\TailwindClassFilter;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\ClearAll;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\JobDispatch;
@@ -446,7 +447,7 @@ return [
             $customClasses = $this->get('class', '');
 
             // Eliminar las clases de $defaultClasses que ya vienen en $customClasses
-            $filteredDefault = filterTailwindClasses($defaultClasses, $customClasses);
+            $filteredDefault = TailwindClassFilter::new()->filter($defaultClasses, $customClasses);
 
             // Llama al método `merge` de la clase original
             return $this->merge(['class' => $filteredDefault]);
