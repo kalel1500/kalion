@@ -724,3 +724,31 @@ if (!function_exists('filterTailwindClasses')) {
     }
 
 }
+
+if (!function_exists('get_class_from_file')) {
+    function get_class_from_file($filePath): ?string
+    {
+        $filePath = normalize_path($filePath);
+
+        if (!file_exists($filePath)) return null;
+
+        $contents = file_get_contents($filePath);
+
+        $namespace = null;
+        if (preg_match('/namespace\s+([^;]+);/', $contents, $matches)) {
+            $namespace = trim($matches[1]);
+        }
+
+        if (is_null($namespace)) {
+            return null;
+        }
+
+        // Buscar el nombre de la clase ignorando cualquier palabra antes de "class"
+        if (preg_match('/\bclass\s+([a-zA-Z0-9_]+)/', $contents, $matches)) {
+            $className = trim($matches[1]);
+            return $namespace . '\\' . $className;
+        }
+
+        return null;
+    }
+}
