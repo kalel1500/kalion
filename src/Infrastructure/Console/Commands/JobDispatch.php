@@ -72,7 +72,7 @@ final class JobDispatch extends Command
         $filePath = $jobPath . DIRECTORY_SEPARATOR . $this->argument('job') . '.php';
         $class = get_class_from_file($filePath);
         if (!is_null($class) && class_exists($class)) {
-            dispatch(new $class($this->option('param1'), $this->option('param2'), $this->option('param3')));
+            dispatch_sync(new $class($this->option('param1'), $this->option('param2'), $this->option('param3')));
             $executed = true;
         }
         return $executed;
