@@ -93,6 +93,12 @@ final class JobDispatch extends Command
             $fullPathCurrent = $path.DIRECTORY_SEPARATOR.$item;
             if (is_file($fullPathCurrent)) continue;
 
+            // Comprobar si la carpeta actual ya es la de Jobs
+            if ($item === 'Jobs') {
+                $pathsWithJobs[] = $fullPathCurrent;
+                continue;
+            }
+
             // Comprobar si existe la carpeta "Jobs" en la ruta actual
             $fullPathJobs = $fullPathCurrent.DIRECTORY_SEPARATOR.'Jobs';
             if (!is_dir($fullPathJobs)) {
