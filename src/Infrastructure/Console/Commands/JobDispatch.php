@@ -49,6 +49,7 @@ final class JobDispatch extends Command
             $packages = is_array($packages) ? $packages : explode(';', $packages);
             $packages = array_map(fn($item) => $vendorPath . $item, $packages);
         }
+        if (is_null($packages)) $packages = [];
 
         // Escanear todas las rutas (paquete, configuracion, aplicación) para ver si existe el Job y ejecutarlo
         $this->scanPathAndRunJobIfExists([
