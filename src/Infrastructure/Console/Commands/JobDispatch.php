@@ -100,7 +100,7 @@ final class JobDispatch extends Command
 
         // Comprobar que se haya encontrado el Job recibido
         if (empty($jobs)) {
-            $this->info("No se ha encontrado ningun Job con el nombre $jobName");
+            $this->warn("No se ha encontrado ningún Job con el nombre $jobName");
             return;
         };
 
@@ -116,7 +116,13 @@ final class JobDispatch extends Command
         $class = get_class_from_file($job);
 
         // Comprobar que la clase no sea null y exista
-        if (is_null($class) || !class_exists($class)) {
+        if (is_null($class)) {
+            $this->warn(sprintf("No se ha encontrado la clase %s en el archivo %s", $jobName, $job));
+            return;
+        }
+
+        if (!class_exists($class)) {
+            $this->warn(sprintf("No se ha encontrado la clase %s", $class));
             return;
         }
 
