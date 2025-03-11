@@ -1,6 +1,40 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.18.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.18.1-beta.0...master)
+
+## [v0.18.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.18.0-beta.0...v0.18.1-beta.0) - 2025-03-06
+
+### Added
+
+* Nuevo Helper "Instantiable" con una función estática "new" para instanciar clases de forma estática
+* Nuevo helper "get_class_from_file($filePath)" que a partir de la ruta de un archivo devuelve la clase (namespace + name)
+
+### Changed
+
+* Añadir el Trait "Instantiable" en la clase "TailwindClassFilter" para poder llamar al filter mas fácilmente y eliminar el helper "filterTailwindClasses()"
+* Comando JobDispatch ("job:dispatch") modificado:
+  * Código refactorizado para mejorar la legibilidad
+  * Hacer el método "scanJobDirsProject()" más flexible y que busque la carpeta "Jobs" en cualquier sitio y no solo dentro de "Infrastructure"
+  * Al buscar la carpeta Jobs en la aplicación, hacer que busque también en la carpeta "app" además de en "src"
+  * Método "scanJobDirsProject()" renombrado a "findJobDirsOnPath()"
+  * Dejar de calcular el "namespace" transformando el "path" y usar el helper "get_class_from_file()"
+  * Variable de configuración "job_paths_from_other_packages" renombrada a "packages_to_scan_for_jobs"
+  * Nueva variable de entorno "KALION_PACKAGES_TO_SCAN_FOR_JOBS" para poder pasarle los paquetes en un string desde el ".env"
+  * Cambiar el contenido de la configuración "packages_to_scan_for_jobs" para guardar el nombre de los paquetes en vez de guardar el "namespace" (y adaptar el comando "JobDispatch")
+  * Comprobar si la carpeta Jobs ya existe en directamente en la ruta que se está escaneando (hasta ahora solo se buscaba la carpeta Jobs dentro de cada carpeta que hay en la ruta que se escanea)
+  * (refactor) Modificar flujo para obtener todas las rutas donde buscar Jobs (kalion, paquetes configurados y app) y después escanearlas todas y llamar a la ejecución
+  * !!! Cambiar lógica para que en vez de ejecutar el primer job que encuentre `(según el orden de búsqueda: kalion, otros paquetes, app.scr y app.app)`, devuelva un mensaje con la lista de jobs que se han encontrado con el nombre recibido y que se pueda seleccionar el que se quiera ejecutar
+
+### Fixed
+
+* (fix) Nuevo helper "str_contains()" para que funcione en versiones anteriores de PHP8
+* (fix) Varios errores arreglados en el comando JobDispatch ("job:dispatch"): 
+  * Arreglar la recursividad del método "scanJobDirsProject()", ya que no estaba guardando el resultado cuando se llamaba a sí mismo
+  * Cambiar el "dispatch" por el "dispatch_sync", ya que a partir de Laravel 11 la conexión por defecto es "database"
+
+### Removed
+
+* Eliminar método "tryDispatchJobFromPath()" (el que antes se llamaba "tryExecJobInNamespace()") y mover la lógica dentro del "handle()"
 
 ## [v0.18.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.17.1-beta.0...v0.18.0-beta.0) - 2025-03-06
 
