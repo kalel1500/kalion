@@ -98,6 +98,13 @@ final class JobDispatch extends Command
             }
         }
 
+        // Comprobar que se haya encontrado el Job recibido
+        if (empty($jobs)) {
+            $this->info("No se ha encontrado ningun Job con el nombre $jobName");
+            return;
+        };
+
+        // Permitir escoger el Job al usuario si hay mas de uno
         $job = (count($jobs) > 1)
             ? $this->choice('Se han encontrado varios Jobs con el mismo nombre. ¿Cual quieres ejecutar?', $jobs)
             : $jobs[0];
