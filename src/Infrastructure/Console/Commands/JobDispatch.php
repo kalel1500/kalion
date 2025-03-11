@@ -62,7 +62,14 @@ final class JobDispatch extends Command
     private function scanPathAndRunJobIfExists($searchPath)
     {
         $this->info('Escaneando Jobs...');
+
+        // Obtener parámetros
         $jobName = $this->argument('job');
+        $options = [
+            $this->option('param1'),
+            $this->option('param2'),
+            $this->option('param3'),
+        ];
 
         // Escanear todas las carpetas "Job" dentro de las rutas recibidas
         $paths = is_array($searchPath) ? $searchPath : [$searchPath];
@@ -107,7 +114,7 @@ final class JobDispatch extends Command
 
         // Ejecutar job
         $this->info("Ejecutando Job $jobName");
-        dispatch_sync(new $class($this->option('param1'), $this->option('param2'), $this->option('param3')));
+        dispatch_sync(new $class(...$options));
         $this->info("Job $jobName ejecutado");
     }
 
