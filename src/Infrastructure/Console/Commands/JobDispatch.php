@@ -22,6 +22,8 @@ final class JobDispatch extends Command
      */
     protected $description = 'Dispatch Job received';
 
+    protected $jobName;
+
     /**
      * Create a new command instance.
      *
@@ -40,6 +42,7 @@ final class JobDispatch extends Command
     public function handle(): void
     {
         $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
+        $this->jobName = $this->argument('job');
 
         // Obtener la ruta del propio paquete "kalion"
         $kalionPath = $vendorPath . 'kalel1500\kalion';
@@ -59,27 +62,53 @@ final class JobDispatch extends Command
         ]);
     }
 
-    private function scanPathAndRunJobIfExists($searchPath): bool
+    private function scanPathAndRunJobIfExists($searchPath)
     {
+        $this->info('Escaneando Jobs...');
+
+        // Escanear todas las carpetas "Job" dentro de las rutas recibidas
         $paths = is_array($searchPath) ? $searchPath : [$searchPath];
         $paths = array_merge(...array_map([$this, 'findJobDirsOnPath'], $paths));
+
+        // Buscar todos los Jobs que coincidan con el Job recibido [$this->argument('job')] dentro de las carpetas "escaneadas"
+        $jobs = [];
         foreach ($paths as $path) {
-            $executed = $this->tryDispatchJobFromPath($path);
-            if ($executed) return true;
+            $dirs = scandir($path);
+            foreach ($dirs as $dir) {
+                // Saltar los primeros elementos que devuelve la función "scandir()"
+                if (in_array($dir, [".",".."])) continue;
+
+                // Comprobar que el item actual no sea un archivo
+                $fullPathDir = $path . DIRECTORY_SEPARATOR . $dir;
+                if (is_dir($fullPathDir)) continue;
+
+                // Obtener la ruta relativa
+                $relativePathDir = str_replace(base_path(), '', $fullPathDir);
+
+                // Guardar el Job si no esta ya guardado y coincide con el job Recibido [$this->argument('job')]
+                if (!in_array($relativePathDir, $jobs) && str_contains($dir, $this->jobName)) {
+                    $jobs[] = $relativePathDir;
+                }
+            }
         }
-        return false;
+
+        $job = (count($jobs) > 1)
+            ? $this->choice('Se han encontrado varios Jobs con el mismo nombre. ¿Cual quieres ejecutar?', $jobs)
+            : $jobs[0];
+
+        // Rehacer la ruta absoluta
+        $job = base_path() . $job;
+        $this->tryDispatchJobFromPath($job);
     }
 
-    private function tryDispatchJobFromPath(string $jobPath): bool
+    private function tryDispatchJobFromPath(string $jobFilePath)
     {
-        $executed = false;
-        $filePath = $jobPath . DIRECTORY_SEPARATOR . $this->argument('job') . '.php';
-        $class = get_class_from_file($filePath);
+        $class = get_class_from_file($jobFilePath);
         if (!is_null($class) && class_exists($class)) {
+            $this->info("Ejecutando Job $this->jobName");
             dispatch_sync(new $class($this->option('param1'), $this->option('param2'), $this->option('param3')));
-            $executed = true;
+            $this->info("Job $this->jobName ejecutado");
         }
-        return $executed;
     }
 
     private function findJobDirsOnPath($path): array
@@ -99,14 +128,14 @@ final class JobDispatch extends Command
 
             // Comprobar si la carpeta actual ya es la de Jobs. En ese caso guardamos la ruta en el array "$pathsWithJobs"
             if ($item === 'Jobs') {
-                $pathsWithJobs[] = $fullPathCurrent;
+                $pathsWithJobs[] = normalize_path($fullPathCurrent);
                 continue;
             }
 
             // Comprobar si existe la carpeta "Jobs" en la ruta actual. En ese caso guardamos la ruta en el array "$pathsWithJobs"
             $fullPathJobs = $fullPathCurrent .DIRECTORY_SEPARATOR . 'Jobs';
             if (is_dir($fullPathJobs)) {
-                $pathsWithJobs[] = $fullPathJobs;
+                $pathsWithJobs[] = normalize_path($fullPathJobs);
                 continue;
             }
 
