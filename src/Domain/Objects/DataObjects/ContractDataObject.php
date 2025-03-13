@@ -29,7 +29,7 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
         foreach ($this as $clave => $valor) {
             $coll[$clave] = $this->getValue($valor);
         }
-        return objectToArray($coll);
+        return object_to_array($coll);
     }
 
     public function toArray(): array
@@ -44,7 +44,7 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
 
     public function toObject(): object|array
     {
-        return arrayToObject($this->toArrayVisible());
+        return array_to_object($this->toArrayVisible());
     }
 
     public function toArrayVo(): ArrayVo

@@ -55,7 +55,7 @@ final class ExceptionContextDo extends ContractDataObject
 
     public static function getMessage(Throwable $e): string
     {
-        return (isDomainException($e) || debugIsActive()) ? $e->getMessage() : __('Server Error');
+        return (is_kalion_exception($e) || debugIsActive()) ? $e->getMessage() : __('Server Error');
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

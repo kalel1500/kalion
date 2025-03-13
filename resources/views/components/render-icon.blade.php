@@ -1,4 +1,4 @@
-@if (strContainsHtml($icon))
+@if (str_contains_html($icon))
     {!! $icon !!}
 @else
     @if (str_contains($icon, ';'))

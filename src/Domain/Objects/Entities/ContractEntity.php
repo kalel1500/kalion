@@ -83,7 +83,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
 
     public function toArray(): array
     {
-        [$relation, $defaultIsFull] = getInfoFromRelationWithFlag('flag:' . config('kalion.entity_calculated_props_mode'));
+        [$relation, $defaultIsFull] = get_info_from_relation_with_flag('flag:' . config('kalion.entity_calculated_props_mode'));
 
         $data   = $this->toArrayProperties();
         $isFull = $this->isFull ?? $defaultIsFull;
@@ -96,7 +96,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         if ($this->withFull) {
             foreach ($this->withFull as $key => $rel) {
                 $relation = (is_array($rel)) ? $key : $rel;
-                [$relation, $isFull] = getInfoFromRelationWithFlag($relation);
+                [$relation, $isFull] = get_info_from_relation_with_flag($relation);
                 $relationData                = $this->$relation()?->toArray();
                 $data[strToSnake($relation)] = $relationData;
             }
@@ -109,7 +109,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
     {
         $array = $this->toArrayProperties();
         if (!is_null(static::$databaseFields)) {
-            return arrayKeepKeys($array, static::$databaseFields);
+            return array_keep($array, static::$databaseFields);
         }
         if ($this->incrementing && !$keepId) unset($array[$this->primaryKey]);
         unset($array['created_at']);
@@ -161,7 +161,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
 
             $isFull    = null;
             $firstFull = $first;
-            [$first, $isFull] = getInfoFromRelationWithFlag($first, $isFull);
+            [$first, $isFull] = get_info_from_relation_with_flag($first, $isFull);
 
             $firstRelations[]     = $first;
             $firstRelationsFull[] = $firstFull;

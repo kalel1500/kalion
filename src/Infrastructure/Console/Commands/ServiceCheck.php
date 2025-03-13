@@ -41,7 +41,7 @@ final class ServiceCheck extends Command
     public function handle(): bool
     {
 //        return false;
-        if (soIsWindows()) {
+        if (so_is_windows()) {
             if (envIsLocal()) {
                 $this->info('EL servicio de colas esta activo');
                 return true;

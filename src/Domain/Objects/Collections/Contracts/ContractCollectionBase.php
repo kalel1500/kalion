@@ -57,7 +57,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $subRelData = (!$this->isInstanceOfRelatable())
             ? SubRelationDataDo::fromArray([null, null])
-            : getSubWith($this->with, $this->isFull, $pluckField);
+            : get_sub_with($this->with, $this->isFull, $pluckField);
         return CollectionAny::fromArray($data, $subRelData->with, $subRelData->isFull);
     }
 

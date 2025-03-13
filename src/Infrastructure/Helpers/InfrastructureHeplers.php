@@ -260,7 +260,7 @@ if (! function_exists('formatArrayOfEmailsToSendMail')) {
     function formatArrayOfEmailsToSendMail($array): array
     {
         return collect($array)
-            ->map(function ($value) {return (verifyEmail($value)) ? ['name' => null, 'email' => $value] : null;})
+            ->map(function ($value) {return (validate_email($value)) ? ['name' => null, 'email' => $value] : null;})
             ->filter(function ($value) {return !is_null($value);})
             ->all();
     }
@@ -274,7 +274,7 @@ if (! function_exists('getGoodEmailsFromArray')) {
         }
         return collect($array)
             ->map(function ($value) {return trim($value);})
-            ->filter(function ($value) {return verifyEmail($value);})
+            ->filter(function ($value) {return validate_email($value);})
             ->all();
     }
 }

@@ -3,194 +3,22 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionException;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
-use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionEntity;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
 
-if (!function_exists('dashesToCamelCase')) {
-    function dashesToCamelCase($string, $capitalizeFirstCharacter = false)
-    {
-
-        $str = str_replace('-', '', ucwords($string, '-'));
-
-        if (!$capitalizeFirstCharacter) {
-            $str = lcfirst($str);
-        }
-
-        return $str;
-    }
-}
-
-if (!function_exists('strToCamelCase')) {
-    function strToCamelCase(?string $string): ?string
+if (!function_exists('str_camel')) {
+    function str_camel(?string $string): ?string
     {
         if (is_null($string)) return null;
-        $string = remove_accents($string);
-        $string = strtolower($string);
-        $string = preg_replace('/[^a-z0-9_\- ]/i', ' ', $string);
-        $intermediate = str_replace(['_', ' ', '/', '-'], '', ucwords($string, '_ '));
-
-        // $intermediate = preg_replace_callback(
-        //     '/(?:^|_| )(\w)/',
-        //     function ($matches) {
-        //         return strtoupper($matches[1]);
-        //     },
-        //     $string
-        // );
-
-        return lcfirst($intermediate);
+        return lcfirst(Str::camel(Str::slug($string)));
     }
 }
 
-if (!function_exists('strToSlug')) {
-    function strToSlug(?string $string): ?string
-    {
-        if (is_null($string)) return null;
-
-        // Convertimos a minúsculas
-        $input = strtolower($string);
-
-        // Reemplazamos cualquier espacio en blanco por un guion
-        $input = preg_replace('/\s+/', '-', $input);
-
-        // Eliminamos cualquier carácter no alfanumérico o guiones
-        $input = preg_replace('/[^a-z0-9\-]/', '', $input);
-
-        // Removemos guiones repetidos
-        $input = preg_replace('/-+/', '-', $input);
-
-        // Removemos guiones al principio o al final
-        return trim($input, '-');
-    }
-}
-
-if (!function_exists('remove_accents')) {
-    function remove_accents($cadena){
-        $cadena = mb_convert_encoding($cadena, 'UTF-8');
-
-		//Reemplazamos la A y a
-		$cadena = str_replace(
-		array('Á', 'À', 'Â', 'Ä', 'á', 'à', 'ä', 'â', 'ª'),
-		array('A', 'A', 'A', 'A', 'a', 'a', 'a', 'a', 'a'),
-		$cadena
-		);
-
-		//Reemplazamos la E y e
-		$cadena = str_replace(
-		array('É', 'È', 'Ê', 'Ë', 'é', 'è', 'ë', 'ê'),
-		array('E', 'E', 'E', 'E', 'e', 'e', 'e', 'e'),
-		$cadena );
-
-		//Reemplazamos la I y i
-		$cadena = str_replace(
-		array('Í', 'Ì', 'Ï', 'Î', 'í', 'ì', 'ï', 'î'),
-		array('I', 'I', 'I', 'I', 'i', 'i', 'i', 'i'),
-		$cadena );
-
-		//Reemplazamos la O y o
-		$cadena = str_replace(
-		array('Ó', 'Ò', 'Ö', 'Ô', 'ó', 'ò', 'ö', 'ô'),
-		array('O', 'O', 'O', 'O', 'o', 'o', 'o', 'o'),
-		$cadena );
-
-		//Reemplazamos la U y u
-		$cadena = str_replace(
-		array('Ú', 'Ù', 'Û', 'Ü', 'ú', 'ù', 'ü', 'û'),
-		array('U', 'U', 'U', 'U', 'u', 'u', 'u', 'u'),
-		$cadena );
-
-		//Reemplazamos la N, n, C y c
-		$cadena = str_replace(
-		array('Ñ', 'ñ', 'Ç', 'ç'),
-		array('N', 'n', 'C', 'c'),
-		$cadena
-		);
-
-		return $cadena;
-	}
-}
-
-if (!function_exists('getFirstMessageIfIsArray')) {
-    function getFirstMessageIfIsArray($message)
-    {
-        if (!is_array($message)) {
-            return $message;
-        } else {
-            return $message[0];
-        }
-    }
-}
-
-if (!function_exists('stringHtmlOfArrayMessages')) {
-    function stringHtmlOfArrayMessages($arrayMessages, $messagesClass = 'restriction-message'): string
-    {
-        if (!is_array($arrayMessages)) {
-            return '<span class="' . $messagesClass . '">' . $arrayMessages . '</span><br>';
-        }
-
-        $htmlMessages = '<div class="d-block">';
-        foreach ($arrayMessages as $message) {
-            $htmlMessages .= '<span class="' . $messagesClass . '">' . $message . '</span><br>';
-        }
-        $htmlMessages .= '</div>';
-
-        return $htmlMessages;
-    }
-}
-
-if (!function_exists('strContains')) {
-    function strContains($haystack, $needle): bool
-    {
-        return strpos($haystack, $needle) !== false;
-    }
-}
-
-if (!function_exists('arrayContains')) {
-    function arrayContains($array, $key, $value): bool
-    {
-        $result = array_search($value, array_column($array, $key));
-        return !(($result === false));
-    }
-}
-
-if (!function_exists('arrayFirstWhere')) {
-    function arrayFirstWhere($array, $key, $value)
-    {
-        $result = array_search($value, array_column($array, $key));
-        return $array[$result];
-    }
-}
-
-if (!function_exists('clearArrayToIntegers')) {
-    function clearArrayToIntegers($arrayToClear): array
-    {
-        $result = [];
-        foreach ($arrayToClear as $item) {
-            $int_item = intval($item);
-            if ($int_item) {
-                $result[] = $int_item;
-            }
-        }
-        return $result;
-    }
-}
-
-if (!function_exists('arrayToString')) {
-    function arrayToString(array $array): ?string
-    {
-        if (empty($array)) {
-            return null;
-        }
-        return implode(", ", $array);
-    }
-}
-
-if (!function_exists('strTurncate')) {
-    function strTurncate(string $string, int $length = 100, string $append = '&hellip;'): ?string
+if (!function_exists('str_truncate')) {
+    function str_truncate(string $string, int $length = 100, string $append = '&hellip;'): ?string
     {
         // Check append length
         if ($length <= strlen($append)) {
@@ -217,80 +45,17 @@ if (!function_exists('strTurncate')) {
     }
 }
 
-if (!function_exists('anyToBoolean')) {
-    function anyToBoolean($value): bool
-    {
-        return $value === 'true' || $value === true || $value === 1 || $value === '1';
-    }
-}
-
-if (!function_exists('strStartsWith')) {
-    function strStartsWith($haystack, $needle, $case = true): bool
-    {
-        if ($case) {
-            return strpos($haystack, $needle) === 0;
-        }
-        return stripos($haystack, $needle) === 0;
-    }
-}
-
-if (!function_exists('strEndsWith')) {
-    function strEndsWith($haystack, $needle, $case = true): bool
-    {
-        $expectedPosition = strlen($haystack) - strlen($needle);
-        if ($case) {
-            return strrpos($haystack, $needle) === $expectedPosition;
-        }
-        return strripos($haystack, $needle) === $expectedPosition;
-    }
-}
-
-if (!function_exists('verifyEmail')) {
-    function verifyEmail($email)
+if (!function_exists('validate_email')) {
+    function validate_email(string $email): string|false
     {
         return (filter_var($email, FILTER_VALIDATE_EMAIL));
     }
 }
 
-if (!function_exists('splitAtUpperCase')) {
-    function splitAtUpperCase($s)
+if (!function_exists('explode_by_uppercase')) {
+    function explode_by_uppercase(string $value): array|false
     {
-        return preg_split('/(?=[A-Z])/', $s, -1, PREG_SPLIT_NO_EMPTY);
-    }
-}
-
-if (!function_exists('arrayHasDupes')) {
-    function arrayHasDupes($array): bool
-    {
-        return count($array) !== count(array_unique($array));
-    }
-
-}
-
-if (!function_exists('buildForeignKeyName')) {
-    function buildForeignKeyName($tableName, $columnName): string
-    {
-        return $tableName . '_' . $columnName . '_foreign';
-    }
-}
-
-if (!function_exists('addMessagesSeparator')) {
-    function addMessagesSeparator(array $arrayOfMessages, string $separator = '||'): ?string
-    {
-
-        $finalMessage = '';
-        foreach ($arrayOfMessages as $key => $message) {
-            if (!empty($message)) {
-                $finalMessage .= $message;
-            }
-
-            $nextKey = $key + 1;
-            $nextMessage = $arrayOfMessages[$nextKey] ?? null;
-            if (!empty($nextMessage)) {
-                $finalMessage .= $separator;
-            }
-        }
-        return empty($finalMessage) ? null : $finalMessage;
+        return preg_split('/(?=[A-Z])/', $value, -1, PREG_SPLIT_NO_EMPTY);
     }
 }
 
@@ -307,8 +72,8 @@ if (!function_exists('abort_d')) {
     }
 }
 
-if (!function_exists('abortC_if')) {
-    function abortC_if(
+if (!function_exists('abort_d_if')) {
+    function abort_d_if(
         bool $condition,
         int $code,
         string $message,
@@ -323,127 +88,73 @@ if (!function_exists('abortC_if')) {
     }
 }
 
-if (!function_exists('isValidBoolean')) {
-    function isValidBoolean($value): bool
+if (!function_exists('is_valid_bool')) {
+    function is_valid_bool($value): bool
     {
         return (is_bool($value) || (($value === 0 || $value === 1)));
     }
 }
 
-if (!function_exists('isDomainException')) {
-    function isDomainException(Throwable $e): bool
+if (!function_exists('is_kalion_exception')) {
+    function is_kalion_exception(Throwable $e): bool
     {
         return ($e instanceof KalionException);
     }
 }
 
-if (!function_exists('getSrcNamespace')) {
-    function getSrcNamespace(): string
-    {
-        return 'Src\\';
-    }
-}
-
-if (!function_exists('getRelationCollection')) {
-    function getRelationCollection(array $value, string $collectionClass)
-    {
-        $isCollection = is_subclass_of($collectionClass, ContractCollectionEntity::class);
-        if (!$isCollection) {
-            throw new InvalidValueException(sprintf('The <%s> variable must be extends of <%s>.', '$collectionClass', class_basename(ContractCollectionEntity::class)));
-        }
-        $entityClass = $collectionClass::ENTITY;
-        $existEntity = !is_null($entityClass);
-        if (!$existEntity) {
-            throw new RequiredDefinitionException(sprintf('<%s> needs to define <%s> %s.', $collectionClass, 'ENTITY', 'constant'));
-        }
-
-        $array = [];
-        foreach ($value as $item) {
-            $array[] = $entityClass::fromArray($item);
-        }
-        return new $collectionClass(...$array);
-    }
-}
-
-if (!function_exists('collectAny')) {
-    function collectAny(array $array): CollectionAny
+if (!function_exists('collect_any')) {
+    function collect_any(array $array): CollectionAny
     {
         return CollectionAny::fromArray($array);
     }
 }
 
-if (!function_exists('objectToArray')) {
-    function objectToArray($object): array|object
+if (!function_exists('object_to_array')) {
+    function object_to_array($object): array|object
     {
         $string = json_encode($object);
         return json_decode($string, true);
     }
 }
 
-if (!function_exists('arrayToObject')) {
-    function arrayToObject($object): array|object
+if (!function_exists('array_to_object')) {
+    function array_to_object($object): array|object
     {
         $string = json_encode($object);
         return json_decode($string);
     }
 }
 
-if (!function_exists('stringToArray')) {
-    function stringToArray(string $stringJson)
-    {
-        return json_decode($stringJson, true);
-    }
-}
-
-if (!function_exists('stringToObject')) {
-    function stringToObject(string $stringJson)
-    {
-        return json_decode($stringJson);
-    }
-}
-
-if (!function_exists('cloneObject')) {
-    function cloneObject($object)
+if (!function_exists('obj_clone')) {
+    function obj_clone($object)
     {
         return unserialize(serialize($object));
     }
 }
 
-if (!function_exists('arrayKeepKeys')) {
-    function arrayKeepKeys($arrayData, $arrayKeys): array
+if (!function_exists('array_keep')) {
+    function array_keep(array $arrayData, array $arrayKeys): array
     {
-        $new = [];
-        foreach ($arrayData as $key => $item) {
-            if (in_array($key, $arrayKeys)) {
-                $new[$key] = $item;
-            }
-        }
-        return $new;
+        return array_intersect_key($arrayData, array_flip($arrayKeys));
     }
 }
 
-if (!function_exists('arrayDeleteKeys')) {
-    function arrayDeleteKeys($arrayData, $arrayKeys): array
+if (!function_exists('array_delete')) {
+    function array_delete(array $arrayData, array $arrayKeys): array
     {
-        $new = [];
-        foreach ($arrayData as $key => $item) {
-            if (!in_array($key, $arrayKeys)) {
-                $new[$key] = $item;
-            }
-        }
-        return $new;
+        return array_diff_key($arrayData, array_flip($arrayKeys));
     }
 }
 
-if (!function_exists('array_diff_assoc_recursive')) {
-    function array_diff_assoc_recursive(array $array1, array $array2): array {
+if (!function_exists('array_diff_assoc_deep')) {
+    function array_diff_assoc_deep(array $array1, array $array2): array {
         $difference = array();
         foreach($array1 as $key => $value) {
             if( is_array($value) ) {
                 if( !isset($array2[$key]) || !is_array($array2[$key]) ) {
                     $difference[$key] = $value;
                 } else {
-                    $new_diff = array_diff_assoc_recursive($value, $array2[$key]);
+                    $new_diff = array_diff_assoc_deep($value, $array2[$key]);
                     if(!empty($new_diff)) {
                         $difference[$key] = $new_diff;
                     }
@@ -482,48 +193,8 @@ if (!function_exists('array_unshift_assoc')) {
     }
 }
 
-if (!function_exists('isBlank')) {
-    function isBlank($value): bool
-    {
-        if (is_null($value)) {
-            return true;
-        }
-
-        if (is_string($value)) {
-            return trim($value) === '';
-        }
-
-        if (is_numeric($value) || is_bool($value)) {
-            return false;
-        }
-
-        if ($value instanceof Countable) {
-            return count($value) === 0;
-        }
-
-        return empty($value);
-    }
-}
-
-if (!function_exists('clearWith')) {
-    function clearWith(?array $with, ?array $allowedRels): ?array
-    {
-        if (is_null($with) || is_null($allowedRels)) return null;
-        $newWith = [];
-        foreach ($with as $key => $rel) {
-            $compareRel = (is_array($rel)) ? $key : $rel;
-            $arrayRels = explode('.', $compareRel);
-            $firstRel = $arrayRels[0];
-            if (in_array($firstRel, $allowedRels)) {
-                $newWith[$key] = $rel;
-            }
-        }
-        return (empty($newWith)) ? null : $newWith;
-    }
-}
-
-if (!function_exists('getSubWith')) {
-    function getSubWith(string|array|null $with, bool|string|null $isFull, ?string $relationName): SubRelationDataDo
+if (!function_exists('get_sub_with')) {
+    function get_sub_with(string|array|null $with, bool|string|null $isFull, ?string $relationName): SubRelationDataDo
     {
         if (is_null($with)) return SubRelationDataDo::fromArray([null, null]);
         if (is_null($relationName)) return SubRelationDataDo::fromArray([$with, $isFull]);
@@ -534,7 +205,7 @@ if (!function_exists('getSubWith')) {
         foreach ($with as $key => $rel) {
 
             if (is_string($key)) {
-                [$key, $isFull] = getInfoFromRelationWithFlag($key, $isFull);
+                [$key, $isFull] = get_info_from_relation_with_flag($key, $isFull);
 
                 if ($key === $relationName) {
                     $newWith = $rel;
@@ -544,7 +215,7 @@ if (!function_exists('getSubWith')) {
             } else {
                 $arrayRels = explode('.', $rel);
                 $firstRel = $arrayRels[0];
-                [$firstRel, $isFull] = getInfoFromRelationWithFlag($firstRel, $isFull);
+                [$firstRel, $isFull] = get_info_from_relation_with_flag($firstRel, $isFull);
 
                 if ($firstRel === $relationName) {
                     unset($arrayRels[0]);
@@ -559,13 +230,13 @@ if (!function_exists('getSubWith')) {
     }
 }
 
-if (!function_exists('getInfoFromRelationWithFlag')) {
+if (!function_exists('get_info_from_relation_with_flag')) {
     /**
      * @param string $relation
      * @param bool|string|null $isFull
      * @return array{string, bool|string|null}
      */
-    function getInfoFromRelationWithFlag(string $relation, bool|string|null $isFull = null): array
+    function get_info_from_relation_with_flag(string $relation, bool|string|null $isFull = null): array
     {
         if (str_contains($relation, ':')) {
             [$relation, $flag] = explode(':', $relation);
@@ -575,52 +246,16 @@ if (!function_exists('getInfoFromRelationWithFlag')) {
     }
 }
 
-if (!function_exists('mapToLabelStructure')) {
-    function mapToLabelStructure($labelField, $valueField): Closure
-    {
-        return fn($item) => ['label' => $item->$labelField, 'value' => $item->$valueField];
-    }
-}
-
-if (!function_exists('soIsWindows')) {
-    function soIsWindows(): bool
+if (!function_exists('so_is_windows')) {
+    function so_is_windows(): bool
     {
         $so = strtoupper(substr(PHP_OS, 0,3));
         return $so === 'WIN';
     }
 }
 
-if (!function_exists('arrFormatIsEntity')) {
-    function arrFormatIsEntity($array): bool
-    {
-        if (!is_array($array)) {
-            return false; // No es un array
-        }
-
-        $keys = array_keys($array);
-        return array_keys($keys) !== $keys;
-    }
-}
-
-if (!function_exists('arrFormatIsCollection')) {
-    function arrFormatIsCollection($array): bool
-    {
-        if (!is_array($array)) {
-            return false; // No es un array
-        }
-
-        foreach ($array as $elemento) {
-            if (!is_array($elemento)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
-if (!function_exists('strContainsHtml')) {
-    function strContainsHtml(string $value): bool
+if (!function_exists('str_contains_html')) {
+    function str_contains_html(string $value): bool
     {
         return $value !== strip_tags($value);
     }

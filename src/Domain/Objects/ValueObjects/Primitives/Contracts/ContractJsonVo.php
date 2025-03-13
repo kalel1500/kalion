@@ -46,8 +46,8 @@ abstract class ContractJsonVo extends ContractValueObject
         if (empty($value)) return;
 
         if (is_string($value)) {
-            $this->arrayValue   = stringToArray($value);
-            $this->objectValue  = stringToObject($value);
+            $this->arrayValue   = json_decode($value, true);
+            $this->objectValue  = json_decode($value);
             $this->encodedValue = $value;
             if (is_null($this->objectValue)) {
                 $this->failAtFormat = true;
@@ -59,8 +59,8 @@ abstract class ContractJsonVo extends ContractValueObject
         }
 
         if (is_array($value) || is_object($value)) {
-            $this->arrayValue   = objectToArray($value);
-            $this->objectValue  = arrayToObject($value);
+            $this->arrayValue   = object_to_array($value);
+            $this->objectValue  = array_to_object($value);
             $this->encodedValue = json_encode($value);
         }
     }

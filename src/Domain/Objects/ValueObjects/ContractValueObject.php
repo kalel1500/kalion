@@ -62,7 +62,7 @@ abstract class ContractValueObject
     public function toCamelCase(): static
     {
         if ($this->isNotNull()) {
-            $this->value = strToCamelCase($this->value);
+            $this->value = str_camel($this->value);
         }
         return $this;
     }

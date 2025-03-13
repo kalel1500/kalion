@@ -49,12 +49,12 @@ final class MyMailDM
 
     public function getRecipientsTo()
     {
-        return arrayToObject($this->mailable->to);
+        return array_to_object($this->mailable->to);
     }
 
     public function getRecipientsCc()
     {
-        return arrayToObject($this->mailable->cc);
+        return array_to_object($this->mailable->cc);
     }
 
     public static function getRecipientsFromStringVariable($stringRecipients)
@@ -65,8 +65,8 @@ final class MyMailDM
 
         $testRecipients = collect(explode(',', $stringRecipients));
 
-        $formatted_mailRecipients = $testRecipients->filter(function ($value, $key) {return !strStartsWith($value, 'u2d');})->map(function ($item, $key) {return ['name' => null, 'email' => $item];})->values()->all();
-        $u2dRecipients = $testRecipients->filter(function ($value, $key) {return strStartsWith($value, 'u2d');})->all();
+        $formatted_mailRecipients = $testRecipients->filter(function ($value, $key) {return !str_starts_with($value, 'u2d');})->map(function ($item, $key) {return ['name' => null, 'email' => $item];})->values()->all();
+        $u2dRecipients = $testRecipients->filter(function ($value, $key) {return str_starts_with($value, 'u2d');})->all();
         $formatted_u2dRecipients = (new UserModelManager())->getUsersInField($u2dRecipients, 'matricula_dacfi')->pluck('array_name_and_email')->toArray();
 
         return array_merge($formatted_u2dRecipients, $formatted_mailRecipients);
