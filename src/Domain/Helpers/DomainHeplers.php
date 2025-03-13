@@ -330,31 +330,6 @@ if (!function_exists('isValidBoolean')) {
     }
 }
 
-/*if (!function_exists('collectInts')) {
-    function collectInts(array $numbers)
-    {
-        $res = [];
-        foreach ($numbers as $number) {
-            $res[] = new IntVo((int)$number);
-        }
-        return new CollectionIntsVo(...$res);
-    }
-}*/
-
-/*if (!function_exists('collectArrayTo')) {
-    function collectArrayTo(array $values, $valueClass, $collectionClass, callable $valueModifierCallback = null)
-    {
-        $res = [];
-        foreach ($values as $value) {
-            if (!is_null($valueModifierCallback)) {
-                $value = $valueModifierCallback($value);
-            }
-            $res[] = new $valueClass($value);
-        }
-        return new $collectionClass(...$res);
-    }
-}*/
-
 if (!function_exists('isDomainException')) {
     function isDomainException(Throwable $e): bool
     {

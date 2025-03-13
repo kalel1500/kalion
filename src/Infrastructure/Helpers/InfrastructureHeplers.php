@@ -123,23 +123,6 @@ if (!function_exists('createRandomString')) {
     }
 }
 
-/*if (!function_exists('checkObjectProperties')) {
-    function checkObjectProperties($object, $arrayProperties, $preventException = false)
-    {
-        $checkProperties = collect([]);
-        foreach ($arrayProperties as $prop) {
-            $checkProperties->push(property_exists($object, $prop));
-        }
-
-        if ($checkProperties->contains(false)) {
-            if ($preventException) return false;
-            throw new \Exception(__('The object does not meet the required properties'));
-        }
-
-        return true;
-    }
-}*/
-
 if (!function_exists('formatStringDatetimeTo')) {
     function formatStringDatetimeTo($datetime, $format = 'Y-m-d\TH:i'): ?string
     {
@@ -153,43 +136,6 @@ if (!function_exists('compareDates')) {
         return MyCarbon::compare($date1, $operator, $date2);
     }
 }
-
-//if (!function_exists('upsert_getArraysForExcept')) {
-//    /**
-//     * @param array $arrayData
-//     * @param array $arrayKeys
-//     * @param array $exceptColumns
-//     * @param bool $deleteTimestamps
-//     * @return MyUpsert
-//     */
-//    function upsert_getArraysForExcept($arrayData, $arrayKeys, $exceptColumns, $deleteTimestamps = true)
-//    {
-//        $upsert = new MyUpsert($arrayData, $arrayKeys, $exceptColumns, $deleteTimestamps);
-//        return $upsert;
-//
-//        /*$arrayUpdate = array_diff(array_keys($arrayData[0]), $exceptColumns);
-//        return [
-//            'arrayData' => $arrayData,
-//            'arrayKeys' => $arrayKeys,
-//            'arrayUpdate' => $arrayUpdate,
-//        ];*/
-//    }
-//}
-
-//if (!function_exists('upsert_ExecuteForExcept')) {
-//    /**
-//     * @param Builder $builder
-//     * @param $arrayData
-//     * @param $arrayKeys
-//     * @param $exceptColumns
-//     * @param bool $deleteTimestamps
-//     */
-//    function upsert_executeForExcept(Builder $builder, $arrayData, $arrayKeys, $exceptColumns, $deleteTimestamps = true)
-//    {
-//        $upsert = new MyUpsert($arrayData, $arrayKeys, $exceptColumns, $deleteTimestamps);
-//        $upsert->executeUpsert($builder);
-//    }
-//}
 
 if (! function_exists('collectE')) {
     /**
@@ -653,18 +599,3 @@ if (!function_exists('defaultUrl')) {
         return appUrl() . defaultRoute();
     }
 }
-
-//if (!function_exists('formatToTabulatorList')) {
-//    function formatToTabulatorList(
-//        Collection|ContractCollectionBase $collection,
-//        string $value,
-//        string $key,
-//        bool $toLabel = false
-//    ): Collection|ContractCollectionBase
-//    {
-//        if ($toLabel) {
-//            return $collection->map(mapToLabelStructure($value, $key));
-//        }
-//        return $collection->pluck($value, $key)->prepend('', 'undefined')->prepend('', 'null')->prepend('', '');
-//    }
-//}
