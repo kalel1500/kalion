@@ -11,12 +11,12 @@ final class MyDebug
 {
     use Singelton;
 
-    public function start()
+    public function start(): void
     {
         DB::enableQueryLog();
     }
 
-    public function show()
+    public function show(): void
     {
         dd(DB::getQueryLog());
     }

@@ -6,11 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Traits;
 
 trait Instantiable
 {
-    /**
-     * @param ...$args
-     * @return static
-     */
-    public static function new(...$args)
+    public static function new(...$args): static
     {
         return new static();
     }

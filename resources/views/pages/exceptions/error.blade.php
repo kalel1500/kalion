@@ -2,8 +2,8 @@
 @extends('kal::pages.exceptions.minimal')
 
 @section('title', $context->getTitle())
-@section('code', $context->getStatusCode())
-@section('message', $context->message())
+@section('code', $context->statusCode)
+@section('message', $context->message)
 
 
 {{--

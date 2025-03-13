@@ -11,29 +11,23 @@ use Thehouseofel\Kalion\Infrastructure\Helpers\MyCarbon;
 final class ArrayTabulatorFiltersVo extends ContractArrayVo
 {
     private const MAX_DAYS_TO_FILTER_RANGE = 50;
-    protected $filterTimeName; // TODO PHP8 - type -> string|null
-    protected $stringValue = null; // TODO PHP8 - type -> string|null
+    protected string $filterTimeName;
+    protected ?string $stringValue = null;
 
-    /**
-     * @param array|string|null $value
-     * @param string $filterTimeName
-     * @param bool $isRequired
-     * @param bool $isRequiredFilterTime
-     */
     public function __construct(
-        $value,
-        string $filterTimeName = 'null',
-        bool $isRequired = false,
-        bool $isRequiredFilterTime = false
+        array|string|null $value,
+        string            $filterTimeName = 'null',
+        bool              $isRequired = false,
+        bool              $isRequiredFilterTime = false
     )
     {
         // Comprobar que sea string, array o null
         $this->checkTypes($value);
 
         // Setear valores
-        $this->filterTimeName   = $filterTimeName;
-        $this->stringValue      = (is_array($value))    ? $this->encodeFilters($value) : $value;
-        $arrayValue             = (is_string($value))   ? $this->decodeFilters($value) : $value;
+        $this->filterTimeName = $filterTimeName;
+        $this->stringValue    = (is_array($value)) ? $this->encodeFilters($value) : $value;
+        $arrayValue           = (is_string($value)) ? $this->decodeFilters($value) : $value;
 
         // Comprobar estructura filtros
         $this->checkIsValidArray($arrayValue, $isRequired);
@@ -50,20 +44,16 @@ final class ArrayTabulatorFiltersVo extends ContractArrayVo
         string $filterTimeName = 'null',
         bool $isRequired = false,
         bool $isRequiredFilterTime = false
-    )
+    ): static
     {
         return new ArrayTabulatorFiltersVo($value, $filterTimeName, $isRequired, $isRequiredFilterTime);
     }
 
-    /**
-     * @param array|string|null $value
-     * @return void
-     */
-    private function checkTypes($value): void
+    private function checkTypes(array|string|null $value): void
     {
         if (!is_null($value) && !is_string($value) && !is_array($value)) {
             $type = gettype($value);
-            throw new InvalidValueException(sprintf('<%s> espera un valor de tipo string, array o null. <%s> recibido', class_basename(self::class), $type));
+            throw new InvalidValueException(sprintf('<%s> espera un valor de tipo string, array o null. <%s> recibido', class_basename(static::class), $type));
         }
     }
 
@@ -78,12 +68,12 @@ final class ArrayTabulatorFiltersVo extends ContractArrayVo
 
         $isValid = true;
         foreach ($value as $item) {
-            if (!array_key_exists('field',$item)) $isValid = false;
-            if (!array_key_exists('type',$item)) $isValid = false;
-            if (!array_key_exists('value',$item)) $isValid = false;
+            if (!array_key_exists('field', $item)) $isValid = false;
+            if (!array_key_exists('type', $item)) $isValid = false;
+            if (!array_key_exists('value', $item)) $isValid = false;
         }
         if (!$isValid) {
-            throw new InvalidValueException(sprintf('<%s> espera que cada registro sea un array con los valores [field, type, value].', class_basename(self::class)));
+            throw new InvalidValueException(sprintf('<%s> espera que cada registro sea un array con los valores [field, type, value].', class_basename(static::class)));
         }
     }
 
@@ -95,13 +85,13 @@ final class ArrayTabulatorFiltersVo extends ContractArrayVo
         $filterTime = $this->getFilterTime($this->filterTimeName);
         if ($isRequiredFilterTime && $filterTime) {
             $start = MyCarbon::parse($filterTime['value']['start']);
-            $end = MyCarbon::parse($filterTime['value']['end']) ?? MyCarbon::now();
+            $end   = MyCarbon::parse($filterTime['value']['end']) ?? MyCarbon::now();
             if (is_null($start)) {
                 throw new InvalidValueException('Para realizar esta acción es necesario indicar la fecha de inicio');
             }
             $interval = $start->diff($end);
-            if ($interval->days > self::MAX_DAYS_TO_FILTER_RANGE) {
-                throw new InvalidValueException(sprintf('Para realizar esta acción el rango máximo de dias es %s', self::MAX_DAYS_TO_FILTER_RANGE));
+            if ($interval->days > static::MAX_DAYS_TO_FILTER_RANGE) {
+                throw new InvalidValueException(sprintf('Para realizar esta acción el rango máximo de dias es %s', static::MAX_DAYS_TO_FILTER_RANGE));
             }
         }
     }
@@ -123,16 +113,16 @@ final class ArrayTabulatorFiltersVo extends ContractArrayVo
 
     public function getEncodedWithDefaultDate(): string
     {
-        $dateStart = MyCarbon::now()->startOfMonth()->format(MyCarbon::$date_startYear);
-        $dateEnd = MyCarbon::now()->endOfMonth()->format(MyCarbon::$date_startYear);
+        $dateStart          = MyCarbon::now()->startOfMonth()->format(MyCarbon::$date_startYear);
+        $dateEnd            = MyCarbon::now()->endOfMonth()->format(MyCarbon::$date_startYear);
         $defaultDateFilters = [["field" => $this->filterTimeName, "type" => "like", "value" => ["start" => $dateStart, "end" => $dateEnd]]];
-        $filters = $this->isNull() ? $defaultDateFilters : array_merge($this->value, $defaultDateFilters);
+        $filters            = $this->isNull() ? $defaultDateFilters : array_merge($this->value, $defaultDateFilters);
         return $this->encodeFilters($filters);
     }
 
     public function getFilterTime(string $fieldName): ?array
     {
-        $isValid = true;
+        $isValid    = true;
         $filterTime = collect($this->value)->where('field', $fieldName);
         if ($filterTime->isNotEmpty()) {
             $filterTime = $filterTime->first();
@@ -140,7 +130,7 @@ final class ArrayTabulatorFiltersVo extends ContractArrayVo
             if (!array_key_exists('end', $filterTime['value'])) $isValid = false;
 
             if (!$isValid) {
-                throw new InvalidValueException(sprintf('Si la clase <%s> contiene un filtro con fecha, se esperan los parámetros start y end.', class_basename(self::class)));
+                throw new InvalidValueException(sprintf('Si la clase <%s> contiene un filtro con fecha, se esperan los parámetros start y end.', class_basename(static::class)));
             }
             return $filterTime;
         }
@@ -155,16 +145,16 @@ final class ArrayTabulatorFiltersVo extends ContractArrayVo
     public function getExportName(string $prefixExportName): string
     {
         $filterTime = $this->getFilterTime($this->filterTimeName);
-        $name = "$prefixExportName.xlsx";
+        $name       = "$prefixExportName.xlsx";
         if ($filterTime && $filterTime['value']['start']) {
-            $dateStart = MyCarbon::parse($filterTime['value']['start']);
-            $dateEnd = MyCarbon::parse($filterTime['value']['end']);
-            $monthNameStart = optional($dateStart)->getTranslatedMonthName(); // TODO PHP8 - null safe operator
-            $monthNameEnd = optional($dateEnd)->getTranslatedMonthName(); // TODO PHP8 - null safe operator
+            $dateStart      = MyCarbon::parse($filterTime['value']['start']);
+            $dateEnd        = MyCarbon::parse($filterTime['value']['end']);
+            $monthNameStart = $dateStart?->getTranslatedMonthName();
+            $monthNameEnd   = $dateEnd?->getTranslatedMonthName();
 
-            $partStart = (!is_null($monthNameStart)) ? $monthNameStart : '';
-            $partEnd = (!is_null($monthNameEnd)) ? "_$monthNameEnd" : '';
-            $monthsName = ($monthNameStart === $monthNameEnd) ? $monthNameStart : $partStart.$partEnd;
+            $partStart  = (!is_null($monthNameStart)) ? $monthNameStart : '';
+            $partEnd    = (!is_null($monthNameEnd)) ? "_$monthNameEnd" : '';
+            $monthsName = ($monthNameStart === $monthNameEnd) ? $monthNameStart : $partStart . $partEnd;
 
             $name = "{$prefixExportName}_$monthsName.xlsx";
         }

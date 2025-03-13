@@ -12,11 +12,6 @@ use Throwable;
 
 final class WebsocketsService
 {
-    /**
-     * @param JsonResponse $response
-     * @param ShouldBroadcast $instanceEvent
-     * @return JsonResponse
-     */
     public static function emitEvent(JsonResponse $response, ShouldBroadcast $instanceEvent): JsonResponse
     {
         try {

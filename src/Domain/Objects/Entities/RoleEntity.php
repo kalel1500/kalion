@@ -12,27 +12,18 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 
 final class RoleEntity extends ContractEntity
 {
-    public ContractModelId $id;
-    public ModelString     $name;
-    public ModelBool       $all_permissions;
-    public ModelBool       $is_query;
-
     public function __construct(
-        ContractModelId $id,
-        ModelString     $name,
-        ModelBool       $all_permissions,
-        ModelBool       $is_query
+        public readonly ContractModelId $id,
+        public readonly ModelString     $name,
+        public readonly ModelBool       $all_permissions,
+        public readonly ModelBool       $is_query
     )
     {
-        $this->id              = $id;
-        $this->name            = $name;
-        $this->all_permissions = $all_permissions;
-        $this->is_query        = $is_query;
     }
 
-    protected static function createFromArray(array $data): self
+    protected static function createFromArray(array $data): static
     {
-        return new self(
+        return new static(
             ModelId::from($data['id'] ?? null),
             ModelString::new($data['name']),
             ModelBool::new($data['all_permissions']),
@@ -59,5 +50,4 @@ final class RoleEntity extends ContractEntity
     {
         $this->setRelation($value, 'permissions', PermissionCollection::class);
     }
-
 }

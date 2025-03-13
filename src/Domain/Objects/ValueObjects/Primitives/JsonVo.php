@@ -8,5 +8,5 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\Contrac
 
 class JsonVo extends ContractJsonVo
 {
-    protected $nullable = false;
+    protected bool $nullable = false;
 }

@@ -10,11 +10,11 @@ trait Singelton
 
     public static function instance()
     {
-        if (!self::$instance instanceof self) {
-            self::$instance = new self();
+        if (!static::$instance instanceof static) {
+            static::$instance = new static();
         }
 
-        return self::$instance;
+        return static::$instance;
     }
 
 }

@@ -18,11 +18,7 @@ abstract class ContractCollectionDo extends ContractCollectionBase
         return $this->items[0] ?? null;
     }
 
-    /**
-     * @param array|null $values
-     * @return static // TODO PHP8 static return type
-     */
-    static function fromArray(?array $values)
+    static function fromArray(?array $values): static|null
     {
         if (is_null($values)) return null;
 

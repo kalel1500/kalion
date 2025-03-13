@@ -14,14 +14,14 @@ use Thehouseofel\Kalion\Infrastructure\Helpers\MyCarbon;
 
 abstract class ContractDateVo extends ContractStringVo
 {
-    protected const CLASS_REQUIRED = DateVo::class;
-    protected const CLASS_NULLABLE = DateNullVo::class;
+    protected const CLASS_REQUIRED       = DateVo::class;
+    protected const CLASS_NULLABLE       = DateNullVo::class;
     protected const CLASS_MODEL_REQUIRED = ModelDate::class;
     protected const CLASS_MODEL_NULLABLE = ModelDateNull::class;
 
-    protected $allowZeros = false;
-    protected $formats    = ['Y-m-d H:i:s'];
-    protected $valueCarbon;
+    protected bool  $allowZeros = false;
+    protected array $formats    = ['Y-m-d H:i:s'];
+    protected       $valueCarbon;
 
     public function __construct(?string $value, ?array $formats = null)
     {
@@ -29,18 +29,12 @@ abstract class ContractDateVo extends ContractStringVo
         parent::__construct($value);
     }
 
-    /**
-     * @return static // TODO PHP8 static return type
-     */
-    public static function new($value, ?array $formats = null)
+    public static function new($value, ?array $formats = null): static
     {
         return new static($value, $formats);
     }
 
-    /**
-     * @return static // TODO PHP8 static return type
-     */
-    public static function from($value)
+    public static function from($value): static
     {
         $formatted = MyCarbon::parse($value)
             ->setTimezone(config('app.timezone'))

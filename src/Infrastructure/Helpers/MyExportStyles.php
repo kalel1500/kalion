@@ -64,7 +64,7 @@ final class MyExportStyles
 
     private static function applyCol(Worksheet $sheet, ?string $currentCellLetter = null, array $colsLetters = [], bool $onlyNotReceived = false): bool
     {
-        $colsLetters = self::getColumnsFromReceivedArray($sheet, $colsLetters, $onlyNotReceived);
+        $colsLetters = static::getColumnsFromReceivedArray($sheet, $colsLetters, $onlyNotReceived);
         return (is_null($currentCellLetter) || in_array($currentCellLetter, $colsLetters));
     }
 
@@ -72,7 +72,7 @@ final class MyExportStyles
 
     public static function setAlignHorizontal(Worksheet &$sheet, string $cord, string $alignment, string $currentCellLetter = null, array $colsLetters = [], bool $onlyNotReceived = false)
     {
-        $check = self::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
+        $check = static::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
         if($check) {
             $sheet->getStyle($cord)->getAlignment()->setHorizontal($alignment);
         }
@@ -80,7 +80,7 @@ final class MyExportStyles
 
     public static function setAlignVertical(Worksheet &$sheet, string $cord, string $alignment, string $currentCellLetter = null, array $colsLetters = [], bool $onlyNotReceived = false)
     {
-        $check = self::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
+        $check = static::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
         if($check) {
             $sheet->getStyle($cord)->getAlignment()->setVertical($alignment);
         }
@@ -88,7 +88,7 @@ final class MyExportStyles
 
     public static function setAlignIdent(Worksheet &$sheet, string $cord, int $ident, string $currentCellLetter = null, array $colsLetters = [], bool $onlyNotReceived = false)
     {
-        $check = self::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
+        $check = static::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
         if($check) {
             $sheet->getStyle($cord)->getAlignment()->setIndent($ident);
         }
@@ -96,7 +96,7 @@ final class MyExportStyles
 
     public static function setBold(Worksheet &$sheet, string $cord, string $currentCellLetter = null, array $colsLetters = [], bool $onlyNotReceived = false)
     {
-        $check = self::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
+        $check = static::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
         if($check) {
             $sheet->getStyle($cord)->getFont()->setBold(true);
         }
@@ -104,7 +104,7 @@ final class MyExportStyles
 
     public static function setBgColor(Worksheet &$sheet, string $cord, string $color, string $currentCellLetter = null, array $colsLetters = [], bool $onlyNotReceived = false)
     {
-        $check = self::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
+        $check = static::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
         if($check) {
             $sheet->getStyle($cord)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color); // FILL_PATTERN_DARKGRAY o FILL_PATTERN_MEDIUMGRAY
         }
@@ -112,7 +112,7 @@ final class MyExportStyles
 
     public static function setNumberFormat(Worksheet &$sheet, string $cord, string $format = NumberFormat::FORMAT_DATE_TIME4, string $currentCellLetter = null, array $colsLetters = [], bool $onlyNotReceived = false)
     {
-        $check = self::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
+        $check = static::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
         if($check) {
             $sheet->getStyle($cord)->getNumberFormat()->setFormatCode($format);
         }
@@ -120,7 +120,7 @@ final class MyExportStyles
 
     public static function setType(Worksheet &$sheet, string $cord, string $dataType = DataType::TYPE_STRING, string $currentCellLetter = null, $colsLetters = [], bool $onlyNotReceived = false)
     {
-        $check = self::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
+        $check = static::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
         if($check) {
             $value = $sheet->getCell($cord)->getValue();
             $sheet->setCellValueExplicit(
@@ -133,7 +133,7 @@ final class MyExportStyles
 
     public static function setBorders(Worksheet &$sheet, string $cord, string $color = 'FFFF0000', string $currentCellLetter = null, array $colsLetters = [], bool $onlyNotReceived = false)
     {
-        $check = self::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
+        $check = static::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
         if ($check) {
             $sheet->getStyle($cord)->getBorders()->getOutline()->setBorderStyle(Border::BORDER_THIN)->setColor(new Color($color));
         }
@@ -147,7 +147,7 @@ final class MyExportStyles
 
     public static function setValue(Worksheet &$sheet, string $cord, $value, string $currentCellLetter = null, $colsLetters = [], bool $onlyNotReceived = false)
     {
-        $check = self::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
+        $check = static::applyCol($sheet, $currentCellLetter, $colsLetters, $onlyNotReceived);
         if($check) {
             $sheet->setCellValue($cord, $value);
         }

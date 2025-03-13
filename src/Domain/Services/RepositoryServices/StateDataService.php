@@ -10,18 +10,13 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\StatePluckFieldVo
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\StatePluckKeyVo;
 use Thehouseofel\Kalion\Domain\Providers\DynamicEnumProviderContract;
 
-final class StateDataService
+final readonly class StateDataService
 {
-    private $repository;
-    private $dynamicEnumProvider;
-
     public function __construct(
-        StateRepositoryContract $repository,
-        DynamicEnumProviderContract $dynamicEnumProvider
+        private StateRepositoryContract     $repository,
+        private DynamicEnumProviderContract $dynamicEnumProvider
     )
     {
-        $this->dynamicEnumProvider = $dynamicEnumProvider;
-        $this->repository = $repository;
     }
 
     public function findByCode(string $code): StateEntity

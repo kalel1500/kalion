@@ -9,15 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\FailedJobCollection;
 
 final class ViewFailedJobsDo extends ContractDataObject
 {
-    private $jobs;
-
-    public function __construct(FailedJobCollection $jobs)
+    public function __construct(public readonly FailedJobCollection $jobs)
     {
-        $this->jobs = $jobs;
-    }
-
-    public function jobs(): FailedJobCollection
-    {
-        return $this->jobs;
     }
 }

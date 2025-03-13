@@ -13,7 +13,6 @@ use Throwable;
 final class AjaxWebsocketsController extends Controller
 {
     /**
-     * @return JsonResponse
      * @throws Throwable
      */
     public function checkService(): JsonResponse

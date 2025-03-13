@@ -94,10 +94,6 @@ final class TailwindClassFilter
     /**
      * Filtra las clases por defecto eliminando aquellas que tengan equivalentes
      * en las clases personalizadas.
-     *
-     * @param string $default_classes
-     * @param string $custom_classes
-     * @return string
      */
     public function filter(string $default_classes, string $custom_classes): string
     {
@@ -126,9 +122,6 @@ final class TailwindClassFilter
      * - Si no es especial, se elimina si hay en custom alguna clase que tenga el mismo número de partes (group)
      *   y el mismo prefijo.
      *
-     * @param string $default_class
-     * @param array $custom_array
-     * @return bool
      */
     protected function shouldKeepClass(string $default_class, array $custom_array): bool
     {
@@ -137,10 +130,10 @@ final class TailwindClassFilter
 
         // Filtrar las clases custom relevantes según si la default tiene variante o no.
         $filteredCustom = array_filter($custom_array, function($custom_class) use ($parsed) {
-            $customHasVariant = strpos($custom_class, ':') !== false;
+            $customHasVariant = str_contains($custom_class, ':');
             if ($parsed['variant'] !== '') {
                 // Si la clase default tiene variante, consideramos solo las custom que tengan la misma variante.
-                return $customHasVariant && (strpos($custom_class, $parsed['variant'] . ':') === 0);
+                return $customHasVariant && (str_starts_with($custom_class, $parsed['variant'] . ':'));
             }
             // Si no tiene variante, tomamos solo las custom sin variante.
             return !$customHasVariant;
@@ -167,10 +160,9 @@ final class TailwindClassFilter
      * Verifica si la clase pertenece a un grupo especial (por ejemplo, display o position).
      * Devuelve el nombre del grupo o false si no pertenece a ninguno.
      *
-     * @param string $class
-     * @return mixed
      */
-    protected function getSpecialGroup(string $class) {
+    protected function getSpecialGroup(string $class): mixed
+    {
         $parsed = $this->parseClass($class);
         foreach ($this->specials as $groupKey => $classList) {
             if (in_array($parsed['base'], $classList)) {
@@ -187,12 +179,10 @@ final class TailwindClassFilter
      * - group: cantidad de partes al dividir la base por "-" (se sobrescribe si la base coincide con una key en $groups)
      * - prefix: la primera parte de la base
      *
-     * @param string $class
-     * @return array
      */
     protected function parseClass(string $class): array
     {
-        if (strpos($class, ':') !== false) {
+        if (str_contains($class, ':')) {
             // Separamos en dos partes: variante y el resto.
             list($variant, $base) = explode(':', $class, 2);
         } else {

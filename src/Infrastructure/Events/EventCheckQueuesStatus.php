@@ -15,16 +15,13 @@ final class EventCheckQueuesStatus implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    private $response;
-
     /**
      * Create a new event instance.
      */
     public function __construct(
-        JsonResponse $response
+        private JsonResponse $response
     )
     {
-        $this->response = $response;
     }
 
     /**

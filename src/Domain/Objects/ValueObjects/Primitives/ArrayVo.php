@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\Contrac
 
 class ArrayVo extends ContractArrayVo
 {
-    protected $nullable = false;
+    protected bool $nullable = false;
 
     public function __construct(array $value)
     {

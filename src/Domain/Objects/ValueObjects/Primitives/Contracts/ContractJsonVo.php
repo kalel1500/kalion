@@ -13,17 +13,17 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
 
 abstract class ContractJsonVo extends ContractValueObject
 {
-    protected const CLASS_REQUIRED = JsonVo::class;
-    protected const CLASS_NULLABLE = JsonNullVo::class;
+    protected const CLASS_REQUIRED       = JsonVo::class;
+    protected const CLASS_NULLABLE       = JsonNullVo::class;
     protected const CLASS_MODEL_REQUIRED = ModelJsonVo::class;
     protected const CLASS_MODEL_NULLABLE = ModelJsonNullVo::class;
 
-    protected $allowStringInformatable = true;
+    protected bool $allowStringInformatable = true;
 
-    protected $arrayValue = null;
-    protected $objectValue = null;
-    protected $encodedValue = null;
-    protected $failAtFormat = false;
+    protected ?array            $arrayValue   = null;
+    protected array|object|null $objectValue  = null;
+    protected ?string           $encodedValue = null;
+    protected bool              $failAtFormat = false;
 
     public function __construct($value)
     {
@@ -46,8 +46,8 @@ abstract class ContractJsonVo extends ContractValueObject
         if (empty($value)) return;
 
         if (is_string($value)) {
-            $this->arrayValue = stringToArray($value);
-            $this->objectValue = stringToObject($value);
+            $this->arrayValue   = stringToArray($value);
+            $this->objectValue  = stringToObject($value);
             $this->encodedValue = $value;
             if (is_null($this->objectValue)) {
                 $this->failAtFormat = true;
@@ -59,16 +59,13 @@ abstract class ContractJsonVo extends ContractValueObject
         }
 
         if (is_array($value) || is_object($value)) {
-            $this->arrayValue = objectToArray($value);
-            $this->objectValue = arrayToObject($value);
+            $this->arrayValue   = objectToArray($value);
+            $this->objectValue  = arrayToObject($value);
             $this->encodedValue = json_encode($value);
         }
     }
 
-    /**
-     * @return null|array|object|string // TODO PHP8 - union types
-     */
-    public function value()
+    public function value(): null|array|object|string
     {
         return $this->value;
     }
@@ -78,10 +75,7 @@ abstract class ContractJsonVo extends ContractValueObject
         return $this->arrayValue;
     }
 
-    /**
-     * @return array|object|null // TODO PHP8 - union types
-     */
-    public function valueObj()
+    public function valueObj(): array|object|null
     {
         return $this->objectValue;
     }
@@ -121,31 +115,21 @@ abstract class ContractJsonVo extends ContractValueObject
     /*----------------------------------------------------------------MODIFIERS---------------------------------------------------------------------*/
 
 
-    /**
-     * @return $this // TODO PHP8 static return type
-     */
-    public function toArray()
+    public function toArray(): static
     {
         $this->value = $this->arrayValue;
         return $this;
     }
 
-    /**
-     * @return $this // TODO PHP8 static return type
-     */
-    public function toObject()
+    public function toObject(): static
     {
         $this->value = $this->objectValue;
         return $this;
     }
 
-    /**
-     * @return $this // TODO PHP8 static return type
-     */
-    public function encode()
+    public function encode(): static
     {
         $this->value = $this->encodedValue;
         return $this;
     }
-
 }

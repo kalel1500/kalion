@@ -11,42 +11,23 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 
-final class AuthorizationService
+final readonly class AuthorizationService
 {
-    private UserRepositoryContract       $repositoryUser;
-    private RoleRepositoryContract       $repositoryRole;
-    private PermissionRepositoryContract $repositoryPermission;
-
     public function __construct(
-        UserRepositoryContract       $repositoryUser,
-        RoleRepositoryContract       $repositoryRole,
-        PermissionRepositoryContract $repositoryPermission
+        private UserRepositoryContract       $repositoryUser,
+        private RoleRepositoryContract       $repositoryRole,
+        private PermissionRepositoryContract $repositoryPermission
     )
     {
-        $this->repositoryUser       = $repositoryUser;
-        $this->repositoryRole       = $repositoryRole;
-        $this->repositoryPermission = $repositoryPermission;
     }
 
-    /**
-     * @param UserEntity $user
-     * @param string|array $permissions
-     * @param array $params
-     * @return bool
-     */
-    public function can(UserEntity $user, $permissions, array $params): bool
+    public function can(UserEntity $user, string|array $permissions, array $params): bool
     {
         $array_permissions = PermissionParser::new()->getArrayPermissions($permissions, $params);
         return $array_permissions->contains(fn($params, $permission) => $this->userHasPermission($user, $permission, $params));
     }
 
-    /**
-     * @param UserEntity $user
-     * @param string|array $roles
-     * @param array $params
-     * @return bool
-     */
-    public function is(UserEntity $user, $roles, array $params): bool
+    public function is(UserEntity $user, string|array $roles, array $params): bool
     {
         $array_roles = PermissionParser::new()->getArrayPermissions($roles, $params);
         return $array_roles->contains(fn($params, $role) => $this->userHasRole($user, $role, $params));

@@ -10,9 +10,9 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
 
 abstract class ContractEnumVo extends ContractValueObject
 {
-    protected $permittedValues = null;
-    protected $caseSensitive = true;
-    protected $translatedValues = null;
+    protected ?array $permittedValues  = null;
+    protected bool   $caseSensitive    = true;
+    protected ?array $translatedValues = null;
 
     public function __construct($value)
     {
@@ -38,13 +38,13 @@ abstract class ContractEnumVo extends ContractValueObject
     {
         if (is_null($value)) return;
 
-        $permittedValues = $this->getPermittedValues();
+        $permittedValues               = $this->getPermittedValues();
         $failPermittedValuesValidation = ($this->caseSensitive)
             ? (!in_array($value, $permittedValues))
             : (!in_array(strtolower($value), array_map('strtolower', $permittedValues)));
 
         if ($failPermittedValuesValidation) {
-            $permittedValuesString = '['.implode(', ', $permittedValues).']';
+            $permittedValuesString = '[' . implode(', ', $permittedValues) . ']';
             throw new InvalidValueException(sprintf('<%s> no permite el valor <%s>. Valores permitidos: <%s>', class_basename(static::class), $value, $permittedValuesString));
         }
     }
@@ -63,7 +63,7 @@ abstract class ContractEnumVo extends ContractValueObject
             return null;
         }
         $value = $this->translatedValues[$this->value()];
-        return ($ucfirst) ? ucfirst($value): $value;
+        return ($ucfirst) ? ucfirst($value) : $value;
     }
 
 }

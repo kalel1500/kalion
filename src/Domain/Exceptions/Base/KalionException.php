@@ -10,25 +10,16 @@ use Throwable;
 
 abstract class KalionException extends Exception
 {
-    protected $statusCode;
-    protected $context;
+    protected int                 $statusCode;
+    protected ?ExceptionContextDo $context = null;
 
-    /**
-     * DomainBaseException constructor.
-     * @param int $statusCode
-     * @param string $message
-     * @param Throwable|null $previous
-     * @param int $code
-     * @param array|null $data
-     * @param bool $success
-     */
     public function __construct(
-        int $statusCode = 500,
-        string $message = "",
+        int        $statusCode = 500,
+        string     $message = "",
         ?Throwable $previous = null,
-        int $code = 0,
-        ?array $data = null,
-        bool $success = false
+        int        $code = 0,
+        ?array     $data = null,
+        bool       $success = false
     )
     {
         if ($message === "") {

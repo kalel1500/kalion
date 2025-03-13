@@ -6,22 +6,10 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
 
 final class SubRelationDataDo extends ContractDataObject
 {
-    private $with;
-    private $isFull;
-
-    public function __construct($with, $isFull)
+    public function __construct(
+        public readonly string|array|null $with,
+        public readonly bool|string|null $isFull
+    )
     {
-        $this->with = $with;
-        $this->isFull = $isFull;
-    }
-
-    public function with()
-    {
-        return $this->with;
-    }
-
-    public function isFull()
-    {
-        return $this->isFull;
     }
 }

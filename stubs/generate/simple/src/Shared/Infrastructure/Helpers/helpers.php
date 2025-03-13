@@ -8,8 +8,6 @@ use Thehouseofel\Kalion\Infrastructure\Facades\AuthService;
 if (!function_exists('userEntity')) {
     /**
      * Este helper se crea en la aplicación (y no en el paquete) para indicar el return es de tipo UserEntity
-     *
-     * @return UserEntity|null
      */
     function userEntity(): ?UserEntity
     {

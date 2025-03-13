@@ -8,12 +8,12 @@ use Thehouseofel\Kalion\Domain\Services\AuthorizationService;
 
 trait EntityHasPermissions
 {
-    public function can($permission, ...$params): bool
+    public function can(string|array $permission, ...$params): bool
     {
         return app()->make(AuthorizationService::class)->can($this, $permission, $params);
     }
 
-    public function is($role, ...$params): bool
+    public function is(string|array $role, ...$params): bool
     {
         return app()->make(AuthorizationService::class)->is($this, $role, $params);
     }

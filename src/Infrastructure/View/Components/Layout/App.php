@@ -11,12 +11,12 @@ use Thehouseofel\Kalion\Infrastructure\Services\CookieService;
 
 class App extends Component
 {
-    public $title;
-    public $isFromPackage;
-    public $darkMode;
-    public $sidebarCollapsed;
-    public $dataTheme;
-    public $colorTheme;
+    public string $title;
+    public bool $isFromPackage;
+    public bool $darkMode;
+    public bool $sidebarCollapsed;
+    public string $dataTheme;
+    public string $colorTheme;
 
     /**
      * Create a new component instance.
@@ -38,10 +38,8 @@ class App extends Component
 
     /**
      * Get the view / contents that represent the component.
-     *
-     * @return View|Closure|string
      */
-    public function render()
+    public function render(): View|Closure|string
     {
         return view('kal::components.layout.app');
     }

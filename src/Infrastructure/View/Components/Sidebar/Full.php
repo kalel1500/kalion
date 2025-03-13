@@ -5,28 +5,29 @@ namespace Thehouseofel\Kalion\Infrastructure\View\Components\Sidebar;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDo;
 use Thehouseofel\Kalion\Infrastructure\Facades\LayoutService;
 
 class Full extends Component
 {
-    public $showSearch;
-    public $searchAction;
-    public $items;
-    public $hasFooter;
-    public $footer;
+    public bool                                $showSearch;
+    public string                              $searchAction;
+    public SidebarItemCollection|CollectionAny $items;
+    public bool                                $hasFooter;
+    public SidebarItemCollection               $footer;
 
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        $this->showSearch = config('kalion_links.sidebar.search.show');
+        $this->showSearch   = config('kalion_links.sidebar.search.show');
         $this->searchAction = getUrlFromRoute(config('kalion_links.sidebar.search.route'));
-        $this->items = SidebarItemCollection::fromArray(config('kalion_links.sidebar.items') ?? []);
-        $this->footer = SidebarItemCollection::fromArray(config('kalion_links.sidebar.footer') ?? []);
-        $this->hasFooter = $this->footer->countInt()->isBiggerThan(0);
+        $this->items        = SidebarItemCollection::fromArray(config('kalion_links.sidebar.items') ?? []);
+        $this->footer       = SidebarItemCollection::fromArray(config('kalion_links.sidebar.footer') ?? []);
+        $this->hasFooter    = $this->footer->countInt()->isBiggerThan(0);
 
         $this->items = $this->items->map(function (SidebarItemDo $item) {
             if (!is_null($action = $item->counter_action)) {
@@ -38,10 +39,8 @@ class Full extends Component
 
     /**
      * Get the view / contents that represent the component.
-     *
-     * @return View|Closure|string
      */
-    public function render()
+    public function render(): View|Closure|string
     {
         return view('kal::components.sidebar.full');
     }

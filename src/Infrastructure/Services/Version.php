@@ -8,8 +8,6 @@ final class Version
 {
     /**
      * Determinar si la version actual de PHP es igual o mayor a la 7.4
-     *
-     * @return bool
      */
     public static function phpMin74(): bool
     {
@@ -18,8 +16,6 @@ final class Version
 
     /**
      * Determinar si la version de Laravel instalada es igual o mayor a la 9
-     *
-     * @return bool
      */
     public static function laravelMin9(): bool
     {
@@ -28,8 +24,6 @@ final class Version
 
     /**
      * Determinar si la version de Laravel instalada es igual o mayor a la 11
-     *
-     * @return bool
      */
     public static function laravelMin11(): bool
     {
@@ -38,8 +32,6 @@ final class Version
 
     /**
      * Determinar si la version de Laravel instalada es igual o mayor a la 12
-     *
-     * @return bool
      */
     public static function laravelMin12(): bool
     {

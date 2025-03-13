@@ -9,35 +9,22 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItem
 
 final class NavbarDropdownDo extends ContractDataObject
 {
-    public $is_list;
-    public $is_square;
-    public $get_data_action;
-    public $header;
-    public $footer;
-    public $items;
-
-    public $userInfo;
+    public UserInfoDo $userInfo;
 
     public function __construct(
-        ?bool                $is_list,
-        ?bool                $is_square,
-        ?string              $get_data_action,
-        ?string              $header,
-        ?NavbarItemDo        $footer,
-        NavbarItemCollection $items
+        public readonly ?bool                $is_list,
+        public readonly ?bool                $is_square,
+        public readonly ?string              $get_data_action,
+        public readonly ?string              $header,
+        public readonly ?NavbarItemDo        $footer,
+        public NavbarItemCollection $items
     )
     {
-        $this->is_list          = $is_list;
-        $this->is_square        = $is_square;
-        $this->get_data_action  = $get_data_action;
-        $this->header           = $header;
-        $this->footer           = $footer;
-        $this->items            = $items;
     }
 
-    protected static function createFromArray(array $data): self
+    protected static function createFromArray(array $data): static
     {
-        return new self(
+        return new static(
             $data['is_list'] ?? null,
             $data['is_square'] ?? null,
             $data['get_data_action'] ?? null,

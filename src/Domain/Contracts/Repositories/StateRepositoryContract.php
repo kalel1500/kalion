@@ -13,8 +13,8 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\EnumDynamicVo;
 interface StateRepositoryContract
 {
     public function all(): StateCollection;
-    public function getDictionary(?StatePluckFieldVo $field, ?StatePluckKeyVo $key): array;
-    public function getDictionaryByType(EnumDynamicVo $type, ?StatePluckFieldVo $field, ?StatePluckKeyVo $key): array;
+    public function getDictionary(StatePluckFieldVo $field, StatePluckKeyVo $key): array;
+    public function getDictionaryByType(EnumDynamicVo $type, StatePluckFieldVo $field, StatePluckKeyVo $key): array;
     public function getByType(EnumDynamicVo $type): StateCollection;
     public function findByCode(EnumDynamicVo $code): StateEntity;
 }

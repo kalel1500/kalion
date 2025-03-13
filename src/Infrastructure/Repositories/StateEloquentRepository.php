@@ -16,37 +16,32 @@ use Thehouseofel\Kalion\Infrastructure\Models\State;
 
 class StateEloquentRepository implements StateRepositoryContract
 {
-    private $eloquentModel;
+    private string $eloquentModel;
 
     public function __construct()
     {
-        $this->eloquentModel = new State();
+        $this->eloquentModel = State::class;
     }
 
     public function all(): StateCollection
     {
-        $eloquentResult = $this->eloquentModel->newQuery()->get();
+        $eloquentResult = $this->eloquentModel::query()->get();
         return StateCollection::fromEloquent($eloquentResult);
     }
 
-    public function getDictionary(?StatePluckFieldVo $field, ?StatePluckKeyVo $key): array
+    public function getDictionary(StatePluckFieldVo $field, StatePluckKeyVo $key): array
     {
-        $field  = $field ?? StatePluckFieldVo::id(); // TODO PHP8 - in parameter -> StatePluckFieldVo $field = new StatePluckFieldVo(StatePluckFieldVo::id)
-        $key    = $key ?? StatePluckKeyVo::code(); // TODO PHP8 - in parameter -> StatePluckKeyVo $key = new StatePluckKeyVo(StatePluckKeyVo::code)
         return $this->all()->pluck($field->value(), $key->value())->toArray();
     }
 
-    public function getDictionaryByType(EnumDynamicVo $type, ?StatePluckFieldVo $field, ?StatePluckKeyVo $key): array
+    public function getDictionaryByType(EnumDynamicVo $type, StatePluckFieldVo $field, StatePluckKeyVo $key): array
     {
-        $field  = $field ?? StatePluckFieldVo::id(); // TODO PHP8 - in parameter -> StatePluckFieldVo $field = new StatePluckFieldVo(StatePluckFieldVo::id)
-        $key    = $key ?? StatePluckKeyVo::code(); // TODO PHP8 - in parameter -> StatePluckKeyVo $key = new StatePluckKeyVo(StatePluckKeyVo::code)
         return $this->getByType($type)->pluck($field->value(), $key->value())->toArray();
     }
 
     public function getByType(EnumDynamicVo $type): StateCollection
     {
-        $eloquentResult = $this->eloquentModel
-            ->newQuery()
+        $eloquentResult = $this->eloquentModel::query()
             ->where('type', $type->value())
             ->get();
 
@@ -56,8 +51,7 @@ class StateEloquentRepository implements StateRepositoryContract
     public function findByCode(EnumDynamicVo $code): StateEntity
     {
         try {
-            $eloquentResult = $this->eloquentModel
-                ->newQuery()
+            $eloquentResult = $this->eloquentModel::query()
                 ->where('code', $code->value())
                 ->firstOrFail();
             return StateEntity::fromArray($eloquentResult->toArray());

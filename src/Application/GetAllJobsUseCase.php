@@ -9,11 +9,8 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\JobCollection;
 
 final class GetAllJobsUseCase
 {
-    private $repository;
-
-    public function __construct(JobRepositoryContract $repository)
+    public function __construct(private JobRepositoryContract $repository)
     {
-        $this->repository = $repository;
     }
 
     public function __invoke(): JobCollection

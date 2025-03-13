@@ -32,10 +32,8 @@ class KalionServiceProvider extends ServiceProvider
 {
     /**
      * All of the container singletons that should be registered.
-     *
-     * @var array
      */
-    public $singletons = [
+    public array $singletons = [
         'layoutService'                                                                           => \Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService::class,
         'authService'                                                                             => \Thehouseofel\Kalion\Infrastructure\Services\AuthService::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\RoleRepository::class,
@@ -45,10 +43,6 @@ class KalionServiceProvider extends ServiceProvider
 
     /**
      * Remove the given provider from the application's provider bootstrap file.
-     *
-     * @param  string  $provider
-     * @param  string|null  $path
-     * @return bool
      */
     public static function removeProviderFromBootstrapFile(string $provider, ?string $path = null): bool
     {
@@ -83,7 +77,7 @@ return [
         return true;
     }
 
-    private function updateNameOfMigrationsIfExist()
+    private function updateNameOfMigrationsIfExist(): void
     {
         $filesystem = new Filesystem();
         $migrationsPath = database_path('migrations');
@@ -128,8 +122,6 @@ return [
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -148,8 +140,6 @@ return [
 
     /**
      * Setup the configuration for Horizon.
-     *
-     * @return void
      */
     protected function configure(): void
     {
@@ -166,8 +156,6 @@ return [
 
     /**
      * Bootstrap the application services.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -185,8 +173,6 @@ return [
 
     /**
      * Register the Package routes.
-     *
-     * @return void
      */
     protected function registerRoutes(): void
     {
@@ -203,18 +189,14 @@ return [
 
     /**
      * Register the Package resources.
-     *
-     * @return void
      */
-    protected function registerResources()
+    protected function registerResources(): void
     {
         $this->loadViewsFrom(KALION_PATH.'/resources/views', 'kal');
     }
 
     /**
      * Register the package's publishable resources.
-     *
-     * @return void
      */
     protected function registerPublishing(): void
     {
@@ -316,8 +298,6 @@ return [
 
     /**
      * Register the Package Artisan commands.
-     *
-     * @return void
      */
     protected function registerCommands(): void
     {
@@ -332,8 +312,6 @@ return [
 
     /**
      * Register Package's migration files.
-     *
-     * @return void
      */
     protected function registerMigrations(): void
     {
@@ -349,8 +327,6 @@ return [
 
     /**
      * Register Package's migration files.
-     *
-     * @return void
      */
     protected function registerTranslations(): void
     {
@@ -360,8 +336,6 @@ return [
 
     /**
      * Register Package's components files.
-     *
-     * @return void
      */
     protected function registerComponents(): void
     {
@@ -376,8 +350,6 @@ return [
 
     /**
      * Register Package's Blade directives.
-     *
-     * @return void
      */
     protected function registerBladeDirectives(): void
     {
@@ -395,7 +367,6 @@ return [
     /**
      * Register Package's Middlewares.
      *
-     * @return void
      * @throws BindingResolutionException
      */
     protected function registerMiddlewares(): void
@@ -435,8 +406,6 @@ return [
 
     /**
      * Add Package's Macros.
-     *
-     * @return void
      */
     protected function registerMacros(): void
     {

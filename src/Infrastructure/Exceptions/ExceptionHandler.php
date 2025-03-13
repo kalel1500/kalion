@@ -22,8 +22,6 @@ final class ExceptionHandler
      * Internamente Laravel primero llama al render()
      *
      * Después llama al respond() y este modifica la respuesta
-     *
-     * @return callable
      */
     public static function getUsingCallback(): callable
     {

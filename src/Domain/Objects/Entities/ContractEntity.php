@@ -13,22 +13,17 @@ use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionE
 
 abstract class ContractEntity implements Arrayable, JsonSerializable
 {
-    public static $databaseFields = null; // TODO PHP8 property type (?array)
-    protected $primaryKey = 'id';
-    protected $incrementing = true;
+    public static ?array       $databaseFields = null;
+    protected string           $primaryKey     = 'id';
+    protected bool             $incrementing   = true;
+    protected ?array           $with           = null;
+    protected ?array           $withFull       = null;
+    protected bool|string|null $isFull;
+    protected array            $originalArray;
+    protected ?object          $originalObject;
+    protected bool             $isFromQuery;
 
-    protected $with;
-    protected $withFull;
-    protected $isFull;
-    protected $originalArray;
-    protected $originalObject;
-    protected $isFromQuery;
-
-    /**
-     * @param array $data
-     * @return static // TODO PHP8 static return type
-     */
-    abstract protected static function createFromArray(array $data);
+    abstract protected static function createFromArray(array $data): static;
 
     /**
      * @param Model|object $item
@@ -39,13 +34,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         return [];
     }
 
-    /**
-     * @param array|null $data
-     * @param string|array|null $with
-     * @param bool|string|null $isFull
-     * @return static|null // TODO PHP8 static return type
-     */
-    public static function fromArray(?array $data, $with = null, $isFull = null)
+    public static function fromArray(?array $data, array|string|null $with = null, bool|string $isFull = null): static|null
     {
         if (is_null($data)) return null;
 
@@ -58,31 +47,21 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         return $self;
     }
 
-    /**
-     * @param Model|object|null $item
-     * @param string|array|null $with
-     * @param bool|string|null $isFull
-     * @return static // TODO PHP8 static return type
-     */
-    public static function fromObject($item, $with = null, $isFull = null)
+    public static function fromObject(?object $item, string|array|null $with = null, bool|string|null $isFull = null): static|null
     {
         if (is_null($item)) return null;
 
-        $data                   = static::createFromObject($item);
-        $self                   = static::createFromArray($data);
-        $self->isFromQuery      = true;
-        $self->originalArray    = json_decode(json_encode($item), true);
-        $self->originalObject   = $item;
-        $self->isFull           = $isFull;
+        $data                 = static::createFromObject($item);
+        $self                 = static::createFromArray($data);
+        $self->isFromQuery    = true;
+        $self->originalArray  = json_decode(json_encode($item), true);
+        $self->originalObject = $item;
+        $self->isFull         = $isFull;
         $self->with($with);
         return $self;
     }
 
-    /**
-     * @param array|Model|null $value // TODO PHP8 union types
-     * @return static|null // TODO PHP8 static return type
-     */
-    public static function fromRelationData($value)
+    public static function fromRelationData(array|Model|null $value): static|null
     {
         return is_object($value) ? static::fromObject($value) : static::fromArray($value);
     }
@@ -96,18 +75,17 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
 
     /**
      * La definimos sin lógica para que las clases que existen sepan cuál sobreescriben
-     * @return static|null // TODO PHP8 static return type
      */
-    public static function createFake(array $overwriteParams = null)
+    public static function createFake(array $overwriteParams = null): static|null
     {
         return null;
     }
 
     public function toArray(): array
     {
-        [$relation, $defaultIsFull] = getInfoFromRelationWithFlag('flag:'.config('kalion.entity_calculated_props_mode'));
+        [$relation, $defaultIsFull] = getInfoFromRelationWithFlag('flag:' . config('kalion.entity_calculated_props_mode'));
 
-        $data = $this->toArrayProperties();
+        $data   = $this->toArrayProperties();
         $isFull = $this->isFull ?? $defaultIsFull;
         if ($isFull === true) {
             $data = array_merge($data, $this->toArrayCalculatedProps());
@@ -119,7 +97,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
             foreach ($this->withFull as $key => $rel) {
                 $relation = (is_array($rel)) ? $key : $rel;
                 [$relation, $isFull] = getInfoFromRelationWithFlag($relation);
-                $relationData = optional($this->$relation())->toArray(); // TODO PHP8 - nullsafe operator
+                $relationData                = $this->$relation()?->toArray();
                 $data[strToSnake($relation)] = $relationData;
             }
         }
@@ -158,16 +136,12 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         return $arrayValues;
     }
 
-    /**
-     * @param string|array $relations
-     * @return $this
-     */
-    public function with($relations)
+    public function with(string|array|null $relations): static
     {
         if (!$relations) return $this;
 
-        $relations = is_array($relations) ? $relations : [$relations];
-        $firstRelations = [];
+        $relations          = is_array($relations) ? $relations : [$relations];
+        $firstRelations     = [];
         $firstRelationsFull = [];
 
         foreach ($relations as $key => $rel) {
@@ -177,7 +151,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
             $currentRel = ($isKey = is_string($key)) ? $key : $rel;
 
             $currentRels = explode('.', $currentRel);
-            $first = $currentRels[0];
+            $first       = $currentRels[0];
             unset($currentRels[0]);
             $hasRelsAfterPoint = ($relsAfterPoint = implode('.', $currentRels)) !== '';
 
@@ -185,35 +159,31 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
                 ? ($hasRelsAfterPoint ? [$relsAfterPoint => $rel] : $rel)
                 : ($hasRelsAfterPoint ? $relsAfterPoint : null);
 
-            $isFull = null;
+            $isFull    = null;
             $firstFull = $first;
             [$first, $isFull] = getInfoFromRelationWithFlag($first, $isFull);
 
-            $firstRelations[] = $first;
+            $firstRelations[]     = $first;
             $firstRelationsFull[] = $firstFull;
             $this->setFirstRelation($first);
             $this->setLastRelation($first, $last, $isFull);
         }
 
 //        $this->originalArray = null;
-        $this->with = $firstRelations;
+        $this->with     = $firstRelations;
         $this->withFull = $firstRelationsFull;
         return $this;
     }
 
-    /**
-     * @param string $first
-     * @return void
-     */
-    private function setFirstRelation(string $first)
+    private function setFirstRelation(string $first): void
     {
-        $setRelation = 'set'.ucfirst($first);
+        $setRelation = 'set' . ucfirst($first);
         if ($this->isFromQuery) {
             $relationData = $this->originalObject->$first;
         } else {
             $relationName = strToSnake($first);
             if (!array_key_exists($relationName, $this->originalArray)) {
-                throw new NotFoundRelationDefinitionException($relationName,static::class);
+                throw new NotFoundRelationDefinitionException($relationName, static::class);
             }
             $relationData = $this->originalArray[$relationName];
         }
@@ -221,17 +191,12 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         $this->$setRelation($relationData);
     }
 
-    /**
-     * @param string $first
-     * @param string|array $last // TODO PHP8 - Union types
-     * @param bool|string|null $isFull
-     */
-    private function setLastRelation(string $first, $last, $isFull)
+    private function setLastRelation(string $first, string|array|null $last, bool|string|null $isFull): void
     {
         // if (empty($last)) return; // OLD
         // $last = (is_array($last)) ? $last : [$last]; // OLD
 
-        $isEntity = is_subclass_of($this->$first, ContractEntity::class);
+        $isEntity     = is_subclass_of($this->$first, ContractEntity::class);
         $isCollection = is_subclass_of($this->$first, ContractCollectionEntity::class);
 
         if ($isEntity) {
@@ -260,7 +225,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         return $this->$name;
     }
 
-    public function setRelation($data, string $name, string $class)
+    public function setRelation($data, string $name, string $class): void
     {
         $this->$name = $class::fromRelationData($data);
     }

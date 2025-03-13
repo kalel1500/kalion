@@ -9,17 +9,17 @@ use Throwable;
 
 final class MyCarbon
 {
-    public static $date_startYear                         = 'Y-m-d';
-    public static $date_startDay                          = 'd-m-Y';
-    public static $date_startYear_slash                   = 'Y/m/d';
-    public static $date_startDay_slash                    = 'd/m/Y';
-    public static $date_startMonthWithoutDay_slash        = 'm/Y';
-    public static $datetime_startYear                     = 'Y-m-d H:i:s';
-    public static $datetime_startYear_withoutSeconds      = 'Y-m-d H:i';
-    public static $datetime_startDay_slash                = 'd/m/Y H:i:s';
-    public static $datetime_startDay_slash_withoutSeconds = 'd/m/Y H:i';
-    public static $datetime_eloquent_timestamps           = 'Y-m-d\TH:i:s.u\Z';
-    public static $time                                   = 'H:i:s';
+    public static string $date_startYear                         = 'Y-m-d';
+    public static string $date_startDay                          = 'd-m-Y';
+    public static string $date_startYear_slash                   = 'Y/m/d';
+    public static string $date_startDay_slash                    = 'd/m/Y';
+    public static string $date_startMonthWithoutDay_slash        = 'm/Y';
+    public static string $datetime_startYear                     = 'Y-m-d H:i:s';
+    public static string $datetime_startYear_withoutSeconds      = 'Y-m-d H:i';
+    public static string $datetime_startDay_slash                = 'd/m/Y H:i:s';
+    public static string $datetime_startDay_slash_withoutSeconds = 'd/m/Y H:i';
+    public static string $datetime_eloquent_timestamps           = 'Y-m-d\TH:i:s.u\Z';
+    public static string $time                                   = 'H:i:s';
 
     public static function stringToformat($date, $format, $getNowIfNullRecived = false): ?string
     {
@@ -31,9 +31,9 @@ final class MyCarbon
         }
 
         if ($isInValid && $returnNow) {
-            $carbon = self::now();
+            $carbon = static::now();
         } else {
-            $carbon = self::parse($date);
+            $carbon = static::parse($date);
         }
 
         return $carbon->format($format);
@@ -59,30 +59,25 @@ final class MyCarbon
         if (is_null($date1) || is_null($date2)) {
             return null;
         }
-        $timestamp_date1 = self::parse($date1)->timestamp;
-        $timestamp_date2 = self::parse($date2)->timestamp;
-        $operation = $timestamp_date1.$operator.$timestamp_date2;
-        return (eval('return '.$operation.';'));
+        $timestamp_date1 = static::parse($date1)->timestamp;
+        $timestamp_date2 = static::parse($date2)->timestamp;
+        $operation       = $timestamp_date1 . $operator . $timestamp_date2;
+        return (eval('return ' . $operation . ';'));
     }
 
-    /**
-     * @param string|CarbonImmutable $date // TODO PHP8 - union types
-     * @param string|CarbonImmutable $time // TODO PHP8 - union types
-     * @return CarbonImmutable|null
-     */
-    public static function mergeDateAndTime($date, $time): ?CarbonImmutable
+    public static function mergeDateAndTime(string|CarbonImmutable $date, string|CarbonImmutable $time): ?CarbonImmutable
     {
-        $date = ($date instanceof CarbonImmutable) ? $date : self::parse($date);
-        $time = ($time instanceof CarbonImmutable) ? $time : self::parse($time);
-        $date = $date->format(self::$date_startYear);
-        $time = $time->format(self::$time);
-        return self::parse($date.' '.$time);
+        $date = ($date instanceof CarbonImmutable) ? $date : static::parse($date);
+        $time = ($time instanceof CarbonImmutable) ? $time : static::parse($time);
+        $date = $date->format(static::$date_startYear);
+        $time = $time->format(static::$time);
+        return static::parse($date . ' ' . $time);
     }
 
     public static function checkFormat(string $date, string $format, bool $allowZeros = false): bool
     {
         // Verificar si el valor es cero según el formato y $allowZeros es true
-        if ($allowZeros && self::isZeroDate($date, $format)) {
+        if ($allowZeros && static::isZeroDate($date, $format)) {
             return true;
         }
 
@@ -100,7 +95,7 @@ final class MyCarbon
     {
         // Iterar sobre cada formato y llamar a checkFormat
         foreach ($formats as $format) {
-            if (self::checkFormat($date, $format, $allowZeros)) {
+            if (static::checkFormat($date, $format, $allowZeros)) {
                 return true;
             }
         }

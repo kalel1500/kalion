@@ -8,33 +8,18 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\ContractDataObject;
 
 final class IconDo extends ContractDataObject
 {
-    protected $name;
-    protected $name_short;
-
     public function __construct(
-        string $name,
-        string $name_short
+        public readonly string $name,
+        public readonly string $name_short
     )
     {
-        $this->name       = $name;
-        $this->name_short = $name_short;
     }
 
-    protected static function createFromArray(array $data): self
+    protected static function createFromArray(array $data): static
     {
-        return new self(
+        return new static(
             $data['name'] ?? null,
             $data['name_short'] ?? null
         );
-    }
-
-    public function name(): string
-    {
-        return $this->name;
-    }
-
-    public function name_short(): string
-    {
-        return $this->name_short;
     }
 }

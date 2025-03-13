@@ -20,9 +20,9 @@ final class TagTypeEntity extends ContractEntity
     {
     }
 
-    protected static function createFromArray(array $data): self
+    protected static function createFromArray(array $data): static
     {
-        return new self(
+        return new static(
             ModelId::from($data['id'] ?? null),
             ModelString::new($data['name']),
             ModelString::new($data['code']),

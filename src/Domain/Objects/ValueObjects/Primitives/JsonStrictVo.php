@@ -8,6 +8,6 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\Contrac
 
 class JsonStrictVo extends ContractJsonVo
 {
-    protected $nullable                = false;
-    protected $allowStringInformatable = false;
+    protected bool $nullable                = false;
+    protected bool $allowStringInformatable = false;
 }

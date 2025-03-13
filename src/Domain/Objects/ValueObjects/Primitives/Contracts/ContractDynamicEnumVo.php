@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Providers\DynamicEnumProviderContract;
 
 abstract class ContractDynamicEnumVo extends ContractEnumVo
 {
-    protected $dynamicEnumProvider;
+    protected DynamicEnumProviderContract $dynamicEnumProvider;
 
     public function __construct($value, DynamicEnumProviderContract $dynamicEnumProvider)
     {
@@ -21,10 +21,7 @@ abstract class ContractDynamicEnumVo extends ContractEnumVo
         return $this->dynamicEnumProvider->getPermittedValues();
     }
 
-    /**
-     * @return static // TODO PHP8 static return type
-     */
-    public static function new($value, DynamicEnumProviderContract $dynamicEnumProvider = null)
+    public static function new($value, DynamicEnumProviderContract $dynamicEnumProvider = null): static
     {
         return new static($value, $dynamicEnumProvider);
     }

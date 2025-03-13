@@ -8,17 +8,12 @@ use Illuminate\Support\Collection;
 
 final class PermissionParser
 {
-    public static function new(): self
+    public static function new(): static
     {
-        return new self();
+        return new static();
     }
 
-    /**
-     * @param string|array $permissions
-     * @param array $params
-     * @return Collection
-     */
-    public function getArrayPermissions($permissions, array $params): Collection
+    public function getArrayPermissions(string|array $permissions, array $params): Collection
     {
         $permissions = collect(is_array($permissions) ? $permissions : explode('|', $permissions));
 

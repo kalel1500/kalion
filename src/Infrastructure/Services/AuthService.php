@@ -15,7 +15,7 @@ final class AuthService implements AuthServiceContract
     /** @var class-string<T> */
     private $entityClass;
 
-    private $loadRoles;
+    private bool $loadRoles;
 
     /** @var T|null */
     private $userEntity = null;

@@ -15,7 +15,6 @@ use Throwable;
 final class AjaxQueuesController extends Controller
 {
     /**
-     * @return JsonResponse
      * @throws Throwable
      */
     public function checkService(): JsonResponse

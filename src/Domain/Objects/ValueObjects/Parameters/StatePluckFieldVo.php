@@ -11,7 +11,7 @@ final class StatePluckFieldVo extends ContractEnumVo
     const id = 'id';
     const name = 'name';
 
-    protected $permittedValues = [
+    protected ?array $permittedValues = [
         self::id,
         self::name,
     ];
@@ -21,13 +21,13 @@ final class StatePluckFieldVo extends ContractEnumVo
         parent::__construct($value);
     }
 
-    public static function id(): self
+    public static function id(): static
     {
-        return new self(self::id);
+        return new static(static::id);
     }
 
-    public static function name(): self
+    public static function name(): static
     {
-        return new self(self::name);
+        return new static(static::name);
     }
 }

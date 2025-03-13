@@ -11,11 +11,11 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\CookiePreferencesDo;
 
 final class CookieService
 {
-    private $cookieName;
-    private $cookieDuration;
-    private $cookieVersion;
-    private $preferences;
-    private $cookie;
+    private string              $cookieName;
+    private int                 $cookieDuration;
+    private string              $cookieVersion;
+    private CookiePreferencesDo $preferences;
+    private ?Cookie             $cookie = null;
 
     public function __construct()
     {
@@ -40,20 +40,20 @@ final class CookieService
         return $this->preferences;
     }
 
-    public function setPreferences(CookiePreferencesDo $preferences): self
+    public function setPreferences(CookiePreferencesDo $preferences): static
     {
         $this->preferences = $preferences;
         return $this;
     }
 
-    public static function new(): self
+    public static function new(): static
     {
-        return new self();
+        return new static();
     }
 
-    public static function readOrNew(): self
+    public static function readOrNew(): static
     {
-        $service     = self::new();
+        $service     = static::new();
         $preferences = CookiePreferencesDo::fromJson(CookieFacade::get($service->cookieName));
         if (!is_null($preferences)) {
             $service->setPreferences($preferences);
@@ -61,7 +61,7 @@ final class CookieService
         return $service;
     }
 
-    public function create(): self
+    public function create(): static
     {
         // Crear la cookie usando CookieFacade::make
         $this->cookie = CookieFacade::make(
@@ -76,7 +76,7 @@ final class CookieService
         return $this;
     }
 
-    public function createIfNotExist(Request $request): self
+    public function createIfNotExist(Request $request): static
     {
         // Verificar que la cookie no exista
         if (!$request->hasCookie($this->cookieName)) {
@@ -87,7 +87,7 @@ final class CookieService
         return $this;
     }
 
-    public function queue(): self
+    public function queue(): static
     {
         if (!is_null($this->cookie)) {
             // Poner la cookie en la cola
@@ -98,8 +98,8 @@ final class CookieService
 
     public function resetAndQueueIfExistInvalid(): ?self
     {
-        if ($this->cookieVersion !== self::readOrNew()->preferences->version()) {
-            return self::new()->create()->queue();
+        if ($this->cookieVersion !== static::readOrNew()->preferences->version()) {
+            return static::new()->create()->queue();
         }
         return null;
     }

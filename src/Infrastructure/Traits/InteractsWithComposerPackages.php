@@ -10,12 +10,8 @@ trait InteractsWithComposerPackages
 {
     /**
      * Installs the given Composer Packages into the application.
-     *
-     * @param  string  $composer
-     * @param  array  $packages
-     * @return bool
      */
-    protected function requireComposerPackages(string $composer, array $packages, bool $isRemove = false)
+    protected function requireComposerPackages(string $composer, array $packages, bool $isRemove = false): bool
     {
         $action = $isRemove ? 'remove' : 'require';
 
@@ -37,10 +33,8 @@ trait InteractsWithComposerPackages
 
     /**
      * Get the path to the appropriate PHP binary.
-     *
-     * @return string
      */
-    protected function phpBinary()
+    protected function phpBinary(): string
     {
         return php_binary();
     }

@@ -6,15 +6,15 @@
     <x-kal::section>
 
         <div id="icons" class="flex flex-wrap gap-3">
-            @foreach($data->icons() as $key => $icon)
+            @foreach($data->icons as $key => $icon)
                 <div class="pb-2 pt-6 px-6 border-2 border-gray-200 border-dashed rounded-sm dark:border-gray-700">
 
                     <x-kal::tooltip id="tooltip-{{ $key }}" data-text-id="{{ $key }}">
-                        <span>{{ $data->show_name_short()->value() ? $icon->name_short() : $icon->name() }}</span>
+                        <span>{{ $data->show_name_short->value() ? $icon->name_short : $icon->name }}</span>
                     </x-kal::tooltip>
 
                     <div class="justify-self-center cursor-pointer" data-tooltip-target="tooltip-{{ $key }}" data-icon-id="{{ $key }}">
-                        <x-dynamic-component :component="$icon->name()"/>
+                        <x-dynamic-component :component="$icon->name"/>
                     </div>
 
                     <div id="copied-{{ $key }}" class="flex items-center text-xs invisible">

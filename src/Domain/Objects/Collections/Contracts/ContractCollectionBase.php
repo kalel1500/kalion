@@ -28,18 +28,18 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
 abstract class ContractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, Arrayable, JsonSerializable
 {
     /** @var null|bool */
-    protected const IS_ENTITY           = null;
+    protected const IS_ENTITY = null;
     /** @var null|string */
-    protected const ENTITY              = null;
+    protected const ENTITY = null;
     /** @var null|string */
-    protected const VALUE_CLASS         = null;
+    protected const VALUE_CLASS = null;
     /** @var null|string */
-    protected const VALUE_CLASS_REQ     = null;
+    protected const VALUE_CLASS_REQ = null;
     /** @var null|string */
-    protected const VALUE_CLASS_NULL    = null;
+    protected const VALUE_CLASS_NULL = null;
 
-    protected $items;
-    protected $nullable = true;
+    protected array $items;
+    protected bool  $nullable = true;
 
     /**
      * @param array $collResult
@@ -58,7 +58,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         $subRelData = (!$this->isInstanceOfRelatable())
             ? SubRelationDataDo::fromArray([null, null])
             : getSubWith($this->with, $this->isFull, $pluckField);
-        return CollectionAny::fromArray($data, $subRelData->with(), $subRelData->isFull());
+        return CollectionAny::fromArray($data, $subRelData->with, $subRelData->isFull);
     }
 
     private function encodeAndDecode(array $array, bool $assoc)
@@ -76,7 +76,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $valueClass = ($this->nullable) ? static::VALUE_CLASS_NULL : static::VALUE_CLASS_REQ;
         $valueClass = is_null($valueClass) ? static::VALUE_CLASS : $valueClass;
-        $class = ($this->isEntity()) ? static::ENTITY : $valueClass;
+        $class      = ($this->isEntity()) ? static::ENTITY : $valueClass;
 
         if (!$class) {
             throw new RequiredDefinitionException(sprintf('The const <%s> must be declared in <%s>.', 'VALUE_CLASS', class_basename(static::class)));
@@ -93,10 +93,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return static::IS_ENTITY;
     }
 
-    /**
-     * @return static // TODO PHP8 static return type
-     */
-    public static function empty()
+    public static function empty(): static
     {
         return new static();
     }
@@ -141,23 +138,17 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toArray();
     }
 
-    public function all()
+    public function all(): array
     {
         return $this->items;
     }
 
-    /**
-     * @return mixed|null
-     */
-    public function first()
+    public function first(): mixed
     {
         return collFirst($this->items);
     }
 
-    /**
-     * @return mixed|null
-     */
-    public function last()
+    public function last(): mixed
     {
         return collLast($this->items);
     }
@@ -182,25 +173,19 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
 
-        // TODO PHP8 - match
-        if ($item instanceof BuildArrayable && $fromThisClass) {
-            return $item->toArrayForBuild();
-        }
-
-        if ($item instanceof Arrayable) {
-            return $item->toArray();
-        }
-        if ($item instanceof ContractValueObject) {
-            return $item->value();
-        }
-        return $item;
+        return match (true) {
+            $item instanceof BuildArrayable && $fromThisClass => $item->toArrayForBuild(),
+            $item instanceof Arrayable                        => $item->toArray(),
+            $item instanceof ContractValueObject              => $item->value(),
+            default                                           => $item,
+        };
     }
 
     public function toArray(): array
     {
         $result = [];
         foreach ($this->items as $key => $item) {
-            $item = self::getItemToArray($item);
+            $item         = self::getItemToArray($item);
             $result[$key] = $item;
         }
         return $result;
@@ -208,11 +193,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function toArrayDynamic($toArrayMethod, ...$params): array
     {
-        $result = [];
-        foreach ($this->items as $key => $item) {
-            $result[$key] = $item->$toArrayMethod(...$params);
-        }
-        return $result;
+        return array_map(fn($item) => $item->$toArrayMethod(...$params), $this->items);
     }
 
     public function toClearedArray(): array
@@ -220,10 +201,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->encodeAndDecode($this->toArray(), true);
     }
 
-    /**
-     * @return object|array // TODO PHP8 - Union types
-     */
-    public function toClearedObject()
+    public function toClearedObject(): object|array
     {
         return $this->encodeAndDecode($this->toArray(), false);
     }
@@ -245,7 +223,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $collectionClass::fromArray($this->toArray());
     }
 
-    public function toJson($options = 0)
+    public function toJson($options = 0): false|string
     {
         return json_encode($this->toArray(), $options);
     }
@@ -257,7 +235,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function pluck(string $field, string $key = null): CollectionAny
     {
-        $getItemValue = function($collectionItem, string $pluckField) {
+        $getItemValue   = function ($collectionItem, string $pluckField) {
             /** @var Arrayable|BuildArrayable $collectionItem */
 
             if (is_array($collectionItem)) {
@@ -279,15 +257,12 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
             return $collectionItem->toArrayForBuild()[$pluckField];
         };
-        $clearItemValue = function($item) {
-            // TODO PHP8 - match
-            if ($item instanceof Arrayable) {
-                return $item->toArray();
-            }
-            if ($item instanceof ContractValueObject) {
-                return $item->value();
-            }
-            return $item;
+        $clearItemValue = function ($item) {
+            return match (true) {
+                $item instanceof Arrayable           => $item->toArray(),
+                $item instanceof ContractValueObject => $item->value(),
+                default                              => $item
+            };
         };
 
         $result = [];
@@ -298,8 +273,8 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             if (is_null($key)) {
                 $result[] = $fieldValue;
             } else {
-                $keyValue = $getItemValue($item, $key);
-                $keyValue = $clearItemValue($keyValue);
+                $keyValue          = $getItemValue($item, $key);
+                $keyValue          = $clearItemValue($keyValue);
                 $result[$keyValue] = $fieldValue;
             }
         }
@@ -428,7 +403,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function select($keys)
     {
-        $keys = is_array($keys) ? $keys : func_get_args();
+        $keys       = is_array($keys) ? $keys : func_get_args();
         $collResult = collSelect($this->toArray(), $keys)->values();
         return $this->toOriginal($collResult->toArray());
     }
@@ -436,7 +411,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     public function diff(ContractCollectionBase $items, string $field = null)
     {
         if (!is_null($field)) {
-            $diff = collect();
+            $diff       = collect();
             $dictionary = $items->pluck($field);
             foreach ($this->toArray() as $item) {
                 if (!$dictionary->contains($item[$field])) {
@@ -448,7 +423,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             $array2 = array_map('json_encode', $items->toArray());
 
             $result = array_diff($array1, $array2);
-            $result = array_map(function($item) { return json_decode($item, true); }, $result);
+            $result = array_map(fn($item) => json_decode($item, true), $result);
 
             $diff = collect($result)->values();
         }
@@ -460,30 +435,30 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
      * @param ContractCollectionBase|array $items
      * @return T
      */
-    public function diffKeys($items)
+    public function diffKeys(ContractCollectionBase|array $items)
     {
         $array1 = $this->toArray();
         $array2 = $this->getArrayableItems($items);
         $result = array_diff_key($array1, $array2);
-        $diff = collect($result);
+        $diff   = collect($result);
         return $this->toOriginal($diff->toArray());
     }
 
     public function flip()
     {
         $result = array_flip($this->toArray());
-        $diff = collect($result);
+        $diff   = collect($result);
         return $this->toOriginal($diff->toArray());
     }
 
     public function map(callable $callback)
     {
-        $keys = array_keys($this->items);
-        $items = array_map($callback, $this->items, $keys);
-        $result = collect(array_combine($keys, $items));
+        $keys        = array_keys($this->items);
+        $items       = array_map($callback, $this->items, $keys);
+        $result      = collect(array_combine($keys, $items));
         $resultArray = $result->toArray();
         return $result->contains(function ($item) {
-            return ! $item instanceof ContractEntity;
+            return !$item instanceof ContractEntity;
         }) ? $this->toBase($resultArray) : $this->toOriginal($resultArray);
     }
 
@@ -499,19 +474,12 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toOriginal($collResult->toArray());
     }
 
-    /**
-     * @return mixed|null
-     */
-    public function firstWhere($key, $operator = null, $value = null)
+    public function firstWhere($key, $operator = null, $value = null): mixed
     {
         return $this->where(...func_get_args())->first();
     }
 
-    /**
-     * @param callable $callback
-     * @return $this
-     */
-    public function each(callable $callback)
+    public function each(callable $callback): static
     {
         foreach ($this->items as $key => $item) {
             if ($callback($item, $key) === false) {
@@ -530,6 +498,6 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             return $items->toArray();
         }
 
-        return (array) $items;
+        return (array)$items;
     }
 }

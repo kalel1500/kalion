@@ -58,7 +58,7 @@ abstract class ContractArrayVo extends ContractValueObject implements ArrayAcces
     {
 //        $pattern = "/^$key/";
 //        $keysToUnset = array_values(preg_grep($pattern, array_keys($this->value)));
-        $keysToUnset = array_keys(array_filter($this->value, function ($item) use ($key) { return (strpos($item, $key) !== false); }, ARRAY_FILTER_USE_KEY));
+        $keysToUnset = array_keys(array_filter($this->value, fn ($item) => str_contains($item, $key), ARRAY_FILTER_USE_KEY));
         foreach ($keysToUnset as $key) {
             unset($this->value[$key]);
         }
@@ -79,11 +79,7 @@ abstract class ContractArrayVo extends ContractValueObject implements ArrayAcces
         return ($this->isNull()) ? null : count($this->value);
     }
 
-    /**
-     * @param string|array $key // TODO PHP8 - Union types
-     * @return bool
-     */
-    public function has($key): bool
+    public function has(string|array $key): bool
     {
         $keys = is_array($key) ? $key : func_get_args();
         foreach ($keys as $value) {
@@ -103,23 +99,14 @@ abstract class ContractArrayVo extends ContractValueObject implements ArrayAcces
         return $default;
     }
 
-    /**
-     * @param  mixed  $key
-     * @param  mixed  $value
-     * @return $this
-     */
-    public function put($key, $value)
+    public function put(mixed $key, mixed $value): static
     {
         $this->offsetSet($key, $value);
 
         return $this;
     }
 
-    /**
-     * @param  string|array $keys // TODO PHP8 - Union types
-     * @return $this
-     */
-    public function forget($keys)
+    public function forget(string|array $keys): static
     {
         foreach ((array) $keys as $key) {
             $this->offsetUnset($key);
@@ -128,11 +115,7 @@ abstract class ContractArrayVo extends ContractValueObject implements ArrayAcces
         return $this;
     }
 
-    /**
-     * @param  string|array $keys // TODO PHP8 - Union types
-     * @return $this
-     */
-    public function forgetLike($keys)
+    public function forgetLike(string|array $keys): static
     {
         foreach ((array) $keys as $key) {
             $this->offsetUnsetLike($key);
@@ -141,11 +124,7 @@ abstract class ContractArrayVo extends ContractValueObject implements ArrayAcces
         return $this;
     }
 
-    /**
-     * @param ...$values
-     * @return $this
-     */
-    public function push(...$values)
+    public function push(...$values): static
     {
         foreach ($values as $value) {
             $this->value[] = $value;

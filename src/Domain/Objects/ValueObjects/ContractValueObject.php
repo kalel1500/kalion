@@ -18,18 +18,15 @@ abstract class ContractValueObject
     protected const CLASS_MODEL_REQUIRED = null;
     protected const CLASS_MODEL_NULLABLE = null;
 
-    protected $nullable = true;
+    protected bool $nullable = true;
     protected $value;
 
-    /**
-     * @return static // TODO PHP8 static return type
-     */
-    public static function new($value)
+    public static function new($value): static
     {
         return new static($value);
     }
 
-    abstract public function value();
+    abstract public function value(): mixed;
 
     protected function isNullReceived(): bool
     {
@@ -46,10 +43,7 @@ abstract class ContractValueObject
         return !$this->isNull();
     }
 
-    /**
-     * @return $this
-     */
-    public function toUppercase()
+    public function toUppercase(): static
     {
         if ($this->isNotNull()) {
             $this->value = strtoupper($this->value);
@@ -57,10 +51,7 @@ abstract class ContractValueObject
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function toLowercase()
+    public function toLowercase(): static
     {
         if ($this->isNotNull()) {
             $this->value = strtolower($this->value);
@@ -68,10 +59,7 @@ abstract class ContractValueObject
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function toCamelCase()
+    public function toCamelCase(): static
     {
         if ($this->isNotNull()) {
             $this->value = strToCamelCase($this->value);
@@ -79,10 +67,7 @@ abstract class ContractValueObject
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function toNoSpaces()
+    public function toNoSpaces(): static
     {
         if ($this->isNotNull()) {
             $this->value = str_replace(' ', '', $this->value);
@@ -90,10 +75,7 @@ abstract class ContractValueObject
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function toCleanString()
+    public function toCleanString(): static
     {
         if ($this->isNotNull()) {
             // Eliminar acentos y convertir a caracteres sin tildes

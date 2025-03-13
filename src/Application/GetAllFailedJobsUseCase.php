@@ -9,11 +9,8 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\FailedJobCollection;
 
 final class GetAllFailedJobsUseCase
 {
-    private $repository;
-
-    public function __construct(JobRepositoryContract $repository)
+    public function __construct(private JobRepositoryContract $repository)
     {
-        $this->repository = $repository;
     }
 
     public function __invoke(): FailedJobCollection

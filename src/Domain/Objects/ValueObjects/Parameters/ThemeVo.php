@@ -12,7 +12,7 @@ final class ThemeVo extends ContractEnumVo
     const light  = 'light';
     const system = 'system';
 
-    protected $permittedValues = [
+    protected ?array $permittedValues = [
         self::dark,
         self::light,
         self::system,
@@ -21,17 +21,17 @@ final class ThemeVo extends ContractEnumVo
 
     public function isDark(): bool
     {
-        return ($this->value === self::dark);
+        return ($this->value === static::dark);
     }
 
     public function isLight(): bool
     {
-        return ($this->value === self::light);
+        return ($this->value === static::light);
     }
 
     public function isSystem(): bool
     {
-        return ($this->value === self::system);
+        return ($this->value === static::system);
     }
 
     public function getDataTheme(): string

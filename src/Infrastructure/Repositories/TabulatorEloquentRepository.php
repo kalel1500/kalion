@@ -21,7 +21,7 @@ class TabulatorEloquentRepository implements TabulatorRepository
         /*Filtradores TABULATOR*/
         if (!is_null($filters)) {
             foreach ($filters as $filter) {
-                $query = self::applyFilter($query, $filter, $dontFilter);
+                $query = static::applyFilter($query, $filter, $dontFilter);
             }
         }
 
@@ -29,7 +29,7 @@ class TabulatorEloquentRepository implements TabulatorRepository
         /*if (isset($arrParams['sorters'])) {
             $sorters = $arrParams['sorters'];
             foreach ($sorters as $sorter) {
-                $query = self::applySorter($query, $sorter);
+                $query = static::applySorter($query, $sorter);
             }
         }*/
 
@@ -49,10 +49,10 @@ class TabulatorEloquentRepository implements TabulatorRepository
         }
 
         // Si no hay puntos (relaciones), filtramos directamente
-        if (strpos($field, ".") === false) {
+        if (!str_contains($field, ".")) {
 //            $originTable = $query->getModel()->getTable();
 //            $field = $originTable . '.' . $field;
-            return self::basicFiltering($query, $field, $type, $value);
+            return static::basicFiltering($query, $field, $type, $value);
         }
 
         // Si hay puntos en el campo, separamos por punto y recorremos para crear el nombre del whereHas
@@ -97,7 +97,7 @@ class TabulatorEloquentRepository implements TabulatorRepository
 
         // Filtramos la relacion
         return $query->whereHas($relName, function ($q) use($relName, $colName, $type, $value, $field) {
-            return self::basicFiltering($q, $colName, $type, $value);
+            return static::basicFiltering($q, $colName, $type, $value);
         });
     }
 
@@ -126,15 +126,13 @@ class TabulatorEloquentRepository implements TabulatorRepository
         return $query;
     }
 
-    /**
-     * @param Builder|QueryBuilder $query $query
-     * @param string|null $field
-     * @param string|null $type
-     * @param [type] $value
-     * @param string|null $fromOtherDBTable
-     * @return Builder|QueryBuilder $query
-     */
-    public static function basicFiltering($query, ?string $field, ?string $type, $value, ?string $fromOtherDBTable = null)
+    public static function basicFiltering(
+        Builder|QueryBuilder $query,
+        ?string $field,
+        ?string $type,
+        mixed $value,
+        ?string $fromOtherDBTable = null
+    ): Builder|QueryBuilder
     {
         // Relacionar con una tabla de otra base de datos para g2r.sist
         if (!is_null($fromOtherDBTable)) {
@@ -142,7 +140,7 @@ class TabulatorEloquentRepository implements TabulatorRepository
         }
 
         $value = (is_array($value) && $type === '=') ? $value[0] : $value;
-        $value = (in_array($value, self::NULL_EQUIVALENT_VALUES)) ? 'k' : $value;
+        $value = (in_array($value, static::NULL_EQUIVALENT_VALUES)) ? 'k' : $value;
         $value = ($value === 'true') ? true : $value;
         $value = ($value === 'false') ? false : $value;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Services;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\ServiceProvider;
@@ -15,28 +16,26 @@ final class StartCommandService
 {
     use CountMethods;
 
-    private $command;
-    private $reset;
-    private $simple;
-    private $steps;
-    private $number = 0;
-    private $filesystem;
-    private $developMode;
-    private $keepMigrationsDate;
-    private $resourcesFolderRestored = false;
+    private int        $steps;
+    private int        $number                  = 0;
+    private Filesystem $filesystem;
+    private bool       $developMode;
+    private bool       $keepMigrationsDate;
+    private bool       $resourcesFolderRestored = false;
 
-    public function __construct(KalionStart $command, bool $reset, bool $simple)
+    public function __construct(
+        private KalionStart $command,
+        private bool        $reset,
+        private bool        $simple,
+    )
     {
         if (!Version::laravelMin12()) {
             $command->error('Por ahora este comando solo esta preparado para la version de laravel 12');
             exit(1); // Terminar la ejecución con código de error
         }
-        $this->command          = $command;
-        $this->reset            = $reset;
-        $this->simple           = $simple;
-        $this->steps            = $this->countPublicMethods();
-        $this->filesystem       = $command->filesystem();
-        $this->developMode      = config('kalion.package_in_develop');
+        $this->steps              = $this->countPublicMethods();
+        $this->filesystem         = $command->filesystem();
+        $this->developMode        = config('kalion.package_in_develop');
         $this->keepMigrationsDate = config('kalion.keep_migrations_date');
     }
 
@@ -47,10 +46,6 @@ final class StartCommandService
 
     /**
      * Write a string as indented output.
-     *
-     * @param string $message
-     * @param bool $show_number
-     * @return void
      */
     private function line(string $message, bool $show_number = true): void
     {
@@ -60,13 +55,8 @@ final class StartCommandService
 
     /**
      * Update the "package.json" file.
-     *
-     * @param string $configurationKey
-     * @param array $items
-     * @param bool $remove
-     * @return void
      */
-    private function modifyPackageJsonSection(string $configurationKey, array $items, bool $remove = false)
+    private function modifyPackageJsonSection(string $configurationKey, array $items, bool $remove = false): void
     {
         $filePath = base_path('package.json');
 
@@ -106,15 +96,8 @@ final class StartCommandService
 
     /**
      * Execute a process.
-     *
-     * @param array|string $command
-     * @param string|null $startMessage
-     * @param string $successMessage
-     * @param string $failureMessage
-     * @param bool $show_number
-     * @return void
      */
-    private function execute_Process($command, ?string $startMessage, string $successMessage, string $failureMessage, bool $show_number = true): void
+    private function execute_Process(array|string $command, ?string $startMessage, string $successMessage, string $failureMessage, bool $show_number = true): void
     {
         // Imprimir mensaje de inicio del proceso
         if (!is_null($startMessage)) {
@@ -127,7 +110,7 @@ final class StartCommandService
         // Verificamos si el proceso falló
         if ($run->failed()) {
             $failureMessageEnd = ' Please run the following command manually: "' . implode(' ', $command) . '"';
-            $this->command->warn($failureMessage.$failureMessageEnd);
+            $this->command->warn($failureMessage . $failureMessageEnd);
             $this->command->error($run->errorOutput());
         } else {
             // Imprimimos el mensaje de éxito
@@ -140,8 +123,8 @@ final class StartCommandService
         if ($this->resourcesFolderRestored) return;
 
         $folder = 'resources';
-        $dir = $this->command->originalStubsPath($folder);
-        $dest = base_path($folder);
+        $dir    = $this->command->originalStubsPath($folder);
+        $dest   = base_path($folder);
 
         $this->filesystem->deleteDirectory($dest);
         $this->filesystem->ensureDirectoryExists($dest);
@@ -150,12 +133,12 @@ final class StartCommandService
     }
 
 
-    public static function configure(KalionStart $command, bool $reset, bool $simple): self
+    public static function configure(KalionStart $command, bool $reset, bool $simple): static
     {
-        return new self($command, $reset, $simple);
+        return new static($command, $reset, $simple);
     }
 
-    public function restoreFilesModifiedByPackageKalionJs(): self
+    public function restoreFilesModifiedByPackageKalionJs(): static
     {
         $this->number++;
 
@@ -177,7 +160,7 @@ final class StartCommandService
         return $this;
     }
 
-    public function publishKalionConfig(): self
+    public function publishKalionConfig(): static
     {
         $this->number++;
 
@@ -197,7 +180,7 @@ final class StartCommandService
         return $this;
     }
 
-    public function stubsCopyFile_AppServiceProvider(): self
+    public function stubsCopyFile_AppServiceProvider(): static
     {
         $this->number++;
 
@@ -206,48 +189,48 @@ final class StartCommandService
         $file = 'app/Providers/AppServiceProvider.php';
 
         $from = ($this->isReset()) ? $this->command->originalStubsPath($file) : $this->command->stubsPath($file);
-        $to = base_path($file);
+        $to   = base_path($file);
 
         copy($from, $to);
-        $this->line('Archivo "'.$file.'" creado');
+        $this->line('Archivo "' . $file . '" creado');
 
         return $this;
     }
 
-    public function stubsCopyFile_DependencyServiceProvider(): self
+    public function stubsCopyFile_DependencyServiceProvider(): static
     {
         $this->number++;
 
         $file = 'app/Providers/DependencyServiceProvider.php';
 
         $from = $this->command->stubsPath($file);
-        $to = base_path($file);
+        $to   = base_path($file);
 
         if ($this->isReset()) {
             $this->filesystem->delete($to);
-            $this->line('Archivo "'.$file.'" eliminado');
+            $this->line('Archivo "' . $file . '" eliminado');
             return $this;
         }
 
         copy($from, $to);
-        $this->line('Archivo "'.$file.'" creado');
+        $this->line('Archivo "' . $file . '" creado');
 
         return $this;
     }
 
-    public function stubsCopyFiles_Config(): self
+    public function stubsCopyFiles_Config(): static
     {
         $this->number++;
 
-        $folder = 'config';
-        $sourcePath = $this->command->stubsPath($folder);
+        $folder          = 'config';
+        $sourcePath      = $this->command->stubsPath($folder);
         $destinationPath = base_path($folder);
 
         $files = $this->filesystem->files($sourcePath);
 
         foreach ($files as $file) {
             $from = $file->getPathname();
-            $to = $destinationPath . DIRECTORY_SEPARATOR . $file->getFilename();
+            $to   = $destinationPath . DIRECTORY_SEPARATOR . $file->getFilename();
 
             if ($this->isReset()) {
                 $this->filesystem->delete($to);
@@ -257,22 +240,22 @@ final class StartCommandService
         }
 
         $action = $this->reset ? 'eliminados' : 'copiados';
-        $this->line('Archivos de configuración '.$action);
+        $this->line('Archivos de configuración ' . $action);
 
         return $this;
     }
 
-    public function stubsCopyFiles_Migrations(): self
+    public function stubsCopyFiles_Migrations(): static
     {
         $this->number++;
 
-        $folder = 'database/migrations';
-        $sourcePath = $this->command->stubsPath($folder);
+        $folder          = 'database/migrations';
+        $sourcePath      = $this->command->stubsPath($folder);
         $destinationPath = base_path($folder);
 
-        $files = $this->filesystem->files($sourcePath);
+        $files         = $this->filesystem->files($sourcePath);
         $existingFiles = collect($this->filesystem->files($destinationPath))->map(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()));
-        $timestamp = now();
+        $timestamp     = now();
 
         foreach ($files as $file) {
             $originalName = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $file->getFilename());
@@ -296,7 +279,7 @@ final class StartCommandService
                 $timestamp->addSecond();
             }
 
-            $newFileName = $fileTimestamp . '_' . $originalName;
+            $newFileName     = $fileTimestamp . '_' . $originalName;
             $destinationFile = $destinationPath . '/' . $newFileName;
 
             // Comprobar que no exista el archivo
@@ -306,19 +289,19 @@ final class StartCommandService
         }
 
         $action = $this->reset ? 'eliminadas' : 'copiadas';
-        $this->line('Migraciones '.$action);
+        $this->line('Migraciones ' . $action);
 
         return $this;
     }
 
-    public function stubsCopyFolder_Factories(): self
+    public function stubsCopyFolder_Factories(): static
     {
         $this->number++;
 
         // Factories
         $folder = 'database/factories';
 
-        $dir = ($this->isReset()) ? $this->command->originalStubsPath($folder) : $this->command->stubsPath($folder);
+        $dir  = ($this->isReset()) ? $this->command->originalStubsPath($folder) : $this->command->stubsPath($folder);
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
@@ -327,19 +310,19 @@ final class StartCommandService
         $this->filesystem->ensureDirectoryExists($dest);
         $this->filesystem->copyDirectory($dir, $dest);
 
-        $this->line('Carpeta "'.$folder.'" copiada');
+        $this->line('Carpeta "' . $folder . '" copiada');
 
         return $this;
     }
 
-    public function stubsCopyFolder_Seeders(): self
+    public function stubsCopyFolder_Seeders(): static
     {
         $this->number++;
 
         // Factories
         $folder = 'database/seeders';
 
-        $dir = ($this->isReset()) ? $this->command->originalStubsPath($folder) : $this->command->stubsPath($folder);
+        $dir  = ($this->isReset()) ? $this->command->originalStubsPath($folder) : $this->command->stubsPath($folder);
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
@@ -348,35 +331,35 @@ final class StartCommandService
         $this->filesystem->ensureDirectoryExists($dest);
         $this->filesystem->copyDirectory($dir, $dest);
 
-        $this->line('Carpeta "'.$folder.'" copiada');
+        $this->line('Carpeta "' . $folder . '" copiada');
 
         return $this;
     }
 
-    public function stubsCopyFolder_Lang(): self
+    public function stubsCopyFolder_Lang(): static
     {
         $this->number++;
 
         // Views
         $folder = 'lang';
 
-        $dir = $this->command->stubsPath($folder);
+        $dir  = $this->command->stubsPath($folder);
         $dest = base_path($folder);
 
         if ($this->isReset()) {
             $this->filesystem->deleteDirectory($dest);
-            $this->line('Carpeta "'.$folder.'" eliminada');
+            $this->line('Carpeta "' . $folder . '" eliminada');
             return $this;
         }
 
         $this->filesystem->ensureDirectoryExists($dest);
         $this->filesystem->copyDirectory($dir, $dest);
-        $this->line('Carpeta "'.$folder.'" creada');
+        $this->line('Carpeta "' . $folder . '" creada');
 
         return $this;
     }
 
-    public function stubsCopyFolder_Resources(): self
+    public function stubsCopyFolder_Resources(): static
     {
         $this->number++;
 
@@ -388,57 +371,57 @@ final class StartCommandService
 
         if ($this->isReset()) return $this;
 
-        $dir = $this->command->stubsPath($folder);
+        $dir  = $this->command->stubsPath($folder);
         $dest = base_path($folder);
 
         $this->filesystem->ensureDirectoryExists($dest);
         $this->filesystem->copyDirectory($dir, $dest);
-        $this->line('Carpeta "'.$folder.'" creada');
+        $this->line('Carpeta "' . $folder . '" creada');
 
         return $this;
     }
 
-    public function stubsCopyFolder_Src(): self
+    public function stubsCopyFolder_Src(): static
     {
         $this->number++;
 
         // Src
         $folder = 'src';
 
-        $dir = $this->command->stubsPath($folder);
+        $dir  = $this->command->stubsPath($folder);
         $dest = base_path($folder);
 
         if ($this->isReset()) {
             $this->filesystem->deleteDirectory($dest);
-            $this->line('Carpeta "'.$folder.'" eliminada');
+            $this->line('Carpeta "' . $folder . '" eliminada');
             return $this;
         }
 
         $this->filesystem->ensureDirectoryExists($dest);
         $this->filesystem->copyDirectory($dir, $dest);
-        $this->line('Carpeta "'.$folder.'" creada');
+        $this->line('Carpeta "' . $folder . '" creada');
 
         return $this;
     }
 
-    public function stubsCopyFile_RoutesWeb(): self
+    public function stubsCopyFile_RoutesWeb(): static
     {
         $this->number++;
 
         // routes/web.php
-        $originalFile = 'routes/web.php';
-        $generatedFile = 'routes/'.(Version::phpMin74() ? 'web.php' : 'web_php_old.php');
+        $originalFile  = 'routes/web.php';
+        $generatedFile = 'routes/' . (Version::phpMin74() ? 'web.php' : 'web_php_old.php');
 
         $from = ($this->isReset()) ? $this->command->originalStubsPath($originalFile) : $this->command->stubsPath($generatedFile);
-        $to = base_path($originalFile);
+        $to   = base_path($originalFile);
 
         copy($from, $to);
-        $this->line('Archivo "'.$originalFile.'" modificado');
+        $this->line('Archivo "' . $originalFile . '" modificado');
 
         return $this;
     }
 
-    public function createEnvFiles(): self
+    public function createEnvFiles(): static
     {
         $this->number++;
 
@@ -447,8 +430,8 @@ final class StartCommandService
         $message = 'Archivos ".env" creados';
 
         // Definir archivo origen (al generar)
-        $file = '.env.save.local';
-        $from = $this->command->stubsPath($file);
+        $file        = '.env.save.local';
+        $from        = $this->command->stubsPath($file);
         $to_envLocal = base_path($file);
 
         // Definir archivo destino
@@ -461,8 +444,8 @@ final class StartCommandService
             $this->filesystem->delete($to_envLocal);
 
             // Definir archivo origen (reset)
-            $file = '.env.example';
-            $from = $this->command->originalStubsPath($file);
+            $file        = '.env.example';
+            $from        = $this->command->originalStubsPath($file);
             $to_envLocal = base_path($file);
         }
 
@@ -485,51 +468,51 @@ final class StartCommandService
         return $this;
     }
 
-    public function deleteDirectory_Http(): self
+    public function deleteDirectory_Http(): static
     {
         $this->number++;
 
         // Delete directory "app/Http"
         $folder = 'app/Http';
-        $dest = base_path($folder);
+        $dest   = base_path($folder);
 
         if ($this->isReset()) {
             $dir = $this->command->originalStubsPath($folder);
             $this->filesystem->ensureDirectoryExists($dest);
             $this->filesystem->copyDirectory($dir, $dest);
-            $this->line('Carpeta "'.$folder.'" creada');
+            $this->line('Carpeta "' . $folder . '" creada');
             return $this;
         }
 
         $this->filesystem->deleteDirectory($dest);
-        $this->line('Directorio "'.$folder.'" eliminado');
+        $this->line('Directorio "' . $folder . '" eliminado');
 
         return $this;
     }
 
-    public function deleteDirectory_Models(): self
+    public function deleteDirectory_Models(): static
     {
         $this->number++;
 
         // Delete directory "app/Models"
         $folder = 'app/Models';
-        $dest = base_path($folder);
+        $dest   = base_path($folder);
 
         if ($this->isReset()) {
             $dir = $this->command->originalStubsPath($folder);
             $this->filesystem->ensureDirectoryExists($dest);
             $this->filesystem->copyDirectory($dir, $dest);
-            $this->line('Carpeta "'.$folder.'" creada');
+            $this->line('Carpeta "' . $folder . '" creada');
             return $this;
         }
 
         $this->filesystem->deleteDirectory($dest);
-        $this->line('Directorio "'.$folder.'" eliminado');
+        $this->line('Directorio "' . $folder . '" eliminado');
 
         return $this;
     }
 
-    public function deleteFile_Changelog(): self
+    public function deleteFile_Changelog(): static
     {
         $this->number++;
 
@@ -540,7 +523,7 @@ final class StartCommandService
         return $this;
     }
 
-    public function modifyFile_BootstrapProviders_toAddDependencyServiceProvider(): self
+    public function modifyFile_BootstrapProviders_toAddDependencyServiceProvider(): static
     {
         $this->number++;
 
@@ -561,7 +544,7 @@ final class StartCommandService
         return $this;
     }
 
-    public function modifyFile_BootstrapApp_toAddMiddlewareRedirect(): self
+    public function modifyFile_BootstrapApp_toAddMiddlewareRedirect(): static
     {
         $this->number++;
 
@@ -601,7 +584,7 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_BootstrapApp_toAddExceptionHandler(): self
+    public function modifyFile_BootstrapApp_toAddExceptionHandler(): static
     {
         $this->number++;
 
@@ -620,7 +603,7 @@ EOD;
 
         // Reemplazar el contenido del bloque con las nuevas líneas
         $replacement = ($this->isReset())
-            ?  <<<'EOD'
+            ? <<<'EOD'
 ->withExceptions(function (Exceptions $exceptions) {
         //
     })
@@ -642,7 +625,7 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_ConfigApp_toUpdateTimezone(): self
+    public function modifyFile_ConfigApp_toUpdateTimezone(): static
     {
         $this->number++;
 
@@ -675,7 +658,7 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_ConfigAuth_toUpdateModel(): self
+    public function modifyFile_ConfigAuth_toUpdateModel(): static
     {
         $this->number++;
 
@@ -708,7 +691,7 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_JsBootstrap_toAddImportFlowbite(): self
+    public function modifyFile_JsBootstrap_toAddImportFlowbite(): static
     {
         $this->number++;
 
@@ -741,7 +724,7 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_Gitignore_toDeleteLockFileLines(): self
+    public function modifyFile_Gitignore_toDeleteLockFileLines(): static
     {
         $this->number++;
 
@@ -774,7 +757,7 @@ EOD;
         return $this;
     }
 
-    /*public function modifyFile_PackageJson_toAddNpmDevDependencies(): self
+    /*public function modifyFile_PackageJson_toAddNpmDevDependencies(): static
     {
         $this->number++;
 
@@ -797,7 +780,7 @@ EOD;
         return $this;
     }*/
 
-    /*public function modifyFile_PackageJson_toAddNpmDependencies(): self
+    /*public function modifyFile_PackageJson_toAddNpmDependencies(): static
     {
         $this->number++;
 
@@ -811,7 +794,7 @@ EOD;
         return $this;
     }*/
 
-    public function modifyFile_PackageJson_toAddScriptTsBuild(): self
+    public function modifyFile_PackageJson_toAddScriptTsBuild(): static
     {
         $this->number++;
 
@@ -825,7 +808,7 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_PackageJson_toAddEngines(): self
+    public function modifyFile_PackageJson_toAddEngines(): static
     {
         $this->number++;
 
@@ -840,7 +823,7 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_ComposerJson_toAddSrcNamespace(): self
+    public function modifyFile_ComposerJson_toAddSrcNamespace(): static
     {
         $this->number++;
 
@@ -898,7 +881,7 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_ComposerJson_toAddHelperFilePath(): self
+    public function modifyFile_ComposerJson_toAddHelperFilePath(): static
     {
         $this->number++;
 
@@ -963,7 +946,7 @@ EOD;
         return $this;
     }
 
-    public function execute_ComposerRequire_toInstallComposerDependencies(): self
+    public function execute_ComposerRequire_toInstallComposerDependencies(): static
     {
         $this->number++;
 
@@ -1006,7 +989,7 @@ EOD;
         return $this;
     }
 
-    /*public function execute_ComposerDumpAutoload(): self
+    /*public function execute_ComposerDumpAutoload(): static
     {
         $this->number++;
 
@@ -1026,7 +1009,7 @@ EOD;
         return $this;
     }*/
 
-    public function execute_NpmInstall(): self
+    public function execute_NpmInstall(): static
     {
         $this->number++;
 
@@ -1042,7 +1025,7 @@ EOD;
         return $this;
     }
 
-    public function execute_NpmInstallDependencies(): self
+    public function execute_NpmInstallDependencies(): static
     {
         $this->number++;
 
@@ -1051,7 +1034,7 @@ EOD;
         $isReset         = $this->isReset();
         $isResetFront    = $this->isReset(true);
         $packageJsonPath = base_path('package.json');
-        $packages = [
+        $packages        = [
             'devDependencies' => [
                 'flowbite'                    => $isReset,
                 '@types/node'                 => $isResetFront,
@@ -1060,16 +1043,16 @@ EOD;
                 'prettier-plugin-tailwindcss' => $isResetFront,
                 'typescript'                  => $isResetFront,
             ],
-            'dependencies' => [
+            'dependencies'    => [
                 '@kalel1500/kalion-js' => $isResetFront,
             ]
         ];
 
         foreach ($packages as $type => $dependencies) {
-            $extra  = $type === 'devDependencies' ? '--save-dev' : '';
+            $extra = $type === 'devDependencies' ? '--save-dev' : '';
             foreach ($dependencies as $package => $remove) {
 
-                $exsistFolder = File::exists(base_path("node_modules/$package"));
+                $exsistFolder  = File::exists(base_path("node_modules/$package"));
                 $inPackageJson = false;
                 if (File::exists($packageJsonPath)) {
                     $packageJson = json_decode(File::get($packageJsonPath), true);
@@ -1098,7 +1081,7 @@ EOD;
         return $this;
     }
 
-    public function execute_NpxKalionJs(): self
+    public function execute_NpxKalionJs(): static
     {
         $this->number++;
 
@@ -1114,7 +1097,7 @@ EOD;
         return $this;
     }
 
-    public function stubsCopyFolder_ResourcesFront(): self
+    public function stubsCopyFolder_ResourcesFront(): static
     {
         $this->number++;
 
@@ -1123,17 +1106,17 @@ EOD;
 
         if ($this->isReset(true)) return $this;
 
-        $dir = $this->command->stubsPath($folder, true);
+        $dir  = $this->command->stubsPath($folder, true);
         $dest = base_path($folder);
 
         $this->filesystem->ensureDirectoryExists($dest);
         $this->filesystem->copyDirectory($dir, $dest);
-        $this->line('Carpeta "'.$folder.'" creada');
+        $this->line('Carpeta "' . $folder . '" creada');
 
         return $this;
     }
 
-    public function execute_gitAdd(): self
+    public function execute_gitAdd(): static
     {
         $this->number++;
 
@@ -1147,7 +1130,7 @@ EOD;
         return $this;
     }
 
-    public function execute_NpmRunBuild(): self
+    public function execute_NpmRunBuild(): static
     {
         $this->number++;
 

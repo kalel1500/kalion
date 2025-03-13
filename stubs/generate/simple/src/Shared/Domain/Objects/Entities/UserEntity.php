@@ -27,7 +27,7 @@ class UserEntity extends BaseUserEntity
         $this->other_field = $other_field;
     }
 
-    protected static function createFromArray(array $data): self
+    protected static function createFromArray(array $data): static
     {
         return parent::createFromChildArray($data, [
             ModelStringNull::new($data['other_field'] ?? 'prueba')

@@ -9,13 +9,10 @@ use Illuminate\Support\Facades\Mail;
 
 final class MyMailDM
 {
-    protected $mailable;
-
-    public function __construct(Mailable $mailable, $keepOriginalRecipientsEvenInTests = false)
+    public function __construct(protected Mailable $mailable, $keepOriginalRecipientsEvenInTests = false)
     {
-        $this->mailable = $mailable;
         if (config('kalion.mail_active_tests') && !$keepOriginalRecipientsEvenInTests) {
-            $arrayTo = self::getRecipientsFromStringVariable(config('kalion.mail_test_recipients'));
+            $arrayTo = static::getRecipientsFromStringVariable(config('kalion.mail_test_recipients'));
             $this->mailable->to = [];
             $this->mailable->cc = [];
             $this->mailable->bcc = [];

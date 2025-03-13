@@ -11,7 +11,7 @@ class UnauthorizedException extends BasicHttpException
 {
     const STATUS_CODE = 403;
 
-    public static function forRoles(string $roles): self
+    public static function forRoles(string $roles): static
     {
         $message = __('h::auth.invalid_roles');
 
@@ -22,7 +22,7 @@ class UnauthorizedException extends BasicHttpException
         return new static(static::STATUS_CODE, $message);
     }
 
-    public static function forPermissions(string $permissions): self
+    public static function forPermissions(string $permissions): static
     {
         $message = __('h::auth.invalid_permissions');
 
@@ -33,14 +33,14 @@ class UnauthorizedException extends BasicHttpException
         return new static(static::STATUS_CODE, $message);
     }
 
-    public static function missingTraitHasPermissions(UserEntity $user): self
+    public static function missingTraitHasPermissions(UserEntity $user): static
     {
         $class = get_class($user);
 
         return new static(403, __('h::auth.missing_trait_has_roles', ['class' => $class]));
     }
 
-    public static function notLoggedIn(): self
+    public static function notLoggedIn(): static
     {
         return new static(static::STATUS_CODE, __('h::auth.not_logged_in'));
     }

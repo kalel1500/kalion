@@ -5,17 +5,25 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Contracts;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ContractDataObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\NavbarDropdownDo;
 
 abstract class NavigationItem extends ContractDataObject
 {
-    public $code;
-    public $icon;
-    public $text;
-    public $tooltip;
-    public $route_name;
-    public $is_post;
-    public $dropdown;
-    protected $hasDropdown;
+    protected bool $hasDropdown;
+
+    public function __construct(
+        public ?string                                     $code,
+        public ?string                                     $icon,
+        public ?string                                     $text,
+        public ?string                                     $tooltip,
+        public ?string                                     $route_name,
+        public ?bool                                       $is_post,
+        public NavbarDropdownDo|SidebarItemCollection|null $dropdown,
+    )
+    {
+        $this->hasDropdown = !is_null($dropdown);
+    }
 
     public function getCode(): string
     {

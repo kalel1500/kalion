@@ -295,16 +295,6 @@ if (!function_exists('addMessagesSeparator')) {
 }
 
 if (!function_exists('abort_d')) {
-    /**
-     * Throw an HttpException with the given data.
-     *
-     * @param int $code
-     * @param string $message
-     * @param array|null $data
-     * @param bool $success
-     * @param Throwable|null $previous
-     * @return void
-     */
     function abort_d(
         int $statusCode,
         string $message,
@@ -318,17 +308,6 @@ if (!function_exists('abort_d')) {
 }
 
 if (!function_exists('abortC_if')) {
-    /**
-     * Throw an HttpException with the given data.
-     *
-     * @param bool $condition
-     * @param int $code
-     * @param string $message
-     * @param array|null $data
-     * @param bool $success
-     * @param Throwable|null $previous
-     * @return void
-     */
     function abortC_if(
         bool $condition,
         int $code,
@@ -377,12 +356,6 @@ if (!function_exists('isValidBoolean')) {
 }*/
 
 if (!function_exists('isDomainException')) {
-    /**
-     * Determine if the given exception is an HTTP exception.
-     *
-     * @param Throwable $e
-     * @return bool
-     */
     function isDomainException(Throwable $e): bool
     {
         return ($e instanceof KalionException);
@@ -425,7 +398,7 @@ if (!function_exists('collectAny')) {
 }
 
 if (!function_exists('objectToArray')) {
-    function objectToArray($object)  // TODO PHP8 - Union types (array|object)
+    function objectToArray($object): array|object
     {
         $string = json_encode($object);
         return json_decode($string, true);
@@ -433,7 +406,7 @@ if (!function_exists('objectToArray')) {
 }
 
 if (!function_exists('arrayToObject')) {
-    function arrayToObject($object)  // TODO PHP8 - Union types (array|object)
+    function arrayToObject($object): array|object
     {
         $string = json_encode($object);
         return json_decode($string);
@@ -575,13 +548,7 @@ if (!function_exists('clearWith')) {
 }
 
 if (!function_exists('getSubWith')) {
-    /**
-     * @param string|array|null $with
-     * @param bool|string|null $isFull
-     * @param string|null $relationName
-     * @return SubRelationDataDo
-     */
-    function getSubWith($with, $isFull, ?string $relationName): SubRelationDataDo
+    function getSubWith(string|array|null $with, bool|string|null $isFull, ?string $relationName): SubRelationDataDo
     {
         if (is_null($with)) return SubRelationDataDo::fromArray([null, null]);
         if (is_null($relationName)) return SubRelationDataDo::fromArray([$with, $isFull]);
@@ -623,7 +590,7 @@ if (!function_exists('getInfoFromRelationWithFlag')) {
      * @param bool|string|null $isFull
      * @return array{string, bool|string|null}
      */
-    function getInfoFromRelationWithFlag(string $relation, $isFull = null): array
+    function getInfoFromRelationWithFlag(string $relation, bool|string|null $isFull = null): array
     {
         if (str_contains($relation, ':')) {
             [$relation, $flag] = explode(':', $relation);
@@ -636,8 +603,7 @@ if (!function_exists('getInfoFromRelationWithFlag')) {
 if (!function_exists('mapToLabelStructure')) {
     function mapToLabelStructure($labelField, $valueField): Closure
     {
-        return function ($item) use ($labelField, $valueField) { return ['label' => $item->$labelField, 'value' => $item->$valueField]; };
-        // TODO PHP8 - return fn($item) => ['label' => $item->$labelField, 'value' => $item->$valueField];
+        return fn($item) => ['label' => $item->$labelField, 'value' => $item->$valueField];
     }
 }
 
@@ -704,11 +670,7 @@ if (!function_exists('get_shadow_classes')) {
 }
 
 if (!function_exists('pipe_str_to_array')) {
-    /**
-     * @param array|string $value
-     * @return array
-     */
-    function pipe_str_to_array($value): array
+    function pipe_str_to_array(array|string $value): array
     {
         return is_array($value)
             ? $value
@@ -741,11 +703,5 @@ if (!function_exists('get_class_from_file')) {
         }
 
         return null;
-    }
-}
-
-if (!function_exists('str_contains')) {
-    function str_contains(string $haystack, string $needle): bool {
-        return strpos($haystack, $needle) !== false;
     }
 }

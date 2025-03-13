@@ -19,7 +19,7 @@ abstract class ContractModelId extends ContractIntVo
     protected const CLASS_MODEL_REQUIRED = ModelId::class;
     protected const CLASS_MODEL_NULLABLE = ModelIdNull::class;
 
-    protected $minimumValueForModelId = null;
+    protected ?int $minimumValueForModelId = null;
 
     public function __construct(?int $value)
     {

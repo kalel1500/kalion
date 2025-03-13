@@ -8,27 +8,18 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
 final class CookiePreferencesDo extends ContractDataObject
 {
-    protected string  $version;
-    protected ThemeVo $theme;
-    protected bool    $sidebar_collapsed;
-    protected bool    $sidebar_state_per_page;
-
     public function __construct(
-        string  $version,
-        ThemeVo $theme,
-        bool    $sidebar_collapsed,
-        bool    $sidebar_state_per_page
+        protected string  $version,
+        protected ThemeVo $theme,
+        protected bool    $sidebar_collapsed,
+        protected bool    $sidebar_state_per_page
     )
     {
-        $this->version                = $version;
-        $this->theme                  = $theme;
-        $this->sidebar_collapsed      = $sidebar_collapsed;
-        $this->sidebar_state_per_page = $sidebar_state_per_page;
     }
 
-    protected static function createFromArray(array $data): self
+    protected static function createFromArray(array $data): static
     {
-        return new self(
+        return new static(
             $data['version'],
             ThemeVo::new($data['theme'] ?? ThemeVo::system),
             $data['sidebar_collapsed'],

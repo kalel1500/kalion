@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\Contrac
 
 class BoolVo extends ContractBoolVo
 {
-    protected $nullable = false;
+    protected bool $nullable = false;
 
     public function value(): bool
     {

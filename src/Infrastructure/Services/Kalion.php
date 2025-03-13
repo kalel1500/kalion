@@ -29,53 +29,53 @@ final class Kalion
         ]);
     }
 
-    public static function configure(): self
+    public static function configure(): static
     {
-        return new self();
+        return new static();
     }
 
 
-    public function runMigrations(): self
+    public function runMigrations(): static
     {
-        self::$runMigrations = true;
+        static::$runMigrations = true;
         return $this;
     }
 
     public static function shouldRunMigrations(): bool
     {
-        return self::$runMigrations;
+        return static::$runMigrations;
     }
 
-    public function publishMigrations(): self
+    public function publishMigrations(): static
     {
-        self::$publishMigrations = true;
+        static::$publishMigrations = true;
         return $this;
     }
 
     public static function shouldPublishMigrations(): bool
     {
-        return self::$publishMigrations;
+        return static::$publishMigrations;
     }
 
-    public function ignoreRoutes(): self
+    public function ignoreRoutes(): static
     {
-        self::$registerRoutes = false;
+        static::$registerRoutes = false;
         return $this;
     }
 
     public static function shouldRegistersRoutes(): bool
     {
-        return self::$registerRoutes;
+        return static::$registerRoutes;
     }
 
-    public function enablePreferencesCookie(): self
+    public function enablePreferencesCookie(): static
     {
-        self::$preferencesCookie = true;
+        static::$preferencesCookie = true;
         return $this;
     }
 
     public static function enabledPreferencesCookie(): bool
     {
-        return self::$preferencesCookie;
+        return static::$preferencesCookie;
     }
 }

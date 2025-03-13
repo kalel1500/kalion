@@ -8,56 +8,41 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Contracts\NavigationIt
 
 final class NavbarItemDo extends NavigationItem
 {
-    public $code;
-    public $icon;
-    public $text;
-    public $time;
-    public $tooltip;
-    public $route_name;
-    public $is_post;
-    public $is_theme_toggle;
-    public $is_user;
-    public $is_separator;
-    public $dropdown;
-
     public function __construct(
-        ?string             $code,
-        ?string             $icon,
-        ?string             $text,
-        ?string             $time,
-        ?string             $tooltip,
-        ?string             $route_name,
-        ?bool               $is_post,
-        ?bool               $is_theme_toggle,
-        ?bool               $is_user,
-        ?bool               $is_separator,
-        ?NavbarDropdownDo   $dropdown
+        ?string           $code,
+        ?string           $icon,
+        ?string           $text,
+        public ?string    $time,
+        ?string           $tooltip,
+        ?string           $route_name,
+        ?bool             $is_post,
+        public ?bool      $is_theme_toggle,
+        public ?bool      $is_user,
+        public ?bool      $is_separator,
+        ?NavbarDropdownDo $dropdown
     )
     {
-        $this->code             = $code;
-        $this->icon             = $icon;
-        $this->text             = $text;
-        $this->time             = $time;
-        $this->tooltip          = $tooltip;
-        $this->route_name       = $route_name;
-        $this->is_post          = $is_post;
-        $this->is_theme_toggle  = $is_theme_toggle;
-        $this->is_user          = $is_user;
-        $this->is_separator     = $is_separator;
-        $this->dropdown         = $dropdown;
-        $this->hasDropdown      = !is_null($dropdown);
+        parent::__construct(
+            $code,
+            $icon,
+            $text,
+            $tooltip,
+            $route_name,
+            $is_post,
+            $dropdown,
+        );
     }
 
-    protected static function createFromArray(array $data): self
+    protected static function createFromArray(array $data): static
     {
-        return new self(
+        return new static(
             $data['code'] ?? null,
             $data['icon'] ?? null,
             $data['text'] ?? null,
             $data['time'] ?? null,
             $data['tooltip'] ?? null,
             $data['route_name'] ?? null,
-                $data['is_post'] ?? null,
+            $data['is_post'] ?? null,
             $data['is_theme_toggle'] ?? null,
             $data['is_user'] ?? null,
             $data['is_separator'] ?? null,

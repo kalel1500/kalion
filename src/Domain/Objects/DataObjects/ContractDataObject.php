@@ -42,7 +42,7 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
         return $this->toArrayVisible();
     }
 
-    public function toObject()
+    public function toObject(): object|array
     {
         return arrayToObject($this->toArrayVisible());
     }
@@ -52,31 +52,19 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
         return ArrayVo::new($this->toArray());
     }
 
-    /**
-     * @param array|null $data
-     * @return static|null // TODO PHP8 static return type
-     */
-    public static function fromArray(?array $data)
+    public static function fromArray(?array $data): static|null
     {
         if (is_null($data)) return null;
         return static::createFromArray($data);
     }
 
-    /**
-     * @param string|null $data
-     * @return static|null // TODO PHP8 static return type
-     */
-    public static function fromJson(?string $data)
+    public static function fromJson(?string $data): static|null
     {
         if (is_null($data)) return null;
-        return self::fromArray(json_decode($data, true));
+        return static::fromArray(json_decode($data, true));
     }
 
-    /**
-     * @param array $data
-     * @return static // TODO PHP8 static return type
-     */
-    protected static function createFromArray(array $data)
+    protected static function createFromArray(array $data): static
     {
         if (!static::REFLECTION_ACTIVE) {
             return new static(...array_values($data));
@@ -86,7 +74,7 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
 
         // Usamos cache para evitar repetir la reflexión
         if (!isset(self::$reflectionCache[$className])) {
-            $reflection = new ReflectionClass($className);
+            $reflection  = new ReflectionClass($className);
             $constructor = $reflection->getConstructor();
 
             if (!$constructor) {
@@ -97,7 +85,7 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
         }
 
         $parameters = self::$reflectionCache[$className];
-        $args = [];
+        $args       = [];
 
         foreach ($parameters as $param) {
             $name = $param->getName();
@@ -108,26 +96,18 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
             }
 
             $typeName = $type->getName();
-            $value = $data[$name] ?? null;
+            $value    = $data[$name] ?? null;
 
-            $typeIsClass = class_exists($typeName);
+            $typeIsClass        = class_exists($typeName);
             $valueIsNotInstance = !($value instanceof $typeName);
 
             if ($typeIsClass && $valueIsNotInstance) {
                 // Si el tipo es una clase y el valor NO es una instancia, creamos la instancia de la clase
-                if (is_a($typeName, \BackedEnum::class, true)) {
-                    $method = 'from';
-                } elseif (is_a($typeName, ContractValueObject::class, true)) {
-                    $method = 'new';
-                } else {
-                    $method = 'fromArray';
-                }
-                // TODO PHP8 - (important) Match
-                /*$method = match (true) {
-                    $value instanceof \BackedEnum => 'from',
-                    $value instanceof ContractValueObject => 'new',
-                    default => 'fromArray',
-                };*/
+                $method = match (true) {
+                    is_a($typeName, \BackedEnum::class, true)         => 'from',
+                    is_a($typeName, ContractValueObject::class, true) => 'new',
+                    default                                           => 'fromArray',
+                };
 
                 $args[] = $typeName::$method($value);
             } else {
@@ -139,7 +119,7 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
         return new static(...$args);
     }
 
-    public function toJson($options = 0)
+    public function toJson($options = 0): false|string
     {
         return json_encode($this->toArray(), $options);
     }

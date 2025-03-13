@@ -29,6 +29,6 @@ trait WithIdsAndToArray
 
     // Método para convertir todos los valores del enum en un array de strings
     public static function toArray(): array {
-        return array_map(function ($case) {return $case->value;}, static::cases()); // TODO PHP8 - array_map(fn($case) => $case->value, static::cases());
+        return array_map(fn($case) => $case->value, static::cases());
     }
 }

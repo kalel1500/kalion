@@ -21,16 +21,10 @@ abstract class ContractCollectionVo extends ContractCollectionBase
 
     public function firstValue()
     {
-        return optional($this->first())->value(); // TODO PHP8 - nullsafe operator
+        return $this->first()?->value();
     }
 
-    /**
-     * @param array|null $values
-     * @param bool $nullable
-     * @param callable|null $valueModifierCallback
-     * @return static // TODO PHP8 static return type
-     */
-    static function fromArray(?array $values, bool $nullable = true, callable $valueModifierCallback = null)
+    static function fromArray(?array $values, bool $nullable = true, callable $valueModifierCallback = null): static|null
     {
         if (is_null($values)) return null;
 

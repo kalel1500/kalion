@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\Contrac
 
 class IntVo extends ContractIntVo
 {
-    protected $nullable = false;
+    protected bool $nullable = false;
 
     public function __construct(int $value)
     {

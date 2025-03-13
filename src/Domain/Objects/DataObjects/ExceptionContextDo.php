@@ -10,58 +10,28 @@ use Throwable;
 
 final class ExceptionContextDo extends ContractDataObject
 {
-    protected $statusCode;
-    protected $code;
-    protected $success;
-    protected $message;
-    protected $data;
-    protected $custom_response;
-    protected $exception;
-    protected $file;
-    protected $line;
-    protected $trace;
-    protected $previous;
-
-    protected $title;
+    protected string $title;
 
     public function __construct(
-        int        $statusCode,
-        string     $message,
-        bool       $success,
-        ?array     $data,
-        ?array     $custom_response,
-                   $code,
-        string     $exception,
-        string     $file,
-        int        $line,
-        array      $trace,
-        ?Throwable $previous
-    ) {
-        $this->statusCode      = $statusCode;
-        $this->message         = $message;
-        $this->success         = $success;
-        $this->data            = $data;
-        $this->custom_response = $custom_response;
-        $this->code            = $code;
-        $this->exception       = $exception;
-        $this->file            = $file;
-        $this->line            = $line;
-        $this->trace           = $trace;
-        $this->previous        = $previous;
-
-        $this->title           = Response::$statusTexts[$this->statusCode];
+        public readonly int        $statusCode,
+        public readonly string     $message,
+        public readonly bool       $success,
+        public readonly ?array     $data,
+        public readonly ?array     $custom_response,
+        public readonly int        $code,
+        public readonly string     $exception,
+        public readonly string     $file,
+        public readonly int        $line,
+        public readonly array      $trace,
+        public readonly ?Throwable $previous
+    )
+    {
+        $this->title = Response::$statusTexts[$this->statusCode];
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------- Create Functions -----------------------------------------------*/
 
-    /**
-     * @param Throwable $e
-     * @param array|null $data
-     * @param bool $success
-     * @param array|null $custom_response
-     * @return ExceptionContextDo
-     */
     public static function from(Throwable $e, ?array $data = null, bool $success = false, ?array $custom_response = null): ExceptionContextDo
     {
         // if (is_null($e)) return null; // TODO Canals - pensar
@@ -78,7 +48,7 @@ final class ExceptionContextDo extends ContractDataObject
             'exception'       => get_class($e),
             'file'            => $e->getFile(),
             'line'            => $e->getLine(),
-            'trace'           => collect($e->getTrace())->map(function ($trace) { return Arr::except($trace, ['args']); })->all(),
+            'trace'           => collect($e->getTrace())->map(fn($trace) => Arr::except($trace, ['args']))->all(),
             'previous'        => $e->getPrevious()
         ]);
     }
@@ -107,7 +77,7 @@ final class ExceptionContextDo extends ContractDataObject
             'file'      => $this->file,
             'line'      => $this->line,
             'trace'     => $this->trace,
-            'previous'  => optional($this->getPreviousData())->toArray(),
+            'previous'  => $this->getPreviousData()?->toArray(),
         ];
     }
 
@@ -141,51 +111,6 @@ final class ExceptionContextDo extends ContractDataObject
     public function getStatusCode(): int
     {
         return $this->statusCode;
-    }
-
-    public function message(): string
-    {
-        return $this->message;
-    }
-
-    public function success(): bool
-    {
-        return $this->success;
-    }
-
-    public function data(): ?array
-    {
-        return $this->data;
-    }
-
-    public function code(): int
-    {
-        return $this->code;
-    }
-
-    public function exception(): string
-    {
-        return $this->exception;
-    }
-
-    public function file(): string
-    {
-        return $this->file;
-    }
-
-    public function line(): int
-    {
-        return $this->line;
-    }
-
-    public function trace(): array
-    {
-        return $this->trace;
-    }
-
-    public function previous(): ?Throwable
-    {
-        return $this->previous;
     }
 
     public function getPreviousData(): ?ExceptionContextDo

@@ -12,5 +12,5 @@ abstract class ContractModelIdZero extends ContractModelId
     protected const CLASS_MODEL_REQUIRED = ModelIdZero::class;
     protected const CLASS_MODEL_NULLABLE = ModelIdZeroNull::class;
 
-    protected $minimumValueForModelId = 0;
+    protected ?int $minimumValueForModelId = 0;
 }

@@ -9,20 +9,8 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Contracts\NavigationIt
 
 final class SidebarItemDo extends NavigationItem
 {
-    public $code;
-    public $icon;
-    public $text;
-    public $tooltip;
-    public $route_name;
-    public $is_post;
-    public $collapsed;
-    public $counter_action;
-    public $is_separator;
-    public $dropdown;
-
-    protected $counter;
-    protected $hasCounter;
-    protected $hasDropdown;
+    protected int  $counter;
+    protected bool $hasCounter;
 
     public function __construct(
         ?string                $code,
@@ -31,30 +19,27 @@ final class SidebarItemDo extends NavigationItem
         ?string                $tooltip,
         ?string                $route_name,
         ?bool                  $is_post,
-        ?string                $counter_action,
-        ?bool                  $collapsed,
-        ?bool                  $is_separator,
+        public ?string         $counter_action,
+        public ?bool           $collapsed,
+        public ?bool           $is_separator,
         ?SidebarItemCollection $dropdown
     )
     {
-        $this->code             = $code;
-        $this->icon             = $icon;
-        $this->text             = $text;
-        $this->tooltip          = $tooltip;
-        $this->route_name       = $route_name;
-        $this->is_post          = $is_post;
-        $this->counter_action   = $counter_action;
-        $this->collapsed        = $collapsed;
-        $this->is_separator     = $is_separator;
-        $this->dropdown         = $dropdown;
-
-        $this->hasCounter       = !is_null($counter_action);
-        $this->hasDropdown      = !is_null($dropdown);
+        parent::__construct(
+            $code,
+            $icon,
+            $text,
+            $tooltip,
+            $route_name,
+            $is_post,
+            $dropdown,
+        );
+        $this->hasCounter = !is_null($counter_action);
     }
 
-    protected static function createFromArray(array $data): self
+    protected static function createFromArray(array $data): static
     {
-        return new self(
+        return new static(
             $data['code'] ?? null,
             $data['icon'] ?? null,
             $data['text'] ?? null,
@@ -78,7 +63,7 @@ final class SidebarItemDo extends NavigationItem
         return $this->counter;
     }
 
-    public function setCounter($counter): void
+    public function setCounter(int $counter): void
     {
         $this->counter = $counter;
     }

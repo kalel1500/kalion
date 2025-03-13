@@ -105,7 +105,7 @@ if (!function_exists('routeContains')) {
     function routeContains($wordToSearch): bool
     {
         $routeName = Route::currentRouteName();
-        return strpos($routeName, $wordToSearch) !== false;
+        return str_contains($routeName, $wordToSearch);
     }
 }
 
@@ -196,11 +196,8 @@ if (! function_exists('collectE')) {
      * @deprecated This function is deprecated and will be removed in a future version.
      *
      * Create a collection from the given value.
-     *
-     * @param mixed $value
-     * @return CollectionE
      */
-    function collectE($value = null)
+    function collectE(mixed $value = null): CollectionE
     {
         trigger_error('The function collectE() is deprecated.', E_USER_DEPRECATED);
         return new CollectionE($value);
@@ -337,12 +334,6 @@ if (! function_exists('getGoodEmailsFromArray')) {
 }
 
 if (!function_exists('isValidationException')) {
-    /**
-     * Determine if the given exception is an HTTP exception.
-     *
-     * @param Throwable $e
-     * @return bool
-     */
     function isValidationException(Throwable $e): bool
     {
         return ($e instanceof ValidationException);
@@ -357,14 +348,7 @@ if (!function_exists('urlContainsAjax')) {
 }
 
 if (! function_exists('responseJson')) {
-    /**
-     * @param bool $success
-     * @param string $message
-     * @param mixed $data
-     * @param int $responseCode
-     * @return JsonResponse
-     */
-    function responseJson(bool $success, string $message, $data = null, int $responseCode = Response::HTTP_OK): JsonResponse
+    function responseJson(bool $success, string $message, ?array $data = null, int $responseCode = 200): JsonResponse
     {
         return response()->json([
             'success' => $success,
@@ -382,11 +366,6 @@ if (! function_exists('responseJsonWith')) {
 }
 
 if (! function_exists('responseJsonError')) {
-    /**
-     * @param Throwable $e
-     * @param bool $throwInDebugMode
-     * @return JsonResponse
-     */
     function responseJsonError(Throwable $e, bool $throwInDebugMode = true): JsonResponse
     {
         // INFO kalel1500 - mi_estructura_de_respuesta
@@ -405,8 +384,6 @@ if (!function_exists('myOptional')) {
 if (! function_exists('src_path')) {
     /**
      * Get the path to the application folder.
-     *
-     * @return string
      */
     function src_path(): string
     {
@@ -636,20 +613,14 @@ if (!function_exists('concat_fields_with')) {
 }
 
 if (!function_exists('getClassUserModel')) {
-    /**
-     * @return string|\Illuminate\Foundation\Auth\User
-     */
-    function getClassUserModel()
+    function getClassUserModel(): string // |\Illuminate\Foundation\Auth\User
     {
         return config('auth.providers.users.model');
     }
 }
 
 if (!function_exists('getClassUserEntity')) {
-    /**
-     * @return string
-     */
-    function getClassUserEntity()
+    function getClassUserEntity(): string
     {
         return config('kalion_auth.entity_class');
     }
@@ -684,11 +655,12 @@ if (!function_exists('defaultUrl')) {
 }
 
 //if (!function_exists('formatToTabulatorList')) {
-//    /**
-//     * @param Collection|ContractCollectionBase $collection // TODO PHP8 - Union types
-//     * @return Collection|ContractCollectionBase // TODO PHP8 - Union types
-//     */
-//    function formatToTabulatorList($collection, string $value, string $key, bool $toLabel = false)
+//    function formatToTabulatorList(
+//        Collection|ContractCollectionBase $collection,
+//        string $value,
+//        string $key,
+//        bool $toLabel = false
+//    ): Collection|ContractCollectionBase
 //    {
 //        if ($toLabel) {
 //            return $collection->map(mapToLabelStructure($value, $key));

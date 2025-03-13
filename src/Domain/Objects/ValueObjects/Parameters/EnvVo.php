@@ -13,7 +13,7 @@ final class EnvVo extends ContractEnumVo
     const production    = 'production';
     const testing       = 'testing';
 
-    protected $permittedValues = [
+    protected ?array $permittedValues = [
         self::local,
         self::preproduction,
         self::production,
@@ -21,7 +21,7 @@ final class EnvVo extends ContractEnumVo
 
     public function __construct(string $value)
     {
-        if ($value === self::testing) {
+        if ($value === static::testing) {
             $value = getEnvironmentReal();
         }
         parent::__construct($value);
@@ -29,16 +29,16 @@ final class EnvVo extends ContractEnumVo
 
     public function isLocal(): bool
     {
-        return ($this->value === self::local);
+        return ($this->value === static::local);
     }
 
     public function isPre(): bool
     {
-        return ($this->value === self::preproduction);
+        return ($this->value === static::preproduction);
     }
 
     public function isProd(): bool
     {
-        return ($this->value === self::production);
+        return ($this->value === static::production);
     }
 }

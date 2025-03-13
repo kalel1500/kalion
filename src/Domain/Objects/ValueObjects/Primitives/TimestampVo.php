@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\Contrac
 
 class TimestampVo extends ContractTimestampVo
 {
-    protected $nullable = false;
+    protected bool $nullable = false;
 
     public function __construct(string $value, ?array $formats = null)
     {

@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\EnumDynamicVo;
 
 abstract class DynamicEnumProviderContract implements DynamicEnumProvider
 {
-    protected $permittedValues = null;
+    protected ?array $permittedValues = null;
 
     public function getPermittedValues(): array
     {

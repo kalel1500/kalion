@@ -14,44 +14,26 @@ class UserEntity extends ContractEntity
 {
     use EntityHasPermissions;
 
-    public ContractModelId $id;
-    public ModelString     $name;
-    public ModelString     $email;
-    public ModelStringNull $email_verified_at;
-
     public function __construct(
-        ContractModelId $id,
-        ModelString     $name,
-        ModelString     $email,
-        ModelStringNull $email_verified_at
+        public readonly ContractModelId $id,
+        public readonly ModelString     $name,
+        public readonly ModelString     $email,
+        public readonly ModelStringNull $email_verified_at
     )
     {
-        $this->id                = $id;
-        $this->name              = $name;
-        $this->email             = $email;
-        $this->email_verified_at = $email_verified_at;
     }
 
-    /**
-     * @param array $data
-     * @return static
-     */
-    protected static function createFromArray(array $data)
+    protected static function createFromArray(array $data): static
     {
         return new static(
-            ModelId::from($data['id']),
+            ModelId::from($data['id'] ?? null),
             ModelString::new($data['name']),
             ModelString::new($data['email']),
             ModelStringNull::new($data['email_verified_at']),
         );
     }
 
-    /**
-     * @param array $data
-     * @param array $newFields
-     * @return static
-     */
-    protected static function createFromChildArray(array $data, array $newFields)
+    protected static function createFromChildArray(array $data, array $newFields): static
     {
         return new static(
             ModelId::from($data['id']),
