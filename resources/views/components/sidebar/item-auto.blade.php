@@ -1,4 +1,5 @@
 @php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDo $item */ @endphp
+@use(Illuminate\Support\Facades\Route)
 
 @props(['item', 'level'])
 
@@ -9,6 +10,7 @@
             :href="$item->hasDropdown() ? null : $item->getHref()"
             :counter="$item->hasCounter() ? $item->getCounter() : null"
             :level="$level"
+            :active="Route::currentRouteNamed($item->route_name)"
     >
         @if(!is_null($item->icon))
             <x-slot:icon>

@@ -1,4 +1,4 @@
-@props(['icon', 'dropdown', 'counter', 'level'])
+@props(['href' => '#', 'icon', 'dropdown', 'counter', 'level', 'active' => false])
 
 @php
     $isDropdown = isset($dropdown);
@@ -9,7 +9,6 @@
     $iconHtml = !$hasIcon ? '' : '<div class="h-6 w-6 shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white">' . $icon . '</div>';
     $spanClasses = !$hasIcon ? '' : 'ml-3 md:sc:ml-0';
     $dropdownId = $isDropdown ? $dropdown->attributes->get('id') : '';
-    $linkIsActive = isRouteActive($attributes->get('href'));
     $dropdownIsOpen = $isDropdown && dropdownIsOpen($dropdown->toHtml());
     $isDeepLevel = (int)$level > 0;
 
@@ -35,7 +34,7 @@
             {{ $dropdown }}
         </ul>
     @else
-        <a {{ $attributes->only('href')->merge(['href' => '#']) }} @class([$linkClasses, 'bg-gray-100 dark:bg-gray-700' => $linkIsActive, 'pl-11' => $isSubitem])>
+        <a href="{{ $href }}" @class([$linkClasses, 'bg-gray-100 dark:bg-gray-700' => $active, 'pl-11' => $isSubitem])>
             @if ($isSubitem)
                 {{ $slot }}
             @else
