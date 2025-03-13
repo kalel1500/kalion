@@ -370,3 +370,31 @@ if (!function_exists('save_execute')) {
         }
     }
 }
+
+if (!function_exists('log_error')) {
+    function log_error(string $message): void
+    {
+        Log::error($message);
+    }
+}
+
+if (!function_exists('log_error_on')) {
+    function log_error_on(string $channel, string $message): void
+    {
+        Log::channel($channel)->error($message);
+    }
+}
+
+if (!function_exists('log_error_on_queues')) {
+    function log_error_on_queues(string $message): void
+    {
+        Log::channel('queues')->error($message);
+    }
+}
+
+if (!function_exists('log_error_on_loads')) {
+    function log_error_on_loads(string $message): void
+    {
+        Log::channel('loads')->error($message);
+    }
+}
