@@ -50,13 +50,9 @@ class StateEloquentRepository implements StateRepositoryContract
 
     public function findByCode(EnumDynamicVo $code): StateEntity
     {
-        try {
-            $eloquentResult = $this->eloquentModel::query()
-                ->where('code', $code->value())
-                ->firstOrFail();
-            return StateEntity::fromArray($eloquentResult->toArray());
-        } catch (ModelNotFoundException $e) {
-            throw new RecordNotFoundException($e->getMessage());
-        }
+        $eloquentResult = $this->eloquentModel::query()
+            ->where('code', $code->value())
+            ->firstOrFail();
+        return StateEntity::fromArray($eloquentResult->toArray());
     }
 }
