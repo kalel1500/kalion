@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request as RequestF;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
@@ -356,5 +357,16 @@ if (!function_exists('default_url')) {
     function default_url(): string
     {
         return app_url() . default_route();
+    }
+}
+
+if (!function_exists('save_execute')) {
+    function save_execute(string $errorPrefix, string $logChannel, callable $callback): void
+    {
+        try {
+            $callback();
+        } catch (Throwable $exception) {
+            Log::channel($logChannel)->error($errorPrefix.$exception->getMessage());
+        }
     }
 }
