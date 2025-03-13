@@ -22,7 +22,7 @@ final class EnvVo extends ContractEnumVo
     public function __construct(string $value)
     {
         if ($value === static::testing) {
-            $value = getEnvironmentReal();
+            $value = get_environment_real();
         }
         parent::__construct($value);
     }

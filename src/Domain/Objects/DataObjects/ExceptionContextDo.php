@@ -55,7 +55,7 @@ final class ExceptionContextDo extends ContractDataObject
 
     public static function getMessage(Throwable $e): string
     {
-        return (is_kalion_exception($e) || debugIsActive()) ? $e->getMessage() : __('Server Error');
+        return (is_kalion_exception($e) || debug_is_active()) ? $e->getMessage() : __('Server Error');
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -99,7 +99,7 @@ final class ExceptionContextDo extends ContractDataObject
 
     public function toArray(bool $throwInDebugMode = true): array
     {
-        $addDebugInfo = debugIsActive() && $throwInDebugMode;
+        $addDebugInfo = debug_is_active() && $throwInDebugMode;
         $toArray      = $this->custom_response ?? $this->toArrayForProd();
         return $addDebugInfo ? array_merge($toArray, $this->arrayDebugInfo()) : $toArray;
     }

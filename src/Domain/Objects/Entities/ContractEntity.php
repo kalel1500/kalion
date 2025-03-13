@@ -97,8 +97,8 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
             foreach ($this->withFull as $key => $rel) {
                 $relation = (is_array($rel)) ? $key : $rel;
                 [$relation, $isFull] = get_info_from_relation_with_flag($relation);
-                $relationData                = $this->$relation()?->toArray();
-                $data[strToSnake($relation)] = $relationData;
+                $relationData               = $this->$relation()?->toArray();
+                $data[str_snake($relation)] = $relationData;
             }
         }
 
@@ -181,7 +181,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         if ($this->isFromQuery) {
             $relationData = $this->originalObject->$first;
         } else {
-            $relationName = strToSnake($first);
+            $relationName = str_snake($first);
             if (!array_key_exists($relationName, $this->originalArray)) {
                 throw new NotFoundRelationDefinitionException($relationName, static::class);
             }

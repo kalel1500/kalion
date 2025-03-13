@@ -24,7 +24,7 @@ class Full extends Component
     public function __construct()
     {
         $this->showSearch   = config('kalion_links.sidebar.search.show');
-        $this->searchAction = getUrlFromRoute(config('kalion_links.sidebar.search.route'));
+        $this->searchAction = get_url_from_route(config('kalion_links.sidebar.search.route'));
         $this->items        = SidebarItemCollection::fromArray(config('kalion_links.sidebar.items') ?? []);
         $this->footer       = SidebarItemCollection::fromArray(config('kalion_links.sidebar.footer') ?? []);
         $this->hasFooter    = $this->footer->countInt()->isBiggerThan(0);

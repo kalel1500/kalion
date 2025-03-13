@@ -13,7 +13,7 @@ class UserRepository implements UserRepositoryContract
 
     public function __construct()
     {
-        $this->model = getClassUserModel();
+        $this->model = get_class_user_model();
     }
 
     public function find(int $id): UserEntity
@@ -21,6 +21,6 @@ class UserRepository implements UserRepositoryContract
         $data = $this->model::query()
             ->with('roles')
             ->findOrFail($id);
-        return getClassUserEntity()::fromArray($data->toArray(), ['roles']);
+        return get_class_user_entity()::fromArray($data->toArray(), ['roles']);
     }
 }

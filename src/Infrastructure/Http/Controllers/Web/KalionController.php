@@ -12,7 +12,7 @@ final class KalionController extends Controller
 {
     public function root()
     {
-        return redirect(appUrl());
+        return redirect(app_url());
     }
 
     public function testVitePackage(): \Illuminate\Contracts\View\View
@@ -22,7 +22,7 @@ final class KalionController extends Controller
 
     public function sessions()
     {
-        if (!debugIsActive()) {
+        if (!debug_is_active()) {
             throw new NotFoundHttpException('The route sessions could not be found.');
         }
         $sessions = DB::table('sessions')->get();

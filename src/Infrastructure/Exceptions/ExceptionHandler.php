@@ -34,8 +34,8 @@ final class ExceptionHandler
                 // Si no es una instancia de ModelNotFoundException, devolver null
                 if (!($exception instanceof ModelNotFoundException)) return null;
 
-                if (debugIsActive()) {
-                    return response(getHtmlLaravelDebugStackTrace($request, $exception));
+                if (debug_is_active()) {
+                    return response(get_html_laravel_debug_stack_trace($request, $exception));
                 } else {
                     $context = ExceptionContextDo::from($exception);
                     return response()->view('kal::pages.exceptions.error', compact('context'), $context->getStatusCode());
@@ -47,14 +47,14 @@ final class ExceptionHandler
                 $context = $e->getContext();
 
                 // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
-                if ($request->expectsJson() || urlContainsAjax()) {
+                if ($request->expectsJson() || url_contains_ajax()) {
                     return response()->json($context->toArray(), $context->getStatusCode());
                 }
 
                 // Si espera una Vista y comprobamos si el debug es true
-                if (debugIsActive()) {
+                if (debug_is_active()) {
                     // Si la excepción es una instancia de "AbortException" renderizamos la vista de errores de Laravel
-                    if ($e instanceof AbortException) return response(getHtmlLaravelDebugStackTrace($request, $e));
+                    if ($e instanceof AbortException) return response(get_html_laravel_debug_stack_trace($request, $e));
 
                     // Para cualquier "KalionException" que no sea "BasicHttpException", dejamos que laravel se encargue de renderizar el error.
                     if (!($e instanceof BasicHttpException)) return null;
@@ -66,7 +66,7 @@ final class ExceptionHandler
 
             // Indicar a Laravel cuando devolver un Json (mirar url "/ajax/")
             $exceptions->shouldRenderJsonWhen(function ($request, Throwable $e) {
-                return $request->expectsJson() || urlContainsAjax();
+                return $request->expectsJson() || url_contains_ajax();
             });
 
             // Formatear todas las respuestas Json para añadir los parámetros [success, message, data] con un valor por defecto (No aplica en los "KalionException" porque ya tienen ese formato)

@@ -9,7 +9,7 @@
     $iconHtml = !$hasIcon ? '' : '<div class="h-6 w-6 shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white">' . $icon . '</div>';
     $spanClasses = !$hasIcon ? '' : 'ml-3 md:sc:ml-0';
     $dropdownId = $isDropdown ? $dropdown->attributes->get('id') : '';
-    $dropdownIsOpen = $isDropdown && dropdownIsOpen($dropdown->toHtml());
+    $dropdownIsOpen = $isDropdown && dropdown_is_open($dropdown->toHtml());
     $isDeepLevel = (int)$level > 0;
 
     /*

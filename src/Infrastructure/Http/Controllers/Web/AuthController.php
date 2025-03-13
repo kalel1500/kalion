@@ -17,7 +17,7 @@ final class AuthController extends Controller
 
     public function __construct()
     {
-        $this->model = getClassUserModel();
+        $this->model = get_class_user_model();
     }
 
     /**
@@ -62,6 +62,6 @@ final class AuthController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect(appUrl());
+        return redirect(app_url());
     }
 }
