@@ -1,4 +1,3 @@
-
 ```php
     public function testJsonErrors(Request $request) {
         $isJsonError = $request->input('isJsonError') === "1";
@@ -25,9 +24,9 @@
             throw new \Exception('error de laravel responseJsonError');
             abort(400, 'error de laravel con "responseJsonError"');
 
-            return responseJson(true, 'success');
+            return response_json(true, 'success');
         } catch (Throwable $e) {
-            return responseJsonError($e);
+            return response_json_error($e);
         }
 
     }

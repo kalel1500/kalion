@@ -24,7 +24,7 @@ final class AjaxAdminController extends Controller
     public function tags(string $type = null): JsonResponse
     {
         $data = $this->getTagsListUseCase->__invoke($type);
-        return responseJson(true, 'success', $data->toArray());
+        return response_json(true, 'success', $data->toArray());
     }
 
     public function create(Request $request): JsonResponse
@@ -36,9 +36,9 @@ final class AjaxAdminController extends Controller
         ]);
         try {
             $this->updateOrCreateTagUseCase->__invoke($params);
-            return responseJson(true, __('h::database.model_created_successfully', ['model' => 'Tag']));
+            return response_json(true, __('h::database.model_created_successfully', ['model' => 'Tag']));
         } catch (\Throwable $th) {
-            return responseJsonError($th);
+            return response_json_error($th);
         }
     }
 
@@ -53,9 +53,9 @@ final class AjaxAdminController extends Controller
 
         try {
             $this->updateOrCreateTagUseCase->__invoke($params);
-            return responseJson(true, __('h::database.model_updated_successfully', ['model' => 'Tag']));
+            return response_json(true, __('h::database.model_updated_successfully', ['model' => 'Tag']));
         } catch (\Throwable $th) {
-            return responseJsonError($th);
+            return response_json_error($th);
         }
     }
 
@@ -63,9 +63,9 @@ final class AjaxAdminController extends Controller
     {
         try {
             $this->deleteTagUseCase->__invoke($id);
-            return responseJson(true, __('h::database.model_deleted_successfully', ['model' => 'Tag']));
+            return response_json(true, __('h::database.model_deleted_successfully', ['model' => 'Tag']));
         } catch (\Throwable $th) {
-            return responseJsonError($th);
+            return response_json_error($th);
         }
     }
 }

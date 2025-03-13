@@ -25,9 +25,9 @@ final class AjaxJobsController extends Controller
         try {
             $getAllJobsUseCase = new GetAllJobsUseCase($this->jobEloquentRepository);
             $jobs              = $getAllJobsUseCase->__invoke();
-            return responseJson(true, 'success', ['jobs' => $jobs->toArray()]);
+            return response_json(true, 'success', ['jobs' => $jobs->toArray()]);
         } catch (Throwable $th) {
-            return responseJsonError($th);
+            return response_json_error($th);
         }
     }
 
@@ -39,9 +39,9 @@ final class AjaxJobsController extends Controller
         try {
             $getAllFailedJobsUseCase = new GetAllFailedJobsUseCase($this->jobEloquentRepository);
             $jobs                    = $getAllFailedJobsUseCase->__invoke();
-            return responseJson(true, 'success', ['jobs' => $jobs->toArray()]);
+            return response_json(true, 'success', ['jobs' => $jobs->toArray()]);
         } catch (Throwable $th) {
-            return responseJsonError($th);
+            return response_json_error($th);
         }
     }
 }

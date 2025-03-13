@@ -120,8 +120,8 @@ if (!function_exists('url_contains_ajax')) {
     }
 }
 
-if (! function_exists('responseJson')) {
-    function responseJson(bool $success, string $message, ?array $data = null, int $responseCode = 200): JsonResponse
+if (! function_exists('response_json')) {
+    function response_json(bool $success, string $message, ?array $data = null, int $responseCode = 200): JsonResponse
     {
         return response()->json([
             'success' => $success,
@@ -131,15 +131,15 @@ if (! function_exists('responseJson')) {
     }
 }
 
-if (! function_exists('responseJsonWith')) {
-    function responseJsonWith(array $data = [], int $responseCode = Response::HTTP_OK): JsonResponse
+if (! function_exists('response_json_with')) {
+    function response_json_with(array $data = [], int $responseCode = Response::HTTP_OK): JsonResponse
     {
         return response()->json($data, $responseCode);
     }
 }
 
-if (! function_exists('responseJsonError')) {
-    function responseJsonError(Throwable $e, bool $throwInDebugMode = true): JsonResponse
+if (! function_exists('response_json_error')) {
+    function response_json_error(Throwable $e, bool $throwInDebugMode = true): JsonResponse
     {
         // INFO kalel1500 - mi_estructura_de_respuesta
         $exceptionData = ExceptionContextDo::from($e);

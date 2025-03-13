@@ -21,11 +21,11 @@ final class AjaxQueuesController extends Controller
     {
         try {
             QueueService::check(__('h::service.queues.inactive'));
-            $response = responseJson(true, __('h::service.queues.active'));
+            $response = response_json(true, __('h::service.queues.active'));
         } catch (ServiceException $e) {
-            $response = responseJson(false, $e->getMessage());
+            $response = response_json(false, $e->getMessage());
         } catch (Throwable $e) {
-            $response = responseJsonError($e, false);
+            $response = response_json_error($e, false);
         }
         return WebsocketsService::emitEvent($response, new EventCheckQueuesStatus($response));
     }

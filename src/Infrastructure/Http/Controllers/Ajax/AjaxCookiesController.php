@@ -20,6 +20,6 @@ final class AjaxCookiesController extends Controller
             ->create()
             ->queue();
 
-        return responseJson(true, 'OK');
+        return response_json(true, 'OK');
     }
 }

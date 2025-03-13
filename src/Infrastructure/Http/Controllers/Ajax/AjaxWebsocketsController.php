@@ -17,7 +17,7 @@ final class AjaxWebsocketsController extends Controller
      */
     public function checkService(): JsonResponse
     {
-        $res = responseJson(true, 'Comprobado servicio websockets');
+        $res = response_json(true, 'Comprobado servicio websockets');
         return WebsocketsService::emitEvent($res, new EventCheckWebsocketsStatus());
     }
 }

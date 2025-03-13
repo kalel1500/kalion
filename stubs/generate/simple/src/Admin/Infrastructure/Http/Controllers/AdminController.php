@@ -23,7 +23,7 @@ final class AdminController extends Controller
         $isJson = $request->expectsJson();
         $data = $this->getViewDataTagsUseCase->__invoke($isJson, $type);
         return $isJson
-            ? responseJson(true, 'Ok', $data->toArray())
+            ? response_json(true, 'Ok', $data->toArray())
             : view('pages.admin.tags', compact('data'));
     }
 }
