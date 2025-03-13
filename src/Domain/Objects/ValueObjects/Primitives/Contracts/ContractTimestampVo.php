@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelTimestamp;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelTimestampNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\TimestampNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\TimestampVo;
-use Thehouseofel\Kalion\Infrastructure\Helpers\MyCarbon;
+use Thehouseofel\Kalion\Infrastructure\Services\Date;
 
 abstract class ContractTimestampVo extends ContractDateVo
 {
@@ -19,7 +19,7 @@ abstract class ContractTimestampVo extends ContractDateVo
 
     public function __construct(?string $value, ?array $formats = null)
     {
-        $this->formats = [MyCarbon::$datetime_eloquent_timestamps];
+        $this->formats = [Date::$datetime_eloquent_timestamps];
         parent::__construct($value, $formats);
     }
 }

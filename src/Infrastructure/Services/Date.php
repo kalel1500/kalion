@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Helpers;
+namespace Thehouseofel\Kalion\Infrastructure\Services;
 
 use Carbon\CarbonImmutable;
 use Throwable;
 
-final class MyCarbon
+final class Date
 {
     public static string $date_startYear                         = 'Y-m-d';
     public static string $date_startDay                          = 'd-m-Y';
@@ -41,7 +41,7 @@ final class MyCarbon
 
     public static function formatInputDateToAudit($imputDate): ?string
     {
-        return MyCarbon::stringToformat($imputDate, MyCarbon::$datetime_startYear);
+        return Date::stringToformat($imputDate, Date::$datetime_startYear);
     }
 
     public static function parse($date): CarbonImmutable
@@ -122,9 +122,9 @@ final class MyCarbon
     public static function debugTime(string $debugTitle, callable $callback)
     {
         dump($debugTitle);
-        $init = MyCarbon::now();
+        $init = Date::now();
         $callback();
-        $end = MyCarbon::now();
+        $end = Date::now();
         $interval = $init->diff($end);
         dump($init->format('H:i:s'));
         dump($end->format('H:i:s'));

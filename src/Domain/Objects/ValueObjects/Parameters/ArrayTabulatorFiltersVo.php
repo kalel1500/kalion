@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractArrayVo;
-use Thehouseofel\Kalion\Infrastructure\Helpers\MyCarbon;
+use Thehouseofel\Kalion\Infrastructure\Services\Date;
 
 final class ArrayTabulatorFiltersVo extends ContractArrayVo
 {
@@ -84,8 +84,8 @@ final class ArrayTabulatorFiltersVo extends ContractArrayVo
         }
         $filterTime = $this->getFilterTime($this->filterTimeName);
         if ($isRequiredFilterTime && $filterTime) {
-            $start = MyCarbon::parse($filterTime['value']['start']);
-            $end   = MyCarbon::parse($filterTime['value']['end']) ?? MyCarbon::now();
+            $start = Date::parse($filterTime['value']['start']);
+            $end   = Date::parse($filterTime['value']['end']) ?? Date::now();
             if (is_null($start)) {
                 throw new InvalidValueException('Para realizar esta acción es necesario indicar la fecha de inicio');
             }
@@ -113,8 +113,8 @@ final class ArrayTabulatorFiltersVo extends ContractArrayVo
 
     public function getEncodedWithDefaultDate(): string
     {
-        $dateStart          = MyCarbon::now()->startOfMonth()->format(MyCarbon::$date_startYear);
-        $dateEnd            = MyCarbon::now()->endOfMonth()->format(MyCarbon::$date_startYear);
+        $dateStart          = Date::now()->startOfMonth()->format(Date::$date_startYear);
+        $dateEnd            = Date::now()->endOfMonth()->format(Date::$date_startYear);
         $defaultDateFilters = [["field" => $this->filterTimeName, "type" => "like", "value" => ["start" => $dateStart, "end" => $dateEnd]]];
         $filters            = $this->isNull() ? $defaultDateFilters : array_merge($this->value, $defaultDateFilters);
         return $this->encodeFilters($filters);
@@ -147,8 +147,8 @@ final class ArrayTabulatorFiltersVo extends ContractArrayVo
         $filterTime = $this->getFilterTime($this->filterTimeName);
         $name       = "$prefixExportName.xlsx";
         if ($filterTime && $filterTime['value']['start']) {
-            $dateStart      = MyCarbon::parse($filterTime['value']['start']);
-            $dateEnd        = MyCarbon::parse($filterTime['value']['end']);
+            $dateStart      = Date::parse($filterTime['value']['start']);
+            $dateEnd        = Date::parse($filterTime['value']['end']);
             $monthNameStart = $dateStart?->getTranslatedMonthName();
             $monthNameEnd   = $dateEnd?->getTranslatedMonthName();
 

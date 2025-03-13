@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelDate;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelDateNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateVo;
-use Thehouseofel\Kalion\Infrastructure\Helpers\MyCarbon;
+use Thehouseofel\Kalion\Infrastructure\Services\Date;
 
 abstract class ContractDateVo extends ContractStringVo
 {
@@ -36,7 +36,7 @@ abstract class ContractDateVo extends ContractStringVo
 
     public static function from($value): static
     {
-        $formatted = MyCarbon::parse($value)
+        $formatted = Date::parse($value)
             ->setTimezone(config('app.timezone'))
             ->format('Y-m-d H:i:s');
         return static::new($formatted);
@@ -46,18 +46,18 @@ abstract class ContractDateVo extends ContractStringVo
     {
         parent::ensureIsValidValue($value);
 
-        if (!is_null($value) && !MyCarbon::checkFormats($value, $this->formats, $this->allowZeros)) {
+        if (!is_null($value) && !Date::checkFormats($value, $this->formats, $this->allowZeros)) {
             throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $this->formats)));
         }
     }
 
     public function formatToSpainDatetime(): ?string
     {
-        return $this->isNull() ? null : MyCarbon::parse($this->value)->format(MyCarbon::$datetime_startDay_slash);
+        return $this->isNull() ? null : Date::parse($this->value)->format(Date::$datetime_startDay_slash);
     }
 
     public function carbon(): CarbonImmutable
     {
-        return $this->valueCarbon ?? MyCarbon::parse($this->value)->setTimezone(config('app.timezone'));
+        return $this->valueCarbon ?? Date::parse($this->value)->setTimezone(config('app.timezone'));
     }
 }
