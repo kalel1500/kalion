@@ -18,7 +18,6 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\ComponentAttributeBag;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\EnvVo;
 
 if (!function_exists('dropdown_is_open')) {
     function dropdown_is_open(string $htmlLinks): bool
@@ -28,70 +27,6 @@ if (!function_exists('dropdown_is_open')) {
         preg_match_all('/<a\s+href=["\']([^"\']+)["\']/', $htmlLinks, $matches);
         $hrefs = $matches[1]; // $matches[1] contiene todos los href encontrados
         return in_array($currentUrl, $hrefs); // Comprueba si la URL actual está en la lista
-    }
-}
-
-if (! function_exists('get_environment')) {
-    function get_environment(): string
-    {
-        $env = new EnvVo(config('app.env'));
-        return $env->value();
-    }
-}
-
-if (! function_exists('get_environment_real')) {
-    function get_environment_real(): ?string
-    {
-        return config('kalion.real_env_in_tests');
-    }
-}
-
-if (! function_exists('env_is_prod')) {
-    function env_is_prod(): bool
-    {
-        return get_environment() === EnvVo::production;
-    }
-}
-
-if (! function_exists('env_is_pre')) {
-    function env_is_pre(): bool
-    {
-        return get_environment() === EnvVo::preproduction;
-    }
-}
-
-if (! function_exists('env_is_local')) {
-    function env_is_local(): bool
-    {
-        return get_environment() === EnvVo::local;
-    }
-}
-
-if (! function_exists('env_is_not_prod')) {
-    function env_is_not_prod(): bool
-    {
-        return !env_is_prod();
-    }
-}
-
-if (! function_exists('env_is_not_pre')) {
-    function env_is_not_pre(): bool
-    {
-        return !env_is_pre();
-    }
-}
-
-if (! function_exists('env_is_not_local')) {
-    function env_is_not_local(): bool
-    {
-        return !env_is_local();
-    }
-}
-
-if (! function_exists('env_is_test')) {
-    function env_is_test(): bool
-    {
-        return config('app.env') === EnvVo::testing;
     }
 }
 

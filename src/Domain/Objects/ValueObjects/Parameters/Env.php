@@ -6,12 +6,14 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractEnumVo;
 
-final class EnvVo extends ContractEnumVo
+final class Env extends ContractEnumVo
 {
     const local         = 'local';
     const preproduction = 'preproduction';
     const production    = 'production';
     const testing       = 'testing';
+
+    private bool $isTesting = false;
 
     protected ?array $permittedValues = [
         self::local,
@@ -22,9 +24,16 @@ final class EnvVo extends ContractEnumVo
     public function __construct(string $value)
     {
         if ($value === static::testing) {
-            $value = get_environment_real();
+            $this->isTesting = true;
+            $value = config('kalion.real_env_in_tests');
         }
         parent::__construct($value);
+    }
+
+    public static function new($value = null): static
+    {
+        $value = $value ?? config('app.env');
+        return new static($value);
     }
 
     public function isLocal(): bool
@@ -40,5 +49,10 @@ final class EnvVo extends ContractEnumVo
     public function isProd(): bool
     {
         return ($this->value === static::production);
+    }
+
+    public function isTest(): bool
+    {
+        return $this->isTesting;
     }
 }

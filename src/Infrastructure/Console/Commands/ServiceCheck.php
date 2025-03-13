@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\Env;
 
 final class ServiceCheck extends Command
 {
@@ -42,7 +43,7 @@ final class ServiceCheck extends Command
     {
 //        return false;
         if (so_is_windows()) {
-            if (env_is_local()) {
+            if (Env::new()->isLocal()) {
                 $this->info('EL servicio de colas esta activo');
                 return true;
             }
