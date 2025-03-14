@@ -57,7 +57,7 @@ if (!function_exists('url_contains_ajax')) {
 }
 
 if (! function_exists('response_json')) {
-    function response_json(bool $success, string $message, ?array $data = null, int $responseCode = 200): JsonResponse
+    function response_json(bool $success, string $message, array|object|string|null $data = null, int $responseCode = 200): JsonResponse
     {
         return response()->json([
             'success' => $success,
