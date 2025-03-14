@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Laravel 11 Example app</title>
+    <title>Laravel 12 Example app</title>
     <meta name="description" content="" />
     <meta name="keywords" content="" />
 
@@ -32,7 +32,7 @@
     <div class="w-full container mx-auto">
         <div class="w-full flex items-center justify-between">
             <a class="flex items-center text-indigo-400 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#">
-                La<span class="bg-clip-text text-transparent bg-linear-to-r from-green-400 via-pink-500 to-purple-500">ravel 11</span>
+                La<span class="bg-clip-text text-transparent bg-linear-to-r from-green-400 via-pink-500 to-purple-500">ravel 12</span>
             </a>
 
             <div class="flex w-1/2 justify-end content-center">

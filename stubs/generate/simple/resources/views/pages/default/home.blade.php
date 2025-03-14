@@ -6,7 +6,7 @@
 
             <div class="container max-w-5xl mx-auto m-8">
                 <h2 class="w-full my-2 text-5xl font-black leading-tight text-center text-gray-800 dark:text-white">
-                    Laravel 11 Example App
+                    Laravel 12 Example App
                 </h2>
                 <div class="w-full mb-4">
                     <div class="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
