@@ -56,7 +56,7 @@ final class JobDispatch extends Command
             $packages = is_array($packages) ? $packages : explode(';', $packages);
             $packages = array_map(fn($item) => $vendorPath . $item, $packages);
         }
-        if (is_null($packages)) $packages = [];
+        if (is_null($packages)) $packages = [null];
 
         // Escanear todas las carpetas "Job" dentro de las siguientes rutas:
         $paths = array_merge(
@@ -122,8 +122,10 @@ final class JobDispatch extends Command
         $this->info("Job $jobName ejecutado");
     }
 
-    private function findJobDirsOnPath($path): array
+    private function findJobDirsOnPath(?string $path): array
     {
+        if (is_null($path)) return [];
+
         $pathsWithJobs = [];
 
         // Obtener y recorrer todos los archivos que hay en la ruta recibida
