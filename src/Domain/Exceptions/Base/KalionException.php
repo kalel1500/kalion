@@ -23,7 +23,7 @@ abstract class KalionException extends Exception
     )
     {
         if ($message === "") {
-            throw new Exception(__('h::error.exception_message_can_not_be_empty', ['exception' => static::class]));
+            throw new Exception(__('k::error.exception_message_can_not_be_empty', ['exception' => static::class]));
         }
 
         // Llamar al constructor

@@ -12,6 +12,6 @@ final class FeatureUnavailableException extends BasicException
 
     public function __construct()
     {
-        parent::__construct(__('h::error.feature_unavailable'));
+        parent::__construct(__('k::error.feature_unavailable'));
     }
 }

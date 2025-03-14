@@ -79,7 +79,7 @@ final class TagRepository implements TagRepositoryContract
             ->exists();
 
         if ($existNameOrCode) {
-            $message = __('h::database.model_already_exist_with_fields', ['model' => 'Tag', 'fields' => concat_fields_with(['name', 'code'], 'or')]);
+            $message = __('k::database.model_already_exist_with_fields', ['model' => 'Tag', 'fields' => concat_fields_with(['name', 'code'], 'or')]);
             throw new DuplicatedRecordException($message);
         }
     }

@@ -247,8 +247,8 @@ if (! function_exists('get_url_from_route')) {
 if (!function_exists('concat_fields_with')) {
     function concat_fields_with(array $fields = ['name', 'code'], string $separator = 'or'): string
     {
-        $separator = __('h::art.'.$separator);
-        $fields = array_map(fn(string $item): string => '"'.ucfirst(__('h::field.'.$item)).'"', $fields);
+        $separator = __('k::art.'.$separator);
+        $fields = array_map(fn(string $item): string => '"'.ucfirst(__('k::field.'.$item)).'"', $fields);
         return implode(" $separator ", $fields);
     }
 }

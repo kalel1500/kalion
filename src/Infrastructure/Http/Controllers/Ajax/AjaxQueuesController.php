@@ -20,8 +20,8 @@ final class AjaxQueuesController extends Controller
     public function checkService(): JsonResponse
     {
         try {
-            QueueService::check(__('h::service.queues.inactive'));
-            $response = response_json(true, __('h::service.queues.active'));
+            QueueService::check(__('k::service.queues.inactive'));
+            $response = response_json(true, __('k::service.queues.active'));
         } catch (ServiceException $e) {
             $response = response_json(false, $e->getMessage());
         } catch (Throwable $e) {

@@ -12,6 +12,6 @@ final class HasRelationException extends BasicException
 
     public function __construct(string $model, string $relation)
     {
-        parent::__construct(__('h::database.record_is_used_in_relation', ['model' => $model, 'relation' => $relation]));
+        parent::__construct(__('k::database.record_is_used_in_relation', ['model' => $model, 'relation' => $relation]));
     }
 }

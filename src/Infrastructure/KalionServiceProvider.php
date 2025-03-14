@@ -330,7 +330,7 @@ return [
      */
     protected function registerTranslations(): void
     {
-        $this->loadTranslationsFrom(KALION_PATH.'/lang', 'h');
+        $this->loadTranslationsFrom(KALION_PATH.'/lang', 'k');
         $this->loadJsonTranslationsFrom(KALION_PATH.'/lang');
     }
 

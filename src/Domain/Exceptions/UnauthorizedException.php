@@ -13,10 +13,10 @@ class UnauthorizedException extends BasicHttpException
 
     public static function forRoles(string $roles): static
     {
-        $message = __('h::auth.invalid_roles');
+        $message = __('k::auth.invalid_roles');
 
         if (config('kalion_auth.display_role_in_exception')) {
-            $message .= ' '.__('h::auth.necessary_roles', ['roles' => $roles]);
+            $message .= ' '.__('k::auth.necessary_roles', ['roles' => $roles]);
         }
 
         return new static(static::STATUS_CODE, $message);
@@ -24,10 +24,10 @@ class UnauthorizedException extends BasicHttpException
 
     public static function forPermissions(string $permissions): static
     {
-        $message = __('h::auth.invalid_permissions');
+        $message = __('k::auth.invalid_permissions');
 
         if (config('kalion_auth.display_permission_in_exception')) {
-            $message .= ' '.__('h::auth.necessary_permissions', ['permissions' => $permissions]);
+            $message .= ' '.__('k::auth.necessary_permissions', ['permissions' => $permissions]);
         }
 
         return new static(static::STATUS_CODE, $message);
@@ -37,12 +37,12 @@ class UnauthorizedException extends BasicHttpException
     {
         $class = get_class($user);
 
-        return new static(403, __('h::auth.missing_trait_has_roles', ['class' => $class]));
+        return new static(403, __('k::auth.missing_trait_has_roles', ['class' => $class]));
     }
 
     public static function notLoggedIn(): static
     {
-        return new static(static::STATUS_CODE, __('h::auth.not_logged_in'));
+        return new static(static::STATUS_CODE, __('k::auth.not_logged_in'));
     }
 
 }
