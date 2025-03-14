@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts;
 
 use Thehouseofel\Kalion\Domain\Providers\DynamicEnumProviderContract;
 
-abstract class ContractDynamicEnumVo extends ContractEnumVo
+abstract class ContractDynamicEnumVo extends ContractBaseEnumVo
 {
     protected DynamicEnumProviderContract $dynamicEnumProvider;
 
