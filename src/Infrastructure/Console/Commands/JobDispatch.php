@@ -42,9 +42,9 @@ final class JobDispatch extends Command
         // Obtener parámetros
         $jobName = $this->argument('job');
         $options = [
-            $this->option('param1'),
-            $this->option('param2'),
-            $this->option('param3'),
+            'param1' => $this->option('param1'),
+            'param2' => $this->option('param2'),
+            'param3' => $this->option('param3'),
         ];
         $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
 
@@ -118,7 +118,7 @@ final class JobDispatch extends Command
 
         // Ejecutar job
         $this->info("Ejecutando Job $jobName");
-        dispatch_sync(new $class(...$options));
+        dispatch_sync(app()->makeWith($class, $options));
         $this->info("Job $jobName ejecutado");
     }
 
