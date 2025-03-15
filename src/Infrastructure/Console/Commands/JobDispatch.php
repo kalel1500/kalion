@@ -13,7 +13,7 @@ final class JobDispatch extends Command
      *
      * @var string
      */
-    protected $signature = 'job:dispatch {job} {--param1=} {--param2=} {--param3=}';
+    protected $signature = 'job:dispatch {job} {--p=*}';
 
     /**
      * The console command description.
@@ -41,11 +41,7 @@ final class JobDispatch extends Command
     {
         // Obtener parámetros
         $jobName = $this->argument('job');
-        $options = [
-            'param1' => $this->option('param1'),
-            'param2' => $this->option('param2'),
-            'param3' => $this->option('param3'),
-        ];
+        $params = $this->option('p');
         $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
 
         // Mensaje inicial
@@ -118,7 +114,7 @@ final class JobDispatch extends Command
 
         // Ejecutar job
         $this->info("Ejecutando Job $jobName");
-        dispatch_sync(app()->makeWith($class, $options));
+        dispatch_sync(app()->makeWith($class, ['params' => $params]));
         $this->info("Job $jobName ejecutado");
     }
 
