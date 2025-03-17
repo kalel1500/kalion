@@ -1,21 +1,22 @@
+@php($field = get_login_field_data())
 
 <x-kal::layout.login.landing>
     <form method="POST" action="{{ route('login') }}" class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4" >
         @csrf
         <div class="mb-4">
-            <label class="block text-blue-300 py-2 font-bold mb-2" for="email">
+            <label class="block text-blue-300 py-2 font-bold mb-2" for="{{ $field->name }}">
                 Email
             </label>
             <input
                 class="shadow-sm appearance-none border rounded-sm w-full p-3 text-gray-700 leading-tight focus:ring-3 transform transition hover:scale-105 duration-300 ease-in-out"
-                id="email"
-                name="email"
-                type="text"
-                placeholder="you@somewhere.com"
-                value="{{ old('email') }}"
+                id="{{ $field->name }}"
+                name="{{ $field->name }}"
+                type="{{ $field->type }}"
+                placeholder="{{ $field->placeholder }}"
+                value="{{ old($field->name) }}"
             />
         </div>
-        @error('email')
+        @error($field->name)
             <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
             {{ $message }}
         </div>

@@ -41,10 +41,11 @@ final class AuthController extends Controller
             throw new FeatureUnavailableException();
         }
 
-        $params = $request->validate(['email' => 'required']);
-        $user = $this->model::query()->where('email', $params['email'])->first();
+        $field = get_login_field_data();
+        $params = $request->validate([$field->name => 'required']);
+        $user = $this->model::query()->where($field->name, $params[$field->name])->first();
         if (!$user) {
-            return redirect()->back()->withErrors(['email' => 'El email existe']);
+            return redirect()->back()->withErrors([$field->name => 'El usuario con el '. $field->label .' proporcionado no existe']);
         }
 
         Auth::login($user);

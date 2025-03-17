@@ -28,10 +28,40 @@ return [
     | The "fake" property allows enabling fake login. This feature should
     | only be used in a local environment.
     |
+    | The "field" configuration defines the field that will be used for login,
+    | meaning it determines which database field will be used to find the user.
+    |
     */
 
     'login' => [
         'fake' => (bool) env('KALION_AUTH_LOGIN_FAKE', false),
+        'field' => env('KALION_AUTH_LOGIN_FIELD', 'email'),
+        'fields' => [
+            'id' => [
+                'name' => 'id',
+                'label' => 'Id',
+                'type' => 'number',
+                'placeholder' => 'ID',
+            ],
+            'email' => [
+                'name' => 'email',
+                'label' => 'Email',
+                'type' => 'email',
+                'placeholder' => 'you@somewhere.com',
+            ],
+            'matricula' => [
+                'name' => 'matricula',
+                'label' => 'Matricula',
+                'type' => 'text',
+                'placeholder' => 'Matricula',
+            ],
+            'custom' => [
+                'name' => env('KALION_AUTH_LOGIN_FIELD_NAME', 'email'),
+                'label' => env('KALION_AUTH_LOGIN_FIELD_LABEL', 'Email'),
+                'type' => env('KALION_AUTH_LOGIN_FIELD_TYPE', 'email'),
+                'placeholder' => env('KALION_AUTH_LOGIN_FIELD_PLACEHOLDER', 'you@somewhere.com'),
+            ]
+        ],
     ],
 
     /*
