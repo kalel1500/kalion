@@ -4,25 +4,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Entity class
+    | User clases
     |--------------------------------------------------------------------------
     |
-    | In the following option you can configure the user Entity class.
+    | In the following options you can configure the user classes:
+    | "UserEntity" and "UserRepository"
     |
     */
 
-    'entity_class' => \Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity::class,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Repository class
-    |--------------------------------------------------------------------------
-    |
-    | In the following option you can configure the user Repository class.
-    |
-    */
-
-    'user_repository_class' => \Thehouseofel\Kalion\Infrastructure\Repositories\UserRepository::class,
+    'user' => [
+        'entity' => \Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity::class,
+        'repository' => \Thehouseofel\Kalion\Infrastructure\Repositories\UserRepository::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------

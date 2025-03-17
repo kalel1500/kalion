@@ -4,24 +4,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Entity class
+    | User clases
     |--------------------------------------------------------------------------
     |
-    | In the following option you can configure the user Entity class.
+    | In the following options you can configure the user classes:
+    | "UserEntity" and "UserRepository"
     |
     */
 
-    'entity_class' => \Src\Shared\Domain\Objects\Entities\UserEntity::class,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Repository class
-    |--------------------------------------------------------------------------
-    |
-    | In the following option you can configure the user Repository class.
-    |
-    */
-
-    'user_repository_class' => \Src\Shared\Infrastructure\Repositories\Eloquent\UserRepository::class,
+    'user' => [
+        'entity' => \Src\Shared\Domain\Objects\Entities\UserEntity::class,
+        'repository' => \Src\Shared\Infrastructure\Repositories\Eloquent\UserRepository::class,
+    ],
 
 ];

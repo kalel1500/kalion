@@ -263,7 +263,7 @@ if (!function_exists('get_class_user_model')) {
 if (!function_exists('get_class_user_entity')) {
     function get_class_user_entity(): string
     {
-        return config('kalion_auth.entity_class');
+        return config('kalion_auth.user.entity');
     }
 }
 

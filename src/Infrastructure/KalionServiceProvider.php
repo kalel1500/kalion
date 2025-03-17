@@ -135,7 +135,7 @@ return [
 
     protected function registerSingletons(): void
     {
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Repositories\UserRepositoryContract::class, fn($app) => new (config('kalion_auth.user_repository_class'))());
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Repositories\UserRepositoryContract::class, fn($app) => new (config('kalion_auth.user.repository'))());
     }
 
     /**
