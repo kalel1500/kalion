@@ -267,6 +267,13 @@ if (!function_exists('get_class_user_entity')) {
     }
 }
 
+if (!function_exists('get_class_user_repository')) {
+    function get_class_user_repository(): string
+    {
+        return config('kalion_auth.user.repository');
+    }
+}
+
 if (!function_exists('get_html_laravel_debug_stack_trace')) {
     function get_html_laravel_debug_stack_trace(Request $request, Throwable $exception): string
     {
