@@ -45,7 +45,7 @@ final class AuthController extends Controller
         $params = $request->validate([$field->name => 'required']);
         $user = $this->model::query()->where($field->name, $params[$field->name])->first();
         if (!$user) {
-            return redirect()->back()->withErrors([$field->name => 'El usuario con el '. $field->label .' proporcionado no existe']);
+            return redirect()->back()->withErrors([$field->name => __('k::auth.user_not_found', ['field' => $field->label])]);
         }
 
         Auth::login($user);
