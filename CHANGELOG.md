@@ -220,6 +220,21 @@
 * tsUtilsDevelop: actualizar archivos iniciales del front (`@kalel1500/laravel-ts-utils`)
 * (breaking) Añadir validación para que todas las excepciones del dominio deban recibir un mensaje obligatoriamente
 * (breaking) Mover las traducciones que se definían con `keys` a sus propios archivos de arrays (`art.php`, `database.php`, `error.php`, `field.php`, `service.php`) y dejar en el json las traducciones que si son frases
+  * <details>
+    <summary>Traducciones modificadas</summary>
+
+      * `serverError`&rarr;`Server Error`
+      * `database_notFoundRecords`&rarr;`deleted`
+      * `database_notFoundRecordOfModel`&rarr;`deleted`
+      * `database_notFoundRecordsOfModel`&rarr;`deleted`
+      * `websockets_serviceInactive`&rarr;`k::service.websockets.inactive`
+      * `websockets_failedActionMessage`&rarr;`k::service.websockets.failed_action_message`
+      * `websockets_failedActionBladeMessage`&rarr;`k::service.websockets.failed_action_blade_message`
+      * `queues_ServiceActive`&rarr;`k::service.queues.active`
+      * `queues_ServiceInactive`&rarr;`k::service.queues.inactive`
+      * `error_featureUnavailable`&rarr;`k::error.feature_unavailable`
+
+    </details>
 * config: Mover las configuraciones de los enlaces del `Navbar` y el `Sidebar` al nuevo archivo `hexagonal_links.php` para poder publicarlo de forma independiente
 * config: Añadir el prefijo `HEXAGONAL_LAYOUT_` a las variables de entorno del archivo de configuración `hexagonal_layout.php`
 * Añadir constructor a la excepción `HasRelationException` para recibir parámetros y setear un mensaje
@@ -241,7 +256,43 @@
 * (refactor) serviceProvider: hacer las migraciones clases anónimas (ya que solo se ejecutan en versiones de laravel 9 o superiores)
 * (refactor) serviceProvider: renombrar migración `states` a la fecha en la que se creó, ya que no es una original del framework
 * hexagonalStart: Modificar el `publishHexagonalConfig()` para que se publique el config/hexagonal_auth.php` incluso en modo develop
-* hexagonalStart: Traducciones movidas del paquete a los `stubs` para facilitar el acceso a los mensajes de errores
+* (breaking) hexagonalStart: Traducciones movidas del paquete a los `stubs` para facilitar el acceso a los mensajes de errores
+  * <details>
+    <summary>Traducciones que se han de definir en la aplicación</summary>
+
+      * `E-Mail Address`
+      * `Password`
+      * `Remember Me`
+      * `Login`
+      * `Forgot Your Password?`
+      * `Register`
+      * `Name`
+      * `Confirm Password`
+      * `Reset Password`
+      * `Reset Password Notification`
+      * `You are receiving this email because we received a password reset request for your account.`
+      * `This password reset link will expire in :count minutes.`
+      * `If you did not request a password reset, no further action is required.`
+      * `Please confirm your password before continuing.`
+      * `Regards`
+      * `Whoops!`
+      * `Hello!`
+      * `If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser: [:actionURL](:actionURL)`
+      * `If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser: [:displayableActionUrl](:actionURL)`
+      * `If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser:`
+      * `Send Password Reset Link`
+      * `Logout`
+      * `Verify Email Address`
+      * `Please click the button below to verify your email address.`
+      * `If you did not create an account, no further action is required.`
+      * `Verify Your Email Address`
+      * `A fresh verification link has been sent to your email address.`
+      * `Before proceeding, please check your email for a verification link.`
+      * `If you did not receive the email`
+      * `click here to request another`
+      * `All rights reserved.`
+
+    </details>
 * (breaking) config: Mover las configuraciones relacionadas con los enlaces del `Navbar` y el `Sidebar` al nuevo archivo `hexagonal_links.php`
 * (breaking) config: Mover las configuraciones relacionadas con la `Layout` al nuevo archivo `hexagonal_layout.php`
 * config: Añadir enlace al `Log Out` en el navbar
