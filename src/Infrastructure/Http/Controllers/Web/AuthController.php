@@ -26,7 +26,7 @@ final class AuthController extends Controller
     public function create(): View
     {
         if (config('kalion_auth.login.fake')) {
-            return view('kal::pages.login.fake');
+            return view('kal::pages.auth.fake');
         }
 
         throw new FeatureUnavailableException();
