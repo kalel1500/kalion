@@ -167,7 +167,6 @@ final class StartCommandService
         // Delete "config/kalion.php"
         $this->filesystem->delete(config_path('kalion.php'));
         $this->filesystem->delete(config_path('kalion_auth.php'));
-        $this->filesystem->delete(config_path('kalion_layout.php'));
         $this->filesystem->delete(config_path('kalion_links.php'));
 
         if ($this->isReset() || $this->developMode) return $this;

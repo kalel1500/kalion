@@ -274,7 +274,7 @@ if (!function_exists('normalize_path')) {
 if (!function_exists('get_shadow_classes')) {
     function get_shadow_classes(string $normalShadow = 'shadow-md'): string
     {
-        return config('kalion_layout.active_shadows')
+        return config('kalion.layout.active_shadows')
             ? 'kal:shadow-xl dark:kal:shadow-black-xl'
             : $normalShadow;
     }

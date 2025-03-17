@@ -24,9 +24,9 @@ final class CookieService
         $this->cookieVersion  = config('kalion.cookie.version');
         $this->preferences    = CookiePreferencesDo::fromArray([
             'version'                => config('kalion.cookie.version'),
-            'theme'                  => config('kalion_layout.theme'),
-            'sidebar_collapsed'      => config('kalion_layout.sidebar_collapsed'),
-            'sidebar_state_per_page' => config('kalion_layout.sidebar_state_per_page'),
+            'theme'                  => config('kalion.layout.theme'),
+            'sidebar_collapsed'      => config('kalion.layout.sidebar_collapsed'),
+            'sidebar_state_per_page' => config('kalion.layout.sidebar_state_per_page'),
         ]);
     }
 

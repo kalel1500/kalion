@@ -67,7 +67,7 @@
         <div class="h-auto p-4 pt-20 md:ml-64 md:sc:ml-20 md:transition-all">
 
             <!-- Main -->
-            @php($mainClass = config('kalion_layout.blade_show_main_border') ? 'border-2 border-dashed border-gray-300 p-2 dark:border-gray-600' : null)
+            @php($mainClass = config('kalion.layout.blade_show_main_border') ? 'border-2 border-dashed border-gray-300 p-2 dark:border-gray-600' : null)
             <main class="{{ $mainClass }}">
 
                 <!-- Page breadcrumb -->

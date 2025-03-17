@@ -147,7 +147,6 @@ return [
         if (!$this->app->configurationIsCached()) {
             $this->mergeConfigFrom(KALION_PATH.'/config/kalion.php', 'kalion');
             $this->mergeConfigFrom(KALION_PATH.'/config/kalion_auth.php', 'kalion_auth');
-            $this->mergeConfigFrom(KALION_PATH.'/config/kalion_layout.php', 'kalion_layout');
             $this->mergeConfigFrom(KALION_PATH.'/config/kalion_links.php', 'kalion_links');
 
             Kalion::setLogChannels();
@@ -270,11 +269,6 @@ return [
         $this->publishes([
             KALION_PATH.'/config/kalion_auth.php' => config_path('kalion_auth.php'),
         ], 'kalion-config-auth');
-
-        // kalion_layout.php
-        $this->publishes([
-            KALION_PATH.'/config/kalion_layout.php' => config_path('kalion_layout.php'),
-        ], 'kalion-config-layout');
 
         // kalion_links.php
         $this->publishes([
