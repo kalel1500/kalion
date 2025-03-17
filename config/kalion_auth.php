@@ -19,6 +19,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | User clases
+    |--------------------------------------------------------------------------
+    |
+    | These configuration options specify the behavior of Kalion's login
+    | functionality.
+    |
+    | The "fake" property allows enabling fake login. This feature should
+    | only be used in a local environment.
+    |
+    */
+
+    'login' => [
+        'fake' => (bool) env('KALION_AUTH_LOGIN_FAKE', false),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Load user roles
     |--------------------------------------------------------------------------
     |

@@ -25,7 +25,7 @@ final class AuthController extends Controller
      */
     public function create(): View
     {
-        if (config('kalion.fake_login_active')) {
+        if (config('kalion_auth.login.fake')) {
             return view('kal::pages.login.fake.index');
         }
 
@@ -37,7 +37,7 @@ final class AuthController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        if (!config('kalion.fake_login_active')) {
+        if (!config('kalion_auth.login.fake')) {
             throw new FeatureUnavailableException();
         }
 
