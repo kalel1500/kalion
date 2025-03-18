@@ -27,7 +27,21 @@ KALION_KEEP_MIGRATIONS_DATE=true
 
 ### Inicio cuando solo hay una rama "master"
 
+```shell
+git checkout -b develop master # Crear rama develop de master
+git push -u origin develop     # Subir la nueva rama develop
 ```
-git checkout -b develop master // crear rama develop de master
-git push -u origin develop // subir la nueva rama develop
+
+### Eliminar una rama
+
+```shell
+git branch -d branch_name             # Eliminar la rama local branch_name
+git push origin --delete branch_name  # (Opcional) Eliminar la rama remota
+```
+
+### Eliminar una tag
+
+```shell
+git tag -d nombre_tag         # Eliminar un tag en local
+git push -d origin nombre_tag # Eliminar el tag del servidor
 ```
