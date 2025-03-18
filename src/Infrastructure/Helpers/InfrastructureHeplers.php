@@ -263,14 +263,14 @@ if (!function_exists('get_class_user_model')) {
 if (!function_exists('get_class_user_entity')) {
     function get_class_user_entity(): string
     {
-        return config('kalion_auth.user.entity');
+        return config('kalion_user.entity');
     }
 }
 
 if (!function_exists('get_class_user_repository')) {
     function get_class_user_repository(): string
     {
-        return config('kalion_auth.user.repository');
+        return config('kalion_user.repository');
     }
 }
 

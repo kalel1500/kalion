@@ -32,7 +32,7 @@ php artisan vendor:publish --tag="kalion-migrations"
 php artisan vendor:publish --tag="kalion-views"
 php artisan vendor:publish --tag="kalion-view-layout"
 php artisan vendor:publish --tag="kalion-config"
-php artisan vendor:publish --tag="kalion-config-auth"
+php artisan vendor:publish --tag="kalion-config-user"
 php artisan vendor:publish --tag="kalion-config-links"
 php artisan vendor:publish --tag="kalion-lang"
 ```
