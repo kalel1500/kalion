@@ -25,21 +25,9 @@ final class ServiceCheck extends Command
     protected $description = 'Check the service specified';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
-     *
-     * @return bool
      */
-    public function handle(): bool
+    public function handle()
     {
 //        return false;
         if (so_is_windows()) {

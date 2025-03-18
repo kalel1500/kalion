@@ -25,21 +25,9 @@ final class JobDispatch extends Command
     protected $description = 'Dispatch Job received';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle(): void
+    public function handle()
     {
         // Obtener parámetros
         $jobName = $this->argument('job');
