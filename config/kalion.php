@@ -156,6 +156,11 @@ return [
 
     'auth' => [
         'fake' => (bool) env('KALION_AUTH_FAKE', false),
+        'blades' => [
+            'fake' => env('KALION_AUTH_BLADE_FAKE', 'kal::pages.auth.fake'),
+            'login' => env('KALION_AUTH_BLADE_LOGIN', 'kal::pages.auth.login'),
+            'register' => env('KALION_AUTH_BLADE_REGISTER', 'kal::pages.auth.register'),
+        ],
         'field' => env('KALION_AUTH_FIELD', 'email'),
         'fields' => [
             'id' => [
