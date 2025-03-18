@@ -33,6 +33,7 @@ final class JobDispatch extends Command
         $jobName = $this->argument('job');
         $params = $this->option('p');
         $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
+        $kalionPath = $vendorPath . 'kalel1500' . DIRECTORY_SEPARATOR . 'kalion';
 
         // Mensaje inicial
         $this->info('Escaneando Jobs...');
@@ -42,15 +43,18 @@ final class JobDispatch extends Command
             $packages = is_array($packages) ? $packages : explode(';', $packages);
             $packages = array_map(fn($item) => normalize_path($vendorPath . $item), $packages);
         }
-        if (is_null($packages)) $packages = [null];
+        if (is_null($packages)) $packages = [];
 
-        // Escanear todas las carpetas "Job" dentro de las siguientes rutas:
-        $paths = array_merge(
-            $this->findJobDirsOnPath($vendorPath . 'kalel1500' . DIRECTORY_SEPARATOR . 'kalion'), // Escanear el propio paquete "kalion"
-            $this->findJobDirsOnPath(...$packages),  // Escanear los paquetes configurados en el ".env"
-            $this->findJobDirsOnPath(src_path()), // Escanear la carpeta "src" de la propia aplicación
-            $this->findJobDirsOnPath(app_path()), // Escanear la carpeta "app" de la propia aplicación
-        );
+        // Definir las rutas donde buscar los Jobs:
+        $pathsToScan = [
+            $kalionPath, // Escanear el propio paquete "kalion"
+            ...$packages, // Escanear los paquetes configurados en el ".env"
+            src_path(), // Escanear la carpeta "src" de la propia aplicación
+            app_path(), // Escanear la carpeta "app" de la propia aplicación
+        ];
+
+        // Escanear todas las carpetas "Job" dentro las rutas definidas
+        $paths = array_merge(...array_map(fn ($path) => $this->findJobDirsOnPath($path), $pathsToScan));
 
         // Buscar todos los Jobs que coincidan con el Job recibido [$this->argument('job')] dentro de las carpetas "escaneadas"
         $jobs = [];
