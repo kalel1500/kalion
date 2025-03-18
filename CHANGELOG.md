@@ -1,40 +1,253 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.18.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.19.0-beta.0...master)
+
+## [v0.19.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.18.1-beta.0...v0.19.0-beta.0) - 2025-03-18
+
+### Added
+
+* Añadir nuevos comandos de Git en el `docs/git/git-commands.md`
+* Ampliar funcionalidad del Auth:
+    * (refactor) Nuevo Helper `get_class_user_repository()` obtener la clase `UserRepository` de la configuración
+    * Nuevo componente layout `components.layout.auth.landing`
+    * Nuevas configuraciones para poder configurar las blades del `login` y `register` desde la aplicación
+      * `kalion.auth.blades.fake`
+      * `kalion.auth.blades.login`
+      * `kalion.auth.blades.register`
+
+### Changed
+
+* Comandos renombrados: Prefijo `kalion` añadido a los comandos del paquete:
+  * `clear:all`&rarr;`kalion:clear-all`
+  * `job:dispatch`&rarr;`kalion:job-dispatch`
+  * `logs:clear`&rarr;`kalion:logs-clear`
+  * `service:check`&rarr;`kalion:service-check`
+* Rehacer por completo el comando `LogsClear`
+  * Comprobar si existe la carpeta `Logs`
+  * Vaciar todos los logs de la carpeta en vez de solo el `laravel.log`
+  * Usar el Filesystem (`File::put()`) en vez de ejecutar el `echo '' > logs/laravel.log`
+  * Ajustar permisos solo en Linux, ya que en Windows no hace falta y asi evitar el fallo que daba en windows
+  * Usar el `shell_exec` en vez del `exec` para ejecutar el comando `chmod`
+  * Asignar permisos `775` en vez de `777`
+  * Dejar de guardar Logs con el resultado tanto `try` como en el `catch`
+* (refactor) Actualizar Comandos a la última version de Laravel
+* Líneas `$this->info()` eliminadas del comando `ClearAll`, ya que basta con la última
+* Ampliar funcionalidad del Auth:
+  * (refactor) Usar el nuevo Helper `get_class_user_repository()` en el `KalionServiceProvider` para obtener la clase `UserRepository`
+  * (refactor) Mover blade de `pages.login.fake.index` a `pages.auth.fake` 
+  * Simplificar la blade `pages.auth.fake` con el `components.layout.auth.landing`
+  * Hacer que el campo del `Fake Login` sea configurable:
+    * Nuevas configuraciones `kalion_auth.login.field` y `kalion_auth.login.fields` (con varias configuraciones por defecto y una custom que se configura en el `.env`)
+    * Nueva clase `LoginFieldDto`
+    * Nuevo helper `get_login_field_data()`
+    * Hacer que tanto la blade `pages.login.fake` como el método `AuthController::store()` obtengan el `field` dinámicamente con el helper `get_login_field_data()`
+  * Modificar propiedad `lang` del html de la layout `layout.login.landing` para que la obtenga dinámicamente
+  * Mover el mensaje que aparece cuando no se encuentra el usuario en el `AuthController` a la traducción `k::auth.user_not_found`
+  * Archivo de configuraciones `kalion_auth.php` renombrado a `kalion_user.php`
+  * Configuraciones movidas de `kalion_layout.php` a `kalion.php`
+  * (breaking) Configuraciones renombradas
+    * `kalion.fake_login_active`&rarr;`kalion.auth.fake` (`KALION_FAKE_LOGIN_ACTIVE`&rarr;`KALION_AUTH_FAKE`)
+    * `kalion_auth.entity_class`&rarr;`kalion_user.entity`
+    * `kalion_auth.user_repository_class`&rarr;`kalion_user.repository`
+    * `kalion_auth.load_roles`&rarr;`kalion.auth.load_roles`
+    * `kalion_auth.display_role_in_exception`&rarr;`kalion.auth.display_role_in_exception`
+    * `kalion_auth.display_permission_in_exception`&rarr;`kalion.auth.display_permission_in_exception`
+    * `kalion_layout.theme`&rarr;`kalion.layout.theme`
+    * `kalion_layout.active_shadows`&rarr;`kalion.layout.active_shadows`
+    * `kalion_layout.sidebar_collapsed`&rarr;`kalion.layout.sidebar_collapsed`
+    * `kalion_layout.sidebar_state_per_page`&rarr;`kalion.layout.sidebar_state_per_page`
+    * `kalion_layout.blade_show_main_border`&rarr;`kalion.layout.blade_show_main_border`
+  * Usar la nueva configuración `kalion.auth.blades.fake` en el método `AuthController::create()`
+* Mejoras en el comando JobDispatch: 
+  * Usar `app()->makeWith($class, $options)` al ejecutar el `dispatch_sync` para permitir la inyección de dependencias
+  * Modificar parámetros del comando `job:dispatch` para permitir pasar un array `{--p=*}` en vez de tener 3 parámetros fijos `{--param1=} {--param2=} {--param3=}` y pasar todo el array al Job recibido (de esta forma se pueden pasar tantos parámetros como requiera el job)
+  * Añadir descripciones a los argumentos del `job:dispatch`
+* (breaking) renamePackage: renombrar prefijo traducciones de `h` a `k`
+* Modificar version de laravel en los literales de las blades
+* Nuevos Value Objects para los Enums `nullables`: 
+  * Renombrar clase `ContractEnumVo` a `ContractBaseEnumVo`
+  * Crear las nuevas clases `ContractEnumVo` y `ContractEnumNullVo` que extienden de esta base (para poder indicar si los Enums son nullables o no sin tener que ponerlo en cada Enum)
+  * Modificar la clase `EnumDynamicVo` para establecerla como `$nullable = false` y crear la nueva clase `EnumDynamicNullVo` para cuando pueda ser nullable
+* (breaking) Clase `EnvVo` renombrada a `Env`
+* (breaking) Añadir parámetro `active` al componente `x-kal::sidebar.item` en vez de usar el `isRouteActive()`
+* <u>**!!! (breaking) !!!**</u> Eliminar los helpers del `env` del archivo `InfrastructureHeplers.php` y mover toda la lógica a la clase `EnvVo`
+* <u>**!!! (breaking) !!!**</u> Clase `MyCarbon` renombrada a `Date` y movida de `Infrastructure\Helpers` a `Infrastructure\Services`
+* <u>**!!! (breaking) !!!**</u> Helpers renombrados en `DomainHeplers.php`:
+    <details>
+    <summary>Mostrar</summary>
+    
+    * `strToCamelCase`&rarr;`str_camel`
+    * `strTurncate`&rarr;`str_truncate`
+    * `verifyEmail`&rarr;`validate_email`
+    * `splitAtUpperCase`&rarr;`explode_by_uppercase`
+    * `abortC_if`&rarr;`abort_d_if`
+    * `isValidBoolean`&rarr;`is_valid_bool`
+    * `isDomainException`&rarr;`is_kalion_exception`
+    * `collectAny`&rarr;`collect_any`
+    * `objectToArray`&rarr;`object_to_array`
+    * `arrayToObject`&rarr;`array_to_object`
+    * `cloneObject`&rarr;`obj_clone`
+    * `arrayKeepKeys`&rarr;`array_keep`
+    * `arrayDeleteKeys`&rarr;`array_delete`
+    * `array_diff_assoc_recursive`&rarr;`array_diff_assoc_deep`
+    * `getSubWith`&rarr;`get_sub_with`
+    * `getInfoFromRelationWithFlag`&rarr;`get_info_from_relation_with_flag`
+    * `soIsWindows`&rarr;`so_is_windows`
+    * `strContainsHtml`&rarr;`str_contains_html`
+    
+    </details>
+* <u>**!!! (breaking) !!!**</u> Helpers renombrados en `InfrastructureHeplers.php`:
+    <details>
+    <summary>Mostrar</summary>
+
+    * `defaultUrl`&rarr;`default_url`
+    * `defaultRoute`&rarr;`default_route`
+    * `appUrl`&rarr;`app_url`
+    * `getHtmlLaravelDebugStackTrace`&rarr;`get_html_laravel_debug_stack_trace`
+    * `getClassUserEntity`&rarr;`get_class_user_entity`
+    * `getClassUserModel`&rarr;`get_class_user_model`
+    * `getUrlFromRoute`&rarr;`get_url_from_route`
+    * `broadcastingIsActive`&rarr;`broadcasting_is_active`
+    * `arrAllValuesAreArray`&rarr;`array_has_only_arrays`
+    * `collTake`&rarr;`coll_take`
+    * `collFlatten`&rarr;`coll_flatten`
+    * `collSelect`&rarr;`coll_select`
+    * `collGroupBy`&rarr;`coll_group_by`
+    * `collSortDesc`&rarr;`coll_sort_desc`
+    * `collSort`&rarr;`coll_sort`
+    * `collSortBy`&rarr;`coll_sortby`
+    * `collFilter`&rarr;`coll_filter`
+    * `collUnique`&rarr;`coll_unique`
+    * `collContains`&rarr;`coll_contains`
+    * `collWhereIn`&rarr;`coll_where_in`
+    * `collWhere`&rarr;`coll_where`
+    * `collLast`&rarr;`coll_last`
+    * `collFirst`&rarr;`coll_first`
+    * `strToSnake`&rarr;`str_snake`
+    * `urlContainsAjax`&rarr;`url_contains_ajax`
+    * `getGoodEmailsFromArray`&rarr;`filter_valid_emails`
+    * `debugIsActive`&rarr;`debug_is_active`
+    * `appIsInDebugMode`&rarr;`debug_is_active`
+    * `dropdownIsOpen`&rarr;`dropdown_is_open`
+    * `responseJson`&rarr;`response_json`
+    * `responseJsonWith`&rarr;`response_json_with`
+    * `responseJsonError`&rarr;`response_json_error`
+
+    </details>
+* (refactor) Quitar tryCatch al `firstOrFail()` del `StateEloquentRepository` ya que ahora se encarga el ExceptionHandler
+* <u>**!!! (breaking) !!!**</u> Migrar todo el código para usar las características de PHP 8.2 (promoted properties, static return type, type multiple, ...)
+* <u>**!!! (breaking) !!!**</u> Dejar de soportar las versiones de PHP `^7.4|^8.0|^8.1` y las versiones de laravel `^7.0|^8.0`
+
+### Removed
+
+* Archivo de configuración `kalion_layout.php` eliminado (se han movido al `kalion.php`)
+* (breaking) Eliminar clase `MyLog` y mover el código de los métodos estáticos a los nuevos helpers `log_error()`, `log_error_on()`, `log_error_on_queues()`, `log_error_on_loads()`
+* (breaking) Eliminar clase `MyJob` y mover código `MyJob::launchSimple()` al nuevo helper `save_execute()`
+* (breaking) Eliminar clase `MyDebug`
+* <u>**!!! (breaking) !!!**</u> Helpers eliminados en `DomainHeplers.php`:
+    <details>
+    <summary>Mostrar</summary>
+
+    * `dashesToCamelCase`
+    * `strToSlug`
+    * `remove_accents`
+    * `getFirstMessageIfIsArray`
+    * `stringHtmlOfArrayMessages`
+    * `strContains`
+    * `arrayContains`
+    * `arrayFirstWhere`
+    * `clearArrayToIntegers`
+    * `arrayToString`
+    * `anyToBoolean`
+    * `strStartsWith`
+    * `strEndsWith`
+    * `arrayHasDupes`
+    * `buildForeignKeyName`
+    * `addMessagesSeparator`
+    * `getSrcNamespace`
+    * `getRelationCollection`
+    * `stringToArray`
+    * `stringToObject`
+    * `isBlank`
+    * `clearWith`
+    * `mapToLabelStructure`
+    * `arrFormatIsEntity`
+    * `arrFormatIsCollection`
+
+    </details>
+* <u>**!!! (breaking) !!!**</u> Helpers eliminados en `InfrastructureHeplers.php`:
+    <details>
+    <summary>Mostrar</summary>
+
+    * `getIconFullAttributes`
+    * `getOtherAttributes`
+    * `getIconClasses`
+    * `myCollect`
+    * `arrSort`
+    * `dbTransaction`
+    * `myOptional`
+    * `isValidationException`
+    * `formatArrayOfEmailsToSendMail`
+    * `myCarbon`
+    * `collectionContains`
+    * `collectE`
+    * `compareDates`
+    * `formatStringDatetimeTo`
+    * `createRandomString`
+    * `routeContains`
+    * `getRouteInput`
+    * `currentRouteNamed`
+    * `isRouteActive`
+    * `showActiveClass`
+    * `envIsTest`
+    * `envIsNotLocal`
+    * `envIsNotPre`
+    * `envIsNotPorduction`
+    * `envIsLocal`
+    * `envIsPre`
+    * `envIsPorduction`
+    * `getEnvironmentReal`
+    * `getEnvironment`
+
+    </details>
+
+### Fixed
+
+* (fix) Solucionar error en el comando `JobDispatch` cuando la configuración `kalion.packages_to_scan_for_jobs` es `null`
 
 ## [v0.18.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.18.0-beta.0...v0.18.1-beta.0) - 2025-03-06
 
 ### Added
 
-* Nuevo Helper "Instantiable" con una función estática "new" para instanciar clases de forma estática
-* Nuevo helper "get_class_from_file($filePath)" que a partir de la ruta de un archivo devuelve la clase (namespace + name)
+* Nuevo Helper `Instantiable` con una función estática `new` para instanciar clases de forma estática
+* Nuevo helper `get_class_from_file($filePath)` que a partir de la ruta de un archivo devuelve la clase (namespace + name)
 
 ### Changed
 
-* Añadir el Trait "Instantiable" en la clase "TailwindClassFilter" para poder llamar al filter mas fácilmente y eliminar el helper "filterTailwindClasses()"
-* Comando JobDispatch ("job:dispatch") modificado:
+* Añadir el Trait `Instantiable` en la clase `TailwindClassFilter` para poder llamar al filter mas fácilmente y eliminar el helper `filterTailwindClasses()`
+* Comando JobDispatch (`job:dispatch`) modificado:
   * Código refactorizado para mejorar la legibilidad
-  * Hacer el método "scanJobDirsProject()" más flexible y que busque la carpeta "Jobs" en cualquier sitio y no solo dentro de "Infrastructure"
-  * Al buscar la carpeta Jobs en la aplicación, hacer que busque también en la carpeta "app" además de en "src"
-  * Método "scanJobDirsProject()" renombrado a "findJobDirsOnPath()"
-  * Dejar de calcular el "namespace" transformando el "path" y usar el helper "get_class_from_file()"
-  * Variable de configuración "job_paths_from_other_packages" renombrada a "packages_to_scan_for_jobs"
-  * Nueva variable de entorno "KALION_PACKAGES_TO_SCAN_FOR_JOBS" para poder pasarle los paquetes en un string desde el ".env"
-  * Cambiar el contenido de la configuración "packages_to_scan_for_jobs" para guardar el nombre de los paquetes en vez de guardar el "namespace" (y adaptar el comando "JobDispatch")
+  * Hacer el método `scanJobDirsProject()` más flexible y que busque la carpeta `Jobs` en cualquier sitio y no solo dentro de `Infrastructure`
+  * Al buscar la carpeta Jobs en la aplicación, hacer que busque también en la carpeta `app` además de en `src`
+  * Método `scanJobDirsProject()` renombrado a `findJobDirsOnPath()`
+  * Dejar de calcular el `namespace` transformando el `path` y usar el helper `get_class_from_file()`
+  * Variable de configuración `job_paths_from_other_packages` renombrada a `packages_to_scan_for_jobs`
+  * Nueva variable de entorno `KALION_PACKAGES_TO_SCAN_FOR_JOBS` para poder pasarle los paquetes en un string desde el `.env`
+  * Cambiar el contenido de la configuración `packages_to_scan_for_jobs` para guardar el nombre de los paquetes en vez de guardar el `namespace` (y adaptar el comando `JobDispatch`)
   * Comprobar si la carpeta Jobs ya existe en directamente en la ruta que se está escaneando (hasta ahora solo se buscaba la carpeta Jobs dentro de cada carpeta que hay en la ruta que se escanea)
   * (refactor) Modificar flujo para obtener todas las rutas donde buscar Jobs (kalion, paquetes configurados y app) y después escanearlas todas y llamar a la ejecución
   * !!! Cambiar lógica para que en vez de ejecutar el primer job que encuentre `(según el orden de búsqueda: kalion, otros paquetes, app.scr y app.app)`, devuelva un mensaje con la lista de jobs que se han encontrado con el nombre recibido y que se pueda seleccionar el que se quiera ejecutar
 
 ### Fixed
 
-* (fix) Nuevo helper "str_contains()" para que funcione en versiones anteriores de PHP8
-* (fix) Varios errores arreglados en el comando JobDispatch ("job:dispatch"): 
-  * Arreglar la recursividad del método "scanJobDirsProject()", ya que no estaba guardando el resultado cuando se llamaba a sí mismo
-  * Cambiar el "dispatch" por el "dispatch_sync", ya que a partir de Laravel 11 la conexión por defecto es "database"
+* (fix) Nuevo helper `str_contains()` para que funcione en versiones anteriores de PHP8
+* (fix) Varios errores arreglados en el comando JobDispatch (`job:dispatch`): 
+  * Arreglar la recursividad del método `scanJobDirsProject()`, ya que no estaba guardando el resultado cuando se llamaba a sí mismo
+  * Cambiar el `dispatch` por el `dispatch_sync`, ya que a partir de Laravel 11 la conexión por defecto es `database`
 
 ### Removed
 
-* Eliminar método "tryDispatchJobFromPath()" (el que antes se llamaba "tryExecJobInNamespace()") y mover la lógica dentro del "handle()"
+* Eliminar método `tryDispatchJobFromPath()` (el que antes se llamaba `tryExecJobInNamespace()`) y mover la lógica dentro del `handle()`
 
 ## [v0.18.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.17.1-beta.0...v0.18.0-beta.0) - 2025-03-06
 
