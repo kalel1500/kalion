@@ -95,7 +95,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | In the next option you can define the namespaces of the jobs of other
-    | packages that you want to be able to start with the command job:dispatch {job}.
+    | packages that you want to be able to start with the command kalion:job-dispatch {job}.
     |
     | You can define an array of strings or a string with several packages
     | separated by ";"

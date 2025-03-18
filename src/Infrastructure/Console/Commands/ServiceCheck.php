@@ -15,7 +15,7 @@ final class ServiceCheck extends Command
      *
      * @var string
      */
-    protected $signature = 'service:check';
+    protected $signature = 'kalion:service-check';
 
     /**
      * The console command description.

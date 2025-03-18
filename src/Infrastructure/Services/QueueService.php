@@ -15,7 +15,7 @@ final class QueueService
      */
     public static function check(string $failMessage): void
     {
-        $exitCode = Artisan::call('service:check');
+        $exitCode = Artisan::call('kalion:service-check');
         $active = ($exitCode !== 0 && !str_contains(Artisan::output(), 'inactivo'));
         if (!$active) {
             cache(['service_queue' => 'inactive'], (10*60));

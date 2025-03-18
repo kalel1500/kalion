@@ -14,7 +14,7 @@ final class LogsClear extends Command
      *
      * @var string
      */
-    protected $signature = 'logs:clear';
+    protected $signature = 'kalion:logs-clear';
 
     /**
      * The console command description.

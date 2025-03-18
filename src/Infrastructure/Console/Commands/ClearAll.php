@@ -14,7 +14,7 @@ final class ClearAll extends Command
      *
      * @var string
      */
-    protected $signature = 'clear:all';
+    protected $signature = 'kalion:clear-all';
 
     /**
      * The console command description.
@@ -39,7 +39,7 @@ final class ClearAll extends Command
         Artisan::call('view:clear');*/
         Artisan::call('optimize:clear');
 
-        Artisan::call('logs:clear');
+        Artisan::call('kalion:logs-clear');
 
         $this->info('All cache files are cleared');
     }
