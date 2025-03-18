@@ -250,7 +250,7 @@ if (!function_exists('get_info_from_relation_with_flag')) {
 if (!function_exists('so_is_windows')) {
     function so_is_windows(): bool
     {
-        $so = strtoupper(substr(PHP_OS, 0,3));
+        $so = strtoupper(substr(PHP_OS, 0, 3));
         return $so === 'WIN';
     }
 }
