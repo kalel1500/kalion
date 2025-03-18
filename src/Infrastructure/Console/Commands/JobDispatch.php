@@ -40,13 +40,13 @@ final class JobDispatch extends Command
         // Obtener las rutas de todos los paquetes definidos en la configuración
         if (!is_null($packages = config('kalion.packages_to_scan_for_jobs'))) {
             $packages = is_array($packages) ? $packages : explode(';', $packages);
-            $packages = array_map(fn($item) => $vendorPath . $item, $packages);
+            $packages = array_map(fn($item) => normalize_path($vendorPath . $item), $packages);
         }
         if (is_null($packages)) $packages = [null];
 
         // Escanear todas las carpetas "Job" dentro de las siguientes rutas:
         $paths = array_merge(
-            $this->findJobDirsOnPath($vendorPath . 'kalel1500\kalion'), // Escanear el propio paquete "kalion"
+            $this->findJobDirsOnPath($vendorPath . 'kalel1500' . DIRECTORY_SEPARATOR . 'kalion'), // Escanear el propio paquete "kalion"
             $this->findJobDirsOnPath(...$packages),  // Escanear los paquetes configurados en el ".env"
             $this->findJobDirsOnPath(src_path()), // Escanear la carpeta "src" de la propia aplicación
             $this->findJobDirsOnPath(app_path()), // Escanear la carpeta "app" de la propia aplicación
