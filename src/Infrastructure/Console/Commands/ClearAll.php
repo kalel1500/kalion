@@ -40,36 +40,18 @@ final class ClearAll extends Command
      */
     public function handle()
     {
-//        Artisan::call('cache:clear');
-//        $this->info('cache:clear');
+        /*Artisan::call('schedule:clear-cache');
+        Artisan::call('debugbar:clear');*/
 
-//        Artisan::call('config:clear');
-//        $this->info('config:clear');
-
-//        Artisan::call('event:clear');
-//        $this->info('event:clear');
-
-//        Artisan::call('route:clear');
-//        $this->info('route:clear');
-
-//        Artisan::call('view:clear');
-//        $this->info('view:clear');
-
-//        Artisan::call('schedule:clear-cache');
-//        $this->info('schedule:clear-cache');
-
-//        Artisan::call('debugbar:clear');
-//        $this->info('debugbar:clear');
-
-//        Artisan::call('clear-compiled');
-//        $this->info('clear-compiled');
-
+        /*Artisan::call('cache:clear');
+        Artisan::call('clear-compiled');
+        Artisan::call('config:clear');
+        Artisan::call('event:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');*/
         Artisan::call('optimize:clear');
-        $this->info('optimize:clear');
 
         Artisan::call('logs:clear');
-        $this->info('logs:clear');
-
 
         $this->info('All cache files are cleared');
     }
