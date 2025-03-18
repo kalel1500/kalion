@@ -46,15 +46,20 @@ final class JobDispatch extends Command
         if (is_null($packages)) $packages = [];
 
         // Definir las rutas donde buscar los Jobs:
-        $pathsToScan = [
+        $pathsToScan_packages = [
             $kalionPath, // Escanear el propio paquete "kalion"
             ...$packages, // Escanear los paquetes configurados en el ".env"
+        ];
+        $pathsToScan_app = [
             src_path(), // Escanear la carpeta "src" de la propia aplicación
             app_path(), // Escanear la carpeta "app" de la propia aplicación
         ];
 
         // Escanear todas las carpetas "Job" dentro las rutas definidas
-        $paths = array_merge(...array_map(fn ($path) => $this->findJobDirsOnPath($path), $pathsToScan));
+        $paths = array_merge(
+            array_merge(...array_map(fn ($path) => $this->findJobDirsOnPath($path, true), $pathsToScan_packages)),
+            array_merge(...array_map(fn ($path) => $this->findJobDirsOnPath($path), $pathsToScan_app)),
+        );
 
         // Buscar todos los Jobs que coincidan con el Job recibido [$this->argument('job')] dentro de las carpetas "escaneadas"
         $jobs = [];
@@ -112,7 +117,7 @@ final class JobDispatch extends Command
         $this->info("Job $jobName ejecutado");
     }
 
-    private function findJobDirsOnPath(?string $path): array
+    private function findJobDirsOnPath(?string $path, bool $isPackage = false): array
     {
         if (is_null($path)) return [];
 
@@ -120,10 +125,19 @@ final class JobDispatch extends Command
 
         // Obtener y recorrer todos los archivos que hay en la ruta recibida
         $dirs = scandir($path);
+
+        // Si es un paquete y se encuentra la carpeta "src" escanearla directamente en vez de buscar en todas las carpetas del paquete
+        if ($isPackage && in_array('src', $dirs)) {
+            return $this->findJobDirsOnPath($path . DIRECTORY_SEPARATOR . 'src', $isPackage);
+        }
+
         foreach ($dirs as $item) {
 
             // Saltar los primeros elementos que devuelve la función "scandir()"
             if (in_array($item, [".",".."])) continue;
+
+            // Saltar las carpetas ocultas
+            if (str_starts_with($item, '.')) continue;
 
             // Comprobar que el item actual no sea un archivo
             $fullPathCurrent = $path . DIRECTORY_SEPARATOR . $item;
