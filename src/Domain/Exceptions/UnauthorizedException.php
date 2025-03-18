@@ -15,7 +15,7 @@ class UnauthorizedException extends BasicHttpException
     {
         $message = __('k::auth.invalid_roles');
 
-        if (config('kalion_auth.display_role_in_exception')) {
+        if (config('kalion.auth.display_role_in_exception')) {
             $message .= ' '.__('k::auth.necessary_roles', ['roles' => $roles]);
         }
 
@@ -26,7 +26,7 @@ class UnauthorizedException extends BasicHttpException
     {
         $message = __('k::auth.invalid_permissions');
 
-        if (config('kalion_auth.display_permission_in_exception')) {
+        if (config('kalion.auth.display_permission_in_exception')) {
             $message .= ' '.__('k::auth.necessary_permissions', ['permissions' => $permissions]);
         }
 

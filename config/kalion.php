@@ -136,6 +136,58 @@ return [
         'blade_show_main_border' => (bool) env('KALION_LAYOUT_BLADE_SHOW_MAIN_BORDER', false),
     ],
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Settings
+    |--------------------------------------------------------------------------
+    |
+    | These configuration options control the authentication behavior of Kalion.
+    |
+    | - "fake": Enables fake login mode, bypassing password authentication.
+    |           Should only be used in local environments for testing.
+    | - "field": Defines which database field will be used for authentication.
+    | - "fields": Contains all available login fields and their attributes.
+    | - "load_roles": If enabled, user roles will be loaded automatically.
+    | - "display_role_in_exception": Shows required roles in exception messages.
+    | - "display_permission_in_exception": Shows required permissions in exceptions.
+    |
+    */
+
+    'auth' => [
+        'fake' => (bool) env('KALION_AUTH_FAKE', false),
+        'field' => env('KALION_AUTH_FIELD', 'email'),
+        'fields' => [
+            'id' => [
+                'name' => 'id',
+                'label' => 'Id',
+                'type' => 'number',
+                'placeholder' => 'ID',
+            ],
+            'email' => [
+                'name' => 'email',
+                'label' => 'Email',
+                'type' => 'email',
+                'placeholder' => 'you@somewhere.com',
+            ],
+            'matricula' => [
+                'name' => 'matricula',
+                'label' => 'Matricula',
+                'type' => 'text',
+                'placeholder' => 'Matricula',
+            ],
+            'custom' => [
+                'name' => env('KALION_AUTH_FIELD_NAME', 'email'),
+                'label' => env('KALION_AUTH_FIELD_LABEL', 'Email'),
+                'type' => env('KALION_AUTH_FIELD_TYPE', 'email'),
+                'placeholder' => env('KALION_AUTH_FIELD_PLACEHOLDER', 'you@somewhere.com'),
+            ]
+        ],
+        'load_roles' => (bool) env('KALION_AUTH_LOAD_ROLES', true),
+        'display_role_in_exception' => (bool) env('KALION_AUTH_DISPLAY_ROLE_IN_EXCEPTION', false),
+        'display_permission_in_exception' => (bool) env('KALION_AUTH_DISPLAY_PERMISSION_IN_EXCEPTION', false),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | NPM engines versions for the Start command

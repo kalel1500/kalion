@@ -320,8 +320,8 @@ if (!function_exists('get_class_from_file')) {
 if (!function_exists('get_login_field_data')) {
     function get_login_field_data(): LoginFieldDto
     {
-        $defaultField = config('kalion_auth.login.field');
-        $fields = config('kalion_auth.login.fields');
+        $defaultField = config('kalion.auth.field');
+        $fields = config('kalion.auth.fields');
         $field = $fields[$defaultField] ?? $fields['email'];
         return LoginFieldDto::fromArray([
             'name'        => $field['name'],
