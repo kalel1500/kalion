@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.19.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.19.0-beta.1...master)
+
+## [v0.19.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.19.0-beta.0...v0.19.0-beta.1) - 2025-03-19
+
+### Changed
+
+* Optimizar comando `JobDispatch` al escanear las para que se salte las carpetas ocultas y si en los paquetes encuentra la carpeta `src` busque directamente dentro y se salte las demás
+
+### Fixed
+
+* (fix) Definir las rutas que se deben escanear en un array `$pathsToScan` y llamar al `findJobDirsOnPath()` con un `array_map()`. Asi se arregla el error con la llamada `$this->findJobDirsOnPath(...$packages)` ya que no funcionaba y además evitamos llamar al `findJobDirsOnPath()` multiples veces
+* (fix) Usar `DIRECTORY_SEPARATOR` y `normalize_path()` en las rutas que se le pasan al `findJobDirsOnPath()` en el comando `JobDispatch`, ya que cuando se ejecuta en Linux falla el `scandir()` si tiene `\`
 
 ## [v0.19.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.18.1-beta.0...v0.19.0-beta.0) - 2025-03-18
 
