@@ -303,7 +303,7 @@ if (!function_exists('default_url')) {
 }
 
 if (!function_exists('save_execute')) {
-    function save_execute(string $errorPrefix, string $logChannel, callable $callback): void
+    function save_execute(string $errorPrefix, ?string $logChannel, callable $callback): void
     {
         try {
             $callback();
