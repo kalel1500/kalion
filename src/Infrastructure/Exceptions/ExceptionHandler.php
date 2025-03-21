@@ -47,7 +47,7 @@ final class ExceptionHandler
                 $context = $e->getContext();
 
                 // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
-                if ($request->expectsJson() || url_contains_ajax()) {
+                if (self::shouldRenderJson($request)) {
                     return response()->json($context->toArray(), $context->getStatusCode());
                 }
 
@@ -65,8 +65,8 @@ final class ExceptionHandler
             });
 
             // Indicar a Laravel cuando devolver un Json (mirar url "/ajax/")
-            $exceptions->shouldRenderJsonWhen(function ($request, Throwable $e) {
-                return $request->expectsJson() || url_contains_ajax();
+            $exceptions->shouldRenderJsonWhen(function (Request $request, Throwable $e) {
+                return self::shouldRenderJson($request);
             });
 
             // Formatear todas las respuestas Json para añadir los parámetros [success, message, data] con un valor por defecto (No aplica en los "KalionException" porque ya tienen ese formato)
@@ -80,5 +80,10 @@ final class ExceptionHandler
             });
 
         };
+    }
+
+    private static function shouldRenderJson(Request $request): bool
+    {
+        return $request->expectsJson() || url_contains_ajax();
     }
 }
