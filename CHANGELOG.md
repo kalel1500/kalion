@@ -1,6 +1,19 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.19.0-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.20.0-beta.0...master)
+
+## [v0.20.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.19.0-beta.1...v0.20.0-beta.0) - 2025-03-21
+
+### Changed
+
+* (breaking) Mover el segundo parámetro `$logChannel` del helper log_if_fail() al final como tercer parámetro después del `$callback`
+* (breaking) Renombrar helper `save_execute` a `log_if_fail()`
+* Permitir que el parámetro `$logChannel` del helper `save_execute()` pueda ser `null`
+* (refactor) Extraer lógica del `shouldRenderJsonWhen()` en el método estático `shouldRenderJson()` del `ExceptionHandler.php` para evitar tener que escribirla varias veces
+
+### Fixed
+
+* (fix) Añadir comprobación `self::shouldRenderJson()` al renderizar los `ModelNotFoundException` en el `ExceptionHandler` para evitar que todas las excepciones `ModelNotFoundException` devuelvan siempre una blade si se debe devolver un `json`
 
 ## [v0.19.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.19.0-beta.0...v0.19.0-beta.1) - 2025-03-19
 
