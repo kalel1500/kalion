@@ -302,8 +302,8 @@ if (!function_exists('default_url')) {
     }
 }
 
-if (!function_exists('save_execute')) {
-    function save_execute(string $errorPrefix, ?string $logChannel, callable $callback): void
+if (!function_exists('log_if_fail')) {
+    function log_if_fail(string $errorPrefix, ?string $logChannel, callable $callback): void
     {
         try {
             $callback();
