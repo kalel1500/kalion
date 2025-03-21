@@ -32,7 +32,7 @@ final class ExceptionHandler
                 $exception = $e->getPrevious();
 
                 // Si no es una instancia de ModelNotFoundException, devolver null
-                if (!($exception instanceof ModelNotFoundException)) return null;
+                if (!($exception instanceof ModelNotFoundException) || self::shouldRenderJson($request)) return null;
 
                 if (debug_is_active()) {
                     return response(get_html_laravel_debug_stack_trace($request, $exception));
