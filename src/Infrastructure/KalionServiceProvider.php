@@ -175,7 +175,7 @@ return [
      */
     protected function registerRoutes(): void
     {
-        if (Kalion::shouldRegistersRoutes()) {
+        if (config('kalion.register_routes')) {
             Route::group([
 //                'as' => 'kalion.',
 //                'prefix' => 'kalion',
@@ -207,7 +207,7 @@ return [
          * -------------------
          */
 
-        if (Kalion::shouldPublishMigrations() && Version::laravelMin9()) {
+        if (config('kalion.publish_migrations') && Version::laravelMin9()) {
             $existNewMethod = method_exists($this, 'publishesMigrations');
             $publishesMigrationsMethod = $existNewMethod
                 ? 'publishesMigrations'
@@ -311,7 +311,7 @@ return [
     {
         if (
             $this->app->runningInConsole() &&
-            Kalion::shouldRunMigrations() &&
+            config('kalion.run_migrations') &&
             Version::laravelMin9()
         ) {
             $this->loadMigrationsFrom(KALION_PATH.'/database/migrations');
@@ -384,7 +384,7 @@ return [
         if (
             !$this->app->runningInConsole() &&
             !empty(config('app.key')) &&
-            Kalion::enabledPreferencesCookie()
+            config('kalion.enable_preferences_cookie')
         ) {
             // Añadir un middleware a un grupo
             $router->pushMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\AddPreferencesCookies::class); // $kernel->appendMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\AddPreferencesCookies::class);

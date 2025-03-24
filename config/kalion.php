@@ -6,6 +6,35 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | ServiceProvider Configurations
+    |--------------------------------------------------------------------------
+    |
+    | In the following options you can configure what will be registered
+    | in the ServiceProvider
+    |
+    | - "run_migrations": Sets whether migrations should be run with
+    |                     the "php artisan migrate" command.
+    |
+    | - "publish_migrations": Sets whether migrations should be published
+    |                         with the "php artisan vendor:publish" command.
+    |
+    | - "register_routes": Sets whether package routes should be registered.
+    |
+    | - "enable_preferences_cookie": Sets whether the AddPreferencesCookies
+    |                                middleware should be added to the web routes group.
+    |
+    */
+
+    'run_migrations' => (bool) env('KALION_RUN_MIGRATIONS', false),
+
+    'publish_migrations' => (bool) env('KALION_PUBLISH_MIGRATIONS', false),
+
+    'register_routes' => (bool) env('KALION_REGISTER_ROUTES', true),
+
+    'enable_preferences_cookie' => (bool) env('KALION_ENABLE_PREFERENCES_COOKIE', true),
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Route
     |--------------------------------------------------------------------------
     |
