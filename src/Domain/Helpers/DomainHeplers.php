@@ -271,15 +271,6 @@ if (!function_exists('normalize_path')) {
     }
 }
 
-if (!function_exists('get_shadow_classes')) {
-    function get_shadow_classes(string $normalShadow = 'shadow-md'): string
-    {
-        return config('kalion.layout.active_shadows')
-            ? 'kal:shadow-xl dark:kal:shadow-black-xl'
-            : $normalShadow;
-    }
-}
-
 if (!function_exists('pipe_str_to_array')) {
     function pipe_str_to_array(array|string $value): array
     {
