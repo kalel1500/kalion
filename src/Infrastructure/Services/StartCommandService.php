@@ -179,23 +179,6 @@ final class StartCommandService
         return $this;
     }
 
-    public function stubsCopyFile_AppServiceProvider(): static
-    {
-        $this->number++;
-
-        if ($this->developMode) return $this;
-
-        $file = 'app/Providers/AppServiceProvider.php';
-
-        $from = ($this->isReset()) ? $this->command->originalStubsPath($file) : $this->command->stubsPath($file);
-        $to   = base_path($file);
-
-        copy($from, $to);
-        $this->line('Archivo "' . $file . '" creado');
-
-        return $this;
-    }
-
     public function stubsCopyFile_DependencyServiceProvider(): static
     {
         $this->number++;
