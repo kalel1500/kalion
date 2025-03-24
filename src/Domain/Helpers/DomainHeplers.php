@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionException;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\LoginFieldDto;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
 
 if (!function_exists('str_camel')) {
@@ -305,20 +304,5 @@ if (!function_exists('get_class_from_file')) {
         }
 
         return null;
-    }
-}
-
-if (!function_exists('get_login_field_data')) {
-    function get_login_field_data(): LoginFieldDto
-    {
-        $defaultField = config('kalion.auth.field');
-        $fields = config('kalion.auth.fields');
-        $field = $fields[$defaultField] ?? $fields['email'];
-        return LoginFieldDto::fromArray([
-            'name'        => $field['name'],
-            'label'       => $field['label'],
-            'type'        => $field['type'],
-            'placeholder' => $field['placeholder'],
-        ]);
     }
 }

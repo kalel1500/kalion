@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Services;
 
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\LoginFieldDto;
+
 final class Kalion
 {
     public static function setLogChannels(): void
@@ -29,5 +31,18 @@ final class Kalion
         return config('kalion.layout.active_shadows')
             ? 'kal:shadow-xl dark:kal:shadow-black-xl'
             : $normalShadow;
+    }
+
+    public static function getLoginFieldData(): LoginFieldDto
+    {
+        $defaultField = config('kalion.auth.field');
+        $fields = config('kalion.auth.fields');
+        $field = $fields[$defaultField] ?? $fields['email'];
+        return LoginFieldDto::fromArray([
+            'name'        => $field['name'],
+            'label'       => $field['label'],
+            'type'        => $field['type'],
+            'placeholder' => $field['placeholder'],
+        ]);
     }
 }

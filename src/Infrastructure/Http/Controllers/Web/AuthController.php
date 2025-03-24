@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Thehouseofel\Kalion\Domain\Exceptions\FeatureUnavailableException;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 final class AuthController extends Controller
 {
@@ -41,7 +42,7 @@ final class AuthController extends Controller
             throw new FeatureUnavailableException();
         }
 
-        $field = get_login_field_data();
+        $field = Kalion::getLoginFieldData();
         $params = $request->validate([$field->name => 'required']);
         $user = $this->model::query()->where($field->name, $params[$field->name])->first();
         if (!$user) {
