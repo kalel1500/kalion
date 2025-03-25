@@ -246,13 +246,6 @@ if (!function_exists('concat_fields_with')) {
     }
 }
 
-if (!function_exists('get_class_user_entity')) {
-    function get_class_user_entity(): string
-    {
-        return config('kalion_user.entity');
-    }
-}
-
 if (!function_exists('get_class_user_repository')) {
     function get_class_user_repository(): string
     {

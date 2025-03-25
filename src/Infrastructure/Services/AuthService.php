@@ -22,7 +22,7 @@ final class AuthService implements AuthServiceContract
 
     public function __construct()
     {
-        $this->entityClass = get_class_user_entity();
+        $this->entityClass = Kalion::getClassUserEntity();
         $this->loadRoles = config('kalion.auth.load_roles');
     }
 

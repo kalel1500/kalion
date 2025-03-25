@@ -60,4 +60,9 @@ final class Kalion
     {
         return config('auth.providers.users.model');
     }
+
+    public static function getClassUserEntity(): string
+    {
+        return config('kalion_user.entity');
+    }
 }

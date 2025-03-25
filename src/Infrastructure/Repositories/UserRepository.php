@@ -22,6 +22,6 @@ class UserRepository implements UserRepositoryContract
         $data = $this->model::query()
             ->with('roles')
             ->findOrFail($id);
-        return get_class_user_entity()::fromArray($data->toArray(), ['roles']);
+        return Kalion::getClassUserEntity()::fromArray($data->toArray(), ['roles']);
     }
 }
