@@ -391,14 +391,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $collResult = collect($this->toArray())->groupBy($groupBy, $preserveKeys);
         if ($collResult->keys()->some('')) throw new RequiredDefinitionException('La key que has indicado no se encuentra en el array del objeto');
-        $new = $collResult->map(function ($group) {
-            return $this->toOriginal($group->toArray());
-            /*$group->map(function ($item) {
-                dd($item);
-                return $this->toOriginal($item->toArray());
-            });*/
-        });
-//        dd($new);
+        $new = $collResult->map(fn($group) => $this->toOriginal($group->toArray()));
         return $this->toBase($new->toArray());
     }
 
@@ -460,9 +453,9 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         $items       = array_map($callback, $this->items, $keys);
         $result      = collect(array_combine($keys, $items));
         $resultArray = $result->toArray();
-        return $result->contains(function ($item) {
-            return !$item instanceof ContractEntity;
-        }) ? $this->toBase($resultArray) : $this->toOriginal($resultArray);
+        return $result->contains(fn($item) => !$item instanceof ContractEntity)
+            ? $this->toBase($resultArray)
+            : $this->toOriginal($resultArray);
     }
 
     public function flatten($depth = INF)
