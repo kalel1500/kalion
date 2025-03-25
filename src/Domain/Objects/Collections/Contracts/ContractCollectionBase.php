@@ -21,6 +21,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\ContractEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
+use Thehouseofel\Kalion\Domain\Services\Relation;
 
 /**
  * @template T of ContractCollectionBase
@@ -57,7 +58,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $subRelData = (!$this->isInstanceOfRelatable())
             ? SubRelationDataDo::fromArray([null, null])
-            : get_sub_with($this->with, $this->isFull, $pluckField);
+            : Relation::getNextRelation($this->with, $this->isFull, $pluckField);
         return CollectionAny::fromArray($data, $subRelData->with, $subRelData->isFull);
     }
 
