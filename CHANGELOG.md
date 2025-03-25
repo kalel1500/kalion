@@ -1,6 +1,50 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.20.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.21.0-beta.0...master)
+
+## [v0.21.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.20.0-beta.0...v0.21.0-beta.0) - 2025-03-25
+
+### Changed
+
+* (refactor) Usar la nueva sintaxis de `arrow function [fn()]` en los callbacks de la clase `ContractCollectionBase`
+* (breaking) Varios helpers no tan genéricos movidos a métodos estáticos de clases del paquete:
+  * |                                      |        |                                           |
+    |--------------------------------------|--------|-------------------------------------------|
+    | `get_shadow_classes()`               | &rarr; | `Kalion::getShadowClasses()`              |
+    | `get_login_field_data()`             | &rarr; | `Kalion::getLoginFieldData()`             |
+    | `get_sub_with()`                     | &rarr; | `Relation::getNextRelation()`             |
+    | `get_info_from_relation_with_flag()` | &rarr; | `Relation::getInfoFromRelationWithFlag()` |
+    | `broadcasting_is_active()`           | &rarr; | `Kalion::broadcastingEnabled()`           |
+    | `get_class_user_model()`             | &rarr; | `Kalion::getClassUserModel()`             |
+    | `get_class_user_entity()`            | &rarr; | `Kalion::getClassUserEntity()`            |
+    | `get_class_user_repository()`        | &rarr; | `Kalion::getClassUserRepository()`        |
+* (breaking) Mover las configuraciones del `KalionServiceProvider` de los métodos estáticos de la clase `Kalion` a las nuevas configuraciones:
+  * |                                                                          |        |                                              |
+    |--------------------------------------------------------------------------|--------|----------------------------------------------|
+    | `Kalion::runMigrations()`/`Kalion::shouldRunMigrations()`                | &rarr; | `config('kalion.run_migrations')`            |
+    | `Kalion::publishMigrations()`/`Kalion::shouldPublishMigrations()`        | &rarr; | `config('kalion.publish_migrations')`        |
+    | `Kalion::ignoreRoutes()`/`Kalion::shouldRegistersRoutes()`               | &rarr; | `config('kalion.register_routes')`           |
+    | `Kalion::enablePreferencesCookie()`/`Kalion::enabledPreferencesCookie()` | &rarr; | `config('kalion.enable_preferences_cookie')` |
+
+### Removed
+
+* Eliminar dependencia de desarrollo `orchestra/testbench`
+* Eliminar todos los helpers relacionados con las colecciones (`coll_`) y lógica movida a la propia clase `ContractCollectionBase`:
+  * `coll_first`
+  * `coll_last`
+  * `coll_where`
+  * `coll_where_in`
+  * `coll_contains`
+  * `coll_unique`
+  * `coll_filter`
+  * `coll_sort_by`
+  * `coll_sort`
+  * `coll_sort_desc`
+  * `coll_group_by`
+  * `coll_select`
+  * `coll_flatten`
+  * `coll_take`
+* Eliminar método `stubsCopyFile_AppServiceProvider()` del comando `KalionStart`, ya que ahora no hace falta modificarlo (archivo `AppServiceProvider` eliminado de los `stubs`)
 
 ## [v0.20.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.19.0-beta.1...v0.20.0-beta.0) - 2025-03-21
 
