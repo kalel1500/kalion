@@ -193,22 +193,6 @@ if (!function_exists('array_unshift_assoc')) {
     }
 }
 
-if (!function_exists('get_info_from_relation_with_flag')) {
-    /**
-     * @param string $relation
-     * @param bool|string|null $isFull
-     * @return array{string, bool|string|null}
-     */
-    function get_info_from_relation_with_flag(string $relation, bool|string|null $isFull = null): array
-    {
-        if (str_contains($relation, ':')) {
-            [$relation, $flag] = explode(':', $relation);
-            $isFull = $flag === 'f' ? true : ($flag === 's' ? false : $flag);
-        }
-        return [$relation, $isFull];
-    }
-}
-
 if (!function_exists('so_is_windows')) {
     function so_is_windows(): bool
     {

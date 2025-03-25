@@ -10,6 +10,7 @@ use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\NotFoundRelationDefinitionException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\UnsetRelationException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionEntity;
+use Thehouseofel\Kalion\Domain\Services\Relation;
 
 abstract class ContractEntity implements Arrayable, JsonSerializable
 {
@@ -83,7 +84,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
 
     public function toArray(): array
     {
-        [$relation, $defaultIsFull] = get_info_from_relation_with_flag('flag:' . config('kalion.entity_calculated_props_mode'));
+        [$relation, $defaultIsFull] = Relation::getInfoFromRelationWithFlag('flag:' . config('kalion.entity_calculated_props_mode'));
 
         $data   = $this->toArrayProperties();
         $isFull = $this->isFull ?? $defaultIsFull;
@@ -96,7 +97,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         if ($this->withFull) {
             foreach ($this->withFull as $key => $rel) {
                 $relation = (is_array($rel)) ? $key : $rel;
-                [$relation, $isFull] = get_info_from_relation_with_flag($relation);
+                [$relation, $isFull] = Relation::getInfoFromRelationWithFlag($relation);
                 $relationData               = $this->$relation()?->toArray();
                 $data[str_snake($relation)] = $relationData;
             }
@@ -161,7 +162,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
 
             $isFull    = null;
             $firstFull = $first;
-            [$first, $isFull] = get_info_from_relation_with_flag($first, $isFull);
+            [$first, $isFull] = Relation::getInfoFromRelationWithFlag($first, $isFull);
 
             $firstRelations[]     = $first;
             $firstRelationsFull[] = $firstFull;

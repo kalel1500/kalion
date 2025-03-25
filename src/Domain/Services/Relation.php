@@ -19,7 +19,7 @@ final class Relation
         foreach ($with as $key => $rel) {
 
             if (is_string($key)) {
-                [$key, $isFull] = get_info_from_relation_with_flag($key, $isFull);
+                [$key, $isFull] = Relation::getInfoFromRelationWithFlag($key, $isFull);
 
                 if ($key === $relationName) {
                     $newWith = $rel;
@@ -29,7 +29,7 @@ final class Relation
             } else {
                 $arrayRels = explode('.', $rel);
                 $firstRel = $arrayRels[0];
-                [$firstRel, $isFull] = get_info_from_relation_with_flag($firstRel, $isFull);
+                [$firstRel, $isFull] = Relation::getInfoFromRelationWithFlag($firstRel, $isFull);
 
                 if ($firstRel === $relationName) {
                     unset($arrayRels[0]);
@@ -41,5 +41,19 @@ final class Relation
         }
         $newWith = (empty($newWith)) ? null : $newWith;
         return SubRelationDataDo::fromArray([$newWith, $newIsFull]);
+    }
+
+    /**
+     * @param string $relation
+     * @param bool|string|null $isFull
+     * @return array{string, bool|string|null}
+     */
+    public static function getInfoFromRelationWithFlag(string $relation, bool|string|null $isFull = null): array
+    {
+        if (str_contains($relation, ':')) {
+            [$relation, $flag] = explode(':', $relation);
+            $isFull = $flag === 'f' ? true : ($flag === 's' ? false : $flag);
+        }
+        return [$relation, $isFull];
     }
 }
