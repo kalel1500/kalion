@@ -65,4 +65,9 @@ final class Kalion
     {
         return config('kalion_user.entity');
     }
+
+    public static function getClassUserRepository(): string
+    {
+        return config('kalion_user.repository');
+    }
 }
