@@ -226,13 +226,6 @@ if (!function_exists('array_has_only_arrays')) {
     }
 }
 
-if (! function_exists('broadcasting_is_active')) {
-    function broadcasting_is_active(): bool
-    {
-        return (bool)config('kalion.broadcasting_enabled');
-    }
-}
-
 if (! function_exists('get_url_from_route')) {
     function get_url_from_route($route): string
     {

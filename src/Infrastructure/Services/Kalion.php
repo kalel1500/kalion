@@ -45,4 +45,14 @@ final class Kalion
             'placeholder' => $field['placeholder'],
         ]);
     }
+
+    public static function broadcastingEnabled(): bool
+    {
+        return config('kalion.broadcasting_enabled');
+    }
+
+    public static function broadcastingDisabled(): bool
+    {
+        return !Kalion::broadcastingEnabled();
+    }
 }
