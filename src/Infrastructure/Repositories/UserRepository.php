@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Repositories;
 
 use Thehouseofel\Kalion\Domain\Contracts\Repositories\UserRepositoryContract;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 class UserRepository implements UserRepositoryContract
 {
@@ -13,7 +14,7 @@ class UserRepository implements UserRepositoryContract
 
     public function __construct()
     {
-        $this->model = get_class_user_model();
+        $this->model = Kalion::getClassUserModel();
     }
 
     public function find(int $id): UserEntity

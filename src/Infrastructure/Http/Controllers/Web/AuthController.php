@@ -18,7 +18,7 @@ final class AuthController extends Controller
 
     public function __construct()
     {
-        $this->model = get_class_user_model();
+        $this->model = Kalion::getClassUserModel();
     }
 
     /**

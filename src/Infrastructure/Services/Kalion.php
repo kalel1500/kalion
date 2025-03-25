@@ -55,4 +55,9 @@ final class Kalion
     {
         return !Kalion::broadcastingEnabled();
     }
+
+    public static function getClassUserModel(): string // |\Illuminate\Foundation\Auth\User
+    {
+        return config('auth.providers.users.model');
+    }
 }

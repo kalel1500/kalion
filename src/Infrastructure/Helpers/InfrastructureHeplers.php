@@ -246,13 +246,6 @@ if (!function_exists('concat_fields_with')) {
     }
 }
 
-if (!function_exists('get_class_user_model')) {
-    function get_class_user_model(): string // |\Illuminate\Foundation\Auth\User
-    {
-        return config('auth.providers.users.model');
-    }
-}
-
 if (!function_exists('get_class_user_entity')) {
     function get_class_user_entity(): string
     {
