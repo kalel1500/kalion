@@ -307,7 +307,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             /*if (!is_array($item)) {
                 continue;
             }*/
-            $results[] = (!is_array($item) || !array_has_only_arrays($item)) ? [$item] : $item;
+            $results[] = $item;
         }
 
         return $this->toBase(array_merge([], ...$results));
