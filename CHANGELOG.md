@@ -1,6 +1,24 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.21.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.22.0-beta.0...master)
+
+## [v0.22.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.21.0-beta.0...v0.22.0-beta.0) - 2025-03-25
+
+### Added
+
+* Nuevo método `flatMap()` en la clase `ContractCollectionBase`
+
+### Changed
+
+* (refactor) Modificar método `collapse()` de la clase `ContractCollectionBase` para usar el `collect()->collapse()` de Laravel
+* (breaking) Igualar comportamiento del método `collapse()` de la clase `ContractCollectionBase` al `collapse()` de Laravel:
+  * No eliminar valores `null`
+  * Eliminar valores que no sean arrays
+* (breaking) Eliminar funcionalidad del `EnumDynamic`, ya que no termina de funcionar
+
+### Fixed
+
+* (fix) Arreglar el método collapse del `ContractCollectionBase`, ya que devolvía todos los items dentro de arrays
 
 ## [v0.21.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.20.0-beta.0...v0.21.0-beta.0) - 2025-03-25
 
