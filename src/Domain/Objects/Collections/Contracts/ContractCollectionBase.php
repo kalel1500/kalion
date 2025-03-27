@@ -301,12 +301,9 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             if ($item instanceof Arrayable) {
                 $item = $item->toArray();
             }
-            if (is_null($item)) {
+            if (!is_array($item)) {
                 continue;
             }
-            /*if (!is_array($item)) {
-                continue;
-            }*/
             $results[] = $item;
         }
 
