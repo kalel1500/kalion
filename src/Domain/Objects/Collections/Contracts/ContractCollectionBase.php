@@ -296,18 +296,8 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function collapse(): CollectionAny
     {
-        $results = [];
-        foreach ($this->items as $item) {
-            if ($item instanceof Arrayable) {
-                $item = $item->toArray();
-            }
-            if (!is_array($item)) {
-                continue;
-            }
-            $results[] = $item;
-        }
-
-        return $this->toBase(array_merge([], ...$results));
+        $result = collect($this->toArray())->collapse();
+        return $this->toBase($result->toArray());
     }
 
     /**
