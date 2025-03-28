@@ -150,6 +150,7 @@ return [
             $this->mergeConfigFrom(KALION_PATH.'/config/kalion_links.php', 'kalion_links');
 
             Kalion::setLogChannels();
+            Kalion::setAuthApiGuards();
         }
     }
 

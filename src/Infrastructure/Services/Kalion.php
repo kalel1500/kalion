@@ -26,6 +26,33 @@ final class Kalion
         ]);
     }
 
+    public static function setAuthApiGuards(): void
+    {
+        if (! config()->has('auth.guards.api')) {
+            config([
+                'auth.guards.api' => [
+                    'driver' => 'session',
+                    'provider' => 'api',
+                ],
+            ]);
+        }
+
+        if (! config()->has('auth.providers.users.model')) {
+            config([
+                'auth.providers.users.model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Infrastructure\Models\User::class),
+            ]);
+        }
+
+        if (! config()->has('auth.providers.api')) {
+            config([
+                'auth.providers.api' => [
+                    'driver' => 'eloquent',
+                    'model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Infrastructure\Models\ApiUser::class),
+                ],
+            ]);
+        }
+    }
+
     public static function getShadowClasses(string $normalShadow = 'shadow-md'): string
     {
         return config('kalion.layout.active_shadows')
