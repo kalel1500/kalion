@@ -60,10 +60,10 @@ final class Kalion
             : $normalShadow;
     }
 
-    public static function getLoginFieldData(): LoginFieldDto
+    public static function getLoginFieldData(string $guard = null): LoginFieldDto
     {
-        $defaultField = config('kalion.auth.field');
-        $fields = config('kalion.auth.fields');
+        $defaultField = config('kalion.auth.fields.'.get_guard($guard));
+        $fields = config('kalion.auth.available_fields');
         $field = $fields[$defaultField] ?? $fields['email'];
         return LoginFieldDto::fromArray([
             'name'        => $field['name'],
@@ -83,18 +83,24 @@ final class Kalion
         return !Kalion::broadcastingEnabled();
     }
 
-    public static function getClassUserModel(): string // |\Illuminate\Foundation\Auth\User
+    public static function getClassUserModel(string $guard = null): string // |\Illuminate\Foundation\Auth\User
     {
-        return config('auth.providers.users.model');
+        $provider = config('auth.guards.'.get_guard($guard).'.provider');
+        return config('auth.providers.'.$provider.'.model');
     }
 
-    public static function getClassUserEntity(): string
+    public static function getClassUserEntity(string $guard = null): string
     {
-        return config('kalion_user.entity');
+        return config('kalion_user.entities.'.get_guard($guard));
     }
 
-    public static function getClassUserRepository(): string
+    public static function getClassUserRepository(string $guard = null): string
     {
-        return config('kalion_user.repository');
+        return config('kalion_user.repositories.'.get_guard($guard));
+    }
+
+    public static function getDefaultAuthGuard(): string
+    {
+        return config('auth.defaults.guard');
     }
 }

@@ -8,6 +8,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionException;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 if (!function_exists('str_camel')) {
     function str_camel(?string $string): ?string
@@ -251,5 +252,16 @@ if (!function_exists('get_class_from_file')) {
         }
 
         return null;
+    }
+}
+
+if (!function_exists('get_guard')) {
+    function get_guard(?string $guard = null): string
+    {
+        if (!is_null($guard)) {
+            return $guard;
+        }
+
+        return Kalion::getDefaultAuthGuard();
     }
 }

@@ -190,8 +190,11 @@ return [
             'login' => env('KALION_AUTH_BLADE_LOGIN', 'kal::pages.auth.login'),
             'register' => env('KALION_AUTH_BLADE_REGISTER', 'kal::pages.auth.register'),
         ],
-        'field' => env('KALION_AUTH_FIELD', 'email'),
         'fields' => [
+            'web' => env('KALION_AUTH_FIELD', 'email'),
+            'api' => env('KALION_AUTH_FIELD_API', 'name'),
+        ],
+        'available_fields' => [
             'id' => [
                 'name' => 'id',
                 'label' => 'Id',
