@@ -48,7 +48,7 @@ class UserEntity extends ContractEntity
     {
         return [
             'id'                => $this->id->value(),
-            'content'           => $this->name->value(),
+            'name'              => $this->name->value(),
             'email'             => $this->email->value(),
             'email_verified_at' => $this->email_verified_at->value(),
         ];
@@ -58,7 +58,7 @@ class UserEntity extends ContractEntity
     {
         return [
             'id'                => $this->id->value(),
-            'content'           => $this->name->value(),
+            'name'              => $this->name->value(),
             'email'             => $this->email->value(),
             'email_verified_at' => $this->email_verified_at->value(),
             ...$newFields
