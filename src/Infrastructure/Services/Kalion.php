@@ -32,7 +32,7 @@ final class Kalion
             config([
                 'auth.guards.api' => [
                     'driver' => 'session',
-                    'provider' => 'api',
+                    'provider' => 'api_users',
                 ],
             ]);
         }
@@ -43,9 +43,9 @@ final class Kalion
             ]);
         }
 
-        if (! config()->has('auth.providers.api')) {
+        if (! config()->has('auth.providers.api_users')) {
             config([
-                'auth.providers.api' => [
+                'auth.providers.api_users' => [
                     'driver' => 'eloquent',
                     'model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Infrastructure\Models\ApiUser::class),
                 ],
