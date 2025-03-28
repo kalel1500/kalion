@@ -130,7 +130,7 @@ return [
         }
 
         $this->registerSingletons();
-        $this->configure();
+        $this->mergeConfig();
     }
 
     protected function registerSingletons(): void
@@ -141,7 +141,7 @@ return [
     /**
      * Setup the configuration for Horizon.
      */
-    protected function configure(): void
+    protected function mergeConfig(): void
     {
         // Configuración - Mergear la configuración del paquete con la configuración de la aplicación, solo hará falta publicar si queremos sobreescribir alguna configuración
         if (!$this->app->configurationIsCached()) {
