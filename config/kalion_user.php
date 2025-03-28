@@ -27,6 +27,6 @@ return [
 
     'repositories' => [
         'web' => \Thehouseofel\Kalion\Infrastructure\Repositories\UserRepository::class,
-        'api' => \Thehouseofel\Kalion\Infrastructure\Repositories\UserRepository::class,
+        'api' => \Thehouseofel\Kalion\Infrastructure\Repositories\ApiUserRepository::class,
     ],
 ];
