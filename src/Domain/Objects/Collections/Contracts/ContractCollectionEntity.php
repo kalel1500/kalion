@@ -95,7 +95,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
     }
 
     private static function fromData(
-        array|Collection|null $data,
+        array|Collection|CollectionS|null $data,
         string|array|null     $with = null,
         bool|string|null      $isFull = null,
         bool                  $isEloquentBuilder = false,
