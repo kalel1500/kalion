@@ -148,9 +148,6 @@ return [
             $this->mergeConfigFrom(KALION_PATH.'/config/kalion.php', 'kalion');
             $this->mergeConfigFrom(KALION_PATH.'/config/kalion_user.php', 'kalion_user');
             $this->mergeConfigFrom(KALION_PATH.'/config/kalion_links.php', 'kalion_links');
-
-            Kalion::setLogChannels();
-            Kalion::setAuthApiGuards();
         }
     }
 
@@ -159,6 +156,7 @@ return [
      */
     public function boot(): void
     {
+        $this->setConfig();
         $this->registerRoutes();
         $this->registerResources();
         $this->registerPublishing();
@@ -169,6 +167,14 @@ return [
         $this->registerBladeDirectives();
         $this->registerMiddlewares();
         $this->registerMacros();
+    }
+
+    protected function setConfig(): void
+    {
+        if (! $this->app->configurationIsCached()) {
+            Kalion::setLogChannels();
+            Kalion::setAuthApiGuards();
+        }
     }
 
     /**
