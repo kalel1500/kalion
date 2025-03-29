@@ -390,14 +390,15 @@ final class StartCommandService
         $this->number++;
 
         // routes/web.php
-        $originalFile  = 'routes/web.php';
-        $generatedFile = 'routes/' . (Version::phpMin74() ? 'web.php' : 'web_php_old.php');
+        $filePath  = 'routes/web.php';
 
-        $from = ($this->isReset()) ? $this->command->originalStubsPath($originalFile) : $this->command->stubsPath($generatedFile);
-        $to   = base_path($originalFile);
+        $from = ($this->isReset())
+            ? $this->command->originalStubsPath($filePath)
+            : $this->command->stubsPath($filePath);
+        $to   = base_path($filePath);
 
         copy($from, $to);
-        $this->line('Archivo "' . $originalFile . '" modificado');
+        $this->line('Archivo "' . $filePath . '" modificado');
 
         return $this;
     }
