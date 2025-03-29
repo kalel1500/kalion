@@ -172,9 +172,8 @@ final class StartCommandService
         if ($this->isReset() || $this->developMode) return $this;
 
         // Publish "config/kalion.php"
-        $this->command->call('vendor:publish', ['--tag' => 'kalion-config-user']);
         $this->command->call('vendor:publish', ['--tag' => 'kalion-config-links']);
-        $this->line('Configuración del paquete publicada: "config/kalion_user.php" y "config/kalion_links.php"');
+        $this->line('Configuración del paquete publicada: "config/kalion_links.php"');
 
         return $this;
     }
