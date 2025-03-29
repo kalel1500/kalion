@@ -7,8 +7,22 @@ use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionException;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
+use Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity;
+use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Infrastructure\Facades\AuthService;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
+
+if (!function_exists('userEntity')) {
+    /**
+     * Get the currently authenticated user entity.
+     *
+     * @return UserEntity|ApiUserEntity|null
+     */
+    function userEntity()
+    {
+        return AuthService::userEntity();
+    }
+}
 
 if (!function_exists('str_camel')) {
     function str_camel(?string $string): ?string
