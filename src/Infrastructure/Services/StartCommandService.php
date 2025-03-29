@@ -884,13 +884,17 @@ EOD;
             $composer['autoload']['files'] = [];
         }
 
-        $filePathToAdd = "src/Shared/Infrastructure/Helpers/helpers.php";
+        // Archivos de helpers a añadir o eliminar
+        $filesToAdd = [
+            "src/Shared/Domain/Helpers/helpers_domain.php",
+            "src/Shared/Infrastructure/Helpers/helpers_infrastructure.php",
+        ];
 
         if ($this->isReset()) {
-            // Si estamos en modo reset, eliminamos el archivo de la lista
+            // Si estamos en modo reset, eliminamos los archivos de la lista
             $composer['autoload']['files'] = array_filter(
                 $composer['autoload']['files'],
-                fn($file) => $file !== $filePathToAdd
+                fn($file) => !in_array($file, $filesToAdd, true)
             );
 
             // Si la lista queda vacía, eliminamos completamente la clave "files"
@@ -898,9 +902,11 @@ EOD;
                 unset($composer['autoload']['files']);
             }
         } else {
-            // Por defecto, agregamos el archivo si no está presente
-            if (!in_array($filePathToAdd, $composer['autoload']['files'], true)) {
-                $composer['autoload']['files'][] = $filePathToAdd;
+            // Por defecto, agregamos los archivos si no están presentes
+            foreach ($filesToAdd as $file) {
+                if (!in_array($file, $composer['autoload']['files'], true)) {
+                    $composer['autoload']['files'][] = $file;
+                }
             }
         }
 
@@ -921,8 +927,8 @@ EOD;
         // Guardamos los cambios en composer.json
         file_put_contents($filePath, $jsonContent . PHP_EOL);
 
-        $action = $this->isReset() ? 'eliminado de' : 'añadido a';
-        $this->line("Archivo \"helpers.php\" {$action} \"autoload.files\" en \"composer.json\"");
+        $action = $this->isReset() ? 'eliminados de' : 'añadidos a';
+        $this->line("Archivos helpers {$action} \"autoload.files\" en \"composer.json\"");
 
         return $this;
     }
