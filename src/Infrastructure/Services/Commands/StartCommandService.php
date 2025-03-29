@@ -641,39 +641,6 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_ConfigAuth_toUpdateModel(): static
-    {
-        $this->number++;
-
-        // Ruta del archivo a modificar
-        $filePath = base_path('config/auth.php');
-
-        // Leer el contenido del archivo
-        $content = File::get($filePath);
-
-        // Reemplazar la línea específica
-        if ($this->isReset()) {
-            $updatedContent = preg_replace(
-                '/\'model\'\s*=>\s*env\(\'AUTH_MODEL\',\s*Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class\)/',
-                "'model' => env('AUTH_MODEL', App\\\\Models\\\\User::class)",
-                $content
-            );
-        } else {
-            $updatedContent = preg_replace(
-                '/\'model\'\s*=>\s*env\(\'AUTH_MODEL\',\s*App\\\\Models\\\\User::class\)/',
-                "'model' => env('AUTH_MODEL', Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class)",
-                $content
-            );
-        }
-
-        // Guardar el archivo con el contenido actualizado
-        File::put($filePath, $updatedContent);
-
-        $this->line('Archivo "config/auth.php" modificado para actualizar el modelo de usuario');
-
-        return $this;
-    }
-
     public function modifyFile_JsBootstrap_toAddImportFlowbite(): static
     {
         $this->number++;

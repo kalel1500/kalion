@@ -98,7 +98,6 @@ class KalionStart extends Command
             ->modifyFile_BootstrapApp_toAddMiddlewareRedirect()
             ->modifyFile_BootstrapApp_toAddExceptionHandler()
             ->modifyFile_ConfigApp_toUpdateTimezone()
-            ->modifyFile_ConfigAuth_toUpdateModel()
             ->modifyFile_JsBootstrap_toAddImportFlowbite()
             ->modifyFile_Gitignore_toDeleteLockFileLines()
             ->modifyFile_PackageJson_toAddScriptTsBuild()
