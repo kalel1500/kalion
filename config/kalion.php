@@ -175,8 +175,8 @@ return [
     |
     | - "fake": Enables fake login mode, bypassing password authentication.
     |           Should only be used in local environments for testing.
-    | - "field": Defines which database field will be used for authentication.
-    | - "fields": Contains all available login fields and their attributes.
+    | - "fields": Defines which database field will be used for authentication.
+    | - "available_fields": Contains all available login fields and their attributes.
     | - "load_roles": If enabled, user roles will be loaded automatically.
     | - "display_role_in_exception": Shows required roles in exception messages.
     | - "display_permission_in_exception": Shows required permissions in exceptions.

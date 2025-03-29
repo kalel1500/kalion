@@ -47,7 +47,7 @@ final class Kalion
             config([
                 'auth.providers.api_users' => [
                     'driver' => 'eloquent',
-                    'model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Infrastructure\Models\ApiUser::class),
+                    'model' => env('AUTH_MODEL_API', \Thehouseofel\Kalion\Infrastructure\Models\ApiUser::class),
                 ],
             ]);
         }
