@@ -11,7 +11,10 @@ return [
     |
     */
 
-    'entity' => \Src\Shared\Domain\Objects\Entities\UserEntity::class,
+    'entities' => [
+        'web' => \Src\Shared\Domain\Objects\Entities\UserEntity::class,
+        'api' => \Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -22,5 +25,8 @@ return [
     |
     */
 
-    'repository' => \Src\Shared\Infrastructure\Repositories\Eloquent\UserRepository::class,
+    'repositories' => [
+        'web' => \Src\Shared\Infrastructure\Repositories\Eloquent\UserRepository::class,
+        'api' => \Thehouseofel\Kalion\Infrastructure\Repositories\ApiUserRepository::class,
+    ],
 ];
