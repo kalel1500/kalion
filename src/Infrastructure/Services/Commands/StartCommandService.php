@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
@@ -11,6 +11,7 @@ use Illuminate\Support\ServiceProvider;
 use Thehouseofel\Kalion\Domain\Traits\CountMethods;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\KalionServiceProvider;
+use Thehouseofel\Kalion\Infrastructure\Services\Version;
 
 final class StartCommandService
 {

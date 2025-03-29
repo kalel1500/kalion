@@ -5,7 +5,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
-use Thehouseofel\Kalion\Infrastructure\Services\StartCommandService;
+use Thehouseofel\Kalion\Infrastructure\Services\Commands\StartCommandService;
 use Thehouseofel\Kalion\Infrastructure\Traits\InteractsWithComposerPackages;
 use function Illuminate\Filesystem\join_paths;
 
