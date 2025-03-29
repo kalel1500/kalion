@@ -12,30 +12,32 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
  */
 final class AuthService implements AuthServiceContract
 {
-    /** @var class-string<T> */
-    private $entityClass;
-
     private bool $loadRoles;
+    private string  $entityClass;
+    private ?string $guard;
 
     /** @var T|null */
     private $userEntity = null;
 
     public function __construct()
     {
-        $this->entityClass = Kalion::getClassUserEntity();
         $this->loadRoles = config('kalion.auth.load_roles');
     }
 
     /**
+     * @param string|null $guard
      * @return T|null
      */
-    public function userEntity()
+    public function userEntity(string $guard = null)
     {
+        $this->guard = $guard;
+        $this->entityClass = Kalion::getClassUserEntity($this->guard);
+
         if ($this->userEntity) {
             return $this->userEntity;
         }
 
-        $user = auth()->user();
+        $user = auth($guard)->user();
         if (is_null($user)) {
             return null;
         }
