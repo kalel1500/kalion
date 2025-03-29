@@ -19,8 +19,8 @@
             "Thehouseofel\\Kalion\\": "src/"
         },
         "files": [
-            "src/Domain/Helpers/DomainHeplers.php",
-            "src/Infrastructure/Helpers/InfrastructureHeplers.php"
+            "src/Domain/Helpers/heplers_domain.php",
+            "src/Infrastructure/Helpers/heplers_infrastructure.php"
         ]
     },
     "autoload-dev": {
