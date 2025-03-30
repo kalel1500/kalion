@@ -1,6 +1,42 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.22.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.23.0-beta.0...master)
+
+## [v0.23.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.22.0-beta.0...v0.23.0-beta.0) - 2025-03-30
+
+### Changed
+
+* Eliminar las comprobaciones `Schema::hasTable` en las migraciones
+* Mover la migración `create_permission_tables.php` de los `stubs` al paquete (`database/migrations`), ya que no es una migración de ejemplo, sino que pertenece al paquete (comando `start` modificado para copiar también las migraciones que hay en la carpeta `database/migrations`)
+* (refactor) `StartCommandService.php` movido a la carpeta `commands`
+* (refactor) stubs: eliminado archivo `web_php_old.php` (comando `start` modificado)
+* stubs: Nuevo archivo de helpers `helpers_domain.php` (comando `start` modificado para añadirlo al `composer.json`)
+* (refactor) Helpers renombrados `DomainHelpers.php` a `helpers_domain.php` y `InfrastructureHelpers.php` a `helpers_Infrastructure.php`
+* (refactor) Renombrar método `configure()` a `mergeConfig()` en el `KalionServiceProvider`
+* (refactor) Mover el seteo de la configuración al método `boot()` para asegurar de que ya esté todo cargado
+* Nueva funcionalidad `Api Auth` para poder hacer login con Laravel desde la API: 
+  * Nuevos modelos `User` y `ApiUser`
+  * Sobreescribir la configuración de `auth` en el `KalionServiceProvider` para añadir la nueva guard `guards.api` y el nuevo provider `providers.api_users` (nuevo método `setAuthApiGuards()`)
+  * (breaking) Modificar configuraciones para permitir multiples `guards`
+  * Nuevas clases `ApiUserEntity` y `ApiUserRepository`
+  * Añadir parámetro `$guard` al método `userEntity()` del `AuthService`
+  * (breaking) (stubs) Actualizar el archivo de configuración `kalion_user.php` de los stubs
+  * Quitar el return type del helper `userEntity()` y ponerlo como PHPDoc para no forzar el tipo
+  * (refactor) Eliminar el `returnType` del método `AuthService::userEntity()`
+  * Añadir nuevas variables de entorno para poder configurar las clases de usuario más fácilmente:
+    * `KALION_USER_ENTITY_WEB`
+    * `KALION_USER_ENTITY_API`
+    * `KALION_USER_REPOSITORY_WEB`
+    * `KALION_USER_REPOSITORY_API`
+  * Quitar la publicación del `config/kalion_user.php`, ya que ahora se configura en el `.env`
+  * Mover el helper `userEntity()` de los `stubs` de la aplicación al `heplers_domain.php` del paquete
+  * Mover los métodos `publishConfigKalionUser()` y `modifyFile_ConfigAuth_toUpdateModel()` del comando `KalionStart` al nuevo comando `PublishAuth`
+  * Modificar el método `modifyFile_ConfigAuth_toUpdateModel()` del comando `PublishAuth` para que también añada los arrays `api` en `guards` y `providers`
+
+### Fixed
+
+* (fix) corregir nombre campo `name` en los métodos `toArray` del `UserEntity`
+* (fix) Permitir el tipo `Illuminate\Support\Collection` en el parámetro `$data` del método `fromData()` de la clase `ContractCollectionEntity`
 
 ## [v0.22.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.21.0-beta.0...v0.22.0-beta.0) - 2025-03-25
 
