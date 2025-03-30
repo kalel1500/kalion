@@ -22,6 +22,7 @@ use Thehouseofel\Kalion\Infrastructure\Console\Commands\ClearAll;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\JobDispatch;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\LogsClear;
+use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\ServiceCheck;
 use Thehouseofel\Kalion\Infrastructure\Http\Middleware\UserHasPermission;
 use Thehouseofel\Kalion\Infrastructure\Http\Middleware\UserHasRole;
@@ -305,6 +306,7 @@ return [
         $this->commands([
             ClearAll::class,
             KalionStart::class,
+            PublishAuth::class,
             JobDispatch::class,
             LogsClear::class,
             ServiceCheck::class,
