@@ -72,23 +72,23 @@ final class PublishAuthCommandService
         if ($this->isReset()) {
             // Se reestablece a la configuración original
 
-            // 1. Remover el guard "api" agregado (si existe)
+            // 1. Remover el guard "api" agregado (si existe), forzando el salto de línea previo
             $updatedContent = preg_replace(
-                "/\s*'api'\s*=>\s*\[\s*'driver'\s*=>\s*'session',\s*'provider'\s*=>\s*'api_users',\s*\],\n?/",
+                "/\n\s*'api'\s*=>\s*\[\s*'driver'\s*=>\s*'session',\s*'provider'\s*=>\s*'api_users',\s*\],/",
                 '',
                 $content
             );
 
             // 2. Revertir el cambio en el provider 'users'
             $updatedContent = preg_replace(
-                "/'model'\s*=>\s*env\('AUTH_MODEL',\s*Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class\)/",
+                "/'model'\s*=>\s*env\(\'AUTH_MODEL\',\s*Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class\)/",
                 "'model' => env('AUTH_MODEL', App\\\\Models\\\\User::class)",
                 $updatedContent
             );
 
             // 3. Remover el provider "api_users" agregado (si existe)
             $updatedContent = preg_replace(
-                "/\s*'api_users'\s*=>\s*\[\s*'driver'\s*=>\s*'eloquent',\s*'model'\s*=>\s*env\('AUTH_MODEL_API',\s*\\\\?Thehouseofel\\\\Kalion\\\\Infrastructure\\\\Models\\\\ApiUser::class\),\s*\],\n?/",
+                "/\n\s*'api_users'\s*=>\s*\[\s*'driver'\s*=>\s*'eloquent',\s*'model'\s*=>\s*env\(\'AUTH_MODEL_API\',\s*\\\\?Thehouseofel\\\\Kalion\\\\Infrastructure\\\\Models\\\\ApiUser::class\),\s*\],/",
                 '',
                 $updatedContent
             );
@@ -97,7 +97,7 @@ final class PublishAuthCommandService
 
             // 1. Actualizar el valor de 'model' en el provider "users"
             $updatedContent = preg_replace(
-                "/'model'\s*=>\s*env\('AUTH_MODEL',\s*App\\\\Models\\\\User::class\)/",
+                "/'model'\s*=>\s*env\(\'AUTH_MODEL\',\s*App\\\\Models\\\\User::class\)/",
                 "'model' => env('AUTH_MODEL', Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class)",
                 $content
             );
@@ -111,10 +111,10 @@ final class PublishAuthCommandService
             );
 
             // 3. Agregar el nuevo provider "api_users"
-            // Se inserta justo después del provider "users"
+            // Se inserta justo después del provider "users", forzando un salto de línea extra
             $updatedContent = preg_replace(
-                "/('users'\s*=>\s*\[\s*'driver'\s*=>\s*'eloquent',\s*'model'\s*=>\s*env\('AUTH_MODEL',\s*Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class\),\s*\],)/",
-                "$1\n\n        'api_users' => [\n            'driver' => 'eloquent',\n            'model' => env('AUTH_MODEL_API', \\Thehouseofel\\Kalion\\Infrastructure\\Models\\ApiUser::class),\n        ],",
+                "/('users'\s*=>\s*\[\s*'driver'\s*=>\s*'eloquent',\s*'model'\s*=>\s*env\(\'AUTH_MODEL\',\s*Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class\),\s*\],)(\s*)/",
+                "$1\n\n        'api_users' => [\n            'driver' => 'eloquent',\n            'model' => env('AUTH_MODEL_API', Thehouseofel\\\\Kalion\\\\Infrastructure\\\\Models\\\\ApiUser::class),\n        ],$2",
                 $updatedContent
             );
         }
