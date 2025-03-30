@@ -35,7 +35,7 @@ final class PublishAuth extends Command
 
         PublishAuthCommandService::configure($this, $reset)
             ->publishConfigKalionUser()
-            ->modifyFile_ConfigAuth_toUpdateModel();
+            ->modifyFile_ConfigAuth_toUpdateModelAndAddApi();
 
     }
 }
