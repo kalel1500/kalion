@@ -251,11 +251,22 @@ final class StartCommandService
 
         $timestamp = now();
 
+        // Lista de migraciones que NO se deben borrar en reset
+        $skipFiles = [
+            'create_users_table.php',
+            'create_cache_table.php',
+            'create_jobs_table.php',
+        ];
+
         foreach ($files as $file) {
             // Removemos el timestamp inicial del nombre del archivo
             $originalName = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $file->getFilename());
 
             if ($this->reset) {
+                // Si el archivo está en la lista de los que no se deben borrar, lo omitimos.
+                if (in_array($originalName, $skipFiles)) {
+                    continue;
+                }
                 // En modo reset, buscamos si existe el archivo en destino (comparando el nombre sin timestamp)
                 $existingFile = collect($this->filesystem->files($destinationPath))
                     ->first(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()) === $originalName);
