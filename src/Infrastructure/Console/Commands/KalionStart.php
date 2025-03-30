@@ -51,6 +51,11 @@ class KalionStart extends Command
         return $this->filesystem;
     }
 
+    public function packagePath($path = ''): string
+    {
+        return join_paths(KALION_PATH, $path);
+    }
+
     public function stubsPath($path = '', $isFront = false): string
     {
         $stubsPath = $isFront ? $this->stubsPathFront : $this->stubsPath;

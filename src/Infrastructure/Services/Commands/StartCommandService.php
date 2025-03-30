@@ -231,28 +231,43 @@ final class StartCommandService
     {
         $this->number++;
 
-        $folder          = 'database/migrations';
-        $sourcePath      = $this->command->stubsPath($folder);
+        $folder = 'database/migrations';
+
+        // Rutas de origen:
+        $stubsPath    = $this->command->stubsPath($folder);
+        $packagePath  = $this->command->packagePath($folder);
+
+        // Ruta de destino en la aplicación
         $destinationPath = base_path($folder);
 
-        $files         = $this->filesystem->files($sourcePath);
-        $existingFiles = collect($this->filesystem->files($destinationPath))->map(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()));
-        $timestamp     = now();
+        // Obtenemos los archivos de ambas fuentes y los combinamos
+        $stubFiles    = $this->filesystem->files($stubsPath);
+        $packageFiles = $this->filesystem->files($packagePath);
+        $files        = array_merge($stubFiles, $packageFiles);
+
+        // Obtenemos los nombres "originales" de los archivos que ya existen en la carpeta destino
+        $existingFiles = collect($this->filesystem->files($destinationPath))
+            ->map(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()));
+
+        $timestamp = now();
 
         foreach ($files as $file) {
+            // Removemos el timestamp inicial del nombre del archivo
             $originalName = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $file->getFilename());
 
             if ($this->reset) {
-                $existingFile = collect($this->filesystem->files($destinationPath))->first(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()) === $originalName);
+                // En modo reset, buscamos si existe el archivo en destino (comparando el nombre sin timestamp)
+                $existingFile = collect($this->filesystem->files($destinationPath))
+                    ->first(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()) === $originalName);
 
-                // Comprobar que SI exista el archivo
+                // Si se encontró, se elimina el archivo
                 if ($existingFile) {
                     $this->filesystem->delete($existingFile);
                 }
-
                 continue;
             }
 
+            // Se determina el timestamp a usar en el nuevo nombre
             if ($this->keepMigrationsDate) {
                 preg_match('/^(\d{4}_\d{2}_\d{2}_\d{6})_/', $file->getFilename(), $matches);
                 $fileTimestamp = $matches[1] ?? $timestamp->format('Y_m_d_His');
@@ -261,12 +276,14 @@ final class StartCommandService
                 $timestamp->addSecond();
             }
 
+            // Se arma el nuevo nombre combinando el timestamp y el nombre original
             $newFileName     = $fileTimestamp . '_' . $originalName;
             $destinationFile = $destinationPath . '/' . $newFileName;
 
-            // Comprobar que no exista el archivo
+            // Si ya existe un archivo con ese nombre base, se omite la copia para evitar duplicados
             if ($existingFiles->contains($originalName)) continue;
 
+            // Copiamos el archivo desde su ruta de origen a la ruta de destino con el nuevo nombre
             $this->filesystem->copy($file->getPathname(), $destinationFile);
         }
 
