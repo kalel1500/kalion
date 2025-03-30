@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('states')) {
-            Schema::create('states', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->boolean('finalized');
-                $table->string('code')->unique();
-                $table->string('type');
-                $table->string('icon')->nullable();
-                $table->timestamps();
-                $table->unique(["name", "type"], 'name_type_unique');
-            });
-        }
+        Schema::create('states', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('finalized');
+            $table->string('code')->unique();
+            $table->string('type');
+            $table->string('icon')->nullable();
+            $table->timestamps();
+            $table->unique(["name", "type"], 'name_type_unique');
+        });
     }
 
     /**
