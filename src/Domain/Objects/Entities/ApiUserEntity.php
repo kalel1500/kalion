@@ -41,7 +41,7 @@ class ApiUserEntity extends ContractEntity
     {
         return [
             'id'      => $this->id->value(),
-            'content' => $this->name->value(),
+            'name'    => $this->name->value(),
         ];
     }
 
