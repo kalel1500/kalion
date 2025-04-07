@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('api_role_user', function (Blueprint $table) {
+        Schema::create('api_user_role', function (Blueprint $table) {
             $table->id();
             $table->foreignId('role_id')->constrained();
             $table->foreignId('api_user_id')->constrained();
