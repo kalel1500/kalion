@@ -16,11 +16,12 @@ if (!function_exists('userEntity')) {
     /**
      * Get the currently authenticated user entity.
      *
+     * @param string|null $guard
      * @return UserEntity|ApiUserEntity|null
      */
-    function userEntity()
+    function userEntity(string $guard = null)
     {
-        return AuthService::userEntity();
+        return AuthService::userEntity($guard);
     }
 }
 
