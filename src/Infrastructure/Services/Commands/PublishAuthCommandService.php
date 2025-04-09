@@ -54,6 +54,28 @@ final class PublishAuthCommandService
 
         // Publish "config/kalion.php"
         $this->command->call('vendor:publish', ['--tag' => 'kalion-config-user']);
+
+        // Ruta del archivo a modificar
+        $filePath = base_path('config'.DIRECTORY_SEPARATOR.'kalion_user.php');
+
+        // Leer el contenido del archivo
+        $content = File::get($filePath);
+
+        $updatedContent = preg_replace(
+            "/'web'\s*=>\s*env\('KALION_USER_ENTITY_WEB'.*/",
+            "'web' => env('KALION_USER_ENTITY_WEB', Src\\\\Shared\\\\Domain\\\\Objects\\\\Entities\\\\UserEntity::class),",
+            $content
+        );
+
+        $updatedContent = preg_replace(
+            "/'web'\s*=>\s*env\('KALION_USER_REPOSITORY_WEB'.*/",
+            "'web' => env('KALION_USER_REPOSITORY_WEB', Src\\\\Shared\\\\Infrastructure\\\\Repositories\\\\Eloquent\\\\UserRepository::class),",
+            $updatedContent
+        );
+
+        // Guardar el archivo con el contenido actualizado
+        File::put($filePath, $updatedContent);
+
         $this->line('Configuración del paquete publicada: "config/kalion_user.php"');
 
         return $this;
