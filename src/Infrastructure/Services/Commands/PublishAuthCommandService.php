@@ -124,21 +124,25 @@ final class PublishAuthCommandService
                 $content
             );
 
-            // 2. Agregar el nuevo guard "api"
-            // Se inserta justo después del guard "web"
-            $updatedContent = preg_replace(
-                "/('web'\s*=>\s*\[\s*'driver'\s*=>\s*'session',\s*'provider'\s*=>\s*'users',\s*\],)/",
-                "$1\n        'api' => [\n            'driver' => 'session',\n            'provider' => 'api_users',\n        ],",
-                $updatedContent
-            );
+            // 2. Agregar el nuevo guard "api" sólo si no existe aún.
+            if (!preg_match("/'api'\s*=>\s*\[/", $updatedContent)) {
+                // Se inserta justo después del guard "web"
+                $updatedContent = preg_replace(
+                    "/('web'\s*=>\s*\[\s*'driver'\s*=>\s*'session',\s*'provider'\s*=>\s*'users',\s*\],)/",
+                    "$1\n        'api' => [\n            'driver' => 'session',\n            'provider' => 'api_users',\n        ],",
+                    $updatedContent
+                );
+            }
 
-            // 3. Agregar el nuevo provider "api_users"
-            // Se inserta justo después del provider "users", forzando un salto de línea extra
-            $updatedContent = preg_replace(
-                "/('users'\s*=>\s*\[\s*'driver'\s*=>\s*'eloquent',\s*'model'\s*=>\s*env\(\'AUTH_MODEL\',\s*Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class\),\s*\],)(\s*)/",
-                "$1\n\n        'api_users' => [\n            'driver' => 'eloquent',\n            'model' => env('AUTH_MODEL_API', Thehouseofel\\\\Kalion\\\\Infrastructure\\\\Models\\\\ApiUser::class),\n        ],$2",
-                $updatedContent
-            );
+            // 3. Agregar el nuevo provider "api_users" sólo si no existe aún.
+            if (!preg_match("/'api_users'\s*=>\s*\[/", $updatedContent)) {
+                // Se inserta justo después del provider "users", forzando un salto de línea extra
+                $updatedContent = preg_replace(
+                    "/('users'\s*=>\s*\[\s*'driver'\s*=>\s*'eloquent',\s*'model'\s*=>\s*env\(\'AUTH_MODEL\',\s*Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class\),\s*\],)(\s*)/",
+                    "$1\n\n        'api_users' => [\n            'driver' => 'eloquent',\n            'model' => env('AUTH_MODEL_API', Thehouseofel\\\\Kalion\\\\Infrastructure\\\\Models\\\\ApiUser::class),\n        ],$2",
+                    $updatedContent
+                );
+            }
         }
 
         // Guardar el archivo con el contenido actualizado
