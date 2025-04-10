@@ -1,6 +1,34 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.23.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.23.1-beta.0...master)
+
+## [v0.23.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.23.0-beta.0...v0.23.1-beta.0) - 2025-04-10
+
+### Added
+
+* Nuevo trait `HasGuard` para guardar la guard en las entidades de usuario
+* Api: Nueva migración `api` con las tablas:
+  * api_users
+  * api_role_user
+  * api_logs
+
+### Changed
+
+* Modificar la clase `PublishAuthCommandService` del comando `PublishAuth`:
+  * (refactor) Eliminar `\` inicial en las clases del archivo `config/kalion_user.php`
+  * Modificar método `publishConfigKalionUser()` para que tras publicar la configuración `kalion_user.php` la modifique para añadir las clases por defecto de la aplicación
+  * (fix) Corregir método `modifyFile_ConfigAuth_toUpdateModelAndAddApi()` para que solo añada el `guard` y el `provider` si no existen
+* Obtener la clase del `UserRepository` de la configuración `Kalion::getClassUserRepository($guard)` en vez de instanciar el `UserRepositoryContract` en la clase `AuthorizationService` para poder pasar el `$guard` y que se instancie el repository que toque
+* Pasar el parámetro `$guard` en el helper `userEntity()` para pasarlo al `AuthService` para guardarlo al instanciar la entidad
+
+### Fixed
+
+* (fix) Corregir nombre clase usuario de la variable de entorno `AUTH_MODEL` en el `.env.save.local`
+* (fix) corregir nombre campo `name` en el método `toArrayProperties()` de la clase `ApiUserEntity`
+
+### Removed
+
+* Eliminar la interfaz `UserRepositoryContract`, que ya no se usa (eliminarlo también de los `stubs`)
 
 ## [v0.23.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.22.0-beta.0...v0.23.0-beta.0) - 2025-03-30
 
