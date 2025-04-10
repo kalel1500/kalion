@@ -13,18 +13,15 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull
 
 class UserEntity extends BaseUserEntity
 {
-    public ModelStringNull $other_field;
-
     public function __construct(
         ContractModelId $id,
         ModelString     $name,
         ModelString     $email,
         ModelStringNull $email_verified_at,
-        ModelStringNull $other_field,
+        public readonly ModelStringNull $other_field,
     )
     {
         parent::__construct($id, $name, $email, $email_verified_at);
-        $this->other_field = $other_field;
     }
 
     protected static function createFromArray(array $data): static
