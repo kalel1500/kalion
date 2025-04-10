@@ -8,10 +8,11 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts\Contr
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Traits\EntityHasPermissions;
+use Thehouseofel\Kalion\Domain\Traits\HasGuard;
 
 class ApiUserEntity extends ContractEntity
 {
-    use EntityHasPermissions;
+    use EntityHasPermissions, HasGuard;
 
     public function __construct(
         public readonly ContractModelId $id,
@@ -41,7 +42,7 @@ class ApiUserEntity extends ContractEntity
     {
         return [
             'id'      => $this->id->value(),
-            'content' => $this->name->value(),
+            'name'    => $this->name->value(),
         ];
     }
 

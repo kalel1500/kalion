@@ -33,7 +33,7 @@ final class AuthService implements AuthServiceContract
         $this->guard = $guard;
         $this->entityClass = Kalion::getClassUserEntity($this->guard);
 
-        if ($this->userEntity) {
+        if ($this->userEntity && $this->userEntity->getGuard() === $this->guard) {
             return $this->userEntity;
         }
 
@@ -48,6 +48,7 @@ final class AuthService implements AuthServiceContract
             $with = ['roles'];
         }
         $this->userEntity =  $this->entityClass::fromArray($user->toArray(), $with);
+        $this->userEntity->setGuard($guard);
         return $this->userEntity;
     }
 }

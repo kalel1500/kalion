@@ -130,13 +130,7 @@ return [
             define('KALION_PATH', realpath(__DIR__.'/../../'));
         }
 
-        $this->registerSingletons();
         $this->mergeConfig();
-    }
-
-    protected function registerSingletons(): void
-    {
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Repositories\UserRepositoryContract::class, fn($app) => new (Kalion::getClassUserRepository())());
     }
 
     /**
