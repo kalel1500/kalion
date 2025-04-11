@@ -392,11 +392,9 @@ return [
             // Añadir un middleware a un grupo
             $router->pushMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\AddPreferencesCookies::class); // $kernel->appendMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\AddPreferencesCookies::class);
 
-            // Desencriptar las cookies de las preferencias del usuario
-            $this->app->booted(function () {
-                /** @var EncryptCookies $encryptCookies */
-                $encryptCookies = $this->app->make(EncryptCookies::class);
-                $encryptCookies::except(config('kalion.cookie.name')); // laravel_kalion_user_preferences
+            // Evitar el encriptado de las cookies de las preferencias del usuario
+            $this->app->afterResolving(EncryptCookies::class, function (EncryptCookies $middleware) {
+                $middleware->disableFor(config('kalion.cookie.name')); // laravel_kalion_user_preferences
             });
         }
     }
