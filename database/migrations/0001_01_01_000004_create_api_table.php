@@ -48,7 +48,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('api_users');
-        Schema::dropIfExists('api_role_user');
+        Schema::dropIfExists('api_user_role');
         Schema::dropIfExists('api_logs');
     }
 };
