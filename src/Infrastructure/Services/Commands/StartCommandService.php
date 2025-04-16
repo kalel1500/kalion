@@ -242,7 +242,7 @@ final class StartCommandService
         // Obtenemos los archivos de ambas fuentes y los combinamos
         $stubFiles    = $this->filesystem->files($stubsPath);
         $packageFiles = $this->filesystem->files($packagePath);
-        $files        = array_merge($stubFiles, $packageFiles);
+        $files        = array_merge($packageFiles, $stubFiles);
 
         // Obtenemos los nombres "originales" de los archivos que ya existen en la carpeta destino
         $existingFiles = collect($this->filesystem->files($destinationPath))
