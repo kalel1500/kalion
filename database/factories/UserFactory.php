@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Thehouseofel\Kalion\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Src\Shared\Infrastructure\Models\User;
+use Thehouseofel\Kalion\Infrastructure\Models\User;
 
 /**
  * @extends Factory<User>

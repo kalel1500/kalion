@@ -16,7 +16,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Thehouseofel\\Kalion\\": "src/"
+            "Thehouseofel\\Kalion\\": "src/",
+            "Thehouseofel\\Kalion\\Database\\Factories\\": "database/factories",
+            "Thehouseofel\\Kalion\\Database\\Seeders\\": "database/seeders"
         },
         "files": [
             "src/Domain/Helpers/helpers_domain.php",

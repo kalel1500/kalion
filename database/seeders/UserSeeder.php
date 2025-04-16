@@ -1,10 +1,10 @@
 <?php
 
-namespace Database\Seeders;
+namespace Thehouseofel\Kalion\Database\Seeders;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
-use Src\Shared\Infrastructure\Models\User;
+use Thehouseofel\Kalion\Infrastructure\Models\User;
 
 class UserSeeder extends Seeder
 {
