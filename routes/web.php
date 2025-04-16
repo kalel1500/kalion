@@ -7,7 +7,7 @@ use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxCookiesControll
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxJobsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxQueuesController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxWebsocketsController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\AuthController;
+use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\LoginController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\ExampleController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\JobsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\KalionController;
@@ -19,15 +19,15 @@ Route::get('/kalion/sessions',  [KalionController::class, 'sessions'])
     ->name('kalion.sessions');
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'create'])
+    Route::get('/login', [LoginController::class, 'create'])
         ->name('login');
 
-    Route::post('/login', [AuthController::class, 'store']);
+    Route::post('/login', [LoginController::class, 'store']);
 });
 
 Route::middleware('auth')->group(function () {
 
-    Route::post('logout', [AuthController::class, 'destroy'])
+    Route::post('logout', [LoginController::class, 'destroy'])
         ->name('logout');
 
     // Service routes
