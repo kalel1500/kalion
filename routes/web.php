@@ -7,7 +7,7 @@ use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxCookiesControll
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxJobsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxQueuesController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxWebsocketsController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\LoginController;
+use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\LoginController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\ExampleController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\JobsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\KalionController;
