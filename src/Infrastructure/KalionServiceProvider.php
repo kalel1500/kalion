@@ -141,7 +141,6 @@ return [
         // Configuración - Mergear la configuración del paquete con la configuración de la aplicación, solo hará falta publicar si queremos sobreescribir alguna configuración
         if (!$this->app->configurationIsCached()) {
             $this->mergeConfigFrom(KALION_PATH.'/config/kalion.php', 'kalion');
-            $this->mergeConfigFrom(KALION_PATH.'/config/kalion_user.php', 'kalion_user');
             $this->mergeConfigFrom(KALION_PATH.'/config/kalion_links.php', 'kalion_links');
         }
     }
@@ -266,11 +265,6 @@ return [
         $this->publishes([
             KALION_PATH.'/config/kalion.php' => config_path('kalion.php'),
         ], 'kalion-config');
-
-        // kalion_user.php
-        $this->publishes([
-            KALION_PATH.'/config/kalion_user.php' => config_path('kalion_user.php'),
-        ], 'kalion-config-user');
 
         // kalion_links.php
         $this->publishes([

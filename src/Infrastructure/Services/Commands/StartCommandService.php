@@ -167,12 +167,11 @@ final class StartCommandService
 
         // Delete "config/kalion.php"
         $this->filesystem->delete(config_path('kalion.php'));
-        $this->filesystem->delete(config_path('kalion_user.php'));
         $this->filesystem->delete(config_path('kalion_links.php'));
 
         if ($this->isReset() || $this->developMode) return $this;
 
-        // Publish "config/kalion.php"
+        // Publish "config/kalion_links.php"
         $this->command->call('vendor:publish', ['--tag' => 'kalion-config-links']);
         $this->line('Configuración del paquete publicada: "config/kalion_links.php"');
 

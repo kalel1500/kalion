@@ -48,35 +48,35 @@ final class PublishAuthCommandService
         $this->number++;
 
         // Delete "config/kalion.php"
-        File::delete(config_path('kalion_user.php'));
+        File::delete(config_path('kalion.php'));
 
         if ($this->isReset()) return $this;
 
         // Publish "config/kalion.php"
-        $this->command->call('vendor:publish', ['--tag' => 'kalion-config-user']);
+        $this->command->call('vendor:publish', ['--tag' => 'kalion-config']);
 
         // Ruta del archivo a modificar
-        $filePath = base_path('config'.DIRECTORY_SEPARATOR.'kalion_user.php');
+        $filePath = base_path('config'.DIRECTORY_SEPARATOR.'kalion.php');
 
         // Leer el contenido del archivo
         $content = File::get($filePath);
 
         $updatedContent = preg_replace(
-            "/'web'\s*=>\s*env\('KALION_USER_ENTITY_WEB'.*/",
-            "'web' => env('KALION_USER_ENTITY_WEB', Src\\\\Shared\\\\Domain\\\\Objects\\\\Entities\\\\UserEntity::class),",
+            "/'web'\s*=>\s*env\('KALION_AUTH_ENTITY_WEB'.*/",
+            "'web' => env('KALION_AUTH_ENTITY_WEB', Src\\\\Shared\\\\Domain\\\\Objects\\\\Entities\\\\UserEntity::class),",
             $content
         );
 
         $updatedContent = preg_replace(
-            "/'web'\s*=>\s*env\('KALION_USER_REPOSITORY_WEB'.*/",
-            "'web' => env('KALION_USER_REPOSITORY_WEB', Src\\\\Shared\\\\Infrastructure\\\\Repositories\\\\Eloquent\\\\UserRepository::class),",
+            "/'web'\s*=>\s*env\('KALION_AUTH_REPOSITORY_WEB'.*/",
+            "'web' => env('KALION_AUTH_REPOSITORY_WEB', Src\\\\Shared\\\\Infrastructure\\\\Repositories\\\\Eloquent\\\\UserRepository::class),",
             $updatedContent
         );
 
         // Guardar el archivo con el contenido actualizado
         File::put($filePath, $updatedContent);
 
-        $this->line('Configuración del paquete publicada: "config/kalion_user.php"');
+        $this->line('Configuración del paquete publicada: "config/kalion.php"');
 
         return $this;
     }

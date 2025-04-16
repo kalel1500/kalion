@@ -190,6 +190,14 @@ return [
             'login' => env('KALION_AUTH_BLADE_LOGIN', 'kal::pages.auth.login'),
             'register' => env('KALION_AUTH_BLADE_REGISTER', 'kal::pages.auth.register'),
         ],
+        'entities' => [
+            'web' => env('KALION_AUTH_ENTITY_WEB', Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity::class),
+            'api' => env('KALION_AUTH_ENTITY_API', Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity::class),
+        ],
+        'repositories' => [
+            'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\Kalion\Infrastructure\Repositories\UserRepository::class),
+            'api' => env('KALION_AUTH_REPOSITORY_API', Thehouseofel\Kalion\Infrastructure\Repositories\ApiUserRepository::class),
+        ],
         'fields' => [
             'web' => env('KALION_AUTH_FIELD', 'email'),
             'api' => env('KALION_AUTH_FIELD_API', 'name'),

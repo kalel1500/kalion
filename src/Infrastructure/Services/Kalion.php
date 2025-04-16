@@ -91,12 +91,12 @@ final class Kalion
 
     public static function getClassUserEntity(string $guard = null): string
     {
-        return config('kalion_user.entities.'.get_guard($guard));
+        return config('kalion.auth.entities.'.get_guard($guard));
     }
 
     public static function getClassUserRepository(string $guard = null): string
     {
-        return config('kalion_user.repositories.'.get_guard($guard));
+        return config('kalion.auth.repositories.'.get_guard($guard));
     }
 
     public static function getDefaultAuthGuard(): string
