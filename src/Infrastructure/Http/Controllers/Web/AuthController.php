@@ -43,14 +43,18 @@ final class AuthController extends Controller
         }
 
         $field = Kalion::getLoginFieldData();
+
         $params = $request->validate([$field->name => 'required']);
+
         $user = $this->model::query()->where($field->name, $params[$field->name])->first();
+
         if (!$user) {
             return redirect()->back()->withErrors([$field->name => __('k::auth.user_not_found', ['field' => $field->label])]);
         }
 
         Auth::login($user);
-        return redirect()->intended('/dashboard'); // Redirige a donde corresponda
+
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
