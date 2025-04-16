@@ -14,7 +14,7 @@ class PostSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::query()->where('email', '!=', 'test@example.com')->get();
+        $users = User::query()->where('email', '!=', 'test@example.com')->limit(10)->get();
         $tags = Tag::all();
 
         // Para cada usuario, crear 3 posts
