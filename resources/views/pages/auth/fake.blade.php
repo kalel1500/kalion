@@ -1,7 +1,7 @@
 @use(Thehouseofel\Kalion\Infrastructure\Services\Kalion)
 @php($field = Kalion::getLoginFieldData())
 
-<x-kal::layout.auth.landing>
+<x-kal::layout.landing>
     <form method="POST" action="{{ route('login') }}" class="bg-gray-900 opacity-75 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4" >
         @csrf
         <div class="mb-4">
@@ -32,4 +32,4 @@
             </button>
         </div>
     </form>
-</x-kal::layout.auth.landing>
+</x-kal::layout.landing>
