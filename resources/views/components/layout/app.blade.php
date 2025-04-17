@@ -18,7 +18,7 @@
         <title>{{ $title }}</title>
 
         <!-- Icon -->
-        <link rel="icon" href="@viteAsset('resources/images/favicon.ico')">
+        <link rel="icon" type="image/x-icon" href="@viteAsset('resources/images/favicon.ico')">
 
         {{-- Js para cargar la clase "dark" cuando el "color-theme" es "system" (por si la carga es lenta y el "js" compilado tarda en cargar) --}}
         <x-kal::js.dark-mode/>
