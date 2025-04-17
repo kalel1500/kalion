@@ -37,6 +37,7 @@ class KalionServiceProvider extends ServiceProvider
     public array $singletons = [
         'layoutService'                                                                        => \Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService::class,
         'authService'                                                                          => \Thehouseofel\Kalion\Infrastructure\Services\AuthService::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\JobRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\RoleRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\PermissionRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\StateRepositoryContract::class      => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\StateRepository::class,
