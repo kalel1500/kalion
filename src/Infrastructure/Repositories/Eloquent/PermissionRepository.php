@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Infrastructure\Models\Permission;
 
 class PermissionRepository implements PermissionRepositoryContract
 {
-    private string $model;
+    protected string $model;
 
     public function __construct()
     {

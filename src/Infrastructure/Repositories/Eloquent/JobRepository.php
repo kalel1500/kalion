@@ -12,8 +12,8 @@ use Thehouseofel\Kalion\Infrastructure\Models\Jobs;
 
 class JobRepository implements JobRepositoryContract
 {
-    private string $eloquentModel;
-    private string $failedJobseloquentModel;
+    protected string $eloquentModel;
+    protected string $failedJobseloquentModel;
 
     public function __construct()
     {

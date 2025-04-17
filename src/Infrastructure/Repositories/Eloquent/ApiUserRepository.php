@@ -9,8 +9,8 @@ use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 class ApiUserRepository
 {
-    private string $guard = 'api';
-    private string $model;
+    protected string $guard = 'api';
+    protected string $model;
 
     public function __construct()
     {

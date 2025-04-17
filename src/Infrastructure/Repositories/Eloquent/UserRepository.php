@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 class UserRepository
 {
-    private string $model;
+    protected string $model;
 
     public function __construct()
     {

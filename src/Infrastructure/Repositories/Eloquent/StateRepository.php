@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Infrastructure\Models\State;
 
 class StateRepository implements StateRepositoryContract
 {
-    private string $eloquentModel;
+    protected string $eloquentModel;
 
     public function __construct()
     {

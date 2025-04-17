@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Infrastructure\Models\Role;
 
 class RoleRepository implements RoleRepositoryContract
 {
-    private string $model;
+    protected string $model;
 
     public function __construct()
     {
