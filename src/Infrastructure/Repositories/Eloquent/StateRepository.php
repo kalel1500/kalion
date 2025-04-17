@@ -11,22 +11,22 @@ use Thehouseofel\Kalion\Infrastructure\Models\State;
 
 class StateRepository implements StateRepositoryContract
 {
-    protected string $eloquentModel;
+    protected string $model;
 
     public function __construct()
     {
-        $this->eloquentModel = State::class;
+        $this->model = State::class;
     }
 
     public function all(): StateCollection
     {
-        $eloquentResult = $this->eloquentModel::query()->get();
+        $eloquentResult = $this->model::query()->get();
         return StateCollection::fromEloquent($eloquentResult);
     }
 
     public function searchByType(string $type): StateCollection
     {
-        $eloquentResult = $this->eloquentModel::query()
+        $eloquentResult = $this->model::query()
             ->where('type', $type)
             ->get();
 
@@ -35,7 +35,7 @@ class StateRepository implements StateRepositoryContract
 
     public function findByCode(string $code): StateEntity
     {
-        $eloquentResult = $this->eloquentModel::query()
+        $eloquentResult = $this->model::query()
             ->where('code', $code)
             ->firstOrFail();
         return StateEntity::fromArray($eloquentResult->toArray());

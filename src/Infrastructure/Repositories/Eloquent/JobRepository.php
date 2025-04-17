@@ -12,18 +12,18 @@ use Thehouseofel\Kalion\Infrastructure\Models\Jobs;
 
 class JobRepository implements JobRepositoryContract
 {
-    protected string $eloquentModel;
-    protected string $failedJobseloquentModel;
+    protected string $model;
+    protected string $modelFailedJobs;
 
     public function __construct()
     {
-        $this->eloquentModel = Jobs::class;
-        $this->failedJobseloquentModel = FailedJob::class;
+        $this->model           = Jobs::class;
+        $this->modelFailedJobs = FailedJob::class;
     }
 
     public function allExceptProcessing(): JobCollection
     {
-        $eloquentResult = $this->eloquentModel::query()->whereNull('reserved_at')->get();
+        $eloquentResult = $this->model::query()->whereNull('reserved_at')->get();
         return JobCollection::fromArray($eloquentResult->toArray());
     }
 
@@ -31,12 +31,12 @@ class JobRepository implements JobRepositoryContract
     {
         // $first = $this->eloquentModel::query()->first();
         // $this->eloquentModel::query()->where('id', '!=', optional($first)->id)->delete();
-        $this->eloquentModel::query()->whereNull('reserved_at')->delete();
+        $this->model::query()->whereNull('reserved_at')->delete();
     }
 
     public function allFailed(): FailedJobCollection
     {
-        $eloquentResult = $this->failedJobseloquentModel::query()->orderBy('failed_at', 'desc')->get();
+        $eloquentResult = $this->modelFailedJobs::query()->orderBy('failed_at', 'desc')->get();
         return FailedJobCollection::fromArray($eloquentResult->toArray());
     }
 }
