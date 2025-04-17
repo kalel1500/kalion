@@ -7,9 +7,6 @@ use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxCookiesControll
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxJobsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxQueuesController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxWebsocketsController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\LoginController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\PasswordResetController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\RegisterController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\ExampleController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\JobsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\KalionController;
@@ -20,23 +17,7 @@ Route::get('/kalion/root', [KalionController::class, 'root'])
 Route::get('/kalion/sessions',  [KalionController::class, 'sessions'])
     ->name('kalion.sessions');
 
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'create'])
-        ->name('login');
-
-    Route::post('/login', [LoginController::class, 'store']);
-
-    Route::get('/register', [RegisterController::class, 'create'])
-        ->name('register');
-
-    Route::get('/forgot-password', [PasswordResetController::class, 'create'])
-        ->name('password.reset');
-});
-
 Route::middleware('auth')->group(function () {
-
-    Route::post('logout', [LoginController::class, 'destroy'])
-        ->name('logout');
 
     // Service routes
     Route::get('/kalion/ajax/check-service-queues', [AjaxQueuesController::class, 'checkService'])
@@ -57,7 +38,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/kalion/ajax/queues/failed-jobs', [AjaxJobsController::class, 'getFailedJobs'])
         ->name('kalion.ajax.queues.getFailedJobs');
-
 
     // Cookies routes
     Route::put('/kalion/cookie/update', [AjaxCookiesController::class, 'update'])
@@ -85,3 +65,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/kalion/example/icons', [ExampleController::class, 'icons'])
         ->name('kalion.icons');
 });
+
+require __DIR__.'/auth.php';
