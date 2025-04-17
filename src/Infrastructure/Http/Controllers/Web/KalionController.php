@@ -23,7 +23,7 @@ final class KalionController extends Controller
     public function sessions()
     {
         if (!debug_is_active()) {
-            throw new NotFoundHttpException('The route sessions could not be found.');
+            throw new NotFoundHttpException();
         }
         $sessions = DB::table('sessions')->get();
         foreach ($sessions as $session) {
