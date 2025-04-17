@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\PermissionEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Infrastructure\Models\Permission;
 
-final class PermissionRepository implements PermissionRepositoryContract
+class PermissionRepository implements PermissionRepositoryContract
 {
     private string $model;
 
