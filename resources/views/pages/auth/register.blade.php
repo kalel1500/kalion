@@ -1,4 +1,4 @@
-<x-kal::layout.guest title="Create an account">
+<x-kal::layout.guest title="Register" cardTitle="Create an account">
 
     <form class="space-y-4 md:space-y-6" action="#">
         <div>

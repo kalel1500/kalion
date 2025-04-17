@@ -1,4 +1,4 @@
-<x-kal::layout.guest title="Sign in to your account">
+<x-kal::layout.guest title="Login" cardTitle="Sign in to your account">
 
     <form class="space-y-4 md:space-y-6" action="#">
         <div>
