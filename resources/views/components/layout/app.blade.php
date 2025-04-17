@@ -39,14 +39,8 @@
             @endif
         @endif
 
-        <!-- JavaScript para cargar el DarkMode -->
-        <script>
-            const theme = document.querySelector('html').getAttribute('color-theme');
-            if (theme === 'dark' || (theme === 'system' && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-                document.documentElement.classList.add("dark");
-                document.documentElement.setAttribute("data-theme", "dark");
-            }
-        </script>
+        {{-- Js para cargar la clase "dark" cuando el "color-theme" es "system" (por si la carga es lenta y el "js" compilado tarda en cargar) --}}
+        <x-kal::js.dark-mode/>
 
         <!-- Estilos de cada vista -->
         @stack('styles')
