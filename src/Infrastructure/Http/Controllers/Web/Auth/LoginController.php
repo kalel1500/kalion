@@ -30,7 +30,7 @@ final class LoginController extends Controller
             return view(config('kalion.auth.blades.fake'));
         }
 
-        throw new FeatureUnavailableException();
+        return view(config('kalion.auth.blades.login'));
     }
 
     /**
