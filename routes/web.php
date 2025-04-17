@@ -8,6 +8,7 @@ use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxJobsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxQueuesController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxWebsocketsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\LoginController;
+use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\RegisterController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\ExampleController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\JobsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\KalionController;
@@ -23,6 +24,9 @@ Route::middleware('guest')->group(function () {
         ->name('login');
 
     Route::post('/login', [LoginController::class, 'store']);
+
+    Route::get('/register', [RegisterController::class, 'create'])
+        ->name('register');
 });
 
 Route::middleware('auth')->group(function () {
