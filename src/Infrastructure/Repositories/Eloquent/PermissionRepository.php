@@ -11,12 +11,7 @@ use Thehouseofel\Kalion\Infrastructure\Models\Permission;
 
 class PermissionRepository implements PermissionRepositoryContract
 {
-    protected string $model;
-
-    public function __construct()
-    {
-        $this->model = Permission::class;
-    }
+    protected string $model = Permission::class;
 
     public function findByName(ModelString $permission): PermissionEntity
     {

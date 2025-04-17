@@ -11,12 +11,7 @@ use Thehouseofel\Kalion\Infrastructure\Models\State;
 
 class StateRepository implements StateRepositoryContract
 {
-    protected string $model;
-
-    public function __construct()
-    {
-        $this->model = State::class;
-    }
+    protected string $model = State::class;
 
     public function all(): StateCollection
     {

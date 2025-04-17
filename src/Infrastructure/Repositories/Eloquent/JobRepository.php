@@ -12,14 +12,8 @@ use Thehouseofel\Kalion\Infrastructure\Models\Jobs;
 
 class JobRepository implements JobRepositoryContract
 {
-    protected string $model;
-    protected string $modelFailedJobs;
-
-    public function __construct()
-    {
-        $this->model           = Jobs::class;
-        $this->modelFailedJobs = FailedJob::class;
-    }
+    protected string $model = Jobs::class;
+    protected string $modelFailedJobs = FailedJob::class;
 
     public function allExceptProcessing(): JobCollection
     {

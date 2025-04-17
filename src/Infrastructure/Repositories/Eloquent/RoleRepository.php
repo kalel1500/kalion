@@ -11,12 +11,7 @@ use Thehouseofel\Kalion\Infrastructure\Models\Role;
 
 class RoleRepository implements RoleRepositoryContract
 {
-    protected string $model;
-
-    public function __construct()
-    {
-        $this->model = Role::class;
-    }
+    protected string $model = Role::class;
 
     public function findByName(ModelString $name): RoleEntity
     {
