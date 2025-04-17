@@ -53,35 +53,49 @@ final class PublishAuthCommandService
     {
         $this->number++;
 
-        // Delete "config/kalion.php"
-        File::delete(config_path('kalion.php'));
-
-        if ($this->isReset()) return $this;
+        // Ruta del archivo a modificar
+        $filePath = config_path('kalion.php');
 
         if (! $this->onlyUpdate()) {
+            // Delete "config/kalion.php"
+            File::delete($filePath);
+
+            if ($this->isReset()) return $this;
+
             // Publish "config/kalion.php"
             $this->command->call('vendor:publish', ['--tag' => 'kalion-config']);
         }
-
-        // Ruta del archivo a modificar
-        $filePath = base_path('config'.DIRECTORY_SEPARATOR.'kalion.php');
 
         if (! File::exists($filePath)) return $this;
 
         // Leer el contenido del archivo
         $content = File::get($filePath);
 
-        $updatedContent = preg_replace(
-            "/'web'\s*=>\s*env\('KALION_AUTH_ENTITY_WEB'.*/",
-            "'web' => env('KALION_AUTH_ENTITY_WEB', Src\\\\Shared\\\\Domain\\\\Objects\\\\Entities\\\\UserEntity::class),",
-            $content
-        );
+        if ($this->isReset()) {
+            $updatedContent = preg_replace(
+                "/'web'\s*=>\s*env\('KALION_AUTH_ENTITY_WEB'.*/",
+                "'web' => env('KALION_AUTH_ENTITY_WEB', Thehouseofel\\\\Kalion\\\\Domain\\\\Objects\\\\Entities\\\\UserEntity::class),",
+                $content
+            );
 
-        $updatedContent = preg_replace(
-            "/'web'\s*=>\s*env\('KALION_AUTH_REPOSITORY_WEB'.*/",
-            "'web' => env('KALION_AUTH_REPOSITORY_WEB', Src\\\\Shared\\\\Infrastructure\\\\Repositories\\\\Eloquent\\\\UserRepository::class),",
-            $updatedContent
-        );
+            $updatedContent = preg_replace(
+                "/'web'\s*=>\s*env\('KALION_AUTH_REPOSITORY_WEB'.*/",
+                "'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\\\\Kalion\\\\Infrastructure\\\\Repositories\\\\UserRepository::class),",
+                $updatedContent
+            );
+        } else {
+            $updatedContent = preg_replace(
+                "/'web'\s*=>\s*env\('KALION_AUTH_ENTITY_WEB'.*/",
+                "'web' => env('KALION_AUTH_ENTITY_WEB', Src\\\\Shared\\\\Domain\\\\Objects\\\\Entities\\\\UserEntity::class),",
+                $content
+            );
+
+            $updatedContent = preg_replace(
+                "/'web'\s*=>\s*env\('KALION_AUTH_REPOSITORY_WEB'.*/",
+                "'web' => env('KALION_AUTH_REPOSITORY_WEB', Src\\\\Shared\\\\Infrastructure\\\\Repositories\\\\Eloquent\\\\UserRepository::class),",
+                $updatedContent
+            );
+        }
 
         // Guardar el archivo con el contenido actualizado
         File::put($filePath, $updatedContent);
