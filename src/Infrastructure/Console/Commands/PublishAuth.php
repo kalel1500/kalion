@@ -34,7 +34,7 @@ final class PublishAuth extends Command
         $this->info("Inicio configuración: $developString");
 
         PublishAuthCommandService::configure($this, $reset)
-            ->publishConfigKalionUser()
+            ->publishConfigKalionAndUpdateClasses()
             ->modifyFile_ConfigAuth_toUpdateModelAndAddApi();
 
     }

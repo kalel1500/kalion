@@ -43,7 +43,7 @@ final class PublishAuthCommandService
         return new static($command, $reset);
     }
 
-    public function publishConfigKalionUser(): static
+    public function publishConfigKalionAndUpdateClasses(): static
     {
         $this->number++;
 
