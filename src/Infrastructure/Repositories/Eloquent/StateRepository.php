@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\StateCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\StateEntity;
 use Thehouseofel\Kalion\Infrastructure\Models\State;
 
-class StateEloquentRepository implements StateRepositoryContract
+class StateRepository implements StateRepositoryContract
 {
     private string $eloquentModel;
 

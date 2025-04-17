@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\JobCollection;
 use Thehouseofel\Kalion\Infrastructure\Models\FailedJob;
 use Thehouseofel\Kalion\Infrastructure\Models\Jobs;
 
-class JobEloquentRepository implements JobRepositoryContract
+class JobRepository implements JobRepositoryContract
 {
     private string $eloquentModel;
     private string $failedJobseloquentModel;
