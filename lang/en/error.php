@@ -11,6 +11,6 @@ return [
     |
     */
 
-    'feature_unavailable'                => 'Esta funcionalidad aun no esta lista',
-    'exception_message_can_not_be_empty' => 'La excepción :exception no puede tener un mensaje vacío',
+    'feature_unavailable'                => 'This feature is not ready yet',
+    'exception_message_can_not_be_empty' => 'The exception :exception cannot have an empty message',
 ];

@@ -4,11 +4,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Articles Language Lines
+    | Auth Language Lines
     |--------------------------------------------------------------------------
     |
-    | The following lines of language contain translations of the
-    | grammatical articles.
+    | The following lines of language contain auth translations.
     |
     */
 
