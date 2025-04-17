@@ -49,7 +49,10 @@ final class LoginController extends Controller
         $user = $this->model::query()->where($field->name, $params[$field->name])->first();
 
         if (!$user) {
-            return redirect()->back()->withErrors([$field->name => __('k::auth.user_not_found', ['field' => $field->label])]);
+            return redirect()
+                ->back()
+                ->withErrors([$field->name => __('k::auth.user_not_found', ['field' => $field->label])])
+                ->withInput();
         }
 
         Auth::login($user);
