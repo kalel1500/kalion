@@ -20,11 +20,15 @@
         <!-- Icon -->
         <link rel="icon" href="@viteAsset('resources/images/favicon.ico')">
 
-        <!-- Acceso a las rutas de laravel desde javascipt -->
+        {{-- Js para cargar la clase "dark" cuando el "color-theme" es "system" (por si la carga es lenta y el "js" compilado tarda en cargar) --}}
+        <x-kal::js.dark-mode/>
+
+        <!-- JS con las rutas de laravel (ziggy) para tener acceso desde el js -->
         @routes
 
-        <!-- Variables CSS de cada vista -->
+        <!-- CSS con las variables de la vista actual (si tiene) -->
         @stack('css-variables')
+        <!--/Fin CSS -->
 
         @if($isFromPackage)
             <!-- JavaScript y CSS del paquete -->
@@ -39,13 +43,9 @@
             @endif
         @endif
 
-        {{-- Js para cargar la clase "dark" cuando el "color-theme" es "system" (por si la carga es lenta y el "js" compilado tarda en cargar) --}}
-        <x-kal::js.dark-mode/>
-
-        <!-- Estilos de cada vista -->
+        <!-- CSS con los estilos de la vista actual (si tiene) -->
         @stack('styles')
-
-        <!-- /Fin elementos head -->
+        <!--/Fin CSS -->
     </head>
 
     <body class="bg-gray-50 antialiased dark:bg-gray-900">
