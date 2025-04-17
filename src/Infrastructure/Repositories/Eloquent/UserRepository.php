@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Repositories;
+namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
 
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;

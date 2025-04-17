@@ -19,8 +19,8 @@ use Illuminate\Support\Str;
 use Illuminate\View\ComponentAttributeBag;
 use Thehouseofel\Kalion\Domain\Services\TailwindClassFilter;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\ClearAll;
-use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\JobDispatch;
+use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\ServiceCheck;
@@ -35,11 +35,11 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'layoutService'                                                                           => \Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService::class,
-        'authService'                                                                             => \Thehouseofel\Kalion\Infrastructure\Services\AuthService::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\RoleRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\PermissionRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StateRepositoryContract::class      => \Thehouseofel\Kalion\Infrastructure\Repositories\StateEloquentRepository::class,
+        'layoutService'                                                                        => \Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService::class,
+        'authService'                                                                          => \Thehouseofel\Kalion\Infrastructure\Services\AuthService::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\RoleRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\PermissionRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StateRepositoryContract::class      => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\StateEloquentRepository::class,
     ];
 
     /**

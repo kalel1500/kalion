@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Thehouseofel\Kalion\Application\GetAllFailedJobsUseCase;
 use Thehouseofel\Kalion\Application\GetAllJobsUseCase;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
-use Thehouseofel\Kalion\Infrastructure\Repositories\JobEloquentRepository;
+use Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\JobEloquentRepository;
 use Throwable;
 
 final class AjaxJobsController extends Controller
