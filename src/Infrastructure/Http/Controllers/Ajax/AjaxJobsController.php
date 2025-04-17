@@ -23,7 +23,7 @@ final class AjaxJobsController extends Controller
     {
         try {
             $jobs = $this->getAllJobsUseCase->__invoke();
-            return response_json(true, 'success', ['jobs' => $jobs->toArray()]);
+            return response_json(true, 'success', $jobs);
         } catch (Throwable $th) {
             return response_json_error($th);
         }
@@ -33,7 +33,7 @@ final class AjaxJobsController extends Controller
     {
         try {
             $jobs = $this->getAllFailedJobsUseCase->__invoke();
-            return response_json(true, 'success', ['jobs' => $jobs->toArray()]);
+            return response_json(true, 'success', $jobs);
         } catch (Throwable $th) {
             return response_json_error($th);
         }
