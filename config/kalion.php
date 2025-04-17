@@ -214,7 +214,7 @@ return [
                 'name' => 'email',
                 'label' => 'Email',
                 'type' => 'email',
-                'placeholder' => 'you@somewhere.com',
+                'placeholder' => 'name@company.com', // you@somewhere.com
             ],
             'matricula' => [
                 'name' => 'matricula',
@@ -226,7 +226,7 @@ return [
                 'name' => env('KALION_AUTH_FIELD_NAME', 'email'),
                 'label' => env('KALION_AUTH_FIELD_LABEL', 'Email'),
                 'type' => env('KALION_AUTH_FIELD_TYPE', 'email'),
-                'placeholder' => env('KALION_AUTH_FIELD_PLACEHOLDER', 'you@somewhere.com'),
+                'placeholder' => env('KALION_AUTH_FIELD_PLACEHOLDER', 'name@company.com'), // you@somewhere.com
             ]
         ],
         'load_roles' => (bool) env('KALION_AUTH_LOAD_ROLES', true),
