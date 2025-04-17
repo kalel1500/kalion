@@ -14,7 +14,9 @@ final class PublishAuth extends Command
      *
      * @var string
      */
-    protected $signature = 'kalion:publish-auth {--reset : Reset all changes made by the command to the original state}';
+    protected $signature = 'kalion:publish-auth
+                    {--reset : Reset all changes made by the command to the original state}
+                    {--onlyUpdate : Update only files that already exist}';
 
     /**
      * The console command description.
@@ -29,11 +31,12 @@ final class PublishAuth extends Command
     public function handle()
     {
         $reset = $this->option('reset');
+        $onlyUpdate = $this->option('onlyUpdate');
 
         $developString = config('kalion.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';
         $this->info("Inicio configuración: $developString");
 
-        PublishAuthCommandService::configure($this, $reset)
+        PublishAuthCommandService::configure($this, $reset, $onlyUpdate)
             ->publishConfigKalionAndUpdateClasses()
             ->modifyFile_ConfigAuth_toUpdateModelAndAddApi();
 

@@ -19,6 +19,7 @@ final class PublishAuthCommandService
     public function __construct(
         private PublishAuth $command,
         private bool        $reset,
+        private bool        $onlyUpdate,
     )
     {
         $this->steps = $this->countPublicMethods();
@@ -27,6 +28,11 @@ final class PublishAuthCommandService
     private function isReset(): bool
     {
         return $this->reset;
+    }
+
+    private function onlyUpdate(): bool
+    {
+        return $this->onlyUpdate;
     }
 
     /**
@@ -38,9 +44,9 @@ final class PublishAuthCommandService
         $this->command->line("  - $number $message");
     }
 
-    public static function configure(PublishAuth $command, bool $reset): static
+    public static function configure(PublishAuth $command, bool $reset, bool $onlyUpdate): static
     {
-        return new static($command, $reset);
+        return new static($command, $reset, $onlyUpdate);
     }
 
     public function publishConfigKalionAndUpdateClasses(): static
@@ -52,11 +58,15 @@ final class PublishAuthCommandService
 
         if ($this->isReset()) return $this;
 
-        // Publish "config/kalion.php"
-        $this->command->call('vendor:publish', ['--tag' => 'kalion-config']);
+        if (! $this->onlyUpdate()) {
+            // Publish "config/kalion.php"
+            $this->command->call('vendor:publish', ['--tag' => 'kalion-config']);
+        }
 
         // Ruta del archivo a modificar
         $filePath = base_path('config'.DIRECTORY_SEPARATOR.'kalion.php');
+
+        if (! File::exists($filePath)) return $this;
 
         // Leer el contenido del archivo
         $content = File::get($filePath);
