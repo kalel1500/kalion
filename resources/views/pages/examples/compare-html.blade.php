@@ -2,8 +2,17 @@
     <x-kal::section>
         <h1 class="mb-5 text-3xl font-bold dark:text-white">Comparar HTML</h1>
         <div class="flex items-center justify-center gap-10">
-            <x-kal::input.textarea id="textarea-a" label="Html A" class="w-2/5" inputClass="whitespace-nowrap scroller text-gray-500!" spellcheck="false"/>
-            <x-kal::input.textarea id="textarea-b" label="Html B" class="w-2/5" inputClass="whitespace-nowrap scroller text-gray-500!" spellcheck="false"/>
+
+            <div class="w-2/5">
+                <x-kal::input.label for="textarea-a" value="Html A"/>
+                <x-kal::input.textarea id="textarea-a" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
+            </div>
+
+            <div class="w-2/5">
+                <x-kal::input.label for="textarea-b" value="Html B"/>
+                <x-kal::input.textarea id="textarea-b" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
+            </div>
+
             <div>
                 <x-kal::button id="compareHtml">Comparar</x-kal::button>
             </div>
