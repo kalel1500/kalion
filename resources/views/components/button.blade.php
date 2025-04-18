@@ -1,4 +1,4 @@
-@props(['color' => 'blue', 'size' => 'base'])
+@props(['type' => 'button', 'color' => 'blue', 'size' => 'base'])
 
 @php
     $classes = 'mb-2 rounded-lg font-medium focus:outline-none focus:ring-4';
@@ -10,6 +10,7 @@
         'lx'    => 'px-6 py-3.5 text-base',
     ];
     $colorClasses = [
+        'blue-form' => '                       bg-blue-600     text-white      hover:bg-blue-700   focus:ring-blue-300                             dark:bg-blue-600                                                dark:hover:bg-blue-700      dark:focus:ring-blue-800',
         'blue'      => '                       bg-blue-700     text-white      hover:bg-blue-800   focus:ring-blue-300                             dark:bg-blue-600                                                dark:hover:bg-blue-700      dark:focus:ring-blue-800',
         'dark'      => '                       bg-gray-800     text-white      hover:bg-gray-900   focus:ring-gray-300     dark:border-gray-700    dark:bg-gray-800                                                dark:hover:bg-gray-700      dark:focus:ring-gray-700',
         'green'     => '                       bg-green-700    text-white      hover:bg-green-800  focus:ring-green-300                            dark:bg-green-600                                               dark:hover:bg-green-700     dark:focus:ring-green-800',
@@ -22,4 +23,4 @@
     $finalClasses = $classes.' '.$sizeClasses[$size].' '.$colorClasses[$color];
 @endphp
 
-<button type="button" {{ $attributes->mergeTailwind($finalClasses) }}>{{ $slot }}</button>
+<button type="{{ $type }}" {{ $attributes->mergeTailwind($finalClasses) }}>{{ $slot }}</button>
