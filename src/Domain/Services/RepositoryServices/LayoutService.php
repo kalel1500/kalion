@@ -46,7 +46,7 @@ final class LayoutService implements LayoutServiceContract
         ]);
     }
 
-    public function getUserInfo(): UserInfoDo
+    public function getUserInfo(): ?UserInfoDo
     {
         return UserInfoDo::fromArray([
             'name' => 'Neil Sims',

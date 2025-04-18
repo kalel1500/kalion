@@ -37,10 +37,10 @@ class Full extends Component
             if (!is_null($dropdown = $item->dropdown) && !is_null($action = $dropdown->get_data_action)) {
                 switch ($action) {
                     case 'getNavbarNotifications':
-                        $dropdown->setItems(LayoutService::$action());
+                        $dropdown->setItems(LayoutService::getNavbarNotifications());
                         break;
                     case 'getUserInfo':
-                        $dropdown->setUserInfo(LayoutService::$action());
+                        $dropdown->setUserInfo(LayoutService::getUserInfo());
                         break;
                 }
             }

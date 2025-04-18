@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItem
 
 final class NavbarDropdownDo extends ContractDataObject
 {
-    public UserInfoDo $userInfo;
+    public ?UserInfoDo $userInfo;
 
     public function __construct(
         public readonly ?bool                $is_list,
@@ -39,7 +39,7 @@ final class NavbarDropdownDo extends ContractDataObject
         $this->items = $items;
     }
 
-    public function setUserInfo(UserInfoDo $userInfo): void
+    public function setUserInfo(?UserInfoDo $userInfo): void
     {
         $this->userInfo = $userInfo;
     }

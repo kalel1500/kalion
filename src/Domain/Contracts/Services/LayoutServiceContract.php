@@ -11,5 +11,5 @@ interface LayoutServiceContract
 {
     public function getMessageCounter(): int;
     public function getNavbarNotifications(): NavbarItemCollection;
-    public function getUserInfo(): UserInfoDo;
+    public function getUserInfo(): ?UserInfoDo;
 }

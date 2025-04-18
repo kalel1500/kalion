@@ -46,8 +46,9 @@ final class LayoutService implements LayoutServiceContract
         ]);
     }
 
-    public function getUserInfo(): UserInfoDo
+    public function getUserInfo(): ?UserInfoDo
     {
+        if (is_null(userEntity())) return null;
         return UserInfoDo::fromArray([
             'name' => userEntity()->name->value(),
             'email' => userEntity()->email->value()
