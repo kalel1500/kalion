@@ -122,5 +122,29 @@ class ComponentsTests extends TestCase
             'bg-white text-black',
             '',
         );
+
+        $this->assertClasses(
+            'text-center',
+            'text-sm',
+            'text-center',
+        );
+
+        $this->assertClasses(
+            'text-sm',
+            'text-center',
+            'text-sm',
+        );
+
+        $this->assertClasses(
+            'dark:text-center',
+            'dark:text-sm',
+            'dark:text-center',
+        );
+
+        $this->assertClasses(
+            'dark:text-sm',
+            'dark:text-center',
+            'dark:text-sm',
+        );
     }
 }

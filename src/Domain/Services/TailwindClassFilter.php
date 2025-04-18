@@ -147,9 +147,15 @@ final class TailwindClassFilter
 
         foreach ($filteredCustom as $custom_class) {
             $customParsed = $this->parseClass($custom_class);
+            $customSpecial = $this->getSpecialGroup($custom_class);
             if ($defaultSpecial !== false) {
                 // Para clases especiales, se elimina si en custom aparece alguna clase del mismo grupo.
                 if (in_array($customParsed['base'], $this->specials[$defaultSpecial])) {
+                    return false;
+                }
+            } elseif ($customSpecial !== false) {
+                // Para clases especiales, se elimina si en custom aparece alguna clase del mismo grupo.
+                if (in_array($parsed['base'], $this->specials[$customSpecial])) {
                     return false;
                 }
             } else {
