@@ -1,0 +1,1 @@
+<x-kal::button type="submit" color="blue-form" class="w-full text-center mb-inherit">{{ $slot }}</x-kal::button>
