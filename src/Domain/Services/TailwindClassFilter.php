@@ -64,6 +64,12 @@ final class TailwindClassFilter
             'truncate',
             'text-ellipsis',
             'text-clip',
+        ],
+        'text_align' => [
+            'text-left',
+            'text-center',
+            'text-right',
+            'text-justify',
         ]
     ];
 
