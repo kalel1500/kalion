@@ -1,9 +1,9 @@
-<x-kal::layout.app package title="Compare html">
+<x-kal::layout.app package title="Compare html" xmlns:x-kal="http://www.w3.org/1999/html">
     <x-kal::section>
         <h1 class="mb-5 text-3xl font-bold dark:text-white">Comparar HTML</h1>
         <div class="flex items-center justify-center gap-10">
-            <x-kal::form.textarea id="textarea-a" label="Html A" class="w-2/5" inputClass="whitespace-nowrap scroller text-gray-500!" spellcheck="false"/>
-            <x-kal::form.textarea id="textarea-b" label="Html B" class="w-2/5" inputClass="whitespace-nowrap scroller text-gray-500!" spellcheck="false"/>
+            <x-kal::input.textarea id="textarea-a" label="Html A" class="w-2/5" inputClass="whitespace-nowrap scroller text-gray-500!" spellcheck="false"/>
+            <x-kal::input.textarea id="textarea-b" label="Html B" class="w-2/5" inputClass="whitespace-nowrap scroller text-gray-500!" spellcheck="false"/>
             <div>
                 <x-kal::button id="compareHtml">Comparar</x-kal::button>
             </div>
