@@ -37,10 +37,15 @@ final class Kalion
             ]);
         }
 
-        if (! config()->has('auth.providers.users.model')) {
-            config([
-                'auth.providers.users.model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Infrastructure\Models\User::class),
-            ]);
+        $authConfigPath = config_path('auth.php');
+        $defaultLine = "'model' => env('AUTH_MODEL', App\\Models\\User::class),";
+        if (file_exists($authConfigPath)) {
+            $authConfigContents = file_get_contents($authConfigPath);
+            if (str_contains($authConfigContents, $defaultLine)) {
+                config([
+                    'auth.providers.users.model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Infrastructure\Models\User::class),
+                ]);
+            }
         }
 
         if (! config()->has('auth.providers.api_users')) {
