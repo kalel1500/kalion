@@ -7,17 +7,17 @@ namespace Thehouseofel\Kalion\Infrastructure\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static userEntity(string|null $guard = null)
+ * @method static user(string|null $guard = null)
  *
- * @see \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser
+ * @see \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager
  */
-final class AuthService extends Facade
+final class Auth extends Facade
 {
     /**
      * Get the registered name of the component.
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'authService';
+        return 'authManager';
     }
 }

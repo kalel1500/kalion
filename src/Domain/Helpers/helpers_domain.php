@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
-use Thehouseofel\Kalion\Infrastructure\Facades\AuthService;
+use Thehouseofel\Kalion\Infrastructure\Facades\Auth;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 if (!function_exists('userEntity')) {
@@ -21,7 +21,7 @@ if (!function_exists('userEntity')) {
      */
     function userEntity(string $guard = null)
     {
-        return AuthService::userEntity($guard);
+        return Auth::user($guard);
     }
 }
 
