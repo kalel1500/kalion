@@ -1,4 +1,4 @@
-@php($errors = session('errors') ?: new \Illuminate\Support\ViewErrorBag)
+{{--@php($errors = session('errors') ?: new \Illuminate\Support\ViewErrorBag)--}}
 @if($errors->any())
     <x-kal::alert.list id="alert-errors" color="red" title="{{ __('Several errors have been detected') }}:" xmlns:x-slot="http://www.w3.org/1999/xlink">
         @foreach ($errors->all() as $error)
