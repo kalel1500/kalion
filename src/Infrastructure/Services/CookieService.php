@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie as CookieFacade;
-use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Cookie as HttpCookie;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\CookiePreferencesDo;
 
 final class CookieService
@@ -15,7 +15,7 @@ final class CookieService
     private int                 $cookieDuration;
     private string              $cookieVersion;
     private CookiePreferencesDo $preferences;
-    private ?Cookie             $cookie = null;
+    private ?HttpCookie             $cookie = null;
 
     public function __construct()
     {
@@ -30,7 +30,7 @@ final class CookieService
         ]);
     }
 
-    public function cookie(): Cookie
+    public function cookie(): HttpCookie
     {
         return $this->cookie;
     }
