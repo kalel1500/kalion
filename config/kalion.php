@@ -189,7 +189,7 @@ return [
             'fake' => env('KALION_AUTH_BLADE_FAKE', 'kal::pages.auth.landing'),
             'login' => env('KALION_AUTH_BLADE_LOGIN', 'kal::pages.auth.login'),
             'register' => env('KALION_AUTH_BLADE_REGISTER', 'kal::pages.auth.register'),
-            'password_reset' => env('KALION_AUTH_BLADE_REGISTER', 'kal::pages.auth.forgot-password'),
+            'password_reset' => env('KALION_AUTH_BLADE_PASSWORD_RESET', 'kal::pages.auth.forgot-password'),
         ],
         'entities' => [
             'web' => env('KALION_AUTH_ENTITY_WEB', Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity::class),
