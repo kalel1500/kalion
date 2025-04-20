@@ -14,5 +14,5 @@ interface CurrentUserContract
     /**
      * @return T|null
      */
-    public function userEntity(string $guard = null);
+    public function entity(string $guard = null);
 }

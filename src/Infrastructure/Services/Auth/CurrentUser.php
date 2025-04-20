@@ -29,7 +29,7 @@ final class CurrentUser implements CurrentUserContract
      * @param string|null $guard
      * @return UserEntity|null
      */
-    public function userEntity(string $guard = null)
+    public function entity(string $guard = null)
     {
         $this->guard = $guard;
         $this->entityClass = Kalion::getClassUserEntity($this->guard);
