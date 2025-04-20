@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Thehouseofel\Kalion\Domain\Exceptions\ServiceException;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 use Thehouseofel\Kalion\Infrastructure\Events\EventCheckQueuesStatus;
-use Thehouseofel\Kalion\Infrastructure\Services\QueueService;
+use Thehouseofel\Kalion\Infrastructure\Services\Queue;
 use Thehouseofel\Kalion\Infrastructure\Services\Broadcast;
 use Throwable;
 
@@ -20,7 +20,7 @@ final class AjaxQueuesController extends Controller
     public function checkService(): JsonResponse
     {
         try {
-            QueueService::check(__('k::service.queues.inactive'));
+            Queue::check(__('k::service.queues.inactive'));
             $response = response_json(true, __('k::service.queues.active'));
         } catch (ServiceException $e) {
             $response = response_json(false, $e->getMessage());
