@@ -1,7 +1,7 @@
 @use(Thehouseofel\Kalion\Infrastructure\Services\Kalion)
 @php($field = Kalion::getLoginFieldData())
 
-<x-kal::layout.guest :title="__('k::text.login.title')" :cardTitle="__('k::text.login.card_title')">
+<x-kal::layout.guest :title="__('k::auth.login.title')" :cardTitle="__('k::auth.login.card_title')">
 
     <x-kal::form method="POST" action="{{ route('login') }}">
         <div>
@@ -16,13 +16,13 @@
         <div class="flex items-center justify-between">
             <x-kal::input.full.checkbox id="remember" :labelText="__('k::text.input.remember_me')" />
             @if(! config('kalion.auth.disable_password_reset'))
-                <x-kal::link href="{{ route('password.reset') }}" class="text-sm" :value="__('k::text.login.password_reset')" />
+                <x-kal::link href="{{ route('password.reset') }}" class="text-sm" :value="__('k::auth.login.password_reset')" />
             @endif
         </div>
 
-        <x-kal::form.button>{{ __('k::text.login.btn') }}</x-kal::form.button>
+        <x-kal::form.button>{{ __('k::auth.login.btn') }}</x-kal::form.button>
         @if(! config('kalion.auth.disable_register'))
-            <x-kal::form.question-link :value="__('k::text.login.question')" :link="__('k::text.login.question_link')" href="{{ route('register') }}" />
+            <x-kal::form.question-link :value="__('k::auth.login.question')" :link="__('k::auth.login.question_link')" href="{{ route('register') }}" />
         @endif
     </x-kal::form>
 

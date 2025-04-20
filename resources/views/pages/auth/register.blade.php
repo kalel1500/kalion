@@ -1,4 +1,4 @@
-<x-kal::layout.guest :title="__('k::text.register.title')" :cardTitle="__('k::text.register.card_title')">
+<x-kal::layout.guest :title="__('k::auth.register.title')" :cardTitle="__('k::auth.register.card_title')">
 
     <x-kal::form method="POST" action="{{ route('register') }}">
         <div>
@@ -24,9 +24,9 @@
 
         <x-kal::form.checkbox-terms />
 
-        <x-kal::form.button>{{ __('k::text.register.btn') }}</x-kal::form.button>
+        <x-kal::form.button>{{ __('k::auth.register.btn') }}</x-kal::form.button>
 
-        <x-kal::form.question-link :value="__('k::text.register.question')" :link="__('k::text.register.question_link')" href="{{ route('login') }}" />
+        <x-kal::form.question-link :value="__('k::auth.register.question')" :link="__('k::auth.register.question_link')" href="{{ route('login') }}" />
     </x-kal::form>
 
 </x-kal::layout.guest>

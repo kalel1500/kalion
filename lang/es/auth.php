@@ -18,5 +18,26 @@ return [
     'missing_trait_has_permissions' => 'La Entidad :class debe usar el trait Thehouseofel\Kalion\Domain\Traits\EntityHasPermissions',
     'not_logged_in'                 => 'El usuario no esta logueado',
     'user_not_found'                => 'No existe ningún usuario con ese :field', // No encontramos ninguna cuenta con ese ":field"
+    'register'         => [
+        'title'         => 'Registro',
+        'card_title'    => 'Crear una cuenta',
+        'btn'           => 'Crear una cuenta',
+        'question'      => '¿Ya tienes una cuenta?',
+        'question_link' => 'Inicia sesión aquí',
+    ],
+    'login'            => [
+        'title'          => 'Iniciar sesión',
+        'card_title'     => 'Inicia sesión en tu cuenta',
+        'btn'            => 'Iniciar sesión',
+        'question'       => '¿Aún no tienes una cuenta?',
+        'question_link'  => 'Registrate',
+        'password_reset' => '¿Has olvidado tu contraseña?',
+    ],
+    'password_reset'   => [
+        'title'      => 'Contraseña olvidada',
+        'card_title' => '¿Olvidaste tu contraseña?',
+        'card_text'  => '¡No te preocupes! Solo escribe tu correo electrónico y te enviaremos un código para restablecer tu contraseña.',
+        'btn'        => 'Restablecer contraseña',
+    ],
 
 ];
