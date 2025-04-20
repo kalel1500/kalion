@@ -15,12 +15,15 @@
         </div>
         <div class="flex items-center justify-between">
             <x-kal::input.full.checkbox id="remember" :labelText="__('k::text.input.remember_me')" />
-            <x-kal::link href="{{ route('password.reset') }}" class="text-sm" :value="__('k::text.login.password_reset')" />
+            @if(! config('kalion.auth.disable_password_reset'))
+                <x-kal::link href="{{ route('password.reset') }}" class="text-sm" :value="__('k::text.login.password_reset')" />
+            @endif
         </div>
 
         <x-kal::form.button>{{ __('k::text.login.btn') }}</x-kal::form.button>
-
-        <x-kal::form.question-link :value="__('k::text.login.question')" :link="__('k::text.login.question_link')" href="{{ route('register') }}" />
+        @if(! config('kalion.auth.disable_register'))
+            <x-kal::form.question-link :value="__('k::text.login.question')" :link="__('k::text.login.question_link')" href="{{ route('register') }}" />
+        @endif
     </x-kal::form>
 
 </x-kal::layout.guest>
