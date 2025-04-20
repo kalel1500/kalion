@@ -8,13 +8,7 @@
             <x-kal::input type="email" id="email" :value="old('email')" required />
             <x-kal::input.error for="email" />
         </div>
-        <x-kal::input.full.checkbox id="terms" required>
-            <span class="font-light">{{ __('k::text.input.terms_part_1') }}</span>
-            <x-kal::link href="#" :value="__('k::text.input.terms_part_2')" />
-            <x-slot:error>
-                <x-kal::input.error for="terms" />
-            </x-slot:error>
-        </x-kal::input.full.checkbox>
+        <x-kal::form.checkbox-terms />
         <x-kal::form.button>{{ __('k::text.forgot_pass.btn') }}</x-kal::form.button>
     </x-kal::form>
 
