@@ -7,7 +7,7 @@ return [
         'id'                    => 'Id',
         'matricula'             => 'Matricula',
         'name'                  => 'Nombre',
-        'email'                 => 'Correo',
+        'email'                 => 'Correo electrónico',
         'password'              => 'Contraseña',
         'password_confirmation' => 'Confirmar contraseña',
         'terms_part_1'          => 'Acepto los',
