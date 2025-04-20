@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\ServiceException;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 use Thehouseofel\Kalion\Infrastructure\Events\EventCheckQueuesStatus;
 use Thehouseofel\Kalion\Infrastructure\Services\QueueService;
-use Thehouseofel\Kalion\Infrastructure\Services\WebsocketsService;
+use Thehouseofel\Kalion\Infrastructure\Services\Broadcast;
 use Throwable;
 
 final class AjaxQueuesController extends Controller
@@ -27,6 +27,6 @@ final class AjaxQueuesController extends Controller
         } catch (Throwable $e) {
             $response = response_json_error($e, false);
         }
-        return WebsocketsService::emitEvent($response, new EventCheckQueuesStatus($response));
+        return Broadcast::emitEvent($response, new EventCheckQueuesStatus($response));
     }
 }

@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax;
 use Illuminate\Http\JsonResponse;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 use Thehouseofel\Kalion\Infrastructure\Events\EventCheckWebsocketsStatus;
-use Thehouseofel\Kalion\Infrastructure\Services\WebsocketsService;
+use Thehouseofel\Kalion\Infrastructure\Services\Broadcast;
 use Throwable;
 
 final class AjaxWebsocketsController extends Controller
@@ -18,6 +18,6 @@ final class AjaxWebsocketsController extends Controller
     public function checkService(): JsonResponse
     {
         $res = response_json(true, 'Comprobado servicio websockets');
-        return WebsocketsService::emitEvent($res, new EventCheckWebsocketsStatus());
+        return Broadcast::emitEvent($res, new EventCheckWebsocketsStatus());
     }
 }

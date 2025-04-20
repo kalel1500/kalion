@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Throwable;
 
-final class WebsocketsService
+final class Broadcast
 {
     public static function emitEvent(JsonResponse $response, ShouldBroadcast $instanceEvent): JsonResponse
     {
