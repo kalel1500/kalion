@@ -12,7 +12,7 @@
         </div>
         <div>
             <x-kal::input.label for="password" value="Password"/>
-            <x-kal::input.password id="password" placeholder="••••••••" class="text-base" required/>
+            <x-kal::input type="password" id="password" placeholder="••••••••" class="text-base" required/>
         </div>
         <div class="flex items-center justify-between">
             <x-kal::input.full.checkbox id="remember" labelText="Remember me" />
