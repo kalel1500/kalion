@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 
-use Thehouseofel\Kalion\Domain\Contracts\Services\AuthServiceContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\CurrentUserContract;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 /**
  * @template T of UserEntity
  */
-final class AuthService implements AuthServiceContract
+final class CurrentUser implements CurrentUserContract
 {
     private bool $loadRoles;
     private string  $entityClass;
     private ?string $guard;
 
-    /** @var T|null */
+    /** @var UserEntity|null */
     private $userEntity = null;
 
     public function __construct()
@@ -26,7 +27,7 @@ final class AuthService implements AuthServiceContract
 
     /**
      * @param string|null $guard
-     * @return T|null
+     * @return UserEntity|null
      */
     public function userEntity(string $guard = null)
     {

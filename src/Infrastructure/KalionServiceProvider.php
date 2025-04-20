@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Events\VendorTagPublished;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -36,7 +32,7 @@ class KalionServiceProvider extends ServiceProvider
      */
     public array $singletons = [
         'layoutService'                                                                        => \Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService::class,
-        'authService'                                                                          => \Thehouseofel\Kalion\Infrastructure\Services\AuthService::class,
+        'authService'                                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\JobRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\RoleRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\PermissionRepository::class,

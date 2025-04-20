@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
 /**
  * @template T of UserEntity
  */
-interface AuthServiceContract
+interface CurrentUserContract
 {
     /**
      * @return T|null

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static userEntity(string|null $guard = null)
  *
- * @see \Thehouseofel\Kalion\Infrastructure\Services\AuthService
+ * @see \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser
  */
 final class AuthService extends Facade
 {
