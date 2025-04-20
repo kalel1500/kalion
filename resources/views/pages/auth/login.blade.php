@@ -6,12 +6,12 @@
     <x-kal::form method="POST" action="{{ route('login') }}">
         <div>
             <x-kal::input.label :for="$field->name" :value="$field->label"/>
-            <x-kal::input :type="$field->type" :id="$field->name" :placeholder="$field->placeholder" class="text-base" :value="old($field->name)" required/>
+            <x-kal::input :type="$field->type" :id="$field->name" class="text-base" :value="old($field->name)" required/>
             <x-kal::input.error :for="$field->name" />
         </div>
         <div>
             <x-kal::input.label for="password" value="Password"/>
-            <x-kal::input type="password" id="password" placeholder="••••••••" class="text-base" required/>
+            <x-kal::input type="password" id="password" class="text-base" required/>
         </div>
         <div class="flex items-center justify-between">
             <x-kal::input.full.checkbox id="remember" labelText="Remember me" />
