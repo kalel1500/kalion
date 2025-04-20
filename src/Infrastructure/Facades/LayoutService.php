@@ -12,6 +12,8 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDo;
  * @method static int getMessageCounter()
  * @method static NavbarItemCollection getNavbarNotifications()
  * @method static UserInfoDo getUserInfo()
+ *
+ * @see \Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService
  */
 final class LayoutService extends Facade
 {
