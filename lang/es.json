@@ -1,4 +1,8 @@
 {
+    "Dismiss": "Descartar",
+    "Search": "Buscar",
+    "Copied": "Copiado",
+    "Compare": "Comparar",
     "Server Error": "Error del Servidor",
     "Unexpected response format": "Formato de respuesta inesperado",
     "Several errors have been detected": "Se han detectado varios errores",

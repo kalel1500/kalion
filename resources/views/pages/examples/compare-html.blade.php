@@ -14,7 +14,7 @@
             </div>
 
             <div>
-                <x-kal::button id="compareHtml">Comparar</x-kal::button>
+                <x-kal::button id="compareHtml">{{ __('Compare') }}</x-kal::button>
             </div>
         </div>
         <div class="flex justify-center">

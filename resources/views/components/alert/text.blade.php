@@ -31,7 +31,7 @@
     </div>
     <div class="flex">
         <button type="button" class="bg-transparent border hover:text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-xs px-3 py-1.5 text-center {{ $btnClasses }}" data-dismiss-target="#{{ $id }}" aria-label="Close">
-            Dismiss
+            {{ __('Dismiss') }}
         </button>
     </div>
 </div>
