@@ -206,25 +206,25 @@ return [
         'available_fields' => [
             'id' => [
                 'name' => 'id',
-                'label' => 'Id',
+                'label' => 'k::text.input.id',
                 'type' => 'number',
                 'placeholder' => 'ID',
             ],
             'email' => [
                 'name' => 'email',
-                'label' => 'Email',
+                'label' => 'k::text.input.email',
                 'type' => 'email',
                 'placeholder' => 'name@company.com', // you@somewhere.com
             ],
             'matricula' => [
                 'name' => 'matricula',
-                'label' => 'Matricula',
+                'label' => 'k::text.input.email.matricula',
                 'type' => 'text',
                 'placeholder' => 'Matricula',
             ],
             'custom' => [
                 'name' => env('KALION_AUTH_FIELD_NAME', 'email'),
-                'label' => env('KALION_AUTH_FIELD_LABEL', 'Email'),
+                'label' => env('KALION_AUTH_FIELD_LABEL', 'k::text.input.email'),
                 'type' => env('KALION_AUTH_FIELD_TYPE', 'email'),
                 'placeholder' => env('KALION_AUTH_FIELD_PLACEHOLDER', 'name@company.com'), // you@somewhere.com
             ]
