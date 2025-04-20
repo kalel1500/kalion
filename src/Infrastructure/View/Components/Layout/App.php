@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\Component;
-use Thehouseofel\Kalion\Infrastructure\Services\CookieService;
+use Thehouseofel\Kalion\Infrastructure\Services\Cookie;
 
 class App extends Component
 {
@@ -29,7 +29,7 @@ class App extends Component
         $this->title = $title ?? config('app.name');
         $this->isFromPackage = $package;
 
-        $preferences = CookieService::readOrNew()->preferences();
+        $preferences            = Cookie::readOrNew()->preferences();
         $this->darkMode         = $preferences->theme()->isDark();
         $this->sidebarCollapsed = $preferences->sidebar_state_per_page() ? $this->calculateSidebarCollapsedFromItems() : $preferences->sidebar_collapsed();
         $this->dataTheme        = $preferences->theme()->getDataTheme();

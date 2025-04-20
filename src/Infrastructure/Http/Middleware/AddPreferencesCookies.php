@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Thehouseofel\Kalion\Infrastructure\Services\CookieService;
+use Thehouseofel\Kalion\Infrastructure\Services\Cookie;
 
 final class AddPreferencesCookies
 {
@@ -18,7 +18,7 @@ final class AddPreferencesCookies
      */
     public function handle(Request $request, Closure $next): Response
     {
-        CookieService::new()
+        Cookie::new()
             ->createIfNotExist($request)
             ->queue()
             ->resetAndQueueIfExistInvalid();

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cookie as CookieFacade;
 use Symfony\Component\HttpFoundation\Cookie as HttpCookie;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\CookiePreferencesDo;
 
-final class CookieService
+final class Cookie
 {
     private string              $cookieName;
     private int                 $cookieDuration;

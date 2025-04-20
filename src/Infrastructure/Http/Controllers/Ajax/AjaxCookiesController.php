@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax;
 use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\CookiePreferencesDo;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
-use Thehouseofel\Kalion\Infrastructure\Services\CookieService;
+use Thehouseofel\Kalion\Infrastructure\Services\Cookie;
 
 final class AjaxCookiesController extends Controller
 {
@@ -15,7 +15,7 @@ final class AjaxCookiesController extends Controller
     {
         $preferences = CookiePreferencesDo::fromJson(urldecode($request->input('preferences')));
 
-        CookieService::new()
+        Cookie::new()
             ->setPreferences($preferences)
             ->create()
             ->queue();
