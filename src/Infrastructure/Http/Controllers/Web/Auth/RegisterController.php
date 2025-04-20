@@ -27,6 +27,7 @@ final class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Password::defaults()],
+            'terms' => ['required'],
         ]);
 
         $user = User::query()->create([
