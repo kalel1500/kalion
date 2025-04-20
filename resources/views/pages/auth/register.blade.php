@@ -24,8 +24,10 @@
 
         <x-kal::input.full.checkbox id="terms" required>
             <span class="font-light">I accept the</span> <x-kal::link value="Terms and Conditions"/>
+            <x-slot:error>
+                <x-kal::input.error for="terms" />
+            </x-slot:error>
         </x-kal::input.full.checkbox>
-        <x-kal::input.error for="terms" />
 
         <x-kal::form.button>Create an account</x-kal::form.button>
 

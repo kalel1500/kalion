@@ -14,6 +14,7 @@
     <div class="ml-3 text-sm">
         <label for="{{ $id }}" class="text-gray-500 dark:text-gray-300">
             {{ $labelText ?? $slot }}
+            {{ $error ?? '' }}
         </label>
     </div>
 </div>
