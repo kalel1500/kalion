@@ -3,8 +3,7 @@
 
 <x-kal::layout.guest title="Login" cardTitle="Sign in to your account">
 
-    <form method="POST" action="{{ route('login') }}" class="space-y-4 md:space-y-6">
-        @csrf
+    <x-kal::form method="POST" action="{{ route('login') }}">
         <div>
             <x-kal::input.label :for="$field->name" :value="$field->label"/>
             <x-kal::input :type="$field->type" :id="$field->name" :placeholder="$field->placeholder" class="text-base" :value="old($field->name)" required/>
@@ -22,6 +21,6 @@
         <x-kal::form.button>Sign in</x-kal::form.button>
 
         <x-kal::form.question-link value="Don’t have an account yet?" link="Sign up" href="{{ route('register') }}"/>
-    </form>
+    </x-kal::form>
 
 </x-kal::layout.guest>
