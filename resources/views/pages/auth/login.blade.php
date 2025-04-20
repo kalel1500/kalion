@@ -16,7 +16,7 @@
         </div>
         <div class="flex items-center justify-between">
             <x-kal::input.full.checkbox id="remember" labelText="Remember me" />
-            <x-kal::link href="{{ route('password.reset') }}" class="text-sm" value="Terms and Conditions"/>
+            <x-kal::link href="{{ route('password.reset') }}" class="text-sm" value="Forgot password?"/>
         </div>
 
         <x-kal::form.button>Sign in</x-kal::form.button>
