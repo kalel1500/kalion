@@ -51,7 +51,7 @@ final class LoginController extends Controller
         if (!$user) {
             return redirect()
                 ->back()
-                ->withErrors([$field->name => __('k::auth.user_not_found', ['field' => $field->label])])
+                ->withErrors([$field->name => __('k::auth.user_not_found', ['field' => __($field->label)])])
                 ->withInput();
         }
 
