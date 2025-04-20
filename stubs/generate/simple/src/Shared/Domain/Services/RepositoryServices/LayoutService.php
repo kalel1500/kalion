@@ -48,10 +48,10 @@ final class LayoutService implements LayoutServiceContract
 
     public function getUserInfo(): ?UserInfoDo
     {
-        if (is_null(userEntity())) return null;
+        if (is_null(user())) return null;
         return UserInfoDo::fromArray([
-            'name' => userEntity()->name->value(),
-            'email' => userEntity()->email->value()
+            'name' => user()->name->value(),
+            'email' => user()->email->value()
         ]);
     }
 }

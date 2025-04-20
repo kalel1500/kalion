@@ -1,4 +1,3 @@
-
 ```php
 Route::get('/login-web/{id?}', function (int $id = 2) {
     $u = \Illuminate\Support\Facades\Auth::guard('web')->loginUsingId($id);
@@ -31,12 +30,12 @@ Route::get('/test', function () {
         session()->all(),
     );*/
     dd(
-        userEntity()?->toArray(),
-        userEntity()?->toArray(),
-        userEntity()?->toArray(),
-        userEntity('api')?->toArray(),
-        userEntity('api')?->toArray(),
-        userEntity('api')?->toArray(),
+        user()?->toArray(),
+        user()?->toArray(),
+        user()?->toArray(),
+        user('api')?->toArray(),
+        user('api')?->toArray(),
+        user('api')?->toArray(),
     );
 });
 ```
@@ -58,7 +57,7 @@ public function handle(): void
         request()->all(),
         session()->all(),
         auth()->user()?->toArray(),
-        userEntity()?->toArray(),
+        user()?->toArray(),
     );
 }
 ```

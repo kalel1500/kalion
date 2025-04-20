@@ -1,5 +1,3 @@
-
-
 ```php
 
     public function __construct(
@@ -70,15 +68,15 @@
         // userEntity()->is('admin');
 
         // ARRAY
-        $array_userCan_seePostDetail_or_AdminTags = userEntity()?->can(['see_post_detail', 'admin_tags']);
-        $array_userIs_admin_or_reader             = userEntity()?->is(['admin', 'reader']);
+        $array_userCan_seePostDetail_or_AdminTags = user()?->can(['see_post_detail', 'admin_tags']);
+        $array_userIs_admin_or_reader             = user()?->is(['admin', 'reader']);
 
         // PIPE
-        $pipe_userCan_seePostDetail_or_AdminTags = userEntity()?->can('see_post_detail|admin_tags');
-        $pipe_userIs_admin_or_reader             = userEntity()?->is('admin|reader');
+        $pipe_userCan_seePostDetail_or_AdminTags = user()?->can('see_post_detail|admin_tags');
+        $pipe_userIs_admin_or_reader             = user()?->is('admin|reader');
 
         dump([
-            'user'                                     => userEntity()?->toArray(),
+            'user'                                     => user()?->toArray(),
             'array_userCan_seePostDetail_or_AdminTags' => $array_userCan_seePostDetail_or_AdminTags,
             'array_userIs_admin_or_reader'             => $array_userIs_admin_or_reader,
 
@@ -97,23 +95,23 @@
         $imp_groups  = implode(',', $groups);
         $imp_centers = implode(',', $centers);
 
-        userEntity()->can("admin_tags:$imp_systems;$imp_groups;aaaa;1|see_post_detail:$imp_centers|filter_posts");
-        userEntity()->can('admin_tags|see_post_detail|filter_posts', [$systems, $groups, 'aaaa', 1], $centers);
-        userEntity()->can(['admin_tags', 'see_post_detail', 'filter_posts'], [$systems, $groups, 'aaaa', 1], $centers);
+        user()->can("admin_tags:$imp_systems;$imp_groups;aaaa;1|see_post_detail:$imp_centers|filter_posts");
+        user()->can('admin_tags|see_post_detail|filter_posts', [$systems, $groups, 'aaaa', 1], $centers);
+        user()->can(['admin_tags', 'see_post_detail', 'filter_posts'], [$systems, $groups, 'aaaa', 1], $centers);
 
-        userEntity()->is("admin:$imp_systems;$imp_groups;aaaa;1|writer:$imp_centers|reader");
-        userEntity()->is('admin|writer|reader', [$systems, $groups, 'aaaa', 1], $centers);
-        userEntity()->is(['admin', 'writer', 'reader'], [$systems, $groups, 'aaaa', 1], $centers);
+        user()->is("admin:$imp_systems;$imp_groups;aaaa;1|writer:$imp_centers|reader");
+        user()->is('admin|writer|reader', [$systems, $groups, 'aaaa', 1], $centers);
+        user()->is(['admin', 'writer', 'reader'], [$systems, $groups, 'aaaa', 1], $centers);
         
         // ------------------------------------------------------------------------------- 
 
-        userEntity()->can('see_post_detail|admin_tags:25,null');
-        userEntity()->can('see_post_detail|admin_tags', null, 25);
-        userEntity()->can(['see_post_detail', 'admin_tags'], [null], [25, null]);
+        user()->can('see_post_detail|admin_tags:25,null');
+        user()->can('see_post_detail|admin_tags', null, 25);
+        user()->can(['see_post_detail', 'admin_tags'], [null], [25, null]);
 
-        userEntity()->is('admin|is_important_group:25');
-        userEntity()->is('admin|is_important_group', null, 25);
-        userEntity()->is(['admin', 'is_important_group'], [null], [25]);
+        user()->is('admin|is_important_group:25');
+        user()->is('admin|is_important_group', null, 25);
+        user()->is(['admin', 'is_important_group'], [null], [25]);
 
         dd('fin');
     }

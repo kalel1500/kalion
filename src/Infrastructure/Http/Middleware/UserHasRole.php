@@ -22,13 +22,13 @@ final class UserHasRole
             throw UnauthorizedException::notLoggedIn();
         }
 
-        $userEntity = userEntity();
+        $user = user();
 
-        if (! method_exists($userEntity, 'is')) {
-            throw UnauthorizedException::missingTraitHasPermissions($userEntity);
+        if (! method_exists($user, 'is')) {
+            throw UnauthorizedException::missingTraitHasPermissions($user);
         }
 
-        if (! userEntity()->can($roles)) {
+        if (! user()->can($roles)) {
             throw UnauthorizedException::forRoles($roles);
         }
 

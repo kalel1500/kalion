@@ -12,14 +12,14 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Infrastructure\Facades\Auth;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
-if (!function_exists('userEntity')) {
+if (!function_exists('user')) {
     /**
      * Get the currently authenticated user entity.
      *
      * @param string|null $guard
      * @return UserEntity|ApiUserEntity|null
      */
-    function userEntity(string $guard = null)
+    function user(string $guard = null)
     {
         return Auth::user($guard);
     }
