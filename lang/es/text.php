@@ -22,14 +22,14 @@ return [
         'question_link' => 'Inicia sesión aquí',
     ],
     'login'            => [
-        'title'         => 'Iniciar sesión',
-        'card_title'    => 'Inicia sesión en tu cuenta',
-        'btn'           => 'Iniciar sesión',
-        'question'      => '¿Aún no tienes una cuenta?',
-        'question_link' => 'Registrate',
-        'forgot_pass'   => '¿Has olvidado tu contraseña?',
+        'title'          => 'Iniciar sesión',
+        'card_title'     => 'Inicia sesión en tu cuenta',
+        'btn'            => 'Iniciar sesión',
+        'question'       => '¿Aún no tienes una cuenta?',
+        'question_link'  => 'Registrate',
+        'password_reset' => '¿Has olvidado tu contraseña?',
     ],
-    'forgot_pass'      => [
+    'password_reset'   => [
         'title'      => 'Contraseña olvidada',
         'card_title' => '¿Olvidaste tu contraseña?',
         'card_text'  => '¡No te preocupes! Solo escribe tu correo electrónico y te enviaremos un código para restablecer tu contraseña.',

@@ -11,6 +11,6 @@ final class PasswordResetController extends Controller
 {
     public function create(): View
     {
-        return view(config('kalion.auth.blades.forgot_pass'));
+        return view(config('kalion.auth.blades.password_reset'));
     }
 }
