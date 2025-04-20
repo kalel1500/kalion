@@ -4,12 +4,12 @@
         @csrf
         <div>
             <x-kal::input.label for="name" value="Your name"/>
-            <x-kal::input type="text" id="name" placeholder="Name Surname" required/>
+            <x-kal::input type="text" id="name" placeholder="Name Surname" :value="old('name')" required/>
             <x-kal::input.error for="name" />
         </div>
         <div>
             <x-kal::input.label for="email" value="Your email"/>
-            <x-kal::input type="email" id="email" placeholder="name@company.com" required/>
+            <x-kal::input type="email" id="email" placeholder="name@company.com" :value="old('email')" required/>
             <x-kal::input.error for="email" />
         </div>
         <div>
