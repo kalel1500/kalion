@@ -135,6 +135,8 @@ return [
     {
         $this->app->singleton('layoutService', fn($app) => new (Kalion::getClassServiceLayout()));
         $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract::class, fn($app) => new (Kalion::getClassServiceLogin()));
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\RegisterContract::class, fn($app) => new (Kalion::getClassServiceRegister()));
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\PasswordResetContract::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
     }
 
     /**

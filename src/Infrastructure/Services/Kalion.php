@@ -114,35 +114,17 @@ final class Kalion
         return config('kalion.layout.service');
     }
 
-    /**
-     *
-     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Services\Auth\Login
-     *
-     * @return TClass
-     */
     public static function getClassServiceLogin()
     {
         return config('kalion.auth.services.login');
     }
 
-    /**
-     *
-     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Services\Auth\Login
-     *
-     * @return TClass
-     */
     public static function getClassServiceRegister()
     {
         return config('kalion.auth.services.register');
     }
 
-    /**
-     *
-     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Services\Auth\Login
-     *
-     * @return TClass
-     */
-    public static function getClassServicePasswordReset(): string
+    public static function getClassServicePasswordReset()
     {
         return config('kalion.auth.services.password_reset');
     }

@@ -11,9 +11,16 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static user(string|null $guard = null)
+ *
  * @method static View viewLogin(Request $request = null)
  * @method static RedirectResponse login(Request $request)
  * @method static RedirectResponse logout(Request $request)
+ *
+ * @method static View viewRegister(Request $request = null)
+ * @method static RedirectResponse register(Request $request)
+ *
+ * @method static View viewPasswordReset(Request $request = null)
+ * @method static RedirectResponse reset(Request $request)
  *
  * @see \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager
  */

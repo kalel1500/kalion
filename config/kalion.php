@@ -204,8 +204,8 @@ return [
         ],
         'services' => [
             'login' => env('KALION_AUTH_SERVICE_LOGIN', Thehouseofel\Kalion\Infrastructure\Services\Auth\Login::class),
-            'register' => env('KALION_AUTH_SERVICE_REGISTER', Thehouseofel\Kalion\Infrastructure\Services\Auth\Login::class),
-            'password_reset' => env('KALION_AUTH_SERVICE_PASSWORD_RESET', Thehouseofel\Kalion\Infrastructure\Services\Auth\Login::class),
+            'register' => env('KALION_AUTH_SERVICE_REGISTER', Thehouseofel\Kalion\Infrastructure\Services\Auth\Register::class),
+            'password_reset' => env('KALION_AUTH_SERVICE_PASSWORD_RESET', Thehouseofel\Kalion\Infrastructure\Services\Auth\PasswordReset::class),
         ],
         'fields' => [
             'web' => env('KALION_AUTH_FIELD', 'email'),
