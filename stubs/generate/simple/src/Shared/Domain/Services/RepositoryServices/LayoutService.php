@@ -6,9 +6,9 @@ namespace Src\Shared\Domain\Services\RepositoryServices;
 
 use Thehouseofel\Kalion\Domain\Contracts\Services\LayoutServiceContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDo;
+use \Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService as LayoutServiceBase;
 
-final class LayoutService implements LayoutServiceContract
+final class LayoutService extends LayoutServiceBase implements LayoutServiceContract
 {
     public function getMessageCounter(): int
     {
@@ -43,15 +43,6 @@ final class LayoutService implements LayoutServiceContract
                 'text'  => 'Robert Brown posted a new video: Glassmorphism - learn how to implement the new design trend.',
                 'time'  => '3 hours ago',
             ],
-        ]);
-    }
-
-    public function getUserInfo(): ?UserInfoDo
-    {
-        if (is_null(user())) return null;
-        return UserInfoDo::fromArray([
-            'name' => user()->name->value(),
-            'email' => user()->email->value()
         ]);
     }
 }

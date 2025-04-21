@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Contracts\Services\LayoutServiceContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDo;
 
-final class LayoutService implements LayoutServiceContract
+class LayoutService implements LayoutServiceContract
 {
     public function getMessageCounter(): int
     {
@@ -48,9 +48,10 @@ final class LayoutService implements LayoutServiceContract
 
     public function getUserInfo(): ?UserInfoDo
     {
+        if (is_null(user())) return null;
         return UserInfoDo::fromArray([
-            'name' => 'Neil Sims',
-            'email' => 'name@flowbite.com'
+            'name' => user()->name->value(), // Neil Sims
+            'email' => user()->email->value() // name@flowbite.com
         ]);
     }
 }
