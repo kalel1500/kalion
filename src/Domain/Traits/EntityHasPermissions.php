@@ -8,14 +8,21 @@ use Thehouseofel\Kalion\Domain\Services\Repository\UserAccessChecker;
 
 trait EntityHasPermissions
 {
+    protected UserAccessChecker $accessChecker;
+
+    protected function accessChecker(): UserAccessChecker
+    {
+        return $this->accessChecker ??= app(UserAccessChecker::class);
+    }
+
     public function can(string|array $permission, ...$params): bool
     {
-        return app()->make(UserAccessChecker::class)->can($this, $permission, $params);
+        return $this->accessChecker()->can($this, $permission, $params);
     }
 
     public function is(string|array $role, ...$params): bool
     {
-        return app()->make(UserAccessChecker::class)->is($this, $role, $params);
+        return $this->accessChecker()->is($this, $role, $params);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
