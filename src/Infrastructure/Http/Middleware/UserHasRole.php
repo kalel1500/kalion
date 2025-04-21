@@ -28,7 +28,7 @@ final class UserHasRole
             throw UnauthorizedException::missingTraitHasPermissions($user);
         }
 
-        if (! user()->can($roles)) {
+        if (! user()->is($roles)) {
             throw UnauthorizedException::forRoles($roles);
         }
 
