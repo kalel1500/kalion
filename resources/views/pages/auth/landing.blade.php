@@ -17,12 +17,10 @@
                 value="{{ old($field->name) }}"
                 autofocus autocomplete="username"
             />
+            @error($field->name)
+                <div class="text-red-500 text-sm pt-2" role="alert">{{ $message }}</div>
+            @enderror
         </div>
-        @error($field->name)
-            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                {{ $message }}
-            </div>
-        @enderror
 
         <div class="flex items-center justify-between pt-4">
             <button
