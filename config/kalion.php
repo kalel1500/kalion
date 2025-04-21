@@ -215,8 +215,8 @@ return [
             'id' => [
                 'name' => 'id',
                 'label' => 'k::text.input.id',
-                'type' => 'number',
-                'placeholder' => 'ID',
+                'type' => 'text',
+                'placeholder' => 'Id',
             ],
             'email' => [
                 'name' => 'email',
