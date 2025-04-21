@@ -189,7 +189,7 @@ return [
         'disable_register' => (bool) env('KALION_AUTH_DISABLE_REGISTER', false),
         'disable_password_reset' => (bool) env('KALION_AUTH_DISABLE_PASSWORD_RESET', false),
         'blades' => [
-            'fake' => env('KALION_AUTH_BLADE_FAKE', 'kal::pages.auth.login'),
+            'fake' => env('KALION_AUTH_BLADE_FAKE', 'kal::pages.auth.landing'),
             'login' => env('KALION_AUTH_BLADE_LOGIN', 'kal::pages.auth.login'),
             'register' => env('KALION_AUTH_BLADE_REGISTER', 'kal::pages.auth.register'),
             'password_reset' => env('KALION_AUTH_BLADE_PASSWORD_RESET', 'kal::pages.auth.password-reset'),
