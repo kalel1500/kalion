@@ -4,18 +4,18 @@ namespace Thehouseofel\Kalion\Domain\Traits;
 
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
-use Thehouseofel\Kalion\Domain\Services\AuthorizationService;
+use Thehouseofel\Kalion\Domain\Services\Repository\UserAccessChecker;
 
 trait EntityHasPermissions
 {
     public function can(string|array $permission, ...$params): bool
     {
-        return app()->make(AuthorizationService::class)->can($this, $permission, $params);
+        return app()->make(UserAccessChecker::class)->can($this, $permission, $params);
     }
 
     public function is(string|array $role, ...$params): bool
     {
-        return app()->make(AuthorizationService::class)->is($this, $role, $params);
+        return app()->make(UserAccessChecker::class)->is($this, $role, $params);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
