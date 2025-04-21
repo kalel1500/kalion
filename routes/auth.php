@@ -3,27 +3,29 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\LoginController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\PasswordResetController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\RegisterController;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'create'])
+$loginController = Kalion::getClassControllerLogin();
+$registerController = Kalion::getClassControllerRegister();
+$passwordResetController = Kalion::getClassControllerPasswordReset();
+
+Route::middleware('guest')->group(function () use ($loginController, $registerController, $passwordResetController) {
+    Route::get('/login', [$loginController, 'create'])
         ->name('login');
 
-    Route::post('/login', [LoginController::class, 'store']);
+    Route::post('/login', [$loginController, 'store']);
 
-    Route::get('/register', [RegisterController::class, 'create'])
+    Route::get('/register', [$registerController, 'create'])
         ->name('register');
 
-    Route::post('/register', [RegisterController::class, 'store']);
+    Route::post('/register', [$registerController, 'store']);
 
-    Route::get('/forgot-password', [PasswordResetController::class, 'create'])
+    Route::get('/forgot-password', [$passwordResetController, 'create'])
         ->name('password.reset');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () use ($loginController) {
 
-    Route::post('logout', [LoginController::class, 'destroy'])
+    Route::post('logout', [$loginController, 'destroy'])
         ->name('logout');
 });

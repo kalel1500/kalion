@@ -202,6 +202,11 @@ return [
             'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\UserRepository::class),
             'api' => env('KALION_AUTH_REPOSITORY_API', Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\ApiUserRepository::class),
         ],
+        'controllers' => [
+            'login' => env('KALION_AUTH_CONTROLLER_LOGIN', Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\LoginController::class),
+            'register' => env('KALION_AUTH_CONTROLLER_REGISTER', Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\RegisterController::class),
+            'password_reset' => env('KALION_AUTH_CONTROLLER_PASSWORD_RESET', Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\PasswordResetController::class),
+        ],
         'fields' => [
             'web' => env('KALION_AUTH_FIELD', 'email'),
             'api' => env('KALION_AUTH_FIELD_API', 'name'),

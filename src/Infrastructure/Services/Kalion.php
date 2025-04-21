@@ -113,4 +113,37 @@ final class Kalion
     {
         return config('kalion.layout.service');
     }
+
+    /**
+     *
+     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\LoginController
+     *
+     * @return TClass
+     */
+    public static function getClassControllerLogin()
+    {
+        return config('kalion.auth.controllers.login');
+    }
+
+    /**
+     *
+     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\RegisterController
+     *
+     * @return TClass
+     */
+    public static function getClassControllerRegister()
+    {
+        return config('kalion.auth.controllers.register');
+    }
+
+    /**
+     *
+     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\PasswordResetController
+     *
+     * @return TClass
+     */
+    public static function getClassControllerPasswordReset(): string
+    {
+        return config('kalion.auth.controllers.password_reset');
+    }
 }
