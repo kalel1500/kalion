@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\FeatureUnavailableException;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
-final class LoginController extends Controller
+class LoginController extends Controller
 {
     private string $model;
 

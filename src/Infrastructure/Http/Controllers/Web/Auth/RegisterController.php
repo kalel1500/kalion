@@ -14,7 +14,7 @@ use Illuminate\Validation\Rules\Password;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 use Thehouseofel\Kalion\Infrastructure\Models\User;
 
-final class RegisterController extends Controller
+class RegisterController extends Controller
 {
     public function create(): View
     {

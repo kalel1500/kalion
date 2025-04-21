@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth;
 use Illuminate\Contracts\View\View;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 
-final class PasswordResetController extends Controller
+class PasswordResetController extends Controller
 {
     public function create(): View
     {
