@@ -57,17 +57,6 @@ return [
         'items' => [
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.computer-desktop',
-                'text'              => 'Welcome',
-                'tooltip'           => null,
-                'route_name'        => 'welcome',
-                'counter_action'    => null,
-                'collapsed'         => false,
-                'is_separator'      => false,
-                'dropdown'          => null,
-            ],
-            [
-                'code'              => null,
                 'icon'              => 'kal::icon.home',
                 'text'              => 'Home',
                 'tooltip'           => null,
@@ -94,6 +83,20 @@ return [
                 'text'              => 'Tags',
                 'tooltip'           => null,
                 'route_name'        => 'tags',
+                'counter_action'    => null,
+                'collapsed'         => false,
+                'is_separator'      => false,
+                'dropdown'          => null,
+            ],
+            [
+                'is_separator'      => true,
+            ],
+            [
+                'code'              => null,
+                'icon'              => 'kal::icon.computer-desktop',
+                'text'              => 'Laravel welcome',
+                'tooltip'           => null,
+                'route_name'        => 'welcome',
                 'counter_action'    => null,
                 'collapsed'         => false,
                 'is_separator'      => false,
