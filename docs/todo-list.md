@@ -34,4 +34,7 @@
 * [X] ~~añadir componentes para mostrar errores en el register~~
 * [X] ~~nuevas config para desactivar el "register" y el "forgot"~~
 * [x] ~~controllers configurables~~
-* [ ] funcionalidad "login" real
+* [x] ~~funcionalidad "login" real~~
+* [ ] trait exception + nuevo tipo + separar en tipos
+* [ ] funcionalidad "API"
+* [ ] deprecar "createFromObject"
