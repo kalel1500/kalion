@@ -13,9 +13,9 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDo;
  * @method static NavbarItemCollection getNavbarNotifications()
  * @method static UserInfoDo getUserInfo()
  *
- * @see \Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService
+ * @see \Thehouseofel\Kalion\Domain\Services\Repository\Layout
  */
-final class LayoutService extends Facade
+final class Layout extends Facade
 {
     /**
      * Get the registered name of the component.

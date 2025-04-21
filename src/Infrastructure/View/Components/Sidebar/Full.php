@@ -8,7 +8,7 @@ use Illuminate\View\Component;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDo;
-use Thehouseofel\Kalion\Infrastructure\Facades\LayoutService;
+use Thehouseofel\Kalion\Infrastructure\Facades\Layout;
 
 class Full extends Component
 {
@@ -31,7 +31,7 @@ class Full extends Component
 
         $this->items = $this->items->map(function (SidebarItemDo $item) {
             if (!is_null($action = $item->counter_action)) {
-                $item->setCounter(LayoutService::$action());
+                $item->setCounter(Layout::$action());
             }
             return $item;
         });

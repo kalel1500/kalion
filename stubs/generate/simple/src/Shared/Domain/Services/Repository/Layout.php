@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Services\RepositoryServices;
+namespace Src\Shared\Domain\Services\Repository;
 
-use Thehouseofel\Kalion\Domain\Contracts\Services\LayoutServiceContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\LayoutContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDo;
+use Thehouseofel\Kalion\Domain\Services\Repository\Layout as LayoutBase;
 
-class LayoutService implements LayoutServiceContract
+final class Layout extends LayoutBase implements LayoutContract
 {
     public function getMessageCounter(): int
     {
@@ -43,15 +43,6 @@ class LayoutService implements LayoutServiceContract
                 'text'  => 'Robert Brown posted a new video: Glassmorphism - learn how to implement the new design trend.',
                 'time'  => '3 hours ago',
             ],
-        ]);
-    }
-
-    public function getUserInfo(): ?UserInfoDo
-    {
-        if (is_null(user())) return null;
-        return UserInfoDo::fromArray([
-            'name' => user()->name->value(), // Neil Sims
-            'email' => user()->email->value() // name@flowbite.com
         ]);
     }
 }
