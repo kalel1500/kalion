@@ -11,10 +11,18 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 class Login implements LoginContract
 {
     protected Request $request;
+    protected ?string $requestIp;
+    protected string  $model;
+    protected string  $fieldName;
+    protected string  $fieldValue;
+    protected bool    $remember;
+    protected string  $throttleKey;
+
 
     /**
      * Attempt to authenticate the request's credentials.
@@ -23,19 +31,59 @@ class Login implements LoginContract
      */
     public function authenticate(Request $request): void
     {
-        $this->request = $request;
+        $this->request    = $request;
+        $this->requestIp  = $request->ip();
+        $this->model      = Kalion::getClassUserModel();
+        $this->fieldName  = Kalion::getLoginFieldData()->name;
+        $this->fieldValue = $request->string($this->fieldName)->toString();
+        $this->remember   = $request->boolean('remember');
 
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
-            RateLimiter::hit($request->throttleKey());
-
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
+        if (config('kalion.auth.fake')) {
+            $this->authenticateFake();
+        } else {
+            $this->authenticateReal();
         }
 
         RateLimiter::clear($this->throttleKey());
+
+        $request->session()->regenerate();
+    }
+
+    protected function authenticateFake(): void
+    {
+        $credentials = $this->request->validate([
+            $this->fieldName => 'required'
+        ]);
+
+        $user = $this->model::query()->where($this->fieldName, $credentials[$this->fieldName])->first();
+
+        if (! $user) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                $this->fieldName => trans('auth.failed'), // __('k::auth.user_not_found', ['field' => __($fthis->ield->label)])
+            ]);
+        }
+
+        Auth::login($user, $this->remember);
+    }
+
+    protected function authenticateReal(): void
+    {
+        $credentials = $this->request->validate([
+            $this->fieldName => 'required',
+            'password'       => 'required',
+        ]);
+
+        if (! Auth::attempt($credentials, $this->remember)) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                $this->fieldName => trans('auth.failed'),
+            ]);
+        }
     }
 
     /**
@@ -54,7 +102,7 @@ class Login implements LoginContract
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            $this->fieldName => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -66,6 +114,6 @@ class Login implements LoginContract
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->request->string('email')).'|'.$this->request->ip());
+        return $this->throttleKey ?? Str::transliterate(Str::lower($this->fieldValue) . '|' . $this->requestIp);
     }
 }
