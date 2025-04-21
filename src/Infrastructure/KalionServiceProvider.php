@@ -33,7 +33,6 @@ class KalionServiceProvider extends ServiceProvider
     public array $singletons = [
         'authManager'                                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager::class,
         \Thehouseofel\Kalion\Domain\Contracts\Services\CurrentUserContract::class              => \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract::class                    => \Thehouseofel\Kalion\Infrastructure\Services\Auth\Login::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\JobRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\RoleRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\PermissionRepository::class,
@@ -134,7 +133,8 @@ return [
 
     protected function registerSingletons(): void
     {
-        $this->app->singleton('layoutService', fn($app) => new (Kalion::getClassServiceLayout())());
+        $this->app->singleton('layoutService', fn($app) => new (Kalion::getClassServiceLayout()));
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract::class, fn($app) => new (Kalion::getClassServiceLogin()));
     }
 
     /**

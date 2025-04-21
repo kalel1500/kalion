@@ -116,34 +116,34 @@ final class Kalion
 
     /**
      *
-     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\LoginController
+     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Services\Auth\Login
      *
      * @return TClass
      */
-    public static function getClassControllerLogin()
+    public static function getClassServiceLogin()
     {
-        return config('kalion.auth.controllers.login');
+        return config('kalion.auth.services.login');
     }
 
     /**
      *
-     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\RegisterController
+     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Services\Auth\Login
      *
      * @return TClass
      */
-    public static function getClassControllerRegister()
+    public static function getClassServiceRegister()
     {
-        return config('kalion.auth.controllers.register');
+        return config('kalion.auth.services.register');
     }
 
     /**
      *
-     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\PasswordResetController
+     * @template TClass of \Thehouseofel\Kalion\Infrastructure\Services\Auth\Login
      *
      * @return TClass
      */
-    public static function getClassControllerPasswordReset(): string
+    public static function getClassServicePasswordReset(): string
     {
-        return config('kalion.auth.controllers.password_reset');
+        return config('kalion.auth.services.password_reset');
     }
 }

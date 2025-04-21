@@ -7,8 +7,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Thehouseofel\Kalion\Infrastructure\Facades\Auth as Login;
+use Thehouseofel\Kalion\Infrastructure\Facades\Auth;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 
 class LoginController extends Controller
@@ -18,11 +17,7 @@ class LoginController extends Controller
      */
     public function create(): View
     {
-        if (config('kalion.auth.fake')) {
-            return view(config('kalion.auth.blades.fake'));
-        }
-
-        return view(config('kalion.auth.blades.login'));
+        return Auth::viewLogin();
     }
 
     /**
@@ -30,8 +25,7 @@ class LoginController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        Login::authenticate($request);
-        return redirect()->intended(route('dashboard', absolute: false));
+        return Auth::login($request);
     }
 
     /**
@@ -39,12 +33,6 @@ class LoginController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect(app_url());
+        return Auth::logout($request);
     }
 }

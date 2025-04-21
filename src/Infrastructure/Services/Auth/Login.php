@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -23,13 +25,21 @@ class Login implements LoginContract
     protected bool    $remember;
     protected string  $throttleKey;
 
+    public function view(?Request $request = null): View
+    {
+        if (config('kalion.auth.fake')) {
+            return view(config('kalion.auth.blades.fake'));
+        }
+
+        return view(config('kalion.auth.blades.login'));
+    }
 
     /**
      * Attempt to authenticate the request's credentials.
      *
      * @throws ValidationException
      */
-    public function authenticate(Request $request): void
+    public function login(Request $request): RedirectResponse
     {
         $this->request    = $request;
         $this->requestIp  = $request->ip();
@@ -49,8 +59,24 @@ class Login implements LoginContract
         RateLimiter::clear($this->throttleKey());
 
         $request->session()->regenerate();
+
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect(app_url());
+    }
+
+    /**
+     * @throws ValidationException
+     */
     protected function authenticateFake(): void
     {
         $credentials = $this->request->validate([
@@ -70,6 +96,9 @@ class Login implements LoginContract
         Auth::login($user, $this->remember);
     }
 
+    /**
+     * @throws ValidationException
+     */
     protected function authenticateReal(): void
     {
         $credentials = $this->request->validate([
