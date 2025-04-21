@@ -15,6 +15,7 @@
                 type="{{ $field->type }}"
                 placeholder="{{ $field->placeholder }}"
                 value="{{ old($field->name) }}"
+                autofocus autocomplete="username"
             />
         </div>
         @error($field->name)

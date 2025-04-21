@@ -5,7 +5,7 @@
     <x-kal::form method="POST" action="#" class="mt-4 lg:mt-5">
         <div>
             <x-kal::input.label for="email" :value="__('k::text.input.email')" />
-            <x-kal::input type="email" id="email" :value="old('email')" required />
+            <x-kal::input type="email" id="email" :value="old('email')" required autofocus autocomplete="email" />
             <x-kal::input.error for="email" />
         </div>
         <x-kal::form.checkbox-terms />
