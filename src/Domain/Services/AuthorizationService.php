@@ -43,7 +43,7 @@ final readonly class AuthorizationService
         // Recorrer los roles del permiso
         return $permission->roles()->contains(function (RoleEntity $role) use ($user, $permission, $params) {
             // Set user repository
-            $repositoryUser = Kalion::getClassUserRepository($user->getGuard());
+            $repositoryUser = new (Kalion::getClassUserRepository($user->getGuard()));
 
             // Comprobar si el rol es query y lanzarla o comprobar si el usuario tiene ese rol
             return $role->is_query->isTrue()
@@ -57,7 +57,7 @@ final readonly class AuthorizationService
         $role = $this->repositoryRole->findByName(ModelString::new($role));
         return $user->roles()->contains(function (RoleEntity $userRole) use ($user, $role, $params) {
             // Set user repository
-            $repositoryUser = Kalion::getClassUserRepository($user->getGuard());
+            $repositoryUser = new (Kalion::getClassUserRepository($user->getGuard()));
 
             if ($userRole->name->value() !== $role->name->value()) return false;
             if ($userRole->is_query->isTrue()) return $repositoryUser->{$role->name->value()}($user, ...$params);
