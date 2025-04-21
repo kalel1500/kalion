@@ -6,7 +6,7 @@
         @csrf
         <div class="mb-4">
             <label class="block text-blue-300 py-2 font-bold mb-2" for="{{ $field->name }}">
-                {{ $field->label }}
+                {{ __($field->label) }}
             </label>
             <input
                 class="shadow-sm appearance-none border rounded-sm w-full p-3 text-gray-700 leading-tight focus:ring-3 transform transition hover:scale-105 duration-300 ease-in-out"
