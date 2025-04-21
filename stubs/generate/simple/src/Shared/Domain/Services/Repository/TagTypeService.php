@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Domain\Services\RepositoryServices;
+namespace Src\Shared\Domain\Services\Repository;
 
 use Src\Shared\Domain\Contracts\Repositories\TagTypeRepositoryContract;
 use Src\Shared\Domain\Objects\Entities\TagTypeEntity;
