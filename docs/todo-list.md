@@ -5,10 +5,10 @@
 * [x] ~~modificar font-weit enlaces sc~~
 * [x] ~~pasar iconos a componentes~~
 * [x] ~~añadir enlaces de exagonal~~
-* [X] ~~vite -> eliminar warning Js de la compilación~~
-* [ ] layout -> prevenir salto de imagen
-* [ ] hexagonal:start -> comprobar la versión de php para las rutas
-* [ ] hexagonal:start -> poder lanzar varias veces sin fallar
+* [x] ~~vite -> eliminar warning Js de la compilación~~
+* [x] ~~layout -> prevenir salto de imagen~~
+* [x] ~~hexagonal:start -> comprobar la versión de php para las rutas~~
+* [x] ~~hexagonal:start -> poder lanzar varias veces sin fallar~~
 * [ ] kalion-js -> hacer todas las dependencias dinámicas
 * [ ] enlaces -> hacer que gire la flecha del dropdown
 * [ ] enlaces -> hacer profundos
@@ -25,5 +25,13 @@
 * [ ] All -> Añadir ejemplos (crud, tablas, modals, selectores...) 
 * [ ] layout -> Name short para el sidebar collapsed
 * [ ] layout -> Desactivar sidebar collapsed
-* [ ] layout -> Poder configurar el dark-mode a auto (preferences)
+* [x] ~~layout -> Poder configurar el dark-mode a auto (preferences)~~
 * [ ] layout -> usar los svg de las banderas de https://svgflags.com/es/
+
+## Urgente
+* [x] ~~pasar blades "auth" a componentes~~
+* [x] ~~pasar textos blades "auth" a traducciones~~
+* [X] ~~añadir componentes para mostrar errores en el register~~
+* [X] ~~nuevas config para desactivar el "register" y el "forgot"~~
+* [x] ~~controllers configurables~~
+* [ ] funcionalidad "login" real
