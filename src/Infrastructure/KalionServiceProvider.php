@@ -31,7 +31,6 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'layoutService'                                                                        => \Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService::class,
         'authManager'                                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager::class,
         \Thehouseofel\Kalion\Domain\Contracts\Services\CurrentUserContract::class              => \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\JobRepository::class,
@@ -128,7 +127,13 @@ return [
             define('KALION_PATH', realpath(__DIR__.'/../../'));
         }
 
+        $this->registerSingletons();
         $this->mergeConfig();
+    }
+
+    protected function registerSingletons(): void
+    {
+        $this->app->singleton('layoutService', fn($app) => new (Kalion::getClassServiceLayout())());
     }
 
     /**

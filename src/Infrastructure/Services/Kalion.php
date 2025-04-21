@@ -108,4 +108,9 @@ final class Kalion
     {
         return config('auth.defaults.guard');
     }
+
+    public static function getClassServiceLayout(): string
+    {
+        return config('kalion.layout.service');
+    }
 }

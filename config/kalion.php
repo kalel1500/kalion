@@ -163,6 +163,7 @@ return [
         'sidebar_collapsed' => (bool) env('KALION_LAYOUT_SIDEBAR_COLLAPSED', false),
         'sidebar_state_per_page' => (bool) env('KALION_LAYOUT_SIDEBAR_STATE_PER_PAGE', false),
         'blade_show_main_border' => (bool) env('KALION_LAYOUT_BLADE_SHOW_MAIN_BORDER', false),
+        'service' => env('KALION_LAYOUT_SERVICE', Thehouseofel\Kalion\Domain\Services\RepositoryServices\LayoutService::class),
     ],
 
 
