@@ -1,6 +1,132 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.23.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.24.0-beta.0...master)
+
+## [v0.24.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.23.1-beta.0...v0.24.0-beta.0) - 2025-04-22
+
+### Added
+
+* (stubs) Variables de entorno añadidas al `.env.save.local`:
+  * `KALION_AUTH_BLADE_FAKE=kal::pages.auth.landing`
+  * `KALION_PACKAGES_TO_SCAN_FOR_JOBS=`
+* Nuevos archivos de traducciones `lang/en/text.php` y `lang/es/text.php`
+* Nuevo valor `text_align` añadido a la propiedad `$specials` de la clase `TailwindClassFilter`
+* Nuevos componentes:
+  * Nuevo componente `input.label`
+  * Nuevo componente `input` (con borde rojo si el campo que recibe contiene algún error)
+  * Nuevo componente `input.full.checkbox`
+  * Nuevo componente `form.button`
+  * Nuevo componente `form.question-link`
+  * Nuevo componente `input.error`
+  * Nuevo componente `form.checkbox-terms`
+* Añadidas traducciones al inglés
+* Nuevo sistema de `Auth` con login y registro reales con estilos de Flowbite y el código backend del paquete `laravel/breeze` 
+  * Nuevo componente `layout/guest` (con estilos tailwind de Flowbite)
+  * Nueva vista `login`
+  * Nuevo `register` (vista, ruta y controlador)
+  * Nuevo `password reset` (vista, ruta y controlador)
+  * Nuevas configuraciones `auth.disable_register` y `auth.disable_password_reset` para poder ocultar los enlaces del `login`
+  * Nuevo servicio `Login` con el código de Laravel para iniciar y cerrar sessión (extraído del paquete `laravel/breeze`)
+  * Nuevo servicio `Register` con el código de Laravel para hacer el registro 
+  * Nuevo servicio `PasswordReset` con el código de Laravel para resetear la contraseña 
+  * Hacer que los controller `Auth` solo llamen a los servicios anteriores mediante la fachada `Auth`
+  * Hacer configurables todos los servicios de `Auth` utilizando el `Service Container`, `Facades`, `Interfaces` y la configuración para que se puedan sobreescribir desde la aplicación
+
+
+### Changed
+
+* Mejorar valores de las configuraciónes `kalion.auth.available_fields.id`
+* Mejorar estilos mensaje de error en la blade `pages.auth.landing`
+* (refactor) Cambiar la forma en que se carga el `singleton` `layoutService`. Usar el método `alias` para enlazar con la interfaz y definir otro `singleton` para esa interfaz
+* Hacer que el `LayoutService` (ahora `Layout`) de la aplicación extienda del `LayoutService` del paquete y mover la lógica del método `getUserInfo` al `LayoutService` del paquete
+* Hacer que el `LayoutService` (ahora `Layout`) se pueda configurar desde la configuración de Laravel para no tener que definirlo en el `DependencyServiceProvider` de la aplicación
+* Gran refactor de los nombres y ubicaciones de varias clases y métodos
+  * <u>**!!! (breaking) !!!**</u> Renombrar clase `WebsocketsService` a `Broadcast`
+  * <u>**!!! (breaking) !!!**</u> Renombrar clase `QueueService` a `Queue`
+  * Renombrar clase `CookieService` a `Cookie`
+  * Renombrar clase `AuthService` a `CurrentUser` y moverla dentro de la carpeta `Auth`
+  * Renombrar `AuthService::userEntity()` a `Auth::user()` y hacer que la fachada apunte al nuevo servicio `AuthManager` (de esta forma se podrán ir añadiendo más servicios de `auth` que serán publicados por el `AuthManager`)
+  * Renombrar método `userEntity()` de la clase `CurrentUser` a `entity()`
+  * <u>**!!! (breaking) !!!**</u> Renombrar helper `userEntity()` a `user()`
+  * Renombrar `LayoutService` a `Layout` y mover de la carpeta `RepositoryServices` a la carpeta `Repository`
+  * Mover `TagTypeService` de la carpeta `RepositoryServices` a la carpeta `Repository`
+  * Renombrar `AuthorizationService` a `UserAccessChecker` y mover a la carpeta `Repository`
+* Añadir el `@see` en la documentación de las `facades` para indicar la clase que implementa los métodos de la fachada
+* Archivos de `lang` (traducciones) actualizados: 
+  * Pasar literales de los componentes a traducciones
+  * Usar traducciones al definir el `label` de los `fields` en la configuración `kalion.auth.available_fields`
+  * Mejorar traducción `auth.user_not_found`
+* Componentes modificados:
+  * (breaking) componentes `select` y `textarea` movidos de `form` a `input`
+  * (breaking) Simplificar componente `input.select`
+  * (breaking) Simplificar componente `input.textarea`
+  * Añadir clase `font-medium` al componente `link`
+  * Añadida la propiedad `value` al componente `link` para poder pasar el texto como propiedad
+  * Añadida la propiedad `type` al componente `button`
+  * Añadido el valor `blue-form` a la propiedad `color` del componente `button`
+  * Componente `form` rehecho con nuevas clases y nuevos parámetros `method` y `action`
+  * Comentar línea innecesaria en el componente `messages`, ya que la variable `$errors` ya está disponible por defecto
+* Modificar condición al sobreescribir la `config('auth.providers.users.model')` en el `Kalion::setAuthApiGuards()` para que se sobreescriba solo si tiene el valor por defecto (asi no es obligatorio declarar la variable de entorno `AUTH_MODEL`)
+* (refactor) Eliminar parámetro mensaje del `NotFoundHttpException` en el método `KalionController::sessions()`
+* Paquete `@kalel1500/kalion-js` actualizado a la version `^0.7.0-beta.2`
+* Componentes modificados:
+  * (refactor) Componente `layout/auth/landing.blade.php` movida fuera de la carpeta `auth`
+  * (refactor) Blade `pages/auth/fake.blade.php` renombrada a `pages/auth/landing.blade.php`
+  * Mover el JS para cargar el `darkMode` a un nuevo componente `js/dark-mode.blade.php`
+  * Ordenar y comentar el `head` del componente `layout/app.blade.php`
+  * Mejora componente `dark-mode.blade.php` para que busque el `theme` en el `localStorage` si no lo encuentra en el `html`
+  * (stubs) Usar el componente `js/dark-mode` en la blade `welcome.blade.php` de los stubs
+  * Añadir atributo `type` en el `<link rel='icon'>` del componente `layout/app`
+* Repositorios modificados:
+  * Hacer heredables todos los Repositorios (quitar la palabra reservada `final` de las clases y hacer `protected` las propiedades)
+  * (refactor) Renombrar las propiedades `$model` de los repositorios
+  * (refactor) Establecer el valor de las propiedades `$model` de los Repositorios directamente en la propiedad en vez de en el constructor
+* Mejoras en las clases de `jobs`: 
+  * Inyectar `JobRepositoryContract` en el `AjaxJobsController` (añadir `singleton` en el `KalionServiceProvider`)
+  * Inyectar los `UseCases` en el `AjaxJobsController` en vez de instanciarlos y pasarle el repository
+  * Devolver directamente los `$jobs` en el parámetro `$data` del `response_json()` en el `AjaxJobsController`
+* <u>**!!! (breaking) !!!**</u> (refactor) Mover todos los Repositorios dentro de la carpeta `Eloquent` y renombrarlos para quitar el sufijo `Eloquent` del nombre
+* Comando `kalion:publish-auth` modificado
+  * (refactor) Método `publishConfigKalionUser()` renombrado a `publishConfigKalionAndUpdateClasses()` en la clase `PublishAuthCommandService`
+  * Añadir nuevo parámetro `--onlyUpdate` al comando `kalion:publish-auth` para no publicar la configuración `config/kalion.php`
+  * Si se reciben los dos parámetros `--reset` y `--onlyUpdate` hacer que se restaure el contenido en vez de borrar el archivo `config/kalion.php`
+* Sistema de `Auth` mejorado:
+  * (refactor) Usar el `route('dashboard', absolute: false)` en vez de `'/dashboard'` al redirigir tras hacer el login
+  * Regenerar el id de sessión tras hacer login
+  * Renombrar el `AuthController` a `LoginController`
+  * Mover el `LoginController` a la carpeta `Auth`
+  * (breaking) Archivo `config/kalion_user.php` eliminado y configuraciones movidas al archivo `config/kalion.php`
+    * Configuraciones de entorno renombradas: `kalion_user.` -> `kalion.auth`
+    * Variables de entorno renombradas:
+      * `KALION_USER_ENTITY_WEB` -> `KALION_AUTH_ENTITY_WEB`
+      * `KALION_USER_REPOSITORY_WEB` -> `KALION_AUTH_REPOSITORY_WEB`
+* Mover las clases `UserFactory` y `UserSeeder` de la aplicación (`stubs`) al paquete e indicar la `UserFactory` en el modelo `User` del paquete
+* Modificar migraciones de roles y permisos
+  * Añadir campo `description` en las tablas `roles` y `permissions`
+  * Añadir índice `unique` en los campos `name` de las tablas `roles` y `permissions`
+* (refactor) Usar el método `disableFor()` en vez del `except()` de la clase `EncryptCookies` (con el `afterResolving`) para evitar el encriptado de las cookies de las preferencias del usuario
+* Archivos de stubs modificados: 
+  * Pasar campo `$other_field` de la clase `UserEntity` a `promoted property`
+  * Eliminar código genérico modelo `User` de la aplicación (`stubs`) y extender del modelo del paquete
+  * Mover el enlace a la vista `welcome` debajo de un separador (en la configuración `config/kalion_links.php`)
+
+### Fixed
+
+* (fix) Corregido error al instanciar el repositorio del usuario en los métodos `userHasPermission()` y `userHasRole()` de la clase `AuthorizationService` (faltaba el `new`)
+* (fix) Corregido error al comprobar los roles del usuario en el middleware `UserHasRole` (se usaba el método `can` que es para permisos en vez del `is` ()
+* (fix) Añadir parámetro `$guard` en la definición del método `userEntity` de la interfaz `CurrentUserContract` (antes llamada `AuthServiceContract`)
+* (fix) Corregido error en la clase `TailwindClassFilter` al filtrar las clases de la propiedad `$specials` (se filtraban solo cuando las especiales estaban en origen y ahora también cuando son las custom) + Nuevos tests añadidos para comprobar que funciona
+* (fix) Reinstalar `phpunit/phpunit` para poder pasar los tests (se desinstalo al eliminar el `orchestral/testbench`)
+* (fix) Devolver `null` en el método `getUserInfo()` de la clase `LayoutService` si `userEntity()` es `null` para evitar errores al entrar a una blade con el layout `layout/app` que este fuera del middleware `auth`
+* (fix) Auth: Añadir `->withInput()` en el `redirect()` del `LoginController` para mostrar el valor antiguo en el formulario
+* (fix) Arreglar orden migraciones en el comando `kalion:start` (`StartCommandService`)
+* (fix) Limitar la query de usuarios a 10 en los seeders de `Post` y `Comment` para asegurar que no se insertan miles de registros
+* (fix) Arreglar métodos `down()` de las migraciones para poder ejecutar el `rollback` sin errores
+* (fix) stubs: Usar dos `\` en las clases definidas en el `.env.save.local`
+
+### Removed
+
+* Eliminar el `@template` del `PHPDoc` para indicar el tipo `UserEntity`
 
 ## [v0.23.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.23.0-beta.0...v0.23.1-beta.0) - 2025-04-10
 
