@@ -69,9 +69,9 @@ return [
             [
                 'code'              => null,
                 'icon'              => 'kal::icon.document-text',
-                'text'              => 'Dashboard',
+                'text'              => 'Posts',
                 'tooltip'           => null,
-                'route_name'        => 'dashboard',
+                'route_name'        => 'post.list',
                 'counter_action'    => null,
                 'collapsed'         => false,
                 'is_separator'      => false,
