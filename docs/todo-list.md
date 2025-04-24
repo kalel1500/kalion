@@ -35,6 +35,9 @@
 * [X] ~~nuevas config para desactivar el "register" y el "forgot"~~
 * [x] ~~controllers configurables~~
 * [x] ~~funcionalidad "login" real~~
+* [x] ~~refactor en los ejemplos~~
+* [ ] renombrar parametro --simple del comando "start" a --skipJs
+* [ ] añadir parametro --skipExamples
 * [ ] trait exception + nuevo tipo + separar en tipos
 * [ ] funcionalidad "API"
 * [ ] deprecar "createFromObject"
