@@ -16,6 +16,6 @@
     "vite": "^6.0"
   },
   "dependencies": {
-    "@kalel1500/kalion-js": "^0.7.1-beta.0"
+    "@kalel1500/kalion-js": "^0.8.0-beta.0"
   }
 }
