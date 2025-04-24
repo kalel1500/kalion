@@ -1,9 +1,12 @@
+/*----- Tailwind css -----*/
 @import 'tailwindcss';
 
+/*----- Stiles from package @kalel1500/kalion-js css -----*/
 @import '@kalel1500/kalion-js/dist/app/tabulator.css';
 @import '@kalel1500/kalion-js/dist/app/sweetalert.css';
 @import '@kalel1500/kalion-js/dist/app/slimselect.css';
 @import '@kalel1500/kalion-js/dist/app/styles.css';
-@import '@kalel1500/kalion-js/dist/app/tailwind-config.css';
 
+/*----- Tailwindcss config from package @kalel1500/kalion-js css -----*/
+@import '@kalel1500/kalion-js/dist/app/tailwind-config.css';
 @config '../../node_modules/@kalel1500/kalion-js/dist/plugins/tailwind/tailwind.config.js';
