@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
 
+use Composer\InstalledVersions;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
@@ -23,6 +24,9 @@ final class StartCommandService
     private bool       $developMode;
     private bool       $keepMigrationsDate;
     private bool       $resourcesFolderRestored = false;
+    private ?string    $packageVersion;
+    private string     $lockFilePath;
+    private array      $stubFilesRelativePaths;
 
     public function __construct(
         private KalionStart $command,
@@ -34,10 +38,43 @@ final class StartCommandService
             $command->error('Por ahora este comando solo esta preparado para la version de laravel 12');
             exit(1); // Terminar la ejecución con código de error
         }
-        $this->steps              = $this->countPublicMethods();
-        $this->filesystem         = $command->filesystem();
-        $this->developMode        = config('kalion.package_in_develop');
-        $this->keepMigrationsDate = config('kalion.keep_migrations_date');
+        $this->steps                  = $this->countPublicMethods();
+        $this->filesystem             = $command->filesystem();
+        $this->developMode            = config('kalion.package_in_develop');
+        $this->keepMigrationsDate     = config('kalion.keep_migrations_date');
+        $this->packageVersion         = InstalledVersions::getVersion('kalel1500/kalion') ?? 'dev';
+        $this->lockFilePath           = base_path('kalion.lock');
+        $this->stubFilesRelativePaths = $this->getStubFiles();
+        $this->saveLock();
+    }
+
+    private function getStubFiles(): array
+    {
+        $paths = [
+            $this->command->stubsPath(),
+            $this->command->stubsPath('', true)
+        ];
+
+        $relativePaths = [];
+        foreach ($paths as $path) {
+            $allFiles      = File::allFiles($path);
+            foreach ($allFiles as $file) {
+                $relativePaths[] = ltrim(str_replace($path, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
+            }
+        }
+        return $relativePaths;
+    }
+
+    private function saveLock(): void
+    {
+        $payload = [
+            'package'   => 'kalel1500/kalion',
+            'version'   => $this->packageVersion,
+            'timestamp' => now()->toDateTimeString(),
+            'stubs'     => $this->stubFilesRelativePaths,
+        ];
+
+        File::put($this->lockFilePath, json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 
     private function isReset(bool $isFront = false): bool
