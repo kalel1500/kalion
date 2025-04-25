@@ -34,7 +34,7 @@ final class StartCommandService
         private readonly bool        $simple,
     )
     {
-        if (!Version::laravelMin12()) {
+        if (! Version::laravelMin12()) {
             $command->error('Por ahora este comando solo esta preparado para la version de laravel 12');
             exit(1); // Terminar la ejecución con código de error
         }
@@ -57,7 +57,7 @@ final class StartCommandService
 
         $relativePaths = [];
         foreach ($paths as $path) {
-            $allFiles      = File::allFiles($path);
+            $allFiles = File::allFiles($path);
             foreach ($allFiles as $file) {
                 $relativePaths[] = ltrim(str_replace($path, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
             }
@@ -71,9 +71,9 @@ final class StartCommandService
             return;
         }
 
-        $old = json_decode(File::get($this->lockFilePath), true);
+        $old         = json_decode(File::get($this->lockFilePath), true);
         $lastVersion = $old['version'];
-        $oldFiles = $old['stubs'];
+        $oldFiles    = $old['stubs'];
 
         if (version_compare($lastVersion, $this->packageVersion, '=')) {
             return;
@@ -129,7 +129,7 @@ final class StartCommandService
     {
         $filePath = base_path('package.json');
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             return;
         }
 
@@ -169,7 +169,7 @@ final class StartCommandService
     private function execute_Process(array|string $command, ?string $startMessage, string $successMessage, string $failureMessage, bool $show_number = true): void
     {
         // Imprimir mensaje de inicio del proceso
-        if (!is_null($startMessage)) {
+        if (! is_null($startMessage)) {
             $this->line($startMessage, false);
         }
 
@@ -301,8 +301,8 @@ final class StartCommandService
         $folder = 'database/migrations';
 
         // Rutas de origen:
-        $stubsPath    = $this->command->stubsPath($folder);
-        $packagePath  = $this->command->packagePath($folder);
+        $stubsPath   = $this->command->stubsPath($folder);
+        $packagePath = $this->command->packagePath($folder);
 
         // Ruta de destino en la aplicación
         $destinationPath = base_path($folder);
@@ -486,7 +486,7 @@ final class StartCommandService
         $this->number++;
 
         // routes/web.php
-        $filePath  = 'routes/web.php';
+        $filePath = 'routes/web.php';
 
         $from = ($this->isReset())
             ? $this->command->originalStubsPath($filePath)
@@ -530,7 +530,7 @@ final class StartCommandService
         // Copiar origen a ".env.save.local"
         copy($from, $to_envLocal);
 
-        if (!$this->developMode) {
+        if (! $this->developMode) {
             // Copiar origen a ".env" (si no es "developMode")
             copy($from, $to_env);
 
@@ -607,7 +607,7 @@ final class StartCommandService
 
         // bootstrap/providers.php
 
-        if (!Version::laravelMin11()) {
+        if (! Version::laravelMin11()) {
             return $this;
         }
 
@@ -626,7 +626,7 @@ final class StartCommandService
     {
         $this->number++;
 
-        if (!Version::laravelMin11()) {
+        if (! Version::laravelMin11()) {
             return $this;
         }
 
@@ -666,7 +666,7 @@ EOD;
     {
         $this->number++;
 
-        if (!Version::laravelMin11()) {
+        if (! Version::laravelMin11()) {
             return $this;
         }
 
@@ -743,7 +743,7 @@ EOD;
         // Import "flowbite" in resources/js/bootstrap.js
         $filePath = base_path('resources/js/bootstrap.js');
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             return $this;
         }
 
@@ -786,7 +786,7 @@ EOD;
 
         // Filtrar el contenido para eliminar solo las líneas especificadas
         $gitignoreContent = array_filter($gitignoreContent, function ($line) use ($linesToRemove) {
-            return !in_array($line, $linesToRemove, true); // Mantener líneas que no están en $linesToRemove
+            return ! in_array($line, $linesToRemove, true); // Mantener líneas que no están en $linesToRemove
         });
 
         // Eliminar cualquier línea vacía adicional al final del contenido
@@ -879,13 +879,13 @@ EOD;
 
         $filePath = base_path('composer.json');
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             return $this;
         }
 
         $composer = json_decode(file_get_contents($filePath), true);
 
-        if (!isset($composer['autoload']['psr-4'])) {
+        if (! isset($composer['autoload']['psr-4'])) {
             $composer['autoload']['psr-4'] = [];
         }
 
@@ -933,18 +933,18 @@ EOD;
         // Ruta del archivo composer.json
         $filePath = base_path('composer.json');
 
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             return $this;
         }
 
         // Cargar el contenido actual de composer.json
         $composer = json_decode(file_get_contents($filePath), true);
 
-        if (!isset($composer['autoload'])) {
+        if (! isset($composer['autoload'])) {
             $composer['autoload'] = [];
         }
 
-        if (!isset($composer['autoload']['files'])) {
+        if (! isset($composer['autoload']['files'])) {
             $composer['autoload']['files'] = [];
         }
 
@@ -958,7 +958,7 @@ EOD;
             // Si estamos en modo reset, eliminamos los archivos de la lista
             $composer['autoload']['files'] = array_filter(
                 $composer['autoload']['files'],
-                fn($file) => !in_array($file, $filesToAdd, true)
+                fn($file) => ! in_array($file, $filesToAdd, true)
             );
 
             // Si la lista queda vacía, eliminamos completamente la clave "files"
@@ -968,7 +968,7 @@ EOD;
         } else {
             // Por defecto, agregamos los archivos si no están presentes
             foreach ($filesToAdd as $file) {
-                if (!in_array($file, $composer['autoload']['files'], true)) {
+                if (! in_array($file, $composer['autoload']['files'], true)) {
                     $composer['autoload']['files'][] = $file;
                 }
             }
@@ -1011,7 +1011,7 @@ EOD;
         $package1 = $packages[0];
 
         if ($this->isReset()) {
-            if (!str_contains($content, $package1)) {
+            if (! str_contains($content, $package1)) {
                 return $this;
             }
 
@@ -1113,7 +1113,7 @@ EOD;
                 }
 
                 $is_installed = $exsistFolder && $inPackageJson;
-                $skip_process = ($remove && !$is_installed) || (!$remove && $is_installed);
+                $skip_process = ($remove && ! $is_installed) || (! $remove && $is_installed);
                 if ($skip_process) continue;
 
                 $action = $remove ? 'uninstall' : 'install';
