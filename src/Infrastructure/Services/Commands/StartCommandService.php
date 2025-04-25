@@ -18,20 +18,20 @@ final class StartCommandService
 {
     use CountMethods;
 
-    private int        $steps;
-    private int        $number                  = 0;
-    private Filesystem $filesystem;
-    private bool       $developMode;
-    private bool       $keepMigrationsDate;
-    private bool       $resourcesFolderRestored = false;
-    private ?string    $packageVersion;
-    private string     $lockFilePath;
-    private array      $stubFilesRelativePaths;
+    private readonly int        $steps;
+    private int                 $number                  = 0;
+    private readonly Filesystem $filesystem;
+    private readonly bool       $developMode;
+    private readonly bool       $keepMigrationsDate;
+    private bool                $resourcesFolderRestored = false;
+    private readonly ?string    $packageVersion;
+    private readonly string     $lockFilePath;
+    private readonly array      $stubFilesRelativePaths;
 
     public function __construct(
-        private KalionStart $command,
-        private bool        $reset,
-        private bool        $simple,
+        private readonly KalionStart $command,
+        private readonly bool        $reset,
+        private readonly bool        $simple,
     )
     {
         if (!Version::laravelMin12()) {
