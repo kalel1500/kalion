@@ -24,7 +24,7 @@ final class StartCommandService
     private readonly bool       $developMode;
     private readonly bool       $keepMigrationsDate;
     private bool                $resourcesFolderRestored = false;
-    private readonly ?string    $packageVersion;
+    private readonly string     $packageVersion;
     private readonly string     $lockFilePath;
     private readonly array      $stubFilesRelativePaths;
 
