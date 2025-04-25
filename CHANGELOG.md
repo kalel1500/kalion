@@ -1,6 +1,21 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.24.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.25.0-beta.0...master)
+
+## [v0.25.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.24.0-beta.0...v0.25.0-beta.0) - 2025-04-25
+
+### Changed
+
+* Modificar comando `kalion:start` (StartCommandService) 
+  * Guardar un archivo `kalion.lock` durante el comando `kalion:start` con la version del paquete y los `stubs` generados por si en futuras versiones del paquete se realizan cambios en el comando (que rompen compatibilidad) y se quisieran terminar de borrar archivos que el `--reset` ha dejado de contemplar
+  * Nuevo método `deleteLastVersionFiles()` en el comando `kalion:start` por si en el futuro queremos borrar archivos que el `--reset` ha dejado de contemplar cuando se actualiza el paquete (por ahora el método no se usa)
+* Actualizar dependencia `@kalel1500/kalion-js` a la versión `^0.9.0-beta.0` y adaptar el `app.css` para importar `flowbite`
+* Refactorizar archivos de los ejemplos (stubs):
+  * Modificar todas las referencias a `Admin` por `Tags`
+  * Modificar todas las referencias a `Dashboard` por `Posts`
+  * Modificar todas las referencias a `Default` por `Home`
+  * Hacerlo con las carpetas, controllers, casos de uso, data objects, rutas, vistas, links y también en el JS
+  * Carpeta `app` del Js renombrada a `config`
 
 ## [v0.24.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.23.1-beta.0...v0.24.0-beta.0) - 2025-04-22
 
@@ -31,7 +46,6 @@
   * Nuevo servicio `PasswordReset` con el código de Laravel para resetear la contraseña 
   * Hacer que los controller `Auth` solo llamen a los servicios anteriores mediante la fachada `Auth`
   * Hacer configurables todos los servicios de `Auth` utilizando el `Service Container`, `Facades`, `Interfaces` y la configuración para que se puedan sobreescribir desde la aplicación
-
 
 ### Changed
 
