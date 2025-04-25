@@ -65,6 +65,37 @@ final class StartCommandService
         return $relativePaths;
     }
 
+    private function deleteLastVersionFiles(): void
+    {
+        if (! File::exists($this->lockFilePath) || $this->isReset()) {
+            return;
+        }
+
+        $old = json_decode(File::get($this->lockFilePath), true);
+        $lastVersion = $old['version'];
+        $oldFiles = $old['stubs'];
+
+        if (version_compare($lastVersion, $this->packageVersion, '=')) {
+            return;
+        }
+
+        $toDelete = array_diff($oldFiles, $this->stubFilesRelativePaths);
+        foreach ($toDelete as $rel) {
+            $full = base_path($rel);
+            if (File::exists($full)) {
+                File::delete($full);
+                $this->command->info("  → Eliminado obsoleto: $rel");
+                // si la carpeta queda vacía, la eliminamos también
+                $dir = dirname($full);
+                if (File::isDirectory($dir) && count(File::files($dir)) === 0) {
+                    File::deleteDirectory($dir);
+                    $this->command->info("  → Carpeta vacía eliminada: " . str_replace(base_path() . '/', '', $dir));
+                }
+            }
+        }
+
+    }
+
     private function saveLock(): void
     {
         $payload = [
