@@ -98,10 +98,15 @@ final class StartCommandService
 
     private function saveLock(): void
     {
+        $timestamp = now()->toDateTimeString();
+        if ($this->developMode && File::exists($this->lockFilePath)) {
+            $old         = json_decode(File::get($this->lockFilePath), true);
+            $timestamp = $old['timestamp'];
+        }
         $payload = [
             'package'   => 'kalel1500/kalion',
             'version'   => $this->packageVersion,
-            'timestamp' => now()->toDateTimeString(),
+            'timestamp' => $timestamp,
             'stubs'     => $this->stubFilesRelativePaths,
         ];
 
