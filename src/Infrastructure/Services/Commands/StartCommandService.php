@@ -110,7 +110,8 @@ final class StartCommandService
             'stubs'     => $this->stubFilesRelativePaths,
         ];
 
-        File::put($this->lockFilePath, json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $body = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).PHP_EOL;
+        File::put($this->lockFilePath, $body);
     }
 
     private function isReset(bool $isFront = false): bool
