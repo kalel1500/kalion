@@ -91,7 +91,7 @@ final class StartCommandService
 
     private function deleteLastVersionFiles(): void
     {
-        if (! File::exists($this->lockFilePath) || $this->isReset()) {
+        if (! File::exists($this->lockFilePath) || $this->reset) {
             return;
         }
 
@@ -136,11 +136,6 @@ final class StartCommandService
 
         $body = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).PHP_EOL;
         File::put($this->lockFilePath, $body);
-    }
-
-    private function isReset(bool $isFront = false): bool
-    {
-        return $isFront ? ($this->reset || $this->simple) : $this->reset;
     }
 
     /**
@@ -267,7 +262,7 @@ final class StartCommandService
         File::delete(config_path('kalion.php'));
         File::delete(config_path('kalion_links.php'));
 
-        if ($this->isReset() || $this->developMode) return $this;
+        if ($this->reset || $this->developMode) return $this;
 
         // Publish "config/kalion_links.php"
         $this->command->call('vendor:publish', ['--tag' => 'kalion-config-links']);
@@ -285,7 +280,7 @@ final class StartCommandService
         $from = $this->stubsPath($file);
         $to   = base_path($file);
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             File::delete($to);
             $this->line('Archivo "' . $file . '" eliminado');
             return $this;
@@ -311,7 +306,7 @@ final class StartCommandService
             $from = $file->getPathname();
             $to   = $destinationPath . DIRECTORY_SEPARATOR . $file->getFilename();
 
-            if ($this->isReset()) {
+            if ($this->reset) {
                 File::delete($to);
             } else {
                 File::copy($from, $to);
@@ -408,7 +403,7 @@ final class StartCommandService
         // Factories
         $folder = 'database/factories';
 
-        $dir  = ($this->isReset()) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
+        $dir  = ($this->reset) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
@@ -429,7 +424,7 @@ final class StartCommandService
         // Factories
         $folder = 'database/seeders';
 
-        $dir  = ($this->isReset()) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
+        $dir  = ($this->reset) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
@@ -453,7 +448,7 @@ final class StartCommandService
         $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             File::deleteDirectory($dest);
             $this->line('Carpeta "' . $folder . '" eliminada');
             return $this;
@@ -476,7 +471,7 @@ final class StartCommandService
         // Restaurar la carpeta original
         $this->restoreResources();
 
-        if ($this->isReset()) return $this;
+        if ($this->reset) return $this;
 
         $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
@@ -498,7 +493,7 @@ final class StartCommandService
         $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             File::deleteDirectory($dest);
             $this->line('Carpeta "' . $folder . '" eliminada');
             return $this;
@@ -518,7 +513,7 @@ final class StartCommandService
         // routes/web.php
         $filePath = 'routes/web.php';
 
-        $from = ($this->isReset())
+        $from = ($this->reset)
             ? $this->originalStubsPath($filePath)
             : $this->stubsPath($filePath);
         $to   = base_path($filePath);
@@ -545,7 +540,7 @@ final class StartCommandService
         // Definir archivo destino
         $to_env = base_path('.env');
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             $message = 'Archivos ".env" restaurados';
 
             // Eliminar archivo ".env.save.local"
@@ -584,7 +579,7 @@ final class StartCommandService
         $folder = 'app/Http';
         $dest   = base_path($folder);
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             $dir = $this->originalStubsPath($folder);
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
@@ -606,7 +601,7 @@ final class StartCommandService
         $folder = 'app/Models';
         $dest   = base_path($folder);
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             $dir = $this->originalStubsPath($folder);
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
@@ -641,7 +636,7 @@ final class StartCommandService
             return $this;
         }
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             KalionServiceProvider::removeProviderFromBootstrapFile('App\Providers\DependencyServiceProvider');
         } else {
             ServiceProvider::addProviderToBootstrapFile('App\Providers\DependencyServiceProvider');
@@ -670,7 +665,7 @@ final class StartCommandService
         $pattern = '/->withMiddleware\(function \(Middleware \$middleware\) \{(.*?)}\)/s';
 
         // Reemplazar el contenido del bloque con la nueva línea
-        $replacement = ($this->isReset())
+        $replacement = ($this->reset)
             ? <<<'EOD'
 ->withMiddleware(function (Middleware $middleware) {
         //
@@ -710,7 +705,7 @@ EOD;
         $pattern = '/->withExceptions\(function \(Exceptions \$exceptions\) \{(.*?)}\)/s';
 
         // Reemplazar el contenido del bloque con las nuevas líneas
-        $replacement = ($this->isReset())
+        $replacement = ($this->reset)
             ? <<<'EOD'
 ->withExceptions(function (Exceptions $exceptions) {
         //
@@ -744,7 +739,7 @@ EOD;
         $content = File::get($filePath);
 
         // Reemplazar la línea específica
-        if ($this->isReset()) {
+        if ($this->reset) {
             $updatedContent = preg_replace(
                 '/\'timezone\'\s*=>\s*\'Europe\/Madrid\'/',
                 "'timezone' => 'UTC'",
@@ -781,7 +776,7 @@ EOD;
 
         $importLine = "import 'flowbite';";
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             // Remove the import line from the file
             $fileContents = str_replace($importLine . PHP_EOL, '', $fileContents);
         } else {
@@ -839,7 +834,7 @@ EOD;
         // Install NPM packages...
         $this->modifyPackageJsonSection('devDependencies', [
             'flowbite'                      => config('kalion.version_flowbite'),
-        ], $this->isReset());
+        ], $this->reset);
 
         // Install NPM packages...
         $this->modifyPackageJsonSection('devDependencies', [
@@ -848,7 +843,7 @@ EOD;
             'prettier-plugin-blade'         => config('kalion.version_prettier_plugin_blade'),
             'prettier-plugin-tailwindcss'   => config('kalion.version_prettier_plugin_tailwindcss'),
             'typescript'                    => config('kalion.version_typescript'),
-        ], $this->isReset(true));
+        ], ($this->reset || $this->simple));
 
         $this->line('Archivo package.json actualizado (devDependencies)');
 
@@ -862,7 +857,7 @@ EOD;
         $this->modifyPackageJsonSection('dependencies', [
             '@kalel1500/kalion-js'   => config('kalion.version_kalel1500_laravel_ts_utils'),
 //            'tabulator-tables'              => config('kalion.version_tabulator_tables'),
-        ], $this->isReset(true));
+        ], ($this->reset || $this->simple));
 
         $this->line('Archivo package.json actualizado (dependencies)');
 
@@ -876,7 +871,7 @@ EOD;
         // Add script "ts-build" in "package.json"
         $this->modifyPackageJsonSection('scripts', [
             'ts-build' => 'tsc && vite build',
-        ], $this->isReset(true));
+        ], ($this->reset || $this->simple));
 
         $this->line('Archivo package.json actualizado (script "ts-build")');
 
@@ -891,7 +886,7 @@ EOD;
         $this->modifyPackageJsonSection('engines', [
             'node' => config('kalion.version_node'),
             'npm'  => config('kalion.version_npm'),
-        ], $this->isReset(true));
+        ], ($this->reset || $this->simple));
 
         $this->line('Archivo package.json actualizado (engines)');
 
@@ -921,7 +916,7 @@ EOD;
 
         $psr4 = $composer['autoload']['psr-4'];
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             // Eliminamos los namespaces especificados
             foreach ($namespaces as $namespace => $path) {
                 unset($composer['autoload']['psr-4'][$namespace]);
@@ -984,7 +979,7 @@ EOD;
             "src/Shared/Infrastructure/Helpers/helpers_infrastructure.php",
         ];
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             // Si estamos en modo reset, eliminamos los archivos de la lista
             $composer['autoload']['files'] = array_filter(
                 $composer['autoload']['files'],
@@ -1021,7 +1016,7 @@ EOD;
         // Guardamos los cambios en composer.json
         file_put_contents($filePath, $jsonContent . PHP_EOL);
 
-        $action = $this->isReset() ? 'eliminados de' : 'añadidos a';
+        $action = $this->reset ? 'eliminados de' : 'añadidos a';
         $this->line("Archivos helpers {$action} \"autoload.files\" en \"composer.json\"");
 
         return $this;
@@ -1040,7 +1035,7 @@ EOD;
         $packages = ['tightenco/ziggy'];
         $package1 = $packages[0];
 
-        if ($this->isReset()) {
+        if ($this->reset) {
             if (! str_contains($content, $package1)) {
                 return $this;
             }
@@ -1112,8 +1107,8 @@ EOD;
 
         if ($this->developMode) return $this;
 
-        $isReset         = $this->isReset();
-        $isResetFront    = $this->isReset(true);
+        $isReset         = $this->reset;
+        $isResetFront    = $this->reset || $this->simple;
         $packageJsonPath = base_path('package.json');
         $packages        = [
             'devDependencies' => [
@@ -1166,7 +1161,7 @@ EOD;
     {
         $this->number++;
 
-        if ($this->isReset(true)) return $this;
+        if ($this->reset || $this->simple) return $this;
 
         $this->execute_Process(
             ['npx', 'kalion-js'],
@@ -1185,7 +1180,7 @@ EOD;
         // Views
         $folder = 'resources';
 
-        if ($this->isReset(true)) return $this;
+        if ($this->reset || $this->simple) return $this;
 
         $dir  = $this->stubsPath($folder, true);
         $dest = base_path($folder);
