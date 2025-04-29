@@ -14,7 +14,7 @@
 ## Quick start
 
 ```bash
-composer require kalel1500/kalion
+composer require kalel1500/kalion:@beta
 ```
 
 ## Publish files
