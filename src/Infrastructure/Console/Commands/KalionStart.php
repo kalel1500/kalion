@@ -3,8 +3,6 @@
 namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
 use Thehouseofel\Kalion\Infrastructure\Services\Commands\StartCommandService;
 use Thehouseofel\Kalion\Infrastructure\Traits\InteractsWithComposerPackages;
 use function Illuminate\Filesystem\join_paths;
@@ -30,25 +28,18 @@ class KalionStart extends Command
      */
     protected $description = 'Create starter files for kalion architecture';
 
-    protected $filesystem;
     protected $stubsPath;
     protected $stubsPathFront;
     protected $originalStubsPath;
 
-    public function __construct(Filesystem $filesystem)
+    public function __construct()
     {
         parent::__construct();
 
         $stubsBasePath           = KALION_PATH . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
-        $this->filesystem        = $filesystem;
         $this->stubsPath         = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'simple';
         $this->stubsPathFront    = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'front';
         $this->originalStubsPath = $stubsBasePath . 'original';
-    }
-
-    public function filesystem(): Filesystem
-    {
-        return $this->filesystem;
     }
 
     public function packagePath($path = ''): string

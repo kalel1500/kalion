@@ -20,7 +20,6 @@ final class StartCommandService
 
     private readonly int        $steps;
     private int                 $number                  = 0;
-    private readonly Filesystem $filesystem;
     private readonly bool       $developMode;
     private readonly bool       $keepMigrationsDate;
     private bool                $resourcesFolderRestored = false;
@@ -39,7 +38,6 @@ final class StartCommandService
             exit(1); // Terminar la ejecución con código de error
         }
         $this->steps                  = $this->countPublicMethods();
-        $this->filesystem             = $command->filesystem();
         $this->developMode            = config('kalion.package_in_develop');
         $this->keepMigrationsDate     = config('kalion.keep_migrations_date');
         $this->packageVersion         = InstalledVersions::getVersion('kalel1500/kalion') ?? 'dev';
@@ -201,9 +199,9 @@ final class StartCommandService
         $dir    = $this->command->originalStubsPath($folder);
         $dest   = base_path($folder);
 
-        $this->filesystem->deleteDirectory($dest);
-        $this->filesystem->ensureDirectoryExists($dest);
-        $this->filesystem->copyDirectory($dir, $dest);
+        File::deleteDirectory($dest);
+        File::ensureDirectoryExists($dest);
+        File::copyDirectory($dir, $dest);
         $this->resourcesFolderRestored = true;
     }
 
@@ -221,13 +219,13 @@ final class StartCommandService
         $this->restoreResources();
 
         // Delete ".prettierrc"
-        $this->filesystem->delete(base_path('.prettierrc'));
+        File::delete(base_path('.prettierrc'));
 
         // Delete "tsconfig.json"
-        $this->filesystem->delete(base_path('tsconfig.json'));
+        File::delete(base_path('tsconfig.json'));
 
         // Delete "vite.config.ts"
-        $this->filesystem->delete(base_path('vite.config.ts'));
+        File::delete(base_path('vite.config.ts'));
         copy($this->command->originalStubsPath('vite.config.js'), base_path('vite.config.js'));
 
         $this->line('Restaurados todos los archivos modificados por el paquete @kalel1500/kalion-js');
@@ -240,8 +238,8 @@ final class StartCommandService
         $this->number++;
 
         // Delete "config/kalion.php"
-        $this->filesystem->delete(config_path('kalion.php'));
-        $this->filesystem->delete(config_path('kalion_links.php'));
+        File::delete(config_path('kalion.php'));
+        File::delete(config_path('kalion_links.php'));
 
         if ($this->isReset() || $this->developMode) return $this;
 
@@ -262,7 +260,7 @@ final class StartCommandService
         $to   = base_path($file);
 
         if ($this->isReset()) {
-            $this->filesystem->delete($to);
+            File::delete($to);
             $this->line('Archivo "' . $file . '" eliminado');
             return $this;
         }
@@ -281,16 +279,16 @@ final class StartCommandService
         $sourcePath      = $this->command->stubsPath($folder);
         $destinationPath = base_path($folder);
 
-        $files = $this->filesystem->files($sourcePath);
+        $files = File::files($sourcePath);
 
         foreach ($files as $file) {
             $from = $file->getPathname();
             $to   = $destinationPath . DIRECTORY_SEPARATOR . $file->getFilename();
 
             if ($this->isReset()) {
-                $this->filesystem->delete($to);
+                File::delete($to);
             } else {
-                $this->filesystem->copy($from, $to);
+                File::copy($from, $to);
             }
         }
 
@@ -314,12 +312,12 @@ final class StartCommandService
         $destinationPath = base_path($folder);
 
         // Obtenemos los archivos de ambas fuentes y los combinamos
-        $stubFiles    = $this->filesystem->files($stubsPath);
-        $packageFiles = $this->filesystem->files($packagePath);
+        $stubFiles    = File::files($stubsPath);
+        $packageFiles = File::files($packagePath);
         $files        = array_merge($packageFiles, $stubFiles);
 
         // Obtenemos los nombres "originales" de los archivos que ya existen en la carpeta destino
-        $existingFiles = collect($this->filesystem->files($destinationPath))
+        $existingFiles = collect(File::files($destinationPath))
             ->map(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()));
 
         $timestamp = now();
@@ -341,12 +339,12 @@ final class StartCommandService
                     continue;
                 }
                 // En modo reset, buscamos si existe el archivo en destino (comparando el nombre sin timestamp)
-                $existingFile = collect($this->filesystem->files($destinationPath))
+                $existingFile = collect(File::files($destinationPath))
                     ->first(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()) === $originalName);
 
                 // Si se encontró, se elimina el archivo
                 if ($existingFile) {
-                    $this->filesystem->delete($existingFile);
+                    File::delete($existingFile);
                 }
                 continue;
             }
@@ -368,7 +366,7 @@ final class StartCommandService
             if ($existingFiles->contains($originalName)) continue;
 
             // Copiamos el archivo desde su ruta de origen a la ruta de destino con el nuevo nombre
-            $this->filesystem->copy($file->getPathname(), $destinationFile);
+            File::copy($file->getPathname(), $destinationFile);
         }
 
         $action = $this->reset ? 'eliminadas' : 'copiadas';
@@ -388,10 +386,10 @@ final class StartCommandService
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
-        $this->filesystem->deleteDirectory($dest);
+        File::deleteDirectory($dest);
 
-        $this->filesystem->ensureDirectoryExists($dest);
-        $this->filesystem->copyDirectory($dir, $dest);
+        File::ensureDirectoryExists($dest);
+        File::copyDirectory($dir, $dest);
 
         $this->line('Carpeta "' . $folder . '" copiada');
 
@@ -409,10 +407,10 @@ final class StartCommandService
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
-        $this->filesystem->deleteDirectory($dest);
+        File::deleteDirectory($dest);
 
-        $this->filesystem->ensureDirectoryExists($dest);
-        $this->filesystem->copyDirectory($dir, $dest);
+        File::ensureDirectoryExists($dest);
+        File::copyDirectory($dir, $dest);
 
         $this->line('Carpeta "' . $folder . '" copiada');
 
@@ -430,13 +428,13 @@ final class StartCommandService
         $dest = base_path($folder);
 
         if ($this->isReset()) {
-            $this->filesystem->deleteDirectory($dest);
+            File::deleteDirectory($dest);
             $this->line('Carpeta "' . $folder . '" eliminada');
             return $this;
         }
 
-        $this->filesystem->ensureDirectoryExists($dest);
-        $this->filesystem->copyDirectory($dir, $dest);
+        File::ensureDirectoryExists($dest);
+        File::copyDirectory($dir, $dest);
         $this->line('Carpeta "' . $folder . '" creada');
 
         return $this;
@@ -457,8 +455,8 @@ final class StartCommandService
         $dir  = $this->command->stubsPath($folder);
         $dest = base_path($folder);
 
-        $this->filesystem->ensureDirectoryExists($dest);
-        $this->filesystem->copyDirectory($dir, $dest);
+        File::ensureDirectoryExists($dest);
+        File::copyDirectory($dir, $dest);
         $this->line('Carpeta "' . $folder . '" creada');
 
         return $this;
@@ -475,13 +473,13 @@ final class StartCommandService
         $dest = base_path($folder);
 
         if ($this->isReset()) {
-            $this->filesystem->deleteDirectory($dest);
+            File::deleteDirectory($dest);
             $this->line('Carpeta "' . $folder . '" eliminada');
             return $this;
         }
 
-        $this->filesystem->ensureDirectoryExists($dest);
-        $this->filesystem->copyDirectory($dir, $dest);
+        File::ensureDirectoryExists($dest);
+        File::copyDirectory($dir, $dest);
         $this->line('Carpeta "' . $folder . '" creada');
 
         return $this;
@@ -525,7 +523,7 @@ final class StartCommandService
             $message = 'Archivos ".env" restaurados';
 
             // Eliminar archivo ".env.save.local"
-            $this->filesystem->delete($to_envLocal);
+            File::delete($to_envLocal);
 
             // Definir archivo origen (reset)
             $file        = '.env.example';
@@ -562,13 +560,13 @@ final class StartCommandService
 
         if ($this->isReset()) {
             $dir = $this->command->originalStubsPath($folder);
-            $this->filesystem->ensureDirectoryExists($dest);
-            $this->filesystem->copyDirectory($dir, $dest);
+            File::ensureDirectoryExists($dest);
+            File::copyDirectory($dir, $dest);
             $this->line('Carpeta "' . $folder . '" creada');
             return $this;
         }
 
-        $this->filesystem->deleteDirectory($dest);
+        File::deleteDirectory($dest);
         $this->line('Directorio "' . $folder . '" eliminado');
 
         return $this;
@@ -584,13 +582,13 @@ final class StartCommandService
 
         if ($this->isReset()) {
             $dir = $this->command->originalStubsPath($folder);
-            $this->filesystem->ensureDirectoryExists($dest);
-            $this->filesystem->copyDirectory($dir, $dest);
+            File::ensureDirectoryExists($dest);
+            File::copyDirectory($dir, $dest);
             $this->line('Carpeta "' . $folder . '" creada');
             return $this;
         }
 
-        $this->filesystem->deleteDirectory($dest);
+        File::deleteDirectory($dest);
         $this->line('Directorio "' . $folder . '" eliminado');
 
         return $this;
@@ -601,7 +599,7 @@ final class StartCommandService
         $this->number++;
 
         // Delete file "CHANGELOG.md"
-        $this->filesystem->delete(base_path('CHANGELOG.md'));
+        File::delete(base_path('CHANGELOG.md'));
         $this->line('Archivo "CHANGELOG.md" eliminado');
 
         return $this;
@@ -1166,8 +1164,8 @@ EOD;
         $dir  = $this->command->stubsPath($folder, true);
         $dest = base_path($folder);
 
-        $this->filesystem->ensureDirectoryExists($dest);
-        $this->filesystem->copyDirectory($dir, $dest);
+        File::ensureDirectoryExists($dest);
+        File::copyDirectory($dir, $dest);
         $this->line('Carpeta "' . $folder . '" creada');
 
         return $this;
