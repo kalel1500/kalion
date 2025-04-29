@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Services;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\LoginFieldDto;
+use Thehouseofel\Kalion\Infrastructure\Services\Config\RedirectAfterLogin;
 
 final class Kalion
 {
@@ -127,5 +128,11 @@ final class Kalion
     public static function getClassServicePasswordReset()
     {
         return config('kalion.auth.services.password_reset');
+    }
+
+    public static function redirectAfterLoginTo(callable|string $redirect): void
+    {
+        $redirect = is_string($redirect) ? fn () => $redirect : $redirect;
+        RedirectAfterLogin::redirectUsing($redirect);
     }
 }

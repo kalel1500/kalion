@@ -52,6 +52,25 @@ In addition, it will generate new files to add complete examples to the project 
 - Posts
 - Tags
 
+## Package configuration
+
+### Redirect after login
+
+You can configure where the application will redirect (as long as no previous route is found) in two ways:
+
+Overriding the `kalion.auth.redirect_after_login` configuration or using the `KALION_AUTH_REDIRECT_AFTER_LOGIN` environment variable.
+
+Or using the `redirectAfterLoginTo()` method of the `Kalion` class in the `register` method of a ServiceProvider for a more complex configuration:
+
+```php
+public function register(): void
+{
+    \Thehouseofel\Kalion\Infrastructure\Services\Kalion::redirectAfterLoginTo('home');
+}
+```
+
+This method also accepts a callback.
+
 ## License
 
 Laravel Hexagonal and DDD is open-sourced software licensed under the [GNU General Public License v3.0](LICENSE).

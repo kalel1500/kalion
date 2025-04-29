@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract;
+use Thehouseofel\Kalion\Infrastructure\Services\Config\RedirectAfterLogin;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 class Login implements LoginContract
@@ -60,7 +61,7 @@ class Login implements LoginContract
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(RedirectAfterLogin::redirectTo($request));
     }
 
     public function logout(Request $request): RedirectResponse
