@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
 
 use Composer\InstalledVersions;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\ServiceProvider;
@@ -13,10 +12,15 @@ use Thehouseofel\Kalion\Domain\Traits\CountMethods;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\KalionServiceProvider;
 use Thehouseofel\Kalion\Infrastructure\Services\Version;
+use function Illuminate\Filesystem\join_paths;
 
 final class StartCommandService
 {
     use CountMethods;
+
+    private readonly string $stubsPath;
+    private readonly string $stubsPathFront;
+    private readonly string $originalStubsPath;
 
     private readonly int        $steps;
     private int                 $number                  = 0;
@@ -37,6 +41,12 @@ final class StartCommandService
             $command->error('Por ahora este comando solo esta preparado para la version de laravel 12');
             exit(1); // Terminar la ejecución con código de error
         }
+
+        $stubsBasePath           = KALION_PATH . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
+        $this->stubsPath         = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'simple';
+        $this->stubsPathFront    = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'front';
+        $this->originalStubsPath = $stubsBasePath . 'original';
+
         $this->steps                  = $this->countPublicMethods();
         $this->developMode            = config('kalion.package_in_develop');
         $this->keepMigrationsDate     = config('kalion.keep_migrations_date');
@@ -46,11 +56,27 @@ final class StartCommandService
         $this->saveLock();
     }
 
+    private function packagePath($path = ''): string
+    {
+        return join_paths(KALION_PATH, $path);
+    }
+
+    private function stubsPath($path = '', $isFront = false): string
+    {
+        $stubsPath = $isFront ? $this->stubsPathFront : $this->stubsPath;
+        return join_paths($stubsPath, $path);
+    }
+
+    private function originalStubsPath($path = ''): string
+    {
+        return join_paths($this->originalStubsPath, $path);
+    }
+
     private function getStubFiles(): array
     {
         $paths = [
-            $this->command->stubsPath(),
-            $this->command->stubsPath('', true)
+            $this->stubsPath(),
+            $this->stubsPath('', true)
         ];
 
         $relativePaths = [];
@@ -196,7 +222,7 @@ final class StartCommandService
         if ($this->resourcesFolderRestored) return;
 
         $folder = 'resources';
-        $dir    = $this->command->originalStubsPath($folder);
+        $dir    = $this->originalStubsPath($folder);
         $dest   = base_path($folder);
 
         File::deleteDirectory($dest);
@@ -226,7 +252,7 @@ final class StartCommandService
 
         // Delete "vite.config.ts"
         File::delete(base_path('vite.config.ts'));
-        copy($this->command->originalStubsPath('vite.config.js'), base_path('vite.config.js'));
+        copy($this->originalStubsPath('vite.config.js'), base_path('vite.config.js'));
 
         $this->line('Restaurados todos los archivos modificados por el paquete @kalel1500/kalion-js');
 
@@ -256,7 +282,7 @@ final class StartCommandService
 
         $file = 'app/Providers/DependencyServiceProvider.php';
 
-        $from = $this->command->stubsPath($file);
+        $from = $this->stubsPath($file);
         $to   = base_path($file);
 
         if ($this->isReset()) {
@@ -276,7 +302,7 @@ final class StartCommandService
         $this->number++;
 
         $folder          = 'config';
-        $sourcePath      = $this->command->stubsPath($folder);
+        $sourcePath      = $this->stubsPath($folder);
         $destinationPath = base_path($folder);
 
         $files = File::files($sourcePath);
@@ -305,8 +331,8 @@ final class StartCommandService
         $folder = 'database/migrations';
 
         // Rutas de origen:
-        $stubsPath   = $this->command->stubsPath($folder);
-        $packagePath = $this->command->packagePath($folder);
+        $stubsPath   = $this->stubsPath($folder);
+        $packagePath = $this->packagePath($folder);
 
         // Ruta de destino en la aplicación
         $destinationPath = base_path($folder);
@@ -382,7 +408,7 @@ final class StartCommandService
         // Factories
         $folder = 'database/factories';
 
-        $dir  = ($this->isReset()) ? $this->command->originalStubsPath($folder) : $this->command->stubsPath($folder);
+        $dir  = ($this->isReset()) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
@@ -403,7 +429,7 @@ final class StartCommandService
         // Factories
         $folder = 'database/seeders';
 
-        $dir  = ($this->isReset()) ? $this->command->originalStubsPath($folder) : $this->command->stubsPath($folder);
+        $dir  = ($this->isReset()) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
@@ -424,7 +450,7 @@ final class StartCommandService
         // Views
         $folder = 'lang';
 
-        $dir  = $this->command->stubsPath($folder);
+        $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
 
         if ($this->isReset()) {
@@ -452,7 +478,7 @@ final class StartCommandService
 
         if ($this->isReset()) return $this;
 
-        $dir  = $this->command->stubsPath($folder);
+        $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
 
         File::ensureDirectoryExists($dest);
@@ -469,7 +495,7 @@ final class StartCommandService
         // Src
         $folder = 'src';
 
-        $dir  = $this->command->stubsPath($folder);
+        $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
 
         if ($this->isReset()) {
@@ -493,8 +519,8 @@ final class StartCommandService
         $filePath = 'routes/web.php';
 
         $from = ($this->isReset())
-            ? $this->command->originalStubsPath($filePath)
-            : $this->command->stubsPath($filePath);
+            ? $this->originalStubsPath($filePath)
+            : $this->stubsPath($filePath);
         $to   = base_path($filePath);
 
         copy($from, $to);
@@ -513,7 +539,7 @@ final class StartCommandService
 
         // Definir archivo origen (al generar)
         $file        = '.env.save.local';
-        $from        = $this->command->stubsPath($file);
+        $from        = $this->stubsPath($file);
         $to_envLocal = base_path($file);
 
         // Definir archivo destino
@@ -527,7 +553,7 @@ final class StartCommandService
 
             // Definir archivo origen (reset)
             $file        = '.env.example';
-            $from        = $this->command->originalStubsPath($file);
+            $from        = $this->originalStubsPath($file);
             $to_envLocal = base_path($file);
         }
 
@@ -559,7 +585,7 @@ final class StartCommandService
         $dest   = base_path($folder);
 
         if ($this->isReset()) {
-            $dir = $this->command->originalStubsPath($folder);
+            $dir = $this->originalStubsPath($folder);
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
             $this->line('Carpeta "' . $folder . '" creada');
@@ -581,7 +607,7 @@ final class StartCommandService
         $dest   = base_path($folder);
 
         if ($this->isReset()) {
-            $dir = $this->command->originalStubsPath($folder);
+            $dir = $this->originalStubsPath($folder);
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
             $this->line('Carpeta "' . $folder . '" creada');
@@ -1161,7 +1187,7 @@ EOD;
 
         if ($this->isReset(true)) return $this;
 
-        $dir  = $this->command->stubsPath($folder, true);
+        $dir  = $this->stubsPath($folder, true);
         $dest = base_path($folder);
 
         File::ensureDirectoryExists($dest);

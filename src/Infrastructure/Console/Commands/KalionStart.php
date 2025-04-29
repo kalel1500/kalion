@@ -5,7 +5,6 @@ namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
 use Illuminate\Console\Command;
 use Thehouseofel\Kalion\Infrastructure\Services\Commands\StartCommandService;
 use Thehouseofel\Kalion\Infrastructure\Traits\InteractsWithComposerPackages;
-use function Illuminate\Filesystem\join_paths;
 
 class KalionStart extends Command
 {
@@ -27,36 +26,6 @@ class KalionStart extends Command
      * @var string
      */
     protected $description = 'Create starter files for kalion architecture';
-
-    protected $stubsPath;
-    protected $stubsPathFront;
-    protected $originalStubsPath;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $stubsBasePath           = KALION_PATH . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
-        $this->stubsPath         = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'simple';
-        $this->stubsPathFront    = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'front';
-        $this->originalStubsPath = $stubsBasePath . 'original';
-    }
-
-    public function packagePath($path = ''): string
-    {
-        return join_paths(KALION_PATH, $path);
-    }
-
-    public function stubsPath($path = '', $isFront = false): string
-    {
-        $stubsPath = $isFront ? $this->stubsPathFront : $this->stubsPath;
-        return join_paths($stubsPath, $path);
-    }
-
-    public function originalStubsPath($path = ''): string
-    {
-        return join_paths($this->originalStubsPath, $path);
-    }
 
     public function traitRequireComposerPackages(string $composer, array $packages, bool $isRemove = false)
     {
@@ -109,6 +78,5 @@ class KalionStart extends Command
             ->execute_NpmRunBuild();
 
         $this->info('Configuración finalizada');
-
     }
 }
