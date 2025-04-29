@@ -37,6 +37,21 @@ php artisan vendor:publish --tag="kalion-config-links"
 php artisan vendor:publish --tag="kalion-lang"
 ```
 
+## Start command
+
+After installing the package, to start a project you can run the following command.
+
+```bash
+php artisan kalion:start
+```
+
+This command will modify several project files to the recommended settings.
+
+In addition, it will generate new files to add complete examples to the project with the following views:
+- Home
+- Posts
+- Tags
+
 ## License
 
 Laravel Hexagonal and DDD is open-sourced software licensed under the [GNU General Public License v3.0](LICENSE).
