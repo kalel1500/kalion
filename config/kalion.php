@@ -35,17 +35,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Route
+    | Default Path
     |--------------------------------------------------------------------------
     |
-    | The following options allow you to configure the default route to which
+    | The following option allow you to configure the default path to which
     | the application should redirect you
     |
     */
 
-    'default_route' => env('KALION_DEFAULT_ROUTE', '/home'),
-
-    'default_route_name' => env('KALION_DEFAULT_ROUTE_NAME', 'home'),
+    'default_path' => env('KALION_DEFAULT_PATH'),
 
     /*
     |--------------------------------------------------------------------------

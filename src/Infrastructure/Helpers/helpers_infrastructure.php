@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\ComponentAttributeBag;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
+use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\DefaultPath;
 
 if (!function_exists('dropdown_is_open')) {
     function dropdown_is_open(string $htmlLinks): bool
@@ -144,17 +145,10 @@ if (!function_exists('app_url')) {
     }
 }
 
-if (!function_exists('default_route')) {
-    function default_route(): string
-    {
-        return '/' . ltrim(config('kalion.default_route'), '/');
-    }
-}
-
 if (!function_exists('default_url')) {
     function default_url(): string
     {
-        return app_url() . default_route();
+        return app_url() . '/' . ltrim(DefaultPath::redirectTo(), '/');
     }
 }
 

@@ -71,6 +71,23 @@ public function register(): void
 
 This method also accepts a callback.
 
+### Default path
+
+You can configure where the application will redirect to by default in two ways:
+
+Overriding the `kalion.default_path` configuration or using the `KALION_DEFAULT_PATH` environment variable.
+
+Or using the `redirectAfterLoginTo()` method of the `Kalion` class in the `register` method of a ServiceProvider for a more complex configuration:
+
+```php
+public function register(): void
+{
+    \Thehouseofel\Kalion\Infrastructure\Services\Kalion::redirectDefaultPathTo('home');
+}
+```
+
+This method also accepts a callback.
+
 ## License
 
 Laravel Hexagonal and DDD is open-sourced software licensed under the [GNU General Public License v3.0](LICENSE).
