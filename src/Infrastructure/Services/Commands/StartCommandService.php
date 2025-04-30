@@ -891,7 +891,7 @@ EOD;
         // Add script "ts-build" in "package.json"
         $this->modifyPackageJsonSection('engines', [
             'node' => config('kalion.version_node'),
-            'npm'  => config('kalion.version_npm'),
+            // 'npm'  => config('kalion.version_npm'),
         ], ($this->reset || $this->simple));
 
         $this->line('Archivo package.json actualizado (engines)');

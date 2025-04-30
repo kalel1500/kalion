@@ -255,8 +255,6 @@ return [
 
     'version_node' => env('KALION_VERSION_NODE', '^20.11.1'),
 
-    'version_npm' => env('KALION_VERSION_NPM', '^10.5.0'),
-
     /*
     |--------------------------------------------------------------------------
     | Package in develop
