@@ -1,6 +1,32 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.25.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.25.1-beta.0...master)
+
+## [v0.25.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.25.0-beta.0...v0.25.1-beta.0) - 2025-04-30
+
+### Added
+
+* Nueva clase `RedirectAfterLogin` para centralizar la lógica de redirección tras el `login` (si no está configurado, busca si existen las rutas `dashboard` y `home` y si no existen redirige a la `/`)
+* Nuevas opciones de configuración de la ruta a la que redirigir tras el login:
+  * En el archivo de configuración `kalion.auth.redirect_after_login` (con la variable de entorno `KALION_AUTH_REDIRECT_AFTER_LOGIN`)
+  * En el método `register()` del `AppServiceProvider` usando la clase `Kalion` (`Kalion::redirectAfterLoginTo('home')`) 
+
+### Changed
+
+* Modificar la propiedad `engines` añadida al `package.json` en el comando `kalion:start`:
+  * Ya no se añade la propiedad `npm` (en el método `modifyFile_PackageJson_toAddEngines()`)
+  * Modificar el valor por defecto de la configuración `kalion.version_node` de `^20.11.1` a `>=20.11.1` para restringir solo la version `minima` y permitir instalar versiones de Node superiores a la 20
+* (stubs) Actualizar archivos de `stubs/original` para coincidir con la última version de Laravel 12 (`stubs/original/resources/css/app.css`)
+
+### Fixed
+
+* (fix) Añadir la opción `reset` en el método `saveLock()` para borrar el archivo `kalion.lock` al hacer el `reset` si existe
+* (fix) Arreglar redirección errónea después del login cuando no existe la ruta `dashboard` incorporando lógica en la nueva clase `RedirectAfterLogin`
+
+### Docs
+
+* Añadir una pequeña documentación sobre el comando `kalion:start` en el `README.md`
+* (fix) Arreglar el comando de instalación del `README.md` añadiendo el `@beta` (`composer require kalel1500/kalion:@beta`)
 
 ## [v0.25.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.24.0-beta.0...v0.25.0-beta.0) - 2025-04-25
 
