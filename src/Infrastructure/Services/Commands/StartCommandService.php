@@ -122,8 +122,14 @@ final class StartCommandService
 
     private function saveLock(): void
     {
+        $exists = File::exists($this->lockFilePath);
+        if ($exists && $this->reset) {
+            File::delete($this->lockFilePath);
+            return;
+        }
+
         $timestamp = now()->toDateTimeString();
-        if ($this->developMode && File::exists($this->lockFilePath)) {
+        if ($this->developMode && $exists) {
             $old         = json_decode(File::get($this->lockFilePath), true);
             $timestamp = $old['timestamp'];
         }
