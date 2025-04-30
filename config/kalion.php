@@ -253,7 +253,7 @@ return [
     |
     */
 
-    'version_node' => env('KALION_VERSION_NODE', '^20.11.1'),
+    'version_node' => env('KALION_VERSION_NODE', '>=20.11.1'),
 
     /*
     |--------------------------------------------------------------------------
