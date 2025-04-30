@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Services;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\LoginFieldDto;
-use Thehouseofel\Kalion\Infrastructure\Services\Config\RedirectAfterLogin;
+use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin;
 
 final class Kalion
 {

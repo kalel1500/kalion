@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract;
-use Thehouseofel\Kalion\Infrastructure\Services\Config\RedirectAfterLogin;
+use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 class Login implements LoginContract
