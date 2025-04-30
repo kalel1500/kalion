@@ -140,7 +140,7 @@ if (!function_exists('get_html_laravel_debug_stack_trace')) {
 if (!function_exists('app_url')) {
     function app_url(): string
     {
-        return rtrim(config('app.url'), '/');
+        return rtrim(url('/'), '/');
     }
 }
 
