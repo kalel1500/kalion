@@ -83,7 +83,6 @@ You can configure where the application will redirect (as long as no previous ro
    }
    ```
 
-   > [!NOTE]
    > This method also accepts a callback.
 
 ### Default path
@@ -113,7 +112,6 @@ You can configure where the application will redirect to by default in three way
    }
    ```
 
-   > [!NOTE]
    > This method also accepts a callback.
 
 ## License
