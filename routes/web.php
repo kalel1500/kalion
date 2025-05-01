@@ -13,8 +13,6 @@ use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\JobsController;
 Route::get('/', fn() => redirect(default_url()))
     ->name('index');
 
-// Route::get('/kalion/test/sessions',  [TestController::class, 'sessions']);
-
 Route::middleware('auth')->group(function () {
 
     // Service routes
@@ -65,3 +63,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+//require __DIR__.'/test.php';
