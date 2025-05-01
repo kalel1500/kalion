@@ -8,22 +8,15 @@ use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\PasswordResetCo
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\Auth\RegisterController;
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'create'])
-        ->name('login');
-
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store']);
 
-    Route::get('/register', [RegisterController::class, 'create'])
-        ->name('register');
-
+    Route::get('/register', [RegisterController::class, 'create'])->name('register');
     Route::post('/register', [RegisterController::class, 'store']);
 
-    Route::get('/forgot-password', [PasswordResetController::class, 'create'])
-        ->name('password.reset');
+    Route::get('/forgot-password', [PasswordResetController::class, 'create'])->name('password.reset');
 });
 
 Route::middleware('auth')->group(function () {
-
-    Route::post('logout', [LoginController::class, 'destroy'])
-        ->name('logout');
+    Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
 });
