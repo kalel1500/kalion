@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 
-final class KalionController extends Controller
+final class TestController extends Controller
 {
     public function testVitePackage(): \Illuminate\Contracts\View\View
     {

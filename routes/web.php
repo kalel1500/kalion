@@ -9,13 +9,11 @@ use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxQueuesControlle
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxWebsocketsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\ExampleController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\JobsController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\KalionController;
 
 Route::get('/', fn() => redirect(default_url()))
     ->name('index');
 
-Route::get('/kalion/sessions',  [KalionController::class, 'sessions'])
-    ->name('kalion.sessions');
+// Route::get('/kalion/test/sessions',  [TestController::class, 'sessions']);
 
 Route::middleware('auth')->group(function () {
 
