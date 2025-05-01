@@ -20,9 +20,12 @@ abstract class Redirector
     protected static $redirectToCallback;
 
     /**
-     * Get the configured path the user should be redirected to
+     * Specify the callback that should be used to generate the redirect path.
      */
-    abstract protected function getConfigPath(): ?string;
+    public static function redirectUsing(callable $redirectToCallback): void
+    {
+        static::$redirectToCallback = $redirectToCallback;
+    }
 
     /**
      * Get the path the user should be redirected to
@@ -33,6 +36,11 @@ abstract class Redirector
             ? call_user_func(static::$redirectToCallback, $request)
             : ($this->getConfigPath() ?: $this->defaultRedirectUri());
     }
+
+    /**
+     * Get the configured path the user should be redirected to
+     */
+    abstract protected function getConfigPath(): ?string;
 
     /**
      * Get the default URI the user should be redirected to
@@ -54,13 +62,5 @@ abstract class Redirector
         }
 
         return '/';
-    }
-
-    /**
-     * Specify the callback that should be used to generate the redirect path.
-     */
-    public static function redirectUsing(callable $redirectToCallback): void
-    {
-        static::$redirectToCallback = $redirectToCallback;
     }
 }
