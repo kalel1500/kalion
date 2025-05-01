@@ -148,7 +148,7 @@ if (!function_exists('app_url')) {
 if (!function_exists('default_url')) {
     function default_url(): string
     {
-        return app_url() . '/' . ltrim(RedirectDefaultPath::redirectTo(), '/');
+        return RedirectDefaultPath::redirectTo();
     }
 }
 

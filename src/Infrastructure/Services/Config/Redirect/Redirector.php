@@ -32,9 +32,13 @@ abstract class Redirector
      */
     public function redirectTo(Request $request = null): ?string
     {
-        return static::$redirectToCallback
+        $to = static::$redirectToCallback
             ? call_user_func(static::$redirectToCallback, $request)
             : ($this->getConfigPath() ?: $this->defaultRedirectUri());
+
+        return $this->isValidUrl($to)
+            ? $to
+            : url($to);
     }
 
     /**
@@ -62,5 +66,17 @@ abstract class Redirector
         }
 
         return '/';
+    }
+
+    /**
+     * Determine if the given path is a valid URL.
+     */
+    protected function isValidUrl(string $path): bool
+    {
+        if (! preg_match('~^(#|//|https?://|(mailto|tel|sms):)~', $path)) {
+            return filter_var($path, FILTER_VALIDATE_URL) !== false;
+        }
+
+        return true;
     }
 }
