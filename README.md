@@ -118,4 +118,4 @@ You can configure where the application will redirect to by default in three way
 
 ## License
 
-Laravel Hexagonal and DDD is open-sourced software licensed under the [GNU General Public License v3.0](LICENSE).
+Kalion is open-sourced software licensed under the [GNU General Public License v3.0](LICENSE).
