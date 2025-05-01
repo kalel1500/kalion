@@ -13,4 +13,5 @@ return [
 
     'feature_unavailable'                => 'This feature is not ready yet',
     'exception_message_can_not_be_empty' => 'The exception :exception cannot have an empty message',
+    'default_url_equals_to_app_url'      => 'No default route found',
 ];

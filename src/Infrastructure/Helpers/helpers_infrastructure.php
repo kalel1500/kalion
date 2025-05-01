@@ -148,7 +148,13 @@ if (!function_exists('app_url')) {
 if (!function_exists('default_url')) {
     function default_url(): string
     {
-        return RedirectDefaultPath::redirectTo();
+        $defaultUrl = RedirectDefaultPath::redirectTo();
+
+        if ($defaultUrl === app_url()) {
+            abort_d(500, __('k::error.default_url_equals_to_app_url'));
+        }
+
+        return $defaultUrl;
     }
 }
 
