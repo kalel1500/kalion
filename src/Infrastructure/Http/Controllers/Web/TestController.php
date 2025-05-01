@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class TestController extends Controller
 {
     public function testVitePackage(): \Illuminate\Contracts\View\View
