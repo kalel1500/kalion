@@ -111,8 +111,8 @@ if (!function_exists('array_has_only_arrays')) {
     }
 }
 
-if (! function_exists('get_url_from_route')) {
-    function get_url_from_route($route): string
+if (! function_exists('safe_route')) {
+    function safe_route($route): string
     {
         try {
             return is_null($route) ? '#' : route($route);

@@ -30,7 +30,7 @@ class Full extends Component
     public function render(): View|Closure|string
     {
         $this->showSearch   = config('kalion_links.navbar.search.show');
-        $this->searchAction = get_url_from_route(config('kalion_links.navbar.search.route'));
+        $this->searchAction = safe_route(config('kalion_links.navbar.search.route'));
         $this->items        = NavbarItemCollection::fromArray(config('kalion_links.navbar.items') ?? []);
 
         $this->items = $this->items->map(function (NavbarItemDo $item) {
