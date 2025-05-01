@@ -20,9 +20,19 @@ abstract class Redirector
     protected static $redirectToCallback;
 
     /**
+     * Get the configured path the user should be redirected to
+     */
+    abstract protected function getConfigPath(): ?string;
+
+    /**
      * Get the path the user should be redirected to
      */
-    abstract public function redirectTo(Request $request = null): ?string;
+    public function redirectTo(Request $request = null): ?string
+    {
+        return static::$redirectToCallback
+            ? call_user_func(static::$redirectToCallback, $request)
+            : ($this->getConfigPath() ?: $this->defaultRedirectUri());
+    }
 
     /**
      * Get the default URI the user should be redirected to
