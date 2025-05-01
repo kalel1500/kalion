@@ -112,10 +112,10 @@ if (!function_exists('array_has_only_arrays')) {
 }
 
 if (! function_exists('safe_route')) {
-    function safe_route($route): string
+    function safe_route(?string $name): string
     {
         try {
-            return is_null($route) ? '#' : route($route);
+            return is_null($name) ? '#' : route($name);
         } catch (\Symfony\Component\Routing\Exception\RouteNotFoundException $exception) {
             return '#';
         }
