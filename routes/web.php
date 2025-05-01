@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/kalion/example/compare-html', [ExampleController::class, 'compareHtml'])->name('kalion.compareHtml');
     Route::get('/kalion/example/icons', [ExampleController::class, 'icons'])->name('kalion.icons');
     Route::get('/kalion/example/modify-cookie', [ExampleController::class, 'modifyCookie'])->name('kalion.modifyCookie');
-    Route::put('/kalion/cookie/update', [AjaxCookiesController::class, 'update'])->name('kalion.ajax.cookie.update');
+    Route::put('/kalion/ajax/cookie/update', [AjaxCookiesController::class, 'update'])->name('kalion.ajax.cookie.update');
 });
 
 require __DIR__.'/auth.php';
