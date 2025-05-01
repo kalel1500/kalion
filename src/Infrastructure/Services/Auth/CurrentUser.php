@@ -7,6 +7,9 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 use Thehouseofel\Kalion\Domain\Contracts\Services\CurrentUserContract;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class CurrentUser implements CurrentUserContract
 {
     private bool    $loadRoles;

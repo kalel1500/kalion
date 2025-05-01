@@ -8,6 +8,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Throwable;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class ExceptionContextDo extends ContractDataObject
 {
     protected string $title;

@@ -12,6 +12,9 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Services\PermissionParser;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final readonly class UserAccessChecker
 {
     public function __construct(

@@ -6,6 +6,9 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect;
 
 use Illuminate\Http\Request;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 class DefaultPath extends Redirector
 {
     protected static $redirectToCallback;

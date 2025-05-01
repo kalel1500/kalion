@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Traits;
 
+/**
+ * @internal This trait is not meant to be used or overwritten outside the package.
+ */
 trait Singelton
 {
     private static $instance;

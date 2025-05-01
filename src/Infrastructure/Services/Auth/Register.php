@@ -14,6 +14,9 @@ use Illuminate\Validation\Rules\Password;
 use Thehouseofel\Kalion\Domain\Contracts\Services\RegisterContract;
 use Thehouseofel\Kalion\Infrastructure\Models\User;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 class Register implements RegisterContract
 {
     public function view(?Request $request = null): View

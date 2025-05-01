@@ -16,6 +16,9 @@ use Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract;
 use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 class Login implements LoginContract
 {
     protected Request $request;

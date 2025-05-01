@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Icons\IconDo;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Icons\ViewIconsDo;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class GetIconsUseCase
 {
     public function __invoke(bool $showNameShort): ViewIconsDo

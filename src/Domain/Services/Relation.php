@@ -6,6 +6,9 @@ namespace Thehouseofel\Kalion\Domain\Services;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class Relation
 {
     public static function getNextRelation(string|array|null $with, bool|string|null $isFull, ?string $relationName): SubRelationDataDo

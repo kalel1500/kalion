@@ -7,6 +7,9 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 abstract class Redirector
 {
     /**

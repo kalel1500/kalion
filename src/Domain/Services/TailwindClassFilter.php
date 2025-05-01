@@ -6,6 +6,9 @@ namespace Thehouseofel\Kalion\Domain\Services;
 
 use Thehouseofel\Kalion\Domain\Traits\Instantiable;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class TailwindClassFilter
 {
     use Instantiable;

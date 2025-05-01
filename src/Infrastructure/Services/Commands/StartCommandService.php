@@ -14,6 +14,9 @@ use Thehouseofel\Kalion\Infrastructure\KalionServiceProvider;
 use Thehouseofel\Kalion\Infrastructure\Services\Version;
 use function Illuminate\Filesystem\join_paths;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class StartCommandService
 {
     use CountMethods;

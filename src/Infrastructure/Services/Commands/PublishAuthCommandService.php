@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\File;
 use Thehouseofel\Kalion\Domain\Traits\CountMethods;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class PublishAuthCommandService
 {
     use CountMethods;
