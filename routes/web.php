@@ -11,8 +11,8 @@ use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\ExampleController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\JobsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\KalionController;
 
-Route::get('/kalion/root', [KalionController::class, 'root'])
-    ->name('kalion.root');
+Route::get('/', fn() => redirect(default_url()))
+    ->name('index');
 
 Route::get('/kalion/sessions',  [KalionController::class, 'sessions'])
     ->name('kalion.sessions');

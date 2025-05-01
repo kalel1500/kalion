@@ -395,7 +395,7 @@ return [
                                 'code'              => null,
                                 'text'              => 'Root',
                                 'tooltip'           => null,
-                                'route_name'        => 'kalion.root',
+                                'route_name'        => 'index',
                                 'counter_action'    => null,
                                 'collapsed'         => false,
                             ],

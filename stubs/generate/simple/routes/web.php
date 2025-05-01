@@ -16,9 +16,6 @@ Route::get('/welcome', fn() => view('welcome'))->name('welcome');
  * Rutas de la aplicación
  */
 
-// Ruta base
-Route::redirect('/', default_url());
-
 // Rutas protegidas
 Route::middleware(['auth'])->group(function () {
     Route::get('/home',                 [HomeController::class, 'home'])->name('home');

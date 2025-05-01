@@ -10,11 +10,6 @@ use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
 
 final class KalionController extends Controller
 {
-    public function root()
-    {
-        return redirect(app_url());
-    }
-
     public function testVitePackage(): \Illuminate\Contracts\View\View
     {
         return view('kal::pages.tests.test-vite-package');
