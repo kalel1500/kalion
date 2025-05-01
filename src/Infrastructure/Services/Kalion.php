@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Services;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\LoginFieldDto;
-use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\DefaultPath;
+use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath;
 use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin;
 
 final class Kalion
@@ -140,6 +140,6 @@ final class Kalion
     public static function redirectDefaultPathTo(callable|string $path): void
     {
         $path = is_string($path) ? fn () => $path : $path;
-        DefaultPath::redirectUsing($path);
+        RedirectDefaultPath::redirectUsing($path);
     }
 }

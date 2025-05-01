@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class DefaultPath extends Redirector
+class RedirectDefaultPath extends Redirector
 {
     protected static $redirectToCallback;
 
