@@ -33,7 +33,7 @@ abstract class NavigationItem extends ContractDataObject
 
     public function getHref(): string
     {
-        return safe_route($this->route_name);
+        return safe_route($this->route_name, '#');
     }
 
     public function hasDropdown(): bool

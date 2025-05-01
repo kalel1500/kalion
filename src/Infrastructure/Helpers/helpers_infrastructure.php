@@ -112,12 +112,18 @@ if (!function_exists('array_has_only_arrays')) {
 }
 
 if (! function_exists('safe_route')) {
-    function safe_route(?string $name): string
+    function safe_route(?string $name, string $default = null): ?string
     {
+        $fallback = match ($default) {
+            null => null,
+            '#' => '#',
+            default => url($default),
+        };
+
         try {
-            return is_null($name) ? '#' : route($name);
+            return is_null($name) ? $fallback : route($name);
         } catch (\Symfony\Component\Routing\Exception\RouteNotFoundException $exception) {
-            return '#';
+            return $fallback;
         }
     }
 }
