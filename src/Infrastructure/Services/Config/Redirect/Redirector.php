@@ -22,12 +22,12 @@ abstract class Redirector
     /**
      * Get the path the user should be redirected to
      */
-    abstract public static function redirectTo(Request $request = null): ?string;
+    abstract public function redirectTo(Request $request = null): ?string;
 
     /**
      * Get the default URI the user should be redirected to
      */
-    protected static function defaultRedirectUri(): string
+    protected function defaultRedirectUri(): string
     {
         foreach (['dashboard', 'home'] as $uri) {
             if (Route::has($uri)) {

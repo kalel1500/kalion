@@ -13,10 +13,10 @@ class RedirectAfterLogin extends Redirector
 {
     protected static $redirectToCallback;
 
-    public static function redirectTo(Request $request = null): ?string
+    public function redirectTo(Request $request = null): ?string
     {
         return static::$redirectToCallback
             ? call_user_func(static::$redirectToCallback, $request)
-            : (config('kalion.auth.redirect_after_login') ?: static::defaultRedirectUri());
+            : (config('kalion.auth.redirect_after_login') ?: $this->defaultRedirectUri());
     }
 }

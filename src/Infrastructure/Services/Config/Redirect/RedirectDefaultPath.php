@@ -13,10 +13,10 @@ class RedirectDefaultPath extends Redirector
 {
     protected static $redirectToCallback;
 
-    public static function redirectTo(Request $request = null): ?string
+    public function redirectTo(Request $request = null): ?string
     {
         return static::$redirectToCallback
             ? call_user_func(static::$redirectToCallback, $request)
-            : (config('kalion.default_path') ?: static::defaultRedirectUri());
+            : (config('kalion.default_path') ?: $this->defaultRedirectUri());
     }
 }
