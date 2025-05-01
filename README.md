@@ -56,37 +56,65 @@ In addition, it will generate new files to add complete examples to the project 
 
 ### Redirect after login
 
-You can configure where the application will redirect (as long as no previous route is found) in two ways:
+You can configure where the application will redirect (as long as no previous route is found) in three ways:
 
-Overriding the `kalion.auth.redirect_after_login` configuration or using the `KALION_AUTH_REDIRECT_AFTER_LOGIN` environment variable.
+1. Overriding the `kalion.auth.redirect_after_login` configuration in `config/kalion.php` file:
 
-Or using the `redirectAfterLoginTo()` method of the `Kalion` class in the `register` method of a ServiceProvider for a more complex configuration:
+   ```php
+   return [
+       'auth' => [
+           'redirect_after_login' => env('KALION_AUTH_REDIRECT_AFTER_LOGIN', 'home')
+       ]
+   ];
+   ```
 
-```php
-public function register(): void
-{
-    \Thehouseofel\Kalion\Infrastructure\Services\Kalion::redirectAfterLoginTo('home');
-}
-```
+2. Using the `KALION_AUTH_REDIRECT_AFTER_LOGIN` environment variable:
 
-This method also accepts a callback.
+   ```dotenv
+   KALION_AUTH_REDIRECT_AFTER_LOGIN=home
+   ```
+
+3. Or using the `redirectAfterLoginTo()` method of the `Kalion` class in the `register` method of a ServiceProvider for a more complex configuration:
+
+   ```php
+   public function register(): void
+   {
+       \Thehouseofel\Kalion\Infrastructure\Services\Kalion::redirectAfterLoginTo('home');
+   }
+   ```
+
+   > [!NOTE]
+   > This method also accepts a callback.
 
 ### Default path
 
-You can configure where the application will redirect to by default in two ways:
+You can configure where the application will redirect to by default in three ways:
 
-Overriding the `kalion.default_path` configuration or using the `KALION_DEFAULT_PATH` environment variable.
+1. Overriding the `kalion.default_path` configuration 
 
-Or using the `redirectAfterLoginTo()` method of the `Kalion` class in the `register` method of a ServiceProvider for a more complex configuration:
+   ```php
+   return [
+       'default_path' => env('KALION_DEFAULT_PATH', 'home')
+   ];
+   ```
+   
+2. Using the `KALION_DEFAULT_PATH` environment variable:
 
-```php
-public function register(): void
-{
-    \Thehouseofel\Kalion\Infrastructure\Services\Kalion::redirectDefaultPathTo('home');
-}
-```
+   ```dotenv
+   KALION_DEFAULT_PATH=home
+   ```
 
-This method also accepts a callback.
+3. Or using the `redirectAfterLoginTo()` method of the `Kalion` class in the `register` method of a ServiceProvider for a more complex configuration:
+
+   ```php
+   public function register(): void
+   {
+       \Thehouseofel\Kalion\Infrastructure\Services\Kalion::redirectDefaultPathTo('home');
+   }
+   ```
+
+   > [!NOTE]
+   > This method also accepts a callback.
 
 ## License
 
