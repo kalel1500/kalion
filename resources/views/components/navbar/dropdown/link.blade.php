@@ -22,14 +22,15 @@
     </a>
 @else
     <li>
-        @php($classes = "flex items-center px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white")
+        @php($itemClasses = "flex items-center text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white")
+        @php($itemPaddingClasses = "px-4 py-2")
         @if($is_post)
-            <form method="POST" action="{{ $href }}" class="{{ $classes }}">
+            <form method="POST" action="{{ $href }}" class="{{ $itemClasses }}">
                 @csrf
-                <button class="flex items-center w-full">{{ $slot }}</button>
+                <button class="flex items-center w-full rounded-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-gray-400 {{ $itemPaddingClasses }}">{{ $slot }}</button>
             </form>
         @else
-            <a href="{{ $href }}" class="{{ $classes }}">
+            <a href="{{ $href }}" class="{{ $itemClasses . ' ' . $itemPaddingClasses }}">
                 {{ $slot }}
             </a>
         @endif
