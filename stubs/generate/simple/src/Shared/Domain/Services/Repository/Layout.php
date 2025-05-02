@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Src\Shared\Domain\Services\Repository;
 
-use Thehouseofel\Kalion\Domain\Contracts\Services\LayoutContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\LayoutDataContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Domain\Services\Repository\Layout as LayoutBase;
 
-final class Layout extends LayoutBase implements LayoutContract
+final class Layout extends LayoutBase implements LayoutDataContract
 {
     public function getMessageCounter(): int
     {
