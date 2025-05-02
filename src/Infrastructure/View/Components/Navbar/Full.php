@@ -8,7 +8,7 @@ use Illuminate\View\Component;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\NavbarItemDo;
-use Thehouseofel\Kalion\Infrastructure\Facades\Layout;
+use Thehouseofel\Kalion\Infrastructure\Facades\LayoutData;
 
 class Full extends Component
 {
@@ -37,10 +37,10 @@ class Full extends Component
             if (!is_null($dropdown = $item->dropdown) && !is_null($action = $dropdown->get_data_action)) {
                 switch ($action) {
                     case 'getNavbarNotifications':
-                        $dropdown->setItems(Layout::getNavbarNotifications());
+                        $dropdown->setItems(LayoutData::getNavbarNotifications());
                         break;
                     case 'getUserInfo':
-                        $dropdown->setUserInfo(Layout::getUserInfo());
+                        $dropdown->setUserInfo(LayoutData::getUserInfo());
                         break;
                 }
             }

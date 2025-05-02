@@ -15,7 +15,7 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDo;
  *
  * @see \Thehouseofel\Kalion\Domain\Services\Repository\LayoutData
  */
-final class Layout extends Facade
+final class LayoutData extends Facade
 {
     /**
      * Get the registered name of the component.
