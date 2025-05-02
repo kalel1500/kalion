@@ -6,7 +6,7 @@ namespace Src\Shared\Domain\Services\Repository;
 
 use Thehouseofel\Kalion\Domain\Contracts\Services\LayoutDataContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Domain\Services\Repository\Layout as LayoutBase;
+use Thehouseofel\Kalion\Domain\Services\Repository\LayoutData as LayoutBase;
 
 final class Layout extends LayoutBase implements LayoutDataContract
 {

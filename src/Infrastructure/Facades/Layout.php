@@ -13,7 +13,7 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDo;
  * @method static NavbarItemCollection getNavbarNotifications()
  * @method static UserInfoDo getUserInfo()
  *
- * @see \Thehouseofel\Kalion\Domain\Services\Repository\Layout
+ * @see \Thehouseofel\Kalion\Domain\Services\Repository\LayoutData
  */
 final class Layout extends Facade
 {
