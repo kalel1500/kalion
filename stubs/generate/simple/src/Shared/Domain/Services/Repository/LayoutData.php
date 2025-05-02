@@ -12,7 +12,7 @@ final class LayoutData extends LayoutDataBase implements LayoutDataContract
 {
     public function getMessageCounter(): int
     {
-        return 4;
+        return 5;
     }
 
     public function getNavbarNotifications(): NavbarItemCollection
