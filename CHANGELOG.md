@@ -1,6 +1,79 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.25.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.26.0-beta.0...master)
+
+## [v0.26.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.25.1-beta.0...v0.26.0-beta.0) - 2025-05-01
+
+### Added
+
+* Nueva ruta `/` llamada `index` que redirige a la ruta por defecto (`default_url()`)
+* Nuevas Facades `RedirectDefaultPath` y `RedirectAfterLogin` para acceder de forma estática al método `::redirectTo()` de las clases que extienden de `Redirector`
+* Nuevo método `redirectDefaultPathTo()` en la clase `Kalion` para poder configurar la ruta por defecto de la aplicación en el `ServiceProvider`
+* Nueva clase `RedirectDefaultPath` (extiende de `Redirector`) para centralizar la lógica de la url por defecto
+* Nueva clase abstracta `Redirector` con la lógica genérica de la clase `RedirectAfterLogin` para mejorar reutilización y mantener consistencia en redirecciones
+* Nueva configuración `kalion.default_path` para configurar la ruta por defecto de la aplicación
+
+### Changed
+
+* (stubs) Número del método "getMessageCounter()" de la clase "LayoutData" modificado para diferenciar fácilmente si se aplica esta clase
+* (breaking) Clases `Layout` renombradas a `LayoutData` (interfaz, clase, fachada y clase en los stubs)
+* Archivo `README.md` actualizado
+* Se previno error si no existe la ruta con el nombre `index` en las blades usando el helper "safe_route()" (en caso de que se añada la ruta `/` en la aplicación con otro nombre)
+* (breaking) Nuevo parámetro `$default` añadido al helper `safe_route()` para poder devolver una url por defecto. Comportamiento modificado: Si no recibe este parámetro ahora devuelve `null`, para seguir devolviendo `#` tiene que recibirlo como parámetro
+* (breaking) Parámetro `$route` del helper `safe_route()` renombrado a `$name` y tipado con `string|null`
+* (breaking) Helper `get_url_from_route()` renombrado a `safe_route()`
+* (breaking) Clase `KalionController` renombrada a `TestController`
+* (breaking) El método `redirectTo()` de la clase `Redirector` ahora siempre devuelve la url completa
+* (breaking) El método `redirectTo()` de las clases de redirección (`extends Redirector`) deja de ser estático. Ahora se usan las fachadas para acceder al método (`::redirectTo()`).
+* (breaking) Las siguientes clases ahora pasan a ser internas del paquete (`@internal`) por lo que, a partir de esta versión, pueden no mantener compatibilidad:
+    <details>
+    <summary>Mostrar</summary>
+
+    * `src\Application\GetIconsUseCase`
+    * `src\Domain\Contracts\Services\CurrentUserContract`
+    * `src\Domain\Contracts\Services\LoginContract`
+    * `src\Domain\Contracts\Services\PasswordResetContract`
+    * `src\Domain\Contracts\Services\RegisterContract`
+    * `src\Domain\Objects\DataObjects\ExceptionContextDo`
+    * `src\Domain\Objects\DataObjects\LoginFieldDto`
+    * `src\Domain\Objects\DataObjects\SubRelationDataDo`
+    * `src\Domain\Services\Repository\UserAccessChecker`
+    * `src\Domain\Services\PermissionParser`
+    * `src\Domain\Services\Relation`
+    * `src\Domain\Services\TailwindClassFilter`
+    * `src\Domain\Traits\Singelton`
+    * `src\Infrastructure\Http\Controllers\Web\TestController`
+    * `src\Infrastructure\Services\Auth\CurrentUser`
+    * `src\Infrastructure\Services\Auth\Login`
+    * `src\Infrastructure\Services\Auth\PasswordReset`
+    * `src\Infrastructure\Services\Auth\Register`
+    * `src\Infrastructure\Services\Commands\PublishAuthCommandService`
+    * `src\Infrastructure\Services\Commands\StartCommandService`
+    * `src\Infrastructure\Services\Config\Redirect\DefaultPath`
+    * `src\Infrastructure\Services\Config\Redirect\RedirectAfterLogin`
+    * `src\Infrastructure\Services\Config\Redirect\Redirector`
+    * `src\Infrastructure\Traits\InteractsWithComposerPackages`
+
+    </details>
+* Mejorada la lógica helper `default_url()`:
+  * Usar la nueva clase `RedirectDefaultPath::redirectTo()` en vez de concatenar los valores de las configuraciones `app.url` y `kalion.default_route`
+  * Prevenir redirección masiva lanzando una excepción si no se ha encontrado una url por defecto en el helper `default_url()`
+* (refactor) Clase `RedirectAfterLogin` refactorizada extrayendo lógica común a la clase abstracta `Redirector` para mejorar reutilización y mantener consistencia en redirecciones
+* Helper `app_url()` mejorado: Se reemplaza `config('app.url')` por `url('/')` para mayor consistencia con la URL generada por Laravel
+
+### Fixed
+
+* (fix) Se corrigió el nombre del paquete en el `README.md`
+
+### Removed
+
+* (breaking) Eliminada ruta de test `/kalion/sessions`
+* (breaking) Eliminado método `root` del Controller `Kalion`
+* (breaking) Eliminada ruta `kalion.root` (modificados los enlaces que la usaban para usar a la nueva ruta `index`)
+* (breaking) (stubs) Eliminada ruta `/` de las rutas de los `stubs` (ya que se ha movido al paquete)
+* (breaking) Eliminado helper `default_route()`
+* (breaking) Eliminada configuración `kalion.default_route_name`
+* (breaking) Eliminada configuración `kalion.default_route`
 
 ## [v0.25.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.25.0-beta.0...v0.25.1-beta.0) - 2025-04-30
 
