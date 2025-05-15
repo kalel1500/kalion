@@ -373,32 +373,30 @@ return [
     {
         /** @var Router $router */
         $router = $this->app->make(Router::class);
-//        /** @var Kernel $kernel */
-//        $kernel = $this->app->make(Kernel::class);
-
-        // Registrar/sobreescribir un grupo de middlewares
-//        $router->middlewareGroup('newCustomGroup', [\Vendor\Package\Http\Middleware\KalionAnyMiddleware::class]);
-
-        // Añadir un middleware a un grupo
-//        $router->pushMiddlewareToGroup('web', ShareInertiaData::class);
 
         // Registrar middlewares solo para rutas específicas
         $router->aliasMiddleware('userCan', UserHasPermission::class);
         $router->aliasMiddleware('userIs', UserHasRole::class);
 
-        // El Middleware AddPreferencesCookies al grupo de rutas web
-        if (
-            !$this->app->runningInConsole() &&
-            !empty(config('app.key')) &&
-            config('kalion.enable_preferences_cookie')
-        ) {
-            // Añadir un middleware a un grupo
-            $router->pushMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\AddPreferencesCookies::class); // $kernel->appendMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\AddPreferencesCookies::class);
+        if ($this->app->runningInConsole()) return;
+
+        // Registrar/sobreescribir un grupo de middlewares
+//        $router->middlewareGroup('newCustomGroup', [\Vendor\Package\Http\Middleware\KalionAnyMiddleware::class]);
+
+        // Añadir middlewares al final de un grupo
+//        $router->pushMiddlewareToGroup('web', ShareInertiaData::class); // $kernel = $this->app->make(Kernel::class); $kernel->appendMiddlewareToGroup('web', ShareInertiaData::class);
+
+        // Añadir el Middleware AddPreferencesCookies al grupo de rutas web
+        if (config('kalion.enable_preferences_cookie')) {
+            // Añadir middlewares al final de un grupo
+            $router->pushMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\AddPreferencesCookies::class);
 
             // Evitar el encriptado de las cookies de las preferencias del usuario
-            $this->app->afterResolving(EncryptCookies::class, function (EncryptCookies $middleware) {
-                $middleware->disableFor(config('kalion.cookie.name')); // laravel_kalion_user_preferences
-            });
+            if (!empty(config('app.key'))) {
+                $this->app->afterResolving(EncryptCookies::class, function (EncryptCookies $middleware) {
+                    $middleware->disableFor(config('kalion.cookie.name')); // laravel_kalion_user_preferences
+                });
+            }
         }
     }
 
