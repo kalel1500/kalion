@@ -162,6 +162,8 @@ return [
         'sidebar_state_per_page' => (bool) env('KALION_LAYOUT_SIDEBAR_STATE_PER_PAGE', false),
         'blade_show_main_border' => (bool) env('KALION_LAYOUT_BLADE_SHOW_MAIN_BORDER', false),
         'service' => env('KALION_LAYOUT_SERVICE', Thehouseofel\Kalion\Domain\Services\Repository\LayoutData::class),
+        'asset_path_logo' => env('KALION_LAYOUT_ASSET_PATH_LOGO', 'resources/images/logo.svg'),
+        'asset_path_favicon' => env('KALION_LAYOUT_ASSET_PATH_FAVICON', 'resources/images/favicon.ico'),
     ],
 
 
