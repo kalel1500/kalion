@@ -390,7 +390,7 @@ return [
 //        $router->prependMiddlewareToGroup('web', ShareInertiaData::class);
 
         // Añadir el Middleware AddPreferencesCookies al grupo de rutas web
-        if (config('kalion.enable_preferences_cookie')) {
+        if (config('kalion.web_middlewares.add_preferences_cookies.active')) {
             // Añadir middlewares al final de un grupo
             $router->pushMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\AddPreferencesCookies::class);
 
@@ -402,8 +402,8 @@ return [
             }
         }
 
-        // Añadir el Middleware AddPreferencesCookies al grupo de rutas web
-        if (config('kalion.force_array_session_in_cloud')) {
+        // Añadir el Middleware ForceArraySessionInCloud al grupo de rutas web
+        if (config('kalion.web_middlewares.force_array_session_in_cloud.active')) {
             // Añadir middlewares al principio de un grupo
             $router->prependMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\ForceArraySessionInCloud::class);
         }

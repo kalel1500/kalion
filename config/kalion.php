@@ -20,11 +20,8 @@ return [
     |
     | - "register_routes": Sets whether package routes should be registered.
     |
-    | - "enable_preferences_cookie": Sets whether the AddPreferencesCookies
-    |                                middleware should be added to the web routes group.
-    |
-    | - "force_array_session_in_cloud": Sets whether the ForceArraySessionInCloud
-    |                                middleware should be added to the web routes group.
+    | - "web_middlewares": Sets whether the following middlewares should be
+    |                      added to the web route group: [AddPreferencesCookies, ForceArraySessionInCloud]
     |
     */
 
@@ -34,9 +31,15 @@ return [
 
     'register_routes' => (bool) env('KALION_REGISTER_ROUTES', true),
 
-    'enable_preferences_cookie' => (bool) env('KALION_ENABLE_PREFERENCES_COOKIE', true),
+    'web_middlewares' => [
+        'add_preferences_cookies' => [
+            'active' => (bool) env('KALION_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE', true),
+        ],
 
-    'force_array_session_in_cloud' => (bool) env('KALION_FORCE_ARRAY_SESSION_IN_CLOUD', true),
+        'force_array_session_in_cloud' => [
+            'active' => (bool) env('KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE', true),
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
