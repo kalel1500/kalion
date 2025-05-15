@@ -38,6 +38,7 @@ return [
 
         'force_array_session_in_cloud' => [
             'active' => (bool) env('KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE', true),
+            'cloud_user_agent_value' => env('KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_CLOUD_USER_AGENT_VALUE', 'kube-probe'),
         ],
     ],
 
