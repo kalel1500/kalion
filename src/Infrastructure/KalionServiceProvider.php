@@ -386,6 +386,9 @@ return [
         // Añadir middlewares al final de un grupo
 //        $router->pushMiddlewareToGroup('web', ShareInertiaData::class); // $kernel = $this->app->make(Kernel::class); $kernel->appendMiddlewareToGroup('web', ShareInertiaData::class);
 
+        // Añadir middlewares al principio de un grupo
+//        $router->prependMiddlewareToGroup('web', ShareInertiaData::class);
+
         // Añadir el Middleware AddPreferencesCookies al grupo de rutas web
         if (config('kalion.enable_preferences_cookie')) {
             // Añadir middlewares al final de un grupo
@@ -397,6 +400,12 @@ return [
                     $middleware->disableFor(config('kalion.cookie.name')); // laravel_kalion_user_preferences
                 });
             }
+        }
+
+        // Añadir el Middleware AddPreferencesCookies al grupo de rutas web
+        if (config('kalion.force_array_session_in_cloud')) {
+            // Añadir middlewares al principio de un grupo
+            $router->prependMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\ForceArraySessionInCloud::class);
         }
     }
 

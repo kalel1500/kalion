@@ -23,6 +23,9 @@ return [
     | - "enable_preferences_cookie": Sets whether the AddPreferencesCookies
     |                                middleware should be added to the web routes group.
     |
+    | - "force_array_session_in_cloud": Sets whether the ForceArraySessionInCloud
+    |                                middleware should be added to the web routes group.
+    |
     */
 
     'run_migrations' => (bool) env('KALION_RUN_MIGRATIONS', false),
@@ -32,6 +35,8 @@ return [
     'register_routes' => (bool) env('KALION_REGISTER_ROUTES', true),
 
     'enable_preferences_cookie' => (bool) env('KALION_ENABLE_PREFERENCES_COOKIE', true),
+
+    'force_array_session_in_cloud' => (bool) env('KALION_FORCE_ARRAY_SESSION_IN_CLOUD', true),
 
     /*
     |--------------------------------------------------------------------------
