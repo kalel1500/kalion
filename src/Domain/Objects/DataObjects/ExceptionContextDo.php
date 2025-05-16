@@ -13,7 +13,7 @@ use Throwable;
  */
 final class ExceptionContextDo extends ContractDataObject
 {
-    protected string $title;
+    public readonly string $title;
 
     public function __construct(
         public readonly int        $statusCode,
@@ -119,11 +119,6 @@ final class ExceptionContextDo extends ContractDataObject
     public function getPreviousData(): ?ExceptionContextDo
     {
         return is_null($this->previous) ? null : ExceptionContextDo::from($this->previous);
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
     }
 
     /*public function getLastPrevious(): ?Throwable
