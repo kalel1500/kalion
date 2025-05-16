@@ -38,7 +38,7 @@ final class ExceptionHandler
                     return response(get_html_laravel_debug_stack_trace($request, $exception));
                 } else {
                     $context = ExceptionContextDo::from($exception);
-                    return response()->view('kal::pages.exceptions.error', compact('context'), $context->getStatusCode());
+                    return response()->view('kal::pages.exceptions.error', compact('context'), $context->statusCode);
                 }
             });
 
@@ -48,7 +48,7 @@ final class ExceptionHandler
 
                 // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
                 if (self::shouldRenderJson($request)) {
-                    return response()->json($context->toArray(), $context->getStatusCode());
+                    return response()->json($context->toArray(), $context->statusCode);
                 }
 
                 // Si espera una Vista y comprobamos si el debug es true
@@ -61,7 +61,7 @@ final class ExceptionHandler
                 }
 
                 // En PROD (o las "BasicHttpException" en DEBUG) devolvemos nuestra vista personalizada
-                return response()->view('kal::pages.exceptions.error', compact('context'), $context->getStatusCode());
+                return response()->view('kal::pages.exceptions.error', compact('context'), $context->statusCode);
             });
 
             // Indicar a Laravel cuando devolver un Json (mirar url "/ajax/")

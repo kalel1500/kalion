@@ -80,7 +80,7 @@ if (! function_exists('response_json_error')) {
     {
         // INFO kalel1500 - mi_estructura_de_respuesta
         $exceptionData = ExceptionContextDo::from($e);
-        return response()->json($exceptionData->toArray($throwInDebugMode), $exceptionData->getStatusCode());
+        return response()->json($exceptionData->toArray($throwInDebugMode), $exceptionData->statusCode);
     }
 }
 

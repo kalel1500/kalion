@@ -111,11 +111,6 @@ final class ExceptionContextDo extends ContractDataObject
     /*----------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------------- Properties -------------------------------------------------*/
 
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
-    }
-
     public function getPreviousData(): ?ExceptionContextDo
     {
         return is_null($this->previous) ? null : ExceptionContextDo::from($this->previous);
