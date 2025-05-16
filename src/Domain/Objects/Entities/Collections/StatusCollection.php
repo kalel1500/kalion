@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\Entities\Collections;
 
 use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionEntity;
-use Thehouseofel\Kalion\Domain\Objects\Entities\StateEntity;
+use Thehouseofel\Kalion\Domain\Objects\Entities\StatusEntity;
 
-class StateCollection extends ContractCollectionEntity
+class StatusCollection extends ContractCollectionEntity
 {
-    public const ENTITY = StateEntity::class;
+    public const ENTITY = StatusEntity::class;
 
-    public function __construct(StateEntity ...$items)
+    public function __construct(StatusEntity ...$items)
     {
         $this->items = $items;
     }

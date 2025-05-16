@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractEnumVo;
 
-final class StatePluckKeyVo extends ContractEnumVo
+final class StatusPluckKeyVo extends ContractEnumVo
 {
     const code = 'code';
     const id = 'id';

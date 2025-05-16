@@ -38,7 +38,7 @@ class KalionServiceProvider extends ServiceProvider
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\JobRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\RoleRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\PermissionRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StateRepositoryContract::class      => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\StateRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepositoryContract::class     => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\StatusRepository::class,
     ];
 
     /**
@@ -84,7 +84,7 @@ return [
 
         // Lista de nombres de migraciones que quieres renombrar (sin timestamp)
         $migrationFiles = [
-            'create_states_table',
+            'create_statuses_table',
             'create_tags_table',
             'create_posts_table',
             'create_comments_table',
