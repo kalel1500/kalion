@@ -16,9 +16,9 @@ class BasicHttpException extends KalionException implements HttpExceptionInterfa
         ?int        $statusCode = null,
         ?string     $message = null,
         ?Throwable $previous = null,
+        int        $code = 0,
         ?array     $data = null,
         bool       $success = false,
-        int        $code = 0
     )
     {
         $statusCode = $statusCode ?? static::STATUS_CODE;

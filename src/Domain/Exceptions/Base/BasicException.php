@@ -16,7 +16,7 @@ abstract class BasicException extends KalionException
         ?Throwable $previous = null,
         int        $code = 0,
         ?array     $data = null,
-        bool       $success = false
+        bool       $success = false,
     )
     {
         $message = $message ?? static::MESSAGE;

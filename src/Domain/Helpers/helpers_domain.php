@@ -84,7 +84,7 @@ if (!function_exists('abort_d')) {
         ?Throwable $previous = null
     ): void
     {
-        throw new AbortException($statusCode, $message, $previous, $data, $success);
+        throw new AbortException($statusCode, $message, $previous, data: $data, success: $success);
     }
 }
 
