@@ -6,12 +6,12 @@ namespace Thehouseofel\Kalion\Domain\Exceptions\Base;
 
 use RuntimeException;
 use Thehouseofel\Kalion\Domain\Contracts\KalionException;
-use Thehouseofel\Kalion\Domain\Traits\IsKalionException;
+use Thehouseofel\Kalion\Domain\Traits\KalionExceptionBehavior;
 use Throwable;
 
 abstract class KalionRuntimeException extends RuntimeException implements KalionException
 {
-    use IsKalionException;
+    use KalionExceptionBehavior;
 
     public function __construct(
         ?string    $message = null,

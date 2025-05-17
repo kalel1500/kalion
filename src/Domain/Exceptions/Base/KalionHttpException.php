@@ -7,12 +7,12 @@ namespace Thehouseofel\Kalion\Domain\Exceptions\Base;
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Thehouseofel\Kalion\Domain\Contracts\KalionException;
-use Thehouseofel\Kalion\Domain\Traits\IsKalionException;
+use Thehouseofel\Kalion\Domain\Traits\KalionExceptionBehavior;
 use Throwable;
 
 abstract class KalionHttpException extends RuntimeException implements KalionException, HttpExceptionInterface
 {
-    use IsKalionException;
+    use KalionExceptionBehavior;
 
     public function __construct(
         ?int       $statusCode = null,

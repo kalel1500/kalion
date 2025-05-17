@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
 use Throwable;
 use UnexpectedValueException;
 
-trait IsKalionException
+trait KalionExceptionBehavior
 {
     const STATUS_CODE = 500;
     const MESSAGE     = '';
