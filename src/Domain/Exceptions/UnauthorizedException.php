@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Exceptions;
 
-use Thehouseofel\Kalion\Domain\Exceptions\Base\BasicHttpException;
+use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
 
-class UnauthorizedException extends BasicHttpException
+class UnauthorizedException extends KalionHttpException
 {
     const STATUS_CODE = 403;
 

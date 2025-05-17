@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Exceptions;
 
-use Thehouseofel\Kalion\Domain\Exceptions\Base\BasicException;
+use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionLogicException;
 use Throwable;
 
-final class NeverCalledException extends BasicException
+final class NeverCalledException extends KalionLogicException
 {
     const STATUS_CODE = 500;
 

@@ -2,28 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Exceptions\Base;
+namespace Thehouseofel\Kalion\Domain\Traits;
 
-use Exception;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
 use Throwable;
+use UnexpectedValueException;
 
-abstract class KalionException extends Exception
+trait IsKalionException
 {
+    const STATUS_CODE = 500;
+    const MESSAGE     = '';
+
     protected int                 $statusCode;
     protected ?ExceptionContextDo $context = null;
 
-    public function __construct(
-        int        $statusCode = 500,
-        string     $message = "",
+    protected function initKalionException(
+        int        $statusCode,
+        string     $message,
         ?Throwable $previous = null,
         int        $code = 0,
         ?array     $data = null,
         bool       $success = false
-    )
+    ): void
     {
-        if ($message === "") {
-            throw new Exception(__('k::error.exception_message_can_not_be_empty', ['exception' => static::class]));
+        if ($message === '') {
+            throw new UnexpectedValueException(__('k::error.exception_message_can_not_be_empty', ['exception' => static::class]));
         }
 
         // Llamar al constructor

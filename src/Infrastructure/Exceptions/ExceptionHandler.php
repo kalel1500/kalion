@@ -10,9 +10,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Thehouseofel\Kalion\Domain\Contracts\KalionException;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
-use Thehouseofel\Kalion\Domain\Exceptions\Base\BasicHttpException;
-use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionException;
+use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
 use Throwable;
 
@@ -56,11 +56,11 @@ final class ExceptionHandler
                     // Si la excepción es una instancia de "AbortException" renderizamos la vista de errores de Laravel
                     if ($e instanceof AbortException) return response(get_html_laravel_debug_stack_trace($request, $e));
 
-                    // Para cualquier "KalionException" que no sea "BasicHttpException", dejamos que laravel se encargue de renderizar el error.
-                    if (!($e instanceof BasicHttpException)) return null;
+                    // Para cualquier "KalionException" que no sea "KalionHttpException", dejamos que laravel se encargue de renderizar el error.
+                    if (!($e instanceof KalionHttpException)) return null;
                 }
 
-                // En PROD (o las "BasicHttpException" en DEBUG) devolvemos nuestra vista personalizada
+                // En PROD (o las "KalionHttpException" en DEBUG) devolvemos nuestra vista personalizada
                 return response()->view('kal::pages.exceptions.error', compact('context'), $context->statusCode);
             });
 
