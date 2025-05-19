@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
 
 use Composer\InstalledVersions;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\ServiceProvider;
 use RuntimeException;
@@ -843,33 +845,55 @@ EOD;
         return $this;
     }
 
-    /*public function modifyFile_PackageJson_toAddNpmDependencies(): static
+    public function modifyFile_PackageJson_toAddNpmDependencies(): static
     {
         $this->number++;
 
+        $packages = [
+            'flowbite'                    => '^3.1.2',
+            '@types/node'                 => '^22.15.18',
+            'prettier'                    => '^3.5.3',
+            'prettier-plugin-blade'       => '^2.1.21',
+            'prettier-plugin-tailwindcss' => '^0.6.11',
+            'typescript'                  => '^5.8.3',
+            '@kalel1500/kalion-js'        => '^0.9.1-beta.1',
+        ];
+
+        $versions = [];
+        foreach ($packages as $package => $defaultVersion) {
+            try {
+                $result = Http::get('https://registry.npmjs.org/'.$package.'/latest');
+                if ($result->failed()) {
+                    throw new ConnectionException();
+                }
+                $versions[$package] = $result->json()['version'];
+            } catch (Throwable $e) {
+                $versions[$package] = $defaultVersion;
+            }
+        }
+
         // Install NPM packages...
         $this->modifyPackageJsonSection('devDependencies', [
-            'flowbite'                      => config('kalion.version_flowbite'),
+            'flowbite' => $versions['flowbite'],
         ], $this->reset);
 
         // Install NPM packages...
         $this->modifyPackageJsonSection('devDependencies', [
-            '@types/node'                   => config('kalion.version_types_node'),
-            'prettier'                      => config('kalion.version_prettier'),
-            'prettier-plugin-blade'         => config('kalion.version_prettier_plugin_blade'),
-            'prettier-plugin-tailwindcss'   => config('kalion.version_prettier_plugin_tailwindcss'),
-            'typescript'                    => config('kalion.version_typescript'),
+            '@types/node'                 => $versions['@types/node'],
+            'prettier'                    => $versions['prettier'],
+            'prettier-plugin-blade'       => $versions['prettier-plugin-blade'],
+            'prettier-plugin-tailwindcss' => $versions['prettier-plugin-tailwindcss'],
+            'typescript'                  => $versions['typescript'],
         ], ($this->reset || $this->simple));
 
         $this->modifyPackageJsonSection('dependencies', [
-            '@kalel1500/kalion-js'   => config('kalion.version_kalel1500_laravel_ts_utils'),
-//            'tabulator-tables'              => config('kalion.version_tabulator_tables'),
+            '@kalel1500/kalion-js' => $versions['@kalel1500/kalion-js'],
         ], ($this->reset || $this->simple));
 
         $this->line('Archivo package.json actualizado (dependencies)');
 
         return $this;
-    }*/
+    }
 
     public function modifyFile_PackageJson_toAddScriptTsBuild(): static
     {
@@ -1108,7 +1132,7 @@ EOD;
         return $this;
     }
 
-    public function execute_NpmInstallDependencies(): static
+    /*public function execute_NpmInstallDependencies(): static
     {
         $this->number++;
 
@@ -1162,7 +1186,7 @@ EOD;
         $this->line('Dependencias de NPM actualizadas');
 
         return $this;
-    }
+    }*/
 
     public function execute_NpxKalionJs(): static
     {
