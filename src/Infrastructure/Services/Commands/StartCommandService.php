@@ -843,7 +843,7 @@ EOD;
         return $this;
     }
 
-    /*public function modifyFile_PackageJson_toAddNpmDevDependencies(): static
+    /*public function modifyFile_PackageJson_toAddNpmDependencies(): static
     {
         $this->number++;
 
@@ -860,15 +860,6 @@ EOD;
             'prettier-plugin-tailwindcss'   => config('kalion.version_prettier_plugin_tailwindcss'),
             'typescript'                    => config('kalion.version_typescript'),
         ], ($this->reset || $this->simple));
-
-        $this->line('Archivo package.json actualizado (devDependencies)');
-
-        return $this;
-    }*/
-
-    /*public function modifyFile_PackageJson_toAddNpmDependencies(): static
-    {
-        $this->number++;
 
         $this->modifyPackageJsonSection('dependencies', [
             '@kalel1500/kalion-js'   => config('kalion.version_kalel1500_laravel_ts_utils'),
