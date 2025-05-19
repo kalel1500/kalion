@@ -8,10 +8,12 @@ use Composer\InstalledVersions;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\ServiceProvider;
+use RuntimeException;
 use Thehouseofel\Kalion\Domain\Traits\CountMethods;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\KalionServiceProvider;
 use Thehouseofel\Kalion\Infrastructure\Services\Version;
+use Throwable;
 use function Illuminate\Filesystem\join_paths;
 
 /**
@@ -202,22 +204,27 @@ final class StartCommandService
      */
     private function execute_Process(array|string $command, ?string $startMessage, string $successMessage, string $failureMessage, bool $show_number = true): void
     {
-        // Imprimir mensaje de inicio del proceso
-        if (! is_null($startMessage)) {
-            $this->line($startMessage, false);
-        }
+        try {
+            // Imprimir mensaje de inicio del proceso
+            if (! is_null($startMessage)) {
+                $this->line($startMessage, false);
+            }
 
-        // Ejecutamos el proceso
-        $run = Process::run($command);
+            // Ejecutamos el proceso
+            $run = Process::run($command);
 
-        // Verificamos si el proceso falló
-        if ($run->failed()) {
-            $failureMessageEnd = ' Please run the following command manually: "' . implode(' ', $command) . '"';
-            $this->command->warn($failureMessage . $failureMessageEnd);
-            $this->command->error($run->errorOutput());
-        } else {
+            // Verificamos si el proceso falló
+            if ($run->failed()) {
+                throw new RuntimeException();
+            }
+
             // Imprimimos el mensaje de éxito
             $this->line($successMessage, $show_number);
+        } catch (Throwable $exception) {
+            $failureMessageEnd = ' Please run the following command manually: "' . implode(' ', $command) . '"';
+            $this->command->warn($failureMessage . $failureMessageEnd);
+            $errorMessage = isset($run) ? $run->errorOutput() : $exception->getMessage();
+            $this->command->error($errorMessage);
         }
     }
 
