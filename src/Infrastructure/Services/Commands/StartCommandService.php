@@ -1053,6 +1053,57 @@ EOD;
         return $this;
     }
 
+    public function modifyFile_ComposerJson_toAddComposerDependencies(): static
+    {
+        $this->number++;
+
+        $packages = ['tightenco/ziggy' => '^2.5'];
+
+        $filePath = base_path('composer.json');
+
+        if (! file_exists($filePath)) {
+            return $this;
+        }
+
+        $composer = json_decode(file_get_contents($filePath), true);
+
+        if (! isset($composer['require'])) {
+            $composer['require'] = [];
+        }
+
+        if ($this->reset) {
+            foreach ($packages as $package => $version) {
+                unset($composer['require'][$package]);
+            }
+        } else {
+            foreach ($packages as $package => $version) {
+                $composer['require'][$package] = $version;
+            }
+        }
+
+        // Convertir el arreglo a JSON y formatear con JSON_PRETTY_PRINT
+        $jsonContent = json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+
+        // Usa una expresión regular para encontrar la key "keywords" y ponerla en una línea
+        $jsonContent = preg_replace_callback(
+            '/"keywords": \[\s+([^]]+?)\s+]/s',
+            function ($matches) {
+                // Limpia el contenido de "keywords" y colócalo en una línea
+                $keywords = preg_replace('/\s+/', '', $matches[1]);  // Elimina espacios y saltos de línea
+                $keywords = str_replace('","', '", "', $keywords);   // Añade un espacio después de cada coma
+                return '"keywords": [' . $keywords . ']';
+            },
+            $jsonContent
+        );
+
+        // Guardamos los cambios en composer.json
+        file_put_contents($filePath, $jsonContent . PHP_EOL);
+
+        $this->line('Dependencias añadidas al "composer.json"');
+
+        return $this;
+    }
+
     public function execute_ComposerRequire_toInstallComposerDependencies(): static
     {
         $this->number++;
