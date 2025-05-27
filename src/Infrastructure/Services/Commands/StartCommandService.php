@@ -263,6 +263,70 @@ final class StartCommandService
         }
     }
 
+    private function installDependenciesWithComposer(): static
+    {
+        // Install "tightenco/ziggy" -> composer require tightenco/ziggy (execute_Process)
+
+        $content = file_get_contents(base_path('composer.json'));
+
+        $packages = ['tightenco/ziggy'];
+        $package1 = $packages[0];
+
+        if ($this->reset) {
+            if (! str_contains($content, $package1)) {
+                return $this;
+            }
+
+            $this->command->traitRequireComposerPackages(
+                $this->command->option('composer'),
+                $packages,
+                true
+            );
+
+            $this->line('Dependencias de composer desinstaladas');
+
+            return $this;
+        }
+
+        if (str_contains($content, $package1)) {
+            return $this;
+        }
+
+        $this->command->traitRequireComposerPackages(
+            $this->command->option('composer'),
+            $packages
+        );
+
+        $this->line('Dependencias de composer instaladas');
+
+        return $this;
+    }
+
+    private function addDependenciesManuallyInComposerJson(): static
+    {
+        return $this->transformComposerJson(
+            function (array $composer) {
+                $packages = ['tightenco/ziggy' => '^2.5'];
+                $require  = $composer['require'] ?? [];
+
+                if ($this->reset) {
+                    foreach (array_keys($packages) as $pkg) {
+                        unset($require[$pkg]);
+                    }
+                } else {
+                    foreach ($packages as $pkg => $ver) {
+                        $require[$pkg] = $ver;
+                    }
+                }
+
+                $composer['require'] = $require;
+
+                return $composer;
+            },
+            'Dependencias actualizadas en "composer.json"'
+        );
+    }
+
 
     public static function configure(KalionStart $command, bool $reset, bool $simple): static
     {
@@ -1027,66 +1091,10 @@ EOD;
         $this->number++;
 
         if ($this->developMode) {
-
-            return $this->transformComposerJson(
-                function (array $composer) {
-                    $packages = ['tightenco/ziggy' => '^2.5'];
-                    $require  = $composer['require'] ?? [];
-
-                    if ($this->reset) {
-                        foreach (array_keys($packages) as $pkg) {
-                            unset($require[$pkg]);
-                        }
-                    } else {
-                        foreach ($packages as $pkg => $ver) {
-                            $require[$pkg] = $ver;
-                        }
-                    }
-
-                    $composer['require'] = $require;
-
-                    return $composer;
-                },
-                'Dependencias actualizadas en "composer.json"'
-            );
-
+            return $this->addDependenciesManuallyInComposerJson();
         } else {
-            // Install "tightenco/ziggy" -> composer require tightenco/ziggy (execute_Process)
-
-            $content = file_get_contents(base_path('composer.json'));
-
-            $packages = ['tightenco/ziggy'];
-            $package1 = $packages[0];
-
-            if ($this->reset) {
-                if (! str_contains($content, $package1)) {
-                    return $this;
-                }
-
-                $this->command->traitRequireComposerPackages(
-                    $this->command->option('composer'),
-                    $packages,
-                    true
-                );
-
-                $this->line('Dependencias de composer desinstaladas');
-
-                return $this;
-            }
-
-            if (str_contains($content, $package1)) {
-                return $this;
-            }
-
-            $this->command->traitRequireComposerPackages(
-                $this->command->option('composer'),
-                $packages
-            );
-
-            $this->line('Dependencias de composer instaladas');
+            return $this->installDependenciesWithComposer();
         }
-
-        return $this;
     }
 
     public function execute_ComposerDumpAutoload(): static
