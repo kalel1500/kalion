@@ -33,7 +33,6 @@ final class StartCommandService
     private int                 $number                  = 0;
     private readonly bool       $developMode;
     private readonly bool       $keepMigrationsDate;
-    private bool                $resourcesFolderRestored = false;
     private readonly string     $packageVersion;
     private readonly string     $lockFilePath;
     private readonly array      $stubFilesRelativePaths;
@@ -230,46 +229,10 @@ final class StartCommandService
         }
     }
 
-    private function restoreResources(): void
-    {
-        if ($this->resourcesFolderRestored) return;
-
-        $folder = 'resources';
-        $dir    = $this->originalStubsPath($folder);
-        $dest   = base_path($folder);
-
-        File::deleteDirectory($dest);
-        File::ensureDirectoryExists($dest);
-        File::copyDirectory($dir, $dest);
-        $this->resourcesFolderRestored = true;
-    }
-
 
     public static function configure(KalionStart $command, bool $reset, bool $simple): static
     {
         return new static($command, $reset, $simple);
-    }
-
-    public function restoreFilesModifiedByPackageKalionJs(): static
-    {
-        $this->number++;
-
-        // Restore "resources"
-        $this->restoreResources();
-
-        // Delete ".prettierrc"
-        File::delete(base_path('.prettierrc'));
-
-        // Delete "tsconfig.json"
-        File::delete(base_path('tsconfig.json'));
-
-        // Delete "vite.config.ts"
-        File::delete(base_path('vite.config.ts'));
-        copy($this->originalStubsPath('vite.config.js'), base_path('vite.config.js'));
-
-        $this->line('Restaurados todos los archivos modificados por el paquete @kalel1500/kalion-js');
-
-        return $this;
     }
 
     public function publishKalionConfig(): static
@@ -414,6 +377,38 @@ final class StartCommandService
         return $this;
     }
 
+    public function stubsCopyFiles_Js(): static
+    {
+        $this->number++;
+
+        if ($this->reset || $this->simple) {
+            // Delete ".prettierrc"
+            File::delete(base_path('.prettierrc'));
+
+            // Delete "tsconfig.json"
+            File::delete(base_path('tsconfig.json'));
+
+            // Delete "vite.config.ts"
+            File::delete(base_path('vite.config.ts'));
+            File::copy($this->originalStubsPath('vite.config.js'), base_path('vite.config.js'));
+        } else {
+            // Copy ".prettierrc"
+            File::copy($this->stubsPath('.prettierrc', true), base_path('.prettierrc'));
+
+            // Copy "tsconfig.json"
+            File::copy($this->stubsPath('tsconfig.json', true), base_path('tsconfig.json'));
+
+            // Copy "vite.config.ts"
+            File::delete(base_path('vite.config.js'));
+            File::copy($this->stubsPath('vite.config.ts', true), base_path('vite.config.ts'));
+        }
+
+        $action = $this->reset ? 'eliminados' : 'copiados';
+        $this->line('Archivos Js ' . $action);
+
+        return $this;
+    }
+
     public function stubsCopyFolder_Factories(): static
     {
         $this->number++;
@@ -485,36 +480,28 @@ final class StartCommandService
 
         // Views
         $folder = 'resources';
-
-        // Restaurar la carpeta original
-        $this->restoreResources();
-
-        if ($this->reset) return $this;
-
-        $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
 
-        File::ensureDirectoryExists($dest);
-        File::copyDirectory($dir, $dest);
-        $this->line('Carpeta "' . $folder . '" creada');
 
-        return $this;
-    }
 
-    public function stubsCopyFolder_ResourcesFront(): static
-    {
-        $this->number++;
+        if ($this->reset) {
+            $dir = $this->originalStubsPath($folder);
+            File::deleteDirectory($dest);
+            File::ensureDirectoryExists($dest);
+            File::copyDirectory($dir, $dest);
+        } else {
+            $dir = $this->stubsPath($folder);
+            File::ensureDirectoryExists($dest);
+            File::copyDirectory($dir, $dest);
 
-        // Views
-        $folder = 'resources';
+            if (! $this->simple) {
+                $dirFront = $this->stubsPath($folder, true);
+                File::copyDirectory($dirFront, $dest);
+                File::delete(resource_path('js/app.js'));
+                File::delete(resource_path('js/bootstrap.js'));
+            }
+        }
 
-        if ($this->reset || $this->simple) return $this;
-
-        $dir  = $this->stubsPath($folder, true);
-        $dest = base_path($folder);
-
-        File::ensureDirectoryExists($dest);
-        File::copyDirectory($dir, $dest);
         $this->line('Carpeta "' . $folder . '" creada');
 
         return $this;
@@ -1246,7 +1233,7 @@ EOD;
         return $this;
     }*/
 
-    public function execute_NpxKalionJs(): static
+    /*public function execute_NpxKalionJs(): static
     {
         $this->number++;
 
@@ -1260,7 +1247,7 @@ EOD;
         );
 
         return $this;
-    }
+    }*/
 
     public function execute_gitAdd(): static
     {

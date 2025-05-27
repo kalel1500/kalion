@@ -44,11 +44,11 @@ class KalionStart extends Command
         $this->info("Inicio configuración: $developString");
 
         StartCommandService::configure($this, $reset, $simple)
-            ->restoreFilesModifiedByPackageKalionJs()
             ->publishKalionConfig()
             ->stubsCopyFile_DependencyServiceProvider()
             ->stubsCopyFiles_Config()
             ->stubsCopyFiles_Migrations()
+            ->stubsCopyFiles_Js()
             ->stubsCopyFolder_Factories()
             ->stubsCopyFolder_Seeders()
             ->stubsCopyFolder_Lang()
@@ -67,14 +67,12 @@ class KalionStart extends Command
             ->modifyFile_Gitignore_toDeleteLockFileLines()
             ->modifyFile_PackageJson_toAddNpmDependencies()
             ->modifyFile_PackageJson_toAddScriptTsBuild()
+            ->modifyFile_PackageJson_toAddEngines()
             ->modifyFile_ComposerJson_toAddSrcNamespace()
             ->modifyFile_ComposerJson_toAddHelperFilePath()
             ->execute_ComposerRequire_toInstallComposerDependencies()
-            ->execute_NpmInstall()
-            ->modifyFile_PackageJson_toAddEngines()
-            ->execute_NpxKalionJs()
-            ->stubsCopyFolder_ResourcesFront()
             ->execute_gitAdd()
+            ->execute_NpmInstall()
             ->execute_NpmRunBuild();
 
         $this->info('Configuración finalizada');
