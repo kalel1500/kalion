@@ -236,6 +236,8 @@ final class StartCommandService
 
     /**
      * Execute a process.
+     *
+     * @throws \RuntimeException
      */
     private function execute_Process(array|string $command, ?string $startMessage, string $successMessage, string $failureMessage, bool $show_number = true): void
     {
@@ -263,6 +265,10 @@ final class StartCommandService
         }
     }
 
+    /**
+     * @throws \RuntimeException
+     * @throws \LogicException
+     */
     private function installDependenciesWithComposer(): static
     {
         // Install "tightenco/ziggy" -> composer require tightenco/ziggy (execute_Process)
@@ -1093,7 +1099,11 @@ EOD;
         if ($this->developMode) {
             return $this->addDependenciesManuallyInComposerJson();
         } else {
-            return $this->installDependenciesWithComposer();
+            try {
+                return $this->installDependenciesWithComposer();
+            } catch (Throwable $_) {
+                return $this->addDependenciesManuallyInComposerJson();
+            }
         }
     }
 

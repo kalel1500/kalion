@@ -27,9 +27,13 @@ class KalionStart extends Command
      */
     protected $description = 'Create starter files for kalion architecture';
 
-    public function traitRequireComposerPackages(string $composer, array $packages, bool $isRemove = false)
+    /**
+     * @throws \RuntimeException
+     * @throws \LogicException
+     */
+    public function traitRequireComposerPackages(string $composer, array $packages, bool $isRemove = false): bool
     {
-        $this->requireComposerPackages($composer, $packages, $isRemove);
+        return $this->requireComposerPackages($composer, $packages, $isRemove);
     }
 
     /**

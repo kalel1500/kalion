@@ -13,6 +13,9 @@ trait InteractsWithComposerPackages
 {
     /**
      * Installs the given Composer Packages into the application.
+     *
+     * @throws \RuntimeException
+     * @throws \LogicException
      */
     protected function requireComposerPackages(string $composer, array $packages, bool $isRemove = false): bool
     {
