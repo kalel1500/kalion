@@ -884,6 +884,7 @@ EOD;
         $versions = [];
         foreach ($packages as $package => $defaultVersion) {
             try {
+                $this->line('=> Consultando version ' . $package, false);
                 $result = Http::get('https://registry.npmjs.org/'.$package.'/latest');
                 if ($result->failed()) {
                     throw new ConnectionException();
