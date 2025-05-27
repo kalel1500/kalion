@@ -1157,25 +1157,19 @@ EOD;
         return $this;
     }
 
-    /*public function execute_ComposerDumpAutoload(): static
+    public function execute_ComposerDumpAutoload(): static
     {
         $this->number++;
 
-        // Execute the "composer dump-autoload" command
-
-        if ($this->packageInDevelop) {
-            return $this;
-        }
-
-        $run = Process::run('composer dump-autoload');
-        if ($run->failed()) {
-            $this->command->warn('The command "composer dump-autoload" has failed');
-        } else {
-            $this->line('Command "composer dump-autoload" successfully.');
-        }
+        $this->execute_Process(
+            ['composer', 'dump-autoload'],
+            null,
+            'Command "composer dump-autoload" successfully.',
+            'The command "composer dump-autoload" has failed'
+        );
 
         return $this;
-    }*/
+    }
 
     /*public function execute_NpmInstallDependencies(): static
     {

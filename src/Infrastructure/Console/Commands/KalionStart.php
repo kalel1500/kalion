@@ -71,6 +71,7 @@ class KalionStart extends Command
             ->modifyFile_ComposerJson_toAddSrcNamespace()
             ->modifyFile_ComposerJson_toAddHelperFilePath()
             ->execute_ComposerRequire_toInstallComposerDependencies()
+            ->execute_ComposerDumpAutoload()
             ->execute_gitAdd()
             ->execute_NpmInstall()
             ->execute_NpmRunBuild();
