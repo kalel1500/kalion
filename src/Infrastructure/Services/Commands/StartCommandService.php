@@ -201,6 +201,40 @@ final class StartCommandService
     }
 
     /**
+     * Reads, transforms, and writes composer.json
+     * @param \Closure(array): array $callback receives current json array and returns modified
+     * @param string $message message to output after writing
+     */
+    private function transformComposerJson(\Closure $callback, string $message): static
+    {
+        $this->number++;
+        $file = base_path('composer.json');
+        if (! file_exists($file)) {
+            return $this;
+        }
+
+        $composer = json_decode(file_get_contents($file), true); // , 512, JSON_THROW_ON_ERROR
+        $composer = $callback($composer);
+
+        $json = json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) . PHP_EOL; //  | JSON_THROW_ON_ERROR
+        $json = preg_replace_callback(
+            '/"keywords": \[\s+([^]]+?)\s+]/s',
+            function (array $matches) {
+                $keywords = preg_replace('/\s+/', '', $matches[1]);  // Elimina espacios y saltos de línea
+                $keywords = str_replace('","', '", "', $keywords);   // Añade un espacio después de cada coma
+                return '"keywords": [' . $keywords . ']';
+            },
+            $json
+        );
+
+        file_put_contents($file, $json);
+
+        $this->line($message);
+
+        return $this;
+    }
+
+    /**
      * Execute a process.
      */
     private function execute_Process(array|string $command, ?string $startMessage, string $successMessage, string $failureMessage, bool $show_number = true): void
@@ -936,182 +970,81 @@ EOD;
 
     public function modifyFile_ComposerJson_toAddSrcNamespace(): static
     {
-        $this->number++;
+        return $this->transformComposerJson(
+            function (array $composer) {
+                $namespaces = ['Src\\' => 'src/'];
+                $psr4       = $composer['autoload']['psr-4'] ?? [];
 
-        // Update the "autoload.psr-4" section in "composer.json" file with additional namespaces.
-        // Add the "Src" namespace into "composer.json"
+                if ($this->reset) {
+                    foreach ($namespaces as $ns => $_) {
+                        unset($composer['autoload']['psr-4'][$ns]);
+                    }
+                } else {
+                    $composer['autoload']['psr-4'] = $namespaces + $psr4;
+                    ksort($composer['autoload']['psr-4']);
+                }
 
-        $namespaces = ['Src\\' => 'src/'];
-
-        $filePath = base_path('composer.json');
-
-        if (! file_exists($filePath)) {
-            return $this;
-        }
-
-        $composer = json_decode(file_get_contents($filePath), true);
-
-        if (! isset($composer['autoload']['psr-4'])) {
-            $composer['autoload']['psr-4'] = [];
-        }
-
-        $psr4 = $composer['autoload']['psr-4'];
-
-        if ($this->reset) {
-            // Eliminamos los namespaces especificados
-            foreach ($namespaces as $namespace => $path) {
-                unset($composer['autoload']['psr-4'][$namespace]);
-            }
-        } else {
-            // Añadimos los nuevos namespaces
-            $composer['autoload']['psr-4'] = $namespaces + $psr4;
-            ksort($composer['autoload']['psr-4']);
-        }
-
-        // Convertir el arreglo a JSON y formatear con JSON_PRETTY_PRINT
-        $jsonContent = json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-
-        // Usa una expresión regular para encontrar la key "keywords" y ponerla en una línea
-        $jsonContent = preg_replace_callback(
-            '/"keywords": \[\s+([^]]+?)\s+]/s',
-            function ($matches) {
-                // Limpia el contenido de "keywords" y colócalo en una línea
-                $keywords = preg_replace('/\s+/', '', $matches[1]);  // Elimina espacios y saltos de línea
-                $keywords = str_replace('","', '", "', $keywords);   // Añade un espacio después de cada coma
-                return '"keywords": [' . $keywords . ']';
+                return $composer;
             },
-            $jsonContent
+            'Namespace "Src" actualizado en "composer.json"'
         );
-
-        // Guardamos los cambios en composer.json
-        file_put_contents($filePath, $jsonContent . PHP_EOL);
-
-
-        $this->line('Namespace "Src" añadido al "composer.json"');
-
-        return $this;
     }
 
     public function modifyFile_ComposerJson_toAddHelperFilePath(): static
     {
-        $this->number++;
+        return $this->transformComposerJson(
+            function (array $composer) {
+                $files   = $composer['autoload']['files'] ?? [];
+                $helpers = [
+                    'src/Shared/Domain/Helpers/helpers_domain.php',
+                    'src/Shared/Infrastructure/Helpers/helpers_infrastructure.php',
+                ];
 
-        // Ruta del archivo composer.json
-        $filePath = base_path('composer.json');
-
-        if (! file_exists($filePath)) {
-            return $this;
-        }
-
-        // Cargar el contenido actual de composer.json
-        $composer = json_decode(file_get_contents($filePath), true);
-
-        if (! isset($composer['autoload'])) {
-            $composer['autoload'] = [];
-        }
-
-        if (! isset($composer['autoload']['files'])) {
-            $composer['autoload']['files'] = [];
-        }
-
-        // Archivos de helpers a añadir o eliminar
-        $filesToAdd = [
-            "src/Shared/Domain/Helpers/helpers_domain.php",
-            "src/Shared/Infrastructure/Helpers/helpers_infrastructure.php",
-        ];
-
-        if ($this->reset) {
-            // Si estamos en modo reset, eliminamos los archivos de la lista
-            $composer['autoload']['files'] = array_filter(
-                $composer['autoload']['files'],
-                fn($file) => ! in_array($file, $filesToAdd, true)
-            );
-
-            // Si la lista queda vacía, eliminamos completamente la clave "files"
-            if (empty($composer['autoload']['files'])) {
-                unset($composer['autoload']['files']);
-            }
-        } else {
-            // Por defecto, agregamos los archivos si no están presentes
-            foreach ($filesToAdd as $file) {
-                if (! in_array($file, $composer['autoload']['files'], true)) {
-                    $composer['autoload']['files'][] = $file;
+                if ($this->reset) {
+                    $composer['autoload']['files'] = array_filter(
+                        $files,
+                        fn($file) => ! in_array($file, $helpers, true)
+                    );
+                    if (empty($composer['autoload']['files'])) {
+                        unset($composer['autoload']['files']);
+                    }
+                } else {
+                    foreach ($helpers as $file) {
+                        if (! in_array($file, $files, true)) {
+                            $composer['autoload']['files'][] = $file;
+                        }
+                    }
                 }
-            }
-        }
 
-        // Convertir el arreglo a JSON y formatear con JSON_PRETTY_PRINT
-        $jsonContent = json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-
-        // Usa una expresión regular para formatear la propiedad "keywords" correctamente en una línea
-        $jsonContent = preg_replace_callback(
-            '/"keywords": \[\s+([^]]+?)\s+]/s',
-            function ($matches) {
-                $keywords = preg_replace('/\s+/', '', $matches[1]);  // Elimina espacios y saltos de línea
-                $keywords = str_replace('","', '", "', $keywords);   // Añade un espacio después de cada coma
-                return '"keywords": [' . $keywords . ']';
+                return $composer;
             },
-            $jsonContent
+            sprintf("Archivos helpers %s en \"composer.json\"", $this->reset ? 'eliminados' : 'añadidos')
         );
-
-        // Guardamos los cambios en composer.json
-        file_put_contents($filePath, $jsonContent . PHP_EOL);
-
-        $action = $this->reset ? 'eliminados de' : 'añadidos a';
-        $this->line("Archivos helpers {$action} \"autoload.files\" en \"composer.json\"");
-
-        return $this;
     }
 
     public function modifyFile_ComposerJson_toAddComposerDependencies(): static
     {
-        $this->number++;
+        return $this->transformComposerJson(
+            function (array $composer) {
+                $packages = ['tightenco/ziggy' => '^2.5'];
+                $require  = $composer['require'] ?? [];
 
-        $packages = ['tightenco/ziggy' => '^2.5'];
+                if ($this->reset) {
+                    foreach (array_keys($packages) as $pkg) {
+                        unset($require[$pkg]);
+                    }
+                } else {
+                    foreach ($packages as $pkg => $ver) {
+                        $require[$pkg] = $ver;
+                    }
+                }
 
-        $filePath = base_path('composer.json');
+                $composer['require'] = $require;
 
-        if (! file_exists($filePath)) {
-            return $this;
-        }
-
-        $composer = json_decode(file_get_contents($filePath), true);
-
-        if (! isset($composer['require'])) {
-            $composer['require'] = [];
-        }
-
-        if ($this->reset) {
-            foreach ($packages as $package => $version) {
-                unset($composer['require'][$package]);
-            }
-        } else {
-            foreach ($packages as $package => $version) {
-                $composer['require'][$package] = $version;
-            }
-        }
-
-        // Convertir el arreglo a JSON y formatear con JSON_PRETTY_PRINT
-        $jsonContent = json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-
-        // Usa una expresión regular para encontrar la key "keywords" y ponerla en una línea
-        $jsonContent = preg_replace_callback(
-            '/"keywords": \[\s+([^]]+?)\s+]/s',
-            function ($matches) {
-                // Limpia el contenido de "keywords" y colócalo en una línea
-                $keywords = preg_replace('/\s+/', '', $matches[1]);  // Elimina espacios y saltos de línea
-                $keywords = str_replace('","', '", "', $keywords);   // Añade un espacio después de cada coma
-                return '"keywords": [' . $keywords . ']';
+                return $composer;
             },
-            $jsonContent
+            'Dependencias actualizadas en "composer.json"'
         );
-
-        // Guardamos los cambios en composer.json
-        file_put_contents($filePath, $jsonContent . PHP_EOL);
-
-        $this->line('Dependencias añadidas al "composer.json"');
-
-        return $this;
     }
 
     public function execute_ComposerRequire_toInstallComposerDependencies(): static
@@ -1120,7 +1053,7 @@ EOD;
 
         if ($this->developMode) return $this;
 
-        // Install "tightenco/ziggy"
+        // Install "tightenco/ziggy" -> composer require tightenco/ziggy (execute_Process)
 
         $content = file_get_contents(base_path('composer.json'));
 
