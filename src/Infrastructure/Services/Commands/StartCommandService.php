@@ -88,7 +88,7 @@ final class StartCommandService
 
         $relativePaths = [];
         foreach ($paths as $path) {
-            $allFiles = File::allFiles($path);
+            $allFiles = File::allFiles($path, true);
             foreach ($allFiles as $file) {
                 $relativePaths[] = ltrim(str_replace($path, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
             }
