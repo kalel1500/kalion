@@ -872,13 +872,13 @@ EOD;
         $this->number++;
 
         $packages = [
-            'flowbite'                    => '^3.1.2',
-            '@types/node'                 => '^22.15.18',
-            'prettier'                    => '^3.5.3',
-            'prettier-plugin-blade'       => '^2.1.21',
-            'prettier-plugin-tailwindcss' => '^0.6.11',
-            'typescript'                  => '^5.8.3',
-            '@kalel1500/kalion-js'        => '^0.9.1-beta.1',
+            'flowbite'                    => '3.1.2',
+            '@types/node'                 => '22.15.18',
+            'prettier'                    => '3.5.3',
+            'prettier-plugin-blade'       => '2.1.21',
+            'prettier-plugin-tailwindcss' => '0.6.11',
+            'typescript'                  => '5.8.3',
+            '@kalel1500/kalion-js'        => '0.9.1-beta.1',
         ];
 
         $versions = [];
@@ -896,16 +896,16 @@ EOD;
 
         // Install NPM packages...
         $this->modifyPackageJsonSection('devDependencies', [
-            'flowbite' => $versions['flowbite'],
+            'flowbite' => '^' . $versions['flowbite'],
         ], $this->reset);
 
         // Install NPM packages...
         $this->modifyPackageJsonSection('devDependencies', [
-            '@types/node'                 => $versions['@types/node'],
-            'prettier'                    => $versions['prettier'],
-            'prettier-plugin-blade'       => $versions['prettier-plugin-blade'],
-            'prettier-plugin-tailwindcss' => $versions['prettier-plugin-tailwindcss'],
-            'typescript'                  => $versions['typescript'],
+            '@types/node'                 => '^' . $versions['@types/node'],
+            'prettier'                    => '^' . $versions['prettier'],
+            'prettier-plugin-blade'       => '^' . $versions['prettier-plugin-blade'],
+            'prettier-plugin-tailwindcss' => '^' . $versions['prettier-plugin-tailwindcss'],
+            'typescript'                  => '^' . $versions['typescript'],
         ], ($this->reset || $this->simple));
 
         $this->modifyPackageJsonSection('dependencies', [
