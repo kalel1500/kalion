@@ -1022,70 +1022,69 @@ EOD;
         );
     }
 
-    public function modifyFile_ComposerJson_toAddComposerDependencies(): static
-    {
-        return $this->transformComposerJson(
-            function (array $composer) {
-                $packages = ['tightenco/ziggy' => '^2.5'];
-                $require  = $composer['require'] ?? [];
-
-                if ($this->reset) {
-                    foreach (array_keys($packages) as $pkg) {
-                        unset($require[$pkg]);
-                    }
-                } else {
-                    foreach ($packages as $pkg => $ver) {
-                        $require[$pkg] = $ver;
-                    }
-                }
-
-                $composer['require'] = $require;
-
-                return $composer;
-            },
-            'Dependencias actualizadas en "composer.json"'
-        );
-    }
-
-    public function execute_ComposerRequire_toInstallComposerDependencies(): static
+    public function executeComposerRequire_or_ModifyFileComposerJson_toInstallOrAddComposerDependencies(): static
     {
         $this->number++;
 
-        if ($this->developMode) return $this;
+        if ($this->developMode) {
 
-        // Install "tightenco/ziggy" -> composer require tightenco/ziggy (execute_Process)
+            return $this->transformComposerJson(
+                function (array $composer) {
+                    $packages = ['tightenco/ziggy' => '^2.5'];
+                    $require  = $composer['require'] ?? [];
 
-        $content = file_get_contents(base_path('composer.json'));
+                    if ($this->reset) {
+                        foreach (array_keys($packages) as $pkg) {
+                            unset($require[$pkg]);
+                        }
+                    } else {
+                        foreach ($packages as $pkg => $ver) {
+                            $require[$pkg] = $ver;
+                        }
+                    }
 
-        $packages = ['tightenco/ziggy'];
-        $package1 = $packages[0];
+                    $composer['require'] = $require;
 
-        if ($this->reset) {
-            if (! str_contains($content, $package1)) {
+                    return $composer;
+                },
+                'Dependencias actualizadas en "composer.json"'
+            );
+
+        } else {
+            // Install "tightenco/ziggy" -> composer require tightenco/ziggy (execute_Process)
+
+            $content = file_get_contents(base_path('composer.json'));
+
+            $packages = ['tightenco/ziggy'];
+            $package1 = $packages[0];
+
+            if ($this->reset) {
+                if (! str_contains($content, $package1)) {
+                    return $this;
+                }
+
+                $this->command->traitRequireComposerPackages(
+                    $this->command->option('composer'),
+                    $packages,
+                    true
+                );
+
+                $this->line('Dependencias de composer desinstaladas');
+
+                return $this;
+            }
+
+            if (str_contains($content, $package1)) {
                 return $this;
             }
 
             $this->command->traitRequireComposerPackages(
                 $this->command->option('composer'),
-                $packages,
-                true
+                $packages
             );
 
-            $this->line('Dependencias de composer desinstaladas');
-
-            return $this;
+            $this->line('Dependencias de composer instaladas');
         }
-
-        if (str_contains($content, $package1)) {
-            return $this;
-        }
-
-        $this->command->traitRequireComposerPackages(
-            $this->command->option('composer'),
-            $packages
-        );
-
-        $this->line('Dependencias de composer instaladas');
 
         return $this;
     }
