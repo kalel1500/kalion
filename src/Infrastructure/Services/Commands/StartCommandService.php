@@ -802,6 +802,8 @@ EOD;
     {
         $this->number++;
 
+        $message = 'Archivo "resources/js/bootstrap.js" modificado';
+
         // Import "flowbite" in resources/js/bootstrap.js
         $filePath = base_path('resources/js/bootstrap.js');
 
@@ -818,6 +820,7 @@ EOD;
             $fileContents = str_replace($importLine . PHP_EOL, '', $fileContents);
         } else {
             if (str_contains($fileContents, $importLine)) {
+                $this->line($message);
                 return $this;
             }
             // Add the import line to the beginning of the file
@@ -826,7 +829,7 @@ EOD;
 
         file_put_contents($filePath, $fileContents);
 
-        $this->line('Archivo "resources/js/bootstrap.js" modificado');
+        $this->line($message);
 
         return $this;
     }
