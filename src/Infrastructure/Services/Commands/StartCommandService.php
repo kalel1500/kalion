@@ -501,6 +501,25 @@ final class StartCommandService
         return $this;
     }
 
+    public function stubsCopyFolder_ResourcesFront(): static
+    {
+        $this->number++;
+
+        // Views
+        $folder = 'resources';
+
+        if ($this->reset || $this->simple) return $this;
+
+        $dir  = $this->stubsPath($folder, true);
+        $dest = base_path($folder);
+
+        File::ensureDirectoryExists($dest);
+        File::copyDirectory($dir, $dest);
+        $this->line('Carpeta "' . $folder . '" creada');
+
+        return $this;
+    }
+
     public function stubsCopyFolder_Src(): static
     {
         $this->number++;
@@ -1167,22 +1186,6 @@ EOD;
         return $this;
     }*/
 
-    public function execute_NpmInstall(): static
-    {
-        $this->number++;
-
-        if ($this->developMode) return $this;
-
-        $this->execute_Process(
-            ['npm', 'install'],
-            'Installing Node dependencies.',
-            'Node dependencies installed successfully.',
-            'Node dependency installation failed.'
-        );
-
-        return $this;
-    }
-
     /*public function execute_NpmInstallDependencies(): static
     {
         $this->number++;
@@ -1255,25 +1258,6 @@ EOD;
         return $this;
     }
 
-    public function stubsCopyFolder_ResourcesFront(): static
-    {
-        $this->number++;
-
-        // Views
-        $folder = 'resources';
-
-        if ($this->reset || $this->simple) return $this;
-
-        $dir  = $this->stubsPath($folder, true);
-        $dest = base_path($folder);
-
-        File::ensureDirectoryExists($dest);
-        File::copyDirectory($dir, $dest);
-        $this->line('Carpeta "' . $folder . '" creada');
-
-        return $this;
-    }
-
     public function execute_gitAdd(): static
     {
         $this->number++;
@@ -1283,6 +1267,22 @@ EOD;
             null,
             'New files added to the Git Staged Area.',
             'Error adding new files to the Git Staged Area.'
+        );
+
+        return $this;
+    }
+
+    public function execute_NpmInstall(): static
+    {
+        $this->number++;
+
+        if ($this->developMode) return $this;
+
+        $this->execute_Process(
+            ['npm', 'install'],
+            'Installing Node dependencies.',
+            'Node dependencies installed successfully.',
+            'Node dependency installation failed.'
         );
 
         return $this;
