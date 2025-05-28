@@ -17,7 +17,8 @@ class KalionStart extends Command
      */
     protected $signature = 'kalion:start
                     {--composer=global : Absolute path to the Composer binary which should be used to install packages}
-                    {--reset : Reset all changes made by the command to the original state}';
+                    {--reset : Reset all changes made by the command to the original state}
+                    {--skip-examples : Don\'t generate the example files}';
 
     /**
      * The console command description.
@@ -41,11 +42,12 @@ class KalionStart extends Command
     public function handle()
     {
         $reset = $this->option('reset');
+        $skipExamples = $this->option('skip-examples');
 
         $developString = config('kalion.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';
         $this->info("Inicio configuración: $developString");
 
-        StartCommandService::configure($this, $reset)
+        StartCommandService::configure($this, $reset, $skipExamples)
             ->publishKalionConfig()
             ->stubsCopyFile_DependencyServiceProvider()
             ->stubsCopyFiles_Config()

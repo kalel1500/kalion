@@ -26,6 +26,7 @@ final class StartCommandService
     use CountMethods;
 
     private readonly string $stubsPath;
+    private readonly string $stubsPathExamples;
     private readonly string $originalStubsPath;
 
     private readonly int        $steps;
@@ -39,6 +40,7 @@ final class StartCommandService
     public function __construct(
         private readonly KalionStart $command,
         private readonly bool        $reset,
+        private readonly bool        $skipExamples,
     )
     {
         if (! Version::laravelMin12()) {
@@ -47,7 +49,8 @@ final class StartCommandService
         }
 
         $stubsBasePath           = KALION_PATH . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
-        $this->stubsPath         = $stubsBasePath . 'generate';
+        $this->stubsPath         = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'base';
+        $this->stubsPathExamples = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'examples';
         $this->originalStubsPath = $stubsBasePath . 'original';
 
         $this->steps                  = $this->countPublicMethods();
@@ -64,9 +67,10 @@ final class StartCommandService
         return join_paths(KALION_PATH, $path);
     }
 
-    private function stubsPath($path = ''): string
+    private function stubsPath($path = '', $isExample = false): string
     {
-        return join_paths($this->stubsPath, $path);
+        $stubsPath = $isExample ? $this->stubsPathExamples : $this->stubsPath;
+        return join_paths($stubsPath, $path);
     }
 
     private function originalStubsPath($path = ''): string
@@ -80,6 +84,10 @@ final class StartCommandService
             $this->stubsPath(),
         ];
 
+        if (! $this->skipExamples) {
+            $paths[] = $this->stubsPath('', true);
+        }
+
         $relativePaths = [];
         foreach ($paths as $path) {
             $allFiles = File::allFiles($path, true);
@@ -87,6 +95,8 @@ final class StartCommandService
                 $relativePaths[] = ltrim(str_replace($path, '', $file->getRealPath()), DIRECTORY_SEPARATOR);
             }
         }
+        $relativePaths = array_unique($relativePaths);
+        sort($relativePaths);
         return $relativePaths;
     }
 
@@ -382,9 +392,9 @@ final class StartCommandService
     }
 
 
-    public static function configure(KalionStart $command, bool $reset): static
+    public static function configure(KalionStart $command, bool $reset, bool $skipExamples): static
     {
-        return new static($command, $reset);
+        return new static($command, $reset, $skipExamples);
     }
 
     public function publishKalionConfig(): static
@@ -468,7 +478,7 @@ final class StartCommandService
         $folder = 'database/migrations';
 
         // Rutas de origen:
-        $stubsPath   = $this->stubsPath($folder);
+        $stubsPath   = $this->stubsPath($folder, true);
         $packagePath = $this->packagePath($folder);
 
         // Obtenemos los archivos de ambas fuentes y los combinamos
@@ -476,7 +486,7 @@ final class StartCommandService
         $packageFiles = File::files($packagePath);
 
         $this->copyMigrationFiles($packageFiles, $this->reset);
-        $this->copyMigrationFiles($stubFiles, $this->reset);
+        $this->copyMigrationFiles($stubFiles, $this->reset || $this->skipExamples);
 
         $this->line('=> OK', false);
 
@@ -525,7 +535,7 @@ final class StartCommandService
 
         $this->line(sprintf('Copiando carpeta %s', $folder));
 
-        $dir  = ($this->reset) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
+        $dir  = ($this->reset || $this->skipExamples) ? $this->originalStubsPath($folder) : $this->stubsPath($folder, true);
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
@@ -548,7 +558,7 @@ final class StartCommandService
 
         $this->line(sprintf('Copiando carpeta %s', $folder));
 
-        $dir  = ($this->reset) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
+        $dir  = ($this->reset || $this->skipExamples) ? $this->originalStubsPath($folder) : $this->stubsPath($folder, true);
         $dest = base_path($folder);
 
         // Borrar para que se eliminen los archivos existentes
@@ -604,6 +614,11 @@ final class StartCommandService
         File::ensureDirectoryExists($dest);
         File::copyDirectory($dir, $dest);
 
+        if (! $this->reset && ! $this->skipExamples) {
+            $dir  = $this->stubsPath($folder, true);
+            File::copyDirectory($dir, $dest);
+        }
+
         $this->line('=> OK', false);
 
         return $this;
@@ -619,13 +634,21 @@ final class StartCommandService
         $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
 
-        $this->line(sprintf('%s carpeta %s', ($this->reset ? 'Eliminando' : 'Creando'), $folder));
+        // Si en el futuro momento se añade algún archivo a los "src" de la carpeta "base", dejarlo con "$this->reset"
+        $isRollback = $this->reset || $this->skipExamples;
 
-        if ($this->reset) {
+        $this->line(sprintf('%s carpeta %s', ($isRollback ? 'Eliminando' : 'Creando'), $folder));
+
+        if ($isRollback) {
             File::deleteDirectory($dest);
         } else {
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
+
+            if (! $this->skipExamples) {
+                $dir  = $this->stubsPath($folder, true);
+                File::copyDirectory($dir, $dest);
+            }
         }
 
         $this->line('=> OK', false);
@@ -644,7 +667,7 @@ final class StartCommandService
 
         $from = ($this->reset)
             ? $this->originalStubsPath($filePath)
-            : $this->stubsPath($filePath);
+            : $this->stubsPath($filePath, ! $this->skipExamples);
         $to   = base_path($filePath);
 
         copy($from, $to);
@@ -664,7 +687,7 @@ final class StartCommandService
 
         // Definir archivo origen (al generar)
         $file        = '.env.save.local';
-        $from        = $this->stubsPath($file);
+        $from        = $this->stubsPath($file, ! $this->skipExamples);
         $to_envLocal = base_path($file);
 
         // Definir archivo destino
@@ -707,9 +730,11 @@ final class StartCommandService
         $folder = 'app/Http';
         $dest   = base_path($folder);
 
-        $this->line(sprintf('%s directorio %s', ($this->reset ? 'Restaurando' : 'Eliminando'), $folder));
+        $isRollback = $this->reset || $this->skipExamples;
 
-        if ($this->reset) {
+        $this->line(sprintf('%s directorio %s', ($isRollback ? 'Restaurando' : 'Eliminando'), $folder));
+
+        if ($isRollback) {
             $dir = $this->originalStubsPath($folder);
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
@@ -730,9 +755,11 @@ final class StartCommandService
         $folder = 'app/Models';
         $dest   = base_path($folder);
 
-        $this->line(sprintf('%s directorio %s', ($this->reset ? 'Restaurando' : 'Eliminando'), $folder));
+        $isRollback = $this->reset || $this->skipExamples;
 
-        if ($this->reset) {
+        $this->line(sprintf('%s directorio %s', ($isRollback ? 'Restaurando' : 'Eliminando'), $folder));
+
+        if ($isRollback) {
             $dir = $this->originalStubsPath($folder);
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
@@ -1035,14 +1062,16 @@ EOD;
     {
         $this->number++;
 
-        $this->line(sprintf('%s namespace "Src" en el "composer.json"', ($this->reset ? 'Eliminando' : 'Añadiendo')));
+        $isRollback = $this->reset || $this->skipExamples;
+
+        $this->line(sprintf('%s namespace "Src" en el "composer.json"', ($isRollback ? 'Eliminando' : 'Añadiendo')));
 
         $this->transformComposerJson(
-            function (array $composer) {
+            function (array $composer) use ($isRollback) {
                 $namespaces = ['Src\\' => 'src/'];
                 $psr4       = $composer['autoload']['psr-4'] ?? [];
 
-                if ($this->reset) {
+                if ($isRollback) {
                     foreach ($namespaces as $ns => $_) {
                         unset($composer['autoload']['psr-4'][$ns]);
                     }
@@ -1064,17 +1093,19 @@ EOD;
     {
         $this->number++;
 
-        $this->line(sprintf('%s archivos de helpers en el "composer.json"', ($this->reset ? 'Eliminando' : 'Añadiendo')));
+        $isRollback = $this->reset || $this->skipExamples;
+
+        $this->line(sprintf('%s archivos de helpers en el "composer.json"', ($isRollback ? 'Eliminando' : 'Añadiendo')));
 
         $this->transformComposerJson(
-            function (array $composer) {
+            function (array $composer) use ($isRollback) {
                 $files   = $composer['autoload']['files'] ?? [];
                 $helpers = [
                     'src/Shared/Domain/Helpers/helpers_domain.php',
                     'src/Shared/Infrastructure/Helpers/helpers_infrastructure.php',
                 ];
 
-                if ($this->reset) {
+                if ($isRollback) {
                     $composer['autoload']['files'] = array_filter(
                         $files,
                         fn($file) => ! in_array($file, $helpers, true)
