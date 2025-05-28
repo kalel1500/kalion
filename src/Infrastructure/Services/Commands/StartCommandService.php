@@ -150,8 +150,14 @@ final class StartCommandService
      */
     private function line(string $message, bool $show_number = true): void
     {
-        $number = $show_number ? "<fg=yellow>$this->number/$this->steps</>" : '';
-        $this->command->line("  - $number $message");
+        $number = $show_number
+            ? "<fg=yellow>$this->number/$this->steps</>"
+            : '';
+
+        $text = $show_number
+            ? "  - $number $message"
+            : "      <fg=green>$message</>";
+        $this->command->line($text);
     }
 
     /**
@@ -198,7 +204,6 @@ final class StartCommandService
     /**
      * Reads, transforms, and writes composer.json
      * @param \Closure(array): array $callback receives current json array and returns modified
-     * @param string $message message to output after writing
      */
     private function transformComposerJson(\Closure $callback): void
     {
@@ -229,14 +234,9 @@ final class StartCommandService
      *
      * @throws \RuntimeException
      */
-    private function execute_Process(array|string $command, ?string $startMessage, string $successMessage, string $failureMessage, bool $show_number = true): void
+    private function execute_Process(array|string $command, string $successMessage, string $failureMessage): void
     {
         try {
-            // Imprimir mensaje de inicio del proceso
-            if (! is_null($startMessage)) {
-                $this->line($startMessage, false);
-            }
-
             // Ejecutamos el proceso
             $run = Process::run($command);
 
@@ -246,7 +246,7 @@ final class StartCommandService
             }
 
             // Imprimimos el mensaje de éxito
-            $this->line($successMessage, $show_number);
+            $this->line($successMessage, false);
         } catch (Throwable $exception) {
             $failureMessageEnd = ' Please run the following command manually: "' . implode(' ', $command) . '"';
             $this->command->warn($failureMessage . $failureMessageEnd);
@@ -324,18 +324,20 @@ final class StartCommandService
     {
         $this->number++;
 
+        $isRollback = $this->reset || $this->developMode;
+
+        $this->line(sprintf('%s configuración del paquete: "config/kalion_links.php"', ($isRollback ? 'Despublicando' : 'Publicando')));
+
         // Delete "config/kalion.php"
         File::delete(config_path('kalion.php'));
         File::delete(config_path('kalion_links.php'));
 
-        if ($this->reset || $this->developMode) {
-            $this->line('Configuración del paquete despublicada');
-            return $this;
+        if (! $isRollback) {
+            // Publish "config/kalion_links.php"
+            $this->command->call('vendor:publish', ['--tag' => 'kalion-config-links']);
         }
 
-        // Publish "config/kalion_links.php"
-        $this->command->call('vendor:publish', ['--tag' => 'kalion-config-links']);
-        $this->line('Configuración del paquete publicada: "config/kalion_links.php"');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -346,17 +348,18 @@ final class StartCommandService
 
         $file = 'app/Providers/DependencyServiceProvider.php';
 
+        $this->line(sprintf('%s archivo %s', ($this->reset ? 'Eliminando' : 'Creando'), $file));
+
         $from = $this->stubsPath($file);
         $to   = base_path($file);
 
         if ($this->reset) {
             File::delete($to);
-            $this->line('Archivo "' . $file . '" eliminado');
-            return $this;
+        } else {
+            copy($from, $to);
         }
 
-        copy($from, $to);
-        $this->line('Archivo "' . $file . '" creado');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -364,6 +367,8 @@ final class StartCommandService
     public function stubsCopyFiles_Config(): static
     {
         $this->number++;
+
+        $this->line(sprintf('%s archivos de configuración', ($this->reset ? 'Eliminando' : 'Creando')));
 
         $folder          = 'config';
         $sourcePath      = $this->stubsPath($folder);
@@ -382,8 +387,7 @@ final class StartCommandService
             }
         }
 
-        $action = $this->reset ? 'eliminados' : 'copiados';
-        $this->line('Archivos de configuración ' . $action);
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -391,6 +395,8 @@ final class StartCommandService
     public function stubsCopyFiles_Migrations(): static
     {
         $this->number++;
+
+        $this->line(sprintf('%s migraciones', ($this->reset ? 'Eliminando' : 'Creando')));
 
         $folder = 'database/migrations';
 
@@ -459,8 +465,7 @@ final class StartCommandService
             File::copy($file->getPathname(), $destinationFile);
         }
 
-        $action = $this->reset ? 'eliminadas' : 'copiadas';
-        $this->line('Migraciones ' . $action);
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -468,6 +473,8 @@ final class StartCommandService
     public function stubsCopyFiles_Js(): static
     {
         $this->number++;
+
+        $this->line(sprintf('%s archivos de configuración del Front', ($this->reset ? 'Eliminando' : 'Creando')));
 
         if ($this->reset) {
             // Delete ".prettierrc"
@@ -491,8 +498,7 @@ final class StartCommandService
             File::copy($this->stubsPath('vite.config.ts'), base_path('vite.config.ts'));
         }
 
-        $action = $this->reset ? 'eliminados' : 'copiados';
-        $this->line('Archivos Js ' . $action);
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -504,6 +510,8 @@ final class StartCommandService
         // Factories
         $folder = 'database/factories';
 
+        $this->line(sprintf('Copiando carpeta %s', $folder));
+
         $dir  = ($this->reset) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
         $dest = base_path($folder);
 
@@ -513,7 +521,7 @@ final class StartCommandService
         File::ensureDirectoryExists($dest);
         File::copyDirectory($dir, $dest);
 
-        $this->line('Carpeta "' . $folder . '" copiada');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -525,6 +533,8 @@ final class StartCommandService
         // Factories
         $folder = 'database/seeders';
 
+        $this->line(sprintf('Copiando carpeta %s', $folder));
+
         $dir  = ($this->reset) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
         $dest = base_path($folder);
 
@@ -534,7 +544,7 @@ final class StartCommandService
         File::ensureDirectoryExists($dest);
         File::copyDirectory($dir, $dest);
 
-        $this->line('Carpeta "' . $folder . '" copiada');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -546,18 +556,19 @@ final class StartCommandService
         // Views
         $folder = 'lang';
 
+        $this->line(sprintf('%s carpeta %s', ($this->reset ? 'Eliminando' : 'Creando'), $folder));
+
         $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
 
         if ($this->reset) {
             File::deleteDirectory($dest);
-            $this->line('Carpeta "' . $folder . '" eliminada');
-            return $this;
+        } else {
+            File::ensureDirectoryExists($dest);
+            File::copyDirectory($dir, $dest);
         }
 
-        File::ensureDirectoryExists($dest);
-        File::copyDirectory($dir, $dest);
-        $this->line('Carpeta "' . $folder . '" creada');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -570,6 +581,8 @@ final class StartCommandService
         $folder = 'resources';
         $dest = base_path($folder);
 
+        $this->line(sprintf('Copiando carpeta %s', $folder));
+
         if ($this->reset) {
             $dir = $this->originalStubsPath($folder);
             File::deleteDirectory($dest);
@@ -581,7 +594,7 @@ final class StartCommandService
             File::copyDirectory($dir, $dest);
         }
 
-        $this->line('Carpeta "' . $folder . '" creada');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -596,15 +609,16 @@ final class StartCommandService
         $dir  = $this->stubsPath($folder);
         $dest = base_path($folder);
 
+        $this->line(sprintf('%s carpeta %s', ($this->reset ? 'Eliminando' : 'Creando'), $folder));
+
         if ($this->reset) {
             File::deleteDirectory($dest);
-            $this->line('Carpeta "' . $folder . '" eliminada');
-            return $this;
+        } else {
+            File::ensureDirectoryExists($dest);
+            File::copyDirectory($dir, $dest);
         }
 
-        File::ensureDirectoryExists($dest);
-        File::copyDirectory($dir, $dest);
-        $this->line('Carpeta "' . $folder . '" creada');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -616,13 +630,16 @@ final class StartCommandService
         // routes/web.php
         $filePath = 'routes/web.php';
 
+        $this->line(sprintf('Modificando archivo %s', $filePath));
+
         $from = ($this->reset)
             ? $this->originalStubsPath($filePath)
             : $this->stubsPath($filePath);
         $to   = base_path($filePath);
 
         copy($from, $to);
-        $this->line('Archivo "' . $filePath . '" modificado');
+
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -633,7 +650,7 @@ final class StartCommandService
 
         // Crear archivos ".env" y ".env.save.local"
 
-        $message = 'Archivos ".env" creados';
+        $this->line(sprintf('%s archivos ".env"', ($this->reset ? 'Restaurando' : 'Creando')));
 
         // Definir archivo origen (al generar)
         $file        = '.env.save.local';
@@ -644,8 +661,6 @@ final class StartCommandService
         $to_env = base_path('.env');
 
         if ($this->reset) {
-            $message = 'Archivos ".env" restaurados';
-
             // Eliminar archivo ".env.save.local"
             File::delete($to_envLocal);
 
@@ -669,7 +684,7 @@ final class StartCommandService
             $this->command->call('key:generate');
         }
 
-        $this->line($message);
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -682,16 +697,17 @@ final class StartCommandService
         $folder = 'app/Http';
         $dest   = base_path($folder);
 
+        $this->line(sprintf('%s directorio %s', ($this->reset ? 'Restaurando' : 'Eliminando'), $folder));
+
         if ($this->reset) {
             $dir = $this->originalStubsPath($folder);
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
-            $this->line('Carpeta "' . $folder . '" creada');
-            return $this;
+        } else {
+            File::deleteDirectory($dest);
         }
 
-        File::deleteDirectory($dest);
-        $this->line('Directorio "' . $folder . '" eliminado');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -704,16 +720,18 @@ final class StartCommandService
         $folder = 'app/Models';
         $dest   = base_path($folder);
 
+        $this->line(sprintf('%s directorio %s', ($this->reset ? 'Restaurando' : 'Eliminando'), $folder));
+
         if ($this->reset) {
             $dir = $this->originalStubsPath($folder);
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
-            $this->line('Carpeta "' . $folder . '" creada');
             return $this;
+        } else {
+            File::deleteDirectory($dest);
         }
 
-        File::deleteDirectory($dest);
-        $this->line('Directorio "' . $folder . '" eliminado');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -722,9 +740,12 @@ final class StartCommandService
     {
         $this->number++;
 
+        $this->line('Eliminando archivo "CHANGELOG.md"');
+
         // Delete file "CHANGELOG.md"
         File::delete(base_path('CHANGELOG.md'));
-        $this->line('Archivo "CHANGELOG.md" eliminado');
+
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -732,6 +753,8 @@ final class StartCommandService
     public function modifyFile_BootstrapProviders_toAddDependencyServiceProvider(): static
     {
         $this->number++;
+
+        $this->line('Modificando archivo "bootstrap/providers.php"');
 
         // bootstrap/providers.php
 
@@ -745,7 +768,7 @@ final class StartCommandService
             ServiceProvider::addProviderToBootstrapFile('App\Providers\DependencyServiceProvider');
         }
 
-        $this->line('Archivo "bootstrap/providers.php" modificado');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -753,6 +776,8 @@ final class StartCommandService
     public function modifyFile_BootstrapApp_toAddMiddlewareRedirect(): static
     {
         $this->number++;
+
+        $this->line('Modificando archivo "bootstrap/app.php" para agregar redirectUsersTo en withMiddleware');
 
         if (! Version::laravelMin11()) {
             return $this;
@@ -785,7 +810,7 @@ EOD;
         // Guardar el archivo con el contenido actualizado
         File::put($filePath, $newContent);
 
-        $this->line('Archivo "bootstrap/app.php" modificado para agregar redirectUsersTo en withMiddleware');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -793,6 +818,8 @@ EOD;
     public function modifyFile_BootstrapApp_toAddExceptionHandler(): static
     {
         $this->number++;
+
+        $this->line('Modificando archivo "bootstrap/app.php" para agregar el "ExceptionHandler" en el "withExceptions()"');
 
         if (! Version::laravelMin11()) {
             return $this;
@@ -826,7 +853,7 @@ EOD;
         // Guardar el archivo con el contenido actualizado
         File::put($filePath, $newContent);
 
-        $this->line('Archivo "bootstrap/app.php" modificado');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -834,6 +861,8 @@ EOD;
     public function modifyFile_ConfigApp_toUpdateTimezone(): static
     {
         $this->number++;
+
+        $this->line('Modificando archivo "config/app.php" para para actualizar el timezone');
 
         // Ruta del archivo a modificar
         $filePath = base_path('config/app.php');
@@ -859,7 +888,7 @@ EOD;
         // Guardar el archivo con el contenido actualizado
         File::put($filePath, $updatedContent);
 
-        $this->line('Archivo "config/app.php" modificado para actualizar el timezone');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -870,8 +899,10 @@ EOD;
 
         // Borrar los ".lock" del ".gitignore"
 
+        $this->line('Eliminando archivos ".lock" del ".gitignore"');
+
         if ($this->developMode) {
-            $this->line('Skipped ".gitignore" deletions');
+            $this->line('=> Skipped ".gitignore" deletions in developMode', false);
             return $this;
         }
 
@@ -895,7 +926,7 @@ EOD;
         // Escribir el contenido actualizado en el archivo con una sola línea vacía al final
         file_put_contents($gitignorePath, implode(PHP_EOL, $gitignoreContent) . PHP_EOL);
 
-        $this->line('Archivos ".lock" eliminados del ".gitignore"');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -903,6 +934,8 @@ EOD;
     public function modifyFile_PackageJson_toAddNpmDependencies(): static
     {
         $this->number++;
+
+        $this->line('Actualizando archivo "package.json" (dependencies)');
 
         $packages = [
             'flowbite'                    => '3.1.2',
@@ -950,7 +983,7 @@ EOD;
             '@kalel1500/kalion-js' => $versions['@kalel1500/kalion-js'],
         ], $this->reset);
 
-        $this->line('Archivo package.json actualizado (dependencies)');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -959,12 +992,14 @@ EOD;
     {
         $this->number++;
 
+        $this->line('Actualizando archivo "package.json" (script "ts-build")');
+
         // Add script "ts-build" in "package.json"
         $this->modifyPackageJsonSection('scripts', [
             'ts-build' => 'tsc && vite build',
         ], $this->reset);
 
-        $this->line('Archivo package.json actualizado (script "ts-build")');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -973,13 +1008,15 @@ EOD;
     {
         $this->number++;
 
+        $this->line('Actualizando archivo "package.json" (script "ts-build")');
+
         // Add script "ts-build" in "package.json"
         $this->modifyPackageJsonSection('engines', [
             'node' => config('kalion.version_node'),
             // 'npm'  => config('kalion.version_npm'),
         ], $this->reset);
 
-        $this->line('Archivo package.json actualizado (engines)');
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -987,6 +1024,8 @@ EOD;
     public function modifyFile_ComposerJson_toAddSrcNamespace(): static
     {
         $this->number++;
+
+        $this->line(sprintf('%s namespace "Src" en el "composer.json"', ($this->reset ? 'Eliminando' : 'Añadiendo')));
 
         $this->transformComposerJson(
             function (array $composer) {
@@ -1006,7 +1045,7 @@ EOD;
             }
         );
 
-        $this->line(sprintf('Namespace "Src" %s en "composer.json"', ($this->reset ? 'eliminado' : 'añadido')));
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -1014,6 +1053,8 @@ EOD;
     public function modifyFile_ComposerJson_toAddHelperFilePath(): static
     {
         $this->number++;
+
+        $this->line(sprintf('%s archivos de helpers en el "composer.json"', ($this->reset ? 'Eliminando' : 'Añadiendo')));
 
         $this->transformComposerJson(
             function (array $composer) {
@@ -1043,7 +1084,7 @@ EOD;
             }
         );
 
-        $this->line(sprintf('Archivos de helpers %s "composer.json"', $this->reset ? 'eliminados del' : 'añadidos al'));
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -1051,6 +1092,8 @@ EOD;
     public function execute_ComposerRequire_toInstallComposerDependencies(): static
     {
         $this->number++;
+
+        $this->line(sprintf('%s dependencias de composer ("composer.json")', ($this->reset ? 'Desinstalando' : 'Instalando')));
 
         if ($this->developMode) {
             $this->addDependenciesManuallyInComposerJson();
@@ -1062,7 +1105,7 @@ EOD;
             }
         }
 
-        $this->line(sprintf('Dependencias de composer %s', ($this->reset ? 'desinstaladas' : 'instaladas')));
+        $this->line('=> OK', false);
 
         return $this;
     }
@@ -1071,16 +1114,17 @@ EOD;
     {
         $this->number++;
 
+        $this->line('Running "composer dump-autoload" command');
+
         if ($this->developMode) {
-            $this->line('Command "composer dump-autoload" skipped on develop mode');
+            $this->line('=> "composer dump-autoload" command skipped on develop mode', false);
             return $this;
         }
 
         $this->execute_Process(
             ['composer', 'dump-autoload'],
-            null,
-            'Command "composer dump-autoload" successfully.',
-            'The command "composer dump-autoload" has failed'
+            '=> "composer dump-autoload" command successfully',
+            '=> "composer dump-autoload" command has failed',
         );
 
         return $this;
@@ -1090,7 +1134,12 @@ EOD;
     {
         $this->number++;
 
-        if ($this->developMode) return $this;
+        $this->line('Actualizando las dependencias de NPM');
+
+        if ($this->developMode) {
+            $this->line('=> Commands "npm install" skipped on develop mode', false);
+            return $this;
+        }
 
         $isReset         = $this->reset;
         $packageJsonPath = base_path('package.json');
@@ -1128,15 +1177,13 @@ EOD;
                 $action = $remove ? 'uninstall' : 'install';
                 $this->execute_Process(
                     ['npm', $action, $package, $extra],
-                    null,
                     "=> Successfully $action $package",
                     "=> Sailed $action $package",
-                    false
                 );
             }
         }
 
-        $this->line('Dependencias de NPM actualizadas');
+        $this->line('=> OK', false);
 
         return $this;
     }*/
@@ -1147,11 +1194,12 @@ EOD;
 
         if ($this->reset) return $this;
 
+        $this->line('Running the "kalion-js" package start command');
+
         $this->execute_Process(
             ['npx', 'kalion-js'],
-            'Running the "kalion-js" package start command.',
-            'kalion-js package files generated successfully.',
-            'Error while generating files for the "kalion-js" package.'
+            '=> kalion-js package files generated successfully',
+            '=> Error while generating files for the "kalion-js" package'
         );
 
         return $this;
@@ -1161,11 +1209,12 @@ EOD;
     {
         $this->number++;
 
+        $this->line('Running "git .add" command');
+
         $this->execute_Process(
             ['git', 'add', '.'],
-            null,
-            'New files added to the Git Staged Area.',
-            'Error adding new files to the Git Staged Area.'
+            '=> New files added to the Git Staged Area',
+            '=> Error adding new files to the Git Staged Area',
         );
 
         return $this;
@@ -1175,16 +1224,17 @@ EOD;
     {
         $this->number++;
 
+        $this->line('Installing Node dependencies');
+
         if ($this->developMode) {
-            $this->line('Skipped "npm install" in develop mode.');
+            $this->line('=> Skipped "npm install" in develop mode', false);
             return $this;
         }
 
         $this->execute_Process(
             ['npm', 'install'],
-            'Installing Node dependencies.',
-            'Node dependencies installed successfully.',
-            'Node dependency installation failed.'
+            '=> Node dependencies installed successfully',
+            '=> Node dependency installation failed',
         );
 
         return $this;
@@ -1194,16 +1244,17 @@ EOD;
     {
         $this->number++;
 
+        $this->line('Building app');
+
         if ($this->developMode) {
-            $this->line('Skipped "npm run build" in develop mode.');
+            $this->line('=> Skipped "npm run build" in develop mode', false);
             return $this;
         }
 
         $this->execute_Process(
             ['npm', 'run', 'build'],
-            'Building app.',
-            'App built successfully.',
-            'Build failed.'
+            'App built successfully',
+            'Build failed',
         );
 
         return $this;
