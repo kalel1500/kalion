@@ -947,7 +947,7 @@ EOD;
         $versions = [];
         foreach ($packages as $package => $defaultVersion) {
             try {
-                if ($this->developMode) {
+                if ($this->reset || $this->developMode) {
                     throw new \LogicException('Skip on develop mode');
                 }
 
