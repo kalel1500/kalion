@@ -579,20 +579,17 @@ final class StartCommandService
 
         // Views
         $folder = 'resources';
+        $dir  = ($this->reset) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
         $dest = base_path($folder);
 
         $this->line(sprintf('Copiando carpeta %s', $folder));
 
-        if ($this->reset) {
-            $dir = $this->originalStubsPath($folder);
-            File::deleteDirectory($dest);
-            File::ensureDirectoryExists($dest);
-            File::copyDirectory($dir, $dest);
-        } else {
-            $dir = $this->stubsPath($folder);
-            File::ensureDirectoryExists($dest);
-            File::copyDirectory($dir, $dest);
-        }
+        // Borrar para que se eliminen los archivos existentes
+        File::deleteDirectory($dest);
+
+        // Realizar la copia completa
+        File::ensureDirectoryExists($dest);
+        File::copyDirectory($dir, $dest);
 
         $this->line('=> OK', false);
 
