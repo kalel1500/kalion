@@ -9,7 +9,9 @@ namespace Thehouseofel\Kalion\Domain\Traits;
  */
 trait WithIdsAndToArray
 {
-    // Método para obtener el ID asociado a un valor del enum
+    /**
+     * Obtener el ID asociado a un valor del enum
+     */
     public function getId(): int {
         return static::values()[$this->value];
     }
@@ -27,7 +29,9 @@ trait WithIdsAndToArray
         return static::from($value);
     }
 
-    // Método para convertir todos los valores del enum en un array de strings
+    /**
+     * Convertir todos los valores del enum en un array de strings
+     */
     public static function toArray(): array {
         return array_map(fn($case) => $case->value, static::cases());
     }
