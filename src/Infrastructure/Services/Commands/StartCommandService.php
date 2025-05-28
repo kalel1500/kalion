@@ -977,7 +977,7 @@ EOD;
         ], $this->reset);
 
         $this->modifyPackageJsonSection('dependencies', [
-            '@kalel1500/kalion-js' => $versions['@kalel1500/kalion-js'],
+            '@kalel1500/kalion-js' => '^' . $versions['@kalel1500/kalion-js'],
         ], $this->reset);
 
         $this->line('=> OK', false);
