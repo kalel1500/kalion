@@ -26,7 +26,6 @@ final class StartCommandService
     use CountMethods;
 
     private readonly string $stubsPath;
-    private readonly string $stubsPathFront;
     private readonly string $originalStubsPath;
 
     private readonly int        $steps;
@@ -48,8 +47,7 @@ final class StartCommandService
         }
 
         $stubsBasePath           = KALION_PATH . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
-        $this->stubsPath         = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'simple';
-        $this->stubsPathFront    = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'front';
+        $this->stubsPath         = $stubsBasePath . 'generate';
         $this->originalStubsPath = $stubsBasePath . 'original';
 
         $this->steps                  = $this->countPublicMethods();
@@ -66,10 +64,9 @@ final class StartCommandService
         return join_paths(KALION_PATH, $path);
     }
 
-    private function stubsPath($path = '', $isFront = false): string
+    private function stubsPath($path = ''): string
     {
-        $stubsPath = $isFront ? $this->stubsPathFront : $this->stubsPath;
-        return join_paths($stubsPath, $path);
+        return join_paths($this->stubsPath, $path);
     }
 
     private function originalStubsPath($path = ''): string
@@ -81,7 +78,6 @@ final class StartCommandService
     {
         $paths = [
             $this->stubsPath(),
-            $this->stubsPath('', true)
         ];
 
         $relativePaths = [];
@@ -496,14 +492,14 @@ final class StartCommandService
             File::copy($this->originalStubsPath('vite.config.js'), base_path('vite.config.js'));
         } else {
             // Copy ".prettierrc"
-            File::copy($this->stubsPath('.prettierrc', true), base_path('.prettierrc'));
+            File::copy($this->stubsPath('.prettierrc'), base_path('.prettierrc'));
 
             // Copy "tsconfig.json"
-            File::copy($this->stubsPath('tsconfig.json', true), base_path('tsconfig.json'));
+            File::copy($this->stubsPath('tsconfig.json'), base_path('tsconfig.json'));
 
             // Copy "vite.config.ts"
             File::delete(base_path('vite.config.js'));
-            File::copy($this->stubsPath('vite.config.ts', true), base_path('vite.config.ts'));
+            File::copy($this->stubsPath('vite.config.ts'), base_path('vite.config.ts'));
         }
 
         $action = $this->reset ? 'eliminados' : 'copiados';
@@ -596,11 +592,6 @@ final class StartCommandService
             $dir = $this->stubsPath($folder);
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
-
-            $dirFront = $this->stubsPath($folder, true);
-            File::copyDirectory($dirFront, $dest);
-            File::delete(resource_path('js/app.js'));
-            File::delete(resource_path('js/bootstrap.js'));
         }
 
         $this->line('Carpeta "' . $folder . '" creada');
