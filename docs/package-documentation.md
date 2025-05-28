@@ -21,11 +21,11 @@ Además, esta nomenclatura ayuda a comunicar de manera inmediata que esos compon
 | ->stubsCopyFile_DependencyServiceProvider()                      |        |             |
 | ->stubsCopyFiles_Config()                                        |        |             |
 | ->stubsCopyFiles_Migrations()                                    |        |             |
-| ->stubsCopyFiles_Js()                                            | simple |             |
+| ->stubsCopyFiles_Js()                                            |        |             |
 | ->stubsCopyFolder_Factories()                                    |        |             |
 | ->stubsCopyFolder_Seeders()                                      |        |             |
 | ->stubsCopyFolder_Lang()                                         |        |             |
-| ->stubsCopyFolder_Resources()                                    | simple |             |
+| ->stubsCopyFolder_Resources()                                    |        |             |
 | ->stubsCopyFolder_Src()                                          |        |             |
 | ->stubsCopyFile_RoutesWeb()                                      |        |             |
 | ->createEnvFiles()                                               |        | developMode |
@@ -38,9 +38,9 @@ Además, esta nomenclatura ayuda a comunicar de manera inmediata que esos compon
 | ->modifyFile_ConfigApp_toUpdateTimezone()                        |        |             |
 | ->modifyFile_JsBootstrap_toAddImportFlowbite()                   |        |             |
 | ->modifyFile_Gitignore_toDeleteLockFileLines()                   |        | developMode |
-| ->modifyFile_PackageJson_toAddNpmDependencies()                  | simple |             |
-| ->modifyFile_PackageJson_toAddScriptTsBuild()                    | simple |             |
-| ->modifyFile_PackageJson_toAddEngines()                          | simple |             |
+| ->modifyFile_PackageJson_toAddNpmDependencies()                  |        |             |
+| ->modifyFile_PackageJson_toAddScriptTsBuild()                    |        |             |
+| ->modifyFile_PackageJson_toAddEngines()                          |        |             |
 | ->modifyFile_ComposerJson_toAddSrcNamespace()                    |        |             |
 | ->modifyFile_ComposerJson_toAddHelperFilePath()                  |        |             |
 | ->execute_ComposerRequire_toInstallComposerDependencies()        |        | developMode |

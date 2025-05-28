@@ -40,7 +40,6 @@ final class StartCommandService
     public function __construct(
         private readonly KalionStart $command,
         private readonly bool        $reset,
-        private readonly bool        $simple,
     )
     {
         if (! Version::laravelMin12()) {
@@ -334,9 +333,9 @@ final class StartCommandService
     }
 
 
-    public static function configure(KalionStart $command, bool $reset, bool $simple): static
+    public static function configure(KalionStart $command, bool $reset): static
     {
-        return new static($command, $reset, $simple);
+        return new static($command, $reset);
     }
 
     public function publishKalionConfig(): static
@@ -485,7 +484,7 @@ final class StartCommandService
     {
         $this->number++;
 
-        if ($this->reset || $this->simple) {
+        if ($this->reset) {
             // Delete ".prettierrc"
             File::delete(base_path('.prettierrc'));
 
@@ -598,12 +597,10 @@ final class StartCommandService
             File::ensureDirectoryExists($dest);
             File::copyDirectory($dir, $dest);
 
-            if (! $this->simple) {
-                $dirFront = $this->stubsPath($folder, true);
-                File::copyDirectory($dirFront, $dest);
-                File::delete(resource_path('js/app.js'));
-                File::delete(resource_path('js/bootstrap.js'));
-            }
+            $dirFront = $this->stubsPath($folder, true);
+            File::copyDirectory($dirFront, $dest);
+            File::delete(resource_path('js/app.js'));
+            File::delete(resource_path('js/bootstrap.js'));
         }
 
         $this->line('Carpeta "' . $folder . '" creada');
@@ -998,11 +995,11 @@ EOD;
             'prettier-plugin-blade'       => '^' . $versions['prettier-plugin-blade'],
             'prettier-plugin-tailwindcss' => '^' . $versions['prettier-plugin-tailwindcss'],
             'typescript'                  => '^' . $versions['typescript'],
-        ], ($this->reset || $this->simple));
+        ], $this->reset);
 
         $this->modifyPackageJsonSection('dependencies', [
             '@kalel1500/kalion-js' => $versions['@kalel1500/kalion-js'],
-        ], ($this->reset || $this->simple));
+        ], $this->reset);
 
         $this->line('Archivo package.json actualizado (dependencies)');
 
@@ -1016,7 +1013,7 @@ EOD;
         // Add script "ts-build" in "package.json"
         $this->modifyPackageJsonSection('scripts', [
             'ts-build' => 'tsc && vite build',
-        ], ($this->reset || $this->simple));
+        ], $this->reset);
 
         $this->line('Archivo package.json actualizado (script "ts-build")');
 
@@ -1031,7 +1028,7 @@ EOD;
         $this->modifyPackageJsonSection('engines', [
             'node' => config('kalion.version_node'),
             // 'npm'  => config('kalion.version_npm'),
-        ], ($this->reset || $this->simple));
+        ], $this->reset);
 
         $this->line('Archivo package.json actualizado (engines)');
 
@@ -1128,19 +1125,18 @@ EOD;
         if ($this->developMode) return $this;
 
         $isReset         = $this->reset;
-        $isResetFront    = $this->reset || $this->simple;
         $packageJsonPath = base_path('package.json');
         $packages        = [
             'devDependencies' => [
                 'flowbite'                    => $isReset,
-                '@types/node'                 => $isResetFront,
-                'prettier'                    => $isResetFront,
-                'prettier-plugin-blade'       => $isResetFront,
-                'prettier-plugin-tailwindcss' => $isResetFront,
-                'typescript'                  => $isResetFront,
+                '@types/node'                 => $isReset,
+                'prettier'                    => $isReset,
+                'prettier-plugin-blade'       => $isReset,
+                'prettier-plugin-tailwindcss' => $isReset,
+                'typescript'                  => $isReset,
             ],
             'dependencies'    => [
-                '@kalel1500/kalion-js' => $isResetFront,
+                '@kalel1500/kalion-js' => $isReset,
             ]
         ];
 
@@ -1181,7 +1177,7 @@ EOD;
     {
         $this->number++;
 
-        if ($this->reset || $this->simple) return $this;
+        if ($this->reset) return $this;
 
         $this->execute_Process(
             ['npx', 'kalion-js'],

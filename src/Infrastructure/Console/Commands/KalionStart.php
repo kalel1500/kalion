@@ -17,8 +17,7 @@ class KalionStart extends Command
      */
     protected $signature = 'kalion:start
                     {--composer=global : Absolute path to the Composer binary which should be used to install packages}
-                    {--reset : Reset all changes made by the command to the original state}
-                    {--simple : Create only the files needed for the backend}';
+                    {--reset : Reset all changes made by the command to the original state}';
 
     /**
      * The console command description.
@@ -42,12 +41,11 @@ class KalionStart extends Command
     public function handle()
     {
         $reset = $this->option('reset');
-        $simple = $this->option('simple');
 
         $developString = config('kalion.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';
         $this->info("Inicio configuración: $developString");
 
-        StartCommandService::configure($this, $reset, $simple)
+        StartCommandService::configure($this, $reset)
             ->publishKalionConfig()
             ->stubsCopyFile_DependencyServiceProvider()
             ->stubsCopyFiles_Config()
