@@ -18,7 +18,7 @@
         <title>{{ $title }}</title>
 
         <!-- Icon -->
-        <link rel="icon" type="image/x-icon" href="@viteAsset({{ config('kalion.layout.asset_path_favicon') }})">
+        <link rel="icon" type="image/x-icon" href="@viteAsset(config('kalion.layout.asset_path_favicon'))">
 
         {{-- Js para cargar la clase "dark" cuando el "color-theme" es "system" (por si la carga es lenta y el "js" compilado tarda en cargar) --}}
         <x-kal::js.dark-mode/>
@@ -36,8 +36,11 @@
             {!! Renderer::js() !!}
         @else
             <!-- JavaScript y CSS compilados -->
-            @php($jsExt = file_exists(resource_path('js/app.ts')) ? 'ts' : 'js')
-            @vite(['resources/css/app.css', 'resources/js/app.'.$jsExt])
+            @if(file_exists(resource_path('js/app.ts')))
+                @vite(['resources/css/app.css', 'resources/js/app.ts'])
+            @else
+                @vite(['resources/css/app.css', 'resources/js/app.js'])
+            @endif
         @endif
 
         <!-- CSS con los estilos de la vista actual (si tiene) -->
