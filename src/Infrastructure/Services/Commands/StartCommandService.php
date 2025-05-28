@@ -917,6 +917,10 @@ EOD;
         $versions = [];
         foreach ($packages as $package => $defaultVersion) {
             try {
+                if ($this->developMode) {
+                    throw new \LogicException('Skip on develop mode');
+                }
+
                 $this->line('=> Consultando version ' . $package, false);
                 $result = Http::get('https://registry.npmjs.org/'.$package.'/latest');
                 if ($result->failed()) {
@@ -1066,6 +1070,11 @@ EOD;
     public function execute_ComposerDumpAutoload(): static
     {
         $this->number++;
+
+        if ($this->developMode) {
+            $this->line('Command "composer dump-autoload" skipped on develop mode');
+            return $this;
+        }
 
         $this->execute_Process(
             ['composer', 'dump-autoload'],
