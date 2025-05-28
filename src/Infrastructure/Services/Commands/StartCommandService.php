@@ -200,11 +200,11 @@ final class StartCommandService
      * @param \Closure(array): array $callback receives current json array and returns modified
      * @param string $message message to output after writing
      */
-    private function transformComposerJson(\Closure $callback, string $message): static
+    private function transformComposerJson(\Closure $callback): void
     {
         $file = base_path('composer.json');
         if (! file_exists($file)) {
-            return $this;
+            return;
         }
 
         $composer = json_decode(file_get_contents($file), true); // , 512, JSON_THROW_ON_ERROR
@@ -222,10 +222,6 @@ final class StartCommandService
         );
 
         file_put_contents($file, $json);
-
-        $this->line($message);
-
-        return $this;
     }
 
     /**
@@ -263,7 +259,7 @@ final class StartCommandService
      * @throws \RuntimeException
      * @throws \LogicException
      */
-    private function installDependenciesWithComposer(): static
+    private function installDependenciesWithComposer(): void
     {
         // Install "tightenco/ziggy" -> composer require tightenco/ziggy (execute_Process)
 
@@ -274,7 +270,7 @@ final class StartCommandService
 
         if ($this->reset) {
             if (! str_contains($content, $package1)) {
-                return $this;
+                return;
             }
 
             $this->command->traitRequireComposerPackages(
@@ -282,29 +278,21 @@ final class StartCommandService
                 $packages,
                 true
             );
-
-            $this->line('Dependencias de composer desinstaladas');
-
-            return $this;
         }
 
         if (str_contains($content, $package1)) {
-            return $this;
+            return;
         }
 
         $this->command->traitRequireComposerPackages(
             $this->command->option('composer'),
             $packages
         );
-
-        $this->line('Dependencias de composer instaladas');
-
-        return $this;
     }
 
-    private function addDependenciesManuallyInComposerJson(): static
+    private function addDependenciesManuallyInComposerJson(): void
     {
-        return $this->transformComposerJson(
+        $this->transformComposerJson(
             function (array $composer) {
                 $packages = ['tightenco/ziggy' => '^2.5'];
                 $require  = $composer['require'] ?? [];
@@ -322,8 +310,7 @@ final class StartCommandService
                 $composer['require'] = $require;
 
                 return $composer;
-            },
-            'Dependencias actualizadas en "composer.json"'
+            }
         );
     }
 
@@ -997,7 +984,7 @@ EOD;
     {
         $this->number++;
 
-        return $this->transformComposerJson(
+        $this->transformComposerJson(
             function (array $composer) {
                 $namespaces = ['Src\\' => 'src/'];
                 $psr4       = $composer['autoload']['psr-4'] ?? [];
@@ -1012,16 +999,19 @@ EOD;
                 }
 
                 return $composer;
-            },
-            'Namespace "Src" actualizado en "composer.json"'
+            }
         );
+
+        $this->line(sprintf('Namespace "Src" %s en "composer.json"', ($this->reset ? 'eliminado' : 'añadido')));
+
+        return $this;
     }
 
     public function modifyFile_ComposerJson_toAddHelperFilePath(): static
     {
         $this->number++;
 
-        return $this->transformComposerJson(
+        $this->transformComposerJson(
             function (array $composer) {
                 $files   = $composer['autoload']['files'] ?? [];
                 $helpers = [
@@ -1046,9 +1036,12 @@ EOD;
                 }
 
                 return $composer;
-            },
-            sprintf("Archivos helpers %s en \"composer.json\"", $this->reset ? 'eliminados' : 'añadidos')
+            }
         );
+
+        $this->line(sprintf('Archivos de helpers %s "composer.json"', $this->reset ? 'eliminados del' : 'añadidos al'));
+
+        return $this;
     }
 
     public function execute_ComposerRequire_toInstallComposerDependencies(): static
@@ -1056,14 +1049,18 @@ EOD;
         $this->number++;
 
         if ($this->developMode) {
-            return $this->addDependenciesManuallyInComposerJson();
+            $this->addDependenciesManuallyInComposerJson();
         } else {
             try {
-                return $this->installDependenciesWithComposer();
+                $this->installDependenciesWithComposer();
             } catch (Throwable $_) {
-                return $this->addDependenciesManuallyInComposerJson();
+                $this->addDependenciesManuallyInComposerJson();
             }
         }
+
+        $this->line(sprintf('Dependencias de composer %s', ($this->reset ? 'desinstaladas' : 'instaladas')));
+
+        return $this;
     }
 
     public function execute_ComposerDumpAutoload(): static
