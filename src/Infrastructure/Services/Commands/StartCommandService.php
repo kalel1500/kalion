@@ -314,6 +314,73 @@ final class StartCommandService
         );
     }
 
+    /**
+     * @param \Symfony\Component\Finder\SplFileInfo[] $files
+     * @param bool $isRollback
+     * @return void
+     */
+    private function copyMigrationFiles(array $files, bool $isRollback): void
+    {
+        $folder = 'database/migrations';
+
+        // Ruta de destino en la aplicación
+        $destinationPath = base_path($folder);
+
+        // Obtenemos los nombres "originales" de los archivos que ya existen en la carpeta destino
+        $existingFiles = collect(File::files($destinationPath))
+            ->map(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()));
+
+        $timestamp = now();
+
+        // Lista de migraciones que NO se deben borrar en reset
+        $skipFiles = [
+            'create_users_table.php',
+            'create_cache_table.php',
+            'create_jobs_table.php',
+        ];
+
+        foreach ($files as $file) {
+            // Removemos el timestamp inicial del nombre del archivo
+            $originalName = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $file->getFilename());
+
+            if ($isRollback) {
+                // Si el archivo está en la lista de los que no se deben borrar, lo omitimos.
+                if (in_array($originalName, $skipFiles)) {
+                    continue;
+                }
+                // En modo reset, buscamos si existe el archivo en destino (comparando el nombre sin timestamp)
+                $existingFile = collect(File::files($destinationPath))
+                    ->first(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()) === $originalName);
+
+                // Si se encontró, se elimina el archivo
+                if ($existingFile) {
+                    File::delete($existingFile);
+                }
+                continue;
+            }
+
+            // Se determina el timestamp a usar en el nuevo nombre
+            if ($this->keepMigrationsDate) {
+                preg_match('/^(\d{4}_\d{2}_\d{2}_\d{6})_/', $file->getFilename(), $matches);
+                $fileTimestamp = $matches[1] ?? $timestamp->format('Y_m_d_His');
+            } else {
+                $fileTimestamp = $timestamp->format('Y_m_d_His');
+                $timestamp->addSecond();
+            }
+
+            // Se arma el nuevo nombre combinando el timestamp y el nombre original
+            $newFileName     = $fileTimestamp . '_' . $originalName;
+            $destinationFile = $destinationPath . '/' . $newFileName;
+
+            // Si ya existe un archivo con ese nombre base, se omite la copia para evitar duplicados
+            if ($existingFiles->contains($originalName)) continue;
+
+            // Copiamos el archivo desde su ruta de origen a la ruta de destino con el nuevo nombre
+            File::copy($file->getPathname(), $destinationFile);
+        }
+
+    }
+
 
     public static function configure(KalionStart $command, bool $reset): static
     {
@@ -404,66 +471,12 @@ final class StartCommandService
         $stubsPath   = $this->stubsPath($folder);
         $packagePath = $this->packagePath($folder);
 
-        // Ruta de destino en la aplicación
-        $destinationPath = base_path($folder);
-
         // Obtenemos los archivos de ambas fuentes y los combinamos
         $stubFiles    = File::files($stubsPath);
         $packageFiles = File::files($packagePath);
-        $files        = array_merge($packageFiles, $stubFiles);
 
-        // Obtenemos los nombres "originales" de los archivos que ya existen en la carpeta destino
-        $existingFiles = collect(File::files($destinationPath))
-            ->map(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()));
-
-        $timestamp = now();
-
-        // Lista de migraciones que NO se deben borrar en reset
-        $skipFiles = [
-            'create_users_table.php',
-            'create_cache_table.php',
-            'create_jobs_table.php',
-        ];
-
-        foreach ($files as $file) {
-            // Removemos el timestamp inicial del nombre del archivo
-            $originalName = preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $file->getFilename());
-
-            if ($this->reset) {
-                // Si el archivo está en la lista de los que no se deben borrar, lo omitimos.
-                if (in_array($originalName, $skipFiles)) {
-                    continue;
-                }
-                // En modo reset, buscamos si existe el archivo en destino (comparando el nombre sin timestamp)
-                $existingFile = collect(File::files($destinationPath))
-                    ->first(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()) === $originalName);
-
-                // Si se encontró, se elimina el archivo
-                if ($existingFile) {
-                    File::delete($existingFile);
-                }
-                continue;
-            }
-
-            // Se determina el timestamp a usar en el nuevo nombre
-            if ($this->keepMigrationsDate) {
-                preg_match('/^(\d{4}_\d{2}_\d{2}_\d{6})_/', $file->getFilename(), $matches);
-                $fileTimestamp = $matches[1] ?? $timestamp->format('Y_m_d_His');
-            } else {
-                $fileTimestamp = $timestamp->format('Y_m_d_His');
-                $timestamp->addSecond();
-            }
-
-            // Se arma el nuevo nombre combinando el timestamp y el nombre original
-            $newFileName     = $fileTimestamp . '_' . $originalName;
-            $destinationFile = $destinationPath . '/' . $newFileName;
-
-            // Si ya existe un archivo con ese nombre base, se omite la copia para evitar duplicados
-            if ($existingFiles->contains($originalName)) continue;
-
-            // Copiamos el archivo desde su ruta de origen a la ruta de destino con el nuevo nombre
-            File::copy($file->getPathname(), $destinationFile);
-        }
+        $this->copyMigrationFiles($packageFiles, $this->reset);
+        $this->copyMigrationFiles($stubFiles, $this->reset);
 
         $this->line('=> OK', false);
 
