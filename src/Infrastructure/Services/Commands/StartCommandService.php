@@ -342,7 +342,10 @@ final class StartCommandService
         File::delete(config_path('kalion.php'));
         File::delete(config_path('kalion_links.php'));
 
-        if ($this->reset || $this->developMode) return $this;
+        if ($this->reset || $this->developMode) {
+            $this->line('Configuración del paquete despublicada');
+            return $this;
+        }
 
         // Publish "config/kalion_links.php"
         $this->command->call('vendor:publish', ['--tag' => 'kalion-config-links']);
@@ -580,8 +583,6 @@ final class StartCommandService
         // Views
         $folder = 'resources';
         $dest = base_path($folder);
-
-
 
         if ($this->reset) {
             $dir = $this->originalStubsPath($folder);
@@ -883,7 +884,10 @@ EOD;
 
         // Borrar los ".lock" del ".gitignore"
 
-        if ($this->developMode) return $this;
+        if ($this->developMode) {
+            $this->line('Skipped ".gitignore" deletions');
+            return $this;
+        }
 
         // Ruta del archivo .gitignore
         $gitignorePath    = base_path('.gitignore');
@@ -1162,7 +1166,10 @@ EOD;
     {
         $this->number++;
 
-        if ($this->developMode) return $this;
+        if ($this->developMode) {
+            $this->line('Skipped "npm install" in develop mode.');
+            return $this;
+        }
 
         $this->execute_Process(
             ['npm', 'install'],
@@ -1178,7 +1185,10 @@ EOD;
     {
         $this->number++;
 
-        if ($this->developMode) return $this;
+        if ($this->developMode) {
+            $this->line('Skipped "npm run build" in develop mode.');
+            return $this;
+        }
 
         $this->execute_Process(
             ['npm', 'run', 'build'],
