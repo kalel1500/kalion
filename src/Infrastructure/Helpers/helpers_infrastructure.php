@@ -202,3 +202,14 @@ if (!function_exists('log_error_on_loads')) {
         Log::channel('loads')->error($message);
     }
 }
+
+if (!function_exists('vite_asset')) {
+    function vite_asset(string $asset): string
+    {
+        try {
+            return \Illuminate\Support\Facades\Vite::asset($asset);
+        } catch (\Illuminate\Foundation\ViteException $exception) {
+            return $exception->getMessage();
+        }
+    }
+}
