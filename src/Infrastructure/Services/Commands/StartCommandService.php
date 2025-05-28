@@ -976,7 +976,7 @@ EOD;
 
         $packages = [
             'flowbite'                    => '3.1.2',
-            '@types/node'                 => '22.15.18',
+            '@types/node'                 => '22.15.24',
             'prettier'                    => '3.5.3',
             'prettier-plugin-blade'       => '2.1.21',
             'prettier-plugin-tailwindcss' => '0.6.11',
