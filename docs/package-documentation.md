@@ -14,37 +14,37 @@ Además, esta nomenclatura ayuda a comunicar de manera inmediata que esos compon
 
 ## Start command
 
-|                                                                                         |        |             |
-|-----------------------------------------------------------------------------------------|--------|-------------|
-| ->new()->saveLock()                                                                     |        | developMode |
-| ->publishKalionConfig()                                                                 |        | developMode |
-| ->stubsCopyFile_DependencyServiceProvider()                                             |        |             |
-| ->stubsCopyFiles_Config()                                                               |        |             |
-| ->stubsCopyFiles_Migrations()                                                           |        |             |
-| ->stubsCopyFiles_Js()                                                                   | simple |             |
-| ->stubsCopyFolder_Factories()                                                           |        |             |
-| ->stubsCopyFolder_Seeders()                                                             |        |             |
-| ->stubsCopyFolder_Lang()                                                                |        |             |
-| ->stubsCopyFolder_Resources()                                                           | simple |             |
-| ->stubsCopyFolder_Src()                                                                 |        |             |
-| ->stubsCopyFile_RoutesWeb()                                                             |        |             |
-| ->createEnvFiles()                                                                      |        | developMode |
-| ->deleteDirectory_Http()                                                                |        |             |
-| ->deleteDirectory_Models()                                                              |        |             |
-| ->deleteFile_Changelog()                                                                |        |             |
-| ->modifyFile_BootstrapProviders_toAddDependencyServiceProvider()                        |        |             |
-| ->modifyFile_BootstrapApp_toAddMiddlewareRedirect()                                     |        |             |
-| ->modifyFile_BootstrapApp_toAddExceptionHandler()                                       |        |             |
-| ->modifyFile_ConfigApp_toUpdateTimezone()                                               |        |             |
-| ->modifyFile_JsBootstrap_toAddImportFlowbite()                                          |        |             |
-| ->modifyFile_Gitignore_toDeleteLockFileLines()                                          |        | developMode |
-| ->modifyFile_PackageJson_toAddNpmDependencies()                                         | simple |             |
-| ->modifyFile_PackageJson_toAddScriptTsBuild()                                           | simple |             |
-| ->modifyFile_PackageJson_toAddEngines()                                                 | simple |             |
-| ->modifyFile_ComposerJson_toAddSrcNamespace()                                           |        |             |
-| ->modifyFile_ComposerJson_toAddHelperFilePath()                                         |        |             |
-| ->executeComposerRequire_or_ModifyFileComposerJson_toInstallOrAddComposerDependencies() |        | developMode |
-| ->execute_ComposerDumpAutoload()                                                        |        |             |
-| ->execute_gitAdd()                                                                      |        |             |
-| ->execute_NpmInstall()                                                                  |        | developMode |
-| ->execute_NpmRunBuild()                                                                 |        | developMode |
+|                                                                  |        |             |
+|------------------------------------------------------------------|--------|-------------|
+| ->new()->saveLock()                                              |        | developMode |
+| ->publishKalionConfig()                                          |        | developMode |
+| ->stubsCopyFile_DependencyServiceProvider()                      |        |             |
+| ->stubsCopyFiles_Config()                                        |        |             |
+| ->stubsCopyFiles_Migrations()                                    |        |             |
+| ->stubsCopyFiles_Js()                                            | simple |             |
+| ->stubsCopyFolder_Factories()                                    |        |             |
+| ->stubsCopyFolder_Seeders()                                      |        |             |
+| ->stubsCopyFolder_Lang()                                         |        |             |
+| ->stubsCopyFolder_Resources()                                    | simple |             |
+| ->stubsCopyFolder_Src()                                          |        |             |
+| ->stubsCopyFile_RoutesWeb()                                      |        |             |
+| ->createEnvFiles()                                               |        | developMode |
+| ->deleteDirectory_Http()                                         |        |             |
+| ->deleteDirectory_Models()                                       |        |             |
+| ->deleteFile_Changelog()                                         |        |             |
+| ->modifyFile_BootstrapProviders_toAddDependencyServiceProvider() |        |             |
+| ->modifyFile_BootstrapApp_toAddMiddlewareRedirect()              |        |             |
+| ->modifyFile_BootstrapApp_toAddExceptionHandler()                |        |             |
+| ->modifyFile_ConfigApp_toUpdateTimezone()                        |        |             |
+| ->modifyFile_JsBootstrap_toAddImportFlowbite()                   |        |             |
+| ->modifyFile_Gitignore_toDeleteLockFileLines()                   |        | developMode |
+| ->modifyFile_PackageJson_toAddNpmDependencies()                  | simple |             |
+| ->modifyFile_PackageJson_toAddScriptTsBuild()                    | simple |             |
+| ->modifyFile_PackageJson_toAddEngines()                          | simple |             |
+| ->modifyFile_ComposerJson_toAddSrcNamespace()                    |        |             |
+| ->modifyFile_ComposerJson_toAddHelperFilePath()                  |        |             |
+| ->execute_ComposerRequire_toInstallComposerDependencies()        |        | developMode |
+| ->execute_ComposerDumpAutoload()                                 |        |             |
+| ->execute_gitAdd()                                               |        |             |
+| ->execute_NpmInstall()                                           |        | developMode |
+| ->execute_NpmRunBuild()                                          |        | developMode |

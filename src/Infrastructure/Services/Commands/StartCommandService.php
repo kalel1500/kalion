@@ -1092,7 +1092,7 @@ EOD;
         );
     }
 
-    public function executeComposerRequire_or_ModifyFileComposerJson_toInstallOrAddComposerDependencies(): static
+    public function execute_ComposerRequire_toInstallComposerDependencies(): static
     {
         $this->number++;
 
