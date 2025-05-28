@@ -36,11 +36,8 @@
             {!! Renderer::js() !!}
         @else
             <!-- JavaScript y CSS compilados -->
-            @if(file_exists(resource_path('js/app.ts')))
-                @vite(['resources/css/app.css', 'resources/js/app.ts'])
-            @else
-                @vite(['resources/css/app.css', 'resources/js/app.js'])
-            @endif
+            @php($jsExt = file_exists(resource_path('js/app.ts')) ? 'ts' : 'js')
+            @vite(['resources/css/app.css', 'resources/js/app.'.$jsExt])
         @endif
 
         <!-- CSS con los estilos de la vista actual (si tiene) -->
