@@ -202,7 +202,6 @@ final class StartCommandService
      */
     private function transformComposerJson(\Closure $callback, string $message): static
     {
-        $this->number++;
         $file = base_path('composer.json');
         if (! file_exists($file)) {
             return $this;
@@ -996,6 +995,8 @@ EOD;
 
     public function modifyFile_ComposerJson_toAddSrcNamespace(): static
     {
+        $this->number++;
+
         return $this->transformComposerJson(
             function (array $composer) {
                 $namespaces = ['Src\\' => 'src/'];
@@ -1018,6 +1019,8 @@ EOD;
 
     public function modifyFile_ComposerJson_toAddHelperFilePath(): static
     {
+        $this->number++;
+
         return $this->transformComposerJson(
             function (array $composer) {
                 $files   = $composer['autoload']['files'] ?? [];
