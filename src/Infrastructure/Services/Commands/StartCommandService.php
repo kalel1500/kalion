@@ -1116,11 +1116,6 @@ EOD;
 
         $this->line('Running "composer dump-autoload" command');
 
-        if ($this->developMode) {
-            $this->line('=> "composer dump-autoload" command skipped on develop mode', false);
-            return $this;
-        }
-
         $this->execute_Process(
             ['composer', 'dump-autoload'],
             '=> "composer dump-autoload" command successfully',
