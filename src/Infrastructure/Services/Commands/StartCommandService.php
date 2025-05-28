@@ -877,42 +877,6 @@ EOD;
         return $this;
     }
 
-    public function modifyFile_JsBootstrap_toAddImportFlowbite(): static
-    {
-        $this->number++;
-
-        $message = 'Archivo "resources/js/bootstrap.js" modificado';
-
-        // Import "flowbite" in resources/js/bootstrap.js
-        $filePath = base_path('resources/js/bootstrap.js');
-
-        if (! file_exists($filePath)) {
-            return $this;
-        }
-
-        $fileContents = file_get_contents($filePath);
-
-        $importLine = "import 'flowbite';";
-
-        if ($this->reset) {
-            // Remove the import line from the file
-            $fileContents = str_replace($importLine . PHP_EOL, '', $fileContents);
-        } else {
-            if (str_contains($fileContents, $importLine)) {
-                $this->line($message);
-                return $this;
-            }
-            // Add the import line to the beginning of the file
-            $fileContents = $importLine . PHP_EOL . $fileContents;
-        }
-
-        file_put_contents($filePath, $fileContents);
-
-        $this->line($message);
-
-        return $this;
-    }
-
     public function modifyFile_Gitignore_toDeleteLockFileLines(): static
     {
         $this->number++;
