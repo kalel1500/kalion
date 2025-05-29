@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Traits;
 
-/**
- * @template TEnum of \BackedEnum
- */
 trait WithIdsAndToArray
 {
     /**
@@ -16,11 +13,8 @@ trait WithIdsAndToArray
         return static::values()[$this->value];
     }
 
-    /**
-     * @param int $id
-     * @return TEnum
-     */
-    public static function fromId(int $id) {
+    public static function fromId(int $id): static
+    {
         $value = array_search($id, static::values(), true);
         if ($value === false) {
             $message = sprintf('"%s" is not a valid backing value for enum %s', $id, static::class);
