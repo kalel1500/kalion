@@ -23,6 +23,17 @@ trait WithIdsAndToArray
         return static::from($value);
     }
 
+    public static function tryFromId($id): ?static
+    {
+        if (is_null($id)) return null;
+
+        $value = array_search((int)$id, static::values(), true);
+
+        if ($value === false) return null;
+
+        return static::from($value);
+    }
+
     /**
      * Convertir todos los valores del enum en un array de strings
      */
