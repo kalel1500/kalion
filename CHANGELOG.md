@@ -1,6 +1,73 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.26.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.0-beta.0...master)
+
+## [v0.27.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.26.0-beta.0...v0.27.0-beta.0) - 2025-05-29
+
+### Added
+
+* Nuevo método `tryFromId()` en el trait `WithIdsAndToArray` para poder crear el enum desde un `id` de forma segura (y que si no existe devuelva null)
+* Nuevo helper `vite_asset()` para usar en lugar de la directiva `@viteAsset()` ya que los ids no la reconocen y puede ser más confuso
+* Nuevo parámetro `--skip-examples` añadido al comando `kalion:start` para no generar los archivos relacionados con los ejemplos de `Home`, `Posts`, `Tags` y `Comments`
+* Nuevo sistema de excepciones basado en un trait base para poder dividir las excepciones del paquete en `LogicException` y `RuntimeException`:
+  * Nuevo trait `KalionExceptionBehavior` con la lógica que había en `KalionException`
+  * Nueva interfaz `KalionException`
+  * Nuevas excepciones creadas que usan el trait `KalionExceptionBehavior` y extienden de la interfaz `KalionException`
+    * `KalionHttpException`
+    * `KalionLogicException`
+    * `KalionRuntimeException`
+* Nuevo middleware `ForceArraySessionInCloud` añadido al grupo de rutas `web` para evitar que se guarde una sessión cada vez que el cloud hace una petición a la ruta `/health` y asi evitar que se llene la tabla `sessions`. Se han añadido las siguientes variables de entorno:
+  * `KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE`
+  * `KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_CLOUD_USER_AGENT_VALUE`
+* Nuevas variables de entorno para configurar las rutas de las imágenes `logo.svg` y `favicon.ico`:
+  * `KALION_LAYOUT_ASSET_PATH_LOGO`
+  * `KALION_LAYOUT_ASSET_PATH_FAVICON`
+
+### Changed
+
+* (refactor) Añadir return `static` en el trait `WithIdsAndToArray` en vez de usar los tipos genéricos de PHPDoc
+* Añadir la ruta `welcome` en el método `defaultRedirectUri()` de la clase `Redirector` por si no existieran las rutas `dashboard` y `home`
+* (refactor) Mejorar la importación de la directiva `@vite()` en el componente `layout/app.blade.php` usando un if ternario para obtener la extension del JS
+* Cambios en el comando `kalion:start`:
+  * (internal) Cambios internos en los métodos del `StartCommandService` para mejorar el control del flujo:
+  * Desacoplar el comando `kalion:start` de NPM para no depender del entorno de Nodejs:
+    * Añadir las dependencias de NPM manualmente al `package.json` en vez de hacer el install (hacer una petición al registro de `npmjs` para obtener la última versión de cada dependencia)
+    * Añadir todos los archivos que generaban en con el comando `npx kalion-js` en los `stubs`
+  * Añadir el comando `composer dump-autoload` a la cadena de ejecuciones
+  * Hacer que en `developMode` se añadan las dependencias al archivo `composer.json` manualmente sin ejecutar el comando `composer require`
+  * (breaking) Eliminar el parámetro `$simple` el comando `kalion:start` ya que las configuraciones del js son necesitaras (eliminado método que añadía el import de flowbite al bootstrap.js)
+  * Añadir mensaje en `developMode` para dar feedback aunque no se ejecute el método
+  * Saltar las acciones largas (instalaciones y llamadas a la api) en `developMode`
+  * Mover los mensajes al inicio de cada método (adaptar contenido indicando que está iniciando) y añadir uno o varios mensajes durante y al final (con más sangria y de color verde) para dar feedback de como está yendo el proceso
+* <u>**!!! (breaking) !!!**</u> Reestructurar las excepciones base para poder dividir las excepciones del paquete entre las `LogicException` y las `RuntimeException`:
+    * Excepciones eliminadas:
+      * `BasicException`
+      * `BasicHttpException`
+      * `KalionException`
+  * Cambiar las referencias de la antigua excepción `KalionException` a la nueva interfaz `KalionException`
+  * Cambiar las referencias de la antigua excepción `BasicHttpException` a la nueva `KalionHttpException`
+* (breaking) Excepciones modificadas:
+  * Hacer `public` y `readonly` la propiedad $title del `ExceptionContextDo` y eliminar el método `getTitle()`
+  * Eliminar el método `getStatusCode()` del `ExceptionContextDo` y usar la propiedad publica `statusCode`
+  * Mover el parámetro `$code` del constructor de la clase `BasicHttpException` detrás del `$previous` para igualar el orden con la clase `BasicException`
+* (breaking) Renombrar tabla `states` a `statuses` y el modelo de `State` a `Status` (renombradas las clases entidad colección y repository)
+* Renombrar configuraciones y variables de entorno:
+  * (breaking) `kalion.enable_preferences_cookie` => `kalion.web_middlewares.add_preferences_cookies.active`
+  * (breaking) `KALION_ENABLE_PREFERENCES_COOKIE` => `KALION_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE`
+  * `kalion.force_array_session_in_cloud` => `kalion.web_middlewares.force_array_session_in_cloud.active`
+  * `KALION_FORCE_ARRAY_SESSION_IN_CLOUD` => `KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE`
+* Hacer configurable las rutas de las imágenes `logo.svg` y `favicon.ico` en los componentes con las nuevas variables de entorno `KALION_LAYOUT_ASSET_PATH_LOGO` y `KALION_LAYOUT_ASSET_PATH_FAVICON`
+* Mejoras en los componentes de la layout:
+  * Mejorar estilos botón `logout` para dar un feedback al usuario cuando se ha clicado
+  * Mejorar estilos `sidebar` cuando está colapsado (centrar texto cuando hay saltos de línea):
+    * Botón del dropdown: Permitir saltos de línea y centrar texto [eliminar: `whitespace-nowrap`, añadir: `sc:text-center`]
+    * Enlace: Centrar texto de primer nivel cuando no tiene counter [añadir: `'text-center' => (!isset($counter) && $level === '0')`]
+
+### Fixed
+
+* (fix) startCommand: Prevenir error en la ejecución del `composer require` y en ese caso hacer que se añadan las dependencias al archivo `composer.json` manualmente
+* (fix) startCommand: Guardar todos los archivos `stubs` al generar el `kalion.lock` en el método `saveLock()` incluidos los que empiezan por `.`
+* (fix) startCommand: Prevenir errores al ejecutar el método `execute_Process()` de la clase `StartCommandService`
 
 ## [v0.26.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.25.1-beta.0...v0.26.0-beta.0) - 2025-05-01
 
@@ -15,10 +82,10 @@
 
 ### Changed
 
-* (stubs) Número del método "getMessageCounter()" de la clase "LayoutData" modificado para diferenciar fácilmente si se aplica esta clase
+* (stubs) Número del método `getMessageCounter()` de la clase `LayoutData` modificado para diferenciar fácilmente si se aplica esta clase
 * (breaking) Clases `Layout` renombradas a `LayoutData` (interfaz, clase, fachada y clase en los stubs)
 * Archivo `README.md` actualizado
-* Se previno error si no existe la ruta con el nombre `index` en las blades usando el helper "safe_route()" (en caso de que se añada la ruta `/` en la aplicación con otro nombre)
+* Se previno error si no existe la ruta con el nombre `index` en las blades usando el helper `safe_route()` (en caso de que se añada la ruta `/` en la aplicación con otro nombre)
 * (breaking) Nuevo parámetro `$default` añadido al helper `safe_route()` para poder devolver una url por defecto. Comportamiento modificado: Si no recibe este parámetro ahora devuelve `null`, para seguir devolviendo `#` tiene que recibirlo como parámetro
 * (breaking) Parámetro `$route` del helper `safe_route()` renombrado a `$name` y tipado con `string|null`
 * (breaking) Helper `get_url_from_route()` renombrado a `safe_route()`
