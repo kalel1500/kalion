@@ -170,6 +170,13 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->items[] = $value;
     }
 
+    public function put($key, $value): static
+    {
+        $this->offsetSet($key, $value);
+
+        return $this;
+    }
+
     private static function getItemToArray($item)
     {
         $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
