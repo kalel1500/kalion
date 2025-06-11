@@ -164,6 +164,15 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return !$this->isEmpty();
     }
 
+    public function get($key, $default = null)
+    {
+        if (array_key_exists($key, $this->items)) {
+            return $this->items[$key];
+        }
+
+        return value($default);
+    }
+
     public function push($value)
     {
         $this->ensureIsValid($value);
