@@ -1,6 +1,21 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.1-beta.0...master)
+
+## [v0.27.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.0-beta.0...v0.27.1-beta.0) - 2025-06-19
+
+### Added
+
+* Nuevo método `get` añadido a las colecciones (`ContractCollectionBase`)
+* Nuevo método `put` añadido a las colecciones (`ContractCollectionBase`)
+
+### Changed
+
+* Mejorado el método `push` de la clase `ContractCollectionBase` para que acepte multiples parámetros (igualado al comportamiento de Laravel)
+
+### Fixed
+
+* (fix) Arreglar método `push` de la clase `ContractCollectionBase` para que devuelva la propia colección `$this`
 
 ## [v0.27.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.26.0-beta.0...v0.27.0-beta.0) - 2025-05-29
 
