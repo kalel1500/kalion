@@ -173,10 +173,10 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return value($default);
     }
 
-    public function push($value)
+    public function push($value): static
     {
         $this->ensureIsValid($value);
-        return $this->items[] = $value;
+        return $this;
     }
 
     public function put($key, $value): static
