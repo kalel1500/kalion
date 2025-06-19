@@ -31,12 +31,26 @@ final class ExceptionHandler
             $exceptions->render(function (NotFoundHttpException $e, Request $request) {
                 $exception = $e->getPrevious();
 
-                // Si no es una instancia de ModelNotFoundException, devolver null
-                if (!($exception instanceof ModelNotFoundException) || self::shouldRenderJson($request)) return null;
+                // Si NO es una instancia de ModelNotFoundException, devolver null
+                if (! ($exception instanceof ModelNotFoundException)) return null;
 
+                // Controlar la respuesta cuando es JSON
+                if (self::shouldRenderJson($request)) {
+
+                    // Si el debug NO está activo dejar que Laravel se encargue de la respuesta devolviendo un "null"
+                    if (! debug_is_active()) return null;
+
+                    // Controlar la respuesta cuando es Json y el debug es TRUE para devolver el trace de la excepcion
+                    $context = ExceptionContextDo::from($exception);
+                    return response()->json($context->toArray(), $context->statusCode);
+                }
+
+                // Controlar la respuesta cuando es HTML
                 if (debug_is_active()) {
+                    // Si el debug está activo mostrar la blade con el stack trace de Laravel
                     return response(get_html_laravel_debug_stack_trace($request, $exception));
                 } else {
+                    // Si no, mostrar la vista custom con el mensaje del error
                     $context = ExceptionContextDo::from($exception);
                     return response()->view('kal::pages.exceptions.error', compact('context'), $context->statusCode);
                 }
