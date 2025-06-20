@@ -83,7 +83,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             throw new RequiredDefinitionException(sprintf('The const <%s> must be declared in <%s>.', 'VALUE_CLASS', class_basename(static::class)));
         }
         if (!(is_string($class) && $class === 'any') && !($value instanceof $class)) {
-            $provided = is_object($value) ? get_class($value) : $value;
+            $provided = is_object($value) ? get_class($value) : (is_string($value) ? $value : gettype($value));
             throw new InvalidValueException(sprintf('The value of <%s> must be an instance of <%s>. Provided <%s>', class_basename(static::class), $class, $provided));
         }
     }
