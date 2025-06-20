@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.2-beta.0...master)
+
+## [v0.27.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.1-beta.0...v0.27.2-beta.0) - 2025-06-20
+
+### Changed
+
+* ExceptionHandler: Mejorada clase `ExceptionHandler` para que al renderizar las excepciones `ModelNotFoundException` también se encargue cuando la respuesta sea JSON y el debug este activo para que muestre el origen del error (igual que se hace el método `get_html_laravel_debug_stack_trace()` en html pero en el Json)
 
 ## [v0.27.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.0-beta.0...v0.27.1-beta.0) - 2025-06-19
 
