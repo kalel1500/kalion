@@ -36,7 +36,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
 
     public function first(): ?ContractEntity
     {
-        return $this->items[0] ?? null;
+        return parent::first();
     }
 
     public function jsonSerialize(): array

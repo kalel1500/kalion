@@ -13,10 +13,7 @@ abstract class ContractCollectionVo extends ContractCollectionBase
 
     public function first(): ?ContractValueObject
     {
-        return $this->items[0] ?? null;
-        /*return ($this->isEntity())
-            ?$this->values[0]->toArray()
-            :$this->values[0]->value();*/
+        return parent::first();
     }
 
     public function firstValue()

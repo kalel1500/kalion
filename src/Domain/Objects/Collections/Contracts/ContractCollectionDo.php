@@ -15,7 +15,7 @@ abstract class ContractCollectionDo extends ContractCollectionBase
 
     public function first(): ?ContractDataObject
     {
-        return $this->items[0] ?? null;
+        return parent::first();
     }
 
     static function fromArray(?array $values): static|null
