@@ -57,23 +57,30 @@ final class ExceptionHandler
             // Renderizar nuestras excepciones de dominio
             $exceptions->render(function (KalionException $e, Request $request) {
                 $context = $e->getContext();
+                $isDebugInactive = ! debug_is_active();
 
                 // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
                 if (self::shouldRenderJson($request)) {
                     return self::renderJson($context);
                 }
 
-                // Si espera una Vista y comprobamos si el debug es true
-                if (debug_is_active()) {
-                    // Si la excepción es una instancia de "AbortException" renderizamos la vista de errores de Laravel
-                    if ($e instanceof AbortException) return self::renderHtmlDebug($e, $request);
-
-                    // Para cualquier "KalionException" que no sea "KalionHttpException", dejamos que laravel se encargue de renderizar el error.
-                    if (!($e instanceof KalionHttpException)) return null;
+                // En PROD devolvemos nuestra vista personalizada
+                if ($isDebugInactive) {
+                    return self::renderHtmlCustom($context);
                 }
 
-                // En PROD (o las "KalionHttpException" en DEBUG) devolvemos nuestra vista personalizada
-                return self::renderHtmlCustom($context);
+                // Si la excepción es una instancia de "AbortException" renderizamos la vista de errores de Laravel
+                if ($e instanceof AbortException) {
+                    return self::renderHtmlDebug($e, $request);
+                }
+
+                // Si es "KalionHttpException" devolvemos nuestra vista personalizada
+                if ($e instanceof KalionHttpException) {
+                    return self::renderHtmlCustom($context);
+                }
+
+                // Para cualquier otro caso dejamos que laravel se encargue de renderizar el error.
+                return null;
             });
 
             // Indicar a Laravel cuando devolver un Json (mirar url "/ajax/")
