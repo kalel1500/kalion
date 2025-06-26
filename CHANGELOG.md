@@ -1,6 +1,21 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.3-beta.0...master)
+
+## [v0.27.3-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.2-beta.0...v0.27.3-beta.0) - 2025-06-26
+
+### Added
+
+* Nueva excepción "UnexpectedApiResponseException" para cuando una api devuelve una estructura inesperada
+
+### Changed
+
+* (refactor) Mejorar lógica en el "ExceptionHandler.php" al renderizar las excepciones del dominio (kalion) para facilitar la lectura
+
+### Fixed
+
+* (fix) corregir los métodos "first()" de las colecciones usando el "parent::first()", ya que fallaba cuando la primera key no era 0
+* (fix) Prevenir error en el método "ensureIsValid()" de la clase "ContractCollectionBase" cuando recibe un array
 
 ## [v0.27.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.1-beta.0...v0.27.2-beta.0) - 2025-06-20
 
