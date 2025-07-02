@@ -21,7 +21,7 @@ final class ExceptionContextDo extends ContractDataObject
         public readonly bool       $success,
         public readonly ?array     $data,
         public readonly ?array     $custom_response,
-        public readonly int        $code,
+        public readonly int|string $code,
         public readonly string     $exception,
         public readonly string     $file,
         public readonly int        $line,
@@ -39,7 +39,7 @@ final class ExceptionContextDo extends ContractDataObject
     {
         // if (is_null($e)) return null; // TODO Canals - pensar
 
-        if (method_exists($e, 'getContext') && !is_null($e->getContext())) return $e->getContext();
+        if (method_exists($e, 'getContext') && ! is_null($e->getContext())) return $e->getContext();
 
         return ExceptionContextDo::fromArray([
             'statusCode'      => (method_exists($e, 'getStatusCode')) ? $e->getStatusCode() : 500,
