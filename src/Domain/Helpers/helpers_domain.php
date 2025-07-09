@@ -280,3 +280,73 @@ if (!function_exists('get_guard')) {
         return Kalion::getDefaultAuthGuard();
     }
 }
+
+if (!function_exists('weighted_random_numbers')) {
+    function weighted_random_numbers(
+        int   $quantity,
+        int   $min_value,
+        int   $max_value,
+        array $custom_weights
+    ): array
+    {
+        // Paso 1: Validación básica
+        if ($min_value > $max_value) {
+            throw new InvalidArgumentException(__('k::error.min_value_cant_be_greater_than_max'));
+        }
+
+        if ($quantity <= 0) {
+            throw new InvalidArgumentException(__('k::error.amount_must_be_greater_than_number', ['number' => '0']));
+        }
+
+        // Paso 2: Lista completa de valores posibles
+        $range = range($min_value, $max_value);
+
+        // Paso 3: Calcular probabilidad restante
+        $totalCustomProbability = array_sum($custom_weights);
+        if ($totalCustomProbability > 100) {
+            throw new InvalidArgumentException(__('k::error.sum_of_probabilities_cant_be_greater_than_100'));
+        }
+
+        $remainingProbability = 100 - $totalCustomProbability;
+
+        // Paso 4: Números sin probabilidad definida
+        $remainingNumbers = array_diff($range, array_keys($custom_weights));
+        $quantityRemaining = count($remainingNumbers);
+
+        // Si hay números restantes, repartir el porcentaje sobrante de manera uniforme
+        $fullProbabilities = $custom_weights;
+        if ($quantityRemaining > 0 && $remainingProbability > 0) {
+            $probByNumber = $remainingProbability / $quantityRemaining;
+            foreach ($remainingNumbers as $number) {
+                $fullProbabilities[$number] = $probByNumber;
+            }
+        } elseif ($quantityRemaining > 0 && $remainingProbability === 0) {
+            // Si no hay porcentaje restante pero hay números sin probabilidad
+            foreach ($remainingNumbers as $number) {
+                $fullProbabilities[$number] = 0;
+            }
+        }
+
+        // Paso 5: Crear la distribución ponderada
+        $distribution = [];
+        foreach ($fullProbabilities as $number => $probability) {
+            $veces = (int) round($probability * 10); // *10 para mayor precisión
+            for ($i = 0; $i < $veces; $i++) {
+                $distribution[] = $number;
+            }
+        }
+
+        if (empty($distribution)) {
+            throw new RuntimeException(__('k::error.generated_distribution_empty'));
+        }
+
+        // Paso 6: Generar los números aleatorios según la distribución
+        $resultados = [];
+        for ($i = 0; $i < $quantity; $i++) {
+            $indice = array_rand($distribution);
+            $resultados[] = $distribution[$indice];
+        }
+
+        return $resultados;
+    }
+}
