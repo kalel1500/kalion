@@ -827,17 +827,17 @@ final class StartCommandService
         $content = File::get($filePath);
 
         // Usar una expresión regular para encontrar y modificar el bloque `withMiddleware`
-        $pattern = '/->withMiddleware\(function \(Middleware \$middleware\) \{(.*?)}\)/s';
+        $pattern = '/->withMiddleware\(function\s*\(Middleware\s+\$middleware\)(:\s*void)?\s*\{(.*?)\}\)/s';
 
         // Reemplazar el contenido del bloque con la nueva línea
         $replacement = ($this->reset)
             ? <<<'EOD'
-->withMiddleware(function (Middleware $middleware) {
+->withMiddleware(function (Middleware $middleware)$1 {
         //
     })
 EOD
             : <<<'EOD'
-->withMiddleware(function (Middleware $middleware) {
+->withMiddleware(function (Middleware $middleware)$1 {
         $middleware->redirectUsersTo('home'); // Ruta a la que redirigir si entran en rutas con el middleware "guest" (RedirectIfAuthenticated)
     })
 EOD;
@@ -869,17 +869,17 @@ EOD;
         $content = File::get($filePath);
 
         // Usar una expresión regular para encontrar y reemplazar el bloque `withExceptions`
-        $pattern = '/->withExceptions\(function \(Exceptions \$exceptions\) \{(.*?)}\)/s';
+        $pattern = '/->withExceptions\(function\s*\(Exceptions\s+\$exceptions\)(:\s*void)?\s*\{(.*?)\}\)/s';
 
         // Reemplazar el contenido del bloque con las nuevas líneas
         $replacement = ($this->reset)
             ? <<<'EOD'
-->withExceptions(function (Exceptions $exceptions) {
+->withExceptions(function (Exceptions $exceptions)$1 {
         //
     })
 EOD
             : <<<'EOD'
-->withExceptions(function (Exceptions $exceptions) {
+->withExceptions(function (Exceptions $exceptions)$1 {
         $callback = \Thehouseofel\Kalion\Infrastructure\Exceptions\ExceptionHandler::getUsingCallback();
         $callback($exceptions);
     })
