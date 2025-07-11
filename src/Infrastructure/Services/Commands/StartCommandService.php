@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
 
 use Composer\InstalledVersions;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Process;
@@ -37,6 +38,8 @@ final class StartCommandService
     private readonly string     $lockFilePath;
     private readonly array      $stubFilesRelativePaths;
 
+    private Carbon $migrationsTimestamp;
+
     public function __construct(
         private readonly KalionStart $command,
         private readonly bool        $reset,
@@ -59,6 +62,7 @@ final class StartCommandService
         $this->packageVersion         = InstalledVersions::getVersion('kalel1500/kalion') ?? 'dev';
         $this->lockFilePath           = base_path('kalion.lock');
         $this->stubFilesRelativePaths = $this->getStubFiles();
+        $this->migrationsTimestamp    = now();
         $this->saveLock();
     }
 
@@ -340,8 +344,6 @@ final class StartCommandService
         $existingFiles = collect(File::files($destinationPath))
             ->map(fn($f) => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', $f->getFilename()));
 
-        $timestamp = now();
-
         // Lista de migraciones que NO se deben borrar en reset
         $skipFiles = [
             'create_users_table.php',
@@ -372,10 +374,10 @@ final class StartCommandService
             // Se determina el timestamp a usar en el nuevo nombre
             if ($this->keepMigrationsDate) {
                 preg_match('/^(\d{4}_\d{2}_\d{2}_\d{6})_/', $file->getFilename(), $matches);
-                $fileTimestamp = $matches[1] ?? $timestamp->format('Y_m_d_His');
+                $fileTimestamp = $matches[1] ?? $this->migrationsTimestamp->format('Y_m_d_His');
             } else {
-                $fileTimestamp = $timestamp->format('Y_m_d_His');
-                $timestamp->addSecond();
+                $fileTimestamp = $this->migrationsTimestamp->format('Y_m_d_His');
+                $this->migrationsTimestamp->addSecond();
             }
 
             // Se arma el nuevo nombre combinando el timestamp y el nombre original
