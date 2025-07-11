@@ -14,7 +14,7 @@
 
 * (fix) Arreglado error en el orden de las migraciones del comando `kalion:start` (usar un $timestamp global, ya que sino el método `addSecond()` las desordenaba)
 * (fix) Adaptar el `StartCommandService` para que los métodos `modifyFile_BootstrapApp_toAddMiddlewareRedirect` y `modifyFile_BootstrapApp_toAddExceptionHandler` funcionen en las nuevas versiones de Laravel con los retornos `:void` en los callbacks
-* (fix) Añadir tipo `string` al parámetro $code de la clase `ExceptionContextDo` (ya que hay errores de Laravel en los que el codie es de tipo string)
+* (fix) Añadir tipo `string` al parámetro `$code` de la clase `ExceptionContextDo` (ya que hay errores de Laravel en los que el `$code` es de tipo string)
 
 ## [v0.27.3-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.2-beta.0...v0.27.3-beta.0) - 2025-06-26
 
