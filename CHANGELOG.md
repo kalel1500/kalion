@@ -1,21 +1,35 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.3-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.4-beta.0...master)
+
+## [v0.27.4-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.3-beta.0...v0.27.4-beta.0) - 2025-07-11
+
+### Added
+
+* Nuevos mensajes de error en las traducciones
+* Nuevo helper `weighted_random_numbers`
+* Nuevos value objects para añadir el tipo `Float`
+
+### Fixed
+
+* (fix) Arreglado error en el orden de las migraciones del comando `kalion:start` (usar un $timestamp global, ya que sino el método `addSecond()` las desordenaba)
+* (fix) Adaptar el `StartCommandService` para que los métodos `modifyFile_BootstrapApp_toAddMiddlewareRedirect` y `modifyFile_BootstrapApp_toAddExceptionHandler` funcionen en las nuevas versiones de Laravel con los retornos `:void` en los callbacks
+* (fix) Añadir tipo `string` al parámetro $code de la clase `ExceptionContextDo` (ya que hay errores de Laravel en los que el codie es de tipo string)
 
 ## [v0.27.3-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.2-beta.0...v0.27.3-beta.0) - 2025-06-26
 
 ### Added
 
-* Nueva excepción "UnexpectedApiResponseException" para cuando una api devuelve una estructura inesperada
+* Nueva excepción `UnexpectedApiResponseException` para cuando una api devuelve una estructura inesperada
 
 ### Changed
 
-* (refactor) Mejorar lógica en el "ExceptionHandler.php" al renderizar las excepciones del dominio (kalion) para facilitar la lectura
+* (refactor) Mejorar lógica en el `ExceptionHandler.php` al renderizar las excepciones del dominio (kalion) para facilitar la lectura
 
 ### Fixed
 
-* (fix) corregir los métodos "first()" de las colecciones usando el "parent::first()", ya que fallaba cuando la primera key no era 0
-* (fix) Prevenir error en el método "ensureIsValid()" de la clase "ContractCollectionBase" cuando recibe un array
+* (fix) corregir los métodos `first()` de las colecciones usando el `parent::first()`, ya que fallaba cuando la primera key no era 0
+* (fix) Prevenir error en el método `ensureIsValid()` de la clase `ContractCollectionBase` cuando recibe un array
 
 ## [v0.27.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.1-beta.0...v0.27.2-beta.0) - 2025-06-20
 
