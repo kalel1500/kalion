@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.4-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.4-beta.1...master)
+
+## [v0.27.4-beta.1](https://github.com/kalel1500/kalion/compare/v0.27.4-beta.0...v0.27.4-beta.1) - 2025-07-14
+
+### Fixed
+
+* (fix) Arreglar el acceso a la traducción de `k::text.input.matricula` en la configuración `kalion.auth.available_fields.matricula.label`
 
 ## [v0.27.4-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.3-beta.0...v0.27.4-beta.0) - 2025-07-11
 
