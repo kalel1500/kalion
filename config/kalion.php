@@ -236,7 +236,7 @@ return [
             ],
             'matricula' => [
                 'name' => 'matricula',
-                'label' => 'k::text.input.email.matricula',
+                'label' => 'k::text.input.matricula',
                 'type' => 'text',
                 'placeholder' => 'Matricula',
             ],
