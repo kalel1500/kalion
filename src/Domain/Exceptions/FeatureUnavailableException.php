@@ -10,8 +10,8 @@ final class FeatureUnavailableException extends KalionLogicException
 {
     const STATUS_CODE = 500;
 
-    public function __construct()
+    public static function default(): static
     {
-        parent::__construct(__('k::error.feature_unavailable'));
+        return new static(__('k::error.feature_unavailable'));
     }
 }

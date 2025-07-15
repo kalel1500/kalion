@@ -10,8 +10,8 @@ final class HasRelationException extends KalionRuntimeException
 {
     const STATUS_CODE = 409; // HTTP_CONFLICT;
 
-    public function __construct(string $model, string $relation)
+    public static function fromModel(string $model, string $relation): static
     {
-        parent::__construct(__('k::database.record_is_used_in_relation', ['model' => $model, 'relation' => $relation]));
+        return new static(__('k::database.record_is_used_in_relation', ['model' => $model, 'relation' => $relation]));
     }
 }

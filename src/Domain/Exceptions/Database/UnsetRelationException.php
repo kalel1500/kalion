@@ -10,8 +10,8 @@ final class UnsetRelationException extends KalionRuntimeException
 {
     const STATUS_CODE = 500; // HTTP_INTERNAL_SERVER_ERROR
 
-    public function __construct(string $relation = '', string $entity = '')
+    public static function fromRelation(string $relation = '', string $entity = ''): static
     {
-        parent::__construct(sprintf('Call to relation [%s] that was not set when creating Entity [%s]', $relation, $entity));
+        return new static(sprintf('Call to relation [%s] that was not set when creating Entity [%s]', $relation, $entity));
     }
 }

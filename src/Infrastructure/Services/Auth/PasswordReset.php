@@ -22,6 +22,6 @@ class PasswordReset implements PasswordResetContract
 
     public function reset(Request $request): RedirectResponse
     {
-        throw new FeatureUnavailableException();
+        throw FeatureUnavailableException::default();
     }
 }

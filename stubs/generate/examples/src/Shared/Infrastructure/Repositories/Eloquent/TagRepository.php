@@ -91,7 +91,7 @@ final class TagRepository implements TagRepositoryContract
             ->posts()
             ->exists();
         if ($hasRelation) {
-            throw new HasRelationException('Tag', 'Posts');
+            throw HasRelationException::fromModel('Tag', 'Posts');
         }
     }
 }

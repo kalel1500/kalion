@@ -10,8 +10,8 @@ final class NotFoundRelationDataException extends KalionRuntimeException
 {
     const STATUS_CODE = 500; // HTTP_INTERNAL_SERVER_ERROR
 
-    public function __construct(string $relation = '')
+    public static function fromRelation(string $relation = ''): static
     {
-        parent::__construct(sprintf('La entidad no contiene datos de la relación [%s]', $relation));
+        return new static(sprintf('La entidad no contiene datos de la relación [%s]', $relation));
     }
 }

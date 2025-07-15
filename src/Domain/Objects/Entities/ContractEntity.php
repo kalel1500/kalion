@@ -35,7 +35,12 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         return [];
     }
 
-    public static function fromArray(?array $data, array|string|null $with = null, bool|string $isFull = null): static|null
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @return (T is null ? null : static)
+     */
+    public static function fromArray($data, array|string|null $with = null, bool|string $isFull = null)
     {
         if (is_null($data)) return null;
 
@@ -184,7 +189,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         } else {
             $relationName = str_snake($first);
             if (!array_key_exists($relationName, $this->originalArray)) {
-                throw new NotFoundRelationDefinitionException($relationName, static::class);
+                throw NotFoundRelationDefinitionException::fromRelation($relationName, static::class);
             }
             $relationData = $this->originalArray[$relationName];
         }
@@ -221,7 +226,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
     public function getRelation(string $name)
     {
         if (!property_exists($this, $name)) {
-            throw new UnsetRelationException($name, static::class);
+            throw UnsetRelationException::fromRelation($name, static::class);
         }
         return $this->$name;
     }
