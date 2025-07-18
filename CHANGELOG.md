@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.27.4-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.28.0-beta.0...master)
+
+## [v0.28.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.4-beta.1...v0.28.0-beta.0) - 2025-07-18
+
+### Added
+
+* Nuevo método `getWith()` en la clase `ContractEntity` para poder obtener el valor de las relaciones cargadas en la entidad
+
+### Changed
+
+* (refactor) Cambiar la forma de guardar las relaciones de las entidades en la clase `ContractEntity`. Guardarlas en el array `$this->relations[]` en vez de crear propiedades dinámicas
+* (breaking) Cambiar los constructores de las excepciones a métodos estáticos que hagan el new para que siempre se pueda hacer el new desde fuera si no se quiere usar el mensaje por defecto
 
 ## [v0.27.4-beta.1](https://github.com/kalel1500/kalion/compare/v0.27.4-beta.0...v0.27.4-beta.1) - 2025-07-14
 
