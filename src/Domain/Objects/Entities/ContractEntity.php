@@ -23,6 +23,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
     protected array            $originalArray;
     protected ?object          $originalObject;
     protected bool             $isFromQuery;
+    protected array            $relations;
 
     abstract protected static function createFromArray(array $data): static;
 
@@ -202,19 +203,19 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         // if (empty($last)) return; // OLD
         // $last = (is_array($last)) ? $last : [$last]; // OLD
 
-        $isEntity     = is_subclass_of($this->$first, ContractEntity::class);
-        $isCollection = is_subclass_of($this->$first, ContractCollectionEntity::class);
+        $isEntity     = is_subclass_of($this->relations[$first], ContractEntity::class);
+        $isCollection = is_subclass_of($this->relations[$first], ContractCollectionEntity::class);
 
         if ($isEntity) {
-            $this->$first->with($last);
-            $this->$first->isFull = $isFull;
+            $this->relations[$first]->with($last);
+            $this->relations[$first]->isFull = $isFull;
         }
         if ($isCollection) {
-            foreach ($this->$first as $item) {
+            foreach ($this->relations[$first] as $item) {
                 $item->with($last);
                 $item->isFull = $isFull;
             }
-            $this->$first->setWith($last)->setIsFull($isFull);
+            $this->relations[$first]->setWith($last)->setIsFull($isFull);
         }
     }
 
@@ -225,15 +226,21 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
 
     public function getRelation(string $name)
     {
-        if (!property_exists($this, $name)) {
+        if (!array_key_exists($name, $this->relations)) {
             throw UnsetRelationException::fromRelation($name, static::class);
         }
-        return $this->$name;
+        return $this->relations[$name];
     }
 
+    /**
+     * @param $data
+     * @param string $name
+     * @param class-string $class
+     * @return void
+     */
     public function setRelation($data, string $name, string $class): void
     {
-        $this->$name = $class::fromRelationData($data);
+        $this->relations[$name] = $class::fromRelationData($data);
     }
 
     public function getWith(): ?array
