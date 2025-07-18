@@ -235,4 +235,9 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
     {
         $this->$name = $class::fromRelationData($data);
     }
+
+    public function getWith(): ?array
+    {
+        return $this->with;
+    }
 }
