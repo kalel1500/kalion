@@ -16,7 +16,6 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\ContractEntity;
 
 abstract class ContractCollectionEntity extends ContractCollectionBase implements Relatable
 {
-    protected const IS_ENTITY = true;
     protected string|array|null $with   = null;
     protected bool|string|null  $isFull = null;
     protected bool              $isPaginate;
@@ -66,7 +65,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
         }
 
         /** @var ContractEntity $entity */
-        $entity       = static::ENTITY;
+        $entity       = static::ITEM_TYPE;
         $isExportable = (is_subclass_of($entity, ExportableEntity::class));
         if (!$isExportable) return $data;
 
@@ -105,15 +104,16 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
     {
         if (is_null($data)) return null;
 
-        if (is_null(static::ENTITY)) {
-            throw new RequiredDefinitionException(sprintf('<%s> needs to define <%s> %s.', class_basename(static::class), 'ENTITY', 'constant'));
+        if (is_null(static::ITEM_TYPE)) {
+            throw new RequiredDefinitionException(sprintf('<%s> needs to define <%s> %s.', class_basename(static::class), 'ITEM_TYPE', 'constant'));
         }
 
         if (!is_null($with) && ($with === '' || is_array($with) && in_array('', $with))) {
             throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class ContractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
         }
 
-        $entity = static::ENTITY;
+        /** @var class-string $entity */
+        $entity = static::ITEM_TYPE;
         $array  = [];
         foreach ($data as $item) {
             if ($item instanceof $entity) {
@@ -222,7 +222,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
     public static function createFake(int $number, int $startIdOn = 1, array $overwriteParams = []): static
     {
         /** @var ContractEntity $entity */
-        $entity = static::ENTITY;
+        $entity = static::ITEM_TYPE;
         $array  = [];
         for ($i = 0; $i <= $number; $i++) {
             $newId                    = $startIdOn + $i;

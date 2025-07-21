@@ -13,7 +13,6 @@ use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Exceptions\NeverCalledException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
@@ -28,19 +27,10 @@ use Thehouseofel\Kalion\Domain\Services\Relation;
  */
 abstract class ContractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, Arrayable, JsonSerializable
 {
-    /** @var null|bool */
-    protected const IS_ENTITY = null;
     /** @var null|string */
-    protected const ENTITY = null;
-    /** @var null|string */
-    protected const VALUE_CLASS = null;
-    /** @var null|string */
-    protected const VALUE_CLASS_REQ = null;
-    /** @var null|string */
-    protected const VALUE_CLASS_NULL = null;
+    protected const ITEM_TYPE = null;
 
     protected array $items;
-    protected bool  $nullable = true;
 
     /**
      * @param array $collResult
@@ -48,10 +38,11 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     private function toOriginal(array $collResult)
     {
-        if ($this->isInstanceOfRelatable()) return static::fromArray($collResult, $this->with, $this->isFull);
-        if ($this instanceof ContractCollectionVo) return static::fromArray($collResult, $this->nullable);
-        if ($this instanceof ContractCollectionDo) return static::fromArray($collResult);
-        throw new NeverCalledException('La instancia de la colección no extiende de ninguna entidad valida.');
+        if ($this->isInstanceOfRelatable()) {
+            return static::fromArray($collResult, $this->with, $this->isFull);
+        } else {
+            return static::fromArray($collResult);
+        }
     }
 
     private function toBase(array $data, string $pluckField = null): CollectionAny
@@ -75,23 +66,15 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     protected function ensureIsValid($value): void
     {
-        $valueClass = ($this->nullable) ? static::VALUE_CLASS_NULL : static::VALUE_CLASS_REQ;
-        $valueClass = is_null($valueClass) ? static::VALUE_CLASS : $valueClass;
-        $class      = ($this->isEntity()) ? static::ENTITY : $valueClass;
+        $class = static::ITEM_TYPE;
 
         if (!$class) {
-            throw new RequiredDefinitionException(sprintf('The const <%s> must be declared in <%s>.', 'VALUE_CLASS', class_basename(static::class)));
+            throw new RequiredDefinitionException(sprintf('The const <%s> must be declared in <%s>.', 'ITEM_TYPE', class_basename(static::class)));
         }
         if (!(is_string($class) && $class === 'any') && !($value instanceof $class)) {
             $provided = is_object($value) ? get_class($value) : (is_string($value) ? $value : gettype($value));
             throw new InvalidValueException(sprintf('The value of <%s> must be an instance of <%s>. Provided <%s>', class_basename(static::class), $class, $provided));
         }
-    }
-
-    protected function isEntity(): ?bool
-    {
-//        return (method_exists($this->values[0], 'toArray'));
-        return static::IS_ENTITY;
     }
 
     public static function empty(): static

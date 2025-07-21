@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\StatusEntity;
 
 class StatusCollection extends ContractCollectionEntity
 {
-    public const ENTITY = StatusEntity::class;
+    public const ITEM_TYPE = StatusEntity::class;
 
     public function __construct(StatusEntity ...$items)
     {

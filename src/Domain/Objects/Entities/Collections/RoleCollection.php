@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 
 final class RoleCollection extends ContractCollectionEntity
 {
-    public const ENTITY = RoleEntity::class;
+    public const ITEM_TYPE = RoleEntity::class;
 
     public function __construct(RoleEntity ...$items)
     {

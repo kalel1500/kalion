@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\NavbarItemDo;
 
 final class NavbarItemCollection extends ContractCollectionDo
 {
-    protected const VALUE_CLASS = NavbarItemDo::class;
+    protected const ITEM_TYPE = NavbarItemDo::class;
 
     public function __construct(NavbarItemDo ...$items)
     {

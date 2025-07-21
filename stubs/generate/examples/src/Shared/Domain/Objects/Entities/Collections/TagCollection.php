@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionE
 
 final class TagCollection extends ContractCollectionEntity
 {
-    public const ENTITY = TagEntity::class;
+    public const ITEM_TYPE = TagEntity::class;
 
     public function __construct(TagEntity ...$items)
     {

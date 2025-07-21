@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionE
 
 final class PostCollection extends ContractCollectionEntity
 {
-    public const ENTITY = PostEntity::class;
+    public const ITEM_TYPE = PostEntity::class;
 
     public function __construct(PostEntity ...$items)
     {

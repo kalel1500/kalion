@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\PermissionEntity;
 
 final class PermissionCollection extends ContractCollectionEntity
 {
-    public const ENTITY = PermissionEntity::class;
+    public const ITEM_TYPE = PermissionEntity::class;
 
     public function __construct(PermissionEntity ...$items)
     {

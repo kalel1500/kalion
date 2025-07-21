@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionD
 
 final class IconCollection extends ContractCollectionDo
 {
-    protected const VALUE_CLASS = IconDo::class;
+    protected const ITEM_TYPE = IconDo::class;
 
     public function __construct(IconDo ...$items)
     {

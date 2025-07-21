@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionE
 
 final class CommentCollection extends ContractCollectionEntity
 {
-    public const ENTITY = CommentEntity::class;
+    public const ITEM_TYPE = CommentEntity::class;
 
     public function __construct(CommentEntity ...$items)
     {

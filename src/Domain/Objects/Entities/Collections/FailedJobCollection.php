@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\FailedJobEntity;
 
 class FailedJobCollection extends ContractCollectionEntity
 {
-    public const ENTITY = FailedJobEntity::class;
+    public const ITEM_TYPE = FailedJobEntity::class;
 
     public function __construct(FailedJobEntity ...$items)
     {

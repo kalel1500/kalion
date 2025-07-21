@@ -11,8 +11,6 @@ use TypeError;
 
 abstract class ContractCollectionDo extends ContractCollectionBase
 {
-    protected const IS_ENTITY = false;
-
     public function first(): ?ContractDataObject
     {
         return parent::first();
@@ -22,11 +20,11 @@ abstract class ContractCollectionDo extends ContractCollectionBase
     {
         if (is_null($values)) return null;
 
-        if (is_null(static::VALUE_CLASS)) {
-            throw new RequiredDefinitionException(sprintf('<%s> needs to define <%s> %s.', class_basename(static::class), 'VALUE_CLASS', 'constant'));
+        if (is_null(static::ITEM_TYPE)) {
+            throw new RequiredDefinitionException(sprintf('<%s> needs to define <%s> %s.', class_basename(static::class), 'ITEM_TYPE', 'constant'));
         }
 
-        $valueClass = static::VALUE_CLASS;
+        $valueClass = static::ITEM_TYPE;
         $res = [];
         try {
             foreach ($values as $value) {
