@@ -46,17 +46,19 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             default                                      => array_values($args),
         };
 
-        $this->items = $this instanceof ContractCollectionAny
-            ? $items
-            : $this->validateItems($items);
+        $this->items = $this->validateItems($items);
     }
 
     protected function validateItems(array $items): array
     {
+        if ($this instanceof ContractCollectionAny) {
+            return $items;
+        }
+
         $type = $this->resolveItemType();
 
         foreach ($items as $key => $item) {
-            if (!($item instanceof $type)) {
+            if (! ($item instanceof $type)) {
                 $givenType = is_object($item) ? get_class($item) : gettype($item);
                 throw new TypeError(sprintf('%s::__construct(): Array items must be of type %s, %s given', static::class, $type, $givenType)); // throw new \InvalidArgumentException("Item at key '$key' must be instance of $type, got $givenType");
             }
@@ -80,7 +82,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             return static::ITEM_TYPE;
         }
 
-        throw new RequiredDefinitionException("Collection must define either #[CollectionOf(...)] or const ITEM_TYPE");
+        throw new RequiredDefinitionException(sprintf('Collection %s must define either #[CollectionOf(...)] or const ITEM_TYPE', static::class));
     }
 
     /**
