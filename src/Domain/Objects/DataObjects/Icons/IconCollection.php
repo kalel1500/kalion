@@ -9,9 +9,4 @@ use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionD
 final class IconCollection extends ContractCollectionDo
 {
     protected const ITEM_TYPE = IconDo::class;
-
-    public function __construct(IconDo ...$items)
-    {
-        $this->items = $items;
-    }
 }

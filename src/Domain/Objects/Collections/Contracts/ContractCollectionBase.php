@@ -35,8 +35,8 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     protected array $items;
 
-    private bool   $shouldSkipValidation;
-    private string $resolvedItemType;
+    protected bool   $shouldSkipValidation;
+    protected string $resolvedItemType;
 
     public function __construct(...$args)
     {
@@ -49,13 +49,13 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         };
 
         $this->shouldSkipValidation = $this instanceof ContractCollectionAny;
-        $this->resolvedItemType     = $this->resolveItemType();
+        $this->resolvedItemType     = static::resolveItemType();
         $this->items                = $this->validateItems($items);
     }
 
-    private function resolveItemType(): string
+    protected static function resolveItemType(): string
     {
-        $ref = new ReflectionClass($this);
+        $ref = new ReflectionClass(static::class);
 
         // Opción 1: Atributo #[CollectionOf(SomeClass::class)]
         $attributes = $ref->getAttributes(CollectionOf::class);

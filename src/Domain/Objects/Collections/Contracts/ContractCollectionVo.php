@@ -18,23 +18,23 @@ abstract class ContractCollectionVo extends ContractCollectionBase
         return $this->first()?->value();
     }
 
-    static function fromArray(?array $values, callable $valueModifierCallback = null): static|null
+    public static function fromArray(?array $values, callable $valueModifierCallback = null): static|null
     {
         if (is_null($values)) return null;
 
-        $valueClass = static::ITEM_TYPE;
+        $valueClass = static::resolveItemType();
         $res = [];
-        foreach ($values as $value) {
+        foreach ($values as $key => $value) {
             if ($value instanceof $valueClass) {
-                $res[] = $value;
+                $res[$key] = $value;
             } else {
                 if (!is_null($valueModifierCallback)) {
                     $value = $valueModifierCallback($value);
                 }
-                $res[] = new $valueClass($value);
+                $res[$key] = new $valueClass($value);
             }
         }
-        $static = new static(...$res); // Los 3 puntos son importantes, ya que los constructores también reciben los parámetros destructurados (...)
+        $static = new static($res);
         return $static;
     }
 }

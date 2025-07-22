@@ -10,9 +10,4 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\JobEntity;
 class JobCollection extends ContractCollectionEntity
 {
     public const ITEM_TYPE = JobEntity::class;
-
-    public function __construct(JobEntity ...$items)
-    {
-        $this->items = $items;
-    }
 }

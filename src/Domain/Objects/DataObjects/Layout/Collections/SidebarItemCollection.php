@@ -10,9 +10,4 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDo;
 final class SidebarItemCollection extends ContractCollectionDo
 {
     protected const ITEM_TYPE = SidebarItemDo::class;
-
-    public function __construct(SidebarItemDo ...$items)
-    {
-        $this->items = $items;
-    }
 }

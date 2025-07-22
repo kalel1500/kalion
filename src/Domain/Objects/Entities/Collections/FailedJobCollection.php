@@ -10,9 +10,4 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\FailedJobEntity;
 class FailedJobCollection extends ContractCollectionEntity
 {
     public const ITEM_TYPE = FailedJobEntity::class;
-
-    public function __construct(FailedJobEntity ...$items)
-    {
-        $this->items = $items;
-    }
 }

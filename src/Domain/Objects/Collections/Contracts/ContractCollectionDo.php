@@ -16,25 +16,21 @@ abstract class ContractCollectionDo extends ContractCollectionBase
         return parent::first();
     }
 
-    static function fromArray(?array $values): static|null
+    public static function fromArray(?array $values): ?static
     {
         if (is_null($values)) return null;
 
-        if (is_null(static::ITEM_TYPE)) {
-            throw new RequiredDefinitionException(sprintf('<%s> needs to define <%s> %s.', class_basename(static::class), 'ITEM_TYPE', 'constant'));
-        }
-
-        $valueClass = static::ITEM_TYPE;
+        $valueClass = static::resolveItemType();
         $res = [];
         try {
-            foreach ($values as $value) {
-                $res[] = ($value instanceof $valueClass)
+            foreach ($values as $key => $value) {
+                $res[$key] = ($value instanceof $valueClass)
                     ? $value
                     : ((is_subclass_of($valueClass, \BackedEnum::class)) ? $valueClass::from($value) : $valueClass::fromArray($value));
             }
         } catch (TypeError $exception) {
             throw new InvalidValueException(sprintf('Los valores del array no coinciden con los necesarios para instanciar la clase <%s>. Mira en <fromArray()> del ContractDataObject', $valueClass));
         }
-        return new static(...$res); // Los 3 puntos son importantes, ya que los constructores también reciben los parámetros destructurados (...)
+        return new static($res);
     }
 }

@@ -10,9 +10,4 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\NavbarItemDo;
 final class NavbarItemCollection extends ContractCollectionDo
 {
     protected const ITEM_TYPE = NavbarItemDo::class;
-
-    public function __construct(NavbarItemDo ...$items)
-    {
-        $this->items = $items;
-    }
 }

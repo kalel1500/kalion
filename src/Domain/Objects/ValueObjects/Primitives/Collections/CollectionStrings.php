@@ -10,9 +10,4 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 final class CollectionStrings extends ContractCollectionVo
 {
     protected const ITEM_TYPE = StringVo::class;
-
-    public function __construct(StringVo ...$items)
-    {
-        $this->items = $items;
-    }
 }

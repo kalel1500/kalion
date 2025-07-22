@@ -104,20 +104,16 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
     {
         if (is_null($data)) return null;
 
-        if (is_null(static::ITEM_TYPE)) {
-            throw new RequiredDefinitionException(sprintf('<%s> needs to define <%s> %s.', class_basename(static::class), 'ITEM_TYPE', 'constant'));
-        }
-
         if (!is_null($with) && ($with === '' || is_array($with) && in_array('', $with))) {
             throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class ContractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
         }
 
         /** @var class-string $entity */
-        $entity = static::ITEM_TYPE;
+        $entity = static::resolveItemType();
         $array  = [];
-        foreach ($data as $item) {
+        foreach ($data as $key => $item) {
             if ($item instanceof $entity) {
-                $array[] = $item;
+                $array[$key] = $item;
             } else {
                 /*$createdEntity = $isEloquentBuilder
                     ? $entity::fromObject($item, null, $isFull)
@@ -128,10 +124,10 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
                 $createdEntity = $isEloquentBuilder
                     ? $entity::fromObject($item, $with, $isFull)
                     : $entity::fromArray($item, $with, $isFull);
-                $array[]       = $createdEntity;
+                $array[$key]       = $createdEntity;
             }
         }
-        $collection                 = new static(...$array); // Los 3 puntos son importantes, ya que los constructores también reciben los parámetros destructurados (...)
+        $collection                 = new static($array);
         $collection->isPaginate     = $isPaginate;
         $collection->paginationData = $paginationData;
         $collection->with           = $with;
