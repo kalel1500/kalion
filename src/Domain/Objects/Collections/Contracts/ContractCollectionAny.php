@@ -8,6 +8,8 @@ use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 
 abstract class ContractCollectionAny extends ContractCollectionBase implements Relatable
 {
+    protected const ITEM_TYPE = '';
+
     protected string|array|null $with   = null;
     protected bool|string|null  $isFull = null;
 
