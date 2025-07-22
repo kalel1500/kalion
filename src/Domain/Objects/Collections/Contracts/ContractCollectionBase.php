@@ -15,7 +15,6 @@ use Thehouseofel\Kalion\Domain\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
-use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
@@ -36,22 +35,40 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     protected array $items;
 
-    private bool $shouldSkipValidation;
+    private bool   $shouldSkipValidation;
     private string $resolvedItemType;
 
     public function __construct(...$args)
     {
         $passedSingleArray = count($args) === 1 && is_array($args[0]);
-        $firstArg = $args[0];
-        $items = match (true) {
+        $firstArg          = $args[0];
+        $items             = match (true) {
             $passedSingleArray && Arr::isAssoc($firstArg) => $firstArg,
-            $passedSingleArray                           => array_values($firstArg),
-            default                                      => array_values($args),
+            $passedSingleArray                            => array_values($firstArg),
+            default                                       => array_values($args),
         };
 
         $this->shouldSkipValidation = $this instanceof ContractCollectionAny;
-        $this->resolvedItemType = $this->resolveItemType();
-        $this->items = $this->validateItems($items);
+        $this->resolvedItemType     = $this->resolveItemType();
+        $this->items                = $this->validateItems($items);
+    }
+
+    private function resolveItemType(): string
+    {
+        $ref = new ReflectionClass($this);
+
+        // Opción 1: Atributo #[CollectionOf(SomeClass::class)]
+        $attributes = $ref->getAttributes(CollectionOf::class);
+        if (! empty($attributes)) {
+            return $attributes[0]->newInstance()->type;
+        }
+
+        // Opción 2: Constante ITEM_TYPE en la clase hija
+        if (! is_null(static::ITEM_TYPE)) {
+            return static::ITEM_TYPE;
+        }
+
+        throw new RequiredDefinitionException(sprintf('Collection %s must define either #[CollectionOf(...)] or const ITEM_TYPE', static::class));
     }
 
     private function validateItems(array $items): array
@@ -84,24 +101,6 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         }
     }
 
-    private function resolveItemType(): string
-    {
-        $ref = new ReflectionClass($this);
-
-        // Opción 1: Atributo #[CollectionOf(SomeClass::class)]
-        $attributes = $ref->getAttributes(CollectionOf::class);
-        if (! empty($attributes)) {
-            return $attributes[0]->newInstance()->type;
-        }
-
-        // Opción 2: Constante ITEM_TYPE en la clase hija
-        if (! is_null(static::ITEM_TYPE)) {
-            return static::ITEM_TYPE;
-        }
-
-        throw new RequiredDefinitionException(sprintf('Collection %s must define either #[CollectionOf(...)] or const ITEM_TYPE', static::class));
-    }
-
     /**
      * @param array $collResult
      * @return T
@@ -117,7 +116,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     private function toBase(array $data, string $pluckField = null): CollectionAny
     {
-        $subRelData = (!$this->isInstanceOfRelatable())
+        $subRelData = (! $this->isInstanceOfRelatable())
             ? SubRelationDataDo::fromArray([null, null])
             : Relation::getNextRelation($this->with, $this->isFull, $pluckField);
         return CollectionAny::fromArray($data, $subRelData->with, $subRelData->isFull);
@@ -201,7 +200,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function isNotEmpty(): bool
     {
-        return !$this->isEmpty();
+        return ! $this->isEmpty();
     }
 
     public function get($key, $default = null)
@@ -303,7 +302,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $collectionItem[str_snake($pluckField)];
             }
 
-            if (!is_object($collectionItem)) {
+            if (! is_object($collectionItem)) {
                 return null;
             }
 
@@ -453,11 +452,11 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function diff(ContractCollectionBase $items, string $field = null)
     {
-        if (!is_null($field)) {
+        if (! is_null($field)) {
             $diff       = collect();
             $dictionary = $items->pluck($field);
             foreach ($this->toArray() as $item) {
-                if (!$dictionary->contains($item[$field])) {
+                if (! $dictionary->contains($item[$field])) {
                     $diff->add($item);
                 }
             }
@@ -500,7 +499,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         $items       = array_map($callback, $this->items, $keys);
         $result      = collect(array_combine($keys, $items));
         $resultArray = $result->toArray();
-        return $result->contains(fn($item) => !$item instanceof ContractEntity)
+        return $result->contains(fn($item) => ! $item instanceof ContractEntity)
             ? $this->toBase($resultArray)
             : $this->toOriginal($resultArray);
     }
