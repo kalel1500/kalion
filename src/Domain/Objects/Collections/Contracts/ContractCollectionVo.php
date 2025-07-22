@@ -34,7 +34,6 @@ abstract class ContractCollectionVo extends ContractCollectionBase
                 $res[$key] = new $valueClass($value);
             }
         }
-        $static = new static($res);
-        return $static;
+        return new static($res);
     }
 }

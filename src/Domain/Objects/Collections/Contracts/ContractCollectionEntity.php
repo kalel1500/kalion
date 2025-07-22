@@ -115,12 +115,6 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
             if ($item instanceof $entity) {
                 $array[$key] = $item;
             } else {
-                /*$createdEntity = $isEloquentBuilder
-                    ? $entity::fromObject($item, null, $isFull)
-                    : $entity::fromArray($item, null, $isFull);
-                if (!is_null($with)) {
-                    $createdEntity->with($with);
-                }*/
                 $createdEntity = $isEloquentBuilder
                     ? $entity::fromObject($item, $with, $isFull)
                     : $entity::fromArray($item, $with, $isFull);
@@ -133,8 +127,6 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
         $collection->with           = $with;
         $collection->isFull         = $isFull;
         return $collection;
-//        dd(new static());
-//        dd($result->toArray());
     }
 
     public static function fromArray(
