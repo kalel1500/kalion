@@ -40,34 +40,41 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $items = (count($args) === 1 && is_array($args[0]) && Arr::isAssoc($args[0]))
             ? $args[0]
-            : array_values($args); // array_values para normalizar claves numéricas
+            : array_values($args); // Normalizar claves numéricas
 
         $this->items = $this->validateItems($items);
     }
 
     protected function validateItems(array $items): array
     {
-        $type = $this->getExpectedType();
+        $type = $this->resolveItemType();
 
         foreach ($items as $key => $item) {
             if (!($item instanceof $type)) {
-                throw new TypeError(sprintf('%s::__construct(): Array items must be of type %s, %s given', static::class, $type, gettype($item))); // "All items must be instances of $type"
+                $givenType = is_object($item) ? get_class($item) : gettype($item);
+                throw new TypeError(sprintf('%s::__construct(): Array items must be of type %s, %s given', static::class, $type, $givenType)); // throw new \InvalidArgumentException("Item at key '$key' must be instance of $type, got $givenType");
             }
         }
 
         return $items;
     }
 
-    private function getExpectedType(): string
+    private function resolveItemType(): string
     {
         $ref = new ReflectionClass($this);
-        $attributes = $ref->getAttributes(CollectionOf::class);
 
-        if (empty($attributes)) {
-            throw new RequiredDefinitionException("Collection class must have #[CollectionOf(SomeClass::class)] attribute");
+        // Opción 1: Atributo #[CollectionOf(SomeClass::class)]
+        $attributes = $ref->getAttributes(CollectionOf::class);
+        if (! empty($attributes)) {
+            return $attributes[0]->newInstance()->type;
         }
 
-        return $attributes[0]->newInstance()->type;
+        // Opción 2: Constante ITEM_TYPE en la clase hija
+        if (! is_null(static::ITEM_TYPE)) {
+            return static::ITEM_TYPE;
+        }
+
+        throw new RequiredDefinitionException("Collection must define either #[CollectionOf(...)] or const ITEM_TYPE");
     }
 
     /**
