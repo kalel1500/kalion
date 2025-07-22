@@ -7,8 +7,11 @@ namespace Thehouseofel\Kalion\Domain\Objects\Collections\Contracts;
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
+use Illuminate\Support\Arr;
 use IteratorAggregate;
 use JsonSerializable;
+use ReflectionClass;
+use Thehouseofel\Kalion\Domain\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
@@ -21,6 +24,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
 use Thehouseofel\Kalion\Domain\Services\Relation;
+use TypeError;
 
 /**
  * @template T of ContractCollectionBase
@@ -31,6 +35,40 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     protected const ITEM_TYPE = null;
 
     protected array $items;
+
+    public function __construct(...$args)
+    {
+        $items = (count($args) === 1 && is_array($args[0]) && Arr::isAssoc($args[0]))
+            ? $args[0]
+            : array_values($args); // array_values para normalizar claves numéricas
+
+        $this->items = $this->validateItems($items);
+    }
+
+    protected function validateItems(array $items): array
+    {
+        $type = $this->getExpectedType();
+
+        foreach ($items as $key => $item) {
+            if (!($item instanceof $type)) {
+                throw new TypeError(sprintf('%s::__construct(): Array items must be of type %s, %s given', static::class, $type, gettype($item))); // "All items must be instances of $type"
+            }
+        }
+
+        return $items;
+    }
+
+    private function getExpectedType(): string
+    {
+        $ref = new ReflectionClass($this);
+        $attributes = $ref->getAttributes(CollectionOf::class);
+
+        if (empty($attributes)) {
+            throw new RequiredDefinitionException("Collection class must have #[CollectionOf(SomeClass::class)] attribute");
+        }
+
+        return $attributes[0]->newInstance()->type;
+    }
 
     /**
      * @param array $collResult
@@ -253,7 +291,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $collectionItem->$pluckField();
             }
 
-            $itemClass = new \ReflectionClass($collectionItem);
+            $itemClass = new ReflectionClass($collectionItem);
             if ($itemClass->hasProperty($pluckField) && $itemClass->getProperty($pluckField)->isPublic()) {
                 return $collectionItem->$pluckField;
             }
