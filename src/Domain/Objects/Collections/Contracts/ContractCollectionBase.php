@@ -42,7 +42,9 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             ? $args[0]
             : array_values($args); // Normalizar claves numéricas
 
-        $this->items = $this->validateItems($items);
+        $this->items = $this instanceof ContractCollectionAny
+            ? $items
+            : $this->validateItems($items);
     }
 
     protected function validateItems(array $items): array

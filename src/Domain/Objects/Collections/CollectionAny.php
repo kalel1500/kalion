@@ -10,6 +10,7 @@ final class CollectionAny extends ContractCollectionAny
 {
     public function __construct($items = null)
     {
-        $this->items = (is_null($items)) ? [] : $items;
+        $items = (is_null($items)) ? [] : $items;
+        parent::__construct($items);
     }
 }
