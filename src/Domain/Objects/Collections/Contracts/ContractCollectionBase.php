@@ -38,9 +38,13 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function __construct(...$args)
     {
-        $items = (count($args) === 1 && is_array($args[0]) && Arr::isAssoc($args[0]))
-            ? $args[0]
-            : array_values($args); // Normalizar claves numéricas
+        $passedSingleArray = count($args) === 1 && is_array($args[0]);
+        $firstArg = $args[0];
+        $items = match (true) {
+            $passedSingleArray && Arr::isAssoc($firstArg) => $firstArg,
+            $passedSingleArray                           => array_values($firstArg),
+            default                                      => array_values($args),
+        };
 
         $this->items = $this instanceof ContractCollectionAny
             ? $items
