@@ -36,6 +36,9 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     protected array $items;
 
+    private bool $shouldSkipValidation;
+    private string $resolvedItemType;
+
     public function __construct(...$args)
     {
         $passedSingleArray = count($args) === 1 && is_array($args[0]);
@@ -46,25 +49,39 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             default                                      => array_values($args),
         };
 
+        $this->shouldSkipValidation = $this instanceof ContractCollectionAny;
+        $this->resolvedItemType = $this->resolveItemType();
         $this->items = $this->validateItems($items);
     }
 
-    protected function validateItems(array $items): array
+    private function validateItems(array $items): array
     {
-        if ($this instanceof ContractCollectionAny) {
-            return $items;
-        }
+        if ($this->shouldSkipValidation) return $items;
 
-        $type = $this->resolveItemType();
-
-        foreach ($items as $key => $item) {
-            if (! ($item instanceof $type)) {
-                $givenType = is_object($item) ? get_class($item) : gettype($item);
-                throw new TypeError(sprintf('%s::__construct(): Array items must be of type %s, %s given', static::class, $type, $givenType)); // throw new \InvalidArgumentException("Item at key '$key' must be instance of $type, got $givenType");
-            }
+        foreach ($items as $item) {
+            $this->validateItem($item);
         }
 
         return $items;
+    }
+
+    private function validateItem(mixed $item): void
+    {
+        if ($this->shouldSkipValidation) return;
+
+        $line = __LINE__ - 4;
+        if (! ($item instanceof $this->resolvedItemType)) {
+            $givenType = is_object($item) ? get_class($item) : gettype($item);
+            throw new TypeError(sprintf(
+                '%s::%s(): Argument #1 ($item) must be of type %s, %s given, called in %s on line %s',
+                self::class,
+                __FUNCTION__,
+                $this->resolvedItemType,
+                $givenType,
+                __FILE__,
+                $line,
+            ));
+        }
     }
 
     private function resolveItemType(): string
@@ -115,19 +132,6 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     private function isInstanceOfRelatable(): bool
     {
         return ($this instanceof Relatable);
-    }
-
-    protected function ensureIsValid($value): void
-    {
-        $class = static::ITEM_TYPE;
-
-        if (!$class) {
-            throw new RequiredDefinitionException(sprintf('The const <%s> must be declared in <%s>.', 'ITEM_TYPE', class_basename(static::class)));
-        }
-        if (!(is_string($class) && $class === 'any') && !($value instanceof $class)) {
-            $provided = is_object($value) ? get_class($value) : (is_string($value) ? $value : gettype($value));
-            throw new InvalidValueException(sprintf('The value of <%s> must be an instance of <%s>. Provided <%s>', class_basename(static::class), $class, $provided));
-        }
     }
 
     public static function empty(): static
@@ -212,7 +216,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     public function push(...$values): static
     {
         foreach ($values as $value) {
-            $this->ensureIsValid($value);
+            $this->validateItem($value);
             $this->items[] = $value;
         }
         return $this;
@@ -220,6 +224,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function put($key, $value): static
     {
+        $this->validateItem($value);
         $this->offsetSet($key, $value);
 
         return $this;
