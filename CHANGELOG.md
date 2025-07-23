@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.29.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.29.1-beta.0...master)
+
+## [v0.29.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.29.0-beta.0...v0.29.1-beta.0) - 2025-07-22
+
+### Changed
+
+* (refactor) Se ha reemplazado la constante `ITEM_TYPE` por el atributo `CollectionOf` en todas las colecciones
+* (refactor) Métodos ordenados en la clase `ContractCollectionBase`
 
 ## [v0.29.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.28.0-beta.0...v0.29.0-beta.0) - 2025-07-22
 
