@@ -197,9 +197,75 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toArray();
     }
 
+
     public function all(): array
     {
         return $this->items;
+    }
+
+    public function collapse(): CollectionAny
+    {
+        $result = collect($this->toArray())->collapse();
+        return $this->toBase($result->toArray());
+    }
+
+    public function contains($key, $operator = null, $value = null): bool
+    {
+        $array = (is_callable($key)) ? $this->items : $this->toArray();
+        return collect($array)->contains(...func_get_args());
+    }
+
+    public function diff(ContractCollectionBase $items, string $field = null)
+    {
+        if (! is_null($field)) {
+            $diff       = collect();
+            $dictionary = $items->pluck($field);
+            foreach ($this->toArray() as $item) {
+                if (! $dictionary->contains($item[$field])) {
+                    $diff->add($item);
+                }
+            }
+        } else {
+            $array1 = array_map('json_encode', $this->toArray());
+            $array2 = array_map('json_encode', $items->toArray());
+
+            $result = array_diff($array1, $array2);
+            $result = array_map(fn($item) => json_decode($item, true), $result);
+
+            $diff = collect($result)->values();
+        }
+
+        return $this->toOriginal($diff->toArray());
+    }
+
+    /**
+     * @param ContractCollectionBase|array $items
+     * @return T
+     */
+    public function diffKeys(ContractCollectionBase|array $items)
+    {
+        $array1 = $this->toArray();
+        $array2 = $this->getArrayableItems($items);
+        $result = array_diff_key($array1, $array2);
+        $diff   = collect($result);
+        return $this->toOriginal($diff->toArray());
+    }
+
+    public function each(callable $callback): static
+    {
+        foreach ($this->items as $key => $item) {
+            if ($callback($item, $key) === false) {
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    public function filter(callable $callback = null)
+    {
+        $collResult = collect($this->toArray())->filter($callback)->values();
+        return $this->toOriginal($collResult->toArray());
     }
 
     public function first(): mixed
@@ -207,9 +273,49 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return collect($this->items)->first();
     }
 
-    public function last(): mixed
+    public function firstWhere($key, $operator = null, $value = null): mixed
     {
-        return collect($this->items)->last();
+        return $this->where(...func_get_args())->first();
+    }
+
+    public function flatMap(callable $callback)
+    {
+        return $this->map($callback)->collapse();
+    }
+
+    public function flatten($depth = INF)
+    {
+        $collResult = collect($this->toArray())->flatten($depth)->values();
+        return $this->toOriginal($collResult->toArray());
+    }
+
+    public function flip()
+    {
+        $result = array_flip($this->toArray());
+        $diff   = collect($result);
+        return $this->toOriginal($diff->toArray());
+    }
+
+    public function get($key, $default = null)
+    {
+        if (array_key_exists($key, $this->items)) {
+            return $this->items[$key];
+        }
+
+        return value($default);
+    }
+
+    public function groupBy($groupBy, $preserveKeys = false): CollectionAny
+    {
+        $collResult = collect($this->toArray())->groupBy($groupBy, $preserveKeys);
+        if ($collResult->keys()->some('')) throw new RequiredDefinitionException('La key que has indicado no se encuentra en el array del objeto');
+        $new = $collResult->map(fn($group) => $this->toOriginal($group->toArray()));
+        return $this->toBase($new->toArray());
+    }
+
+    public function implode(string $value): string
+    {
+        return implode($value, $this->toArray());
     }
 
     public function isEmpty(): bool
@@ -222,82 +328,20 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return ! $this->isEmpty();
     }
 
-    public function get($key, $default = null)
+    public function last(): mixed
     {
-        if (array_key_exists($key, $this->items)) {
-            return $this->items[$key];
-        }
-
-        return value($default);
+        return collect($this->items)->last();
     }
 
-    public function push(...$values): static
+    public function map(callable $callback)
     {
-        foreach ($values as $value) {
-            $this->validateItem($value);
-            $this->items[] = $value;
-        }
-        return $this;
-    }
-
-    public function put($key, $value): static
-    {
-        $this->validateItem($value);
-        $this->offsetSet($key, $value);
-
-        return $this;
-    }
-
-    public function toArray(): array
-    {
-        $result = [];
-        foreach ($this->items as $key => $item) {
-            $item         = self::getItemToArray($item);
-            $result[$key] = $item;
-        }
-        return $result;
-    }
-
-    public function toArrayDynamic($toArrayMethod, ...$params): array
-    {
-        return array_map(fn($item) => $item->$toArrayMethod(...$params), $this->items);
-    }
-
-    public function toClearedArray(): array
-    {
-        return object_to_array($this->toArray());
-    }
-
-    public function toClearedObject(): object|array
-    {
-        return array_to_object($this->toArray());
-    }
-
-    public function toCollect(): Collection
-    {
-        return collect($this->toArray());
-    }
-
-    /**
-     * @param class-string<T> $collectionClass
-     * @return T
-     */
-    public function toCollection(string $collectionClass)
-    {
-        if (is_subclass_of($collectionClass, Relatable::class)) {
-            return $collectionClass::fromArray($this->toArray(), $this->with, $this->isFull);
-        }
-        return $collectionClass::fromArray($this->toArray());
-    }
-
-    public function toJson($options = 0): false|string
-    {
-        return json_encode($this->toArray(), $options);
-    }
-
-    public function toJsonVo(): JsonVo
-    {
-        return new JsonVo($this->toArray());
+        $keys        = array_keys($this->items);
+        $items       = array_map($callback, $this->items, $keys);
+        $result      = collect(array_combine($keys, $items));
+        $resultArray = $result->toArray();
+        return $result->contains(fn($item) => ! $item instanceof ContractEntity)
+            ? $this->toBase($resultArray)
+            : $this->toOriginal($resultArray);
     }
 
     public function pluck(string $field, string $key = null): CollectionAny
@@ -360,10 +404,36 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->pluck($field)->toCollection($to);
     }
 
-    public function collapse(): CollectionAny
+    public function push(...$values): static
     {
-        $result = collect($this->toArray())->collapse();
-        return $this->toBase($result->toArray());
+        foreach ($values as $value) {
+            $this->validateItem($value);
+            $this->items[] = $value;
+        }
+        return $this;
+    }
+
+    public function put($key, $value): static
+    {
+        $this->validateItem($value);
+        $this->offsetSet($key, $value);
+
+        return $this;
+    }
+
+    public function select($keys)
+    {
+        $keys       = is_array($keys) ? $keys : func_get_args();
+        $collResult = collect($this->toArray())
+            ->map(fn($item) => collect($item)->only($keys)->toArray())
+            ->values();
+        return $this->toOriginal($collResult->toArray());
+    }
+
+    public function sort($callback = null)
+    {
+        $collResult = collect($this->toArray())->sort($callback)->values();
+        return $this->toOriginal($collResult->toArray());
     }
 
     /**
@@ -383,6 +453,81 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->sortBy($callback, $options, true);
     }
 
+    public function sortDesc($options = SORT_REGULAR)
+    {
+        $collResult = collect($this->toArray())->sortDesc($options)->values();
+        return $this->toOriginal($collResult->toArray());
+    }
+
+    public function take(int $limit)
+    {
+        $collResult = collect($this->toArray())->take($limit)->values();
+        return $this->toOriginal($collResult->toArray());
+    }
+
+    public function toArray(): array
+    {
+        $result = [];
+        foreach ($this->items as $key => $item) {
+            $item         = self::getItemToArray($item);
+            $result[$key] = $item;
+        }
+        return $result;
+    }
+
+    public function toArrayDynamic($toArrayMethod, ...$params): array
+    {
+        return array_map(fn($item) => $item->$toArrayMethod(...$params), $this->items);
+    }
+
+    public function toClearedArray(): array
+    {
+        return object_to_array($this->toArray());
+    }
+
+    public function toClearedObject(): object|array
+    {
+        return array_to_object($this->toArray());
+    }
+
+    public function toCollect(): Collection
+    {
+        return collect($this->toArray());
+    }
+
+    /**
+     * @param class-string<T> $collectionClass
+     * @return T
+     */
+    public function toCollection(string $collectionClass)
+    {
+        if (is_subclass_of($collectionClass, Relatable::class)) {
+            return $collectionClass::fromArray($this->toArray(), $this->with, $this->isFull);
+        }
+        return $collectionClass::fromArray($this->toArray());
+    }
+
+    public function toJson($options = 0): false|string
+    {
+        return json_encode($this->toArray(), $options);
+    }
+
+    public function toJsonVo(): JsonVo
+    {
+        return new JsonVo($this->toArray());
+    }
+
+    public function unique($key = null, $strict = false)
+    {
+        $collResult = collect($this->toArray())->unique($key, $strict)->values();
+        return $this->toOriginal($collResult->toArray());
+    }
+
+    public function values()
+    {
+        return $this->toOriginal(array_values($this->toArray()));
+    }
+
     public function where($key, $operator = null, $value = null)
     {
         $collResult = collect($this->toArray())->where(...func_get_args())->values();
@@ -395,152 +540,8 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toOriginal($collResult->toArray());
     }
 
-    public function contains($key, $operator = null, $value = null): bool
-    {
-        $array = (is_callable($key)) ? $this->items : $this->toArray();
-        return collect($array)->contains(...func_get_args());
-    }
-
     public function whereNotNull($key = null)
     {
         return $this->where($key, '!==', null);
-    }
-
-    public function values()
-    {
-        return $this->toOriginal(array_values($this->toArray()));
-    }
-
-    public function unique($key = null, $strict = false)
-    {
-        $collResult = collect($this->toArray())->unique($key, $strict)->values();
-        return $this->toOriginal($collResult->toArray());
-    }
-
-    public function filter(callable $callback = null)
-    {
-        $collResult = collect($this->toArray())->filter($callback)->values();
-        return $this->toOriginal($collResult->toArray());
-    }
-
-    public function implode(string $value): string
-    {
-        return implode($value, $this->toArray());
-    }
-
-    public function sort($callback = null)
-    {
-        $collResult = collect($this->toArray())->sort($callback)->values();
-        return $this->toOriginal($collResult->toArray());
-    }
-
-    public function sortDesc($options = SORT_REGULAR)
-    {
-        $collResult = collect($this->toArray())->sortDesc($options)->values();
-        return $this->toOriginal($collResult->toArray());
-    }
-
-    public function groupBy($groupBy, $preserveKeys = false): CollectionAny
-    {
-        $collResult = collect($this->toArray())->groupBy($groupBy, $preserveKeys);
-        if ($collResult->keys()->some('')) throw new RequiredDefinitionException('La key que has indicado no se encuentra en el array del objeto');
-        $new = $collResult->map(fn($group) => $this->toOriginal($group->toArray()));
-        return $this->toBase($new->toArray());
-    }
-
-    public function select($keys)
-    {
-        $keys       = is_array($keys) ? $keys : func_get_args();
-        $collResult = collect($this->toArray())
-            ->map(fn($item) => collect($item)->only($keys)->toArray())
-            ->values();
-        return $this->toOriginal($collResult->toArray());
-    }
-
-    public function diff(ContractCollectionBase $items, string $field = null)
-    {
-        if (! is_null($field)) {
-            $diff       = collect();
-            $dictionary = $items->pluck($field);
-            foreach ($this->toArray() as $item) {
-                if (! $dictionary->contains($item[$field])) {
-                    $diff->add($item);
-                }
-            }
-        } else {
-            $array1 = array_map('json_encode', $this->toArray());
-            $array2 = array_map('json_encode', $items->toArray());
-
-            $result = array_diff($array1, $array2);
-            $result = array_map(fn($item) => json_decode($item, true), $result);
-
-            $diff = collect($result)->values();
-        }
-
-        return $this->toOriginal($diff->toArray());
-    }
-
-    /**
-     * @param ContractCollectionBase|array $items
-     * @return T
-     */
-    public function diffKeys(ContractCollectionBase|array $items)
-    {
-        $array1 = $this->toArray();
-        $array2 = $this->getArrayableItems($items);
-        $result = array_diff_key($array1, $array2);
-        $diff   = collect($result);
-        return $this->toOriginal($diff->toArray());
-    }
-
-    public function flip()
-    {
-        $result = array_flip($this->toArray());
-        $diff   = collect($result);
-        return $this->toOriginal($diff->toArray());
-    }
-
-    public function map(callable $callback)
-    {
-        $keys        = array_keys($this->items);
-        $items       = array_map($callback, $this->items, $keys);
-        $result      = collect(array_combine($keys, $items));
-        $resultArray = $result->toArray();
-        return $result->contains(fn($item) => ! $item instanceof ContractEntity)
-            ? $this->toBase($resultArray)
-            : $this->toOriginal($resultArray);
-    }
-
-    public function flatMap(callable $callback)
-    {
-        return $this->map($callback)->collapse();
-    }
-
-    public function flatten($depth = INF)
-    {
-        $collResult = collect($this->toArray())->flatten($depth)->values();
-        return $this->toOriginal($collResult->toArray());
-    }
-
-    public function take(int $limit)
-    {
-        $collResult = collect($this->toArray())->take($limit)->values();
-        return $this->toOriginal($collResult->toArray());
-    }
-
-    public function firstWhere($key, $operator = null, $value = null): mixed
-    {
-        return $this->where(...func_get_args())->first();
-    }
-
-    public function each(callable $callback): static
-    {
-        foreach ($this->items as $key => $item) {
-            if ($callback($item, $key) === false) {
-                break;
-            }
-        }
-
-        return $this;
     }
 }
