@@ -1,6 +1,36 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.28.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.29.0-beta.0...master)
+
+## [v0.29.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.28.0-beta.0...v0.29.0-beta.0) - 2025-07-22
+
+### Added
+
+* Nuevo atributo `CollectionOf` para añadir a las Colecciones y que no sea necesario definir el constructor y la constante `ITEM_TYPE` en cada colección.
+
+### Changed
+
+* (breaking) Se ha eliminado el `tryCatch` en el método `fromArray()` de la clase `ContractCollectionDo` por lo que ahora si recibe un tipo inesperado devuelve un `TypeError` en vez del `InvalidValueException`
+* Se ha eliminado el constructor de todas las colecciones
+* Se han modificado los métodos `fromArray()` de las colecciones (`ContractCollectionDo`, `ContractCollectionEntity` y `ContractCollectionVo`):
+  * Ahora usan el nuevo método estático `resolveItemType()` para obtener la clase del atributo o de la constante (y de paso no tener que hacer la validación en cada una)
+  * Se han añadido las keys recibidas al crear la colección (ya que ahora esta los puede mantener)
+  * (breaking) Al crear las clases ahora se les pasa el array completo (sin desempaquetar) por lo que el constructor de las clases finales ya no puede recibir el parámetro asi `__construct(TypeClass ...$items)`
+* (breaking) Modificar las colecciones (`ContractCollectionBase`) para poder mantener las keys tras usar cualquier método después de haber usado el `->put($key, $item)`
+  * Añadido nuevo constructor en la clase `ContractCollectionBase` para permitir que las colecciones puedan recibir el array de items sin desempaquetar (asociativo o no)
+  * (info) El parámetro `$items` del constructor ya no está tipado, pero dentro se valída el tipo definido en el atributo `#[CollectionOf(...)]` de la clase (si no existe el atributo usa la constante `ITEM_TYPE`)
+  * El constructor usa los nuevos métodos `validateItems()` y `validateItem()` para validar que el tipo de los elementos (el constructor ahora guarda cálculos como `shouldSkipValidation` y `resolvedItemType` por lo que si se sobreescribe el constructor hay que llamar al padre)
+  * Eliminado método `ensureIsValid()` y reemplazado el uso por `validateItem()` en el método `push()`
+  * Añadida validación en el método `put()`
+  * (todo) Eliminar el constructor de todas las colecciones (basta con definir la constante `ITEM_TYPE` o el atributo `#[CollectionOf(...)]`) o llamar al `parent::__construct`
+* (breaking) Se ha simplificado la gestion de los tipos en las colecciones:
+  * Eliminadas constantes `VALUE_CLASS_REQ` y `VALUE_CLASS_NULL` (de las colecciones VO), porque ahora las colecciones de VO no pueden ser generics (o son nullable o no)
+  * Se ha modificado el método `fromArray` de la clase `ContractCollectionVo` para dejar de recibir el segundo parámetro `$nullable` ya que ahora estas colecciones solo pueden ser de un tipo
+  * La clase `CollectionModelId` ahora solo puede contener items de tipo `ModelId` (antes también podían ser de `ModelIdNull`)
+  * La clase `CollectionInts` ahora solo puede contener items de tipo `IntVo` (antes también podían ser de `IntNullVo`)
+  * La clase `CollectionStrings` ahora solo puede contener items de tipo `StringVo` (antes también podían ser de `StringNullVo`)
+  * Se han renombrado las constantes `ENTITY` y `VALUE_CLASS` de las colecciones que extienden de `ContractCollectionEntity` y `ContractCollectionVo` respectivamente a `ITEM_TYPE` para que todas las colecciones puedan ser definidas con una sola constante
+  * Eliminada constante `IS_ENTITY`, ya que ahora todas las colecciones tienen la misma constante para guardar la clase
 
 ## [v0.28.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.27.4-beta.1...v0.28.0-beta.0) - 2025-07-18
 
