@@ -8,6 +8,7 @@ use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
 use ReflectionClass;
@@ -122,16 +123,34 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return CollectionAny::fromArray($data, $subRelData->with, $subRelData->isFull);
     }
 
-    private function encodeAndDecode(array $array, bool $assoc)
-    {
-        $res = json_encode($array);
-        return json_decode($res, $assoc);
-    }
-
     private function isInstanceOfRelatable(): bool
     {
         return ($this instanceof Relatable);
     }
+
+    private static function getItemToArray($item)
+    {
+        $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
+
+        return match (true) {
+            $item instanceof BuildArrayable && $fromThisClass => $item->toArrayForBuild(),
+            $item instanceof Arrayable                        => $item->toArray(),
+            $item instanceof ContractValueObject              => $item->value(),
+            default                                           => $item,
+        };
+    }
+
+    private function getArrayableItems($items): array
+    {
+        if (is_array($items)) {
+            return $items;
+        } elseif ($items instanceof ContractCollectionBase) {
+            return $items->toArray();
+        }
+
+        return (array)$items;
+    }
+
 
     public static function empty(): static
     {
@@ -153,7 +172,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return isset($this->items[$offset]);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->items[$offset];
     }
@@ -229,18 +248,6 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this;
     }
 
-    private static function getItemToArray($item)
-    {
-        $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
-
-        return match (true) {
-            $item instanceof BuildArrayable && $fromThisClass => $item->toArrayForBuild(),
-            $item instanceof Arrayable                        => $item->toArray(),
-            $item instanceof ContractValueObject              => $item->value(),
-            default                                           => $item,
-        };
-    }
-
     public function toArray(): array
     {
         $result = [];
@@ -258,15 +265,15 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function toClearedArray(): array
     {
-        return $this->encodeAndDecode($this->toArray(), true);
+        return object_to_array($this->toArray());
     }
 
     public function toClearedObject(): object|array
     {
-        return $this->encodeAndDecode($this->toArray(), false);
+        return array_to_object($this->toArray());
     }
 
-    public function toCollect()
+    public function toCollect(): Collection
     {
         return collect($this->toArray());
     }
@@ -535,16 +542,5 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         }
 
         return $this;
-    }
-
-    protected function getArrayableItems($items): array
-    {
-        if (is_array($items)) {
-            return $items;
-        } elseif ($items instanceof ContractCollectionBase) {
-            return $items->toArray();
-        }
-
-        return (array)$items;
     }
 }
