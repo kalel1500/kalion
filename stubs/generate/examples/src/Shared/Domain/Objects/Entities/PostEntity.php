@@ -7,20 +7,20 @@ namespace Src\Shared\Domain\Objects\Entities;
 use Src\Shared\Domain\Objects\Entities\Collections\CommentCollection;
 use Src\Shared\Domain\Objects\Entities\Collections\TagCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\ContractEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts\ContractModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelTimestampNull;
 
 final class PostEntity extends ContractEntity
 {
     public function __construct(
-        public readonly ContractModelId    $id,
-        public readonly ModelString        $title,
-        public readonly ModelString        $content,
-        public readonly ModelString        $slug,
-        public readonly ModelId            $user_id,
-        public readonly ModelTimestampNull $created_at,
+        public readonly ModelId|ModelIdNull $id,
+        public readonly ModelString         $title,
+        public readonly ModelString         $content,
+        public readonly ModelString         $slug,
+        public readonly ModelId             $user_id,
+        public readonly ModelTimestampNull  $created_at,
     )
     {
     }

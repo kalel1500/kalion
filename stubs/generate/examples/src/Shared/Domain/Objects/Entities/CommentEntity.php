@@ -6,7 +6,6 @@ namespace Src\Shared\Domain\Objects\Entities;
 
 use Src\Shared\Domain\Objects\Entities\Collections\CommentCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\ContractEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts\ContractModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
@@ -14,7 +13,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 final class CommentEntity extends ContractEntity
 {
     public function __construct(
-        public readonly ContractModelId $id,
+        public readonly ModelId|ModelIdNull $id,
         public readonly ModelString     $content,
         public readonly ModelId         $user_id,
         public readonly ModelIdNull     $post_id,

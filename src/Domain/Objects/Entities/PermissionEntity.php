@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\RoleCollection;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts\ContractModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 
 final class PermissionEntity extends ContractEntity
 {
     public function __construct(
-        public readonly ContractModelId $id,
+        public readonly ModelId|ModelIdNull $id,
         public readonly ModelString     $name
     )
     {
