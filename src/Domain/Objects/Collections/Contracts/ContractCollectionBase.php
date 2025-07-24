@@ -198,10 +198,40 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     }
 
 
+//    public function after()
+//    {
+//        //
+//    }
+
     public function all(): array
     {
         return $this->items;
     }
+
+//    public function average()
+//    {
+//        //
+//    }
+
+//    public function avg()
+//    {
+//        //
+//    }
+
+//    public function before()
+//    {
+//        //
+//    }
+
+//    public function chunk()
+//    {
+//        //
+//    }
+
+//    public function chunkWhile()
+//    {
+//        //
+//    }
 
     public function collapse(): CollectionAny
     {
@@ -209,11 +239,56 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toBase($result->toArray());
     }
 
+//    public function collapseWithKeys()
+//    {
+//        //
+//    }
+
+//    public function collect()
+//    {
+//        //
+//    }
+
+//    public function combine()
+//    {
+//        //
+//    }
+
+//    public function concat()
+//    {
+//        //
+//    }
+
     public function contains($key, $operator = null, $value = null): bool
     {
         $array = (is_callable($key)) ? $this->items : $this->toArray();
         return collect($array)->contains(...func_get_args());
     }
+
+//    public function containsOneItem()
+//    {
+//        //
+//    }
+
+//    public function containsStrict()
+//    {
+//        //
+//    }
+
+//    public function countBy()
+//    {
+//        //
+//    }
+
+//    public function crossJoin()
+//    {
+//        //
+//    }
+
+//    public function dd()
+//    {
+//        //
+//    }
 
     public function diff(ContractCollectionBase $items, string $field = null)
     {
@@ -238,6 +313,16 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toOriginal($diff->toArray());
     }
 
+//    public function diffAssoc()
+//    {
+//        //
+//    }
+
+//    public function diffAssocUsing()
+//    {
+//        //
+//    }
+
     /**
      * @param ContractCollectionBase|array $items
      * @return T
@@ -251,6 +336,31 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toOriginal($diff->toArray());
     }
 
+//    public function doesntContain()
+//    {
+//        //
+//    }
+
+//    public function dot()
+//    {
+//        //
+//    }
+
+//    public function dump()
+//    {
+//        //
+//    }
+
+//    public function duplicates()
+//    {
+//        //
+//    }
+
+//    public function duplicatesStrict()
+//    {
+//        //
+//    }
+
     public function each(callable $callback): static
     {
         foreach ($this->items as $key => $item) {
@@ -262,10 +372,25 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this;
     }
 
+//    public function eachSpread()
+//    {
+//        //
+//    }
+
+//    public function ensure()
+//    {
+//        //
+//    }
+
     public function every($key, $operator = null, $value = null): bool
     {
         return collect($this->toArray())->every(...func_get_args());
     }
+
+//    public function except()
+//    {
+//        //
+//    }
 
     public function filter(callable $callback = null)
     {
@@ -277,6 +402,11 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         return collect($this->items)->first();
     }
+
+//    public function firstOrFail()
+//    {
+//        //
+//    }
 
     public function firstWhere($key, $operator = null, $value = null): mixed
     {
@@ -301,6 +431,21 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toOriginal($diff->toArray());
     }
 
+//    public function forget()
+//    {
+//        //
+//    }
+
+//    public function forPage()
+//    {
+//        //
+//    }
+
+//    public function fromJson()
+//    {
+//        //
+//    }
+
     public function get($key, $default = null)
     {
         if (array_key_exists($key, $this->items)) {
@@ -318,10 +463,45 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toBase($new->toArray());
     }
 
+//    public function has()
+//    {
+//        //
+//    }
+
+//    public function hasAny()
+//    {
+//        //
+//    }
+
     public function implode(string $value): string
     {
         return implode($value, $this->toArray());
     }
+
+//    public function intersect()
+//    {
+//        //
+//    }
+
+//    public function intersectUsing()
+//    {
+//        //
+//    }
+
+//    public function intersectAssoc()
+//    {
+//        //
+//    }
+
+//    public function intersectAssocUsing()
+//    {
+//        //
+//    }
+
+//    public function intersectByKeys()
+//    {
+//        //
+//    }
 
     public function isEmpty(): bool
     {
@@ -333,10 +513,40 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return ! $this->isEmpty();
     }
 
+//    public function join()
+//    {
+//        //
+//    }
+
+//    public function keyBy()
+//    {
+//        //
+//    }
+
+//    public function keys()
+//    {
+//        //
+//    }
+
     public function last(): mixed
     {
         return collect($this->items)->last();
     }
+
+//    public function lazy()
+//    {
+//        //
+//    }
+
+//    public function macro()
+//    {
+//        //
+//    }
+
+//    public function make()
+//    {
+//        //
+//    }
 
     public function map(callable $callback)
     {
@@ -348,6 +558,101 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             ? $this->toBase($resultArray)
             : $this->toOriginal($resultArray);
     }
+
+//    public function mapInto()
+//    {
+//        //
+//    }
+
+//    public function mapSpread()
+//    {
+//        //
+//    }
+
+//    public function mapToGroups()
+//    {
+//        //
+//    }
+
+//    public function mapWithKeys()
+//    {
+//        //
+//    }
+
+//    public function max()
+//    {
+//        //
+//    }
+
+//    public function median()
+//    {
+//        //
+//    }
+
+//    public function merge()
+//    {
+//        //
+//    }
+
+//    public function mergeRecursive()
+//    {
+//        //
+//    }
+
+//    public function min()
+//    {
+//        //
+//    }
+
+//    public function mode()
+//    {
+//        //
+//    }
+
+//    public function multiply()
+//    {
+//        //
+//    }
+
+//    public function nth()
+//    {
+//        //
+//    }
+
+//    public function only()
+//    {
+//        //
+//    }
+
+//    public function pad()
+//    {
+//        //
+//    }
+
+//    public function partition()
+//    {
+//        //
+//    }
+
+//    public function percentage()
+//    {
+//        //
+//    }
+
+//    public function pipe()
+//    {
+//        //
+//    }
+
+//    public function pipeInto()
+//    {
+//        //
+//    }
+
+//    public function pipeThrough()
+//    {
+//        //
+//    }
 
     public function pluck(string $field, string $key = null): CollectionAny
     {
@@ -409,6 +714,21 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->pluck($field)->toCollection($to);
     }
 
+//    public function pop()
+//    {
+//        //
+//    }
+
+//    public function prepend()
+//    {
+//        //
+//    }
+
+//    public function pull()
+//    {
+//        //
+//    }
+
     public function push(...$values): static
     {
         foreach ($values as $value) {
@@ -426,6 +746,51 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this;
     }
 
+//    public function random()
+//    {
+//        //
+//    }
+
+//    public function range()
+//    {
+//        //
+//    }
+//
+//    public function reduce()
+//    {
+//        //
+//    }
+
+//    public function reduceSpread()
+//    {
+//        //
+//    }
+
+//    public function reject()
+//    {
+//        //
+//    }
+
+//    public function replace()
+//    {
+//        //
+//    }
+
+//    public function replaceRecursive()
+//    {
+//        //
+//    }
+
+//    public function reverse()
+//    {
+//        //
+//    }
+
+//    public function search()
+//    {
+//        //
+//    }
+
     public function select($keys)
     {
         $keys       = is_array($keys) ? $keys : func_get_args();
@@ -434,6 +799,51 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             ->values();
         return $this->toOriginal($collResult->toArray());
     }
+
+//    public function shift()
+//    {
+//        //
+//    }
+
+//    public function shuffle()
+//    {
+//        //
+//    }
+
+//    public function skip()
+//    {
+//        //
+//    }
+
+//    public function skipUntil()
+//    {
+//        //
+//    }
+
+//    public function skipWhile()
+//    {
+//        //
+//    }
+
+//    public function slice()
+//    {
+//        //
+//    }
+
+//    public function sliding()
+//    {
+//        //
+//    }
+
+//    public function sole()
+//    {
+//        //
+//    }
+
+//    public function some()
+//    {
+//        //
+//    }
 
     public function sort($callback = null)
     {
@@ -464,11 +874,66 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toOriginal($collResult->toArray());
     }
 
+//    public function sortKeys()
+//    {
+//        //
+//    }
+
+//    public function sortKeysDesc()
+//    {
+//        //
+//    }
+//
+//    public function sortKeysUsing()
+//    {
+//        //
+//    }
+
+//    public function splice()
+//    {
+//        //
+//    }
+
+//    public function split()
+//    {
+//        //
+//    }
+
+//    public function splitIn()
+//    {
+//        //
+//    }
+
+//    public function sum()
+//    {
+//        //
+//    }
+
     public function take(int $limit)
     {
         $collResult = collect($this->toArray())->take($limit)->values();
         return $this->toOriginal($collResult->toArray());
     }
+
+//    public function takeUntil()
+//    {
+//        //
+//    }
+
+//    public function takeWhile()
+//    {
+//        //
+//    }
+
+//    public function tap()
+//    {
+//        //
+//    }
+
+//    public function times()
+//    {
+//        //
+//    }
 
     public function toArray(): array
     {
@@ -522,16 +987,76 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return new JsonVo($this->toArray());
     }
 
+//    public function transform()
+//    {
+//        //
+//    }
+
+//    public function undot()
+//    {
+//        //
+//    }
+
+//    public function union()
+//    {
+//        //
+//    }
+
     public function unique($key = null, $strict = false)
     {
         $collResult = collect($this->toArray())->unique($key, $strict)->values();
         return $this->toOriginal($collResult->toArray());
     }
 
+//    public function uniqueStrict()
+//    {
+//        //
+//    }
+
+//    public function unless()
+//    {
+//        //
+//    }
+
+//    public function unlessEmpty()
+//    {
+//        //
+//    }
+
+//    public function unlessNotEmpty()
+//    {
+//        //
+//    }
+
+//    public function unwrap()
+//    {
+//        //
+//    }
+
+//    public function value()
+//    {
+//        //
+//    }
+
     public function values()
     {
         return $this->toOriginal(array_values($this->toArray()));
     }
+
+//    public function when()
+//    {
+//        //
+//    }
+
+//    public function whenEmpty()
+//    {
+//        //
+//    }
+
+//    public function whenNotEmpty()
+//    {
+//        //
+//    }
 
     public function where($key, $operator = null, $value = null)
     {
@@ -539,14 +1064,64 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toOriginal($collResult->toArray());
     }
 
+//    public function whereStrict()
+//    {
+//        //
+//    }
+
+//    public function whereBetween()
+//    {
+//        //
+//    }
+
     public function whereIn($key, $values, $strict = false)
     {
         $collResult = collect($this->toArray())->whereIn($key, $values, $strict)->values();
         return $this->toOriginal($collResult->toArray());
     }
 
+//    public function whereInStrict()
+//    {
+//        //
+//    }
+
+//    public function whereInstanceOf()
+//    {
+//        //
+//    }
+
+//    public function whereNotBetween()
+//    {
+//        //
+//    }
+
+//    public function whereNotIn()
+//    {
+//        //
+//    }
+
+//    public function whereNotInStrict()
+//    {
+//        //
+//    }
+
     public function whereNotNull($key = null)
     {
         return $this->where($key, '!==', null);
     }
+
+//    public function whereNull()
+//    {
+//        //
+//    }
+
+//    public function wrap()
+//    {
+//        //
+//    }
+
+//    public function zip()
+//    {
+//        //
+//    }
 }
