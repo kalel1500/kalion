@@ -262,6 +262,11 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this;
     }
 
+    public function every($key, $operator = null, $value = null): bool
+    {
+        return collect($this->toArray())->every(...func_get_args());
+    }
+
     public function filter(callable $callback = null)
     {
         $collResult = collect($this->toArray())->filter($callback)->values();
