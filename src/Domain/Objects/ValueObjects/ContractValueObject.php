@@ -105,6 +105,24 @@ abstract class ContractValueObject
         return $class::new($this->value);
     }
 
+    /**
+     * @return T
+     */
+    public function toModel()
+    {
+        $class = $this->nullable ? static::CLASS_MODEL_NULLABLE : static::CLASS_MODEL_REQUIRED;
+        return $class::new($this->value);
+    }
+
+    /**
+     * @return T
+     */
+    public function toNotModel()
+    {
+        $class = $this->nullable ? static::CLASS_NULLABLE : static::CLASS_REQUIRED;
+        return $class::new($this->value);
+    }
+
     protected function checkNullable($value): void
     {
         if (!$this->nullable && is_null($value)) {
