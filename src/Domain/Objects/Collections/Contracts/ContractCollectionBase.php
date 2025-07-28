@@ -102,11 +102,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         }
     }
 
-    /**
-     * @param array $collResult
-     * @return T
-     */
-    private function toStatic(array $collResult)
+    private function toStatic(array $collResult): static
     {
         if ($this->isInstanceOfRelatable()) {
             return static::fromArray($collResult, $this->with, $this->isFull);
