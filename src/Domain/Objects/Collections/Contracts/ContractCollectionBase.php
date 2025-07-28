@@ -295,7 +295,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
      * @param string|null $field
      * @return static
      */
-    public function diff(ContractCollectionBase $items, string $field = null)
+    public function diff($items, string $field = null)
     {
         if (! is_null($field)) {
             $diff       = collect();
@@ -332,7 +332,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
      * @param ContractCollectionBase|array $items
      * @return static
      */
-    public function diffKeys(ContractCollectionBase|array $items)
+    public function diffKeys($items)
     {
         $array1 = $this->toArray();
         $array2 = $this->getArrayableItems($items);
@@ -725,7 +725,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
      * @param string|null $key
      * @return CollectionAny
      */
-    public function pluck(string $value, string $key = null)
+    public function pluck($value, $key = null)
     {
         $getItemValue   = function ($collectionItem, string $pluckField) {
             /** @var Arrayable|BuildArrayable $collectionItem */
@@ -1010,7 +1010,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
      * @param int $limit
      * @return static
      */
-    public function take(int $limit)
+    public function take($limit)
     {
         $collResult = collect($this->toArray())->take($limit)->values();
         return $this->toStatic($collResult->toArray());
