@@ -12,9 +12,9 @@ abstract class ContractCollectionDo extends ContractCollectionBase
     /**
      * @return ContractDataObject|null
      */
-    public function first()
+    public function first(?callable $callback = null, $default = null)
     {
-        return parent::first();
+        return parent::first(...func_get_args());
     }
 
     public static function fromArray(?array $values): ?static

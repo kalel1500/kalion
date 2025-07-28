@@ -36,9 +36,9 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
     /**
      * @return ContractEntity|null
      */
-    public function first()
+    public function first(?callable $callback = null, $default = null)
     {
-        return parent::first();
+        return parent::first(...func_get_args());
     }
 
     public function jsonSerialize(): array

@@ -11,9 +11,9 @@ abstract class ContractCollectionVo extends ContractCollectionBase
     /**
      * @return ContractValueObject|null
      */
-    public function first()
+    public function first(?callable $callback = null, $default = null)
     {
-        return parent::first();
+        return parent::first(...func_get_args());
     }
 
     public function firstValue()

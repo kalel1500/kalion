@@ -420,9 +420,9 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     /**
      * @return mixed
      */
-    public function first()
+    public function first(?callable $callback = null, $default = null)
     {
-        return collect($this->items)->first();
+        return collect($this->items)->first(...func_get_args());
     }
 
 //    public function firstOrFail()
@@ -438,7 +438,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function firstWhere($key, $operator = null, $value = null)
     {
-        return $this->where(...func_get_args())->first();
+        return $this->where(...func_get_args())->first(); // TODO Canals - hacer pruebas y adaptar a Laravel
     }
 
     /**
@@ -526,9 +526,9 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
      * @param string $value
      * @return string
      */
-    public function implode(string $value)
+    public function implode($value, $glue = null)
     {
-        return implode($value, $this->toArray());
+        return collect($this->toArray())->implode(...func_get_args());
     }
 
 //    public function intersect()
@@ -590,9 +590,9 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     /**
      * @return mixed
      */
-    public function last()
+    public function last(?callable $callback = null, $default = null)
     {
-        return collect($this->items)->last();
+        return collect($this->items)->last(...func_get_args());
     }
 
 //    public function lazy()
