@@ -128,18 +128,6 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return ($this instanceof Relatable);
     }
 
-    private static function getItemToArray($item)
-    {
-        $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
-
-        return match (true) {
-            $item instanceof BuildArrayable && $fromThisClass => $item->toArrayForBuild(),
-            $item instanceof Arrayable                        => $item->toArray(),
-            $item instanceof ContractValueObject              => $item->value(),
-            default                                           => $item,
-        };
-    }
-
     private function getArrayableItems($items): array
     {
         if (is_array($items)) {
@@ -939,7 +927,13 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $result = [];
         foreach ($this->items as $key => $item) {
-            $item         = self::getItemToArray($item);
+            $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
+            $item = match (true) {
+                $item instanceof BuildArrayable && $fromThisClass => $item->toArrayForBuild(),
+                $item instanceof Arrayable                        => $item->toArray(),
+                $item instanceof ContractValueObject              => $item->value(),
+                default                                           => $item,
+            };
             $result[$key] = $item;
         }
         return $result;
