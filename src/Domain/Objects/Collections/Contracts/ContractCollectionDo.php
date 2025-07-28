@@ -9,7 +9,10 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\ContractDataObject;
 
 abstract class ContractCollectionDo extends ContractCollectionBase
 {
-    public function first(): ?ContractDataObject
+    /**
+     * @return ContractDataObject|null
+     */
+    public function first()
     {
         return parent::first();
     }

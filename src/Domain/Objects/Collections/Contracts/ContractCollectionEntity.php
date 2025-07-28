@@ -33,7 +33,10 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
         return $this;
     }
 
-    public function first(): ?ContractEntity
+    /**
+     * @return ContractEntity|null
+     */
+    public function first()
     {
         return parent::first();
     }

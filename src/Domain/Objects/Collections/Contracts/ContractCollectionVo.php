@@ -8,7 +8,10 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
 
 abstract class ContractCollectionVo extends ContractCollectionBase
 {
-    public function first(): ?ContractValueObject
+    /**
+     * @return ContractValueObject|null
+     */
+    public function first()
     {
         return parent::first();
     }
