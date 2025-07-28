@@ -721,11 +721,11 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param string $field
+     * @param string $value
      * @param string|null $key
      * @return CollectionAny
      */
-    public function pluck(string $field, string $key = null): CollectionAny
+    public function pluck(string $value, string $key = null): CollectionAny
     {
         $getItemValue   = function ($collectionItem, string $pluckField) {
             /** @var Arrayable|BuildArrayable $collectionItem */
@@ -759,7 +759,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 
         $result = [];
         foreach ($this->items as $item) {
-            $fieldValue = $getItemValue($item, $field);
+            $fieldValue = $getItemValue($item, $value);
             $fieldValue = $clearItemValue($fieldValue);
 
             if (is_null($key)) {
@@ -772,7 +772,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         }
 
 //        return (new CollectionAnyVo($result))->whereNotNull();
-        return $this->toAny($result, $field);
+        return $this->toAny($result, $value);
     }
 
     /**
