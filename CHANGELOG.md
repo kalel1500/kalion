@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.29.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.29.2-beta.0...master)
+
+## [v0.29.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.29.1-beta.0...v0.29.2-beta.0) - 2025-07-28
+
+### Added
+
+* Nuevos métodos `toModel()` y `toNotModel()` añadidos a la clase `ContractValueObject` para poder convertir fácilmente las instancias de modelo a base y viceversa
+* Se ha añadido el nuevo método `every()` en las colecciones (`ContractCollectionBase`)
+
+### Changed
+
+* stubs: Variables de los archivos `.env` ordenadas
+* Se han reemplazado todos los tipos `ContractModelId` de los parámetros `$ids` por el tipo mixto `ModelId|ModelIdNull` en las entidades
 
 ## [v0.29.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.29.0-beta.0...v0.29.1-beta.0) - 2025-07-22
 
