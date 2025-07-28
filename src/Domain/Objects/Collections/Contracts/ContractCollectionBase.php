@@ -34,7 +34,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     /** @var null|string */
     protected const ITEM_TYPE = null;
 
-    protected array $items;
+    protected $items;
 
     protected bool   $shouldSkipValidation;
     protected string $resolvedItemType;
