@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.29.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.29.2-beta.1...master)
+
+## [v0.29.2-beta.1](https://github.com/kalel1500/kalion/compare/v0.29.2-beta.0...v0.29.2-beta.1) - 2025-07-28
+
+### Changed
+
+* Refactors internos sin impacto funcional: 
+  * Métodos `toOriginal()` y `toBase()` renombrados `toStatic()` y `toAny()` en la clase `ContractCollectionBase`
+  * Eliminar método `getItemToArray()` (y mover la lógica dentro `toArray()`) en la clase `ContractCollectionBase`
+  * Añadido el tipo de retorno `static` en el método `toStatic()`
+  * Añadir documentación `PhpDoc` en los métodos de la clase `ContractCollectionBase`
 
 ## [v0.29.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.29.1-beta.0...v0.29.2-beta.0) - 2025-07-28
 
