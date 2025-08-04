@@ -17,6 +17,11 @@ abstract class ContractCollectionDo extends ContractCollectionBase
         return parent::first(...func_get_args());
     }
 
+    public function toArrayForBuild(): array
+    {
+        return array_map(fn($item) => $item->toArrayForBuild(), $this->items);
+    }
+
     public static function fromArray(?array $values): ?static
     {
         if (is_null($values)) return null;
