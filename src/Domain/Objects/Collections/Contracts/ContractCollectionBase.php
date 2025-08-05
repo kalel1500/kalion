@@ -341,10 +341,18 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toStatic($diff->toArray());
     }
 
-//    public function doesntContain()
-//    {
-//        //
-//    }
+    /**
+     * Determine if an item is not contained in the collection.
+     *
+     * @param  mixed  $key
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return bool
+     */
+    public function doesntContain($key, $operator = null, $value = null)
+    {
+        return ! $this->contains(...func_get_args());
+    }
 
 //    public function dot()
 //    {
