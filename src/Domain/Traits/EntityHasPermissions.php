@@ -2,6 +2,7 @@
 
 namespace Thehouseofel\Kalion\Domain\Traits;
 
+use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Domain\Services\Repository\UserAccessChecker;
@@ -28,14 +29,10 @@ trait EntityHasPermissions
     /*----------------------------------------------------------------------------------------------------------------*/
     /*--------------------------------------------------- Relations -------------------------------------------------*/
 
+    #[RelationOf(RoleCollection::class)]
     public function roles(): RoleCollection
     {
         return $this->getRelation('roles');
-    }
-
-    public function setRoles(array $value): void
-    {
-        $this->setRelation($value, 'roles', RoleCollection::class);
     }
 
 

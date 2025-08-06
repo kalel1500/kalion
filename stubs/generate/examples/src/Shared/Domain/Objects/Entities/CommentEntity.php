@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Src\Shared\Domain\Objects\Entities;
 
 use Src\Shared\Domain\Objects\Entities\Collections\CommentCollection;
+use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\ContractEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
@@ -44,44 +45,27 @@ final class CommentEntity extends ContractEntity
         ];
     }
 
+    #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {
         return $this->getRelation('user');
     }
 
-    public function setUser(?array $value): void
-    {
-        $this->setRelation($value, 'user', UserEntity::class);
-    }
-
+    #[RelationOf(PostEntity::class)]
     public function post(): ?PostEntity
     {
         return $this->getRelation('post');
     }
 
-    public function setPost(?array $value): void
-    {
-        $this->setRelation($value, 'post', PostEntity::class);
-    }
-
+    #[RelationOf(CommentEntity::class)]
     public function comment(): ?CommentEntity
     {
         return $this->getRelation('comment');
     }
 
-    public function setComment(?array $value): void
-    {
-        $this->setRelation($value, 'comment', CommentEntity::class);
-    }
-
+    #[RelationOf(CommentCollection::class)]
     public function responses(): CommentCollection
     {
         return $this->getRelation('responses');
     }
-
-    public function setResponses(array $value): void
-    {
-        $this->setRelation($value, 'responses', CommentCollection::class);
-    }
-
 }

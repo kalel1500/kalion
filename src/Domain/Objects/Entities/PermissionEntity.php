@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 
+use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
@@ -34,13 +35,9 @@ final class PermissionEntity extends ContractEntity
         ];
     }
 
+    #[RelationOf(RoleCollection::class)]
     public function roles(): RoleCollection
     {
         return $this->getRelation('roles');
-    }
-
-    public function setRoles(array $value): void
-    {
-        $this->setRelation($value, 'roles', RoleCollection::class);
     }
 }
