@@ -184,12 +184,6 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
         return static::fromData($data, $with, $isFull, $saveBuilderObject, $isPaginate, $paginationData);
     }
 
-    public static function fromRelationData(array|Collection $data): static|null
-    {
-        $isFromQuery = is_object($data);
-        return static::fromData($data, null, null, $isFromQuery);
-    }
-
     public function isPaginate(): bool
     {
         return $this->isPaginate;

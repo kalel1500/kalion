@@ -69,11 +69,6 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         return $self;
     }
 
-    public static function fromRelationData(array|Model|null $value): static|null
-    {
-        return is_object($value) ? static::fromObject($value) : static::fromArray($value);
-    }
-
     abstract protected function toArrayProperties(): array;
 
     protected function toArrayCalculatedProps(): array
@@ -249,6 +244,10 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
      */
     public function setRelation($data, string $name, string $class): void
     {
-        $this->relations[$name] = $class::fromRelationData($data);
+        $data = match (true) {
+            is_subclass_of($class, ContractEntity::class)           => is_object($data) ? $class::fromObject($data) : $class::fromArray($data),
+            is_subclass_of($class, ContractCollectionEntity::class) => is_object($data) ? $class::fromEloquent($data, null, null, true) : $class::fromArray($data),
+        };
+        $this->relations[$name] = $data;
     }
 }
