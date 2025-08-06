@@ -180,7 +180,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
                 $queryResult->links()->toHtml()
             );
         }
-        $data = $saveBuilderObject ? $queryResult : $queryResult->values()->toArray();
+        $data = $saveBuilderObject ? $queryResult : object_to_array($queryResult->values()->toArray());
         return static::fromData($data, $with, $isFull, $saveBuilderObject, $isPaginate, $paginationData);
     }
 
