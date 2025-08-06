@@ -6,6 +6,8 @@ namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use JsonSerializable;
+use ReflectionClass;
+use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\NotFoundRelationDefinitionException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\UnsetRelationException;
@@ -194,8 +196,14 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
             $relationData = $this->originalArray[$relationName];
         }
 
-        $setRelation = 'set' . ucfirst($first);
-        $this->$setRelation($relationData);
+        $ref = new ReflectionClass(static::class);
+        $attribute = $ref->getMethod($first)->getAttributes(RelationOf::class)[0] ?? null;
+        if (is_null($attribute)) {
+            $setRelation = 'set' . ucfirst($first);
+            $this->$setRelation($relationData);
+        } else {
+            $this->setRelation($relationData, $first, $attribute->newInstance()->class);
+        }
     }
 
     private function setLastRelation(string $first, string|array|null $last, bool|string|null $isFull): void
