@@ -245,6 +245,8 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
      * @param string $name
      * @param class-string $class
      * @return void
+     *
+     * @deprecated use #[RelationOf()]
      */
     public function setRelation($data, string $name, string $class): void
     {
