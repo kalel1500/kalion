@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Traits;
 
+use ReflectionClass;
+
 trait CountMethods
 {
     protected function countPublicMethods(): int
@@ -12,7 +14,7 @@ trait CountMethods
 //        dd($numeroDeMetodos);
 
         // Crear una instancia de ReflectionClass para la clase actual
-        $reflexion = new \ReflectionClass($this);
+        $reflexion = new ReflectionClass($this);
 
         // Obtener los métodos públicos o protegidos (sin incluir los estáticos)
         $methods = $reflexion->getMethods(\ReflectionMethod::IS_PUBLIC);
