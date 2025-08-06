@@ -10,7 +10,7 @@ use Src\Shared\Domain\Objects\Entities\Collections\TagCollection;
 use Src\Shared\Domain\Objects\Entities\TagEntity;
 use Src\Shared\Infrastructure\Models\Tag;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\DuplicatedRecordException;
-use Thehouseofel\Kalion\Domain\Exceptions\Database\HasRelationException;
+use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 
@@ -91,7 +91,7 @@ final class TagRepository implements TagRepositoryContract
             ->posts()
             ->exists();
         if ($hasRelation) {
-            throw HasRelationException::fromModel('Tag', 'Posts');
+            throw EntityRelationException::cannotDeleteDueToRelation('Tag', 'Posts');
         }
     }
 }

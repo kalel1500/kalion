@@ -9,8 +9,7 @@ use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
-use Thehouseofel\Kalion\Domain\Exceptions\Database\NotFoundRelationDefinitionException;
-use Thehouseofel\Kalion\Domain\Exceptions\Database\UnsetRelationException;
+use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionEntity;
 use Thehouseofel\Kalion\Domain\Services\Relation;
 
@@ -191,7 +190,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         } else {
             $relationName = str_snake($first);
             if (!array_key_exists($relationName, $this->originalArray)) {
-                throw NotFoundRelationDefinitionException::fromRelation($relationName, static::class);
+                throw EntityRelationException::relationNotLoadedInEloquentResult($relationName, static::class);
             }
             $relationData = $this->originalArray[$relationName];
         }
@@ -235,7 +234,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
     public function getRelation(string $name)
     {
         if (!array_key_exists($name, $this->relations)) {
-            throw UnsetRelationException::fromRelation($name, static::class);
+            throw EntityRelationException::relationNotSetInEntitySetup($name, static::class);
         }
         return $this->relations[$name];
     }
