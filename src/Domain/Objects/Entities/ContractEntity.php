@@ -184,7 +184,6 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
 
     private function setFirstRelation(string $first): void
     {
-        $setRelation = 'set' . ucfirst($first);
         if ($this->isFromQuery) {
             $relationData = $this->originalObject->$first;
         } else {
@@ -195,6 +194,7 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
             $relationData = $this->originalArray[$relationName];
         }
 
+        $setRelation = 'set' . ucfirst($first);
         $this->$setRelation($relationData);
     }
 
