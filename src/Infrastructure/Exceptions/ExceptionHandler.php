@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Thehouseofel\Kalion\Domain\Contracts\KalionException;
+use Thehouseofel\Kalion\Domain\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
@@ -55,7 +55,7 @@ final class ExceptionHandler
             });
 
             // Renderizar nuestras excepciones de dominio
-            $exceptions->render(function (KalionException $e, Request $request) {
+            $exceptions->render(function (KalionExceptionInterface $e, Request $request) {
                 $context = $e->getContext();
                 $isDebugInactive = ! debug_is_active();
 

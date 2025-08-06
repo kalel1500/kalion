@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Domain\Contracts\KalionException;
+use Thehouseofel\Kalion\Domain\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity;
@@ -114,7 +114,7 @@ if (!function_exists('is_valid_bool')) {
 if (!function_exists('is_kalion_exception')) {
     function is_kalion_exception(Throwable $e): bool
     {
-        return ($e instanceof KalionException);
+        return ($e instanceof KalionExceptionInterface);
     }
 }
 

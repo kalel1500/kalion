@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Exceptions\Base;
 
 use LogicException;
-use Thehouseofel\Kalion\Domain\Contracts\KalionException;
+use Thehouseofel\Kalion\Domain\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Traits\KalionExceptionBehavior;
 use Throwable;
 
-abstract class KalionLogicException extends LogicException implements KalionException
+abstract class KalionLogicException extends LogicException implements KalionExceptionInterface
 {
     use KalionExceptionBehavior;
 
