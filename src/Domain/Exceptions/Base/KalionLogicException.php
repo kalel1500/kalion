@@ -18,11 +18,12 @@ abstract class KalionLogicException extends LogicException implements KalionExce
         ?Throwable $previous = null,
         int        $code = 0,
         ?array     $data = null,
-        bool       $success = false
+        bool       $success = false,
+        ?int       $statusCode = null,
     )
     {
         $this->initKalionException(
-            statusCode: static::STATUS_CODE,
+            statusCode: $statusCode ?? static::STATUS_CODE,
             message   : $message ?? static::MESSAGE,
             previous  : $previous,
             code      : $code,
