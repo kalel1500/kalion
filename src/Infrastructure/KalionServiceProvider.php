@@ -253,13 +253,13 @@ return [
 
         // Todas
         $this->publishes([
-            KALION_PATH.'/resources/views'                    => base_path('resources/views/vendor/kalion'),
+            KALION_PATH.'/resources/views'                    => base_path('resources/views/vendor/kal'),
             KALION_PATH.'/src/Infrastructure/View/Components' => app_path('View/Components'),
         ], 'kalion-views');
 
         // Publicar solo la vista "app.blade.php"
         $this->publishes([
-            KALION_PATH.'/resources/views/components/layout/app.blade.php'   => base_path('resources/views/vendor/kalion/components/layout/app.blade.php'),
+            KALION_PATH.'/resources/views/components/layout/app.blade.php' => base_path('resources/views/vendor/kal/components/layout/app.blade.php'),
             KALION_PATH.'/src/Infrastructure/View/Components/Layout/App.php' => app_path('View/Components/Layout/App.php'),
         ], 'kalion-view-layout');
 
