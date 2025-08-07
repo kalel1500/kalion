@@ -231,8 +231,9 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         return $this->toArray();
     }
 
-    public function getRelation(string $name)
+    public function getRelation()
     {
+        $name = debug_backtrace()[1]['function'];
         if (!array_key_exists($name, $this->relations)) {
             throw EntityRelationException::relationNotSetInEntitySetup($name, static::class);
         }

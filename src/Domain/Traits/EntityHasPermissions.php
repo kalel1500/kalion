@@ -32,7 +32,7 @@ trait EntityHasPermissions
     #[RelationOf(RoleCollection::class)]
     public function roles(): RoleCollection
     {
-        return $this->getRelation('roles');
+        return $this->getRelation();
     }
 
 

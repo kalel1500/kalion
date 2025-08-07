@@ -48,24 +48,24 @@ final class CommentEntity extends ContractEntity
     #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {
-        return $this->getRelation('user');
+        return $this->getRelation();
     }
 
     #[RelationOf(PostEntity::class)]
     public function post(): ?PostEntity
     {
-        return $this->getRelation('post');
+        return $this->getRelation();
     }
 
     #[RelationOf(CommentEntity::class)]
     public function comment(): ?CommentEntity
     {
-        return $this->getRelation('comment');
+        return $this->getRelation();
     }
 
     #[RelationOf(CommentCollection::class)]
     public function responses(): CommentCollection
     {
-        return $this->getRelation('responses');
+        return $this->getRelation();
     }
 }

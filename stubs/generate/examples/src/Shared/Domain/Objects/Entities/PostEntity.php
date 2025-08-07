@@ -53,18 +53,18 @@ final class PostEntity extends ContractEntity
     #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {
-        return $this->getRelation('user');
+        return $this->getRelation();
     }
 
     #[RelationOf(CommentCollection::class)]
     public function comments(): CommentCollection
     {
-        return $this->getRelation('comments');
+        return $this->getRelation();
     }
 
     #[RelationOf(TagCollection::class)]
     public function tags(): TagCollection
     {
-        return $this->getRelation('tags');
+        return $this->getRelation();
     }
 }

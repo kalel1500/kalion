@@ -45,12 +45,12 @@ final class TagEntity extends ContractEntity
     #[RelationOf(PostCollection::class)]
     public function posts(): PostCollection
     {
-        return $this->getRelation('posts');
+        return $this->getRelation();
     }
 
     #[RelationOf(TagTypeEntity::class)]
     public function tagType(): ?TagTypeEntity
     {
-        return $this->getRelation('tagType');
+        return $this->getRelation();
     }
 }

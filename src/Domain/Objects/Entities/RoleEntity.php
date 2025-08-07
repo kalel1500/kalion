@@ -45,6 +45,6 @@ final class RoleEntity extends ContractEntity
     #[RelationOf(PermissionCollection::class)]
     public function permissions(): PermissionCollection
     {
-        return $this->getRelation('permissions');
+        return $this->getRelation();
     }
 }

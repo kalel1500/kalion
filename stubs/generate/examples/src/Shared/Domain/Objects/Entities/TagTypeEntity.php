@@ -42,6 +42,6 @@ final class TagTypeEntity extends ContractEntity
     #[RelationOf(TagCollection::class)]
     public function tags(): TagCollection
     {
-        return $this->getRelation('tags');
+        return $this->getRelation();
     }
 }

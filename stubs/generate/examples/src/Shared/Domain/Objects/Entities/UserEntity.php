@@ -43,12 +43,12 @@ class UserEntity extends BaseUserEntity
     #[RelationOf(PostCollection::class)]
     public function posts(): PostCollection
     {
-        return $this->getRelation('posts');
+        return $this->getRelation();
     }
 
     #[RelationOf(CommentCollection::class)]
     public function comments(): CommentCollection
     {
-        return $this->getRelation('comments');
+        return $this->getRelation();
     }
 }
