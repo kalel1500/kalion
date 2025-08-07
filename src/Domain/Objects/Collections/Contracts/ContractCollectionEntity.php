@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\Collections\Contracts;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection as CollectionS;
 use Thehouseofel\Kalion\Domain\Contracts\ExportableEntity;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
@@ -139,6 +140,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
     ): static|null
     {
         if (is_null($data)) return null;
+
         $isPaginate     = array_key_exists('current_page', $data);
         $paginationData = null;
         if ($isPaginate) {
@@ -153,6 +155,11 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
             );
             $data           = $data['data'];
         }
+
+        if (is_object(Arr::first($data))) {
+            $data = object_to_array($data);
+        }
+
         return static::fromData($data, $with, $isFull, false, $isPaginate, $paginationData);
     }
 
