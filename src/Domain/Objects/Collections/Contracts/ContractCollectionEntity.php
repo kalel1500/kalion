@@ -112,7 +112,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
             throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class ContractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
         }
 
-        /** @var class-string $entity */
+        /** @var class-string<ContractEntity> $entity */
         $entity = static::resolveItemType();
         $array  = [];
         foreach ($data as $key => $item) {
@@ -163,6 +163,9 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
         return static::fromData($data, $with, $isFull, false, $isPaginate, $paginationData);
     }
 
+    /**
+     * @deprecated Use fromArray()
+     */
     public static function fromEloquent(
         Collection|CollectionS|LengthAwarePaginator|null $queryResult,
         string|array|null                                $with = null,

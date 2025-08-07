@@ -31,6 +31,8 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
     /**
      * @param Model|object $item
      * @return array
+     *
+     * @deprecated Use createFromArray()
      */
     protected static function createFromObject($item): array
     {
@@ -55,6 +57,9 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         return $self;
     }
 
+    /**
+     * @deprecated Use fromArray()
+     */
     public static function fromObject(?object $item, string|array|null $with = null, bool|string|null $isFull = null): static|null
     {
         if (is_null($item)) return null;
