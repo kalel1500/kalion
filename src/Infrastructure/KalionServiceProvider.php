@@ -253,15 +253,24 @@ return [
 
         // Todas
         $this->publishes([
-            KALION_PATH.'/resources/views'                    => base_path('resources/views/vendor/kal'),
-            KALION_PATH.'/src/Infrastructure/View/Components' => app_path('View/Components'),
+            KALION_PATH.'/resources/views' => base_path('resources/views/vendor/kal'),
         ], 'kalion-views');
 
         // Publicar solo la vista "app.blade.php"
         $this->publishes([
             KALION_PATH.'/resources/views/components/layout/app.blade.php' => base_path('resources/views/vendor/kal/components/layout/app.blade.php'),
-            KALION_PATH.'/src/Infrastructure/View/Components/Layout/App.php' => app_path('View/Components/Layout/App.php'),
         ], 'kalion-view-layout');
+
+
+        /*
+         * -------------------
+         * --- Componentes ---
+         * -------------------
+         */
+
+        $this->publishes([
+            KALION_PATH.'/stubs/generate/components' => src_path('Shared/Infrastructure/View/Vendor/Kal/Components'),
+        ], 'kalion-components');
 
 
         /*
@@ -343,6 +352,7 @@ return [
 
         // Registrar componentes con Clase
         Blade::componentNamespace('Thehouseofel\\Kalion\\Infrastructure\\View\\Components', 'kal');
+        Blade::componentNamespace('Src\\Shared\\Infrastructure\\View\\Vendor\\Kal\\Components', 'kal2');
 
         // Registrar componentes anónimos
         Blade::anonymousComponentPath(KALION_PATH.'/resources/views/components', 'kal');
