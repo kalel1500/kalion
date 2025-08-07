@@ -22,12 +22,12 @@ abstract class KalionException extends Exception implements KalionExceptionInter
     )
     {
         $this->initKalionException(
-            static::STATUS_CODE,
-            $message ?? static::MESSAGE,
-            $previous,
-            $code,
-            $data,
-            $success
+            statusCode: static::STATUS_CODE,
+            message   : $message ?? static::MESSAGE,
+            previous  : $previous,
+            code      : $code,
+            data      : $data,
+            success   : $success
         );
     }
 }
