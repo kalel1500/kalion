@@ -19,6 +19,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\View\ComponentAttributeBag;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
 use Thehouseofel\Kalion\Infrastructure\Facades\RedirectDefaultPath;
+use function Illuminate\Filesystem\join_paths;
 
 if (!function_exists('dropdown_is_open')) {
     function dropdown_is_open(string $htmlLinks): bool
@@ -88,9 +89,10 @@ if (! function_exists('src_path')) {
     /**
      * Get the path to the application folder.
      */
-    function src_path(): string
+    function src_path(string $path = ''): string
     {
-        return base_path().DIRECTORY_SEPARATOR.'src';
+        $srcPath = base_path('src');
+        return join_paths($srcPath, $path);
     }
 }
 
