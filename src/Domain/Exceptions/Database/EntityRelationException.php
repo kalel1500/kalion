@@ -12,7 +12,7 @@ final class EntityRelationException extends KalionLogicException
 
     public static function cannotDeleteDueToRelation(string $model = '', string $relation = ''): static
     {
-        return new static(__('k::database.record_is_used_in_relation', ['model' => $model, 'relation' => $relation])); // TODO Canals - 409
+        return new static(__('k::database.record_is_used_in_relation', ['model' => $model, 'relation' => $relation]), statusCode: 409); // HTTP_CONFLICT;
     }
 
     public static function relationDataNotFound(string $entity = '', string $relation = ''): static
