@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Exceptions\Database;
 
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionLogicException;
 
-final class EntityRelationException extends KalionLogicException
+class EntityRelationException extends KalionLogicException
 {
     const STATUS_CODE = 500; // HTTP_INTERNAL_SERVER_ERROR
 

@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Exceptions;
 
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionLogicException;
 
-final class AppException extends KalionLogicException
+class AppException extends KalionLogicException
 {
     const STATUS_CODE = 500; // HTTP_INTERNAL_SERVER_ERROR
 }

@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Domain\Exceptions;
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionLogicException;
 use Throwable;
 
-final class NeverCalledException extends KalionLogicException
+class NeverCalledException extends KalionLogicException
 {
     const STATUS_CODE = 500;
 

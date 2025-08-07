@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Exceptions;
 
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionLogicException;
 
-final class FeatureUnavailableException extends KalionLogicException
+class FeatureUnavailableException extends KalionLogicException
 {
     const STATUS_CODE = 500;
 

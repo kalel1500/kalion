@@ -6,6 +6,6 @@ namespace Thehouseofel\Kalion\Domain\Exceptions;
 
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
 
-final class AbortException extends KalionHttpException
+class AbortException extends KalionHttpException
 {
 }
