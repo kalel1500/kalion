@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Traits;
 
-trait WithIdsAndToArray
+trait HasIds
 {
     /**
      * Obtener el ID asociado a un valor del enum
      */
     public function getId(): int {
-        return static::values()[$this->value];
+        return static::ids()[$this->value];
     }
 
     public static function fromId(int $id): static
     {
-        $value = array_search($id, static::values(), true);
+        $value = array_search($id, static::ids(), true);
         if ($value === false) {
             $message = sprintf('"%s" is not a valid backing value for enum %s', $id, static::class);
             throw new \ValueError($message);
@@ -27,7 +27,7 @@ trait WithIdsAndToArray
     {
         if (is_null($id)) return null;
 
-        $value = array_search((int)$id, static::values(), true);
+        $value = array_search((int)$id, static::ids(), true);
 
         if ($value === false) return null;
 
