@@ -590,10 +590,13 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function keys()
-//    {
-//        //
-//    }
+    /**
+     * @return CollectionAny
+     */
+    public function keys()
+    {
+        return new CollectionAny(array_keys($this->items));
+    }
 
     /**
      * @return mixed
@@ -1237,10 +1240,17 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function whereNotIn()
-//    {
-//        //
-//    }
+    /**
+     * @param string $key
+     * @param array $values
+     * @param bool $strict
+     * @return static
+     */
+    public function whereNotIn($key, $values, $strict = false)
+    {
+        $collResult = collect($this->toArray())->whereNotIn($key, $values, $strict)->values();
+        return $this->toStatic($collResult->toArray());
+    }
 
 //    public function whereNotInStrict()
 //    {
