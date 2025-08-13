@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Thehouseofel\Kalion\Infrastructure\Facades;
+
+use Illuminate\Support\Facades\Facade;
+
+/**
+ * @method static bool isRunning(string $processName)
+ * @method static void assert(string $processName, string $errorMessage = null)
+ * @method static bool checkQueue()
+ * @method static void assertQueue(string $errorMessage = null)
+ * @method static bool checkReverb()
+ * @method static void assertReverb(string $errorMessage = null)
+ *
+ * @see \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker
+ */
+final class ProcessChecker extends Facade
+{
+    /**
+     * Get the registered name of the component.
+     */
+    protected static function getFacadeAccessor(): string
+    {
+        return 'processChecker';
+    }
+}

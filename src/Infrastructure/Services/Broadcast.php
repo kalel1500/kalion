@@ -15,7 +15,7 @@ final class Broadcast
     public static function emitEvent(JsonResponse $response, ShouldBroadcast $instanceEvent): JsonResponse
     {
         try {
-            if (Kalion::broadcastingDisabled()) throw new BroadcastException(__('k::service.websockets.inactive'), Response::HTTP_PARTIAL_CONTENT);
+            if (Kalion::broadcastingDisabled()) throw new BroadcastException(__('k::process.reverb.inactive'), Response::HTTP_PARTIAL_CONTENT);
             broadcast($instanceEvent);
             $data = $response->getData(true);
             $data['data']['broadcasting'] = ['success' => true, 'message' => 'Servicio websockets levantado'];
@@ -32,7 +32,7 @@ final class Broadcast
     public static function emitEventSimple(ShouldBroadcast $instanceEvent): void
     {
         try {
-            if (Kalion::broadcastingDisabled()) throw new BroadcastException(__('k::service.websockets.inactive'), Response::HTTP_PARTIAL_CONTENT);
+            if (Kalion::broadcastingDisabled()) throw new BroadcastException(__('k::process.reverb.inactive'), Response::HTTP_PARTIAL_CONTENT);
             broadcast($instanceEvent);
         } catch (BroadcastException $e) {
             //

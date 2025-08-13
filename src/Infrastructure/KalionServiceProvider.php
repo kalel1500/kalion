@@ -19,7 +19,7 @@ use Thehouseofel\Kalion\Infrastructure\Console\Commands\JobDispatch;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
-use Thehouseofel\Kalion\Infrastructure\Console\Commands\ServiceCheck;
+use Thehouseofel\Kalion\Infrastructure\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Infrastructure\Http\Middleware\UserHasPermission;
 use Thehouseofel\Kalion\Infrastructure\Http\Middleware\UserHasRole;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
@@ -34,6 +34,7 @@ class KalionServiceProvider extends ServiceProvider
         'authManager'                                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager::class,
         'redirectAfterLogin'                                                                   => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
         'redirectDefaultPath'                                                                  => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
+        'processChecker'                                                                       => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
         \Thehouseofel\Kalion\Domain\Contracts\Services\CurrentUserContract::class              => \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\JobRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\RoleRepository::class,
@@ -315,7 +316,7 @@ return [
             PublishAuth::class,
             JobDispatch::class,
             LogsClear::class,
-            ServiceCheck::class,
+            ProcessCheck::class,
         ]);
     }
 

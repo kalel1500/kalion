@@ -3,10 +3,9 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxCheckProcessController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxCookiesController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxJobsController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxQueuesController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxWebsocketsController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\ExampleController;
 use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\JobsController;
 
@@ -14,9 +13,11 @@ Route::get('/', fn() => redirect(default_url()))->name('index');
 
 Route::middleware('auth')->group(function () {
 
-    // Service routes
-    Route::get('/kalion/ajax/check-service-queues', [AjaxQueuesController::class, 'checkService'])->name('kalion.ajax.queues.checkService');
-    Route::get('/kalion/ajax/check-service-websockets', [AjaxWebsocketsController::class, 'checkService'])->name('kalion.ajax.websockets.checkService');
+    // Process routes
+    Route::get('/kalion/ajax/process/check-queue', [AjaxCheckProcessController::class, 'checkQueue'])->name('kalion.ajax.process.checkQueue');
+    Route::get('/kalion/ajax/process/broadcast-queue-status', [AjaxCheckProcessController::class, 'broadcastQueueStatus'])->name('kalion.ajax.process.broadcastQueueStatus');
+    Route::get('/kalion/ajax/process/check-reverb', [AjaxCheckProcessController::class, 'checkReverb'])->name('kalion.ajax.process.checkReverb');
+    Route::get('/kalion/ajax/process/broadcast-reverb-status', [AjaxCheckProcessController::class, 'broadcastReverbStatus'])->name('kalion.ajax.process.broadcastReverbStatus');
 
     // Queues routes
     Route::get('/kalion/queues/jobs', [JobsController::class, 'queuedJobs'])->name('kalion.queues.queuedJobs');

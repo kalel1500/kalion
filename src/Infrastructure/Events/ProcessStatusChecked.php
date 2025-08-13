@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Queue\SerializesModels;
 
-final class EventCheckQueuesStatus implements ShouldBroadcast
+final class ProcessStatusChecked implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -32,7 +32,7 @@ final class EventCheckQueuesStatus implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('check-queues-status'),
+            new Channel('process-status'),
         ];
     }
 
