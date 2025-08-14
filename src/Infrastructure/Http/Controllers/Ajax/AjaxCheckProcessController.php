@@ -28,7 +28,8 @@ final class AjaxCheckProcessController extends Controller
     public function broadcastQueueStatus(): JsonResponse
     {
         $response = $this->checkProcessQueueUseCase->__invoke();
-        return Broadcast::emitEvent($response, new ProcessStatusChecked($response));
+        $broadcast = Broadcast::tryBroadcast(new ProcessStatusChecked($response));
+        return Broadcast::annotateResponse($response, $broadcast);
     }
 
 
@@ -40,6 +41,7 @@ final class AjaxCheckProcessController extends Controller
     public function broadcastReverbStatus(): JsonResponse
     {
         $response = $this->checkProcessReverbUseCase->__invoke();
-        return Broadcast::emitEvent($response, new ProcessStatusChecked($response));
+        $broadcast = Broadcast::tryBroadcast(new ProcessStatusChecked($response));
+        return Broadcast::annotateResponse($response, $broadcast);
     }
 }

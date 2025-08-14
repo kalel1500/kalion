@@ -8,34 +8,29 @@ use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Responses\ResponseBroadcast;
 use Throwable;
 
 final class Broadcast
 {
-    public static function emitEvent(JsonResponse $response, ShouldBroadcast $instanceEvent): JsonResponse
+    public static function tryBroadcast(ShouldBroadcast $event): ResponseBroadcast
     {
         try {
-            if (Kalion::broadcastingDisabled()) throw new BroadcastException(__('k::process.reverb.inactive'), Response::HTTP_PARTIAL_CONTENT);
-            broadcast($instanceEvent);
-            $data = $response->getData(true);
-            $data['data']['broadcasting'] = ['success' => true, 'message' => 'Servicio websockets levantado'];
-            $response->setData($data);
-            return $response;
+            if (Kalion::broadcastingDisabled()) {
+                throw new BroadcastException(__('k::process.reverb.inactive'), Response::HTTP_PARTIAL_CONTENT);
+            }
+            broadcast($event);
+            return new ResponseBroadcast(success: true, message: __('k::process.reverb.active'));
         } catch (Throwable $e) {
-            $data = $response->getData(true);
-            $data['data']['broadcasting'] = ['success' => false, 'message' => $e->getMessage()];
-            $response->setData($data);
-            return $response;
+            return new ResponseBroadcast(success: false, message: $e->getMessage());
         }
     }
 
-    public static function emitEventSimple(ShouldBroadcast $instanceEvent): void
+    public static function annotateResponse(JsonResponse $response, ResponseBroadcast $broadcast): JsonResponse
     {
-        try {
-            if (Kalion::broadcastingDisabled()) throw new BroadcastException(__('k::process.reverb.inactive'), Response::HTTP_PARTIAL_CONTENT);
-            broadcast($instanceEvent);
-        } catch (BroadcastException $e) {
-            //
-        }
+        $data = $response->getData(true);
+        $data['data']['broadcasting'] = $broadcast->toArray();
+        $response->setData($data);
+        return $response;
     }
 }
