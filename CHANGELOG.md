@@ -1,6 +1,104 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.29.2-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.30.0-beta.0...master)
+
+## [v0.30.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.29.2-beta.1...v0.30.0-beta.0) - 2025-08-14
+
+### Added
+
+* Nuevas clases añadidas al rehacer el sistema de comprobación de los servicios de Laravel:
+  * Nuevos casos de uso `CheckProcessQueueUseCase` y `CheckProcessReverbUseCase` para obtener el estado de un servicio
+  * Nuevo enum `CheckableProcessVo`
+  * Nueva clase `ProcessChecker` para calcular si un proceso está activo en el servidor
+  * Nueva fachada `ProcessChecker` para poder usar fácilmente los métodos de la clase `ProcessChecker`
+* Nueva interfaz `TranslatableEnum` y nuevo trait `HasTranslations` para añadir fácilmente traducciones a los enums
+* Nuevos métodos `keys()` y `whereNotIn()` añadidos en la clase `ContractCollectionBase`
+* Nueva excepción `EntityRelationException` para gestionar todas las excepciones relacionadas con las relaciones de las entidades
+* Nuevo Atributo `RelationOf` para poner en los métodos de las relaciones y asi evitar tener que poner un método `set` para cada relación
+* Nueva excepción `KalionException` que extiende de Exception
+* Nuevo método `doesntContain()` añadido a la clase `ContractCollectionBase`
+* Nuevo método `toArrayForBuild()` añadido a la clase `ContractCollectionDo`
+
+### Changed
+
+* (breaking) Clase `ResponseBasicDo` renombrada a `ResponseCommonDto`
+* (breaking) Se ha eliminado la clase abstracta `ContractResponseDefaultDo` y se ha trasladado el código a la clase `ResponseBasicDo`, ya que ahora se puede extender de ella directamente
+* Se ha eliminado el modificador `final` de la clase `ResponseBasicDo` para que se pueda extender
+* (breaking) Se han cambiado los métodos `emitEvent()` y `emitEventSimple()` de la clase `Broadcast` por `tryBroadcast()` y `annotateResponse()` y ahora cada uno tiene una sola responsabilidad
+* (breaking) Se ha rehecho todo el sistema de comprobación de los servicios de Laravel:
+  * Traducciones modificadas:
+      * `k::service.*` -> `k::process.*`
+      * `k::service.websockets.*` -> `k::process.reverb.*`
+  * Rutas modificadas:
+      * `kalion.ajax.queues.checkService` -> `kalion.ajax.process.broadcastQueueStatus`
+      * `kalion.ajax.websockets.checkService` -> `kalion.ajax.process.broadcastReverbStatus`
+  * Rutas añadidas:
+      * `kalion.ajax.process.checkQueue`
+      * `kalion.ajax.process.checkReverb`
+  * Controladores `AjaxQueuesController` y `AjaxWebsocketsController` unificados en el `AjaxCheckProcessController` (lógica modificada, ya que ahora se usan los nuevos casos de uso `CheckProcessQueueUseCase` y `CheckProcessReverbUseCase`)
+  * Excepción `ServiceException` renombrada a `ProcessException` y ahora extiende de `KalionException` en vez de `KalionRuntimeException`
+  * Comando `ServiceCheck` renombrado a `ProcessCheck`. Firma renombrada de `kalion:service-check` a `kalion:process-check`. Lógica rehecha por completo usando el nuevo `ProcessChecker`
+  * Eventos `EventCheckQueuesStatus` y `EventCheckWebsocketsStatus` unificados en el `EventCheckQueuesStatus` (nombre del canal cambiado a `process-status`)
+  * Servicio `Queue` con el método `check()` eliminado. Ahora se puede llamar usando la Facade `ProcessChecker::assertQueue` en su lugar. Además, ya no guarda el estado en la caché.
+* (breaking) Se han renombrado las siguientes clases:
+  * la interfaz `EnumWIthIdsContract` -> `IdentifiableEnum`
+  * el trait `WithIdsAndToArray` -> `HasIds`
+  * el método `values` (de interfaz `EnumWIthIdsContract`) -> `ids`
+* Añadido parámetro `$path` al helper `src_path()` para poder pasarle un path para concatenar al src
+* Se han realizado cambios en las Colecciones y Entidades:
+  * (internal) Se ha modificado el método `setFirstRelation()` para que lea el nuevo atributo `RelationOf` en vez del método `set` al asignar las relaciones
+  * (break-command) Se han adaptado todas las entidades para usar el atributo `RelationOf` en vez de usar los métodos set en cada relación (incluyendo los stubs del `kalion:start`)
+  * Se ha añadido el comentario `@deprecated` al método `setRelation()` para indicar que se eliminara en un futuro y que se debe usar el atributo `#[RelationOf()]`
+  * (refactor) Se han eliminado los métodos `fromRelationData()` de las clases `ContractEntity` y `ContractCollectionEntity` y reemplazarlos por un `match` en el método `setRelation()` de la clase `ContractEntity` para simplificar la lógica
+  * Se ha añadido el comentario `@deprecated` en los métodos `fromEloquent()`, `fromObject()` y `createFromObject()` para indicar que se eliminara en un futuro
+  * Se ha modificado método `getRelation()` de la clase `ContractEntity` para dejar de recibir el parámetro `$name` y obtener el nombre de la relación del propio nombre del método de la relación. De esta forma ya no es necesario que cada relación de las entidades le pase un parámetro con el mismo valor que el nombre del método.
+* (breaking) Se han realizado cambios en las Excepciones:
+  * Interfaz `KalionException` renombrada a `KalionExceptionInterface`
+  * Hacer que la Interfaz `KalionExceptionInterface` extienda de `Throwable`
+  * Hacer que la Excepción `UnexpectedApiResponseException` extienda de la nueva `KalionException` en vez de la `KalionRuntimeException`
+  * (breaking) Se ha substituido los usos excepciones eliminadas (`KalionException`, `KalionHttpException`, `KalionLogicException` y `KalionRuntimeException`) por la nueva excepción `EntityRelationException` usando los métodos estáticos para simplificar la gestion de las excepciones de las relaciones. Los nuevos métodos son:
+    * `cannotDeleteDueToRelation()` (devuelve un 409)
+    * `relationDataNotFound()`
+    * `relationNotLoadedInEloquentResult()`
+    * `relationNotSetInEntitySetup()`
+  * (refactor) Usar parámetros nombrados al llamar al método `initKalionException()` en las excepciones base
+  * Se ha añadido el nuevo parámetro `$statusCode` al final de los constructores de las clases `KalionException.php`, `KalionLogicException.php` y `KalionRuntimeException.php` para que una misma excepción pueda tener viarios métodos estáticos con diferentes códigos http.
+  * Se han eliminado los modificadores `final` de las excepciones concretas para permitir su extensión desde las aplicaciones
+* (breaking) Eliminado método `getWith()` de la clase `ContractEntity` (ya que seguramente el comportamiento del `with` cambie en el futuro)
+* (breaking) Se han modificado los métodos de las colecciones para asimilarlos lo más posible a los métodos de eloquent (para evitar posibles futuros errores de compatibilidad):
+  * Parámetro `$field` renombrado a `$value` en el método `pluck()` de la clase `ContractCollectionBase`
+  * Se ha eliminado el tipado de retorno de los métodos de la clase `ContractCollectionBase`
+  * Se ha eliminado el tipado de los parámetros en la clase `ContractCollectionBase`
+  * Se han adaptado los métodos `first()`, `implode()` y `last()` de las colecciones para igualar las firmas y el comportamiento con los de Laravel
+  * Eliminar tipado (`array`) de la propiedad `$items` de la clase `ContractCollectionBase`
+
+### Removed
+
+* (breaking) La clase `ResponseBasicDo` ha dejado de existir (renombrada)
+* (breaking) Se ha eliminado la clase `ContractResponseDefaultDo`
+* (breaking) Al rehacer el sistema de comprobación de los servicios de Laravel se han eliminado las siguientes clases:
+  * `ServiceException`
+  * `ServiceCheck`
+  * `EventCheckWebsocketsStatus`
+  * `EventCheckQueuesStatus`
+  * `AjaxQueuesController`
+  * `AjaxWebsocketsController`
+  * `Queue`
+* (breaking) Se ha eliminado las 4 excepciones de las relaciones de las entidades:
+  * `HasRelationException`
+  * `NotFoundRelationDataException`
+  * `NotFoundRelationDefinitionException`
+  * `UnsetRelationException`
+
+### Fixed
+
+* (fix) Usar el helper `object_to_array()` en el método `fromArray()` de la clase `ContractCollectionEntity` para convertir los datos a arrays si el primer item es un objeto
+* (fix) Modificar la publicación de las clases de los componentes.
+  * Ahora solo se publican las blades, ya que al tener el namespace las clases no se pueden sobreescribir. 
+  * Lo que se publica ahora son unas nuevas clases de los componentes (guardadas en los stubs) que extienden de las originales en la ruta `Shared/Infrastructure/View/Vendor/Kal/Components`. 
+  * También se ha creado un nuevo `componentNamespace` llamado `kal2` para acceder a estas clases y asi poder sobreescribir las originales.
+* (fix) Modificar path de la publicación de las blades de `resources/views/vendor/kalion` a `resources/views/vendor/kal` ya que la carpeta se debe llamar igual que el prefijo
+* (fix) Usar el helper `object_to_array()` para convertir el resultado del `->toArray()` de Eloquent a un array profundo cuando `$saveBuilderObject === true` en el método `fromEloquent()` de la clase `ContractCollectionEntity` (de esta forma se puede pasar el resultado de un QueryBuilder en vez de solo los resultados de modelos)
 
 ## [v0.29.2-beta.1](https://github.com/kalel1500/kalion/compare/v0.29.2-beta.0...v0.29.2-beta.1) - 2025-07-28
 
