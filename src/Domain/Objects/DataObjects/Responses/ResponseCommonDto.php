@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Responses;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ContractDataObject;
 
-class ResponseBasicDo extends ContractDataObject
+class ResponseCommonDto extends ContractDataObject
 {
     public function __construct(
         public readonly ?int    $statusCode,
