@@ -11,7 +11,7 @@ use Throwable;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class ExceptionContextDo extends ContractDataObject
+final class ExceptionContextDo extends AbstractDataObject
 {
     public readonly string $title;
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractBoolVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractBoolVo;
 
-class BoolVo extends ContractBoolVo
+class BoolVo extends AbstractBoolVo
 {
     protected bool $nullable = false;
 

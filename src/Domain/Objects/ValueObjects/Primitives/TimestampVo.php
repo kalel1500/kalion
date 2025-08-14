@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractTimestampVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractTimestampVo;
 
-class TimestampVo extends ContractTimestampVo
+class TimestampVo extends AbstractTimestampVo
 {
     protected bool $nullable = false;
 

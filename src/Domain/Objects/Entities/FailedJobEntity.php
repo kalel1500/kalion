@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 
-class FailedJobEntity extends ContractEntity
+class FailedJobEntity extends AbstractEntity
 {
     public function __construct(
         public readonly ModelId|ModelIdNull $id,

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractDateVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractDateVo;
 
-class DateVo extends ContractDateVo
+class DateVo extends AbstractDateVo
 {
     protected bool $nullable = false;
 

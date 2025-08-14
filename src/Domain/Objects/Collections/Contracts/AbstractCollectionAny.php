@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\Collections\Contracts;
 
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 
-abstract class ContractCollectionAny extends ContractCollectionBase implements Relatable
+abstract class AbstractCollectionAny extends AbstractCollectionBase implements Relatable
 {
     protected const ITEM_TYPE = '';
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractDateVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractDateVo;
 
-class DateNullVo extends ContractDateVo
+class DateNullVo extends AbstractDateVo
 {
 }

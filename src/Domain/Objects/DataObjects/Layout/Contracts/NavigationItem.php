@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Contracts;
 
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ContractDataObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\NavbarDropdownDo;
 
-abstract class NavigationItem extends ContractDataObject
+abstract class NavigationItem extends AbstractDataObject
 {
     protected bool $hasDropdown;
 

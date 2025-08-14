@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelUnsignedIn
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\UnsignedIntNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\UnsignedIntVo;
 
-abstract class ContractUnsignedIntVo extends ContractIntVo
+abstract class AbstractUnsignedIntVo extends AbstractIntVo
 {
     protected const CLASS_REQUIRED = UnsignedIntVo::class;
     protected const CLASS_NULLABLE = UnsignedIntNullVo::class;

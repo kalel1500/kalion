@@ -9,10 +9,10 @@ use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\AppException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
-abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
+abstract class AbstractDataObject implements Arrayable, BuildArrayable, Jsonable
 {
     protected const REFLECTION_ACTIVE = false;
 
@@ -20,7 +20,7 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
 
     private function getValue($value)
     {
-        return ($value instanceof ContractValueObject) ? $value->value() : $value;
+        return ($value instanceof AbstractValueObject) ? $value->value() : $value;
     }
 
     private function toArrayVisible(): array
@@ -105,7 +105,7 @@ abstract class ContractDataObject implements Arrayable, BuildArrayable, Jsonable
                 // Si el tipo es una clase y el valor NO es una instancia, creamos la instancia de la clase
                 $method = match (true) {
                     is_a($typeName, \BackedEnum::class, true)         => 'from',
-                    is_a($typeName, ContractValueObject::class, true) => 'new',
+                    is_a($typeName, AbstractValueObject::class, true) => 'new',
                     default                                           => 'fromArray',
                 };
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts\ContractModelIdZero;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts\AbstractModelIdZero;
 
-final class ModelIdZero extends ContractModelIdZero
+final class ModelIdZero extends AbstractModelIdZero
 {
     protected const IS_MODEL = true;
 

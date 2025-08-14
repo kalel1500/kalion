@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class SubRelationDataDo extends ContractDataObject
+final class SubRelationDataDo extends AbstractDataObject
 {
     public function __construct(
         public readonly string|array|null $with,

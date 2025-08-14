@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateVo;
 use Thehouseofel\Kalion\Infrastructure\Services\Date;
 
-abstract class ContractDateVo extends ContractStringVo
+abstract class AbstractDateVo extends AbstractStringVo
 {
     protected const CLASS_REQUIRED       = DateVo::class;
     protected const CLASS_NULLABLE       = DateNullVo::class;

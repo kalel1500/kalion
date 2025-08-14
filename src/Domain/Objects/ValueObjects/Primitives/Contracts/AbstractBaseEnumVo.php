@@ -6,9 +6,9 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts;
 
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 
-abstract class ContractBaseEnumVo extends ContractValueObject
+abstract class AbstractBaseEnumVo extends AbstractValueObject
 {
     protected ?array $permittedValues  = null;
     protected bool   $caseSensitive    = true;

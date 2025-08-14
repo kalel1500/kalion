@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\TimestampNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\TimestampVo;
 use Thehouseofel\Kalion\Infrastructure\Services\Date;
 
-abstract class ContractTimestampVo extends ContractDateVo
+abstract class AbstractTimestampVo extends AbstractDateVo
 {
     protected const CLASS_REQUIRED = TimestampVo::class;
     protected const CLASS_NULLABLE = TimestampNullVo::class;

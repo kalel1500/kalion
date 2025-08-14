@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ContractDataObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 
-final class NavbarDropdownDo extends ContractDataObject
+final class NavbarDropdownDo extends AbstractDataObject
 {
     public ?UserInfoDo $userInfo;
 

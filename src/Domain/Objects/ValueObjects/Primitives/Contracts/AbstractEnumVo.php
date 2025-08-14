@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts;
 
-class ContractEnumVo extends ContractBaseEnumVo
+class AbstractEnumVo extends AbstractBaseEnumVo
 {
     protected bool $nullable = false;
 

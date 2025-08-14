@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Icons;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ContractDataObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;
 
-final class IconDo extends ContractDataObject
+final class IconDo extends AbstractDataObject
 {
     public function __construct(
         public readonly string $name,

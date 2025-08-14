@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts;
 
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelBool;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelBoolNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelDate;
@@ -15,7 +15,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\BoolVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateVo;
 
-abstract class ContractBoolVo extends ContractValueObject
+abstract class AbstractBoolVo extends AbstractValueObject
 {
     protected const CLASS_REQUIRED = BoolVo::class;
     protected const CLASS_NULLABLE = BoolNullVo::class;

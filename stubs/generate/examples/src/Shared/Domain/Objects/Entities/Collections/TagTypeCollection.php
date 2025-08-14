@@ -6,9 +6,9 @@ namespace Src\Shared\Domain\Objects\Entities\Collections;
 
 use Src\Shared\Domain\Objects\Entities\TagTypeEntity;
 use Thehouseofel\Kalion\Domain\Attributes\CollectionOf;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionEntity;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\AbstractCollectionEntity;
 
 #[CollectionOf(TagTypeEntity::class)]
-final class TagTypeCollection extends ContractCollectionEntity
+final class TagTypeCollection extends AbstractCollectionEntity
 {
 }

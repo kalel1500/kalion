@@ -7,13 +7,13 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts;
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelArray;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelArrayNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
-abstract class ContractArrayVo extends ContractValueObject implements ArrayAccess, IteratorAggregate
+abstract class AbstractArrayVo extends AbstractValueObject implements ArrayAccess, IteratorAggregate
 {
     protected const CLASS_REQUIRED = ArrayVo::class;
     protected const CLASS_NULLABLE = ArrayNullVo::class;

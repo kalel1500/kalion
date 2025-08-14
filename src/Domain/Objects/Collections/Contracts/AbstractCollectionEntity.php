@@ -13,9 +13,9 @@ use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\PaginationDataDo;
-use Thehouseofel\Kalion\Domain\Objects\Entities\ContractEntity;
+use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 
-abstract class ContractCollectionEntity extends ContractCollectionBase implements Relatable
+abstract class AbstractCollectionEntity extends AbstractCollectionBase implements Relatable
 {
     protected string|array|null $with   = null;
     protected bool|string|null  $isFull = null;
@@ -35,7 +35,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
     }
 
     /**
-     * @return ContractEntity|null
+     * @return AbstractEntity|null
      */
     public function first(?callable $callback = null, $default = null)
     {
@@ -68,7 +68,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
             $data = $modifyData($data);
         }
 
-        /** @var ContractEntity $entity */
+        /** @var AbstractEntity $entity */
         $entity       = static::ITEM_TYPE;
         $isExportable = (is_subclass_of($entity, ExportableEntity::class));
         if (!$isExportable) return $data;
@@ -109,10 +109,10 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
         if (is_null($data)) return null;
 
         if (!is_null($with) && ($with === '' || is_array($with) && in_array('', $with))) {
-            throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class ContractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
+            throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class AbstractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
         }
 
-        /** @var class-string<ContractEntity> $entity */
+        /** @var class-string<AbstractEntity> $entity */
         $entity = static::resolveItemType();
         $array  = [];
         foreach ($data as $key => $item) {
@@ -216,7 +216,7 @@ abstract class ContractCollectionEntity extends ContractCollectionBase implement
 
     public static function createFake(int $number, int $startIdOn = 1, array $overwriteParams = []): static
     {
-        /** @var ContractEntity $entity */
+        /** @var AbstractEntity $entity */
         $entity = static::ITEM_TYPE;
         $array  = [];
         for ($i = 0; $i <= $number; $i++) {

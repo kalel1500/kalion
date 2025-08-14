@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractArrayVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractArrayVo;
 use Thehouseofel\Kalion\Infrastructure\Services\Date;
 
-final class ArrayTabulatorFiltersVo extends ContractArrayVo
+final class ArrayTabulatorFiltersVo extends AbstractArrayVo
 {
     private const MAX_DAYS_TO_FILTER_RANGE = 50;
     protected string $filterTimeName;

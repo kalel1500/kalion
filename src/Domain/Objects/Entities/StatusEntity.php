@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 
-class StatusEntity extends ContractEntity
+class StatusEntity extends AbstractEntity
 {
     public function __construct(
         public readonly ModelId|ModelIdNull $id,

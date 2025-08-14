@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects;
 
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractBoolVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractBoolVo;
 
 /**
- * @template T of ContractValueObject
+ * @template T of AbstractValueObject
  */
-abstract class ContractValueObject
+abstract class AbstractValueObject
 {
     protected const IS_MODEL = false;
     protected const CLASS_REQUIRED = null;

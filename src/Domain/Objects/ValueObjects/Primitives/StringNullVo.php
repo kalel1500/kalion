@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractStringVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractStringVo;
 
-class StringNullVo extends ContractStringVo
+class StringNullVo extends AbstractStringVo
 {
 }

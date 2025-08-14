@@ -10,10 +10,10 @@ use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionEntity;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Domain\Services\Relation;
 
-abstract class ContractEntity implements Arrayable, JsonSerializable
+abstract class AbstractEntity implements Arrayable, JsonSerializable
 {
     public static ?array       $databaseFields = null;
     protected string           $primaryKey     = 'id';
@@ -210,8 +210,8 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
         // if (empty($last)) return; // OLD
         // $last = (is_array($last)) ? $last : [$last]; // OLD
 
-        $isEntity     = is_subclass_of($this->relations[$first], ContractEntity::class);
-        $isCollection = is_subclass_of($this->relations[$first], ContractCollectionEntity::class);
+        $isEntity     = is_subclass_of($this->relations[$first], AbstractEntity::class);
+        $isCollection = is_subclass_of($this->relations[$first], AbstractCollectionEntity::class);
 
         if ($isEntity) {
             $this->relations[$first]->with($last);
@@ -251,8 +251,8 @@ abstract class ContractEntity implements Arrayable, JsonSerializable
     public function setRelation($data, string $name, string $class): void
     {
         $data = match (true) {
-            is_subclass_of($class, ContractEntity::class)           => is_object($data) ? $class::fromObject($data) : $class::fromArray($data),
-            is_subclass_of($class, ContractCollectionEntity::class) => is_object($data) ? $class::fromEloquent($data, null, null, true) : $class::fromArray($data),
+            is_subclass_of($class, AbstractEntity::class)           => is_object($data) ? $class::fromObject($data) : $class::fromArray($data),
+            is_subclass_of($class, AbstractCollectionEntity::class) => is_object($data) ? $class::fromEloquent($data, null, null, true) : $class::fromArray($data),
         };
         $this->relations[$name] = $data;
     }

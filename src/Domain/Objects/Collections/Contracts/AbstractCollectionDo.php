@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Contracts;
 
 use BackedEnum;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ContractDataObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;
 
-abstract class ContractCollectionDo extends ContractCollectionBase
+abstract class AbstractCollectionDo extends AbstractCollectionBase
 {
     /**
-     * @return ContractDataObject|null
+     * @return AbstractDataObject|null
      */
     public function first(?callable $callback = null, $default = null)
     {

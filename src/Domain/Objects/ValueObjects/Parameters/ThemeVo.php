@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractEnumVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractEnumVo;
 
-final class ThemeVo extends ContractEnumVo
+final class ThemeVo extends AbstractEnumVo
 {
     const dark   = 'dark';
     const light  = 'light';

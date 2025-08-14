@@ -6,9 +6,9 @@ namespace Src\Shared\Domain\Objects\Entities\Collections;
 
 use Src\Shared\Domain\Objects\Entities\CommentEntity;
 use Thehouseofel\Kalion\Domain\Attributes\CollectionOf;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\ContractCollectionEntity;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\AbstractCollectionEntity;
 
 #[CollectionOf(CommentEntity::class)]
-final class CommentCollection extends ContractCollectionEntity
+final class CommentCollection extends AbstractCollectionEntity
 {
 }

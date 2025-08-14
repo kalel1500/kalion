@@ -19,17 +19,17 @@ use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
-use Thehouseofel\Kalion\Domain\Objects\Entities\ContractEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
+use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
 use Thehouseofel\Kalion\Domain\Services\Relation;
 use TypeError;
 
 /**
- * @template T of ContractCollectionBase
+ * @template T of AbstractCollectionBase
  */
-abstract class ContractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, Arrayable, JsonSerializable
+abstract class AbstractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, Arrayable, JsonSerializable
 {
     /** @var null|string */
     protected const ITEM_TYPE = null;
@@ -49,7 +49,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             default                                       => array_values($args),
         };
 
-        $this->shouldSkipValidation = $this instanceof ContractCollectionAny;
+        $this->shouldSkipValidation = $this instanceof AbstractCollectionAny;
         $this->resolvedItemType     = static::resolveItemType();
         $this->items                = $this->validateItems($items);
     }
@@ -129,7 +129,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         if (is_array($items)) {
             return $items;
-        } elseif ($items instanceof ContractCollectionBase) {
+        } elseif ($items instanceof AbstractCollectionBase) {
             return $items->toArray();
         }
 
@@ -291,7 +291,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param ContractCollectionBase $items
+     * @param AbstractCollectionBase $items
      * @param string|null $field
      * @return static
      */
@@ -329,7 +329,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param ContractCollectionBase|array $items
+     * @param AbstractCollectionBase|array $items
      * @return static
      */
     public function diffKeys($items)
@@ -631,7 +631,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         $items       = array_map($callback, $this->items, $keys);
         $result      = collect(array_combine($keys, $items));
         $resultArray = $result->toArray();
-        return $result->contains(fn($item) => ! $item instanceof ContractEntity)
+        return $result->contains(fn($item) => ! $item instanceof AbstractEntity)
             ? $this->toAny($resultArray)
             : $this->toStatic($resultArray);
     }
@@ -763,7 +763,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
         $clearItemValue = function ($item) {
             return match (true) {
                 $item instanceof Arrayable           => $item->toArray(),
-                $item instanceof ContractValueObject => $item->value(),
+                $item instanceof AbstractValueObject => $item->value(),
                 default                              => $item
             };
         };
@@ -1058,7 +1058,7 @@ abstract class ContractCollectionBase implements Countable, ArrayAccess, Iterato
             $item = match (true) {
                 $item instanceof BuildArrayable && $fromThisClass => $item->toArrayForBuild(),
                 $item instanceof Arrayable                        => $item->toArray(),
-                $item instanceof ContractValueObject              => $item->value(),
+                $item instanceof AbstractValueObject              => $item->value(),
                 default                                           => $item,
             };
             $result[$key] = $item;

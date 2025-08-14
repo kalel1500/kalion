@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 
-abstract class ContractStringVo extends ContractValueObject
+abstract class AbstractStringVo extends AbstractValueObject
 {
     protected const CLASS_REQUIRED = StringVo::class;
     protected const CLASS_NULLABLE = StringNullVo::class;

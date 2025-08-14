@@ -7,12 +7,12 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractIntVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractIntVo;
 
 /**
- * @template T of ContractModelId
+ * @template T of AbstractModelId
  */
-abstract class ContractModelId extends ContractIntVo
+abstract class AbstractModelId extends AbstractIntVo
 {
     protected const CLASS_REQUIRED = null;
     protected const CLASS_NULLABLE = null;

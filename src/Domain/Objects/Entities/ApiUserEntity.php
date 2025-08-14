@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Traits\EntityHasPermissions;
 use Thehouseofel\Kalion\Domain\Traits\HasGuard;
 
-class ApiUserEntity extends ContractEntity
+class ApiUserEntity extends AbstractEntity
 {
     use EntityHasPermissions, HasGuard;
 

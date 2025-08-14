@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\ContractEnumVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractEnumVo;
 
-final class StatusPluckKeyVo extends ContractEnumVo
+final class StatusPluckKeyVo extends AbstractEnumVo
 {
     const code = 'code';
     const id = 'id';

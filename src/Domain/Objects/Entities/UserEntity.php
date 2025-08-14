@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull
 use Thehouseofel\Kalion\Domain\Traits\EntityHasPermissions;
 use Thehouseofel\Kalion\Domain\Traits\HasGuard;
 
-class UserEntity extends ContractEntity
+class UserEntity extends AbstractEntity
 {
     use EntityHasPermissions, HasGuard;
 

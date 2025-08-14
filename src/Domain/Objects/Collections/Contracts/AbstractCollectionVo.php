@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Contracts;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\ContractValueObject;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 
-abstract class ContractCollectionVo extends ContractCollectionBase
+abstract class AbstractCollectionVo extends AbstractCollectionBase
 {
     /**
-     * @return ContractValueObject|null
+     * @return AbstractValueObject|null
      */
     public function first(?callable $callback = null, $default = null)
     {

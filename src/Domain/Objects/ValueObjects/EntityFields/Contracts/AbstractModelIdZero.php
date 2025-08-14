@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdZero;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdZeroNull;
 
-abstract class ContractModelIdZero extends ContractModelId
+abstract class AbstractModelIdZero extends AbstractModelId
 {
     protected const CLASS_MODEL_REQUIRED = ModelIdZero::class;
     protected const CLASS_MODEL_NULLABLE = ModelIdZeroNull::class;

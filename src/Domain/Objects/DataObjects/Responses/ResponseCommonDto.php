@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Responses;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ContractDataObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;
 
-class ResponseCommonDto extends ContractDataObject
+class ResponseCommonDto extends AbstractDataObject
 {
     public function __construct(
         public readonly ?int    $statusCode,
