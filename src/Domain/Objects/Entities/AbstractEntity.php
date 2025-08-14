@@ -10,7 +10,7 @@ use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\AbstractCollectionEntity;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Domain\Services\Relation;
 
 abstract class AbstractEntity implements Arrayable, JsonSerializable

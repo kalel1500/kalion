@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts;
+namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Abstracts;
 
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractIntVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractIntVo;
 
 /**
  * @template T of AbstractModelId

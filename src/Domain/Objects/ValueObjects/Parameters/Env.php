@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractEnumVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractEnumVo;
 
 final class Env extends AbstractEnumVo
 {

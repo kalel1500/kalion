@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\Collections;
 
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\AbstractCollectionAny;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionAny;
 
 final class CollectionAny extends AbstractCollectionAny
 {

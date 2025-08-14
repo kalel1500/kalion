@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Contracts\NavigationItem;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Abstracts\NavigationItem;
 
 final class SidebarItemDo extends NavigationItem
 {

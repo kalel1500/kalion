@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections\Contracts;
+namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
 use BackedEnum;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;

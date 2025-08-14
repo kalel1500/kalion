@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections\Contracts;
+namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;

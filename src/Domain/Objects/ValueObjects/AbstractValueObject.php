@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects;
 
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Contracts\AbstractBoolVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractBoolVo;
 
 /**
  * @template T of AbstractValueObject

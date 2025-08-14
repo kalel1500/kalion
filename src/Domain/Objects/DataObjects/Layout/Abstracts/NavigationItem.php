@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Contracts;
+namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Abstracts;
 
 use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;

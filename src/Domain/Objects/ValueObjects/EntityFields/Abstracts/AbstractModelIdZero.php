@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Contracts;
+namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Abstracts;
 
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdZero;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdZeroNull;
