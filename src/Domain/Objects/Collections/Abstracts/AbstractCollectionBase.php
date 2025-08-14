@@ -61,7 +61,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         // Opción 1: Atributo #[CollectionOf(SomeClass::class)]
         $attributes = $ref->getAttributes(CollectionOf::class);
         if (! empty($attributes)) {
-            return $attributes[0]->newInstance()->type;
+            return $attributes[0]->newInstance()->class;
         }
 
         // Opción 2: Constante ITEM_TYPE en la clase hija
