@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class LoginFieldDto extends AbstractDataObject
+final class LoginFieldDto extends AbstractDataTransferObject
 {
     public function __construct(
         public readonly string $name,

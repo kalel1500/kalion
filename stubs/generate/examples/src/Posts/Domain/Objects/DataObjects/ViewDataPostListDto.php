@@ -6,9 +6,9 @@ namespace Src\Posts\Domain\Objects\DataObjects;
 
 use Src\Shared\Domain\Objects\Entities\Collections\PostCollection;
 use Src\Shared\Domain\Objects\Entities\Collections\TagCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
 
-final class ViewDataPostListDo extends AbstractDataObject
+final class ViewDataPostListDto extends AbstractDataTransferObject
 {
     public function __construct(
         public readonly TagCollection  $tags,

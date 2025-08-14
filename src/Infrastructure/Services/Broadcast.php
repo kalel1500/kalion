@@ -8,25 +8,25 @@ use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Responses\ResponseBroadcast;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Responses\ResponseBroadcastDto;
 use Throwable;
 
 final class Broadcast
 {
-    public static function tryBroadcast(ShouldBroadcast $event): ResponseBroadcast
+    public static function tryBroadcast(ShouldBroadcast $event): ResponseBroadcastDto
     {
         try {
             if (Kalion::broadcastingDisabled()) {
                 throw new BroadcastException(__('k::process.reverb.inactive'), Response::HTTP_PARTIAL_CONTENT);
             }
             broadcast($event);
-            return new ResponseBroadcast(success: true, message: __('k::process.reverb.active'));
+            return new ResponseBroadcastDto(success: true, message: __('k::process.reverb.active'));
         } catch (Throwable $e) {
-            return new ResponseBroadcast(success: false, message: $e->getMessage());
+            return new ResponseBroadcastDto(success: false, message: $e->getMessage());
         }
     }
 
-    public static function annotateResponse(JsonResponse $response, ResponseBroadcast $broadcast): JsonResponse
+    public static function annotateResponse(JsonResponse $response, ResponseBroadcastDto $broadcast): JsonResponse
     {
         $data = $response->getData(true);
         $data['data']['broadcasting'] = $broadcast->toArray();

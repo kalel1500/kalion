@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Abstracts\NavigationItem;
 
-final class SidebarItemDo extends NavigationItem
+final class SidebarItemDto extends NavigationItem
 {
     protected int  $counter;
     protected bool $hasCounter;

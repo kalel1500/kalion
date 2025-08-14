@@ -1,5 +1,5 @@
-@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDo $item */ @endphp
-@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDo $subItem */ @endphp
+@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDto $item */ @endphp
+@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDto $subItem */ @endphp
 
 <x-kal::sidebar>
     @if($showSearch)
@@ -17,16 +17,16 @@
             <x-kal::sidebar.footer>
                 @foreach($footer as $item)
                     <x-kal::sidebar.footer.item
-                        :href="$item->hasDropdown() ? null : $item->getHref()"
-                        :id="$item->code ?? null"
-                        :tooltip="$item->tooltip ?? null"
+                            :href="$item->hasDropdown() ? null : $item->getHref()"
+                            :id="$item->code ?? null"
+                            :tooltip="$item->tooltip ?? null"
                     >
-                        <x-kal::render-icon :icon="$item->icon" />
+                        <x-kal::render-icon :icon="$item->icon"/>
                         @if($item->hasDropdown())
                             <x-slot:dropdown>
                                 @foreach($item->dropdown as $subItem)
                                     <x-kal::sidebar.footer.subitem>
-                                        <x-kal::render-icon :icon="$subItem->icon" />
+                                        <x-kal::render-icon :icon="$subItem->icon"/>
                                         {{ $subItem->text }}
                                     </x-kal::sidebar.footer.subitem>
                                 @endforeach

@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Abstracts\NavigationItem;
 
-final class NavbarItemDo extends NavigationItem
+final class NavbarItemDto extends NavigationItem
 {
     public function __construct(
         ?string           $code,
@@ -19,7 +19,7 @@ final class NavbarItemDo extends NavigationItem
         public ?bool      $is_theme_toggle,
         public ?bool      $is_user,
         public ?bool      $is_separator,
-        ?NavbarDropdownDo $dropdown
+        ?NavbarDropdownDto $dropdown
     )
     {
         parent::__construct(
@@ -46,7 +46,7 @@ final class NavbarItemDo extends NavigationItem
             $data['is_theme_toggle'] ?? null,
             $data['is_user'] ?? null,
             $data['is_separator'] ?? null,
-            NavbarDropdownDo::fromArray($data['dropdown'] ?? null)
+            NavbarDropdownDto::fromArray($data['dropdown'] ?? null)
         );
     }
 }

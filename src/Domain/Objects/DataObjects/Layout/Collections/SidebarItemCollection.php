@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections;
 
 use Thehouseofel\Kalion\Domain\Attributes\CollectionOf;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionDo;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDo;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionDto;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDto;
 
-#[CollectionOf(SidebarItemDo::class)]
-final class SidebarItemCollection extends AbstractCollectionDo
+#[CollectionOf(SidebarItemDto::class)]
+final class SidebarItemCollection extends AbstractCollectionDto
 {
 }

@@ -12,15 +12,15 @@ use Thehouseofel\Kalion\Domain\Contracts\ExportableEntity;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\PaginationDataDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\PaginationDataDto;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 
 abstract class AbstractCollectionEntity extends AbstractCollectionBase implements Relatable
 {
     protected string|array|null $with   = null;
     protected bool|string|null  $isFull = null;
-    protected bool              $isPaginate;
-    protected ?PaginationDataDo $paginationData;
+    protected bool               $isPaginate;
+    protected ?PaginationDataDto $paginationData;
 
     public function setWith(string|array|null $with): static
     {
@@ -103,7 +103,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         bool|string|null      $isFull = null,
         bool                  $isEloquentBuilder = false,
         bool                  $isPaginate = false,
-        ?PaginationDataDo     $paginationData = null
+        ?PaginationDataDto $paginationData = null
     ): static|null
     {
         if (is_null($data)) return null;
@@ -144,7 +144,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         $isPaginate     = array_key_exists('current_page', $data);
         $paginationData = null;
         if ($isPaginate) {
-            $paginationData = new PaginationDataDo(
+            $paginationData = new PaginationDataDto(
                 $data['total'],
                 $data['last_page'],
                 intval($data['per_page']),
@@ -180,7 +180,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         $isPaginate     = is_a($queryResult, LengthAwarePaginator::class);
         $paginationData = null;
         if ($isPaginate) {
-            $paginationData = new PaginationDataDo(
+            $paginationData = new PaginationDataDto(
                 $queryResult->total(),
                 $queryResult->lastPage(),
                 intval($queryResult->perPage()),
@@ -199,7 +199,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         return $this->isPaginate;
     }
 
-    public function paginationData(): ?PaginationDataDo
+    public function paginationData(): ?PaginationDataDto
     {
         return $this->paginationData;
     }
@@ -209,7 +209,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         $this->isPaginate = $isPaginate;
     }
 
-    public function setPaginationData(PaginationDataDo $paginationData): void
+    public function setPaginationData(PaginationDataDto $paginationData): void
     {
         $this->paginationData = $paginationData;
     }

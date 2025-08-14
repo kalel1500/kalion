@@ -18,7 +18,7 @@ use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDto;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
@@ -115,7 +115,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     private function toAny(array $data, string $pluckField = null): CollectionAny
     {
         $subRelData = (! $this->isInstanceOfRelatable())
-            ? SubRelationDataDo::fromArray([null, null])
+            ? SubRelationDataDto::fromArray([null, null])
             : Relation::getNextRelation($this->with, $this->isFull, $pluckField);
         return CollectionAny::fromArray($data, $subRelData->with, $subRelData->isFull);
     }

@@ -7,22 +7,22 @@ namespace Thehouseofel\Kalion\Infrastructure\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie as CookieFacade;
 use Symfony\Component\HttpFoundation\Cookie as HttpCookie;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\CookiePreferencesDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\CookiePreferencesDto;
 
 final class Cookie
 {
     private string              $cookieName;
     private int                 $cookieDuration;
-    private string              $cookieVersion;
-    private CookiePreferencesDo $preferences;
-    private ?HttpCookie             $cookie = null;
+    private string               $cookieVersion;
+    private CookiePreferencesDto $preferences;
+    private ?HttpCookie          $cookie = null;
 
     public function __construct()
     {
         $this->cookieName     = config('kalion.cookie.name');
         $this->cookieDuration = config('kalion.cookie.duration');
         $this->cookieVersion  = config('kalion.cookie.version');
-        $this->preferences    = CookiePreferencesDo::fromArray([
+        $this->preferences    = CookiePreferencesDto::fromArray([
             'version'                => config('kalion.cookie.version'),
             'theme'                  => config('kalion.layout.theme'),
             'sidebar_collapsed'      => config('kalion.layout.sidebar_collapsed'),
@@ -35,12 +35,12 @@ final class Cookie
         return $this->cookie;
     }
 
-    public function preferences(): CookiePreferencesDo
+    public function preferences(): CookiePreferencesDto
     {
         return $this->preferences;
     }
 
-    public function setPreferences(CookiePreferencesDo $preferences): static
+    public function setPreferences(CookiePreferencesDto $preferences): static
     {
         $this->preferences = $preferences;
         return $this;
@@ -54,7 +54,7 @@ final class Cookie
     public static function readOrNew(): static
     {
         $service     = static::new();
-        $preferences = CookiePreferencesDo::fromJson(CookieFacade::get($service->cookieName));
+        $preferences = CookiePreferencesDto::fromJson(CookieFacade::get($service->cookieName));
         if (!is_null($preferences)) {
             $service->setPreferences($preferences);
         }

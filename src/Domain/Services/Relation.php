@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Services;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDto;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
 final class Relation
 {
-    public static function getNextRelation(string|array|null $with, bool|string|null $isFull, ?string $relationName): SubRelationDataDo
+    public static function getNextRelation(string|array|null $with, bool|string|null $isFull, ?string $relationName): SubRelationDataDto
     {
-        if (is_null($with)) return SubRelationDataDo::fromArray([null, null]);
-        if (is_null($relationName)) return SubRelationDataDo::fromArray([$with, $isFull]);
+        if (is_null($with)) return SubRelationDataDto::fromArray([null, null]);
+        if (is_null($relationName)) return SubRelationDataDto::fromArray([$with, $isFull]);
 
         $with = is_array($with) ? $with : [$with];
         $newWith = null;
@@ -43,7 +43,7 @@ final class Relation
             }
         }
         $newWith = (empty($newWith)) ? null : $newWith;
-        return SubRelationDataDo::fromArray([$newWith, $newIsFull]);
+        return SubRelationDataDto::fromArray([$newWith, $newIsFull]);
     }
 
     /**

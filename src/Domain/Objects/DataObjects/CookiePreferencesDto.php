@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
 
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
-final class CookiePreferencesDo extends AbstractDataObject
+final class CookiePreferencesDto extends AbstractDataTransferObject
 {
     public function __construct(
         protected string  $version,

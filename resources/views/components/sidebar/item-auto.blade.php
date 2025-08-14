@@ -1,4 +1,4 @@
-@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDo $item */ @endphp
+@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDto $item */ @endphp
 @use(Illuminate\Support\Facades\Route)
 
 @props(['item', 'level'])
@@ -14,7 +14,7 @@
     >
         @if(!is_null($item->icon))
             <x-slot:icon>
-                <x-kal::render-icon :icon="$item->icon" />
+                <x-kal::render-icon :icon="$item->icon"/>
             </x-slot:icon>
         @endif
         {{ $item->text }}

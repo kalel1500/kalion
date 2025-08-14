@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Traits;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
 use Throwable;
 use UnexpectedValueException;
 
@@ -13,8 +13,8 @@ trait KalionExceptionBehavior
     const STATUS_CODE = 500;
     const MESSAGE     = '';
 
-    protected int                 $statusCode;
-    protected ?ExceptionContextDo $context = null;
+    protected int                  $statusCode;
+    protected ?ExceptionContextDto $context = null;
 
     protected function initKalionException(
         int        $statusCode,
@@ -36,7 +36,7 @@ trait KalionExceptionBehavior
         $this->statusCode = $statusCode;
 
         // Guardar código y montar estructura del Json a devolver // INFO kalel1500 - mi_estructura_de_respuesta
-        $this->context = ExceptionContextDo::from($this, $data, $success, $this->getResponse($data));
+        $this->context = ExceptionContextDto::from($this, $data, $success, $this->getResponse($data));
     }
 
     public function getStatusCode(): int
@@ -44,7 +44,7 @@ trait KalionExceptionBehavior
         return $this->statusCode;
     }
 
-    public function getContext(): ?ExceptionContextDo
+    public function getContext(): ?ExceptionContextDto
     {
         return $this->context;
     }

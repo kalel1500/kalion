@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Services\Repository;
 
 use Thehouseofel\Kalion\Domain\Contracts\Services\LayoutDataContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
 
 class LayoutData implements LayoutDataContract
 {
@@ -46,10 +46,10 @@ class LayoutData implements LayoutDataContract
         ]);
     }
 
-    public function getUserInfo(): ?UserInfoDo
+    public function getUserInfo(): ?UserInfoDto
     {
         if (is_null(user())) return null;
-        return UserInfoDo::fromArray([
+        return UserInfoDto::fromArray([
             'name' => user()->name->value(), // Neil Sims
             'email' => user()->email->value() // name@flowbite.com
         ]);

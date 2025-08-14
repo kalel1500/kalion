@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Src\Posts\Application;
 
-use Src\Posts\Domain\Objects\DataObjects\ViewDataPostListDo;
+use Src\Posts\Domain\Objects\DataObjects\ViewDataPostListDto;
 use Src\Shared\Domain\Contracts\Repositories\PostRepositoryContract;
 use Src\Shared\Domain\Contracts\Repositories\TagRepositoryContract;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
@@ -18,11 +18,11 @@ final readonly class GetViewDataPostListUseCase
     {
     }
 
-    public function __invoke(?string $tag): ViewDataPostListDo
+    public function __invoke(?string $tag): ViewDataPostListDto
     {
         $tags  = $this->repositoryTag->all();
         $posts = $this->repositoryPost->searchByTag(ModelStringNull::new($tag));
-        return ViewDataPostListDo::fromArray([
+        return ViewDataPostListDto::fromArray([
             $tags,
             $posts,
             $posts->count(),

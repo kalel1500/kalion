@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 
-final class NavbarDropdownDo extends AbstractDataObject
+final class NavbarDropdownDto extends AbstractDataTransferObject
 {
-    public ?UserInfoDo $userInfo;
+    public ?UserInfoDto $userInfo;
 
     public function __construct(
-        public readonly ?bool                $is_list,
-        public readonly ?bool                $is_square,
-        public readonly ?string              $get_data_action,
-        public readonly ?string              $header,
-        public readonly ?NavbarItemDo        $footer,
-        public NavbarItemCollection $items
+        public readonly ?bool          $is_list,
+        public readonly ?bool          $is_square,
+        public readonly ?string        $get_data_action,
+        public readonly ?string        $header,
+        public readonly ?NavbarItemDto $footer,
+        public NavbarItemCollection    $items
     )
     {
     }
@@ -29,7 +29,7 @@ final class NavbarDropdownDo extends AbstractDataObject
             $data['is_square'] ?? null,
             $data['get_data_action'] ?? null,
             $data['header'] ?? null,
-            NavbarItemDo::fromArray($data['footer'] ?? null),
+            NavbarItemDto::fromArray($data['footer'] ?? null),
             NavbarItemCollection::fromArray($data['items'] ?? [])
         );
     }
@@ -39,7 +39,7 @@ final class NavbarDropdownDo extends AbstractDataObject
         $this->items = $items;
     }
 
-    public function setUserInfo(?UserInfoDo $userInfo): void
+    public function setUserInfo(?UserInfoDto $userInfo): void
     {
         $this->userInfo = $userInfo;
     }

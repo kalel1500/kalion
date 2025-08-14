@@ -9,3 +9,8 @@ Buscar rutas que contengan "Contracts" excepto carpetas que contengan interfaces
 Thehouseofel\\Kalion\\(.*)\\Contracts\\((?!Repositories|Services|Arrayable|BuildArrayable|ExportableEntity|IdentifiableEnum|KalionExceptionInterface|Relatable|TranslatableEnum).*)
 ```
 
+Buscar todas las clases que terminen con el sufijo Do
+```regexp
+\b(\w+)Do\b
+```
+

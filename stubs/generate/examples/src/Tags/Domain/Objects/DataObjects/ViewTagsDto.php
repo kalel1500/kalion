@@ -6,9 +6,9 @@ namespace Src\Tags\Domain\Objects\DataObjects;
 
 use Src\Shared\Domain\Objects\Entities\Collections\TagTypeCollection;
 use Src\Shared\Domain\Objects\Entities\TagTypeEntity;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
 
-final class ViewTagsDto extends AbstractDataObject
+final class ViewTagsDto extends AbstractDataTransferObject
 {
     public function __construct(
         public readonly ?TagTypeEntity $currentTagType,

@@ -1,4 +1,4 @@
-@php /** @var \Src\Posts\Domain\Objects\DataObjects\ViewDataPostListDo $data */ @endphp
+@php /** @var \Src\Posts\Domain\Objects\DataObjects\ViewDataPostListDto $data */ @endphp
 @php /** @var \Src\Shared\Domain\Objects\Entities\PostEntity $post */ @endphp
 @php /** @var \Src\Shared\Domain\Objects\Entities\TagEntity $tag */ @endphp
 

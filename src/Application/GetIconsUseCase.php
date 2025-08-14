@@ -6,15 +6,15 @@ namespace Thehouseofel\Kalion\Application;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Icons\IconDo;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Icons\ViewIconsDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Icons\IconDto;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Icons\ViewIconsDto;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
 final class GetIconsUseCase
 {
-    public function __invoke(bool $showNameShort): ViewIconsDo
+    public function __invoke(bool $showNameShort): ViewIconsDto
     {
         // Ruta a la carpeta de iconos
         $iconPath = KALION_PATH . '/resources/views/components/icon';
@@ -32,10 +32,10 @@ final class GetIconsUseCase
                 // Extraer el nombre del componente en kebab-case
                 $prefix = 'kal::icon.';
                 $name = Str::kebab($file->getBasename('.blade.php'));
-                return IconDo::fromArray(['name' => $prefix . $name, 'name_short' => $name]);
+                return IconDto::fromArray(['name' => $prefix . $name, 'name_short' => $name]);
             });
 
-        return ViewIconsDo::fromArray([
+        return ViewIconsDto::fromArray([
             'icons' => $icons->toArray(),
             'show_name_short' => $showNameShort,
         ]);

@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\AppException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
-abstract class AbstractDataObject implements Arrayable, BuildArrayable, Jsonable
+abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, Jsonable
 {
     protected const REFLECTION_ACTIVE = false;
 

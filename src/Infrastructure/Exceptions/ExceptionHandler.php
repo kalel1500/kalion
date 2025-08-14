@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Thehouseofel\Kalion\Domain\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
 use Throwable;
 
 final class ExceptionHandler
@@ -37,7 +37,7 @@ final class ExceptionHandler
                     return null; // Que Laravel lo maneje como siempre
                 }
 
-                $context = ExceptionContextDo::from($exception);
+                $context = ExceptionContextDto::from($exception);
                 $isJson = self::shouldRenderJson($request);
                 $isDebug = debug_is_active();
 
@@ -106,7 +106,7 @@ final class ExceptionHandler
         return $request->expectsJson() || url_contains_ajax();
     }
 
-    private static function renderJson(ExceptionContextDo $context): JsonResponse
+    private static function renderJson(ExceptionContextDto $context): JsonResponse
     {
         return response()->json($context->toArray(), $context->statusCode);
     }
@@ -116,7 +116,7 @@ final class ExceptionHandler
         return response(get_html_laravel_debug_stack_trace($request, $exception));
     }
 
-    private static function renderHtmlCustom(ExceptionContextDo $context): Response
+    private static function renderHtmlCustom(ExceptionContextDto $context): Response
     {
         return response()->view('kal::pages.exceptions.error', compact('context'), $context->statusCode);
     }

@@ -6,12 +6,12 @@ namespace Thehouseofel\Kalion\Infrastructure\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
 
 /**
  * @method static int getMessageCounter()
  * @method static NavbarItemCollection getNavbarNotifications()
- * @method static UserInfoDo getUserInfo()
+ * @method static UserInfoDto getUserInfo()
  *
  * @see \Thehouseofel\Kalion\Domain\Services\Repository\LayoutData
  */

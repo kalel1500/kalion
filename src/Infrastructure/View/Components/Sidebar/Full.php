@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDto;
 use Thehouseofel\Kalion\Infrastructure\Facades\LayoutData;
 
 class Full extends Component
@@ -29,7 +29,7 @@ class Full extends Component
         $this->footer       = SidebarItemCollection::fromArray(config('kalion_links.sidebar.footer') ?? []);
         $this->hasFooter    = $this->footer->countInt()->isBiggerThan(0);
 
-        $this->items = $this->items->map(function (SidebarItemDo $item) {
+        $this->items = $this->items->map(function (SidebarItemDto $item) {
             if (!is_null($action = $item->counter_action)) {
                 $item->setCounter(LayoutData::$action());
             }

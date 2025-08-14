@@ -11,7 +11,7 @@ use Throwable;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class ExceptionContextDo extends AbstractDataObject
+final class ExceptionContextDto extends AbstractDataTransferObject
 {
     public readonly string $title;
 
@@ -35,15 +35,15 @@ final class ExceptionContextDo extends AbstractDataObject
     /*----------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------- Create Functions -----------------------------------------------*/
 
-    public static function from(Throwable $e, ?array $data = null, bool $success = false, ?array $custom_response = null): ExceptionContextDo
+    public static function from(Throwable $e, ?array $data = null, bool $success = false, ?array $custom_response = null): ExceptionContextDto
     {
         // if (is_null($e)) return null; // TODO Canals - pensar
 
         if (method_exists($e, 'getContext') && ! is_null($e->getContext())) return $e->getContext();
 
-        return ExceptionContextDo::fromArray([
+        return ExceptionContextDto::fromArray([
             'statusCode'      => (method_exists($e, 'getStatusCode')) ? $e->getStatusCode() : 500,
-            'message'         => ExceptionContextDo::getMessage($e),
+            'message'         => ExceptionContextDto::getMessage($e),
             'success'         => $success,
             'data'            => $data,
             'custom_response' => $custom_response,
@@ -111,9 +111,9 @@ final class ExceptionContextDo extends AbstractDataObject
     /*----------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------------- Properties -------------------------------------------------*/
 
-    public function getPreviousData(): ?ExceptionContextDo
+    public function getPreviousData(): ?ExceptionContextDto
     {
-        return is_null($this->previous) ? null : ExceptionContextDo::from($this->previous);
+        return is_null($this->previous) ? null : ExceptionContextDto::from($this->previous);
     }
 
     /*public function getLastPrevious(): ?Throwable

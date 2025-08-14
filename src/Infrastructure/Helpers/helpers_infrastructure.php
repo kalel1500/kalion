@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\ComponentAttributeBag;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDo;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Infrastructure\Facades\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;
 
@@ -80,7 +80,7 @@ if (! function_exists('response_json_error')) {
     function response_json_error(Throwable $e, bool $throwInDebugMode = true): JsonResponse
     {
         // INFO kalel1500 - mi_estructura_de_respuesta
-        $exceptionData = ExceptionContextDo::from($e);
+        $exceptionData = ExceptionContextDto::from($e);
         return response()->json($exceptionData->toArray($throwInDebugMode), $exceptionData->statusCode);
     }
 }

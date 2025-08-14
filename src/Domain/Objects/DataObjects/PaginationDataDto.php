@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
 
-final class PaginationDataDo extends AbstractDataObject
+final class PaginationDataDto extends AbstractDataTransferObject
 {
     public function __construct(
         public readonly int $total,
