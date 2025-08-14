@@ -14,3 +14,8 @@ Buscar todas las clases que terminen con el sufijo Do
 \b(\w+)Do\b
 ```
 
+Buscar todos los imports de clases con sufijo Do
+```regexp
+Thehouseofel(.*)(\w+)Do(\b)
+```
+
