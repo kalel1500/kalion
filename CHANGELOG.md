@@ -1,6 +1,24 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.30.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.31.0-beta.0...master)
+
+## [v0.31.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.30.0-beta.0...v0.31.0-beta.0) - 2025-08-17
+
+### Added
+
+* (docs) Nuevo archivo `regex.md` para guardar los regex que puedan ser útiles. Pueden servir para hacer los refactors en los proyectos de los cambios de esta versión del paquete.
+
+### Changed
+
+* (refactor) Propiedad `$type` del atributo `CollectionOf` renombrada a `$class`
+* (breaking) Se ha cambiado el sufijo `Do` de todas las clases por `Dto`
+* (breaking) Clase `AbstractDataObject` renombrada a `AbstractDataTransferObject`
+* (breaking) Se han movido todas las clases abstractas de las capetas `Contracts` a las carpetas `Abstracts`
+* (breaking) Se ha modificado el prefijo `Contract` de todas las clases por `Abstract`
+
+### Fixed
+
+* (fix) Añadir valor inicial a la propiedad `$relations` de la clase `AbstractEntity` para prevenir un error cuando se intenta acceder a una relación de una entidad sin haber seteado ninguna otra anteriormente
 
 ## [v0.30.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.29.2-beta.1...v0.30.0-beta.0) - 2025-08-14
 
