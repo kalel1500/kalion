@@ -24,7 +24,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     protected array            $originalArray;
     protected ?object          $originalObject;
     protected bool             $isFromQuery;
-    protected array            $relations;
+    protected array            $relations = [];
 
     abstract protected static function createFromArray(array $data): static;
 
