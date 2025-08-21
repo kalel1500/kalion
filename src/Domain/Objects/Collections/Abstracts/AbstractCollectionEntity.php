@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Thehouseofel\Kalion\Domain\Contracts\ExportableEntity;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
@@ -87,11 +86,14 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         return $this->toArrayDynamic(__FUNCTION__, $fields);
     }
 
-    public static function fromArray(
-        array|Collection|null $data,
-        string|array|null     $with = null,
-        bool|string|null      $isFull = null
-    ): static|null
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @param string|array|null $with
+     * @param bool|string $isFull
+     * @return (T is null ? null : static)
+     */
+    public static function fromArray($data, string|array|null $with = null, bool|string $isFull = null)
     {
         if (is_null($data)) return null;
 
