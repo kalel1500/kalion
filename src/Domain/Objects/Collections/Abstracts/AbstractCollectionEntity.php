@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection as CollectionS;
 use Thehouseofel\Kalion\Domain\Contracts\ExportableEntity;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\PaginationDataDto;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 
@@ -90,39 +87,6 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         return $this->toArrayDynamic(__FUNCTION__, $fields);
     }
 
-    private static function fromData(
-        array|Collection|CollectionS|null $data,
-        string|array|null     $with = null,
-        bool|string|null      $isFull = null,
-        bool                  $isPaginate = false,
-        ?PaginationDataDto $paginationData = null
-    ): static|null
-    {
-        if (is_null($data)) return null;
-
-        if (!is_null($with) && ($with === '' || is_array($with) && in_array('', $with))) {
-            throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class AbstractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
-        }
-
-        /** @var class-string<AbstractEntity> $entity */
-        $entity = static::resolveItemType();
-        $array  = [];
-        foreach ($data as $key => $item) {
-            if ($item instanceof $entity) {
-                $array[$key] = $item;
-            } else {
-                $createdEntity = $entity::fromArray($item, $with, $isFull);
-                $array[$key]   = $createdEntity;
-            }
-        }
-        $collection                 = new static($array);
-        $collection->isPaginate     = $isPaginate;
-        $collection->paginationData = $paginationData;
-        $collection->with           = $with;
-        $collection->isFull         = $isFull;
-        return $collection;
-    }
-
     public static function fromArray(
         array|Collection|null $data,
         string|array|null     $with = null,
@@ -130,6 +94,10 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
     ): static|null
     {
         if (is_null($data)) return null;
+
+        if (!is_null($with) && ($with === '' || is_array($with) && in_array('', $with))) {
+            throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class AbstractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
+        }
 
         $isPaginate     = array_key_exists('current_page', $data);
         $paginationData = null;
@@ -150,7 +118,23 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
             $data = object_to_array($data);
         }
 
-        return static::fromData($data, $with, $isFull, $isPaginate, $paginationData);
+        /** @var class-string<AbstractEntity> $entity */
+        $entity = static::resolveItemType();
+        $array  = [];
+        foreach ($data as $key => $item) {
+            if ($item instanceof $entity) {
+                $array[$key] = $item;
+            } else {
+                $createdEntity = $entity::fromArray($item, $with, $isFull);
+                $array[$key]   = $createdEntity;
+            }
+        }
+        $collection                 = new static($array);
+        $collection->isPaginate     = $isPaginate;
+        $collection->paginationData = $paginationData;
+        $collection->with           = $with;
+        $collection->isFull         = $isFull;
+        return $collection;
     }
 
     public function isPaginate(): bool
