@@ -9,9 +9,6 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractIntVo;
 
-/**
- * @template T of AbstractModelId
- */
 abstract class AbstractModelId extends AbstractIntVo
 {
     protected const CLASS_REQUIRED = null;
@@ -41,7 +38,7 @@ abstract class AbstractModelId extends AbstractIntVo
 
     /**
      * @param int|null $id
-     * @return T
+     * @return ($id is null ? null : ModelId|ModelIdNull)
      */
     public static function from(?int $id)
     {
