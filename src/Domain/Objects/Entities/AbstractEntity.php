@@ -202,12 +202,12 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
         $ref = new ReflectionClass(static::class);
         $attribute = $ref->getMethod($first)->getAttributes(RelationOf::class)[0] ?? null;
-        if (is_null($attribute)) {
-            $setRelation = 'set' . ucfirst($first);
-            $this->$setRelation($relationData);
-        } else {
-            $this->setRelation($relationData, $first, $attribute->newInstance()->class);
-        }
+        $class = $attribute->newInstance()->class;
+        $data = match (true) {
+            is_subclass_of($class, AbstractEntity::class)           => is_object($relationData) ? $class::fromObject($relationData) : $class::fromArray($relationData),
+            is_subclass_of($class, AbstractCollectionEntity::class) => is_object($relationData) ? $class::fromEloquent($relationData, null, null, true) : $class::fromArray($relationData),
+        };
+        $this->relations[$first] = $data;
     }
 
     private function setLastRelation(string $first, string|array|null $last, bool|string|null $isFull): void
@@ -235,22 +235,5 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
             throw EntityRelationException::relationNotSetInEntitySetup($name, static::class);
         }
         return $this->relations[$name];
-    }
-
-    /**
-     * @param $data
-     * @param string $name
-     * @param class-string $class
-     * @return void
-     *
-     * @deprecated use #[RelationOf()]
-     */
-    public function setRelation($data, string $name, string $class): void
-    {
-        $data = match (true) {
-            is_subclass_of($class, AbstractEntity::class)           => is_object($data) ? $class::fromObject($data) : $class::fromArray($data),
-            is_subclass_of($class, AbstractCollectionEntity::class) => is_object($data) ? $class::fromEloquent($data, null, null, true) : $class::fromArray($data),
-        };
-        $this->relations[$name] = $data;
     }
 }
