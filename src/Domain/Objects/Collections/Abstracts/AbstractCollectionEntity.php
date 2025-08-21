@@ -54,13 +54,6 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         ];
     }
 
-
-    /*public static function with(array $relations)
-    {
-        static::$with = $relations;
-        return new static;
-    }*/
-
     public function toArrayExport(callable $modifyData = null, string $exportMethodName = 'getExportColumns'): array
     {
         $data = $this->toArray();
