@@ -10,6 +10,7 @@ use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
+use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Domain\Services\Relation;
 
@@ -166,11 +167,16 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         }
         $relationData = $this->originalArray[$relationName];
 
-        $ref       = new ReflectionClass(static::class);
-        $attribute = $ref->getMethod($first)->getAttributes(RelationOf::class)[0] ?? null;
+        $ref        = new ReflectionClass(static::class);
+        $attributes = $ref->getMethod($first)->getAttributes(RelationOf::class);
+
+        if (empty($attributes)) {
+            $class = static::class;
+            throw new RequiredDefinitionException("The $class::$first method must have the #[RelationOf(...)] attribute defined.");
+        }
 
         /** @var AbstractEntity|AbstractCollectionEntity $class */
-        $class                   = $attribute->newInstance()->class;
+        $class                   = $attributes[0]->newInstance()->class;
         $this->relations[$first] = $class::fromArray($relationData);
     }
 
