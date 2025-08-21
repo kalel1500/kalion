@@ -13,7 +13,7 @@ final class PaginationDataDto extends AbstractDataTransferObject
         public readonly int $currentPage,
         public readonly ?string $path,
         public readonly string $pageName,
-        public readonly string $htmlLinks
+        public readonly string $htmlLinks,
     )
     {
     }

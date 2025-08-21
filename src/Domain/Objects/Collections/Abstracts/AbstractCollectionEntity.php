@@ -13,8 +13,8 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 
 abstract class AbstractCollectionEntity extends AbstractCollectionBase implements Relatable
 {
-    protected string|array|null $with   = null;
-    protected bool|string|null  $isFull = null;
+    protected string|array|null  $with   = null;
+    protected bool|string|null   $isFull = null;
     protected bool               $isPaginate;
     protected ?PaginationDataDto $paginationData;
 
@@ -105,13 +105,13 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         $paginationData = null;
         if ($isPaginate) {
             $paginationData = new PaginationDataDto(
-                $data['total'],
-                $data['last_page'],
-                intval($data['per_page']),
-                $data['current_page'],
-                $data['path'],
-                'page',
-                '--'
+                total      : $data['total'],
+                lastPage   : $data['last_page'],
+                perPage    : intval($data['per_page']),
+                currentPage: $data['current_page'],
+                path       : $data['path'],
+                pageName   : 'page',
+                htmlLinks  : '--',
             );
             $data           = $data['data'];
         }
