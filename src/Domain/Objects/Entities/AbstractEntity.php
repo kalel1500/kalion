@@ -29,9 +29,11 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     /**
      * @template T of array|null
      * @param T $data
+     * @param array|string|null $with
+     * @param bool|string $isFull
      * @return (T is null ? null : static)
      */
-    public static function fromArray($data, array|string|null $with = null, bool|string $isFull = null)
+    public static function fromArray($data, string|array|null $with = null, bool|string $isFull = null)
     {
         if (is_null($data)) return null;
 
