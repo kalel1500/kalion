@@ -94,7 +94,6 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         array|Collection|CollectionS|null $data,
         string|array|null     $with = null,
         bool|string|null      $isFull = null,
-        bool                  $isEloquentBuilder = false,
         bool                  $isPaginate = false,
         ?PaginationDataDto $paginationData = null
     ): static|null
@@ -112,10 +111,8 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
             if ($item instanceof $entity) {
                 $array[$key] = $item;
             } else {
-                $createdEntity = $isEloquentBuilder
-                    ? $entity::fromObject($item, $with, $isFull)
-                    : $entity::fromArray($item, $with, $isFull);
-                $array[$key]       = $createdEntity;
+                $createdEntity = $entity::fromArray($item, $with, $isFull);
+                $array[$key]   = $createdEntity;
             }
         }
         $collection                 = new static($array);
@@ -153,38 +150,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
             $data = object_to_array($data);
         }
 
-        return static::fromData($data, $with, $isFull, false, $isPaginate, $paginationData);
-    }
-
-    /**
-     * @deprecated Use fromArray()
-     */
-    public static function fromEloquent(
-        Collection|CollectionS|LengthAwarePaginator|null $queryResult,
-        string|array|null                                $with = null,
-        bool|string|null                                 $isFull = null,
-        bool                                             $saveBuilderObject = false
-    ): static|null
-    {
-        // $data = $response->isFromQuery() ? $response->originalObject() : $response->originalArray();
-        // return static::fromData($data, $with, $response->isFromQuery(), $response->isPaginate(), $response->paginationData());
-
-        if (is_null($queryResult)) return null;
-        $isPaginate     = is_a($queryResult, LengthAwarePaginator::class);
-        $paginationData = null;
-        if ($isPaginate) {
-            $paginationData = new PaginationDataDto(
-                $queryResult->total(),
-                $queryResult->lastPage(),
-                intval($queryResult->perPage()),
-                $queryResult->currentPage(),
-                $queryResult->path(),
-                $queryResult->getPageName(),
-                $queryResult->links()->toHtml()
-            );
-        }
-        $data = $saveBuilderObject ? $queryResult : object_to_array($queryResult->values()->toArray());
-        return static::fromData($data, $with, $isFull, $saveBuilderObject, $isPaginate, $paginationData);
+        return static::fromData($data, $with, $isFull, $isPaginate, $paginationData);
     }
 
     public function isPaginate(): bool

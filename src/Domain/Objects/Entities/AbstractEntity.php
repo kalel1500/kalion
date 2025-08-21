@@ -22,22 +22,9 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     protected ?array           $withFull       = null;
     protected bool|string|null $isFull;
     protected array            $originalArray;
-    protected ?object          $originalObject;
-    protected bool             $isFromQuery;
     protected array            $relations = [];
 
     abstract protected static function createFromArray(array $data): static;
-
-    /**
-     * @param Model|object $item
-     * @return array
-     *
-     * @deprecated Use createFromArray()
-     */
-    protected static function createFromObject($item): array
-    {
-        return [];
-    }
 
     /**
      * @template T of array|null
@@ -49,26 +36,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         if (is_null($data)) return null;
 
         $self                 = static::createFromArray($data);
-        $self->isFromQuery    = false;
         $self->originalArray  = $data;
-        $self->originalObject = null;
-        $self->isFull         = $isFull;
-        $self->with($with);
-        return $self;
-    }
-
-    /**
-     * @deprecated Use fromArray()
-     */
-    public static function fromObject(?object $item, string|array|null $with = null, bool|string|null $isFull = null): static|null
-    {
-        if (is_null($item)) return null;
-
-        $data                 = static::createFromObject($item);
-        $self                 = static::createFromArray($data);
-        $self->isFromQuery    = true;
-        $self->originalArray  = json_decode(json_encode($item), true);
-        $self->originalObject = $item;
         $self->isFull         = $isFull;
         $self->with($with);
         return $self;
@@ -190,24 +158,18 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     private function setFirstRelation(string $first): void
     {
-        if ($this->isFromQuery) {
-            $relationData = $this->originalObject->$first;
-        } else {
-            $relationName = str_snake($first);
-            if (!array_key_exists($relationName, $this->originalArray)) {
-                throw EntityRelationException::relationNotLoadedInEloquentResult($relationName, static::class);
-            }
-            $relationData = $this->originalArray[$relationName];
+        $relationName = str_snake($first);
+        if (!array_key_exists($relationName, $this->originalArray)) {
+            throw EntityRelationException::relationNotLoadedInEloquentResult($relationName, static::class);
         }
+        $relationData = $this->originalArray[$relationName];
 
-        $ref = new ReflectionClass(static::class);
+        $ref       = new ReflectionClass(static::class);
         $attribute = $ref->getMethod($first)->getAttributes(RelationOf::class)[0] ?? null;
-        $class = $attribute->newInstance()->class;
-        $data = match (true) {
-            is_subclass_of($class, AbstractEntity::class)           => is_object($relationData) ? $class::fromObject($relationData) : $class::fromArray($relationData),
-            is_subclass_of($class, AbstractCollectionEntity::class) => is_object($relationData) ? $class::fromEloquent($relationData, null, null, true) : $class::fromArray($relationData),
-        };
-        $this->relations[$first] = $data;
+
+        /** @var AbstractEntity|AbstractCollectionEntity $class */
+        $class                   = $attribute->newInstance()->class;
+        $this->relations[$first] = $class::fromArray($relationData);
     }
 
     private function setLastRelation(string $first, string|array|null $last, bool|string|null $isFull): void

@@ -15,24 +15,24 @@ class StatusRepository implements StatusRepositoryContract
 
     public function all(): StatusCollection
     {
-        $eloquentResult = $this->model::query()->get();
-        return StatusCollection::fromEloquent($eloquentResult);
+        $statuses = $this->model::query()->get();
+        return StatusCollection::fromArray($statuses->toArray());
     }
 
     public function searchByType(string $type): StatusCollection
     {
-        $eloquentResult = $this->model::query()
+        $statuses = $this->model::query()
             ->where('type', $type)
             ->get();
 
-        return StatusCollection::fromEloquent($eloquentResult);
+        return StatusCollection::fromArray($statuses->toArray());
     }
 
     public function findByCode(string $code): StatusEntity
     {
-        $eloquentResult = $this->model::query()
+        $status = $this->model::query()
             ->where('code', $code)
             ->firstOrFail();
-        return StatusEntity::fromArray($eloquentResult->toArray());
+        return StatusEntity::fromArray($status->toArray());
     }
 }
