@@ -89,6 +89,11 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         return null;
     }
 
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
     public function toArray(): array
     {
         [$relation, $defaultIsFull] = Relation::getInfoFromRelationWithFlag('flag:' . config('kalion.entity_calculated_props_mode'));
@@ -224,11 +229,6 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
             }
             $this->relations[$first]->setWith($last)->setIsFull($isFull);
         }
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
     }
 
     public function getRelation()
