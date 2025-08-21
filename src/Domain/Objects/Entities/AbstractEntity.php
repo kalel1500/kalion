@@ -212,9 +212,6 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     private function setLastRelation(string $first, string|array|null $last, bool|string|null $isFull): void
     {
-        // if (empty($last)) return; // OLD
-        // $last = (is_array($last)) ? $last : [$last]; // OLD
-
         $isEntity     = is_subclass_of($this->relations[$first], AbstractEntity::class);
         $isCollection = is_subclass_of($this->relations[$first], AbstractCollectionEntity::class);
 
