@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 
-use Illuminate\Database\Eloquent\Model;
 use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
@@ -12,10 +11,12 @@ use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
-use Thehouseofel\Kalion\Domain\Services\Relation;
+use Thehouseofel\Kalion\Domain\Traits\ParsesRelationFlags;
 
 abstract class AbstractEntity implements Arrayable, JsonSerializable
 {
+    use ParsesRelationFlags;
+
     public static ?array       $databaseFields = null;
     protected string           $primaryKey     = 'id';
     protected bool             $incrementing   = true;
@@ -67,7 +68,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     public function toArray(): array
     {
-        [$relation, $defaultIsFull] = Relation::getInfoFromRelationWithFlag('flag:' . config('kalion.entity_calculated_props_mode'));
+        [$relation, $defaultIsFull] = $this->getInfoFromRelationWithFlag('flag:' . config('kalion.entity_calculated_props_mode'));
 
         $data   = $this->toArrayProperties();
         $isFull = $this->isFull ?? $defaultIsFull;
@@ -80,7 +81,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         if ($this->withFull) {
             foreach ($this->withFull as $key => $rel) {
                 $relation = (is_array($rel)) ? $key : $rel;
-                [$relation, $isFull] = Relation::getInfoFromRelationWithFlag($relation);
+                [$relation, $isFull] = $this->getInfoFromRelationWithFlag($relation);
                 $relationData               = $this->$relation()?->toArray();
                 $data[str_snake($relation)] = $relationData;
             }
@@ -145,7 +146,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
             $isFull    = null;
             $firstFull = $first;
-            [$first, $isFull] = Relation::getInfoFromRelationWithFlag($first, $isFull);
+            [$first, $isFull] = $this->getInfoFromRelationWithFlag($first, $isFull);
 
             $firstRelations[]     = $first;
             $firstRelationsFull[] = $firstFull;

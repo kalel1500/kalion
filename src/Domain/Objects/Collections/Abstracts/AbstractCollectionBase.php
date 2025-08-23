@@ -18,12 +18,11 @@ use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\SubRelationDataDto;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
-use Thehouseofel\Kalion\Domain\Services\Relation;
+use Thehouseofel\Kalion\Domain\Traits\ParsesRelationFlags;
 use TypeError;
 
 /**
@@ -31,6 +30,8 @@ use TypeError;
  */
 abstract class AbstractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, Arrayable, JsonSerializable
 {
+    use ParsesRelationFlags;
+
     /** @var null|string */
     protected const ITEM_TYPE = null;
 
@@ -112,12 +113,12 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         }
     }
 
-    private function toAny(array $data, string $pluckField = null): CollectionAny
+    private function toAny(array $data): CollectionAny
     {
-        $subRelData = (! $this->isInstanceOfRelatable())
-            ? SubRelationDataDto::fromArray([null, null])
-            : Relation::getNextRelation($this->with, $this->isFull, $pluckField);
-        return CollectionAny::fromArray($data, $subRelData->with, $subRelData->isFull);
+        return match (true) {
+            ! $this->isInstanceOfRelatable(), is_null($this->with) => CollectionAny::fromArray($data),
+            default                                                => CollectionAny::fromArray($data, $this->with, $this->isFull),
+        };
     }
 
     private function isInstanceOfRelatable(): bool
@@ -782,8 +783,42 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             }
         }
 
-//        return (new CollectionAnyVo($result))->whereNotNull();
-        return $this->toAny($result, $value);
+        if (! $this->isInstanceOfRelatable()) {
+            return CollectionAny::fromArray($result);
+        }
+
+        $with = is_array($this->with) ? $this->with : [$this->with];
+        $isFull = $this->isFull;
+        $relationName = $value;
+
+        $newWith = null;
+        $newIsFull = null;
+        foreach ($with as $key => $rel) {
+
+            if (is_string($key)) {
+                [$key, $isFull] = $this->getInfoFromRelationWithFlag($key, $isFull);
+
+                if ($key === $relationName) {
+                    $newWith = $rel;
+                    $newIsFull = $isFull;
+                    break;
+                }
+            } else {
+                $arrayRels = explode('.', $rel);
+                $firstRel = $arrayRels[0];
+                [$firstRel, $isFull] = $this->getInfoFromRelationWithFlag($firstRel, $isFull);
+
+                if ($firstRel === $relationName) {
+                    unset($arrayRels[0]);
+                    $newWith = implode('.', $arrayRels);
+                    $newIsFull = $isFull;
+                    break;
+                }
+            }
+        }
+        $newWith = (empty($newWith)) ? null : $newWith;
+
+        return CollectionAny::fromArray($result, $newWith, $newIsFull);
     }
 
     /**
