@@ -49,12 +49,7 @@ abstract class TestCase extends Orchestra
             return;
         }
 
-        // Aseguramos que exista el directorio "database"
         $dbPath = self::$sqliteFile;
-        $dir    = dirname($dbPath);
-        if (! is_dir($dir)) {
-            mkdir($dir, 0775, true);
-        }
 
         $existDatabase = file_exists($dbPath);
 
