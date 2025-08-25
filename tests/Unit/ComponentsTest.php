@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit;
+namespace Thehouseofel\Kalion\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Thehouseofel\Kalion\Domain\Services\TailwindClassFilter;
 
-class ComponentsTests extends TestCase
+class ComponentsTest extends TestCase
 {
     private function assertClasses($default_classes, $custom_classes, $expected)
     {

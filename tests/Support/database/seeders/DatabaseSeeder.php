@@ -1,0 +1,24 @@
+<?php
+
+namespace Thehouseofel\Kalion\Tests\Support\Database\Seeders;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Thehouseofel\Kalion\Database\Seeders\UserSeeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        $this->call([
+            UserSeeder::class,
+            TagSeeder::class,
+            PostSeeder::class,
+            CommentSeeder::class,
+            PermissionSeeder::class,
+        ]);
+    }
+}
