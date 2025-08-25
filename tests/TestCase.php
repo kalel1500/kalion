@@ -13,6 +13,12 @@ abstract class TestCase extends Orchestra
     /** Ruta del fichero sqlite que usaremos durante los tests */
     protected static string $sqliteFile = __DIR__ . '/Support/database/database.sqlite';
 
+    /** Array con las rutas de las migraciones que usaremos durante los tests */
+    protected static array $migrations = [
+        __DIR__ . '/../database/migrations',
+        __DIR__.'/Support/database/migrations',
+    ];
+
     protected function getPackageProviders($app)
     {
         return [
@@ -63,13 +69,12 @@ abstract class TestCase extends Orchestra
             touch($dbPath);
         }
 
-        // Si tu paquete tiene migrations públicas, también las registramos
-        if (is_dir(__DIR__ . '/../database/migrations')) {
-            $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        }
-
-        // Registrar migraciones de tests/Support (se usan por migrate:fresh)
-        $this->loadMigrationsFrom(__DIR__ . '/Support/database/migrations');
+        // Ejecutar migraciones
+        $app = \Orchestra\Testbench\Foundation\Application::create();
+        $this->defineEnvironment($app);
+        $migrator = $app->make(\Illuminate\Database\Migrations\Migrator::class);
+        $migrator->reset(self::$migrations);
+        $migrator->run(self::$migrations);
 
         // Ejecutar el seeder principal de soporte: ajusta el namespace si lo tienes distinto
         $seedExit = $this->artisan('db:seed', [

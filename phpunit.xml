@@ -18,6 +18,6 @@
         </include>
     </source>
     <php>
-        <env name="FRESH_DATABASE" value="true"/>
+        <env name="FRESH_DATABASE" value="false"/>
     </php>
 </phpunit>
