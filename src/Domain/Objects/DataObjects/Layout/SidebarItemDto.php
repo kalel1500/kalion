@@ -37,7 +37,7 @@ final class SidebarItemDto extends NavigationItem
         $this->hasCounter = !is_null($counter_action);
     }
 
-    protected static function createFromArray(array $data): static
+    protected static function make(array $data): static
     {
         return new static(
             $data['code'] ?? null,

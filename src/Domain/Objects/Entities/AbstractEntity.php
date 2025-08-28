@@ -26,7 +26,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     protected array            $originalArray;
     protected array            $relations      = [];
 
-    abstract protected static function createFromArray(array $data): static;
+    abstract protected static function make(array $data): static;
 
     /**
      * @template T of array|null
@@ -39,7 +39,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     {
         if (is_null($data)) return null;
 
-        $self                = static::createFromArray($data);
+        $self                = static::make($data);
         $self->originalArray = $data;
         $self->isFull        = $isFull;
         $self->with($with);

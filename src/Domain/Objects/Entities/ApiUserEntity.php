@@ -21,7 +21,7 @@ class ApiUserEntity extends AbstractEntity
     {
     }
 
-    protected static function createFromArray(array $data): static
+    protected static function make(array $data): static
     {
         return new static(
             ModelId::from($data['id'] ?? null),
@@ -29,7 +29,7 @@ class ApiUserEntity extends AbstractEntity
         );
     }
 
-    protected static function createFromChildArray(array $data, array $newFields): static
+    protected static function makeWith(array $data, array $newFields): static
     {
         return new static(
             ModelId::from($data['id']),

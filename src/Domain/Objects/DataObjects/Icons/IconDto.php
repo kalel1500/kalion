@@ -15,7 +15,7 @@ final class IconDto extends AbstractDataTransferObject
     {
     }
 
-    protected static function createFromArray(array $data): static
+    protected static function make(array $data): static
     {
         return new static(
             $data['name'] ?? null,

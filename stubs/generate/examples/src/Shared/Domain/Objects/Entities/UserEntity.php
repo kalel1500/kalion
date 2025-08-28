@@ -26,9 +26,9 @@ class UserEntity extends BaseUserEntity
         parent::__construct($id, $name, $email, $email_verified_at);
     }
 
-    protected static function createFromArray(array $data): static
+    protected static function make(array $data): static
     {
-        return parent::createFromChildArray($data, [
+        return parent::makeWith($data, [
             ModelStringNull::new($data['other_field'] ?? 'prueba')
         ]);
     }

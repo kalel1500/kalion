@@ -55,7 +55,7 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
     public static function fromArray(?array $data): static|null
     {
         if (is_null($data)) return null;
-        return static::createFromArray($data);
+        return static::make($data);
     }
 
     public static function fromJson(?string $data): static|null
@@ -64,7 +64,7 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
         return static::fromArray(json_decode($data, true));
     }
 
-    protected static function createFromArray(array $data): static
+    protected static function make(array $data): static
     {
         if (!static::REFLECTION_ACTIVE) {
             return new static(...array_values($data));

@@ -22,7 +22,7 @@ final class RoleEntity extends AbstractEntity
     {
     }
 
-    protected static function createFromArray(array $data): static
+    protected static function make(array $data): static
     {
         return new static(
             ModelId::from($data['id'] ?? null),

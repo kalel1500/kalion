@@ -33,7 +33,7 @@ final class NavbarItemDto extends NavigationItem
         );
     }
 
-    protected static function createFromArray(array $data): static
+    protected static function make(array $data): static
     {
         return new static(
             $data['code'] ?? null,
