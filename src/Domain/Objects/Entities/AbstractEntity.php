@@ -48,6 +48,14 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     abstract protected function props(): array;
 
+    protected function propsWith(array $extra): array
+    {
+        return [
+            ...$this->props(),
+            ...$extra,
+        ];
+    }
+
     protected function calc(): array
     {
         return [];

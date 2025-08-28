@@ -45,13 +45,4 @@ class ApiUserEntity extends AbstractEntity
             'name'    => $this->name->value(),
         ];
     }
-
-    protected function propsWith(array $newFields): array
-    {
-        return [
-            'id'   => $this->id->value(),
-            'name' => $this->name->value(),
-            ...$newFields
-        ];
-    }
 }

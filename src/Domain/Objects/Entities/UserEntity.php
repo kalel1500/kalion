@@ -54,15 +54,4 @@ class UserEntity extends AbstractEntity
             'email_verified_at' => $this->email_verified_at->value(),
         ];
     }
-
-    protected function propsWith(array $newFields): array
-    {
-        return [
-            'id'                => $this->id->value(),
-            'name'              => $this->name->value(),
-            'email'             => $this->email->value(),
-            'email_verified_at' => $this->email_verified_at->value(),
-            ...$newFields
-        ];
-    }
 }
