@@ -13,6 +13,9 @@ use Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities\Collections\PostCo
 
 final class TagEntity extends AbstractEntity
 {
+    private readonly string $type_name;
+    private readonly string $type_slug;
+
     public function __construct(
         public readonly ModelId|ModelIdNull $id,
         public readonly ModelString     $name,
@@ -42,6 +45,14 @@ final class TagEntity extends AbstractEntity
         ];
     }
 
+    protected function toArrayCalculatedProps(): array
+    {
+        return [
+            'type_name' => $this->type_name(),
+            'type_slug' => $this->type_slug(),
+        ];
+    }
+
     #[RelationOf(PostCollection::class)]
     public function posts(): PostCollection
     {
@@ -52,5 +63,15 @@ final class TagEntity extends AbstractEntity
     public function tagType(): ?TagTypeEntity
     {
         return $this->getRelation();
+    }
+
+    public function type_name(): string
+    {
+        return $this->type_name ??= $this->tagType()->name->value();
+    }
+
+    public function type_slug(): string
+    {
+        return $this->type_slug ??= $this->tagType()->slug();
     }
 }

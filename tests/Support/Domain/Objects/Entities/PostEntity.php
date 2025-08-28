@@ -15,6 +15,8 @@ use Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities\Collections\TagCol
 
 final class PostEntity extends AbstractEntity
 {
+    private readonly int $number_comments;
+
     public function __construct(
         public readonly ModelId|ModelIdNull $id,
         public readonly ModelString         $title,
@@ -50,6 +52,13 @@ final class PostEntity extends AbstractEntity
         ];
     }
 
+    protected function toArrayCalculatedProps(): array
+    {
+        return [
+            'number_comments' => $this->number_comments(),
+        ];
+    }
+
     #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {
@@ -66,5 +75,10 @@ final class PostEntity extends AbstractEntity
     public function tags(): TagCollection
     {
         return $this->getRelation();
+    }
+
+    public function number_comments(): int
+    {
+        return $this->number_comments ??= $this->comments()->count();
     }
 }
