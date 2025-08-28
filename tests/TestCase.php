@@ -69,12 +69,11 @@ abstract class TestCase extends Orchestra
             touch($dbPath);
         }
 
-        // Ejecutar migraciones
-        $app = \Orchestra\Testbench\Foundation\Application::create();
-        $this->defineEnvironment($app);
-        $migrator = $app->make(\Illuminate\Database\Migrations\Migrator::class);
-        $migrator->reset(self::$migrations);
-        $migrator->run(self::$migrations);
+        $this->artisan('migrate:fresh', [
+            '--database' => 'testing',
+            '--path' => static::$migrations,
+            '--realpath' => 'true',
+        ]);
 
         // Ejecutar el seeder principal de soporte: ajusta el namespace si lo tienes distinto
         $seedExit = $this->artisan('db:seed', [
