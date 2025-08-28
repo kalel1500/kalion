@@ -46,9 +46,9 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         return $self;
     }
 
-    abstract protected function toArrayProperties(): array;
+    abstract protected function props(): array;
 
-    protected function toArrayCalculatedProps(): array
+    protected function calc(): array
     {
         return [];
     }
@@ -70,10 +70,10 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     {
         [$relation, $defaultIsFull] = $this->getInfoFromRelationWithFlag('flag:' . config('kalion.entity_calculated_props_mode'));
 
-        $data   = $this->toArrayProperties();
+        $data   = $this->props();
         $isFull = $this->isFull ?? $defaultIsFull;
         if ($isFull === true) {
-            $data = array_merge($data, $this->toArrayCalculatedProps());
+            $data = array_merge($data, $this->calc());
         } elseif (is_string($isFull)) {
             $data = array_merge($data, $this->{$isFull}());
         }
@@ -92,7 +92,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     public function toArrayDb($keepId = false): array
     {
-        $array = $this->toArrayProperties();
+        $array = $this->props();
         if (!is_null(static::$databaseFields)) {
             return array_keep($array, static::$databaseFields);
         }
@@ -104,7 +104,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     public function toArrayWithout(array $fields, $fromArrayDb = false): array
     {
-        $array = $fromArrayDb ? $this->toArrayDb() : $this->toArrayProperties();
+        $array = $fromArrayDb ? $this->toArrayDb() : $this->props();
         foreach ($fields as $field) {
             unset($array[$field]);
         }
@@ -114,7 +114,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     public function toArrayWith(array $fields, $fromArrayDb = false): array
     {
-        $arrayValues = $fromArrayDb ? $this->toArrayDb() : $this->toArrayProperties();
+        $arrayValues = $fromArrayDb ? $this->toArrayDb() : $this->props();
         foreach ($arrayValues as $key => $value) {
             if (!in_array($key, $fields)) unset($arrayValues[$key]);
         }

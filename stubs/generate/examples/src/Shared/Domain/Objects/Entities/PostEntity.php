@@ -38,7 +38,7 @@ final class PostEntity extends AbstractEntity
         );
     }
 
-    protected function toArrayProperties(): array
+    protected function props(): array
     {
         return [
             'id'         => $this->id->value(),

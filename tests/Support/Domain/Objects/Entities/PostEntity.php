@@ -40,7 +40,7 @@ final class PostEntity extends AbstractEntity
         );
     }
 
-    protected function toArrayProperties(): array
+    protected function props(): array
     {
         return [
             'id'         => $this->id->value(),
@@ -52,7 +52,7 @@ final class PostEntity extends AbstractEntity
         ];
     }
 
-    protected function toArrayCalculatedProps(): array
+    protected function calc(): array
     {
         return [
             'number_comments' => $this->number_comments(),

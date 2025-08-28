@@ -33,9 +33,9 @@ class UserEntity extends BaseUserEntity
         ]);
     }
 
-    protected function toArrayProperties(): array
+    protected function props(): array
     {
-        return parent::toArrayPropertiesFromChild([
+        return parent::propsWith([
             'other_field' => $this->other_field->value(),
         ]);
     }

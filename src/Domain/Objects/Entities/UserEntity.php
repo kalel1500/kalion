@@ -45,7 +45,7 @@ class UserEntity extends AbstractEntity
         );
     }
 
-    protected function toArrayProperties(): array
+    protected function props(): array
     {
         return [
             'id'                => $this->id->value(),
@@ -55,7 +55,7 @@ class UserEntity extends AbstractEntity
         ];
     }
 
-    protected function toArrayPropertiesFromChild(array $newFields): array
+    protected function propsWith(array $newFields): array
     {
         return [
             'id'                => $this->id->value(),

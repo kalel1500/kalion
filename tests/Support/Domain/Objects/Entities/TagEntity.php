@@ -35,7 +35,7 @@ final class TagEntity extends AbstractEntity
         );
     }
 
-    protected function toArrayProperties(): array
+    protected function props(): array
     {
         return [
             'id'          => $this->id->value(),
@@ -45,7 +45,7 @@ final class TagEntity extends AbstractEntity
         ];
     }
 
-    protected function toArrayCalculatedProps(): array
+    protected function calc(): array
     {
         return [
             'type_name' => $this->type_name(),
