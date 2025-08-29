@@ -75,7 +75,7 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
 
         $className = static::class;
 
-        // Usamos cache para evitar repetir la reflexión
+        // Cacheamos ya los parámetros procesados
         if (!isset(self::$reflectionCache[$className])) {
             $reflection  = new ReflectionClass($className);
             $constructor = $reflection->getConstructor();
@@ -84,43 +84,55 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
                 throw new AppException("The " . static::class . " class has no constructor.");
             }
 
-            self::$reflectionCache[$className] = $constructor->getParameters();
+            $paramsMeta = [];
+
+            foreach ($constructor->getParameters() as $param) {
+                $paramName = $param->getName();
+                $paramType = $param->getType();
+
+                if (is_null($paramType)) {
+                    throw new AppException("The \$$paramName parameter in $className does not have a defined type.");
+                }
+
+                if ($paramType instanceof ReflectionIntersectionType) {
+                    throw new AppException("Reflection cannot be used on DTOs when the constructor uses IntersectionTypes.");
+                }
+
+                if ($paramType instanceof ReflectionUnionType) {
+                    throw new AppException("Union types are not supported in AbstractDataTransferObject. Please override make() in your DTO to handle them.");
+                }
+
+                $typeName = $paramType->getName();
+
+                $paramsMeta[] = [
+                    'name'     => $paramName,
+                    'type'     => $typeName,
+                    'isClass'  => class_exists($typeName),
+                    'isEnum'   => is_a($typeName, \BackedEnum::class, true),
+                    'isVO'     => is_a($typeName, AbstractValueObject::class, true),
+                ];
+            }
+
+            self::$reflectionCache[$className] = $paramsMeta;
         }
 
-        $parameters = self::$reflectionCache[$className];
-        $args       = [];
+        $args = [];
 
-        foreach ($parameters as $param) {
-            /** @var string $paramName */
-            /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $paramType */
-            $paramName = $param->getName();
-            $paramType = $param->getType();
+        foreach (self::$reflectionCache[$className] as $meta) {
+            $paramName = $meta['name'];
+            $typeName  = $meta['type'];
+            $value     = $data[$paramName] ?? null;
 
-            if (is_null($paramType)) {
-                throw new AppException("The \$$paramName parameter in " . static::class . " does not have a defined type.");
-            }
-
-            if ($paramType instanceof ReflectionIntersectionType) {
-                throw new AppException("Reflection cannot be used on DTOs when the constructor uses IntersectionTypes.");
-            }
-
-            if ($paramType instanceof ReflectionUnionType) {
-                throw new AppException("Reflection cannot be used on DTOs when the constructor uses UnionTypes.");
-            }
-
-            $typeName = $paramType->getName();
-            $value    = $data[$paramName] ?? null;
-
-            // Si el valor es un primitivo o ya recibimos la instancia de la clase, pasamos el valor directamente
-            if (! class_exists($typeName) || ($value instanceof $typeName)) {
+            // Si es primitivo o ya recibimos la instancia de la clase, lo usamos directamente
+            if (!$meta['isClass'] || ($value instanceof $typeName)) {
                 $args[] = $value;
                 continue;
             }
 
             $method = match (true) {
-                is_a($typeName, class: \BackedEnum::class, allow_string: true)          => 'from',
-                is_a($typeName, class: AbstractValueObject::class, allow_string: true)  => 'new',
-                default                                                                 => 'fromArray',
+                $meta['isEnum'] => 'from',
+                $meta['isVO']   => 'new',
+                default         => 'fromArray',
             };
 
             $args[] = $typeName::$method($value);
