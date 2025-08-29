@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 
 use JsonSerializable;
 use ReflectionClass;
+use Thehouseofel\Kalion\Domain\Attributes\Computed;
 use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
@@ -57,9 +58,33 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         ];
     }
 
-    protected function calc(): array
+    protected function computedProps(?string $context = null): array
     {
-        return [];
+        $result = [];
+        $ref = new ReflectionClass($this);
+
+        foreach ($ref->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            $attrs = $method->getAttributes(Computed::class);
+
+            if (empty($attrs)) {
+                continue;
+            }
+
+            /** @var Computed $attr */
+            $attr = $attrs[0]->newInstance();
+
+            // Si hay contextos definidos y no coincide → saltar
+            if ($context && !empty($attr->contexts) && !in_array($context, $attr->contexts, true)) {
+                continue;
+            }
+
+            $name = $method->getName();
+
+            // cachear y ejecutar
+            $result[$name] = $this->{$name}();
+        }
+
+        return $result;
     }
 
     /**
@@ -82,9 +107,9 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         $data   = $this->props();
         $isFull = $this->isFull ?? $defaultIsFull;
         if ($isFull === true) {
-            $data = array_merge($data, $this->calc());
+            $data = array_merge($data, $this->computedProps());
         } elseif (is_string($isFull)) {
-            $data = array_merge($data, $this->{$isFull}());
+            $data = array_merge($data, $this->computedProps($isFull));
         }
 
         if ($this->withFull) {

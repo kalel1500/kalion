@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities;
 
+use Thehouseofel\Kalion\Domain\Attributes\Computed;
 use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
@@ -50,13 +51,6 @@ final class PostEntity extends AbstractEntity
         ];
     }
 
-    protected function calc(): array
-    {
-        return [
-            'number_comments' => $this->number_comments(),
-        ];
-    }
-
     #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {
@@ -75,6 +69,7 @@ final class PostEntity extends AbstractEntity
         return $this->getRelation();
     }
 
+    #[Computed]
     public function number_comments(): int
     {
         return $this->computed($this->comments()->count());

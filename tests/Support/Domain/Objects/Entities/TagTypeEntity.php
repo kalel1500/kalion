@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities;
 
 use Illuminate\Support\Str;
+use Thehouseofel\Kalion\Domain\Attributes\Computed;
 use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
@@ -40,20 +41,13 @@ final class TagTypeEntity extends AbstractEntity
         ];
     }
 
-    protected function calc(): array
-    {
-        return [
-            'slug' => $this->slug(),
-        ];
-    }
-
     #[RelationOf(TagCollection::class)]
     public function tags(): TagCollection
     {
         return $this->getRelation();
     }
 
-
+    #[Computed]
     public function slug(): string
     {
         return $this->computed(Str::slug($this->name));
