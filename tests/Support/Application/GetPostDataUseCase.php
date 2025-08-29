@@ -13,7 +13,7 @@ final class GetPostDataUseCase
     public function getPostsWithRelations(): PostCollection
     {
         $data = Post::query()
-            ->with(['tags.tagType', 'tags.posts', 'comments' => fn($q) => $q->where('id', 99999)])
+            ->with(['tags.tagType', 'tags.posts', 'comments'])
             ->limit(3)
             ->get();
         $posts = PostCollection::fromArray($data->toArray(), ['tags:f' => ['tagType:f', 'posts'], 'comments'], true);
