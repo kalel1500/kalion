@@ -223,7 +223,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         }
         $relationData = $this->originalArray[$relationName];
 
-        $ref        = new ReflectionClass(static::class);
+        $ref        = new ReflectionClass(static::class); // REFLECTION - delete
         $attributes = $ref->getMethod($first)->getAttributes(RelationOf::class);
 
         if (empty($attributes)) {

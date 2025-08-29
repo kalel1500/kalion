@@ -57,7 +57,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
     protected static function resolveItemType(): string
     {
-        $ref = new ReflectionClass(static::class);
+        $ref = new ReflectionClass(static::class); // REFLECTION - once
 
         // Opción 1: Atributo #[CollectionOf(SomeClass::class)]
         $attributes = $ref->getAttributes(CollectionOf::class);
@@ -754,7 +754,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $collectionItem->$pluckField();
             }
 
-            $itemClass = new ReflectionClass($collectionItem);
+            $itemClass = new ReflectionClass($collectionItem); // REFLECTION - delete
             if ($itemClass->hasProperty($pluckField) && $itemClass->getProperty($pluckField)->isPublic()) {
                 return $collectionItem->$pluckField;
             }

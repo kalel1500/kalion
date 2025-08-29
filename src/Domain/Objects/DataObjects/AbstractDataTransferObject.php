@@ -77,7 +77,7 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
 
         // Cacheamos ya los parámetros procesados
         if (!isset(self::$reflectionCache[$className])) {
-            $reflection  = new ReflectionClass($className);
+            $reflection  = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $reflection->getConstructor();
 
             if (!$constructor) {
