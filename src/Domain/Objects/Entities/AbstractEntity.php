@@ -25,6 +25,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     protected bool|string|null $isFull;
     protected array            $originalArray;
     protected array            $relations      = [];
+    protected array            $computed       = [];
 
     abstract protected static function make(array $data): static;
 
@@ -127,6 +128,12 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
             if (!in_array($key, $fields)) unset($arrayValues[$key]);
         }
         return $arrayValues;
+    }
+
+    protected function computed($value)
+    {
+        $name = debug_backtrace()[1]['function'];
+        return $this->computed[$name] ??= $value;
     }
 
     public function with(string|array|null $relations): static

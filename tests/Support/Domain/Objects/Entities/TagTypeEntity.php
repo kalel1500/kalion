@@ -14,8 +14,6 @@ use Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities\Collections\TagCol
 
 final class TagTypeEntity extends AbstractEntity
 {
-    private readonly string $slug;
-
     public function __construct(
         public readonly ModelId|ModelIdNull $id,
         public readonly ModelString         $name,
@@ -58,6 +56,6 @@ final class TagTypeEntity extends AbstractEntity
 
     public function slug(): string
     {
-        return $this->slug ??= Str::slug($this->name);
+        return $this->computed(Str::slug($this->name));
     }
 }
