@@ -6,6 +6,9 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
 
 use Illuminate\Contracts\Support\Jsonable;
 use ReflectionClass;
+use ReflectionIntersectionType;
+use ReflectionNamedType;
+use ReflectionUnionType;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\AppException;
@@ -88,32 +91,39 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
         $args       = [];
 
         foreach ($parameters as $param) {
-            $name = $param->getName();
-            $type = $param->getType();
+            /** @var string $paramName */
+            /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $paramType */
+            $paramName = $param->getName();
+            $paramType = $param->getType();
 
-            if (!$type) {
-                throw new AppException("The \$$name parameter in " . static::class . " does not have a defined type.");
+            if (is_null($paramType)) {
+                throw new AppException("The \$$paramName parameter in " . static::class . " does not have a defined type.");
             }
 
-            $typeName = $type->getName();
-            $value    = $data[$name] ?? null;
+            if ($paramType instanceof ReflectionIntersectionType) {
+                throw new AppException("Reflection cannot be used on DTOs when the constructor uses IntersectionTypes.");
+            }
 
-            $typeIsClass        = class_exists($typeName);
-            $valueIsNotInstance = !($value instanceof $typeName);
+            if ($paramType instanceof ReflectionUnionType) {
+                throw new AppException("Reflection cannot be used on DTOs when the constructor uses UnionTypes.");
+            }
 
-            if ($typeIsClass && $valueIsNotInstance) {
-                // Si el tipo es una clase y el valor NO es una instancia, creamos la instancia de la clase
-                $method = match (true) {
-                    is_a($typeName, \BackedEnum::class, true)         => 'from',
-                    is_a($typeName, AbstractValueObject::class, true) => 'new',
-                    default                                           => 'fromArray',
-                };
+            $typeName = $paramType->getName();
+            $value    = $data[$paramName] ?? null;
 
-                $args[] = $typeName::$method($value);
-            } else {
-                // Si no, pasamos el valor directamente
+            // Si el valor es un primitivo o ya recibimos la instancia de la clase, pasamos el valor directamente
+            if (! class_exists($typeName) || ($value instanceof $typeName)) {
                 $args[] = $value;
+                continue;
             }
+
+            $method = match (true) {
+                is_a($typeName, class: \BackedEnum::class, allow_string: true)          => 'from',
+                is_a($typeName, class: AbstractValueObject::class, allow_string: true)  => 'new',
+                default                                                                 => 'fromArray',
+            };
+
+            $args[] = $typeName::$method($value);
         }
 
         return new static(...$args);
