@@ -18,6 +18,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 {
     use ParsesRelationFlags;
 
+    protected static array     $computedCache = [];
     public static ?array       $databaseFields = null;
     protected string           $primaryKey     = 'id';
     protected bool             $incrementing   = true;
@@ -60,27 +61,41 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     protected function computedProps(?string $context = null): array
     {
+        $className = static::class;
+
+        // Cachear los métodos con #[Computed]
+        if (!isset(self::$computedCache[$className])) {
+            $ref    = new ReflectionClass($this); // REFLECTION - cached
+            $cached = [];
+
+            foreach ($ref->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+                $attrs = $method->getAttributes(Computed::class);
+
+                if (empty($attrs)) {
+                    continue;
+                }
+
+                /** @var Computed $attr */
+                $attr = $attrs[0]->newInstance();
+
+                $cached[] = [
+                    'name'     => $method->getName(),
+                    'contexts' => $attr->contexts,
+                ];
+            }
+
+            self::$computedCache[$className] = $cached;
+        }
+
         $result = [];
-        $ref = new ReflectionClass($this);
 
-        foreach ($ref->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-            $attrs = $method->getAttributes(Computed::class);
-
-            if (empty($attrs)) {
+        foreach (self::$computedCache[$className] as $meta) {
+            // Contexto no coincide → saltar
+            if ($context && !empty($meta['contexts']) && !in_array($context, $meta['contexts'], true)) {
                 continue;
             }
 
-            /** @var Computed $attr */
-            $attr = $attrs[0]->newInstance();
-
-            // Si hay contextos definidos y no coincide → saltar
-            if ($context && !empty($attr->contexts) && !in_array($context, $attr->contexts, true)) {
-                continue;
-            }
-
-            $name = $method->getName();
-
-            // cachear y ejecutar
+            $name = $meta['name'];
             $result[$name] = $this->{$name}();
         }
 
