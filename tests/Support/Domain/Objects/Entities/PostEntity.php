@@ -72,6 +72,6 @@ final class PostEntity extends AbstractEntity
     #[Computed]
     public function number_comments(): int
     {
-        return $this->computed($this->comments()->count());
+        return $this->computed(fn() => $this->comments()->count());
     }
 }

@@ -50,6 +50,6 @@ final class TagTypeEntity extends AbstractEntity
     #[Computed]
     public function slug(): string
     {
-        return $this->computed(Str::slug($this->name));
+        return $this->computed(fn() => Str::slug($this->name));
     }
 }

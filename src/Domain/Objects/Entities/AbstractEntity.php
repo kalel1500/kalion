@@ -170,10 +170,10 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         return $arrayValues;
     }
 
-    protected function computed($value)
+    protected function computed(callable $value)
     {
         $name = debug_backtrace()[1]['function'];
-        return $this->computed[$name] ??= $value;
+        return $this->computed[$name] ??= $value();
     }
 
     public function with(string|array|null $relations): static
