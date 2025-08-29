@@ -28,9 +28,13 @@ class UserEntity extends BaseUserEntity
 
     protected static function make(array $data): static
     {
-        return parent::makeWith($data, [
-            ModelStringNull::new($data['other_field'] ?? 'prueba')
-        ]);
+        return new static(
+            ModelId::from($data['id']),
+            ModelString::new($data['name']),
+            ModelString::new($data['email']),
+            ModelStringNull::new($data['email_verified_at']),
+            ModelStringNull::new($data['other_field'] ?? 'prueba'),
+        );
     }
 
     protected function props(): array

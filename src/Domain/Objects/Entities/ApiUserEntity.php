@@ -29,15 +29,6 @@ class ApiUserEntity extends AbstractEntity
         );
     }
 
-    protected static function makeWith(array $data, array $newFields): static
-    {
-        return new static(
-            ModelId::from($data['id']),
-            ModelString::new($data['name']),
-            ...$newFields
-        );
-    }
-
     protected function props(): array
     {
         return [
