@@ -207,7 +207,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         }
     }
 
-    public function getRelation()
+    protected function getRelation()
     {
         $name = debug_backtrace()[1]['function'];
         if (!array_key_exists($name, $this->relations)) {
