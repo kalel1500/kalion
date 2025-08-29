@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\Collections;
 
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionAny;
 
-final class CollectionAny extends AbstractCollectionAny
+class CollectionAny extends AbstractCollectionAny
 {
     public function __construct($items = null)
     {

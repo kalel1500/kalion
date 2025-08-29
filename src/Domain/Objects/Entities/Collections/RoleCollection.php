@@ -9,6 +9,6 @@ use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionE
 use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 
 #[CollectionOf(RoleEntity::class)]
-final class RoleCollection extends AbstractCollectionEntity
+class RoleCollection extends AbstractCollectionEntity
 {
 }

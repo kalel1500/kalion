@@ -9,6 +9,6 @@ use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionE
 use Thehouseofel\Kalion\Domain\Objects\Entities\PermissionEntity;
 
 #[CollectionOf(PermissionEntity::class)]
-final class PermissionCollection extends AbstractCollectionEntity
+class PermissionCollection extends AbstractCollectionEntity
 {
 }

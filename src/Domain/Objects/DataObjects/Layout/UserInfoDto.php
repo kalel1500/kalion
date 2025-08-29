@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
 
-final class UserInfoDto extends AbstractDataTransferObject
+class UserInfoDto extends AbstractDataTransferObject
 {
     public function __construct(
         public readonly string $name,
