@@ -20,8 +20,9 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     protected static array     $computedCache = [];
     public static ?array       $databaseFields = null;
-    protected string           $primaryKey     = 'id';
-    protected bool             $incrementing   = true;
+    protected static string    $primaryKey     = 'id';
+    protected static bool      $incrementing   = true;
+
     protected ?array           $with           = null;
     protected ?array           $withFull       = null;
     protected bool|string|null $isFull;
@@ -137,7 +138,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         if (!is_null(static::$databaseFields)) {
             return array_keep($array, static::$databaseFields);
         }
-        if ($this->incrementing && !$keepId) unset($array[$this->primaryKey]);
+        if (static::$incrementing && !$keepId) unset($array[static::$primaryKey]);
         unset($array['created_at']);
         unset($array['updated_at']);
         return $array;
