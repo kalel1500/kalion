@@ -18,7 +18,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 {
     use ParsesRelationFlags;
 
-    protected static array     $computedCache = [];
+    private static array       $computedCache  = [];
     protected static ?array    $databaseFields = null;
     protected static string    $primaryKey     = 'id';
     protected static bool      $incrementing   = true;
