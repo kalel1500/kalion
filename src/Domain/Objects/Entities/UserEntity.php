@@ -33,14 +33,4 @@ class UserEntity extends AbstractEntity
             ModelStringNull::new($data['email_verified_at']),
         );
     }
-
-    protected function props(): array
-    {
-        return [
-            'id'                => $this->id->value(),
-            'name'              => $this->name->value(),
-            'email'             => $this->email->value(),
-            'email_verified_at' => $this->email_verified_at->value(),
-        ];
-    }
 }

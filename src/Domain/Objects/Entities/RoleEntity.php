@@ -32,16 +32,6 @@ class RoleEntity extends AbstractEntity
         );
     }
 
-    protected function props(): array
-    {
-        return [
-            'id'              => $this->id->value(),
-            'name'            => $this->name->value(),
-            'all_permissions' => $this->all_permissions->value(),
-            'is_query'        => $this->is_query->value(),
-        ];
-    }
-
     #[RelationOf(PermissionCollection::class)]
     public function permissions(): PermissionCollection
     {

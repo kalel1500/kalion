@@ -38,17 +38,4 @@ class FailedJobEntity extends AbstractEntity
             ModelString::new($data['failed_at'])
         );
     }
-
-    protected function props(): array
-    {
-        return [
-            'id'            => $this->id->value(),
-            'uuid'          => $this->uuid->value(),
-            'connection'    => $this->connection->value(),
-            'queue'         => $this->queue->value(),
-            'payload'       => $this->payload->value(),
-            'exception'     => $this->exception->value(),
-            'failed_at'     => $this->failed_at->value(),
-        ];
-    }
 }

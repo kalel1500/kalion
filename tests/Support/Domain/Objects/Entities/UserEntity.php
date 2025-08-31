@@ -37,14 +37,6 @@ class UserEntity extends BaseUserEntity
         );
     }
 
-    protected function props(): array
-    {
-        return [
-            ...parent::props(),
-            'other_field' => $this->other_field->value(),
-        ];
-    }
-
     #[RelationOf(PostCollection::class)]
     public function posts(): PostCollection
     {
