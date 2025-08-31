@@ -1,6 +1,58 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.31.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.32.0-beta.0...master)
+
+## [v0.32.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.31.0-beta.0...v0.32.0-beta.0) - 2025-09-05
+
+### Added
+
+* Se han añadido los primeros tests del paquete:
+  * Nuevo `TestCase` base para los tests de integración con migraciones y seeders que se ejecutan solo una vez.
+  * Nuevo `phpunit.xml` con la info de los tests y la variable de entorno `FRESH_DATABASE`.
+  * Nuevo trait `KalionAssertions` con el método `assertArrayStructure` para comprobar la estructura de un array.
+  * Nuevo directorio `tests/Support` con todos los archivos necesarios para realizar los tests.
+  * Nuevo test `test_post_relations()` para probar las relaciones de las entidades del post (usando el nuevo `GetPostDataUseCase`).
+  * Nuevo `server.php` para poder levantar un servidor en local y hacer pruebas.
+
+### Changed
+
+* Se ha cacheado toda la reflexión en el método `make()` de la clase `AbstractDataTransferObject` (no solo los parámetros)
+* (breaking) Gran cambio en las entidades:
+  * Métodos de las entidades renombrados `AbstractEntity`:
+    * `toArrayProperties()` -> `props()`
+    * `createFromArray()` -> `make()` (también en `AbstractDataTransferObject`)
+  * Métodos `fromChild` eliminados de entidades heredables y usar los métodos normales en las hijas. De esta forma cualquier entidad es heredable sin tener que definir los métodos:
+    * `createFromChildArray()`
+    * `toArrayPropertiesFromChild()`
+  * Se ha modificado la visibilidad del método `getRelation()` de `public` a `protected`
+  * Se ha movido la gestion del cacheo de las propiedades calculadas a la entidad base para no tener que crear propiedades privadas readonly en cada entidad. Ahora se usa el nuevo método `computed()` dentro del método de cada propiedad pasándole un callback que solo se ejecuta la primera vez qeu se llama al método. El método `computed()` guarda los valores en forma de array en la nueva propiedad `$computed`.
+  * Se ha eliminado el método `toArrayCalculatedProps()` (y la necesidad de ir creando varios métodos según las necesidades de cada vista). En su lugar ahora se utiliza el nuevo atributo `#[Computed]` en las propiedades calculadas. Se le pueden pasar argumentos con los nombres que antes se hubieran usado para crear nuevos métodos. Ej: `#[Computed('forDashboard', 'forApi')]`
+  * Hacer estáticas las propiedades `$incrementing` y `$primaryKey` en la clase `AbstractEntity`
+  * Se ha modificado la visibilidad de la propiedad `$databaseFields` de la clase `AbstractEntity` de `public` a `protected`
+* (breaking) Se ha simplificado la gestion de las relaciones en el método `toAny()` de la clase `AbstractCollectionBase` 
+  * Eliminada clase `SubRelationDataDto`
+  * Eliminada clase `Relation`
+  * Parámetro `$pluckField` eliminado del método privado `toAny()` ya que dentro ya no se llama al método `pluck()`
+  * Toda la lógica del método `Relation::getNextRelation()` se ha movido dentro del método `AbstractCollectionBase::pluck()`
+  * El método `getInfoFromRelationWithFlag()` de la clase `Relation` se ha movido al nuevo trait `ParsesRelationFlags` para poder usarlo tanto en la entidad como en la colección sin tener una clase dedicada
+* (refactor) Mejorada la documentación del método `AbstractModelId::from()`
+* (refactor) Usar parámetros nombrados al instanciar la clase `PaginationDataDto`
+* (breaking) Firma del método `AbstractCollectionEntity::fromArray()` modificada. Se ha eliminado el tipado del parámetro `$data` y el tipado de retorno del método. Se ha añadido la documentación del método con un retorno condicional (con `@template`).
+* (refactor) Se ha ampliado la documentación del método `AbstractEntity::fromArray()`
+
+### Removed
+
+* (breaking) Se ha simplificado la gestion de las relaciones
+  * Se ha eliminado la clase `SubRelationDataDto`
+  * Se ha eliminado la clase `Relation`
+* (refactor) Se ha eliminado el método privado `fromData()` y movido el código al método `fromArray()` en la clase `AbstractCollectionEntity`
+* (breaking) Se ha eliminado a la funcionalidad `fromEloquent` de las entidades y colecciones por lo que ahora en los repositorios es obligatorio usar el método `::fromArray()`. Se han eliminado los métodos `AbstractCollectionEntity::fromEloquent()` y `AbstractEntity::fromObject()`
+* (breaking) Se ha eliminado a la funcionalidad `setRelation` de las entidades por lo que ahora es obligatorio usar el atributo `RelationOf`. Se ha eliminado el método `setRelation()`
+
+### Fixed
+
+* (fix) Prevenir errores en el método `make()` (antiguo `createFromArray`) de la clase `AbstractDataTransferObject` cuando el constructor del DTO usa unión o intersección de tipos
+* (fix) Prevenir error si algún método de relación no tiene definido el atributo `#[RelationOf(...)]`
 
 ## [v0.31.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.30.0-beta.0...v0.31.0-beta.0) - 2025-08-17
 
