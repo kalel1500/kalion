@@ -52,7 +52,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     abstract protected function props(): array;
 
-    protected function computedProps(?string $context = null): array
+    private function computedProps(?string $context = null): array
     {
         $className = static::class;
 
