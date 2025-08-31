@@ -28,12 +28,4 @@ class ApiUserEntity extends AbstractEntity
             ModelString::new($data['name']),
         );
     }
-
-    protected function props(): array
-    {
-        return [
-            'id'      => $this->id->value(),
-            'name'    => $this->name->value(),
-        ];
-    }
 }

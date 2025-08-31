@@ -38,16 +38,4 @@ class StatusEntity extends AbstractEntity
             new ModelStringNull($data['icon'])
         );
     }
-
-    protected function props(): array
-    {
-        return [
-            'id'        => $this->id->value(),
-            'name'      => $this->name->value(),
-            'finalized' => $this->finalized->value(),
-            'code'      => $this->code->value(),
-            'type'      => $this->type->value(),
-            'icon'      => $this->icon->value(),
-        ];
-    }
 }

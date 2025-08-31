@@ -38,18 +38,6 @@ final class PostEntity extends AbstractEntity
         );
     }
 
-    protected function props(): array
-    {
-        return [
-            'id'         => $this->id->value(),
-            'title'      => $this->title->value(),
-            'content'    => $this->content->value(),
-            'slug'       => $this->slug->value(),
-            'user_id'    => $this->user_id->value(),
-            'created_at' => $this->created_at->value(),
-        ];
-    }
-
     #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {

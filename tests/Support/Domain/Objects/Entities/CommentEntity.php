@@ -34,17 +34,6 @@ final class CommentEntity extends AbstractEntity
         );
     }
 
-    protected function props(): array
-    {
-        return [
-            'id'         => $this->id->value(),
-            'content'    => $this->content->value(),
-            'user_id'    => $this->user_id->value(),
-            'post_id'    => $this->post_id->value(),
-            'comment_id' => $this->comment_id->value(),
-        ];
-    }
-
     #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {

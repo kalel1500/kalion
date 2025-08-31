@@ -40,17 +40,4 @@ class JobEntity extends AbstractEntity
             ModelString::new($data['created_at'])
         );
     }
-
-    protected function props(): array
-    {
-        return [
-            'id'           => $this->id->value(),
-            'queue'        => $this->queue->value(),
-            'payload'      => $this->payload->value(),
-            'attempts'     => $this->attempts->value(),
-            'reserved_at'  => $this->reserved_at->value(),
-            'available_at' => $this->available_at->value(),
-            'created_at'   => $this->created_at->value(),
-        ];
-    }
 }

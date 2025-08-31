@@ -32,15 +32,6 @@ final class TagTypeEntity extends AbstractEntity
         );
     }
 
-    protected function props(): array
-    {
-        return [
-            'id'   => $this->id->value(),
-            'name' => $this->name->value(),
-            'code' => $this->code->value(),
-        ];
-    }
-
     #[RelationOf(TagCollection::class)]
     public function tags(): TagCollection
     {
