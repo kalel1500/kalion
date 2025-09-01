@@ -19,14 +19,6 @@ class PermissionEntity extends AbstractEntity
     {
     }
 
-    protected static function make(array $data): static
-    {
-        return new static(
-            ModelId::from($data['id'] ?? null),
-            ModelString::new($data['name']),
-        );
-    }
-
     #[RelationOf(RoleCollection::class)]
     public function roles(): RoleCollection
     {

@@ -23,17 +23,6 @@ final class CommentEntity extends AbstractEntity
     {
     }
 
-    protected static function make(array $data): static
-    {
-        return new static(
-            ModelId::from($data['id'] ?? null),
-            ModelString::new($data['content']),
-            ModelId::new($data['user_id']),
-            ModelIdNull::new($data['post_id']),
-            ModelIdNull::new($data['comment_id']),
-        );
-    }
-
     #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {

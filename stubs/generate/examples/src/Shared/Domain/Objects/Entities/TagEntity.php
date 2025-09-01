@@ -22,16 +22,6 @@ final class TagEntity extends AbstractEntity
     {
     }
 
-    protected static function make(array $data): static
-    {
-        return new static(
-            ModelId::from($data['id'] ?? null),
-            ModelString::new($data['name']),
-            ModelString::new($data['code']),
-            ModelId::new($data['tag_type_id']),
-        );
-    }
-
     #[RelationOf(PostCollection::class)]
     public function posts(): PostCollection
     {

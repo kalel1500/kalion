@@ -21,21 +21,4 @@ class FailedJobEntity extends AbstractEntity
     )
     {
     }
-
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /*---------------------------------------------- Create Functions -----------------------------------------------*/
-
-    protected static function make(array $data): static
-    {
-        return new static(
-            ModelId::from($data['id'] ?? null),
-            ModelString::new($data['uuid']),
-            ModelString::new($data['connection']),
-            ModelString::new($data['queue']),
-            ModelString::new($data['payload']),
-            ModelString::new($data['exception']),
-            ModelString::new($data['failed_at'])
-        );
-    }
 }

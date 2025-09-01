@@ -23,21 +23,4 @@ class JobEntity extends AbstractEntity
     )
     {
     }
-
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /*---------------------------------------------- Create Functions -----------------------------------------------*/
-
-    protected static function make(array $data): static
-    {
-        return new static(
-            ModelId::from($data['id'] ?? null),
-            ModelString::new($data['queue']),
-            ModelString::new($data['payload']),
-            ModelInt::new($data['attempts']),
-            ModelIntNull::new($data['reserved_at'] ?? null),
-            ModelInt::new($data['available_at']),
-            ModelString::new($data['created_at'])
-        );
-    }
 }

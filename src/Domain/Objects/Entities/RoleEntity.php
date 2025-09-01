@@ -22,16 +22,6 @@ class RoleEntity extends AbstractEntity
     {
     }
 
-    protected static function make(array $data): static
-    {
-        return new static(
-            ModelId::from($data['id'] ?? null),
-            ModelString::new($data['name']),
-            ModelBool::new($data['all_permissions']),
-            ModelBool::new($data['is_query'])
-        );
-    }
-
     #[RelationOf(PermissionCollection::class)]
     public function permissions(): PermissionCollection
     {
