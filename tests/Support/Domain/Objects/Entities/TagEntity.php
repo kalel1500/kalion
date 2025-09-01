@@ -23,18 +23,6 @@ final class TagEntity extends AbstractEntity
     {
     }
 
-    #[RelationOf(PostCollection::class)]
-    public function posts(): PostCollection
-    {
-        return $this->getRelation();
-    }
-
-    #[RelationOf(TagTypeEntity::class)]
-    public function tagType(): ?TagTypeEntity
-    {
-        return $this->getRelation();
-    }
-
     #[Computed]
     public function type_name(): string
     {
@@ -45,5 +33,18 @@ final class TagEntity extends AbstractEntity
     public function type_slug(): string
     {
         return $this->computed(fn() => $this->tagType()->slug());
+    }
+
+
+    #[RelationOf(PostCollection::class)]
+    public function posts(): PostCollection
+    {
+        return $this->getRelation();
+    }
+
+    #[RelationOf(TagTypeEntity::class)]
+    public function tagType(): ?TagTypeEntity
+    {
+        return $this->getRelation();
     }
 }

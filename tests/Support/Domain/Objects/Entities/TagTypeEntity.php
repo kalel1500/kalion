@@ -23,15 +23,15 @@ final class TagTypeEntity extends AbstractEntity
     {
     }
 
-    #[RelationOf(TagCollection::class)]
-    public function tags(): TagCollection
-    {
-        return $this->getRelation();
-    }
-
     #[Computed]
     public function slug(): string
     {
         return $this->computed(fn() => Str::slug($this->name));
+    }
+
+    #[RelationOf(TagCollection::class)]
+    public function tags(): TagCollection
+    {
+        return $this->getRelation();
     }
 }
