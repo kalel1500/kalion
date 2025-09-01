@@ -26,17 +26,6 @@ class UserEntity extends BaseUserEntity
         parent::__construct($id, $name, $email, $email_verified_at);
     }
 
-    protected static function make(array $data): static
-    {
-        return new static(
-            ModelId::from($data['id']),
-            ModelString::new($data['name']),
-            ModelString::new($data['email']),
-            ModelStringNull::new($data['email_verified_at']),
-            ModelStringNull::new($data['other_field'] ?? 'prueba'),
-        );
-    }
-
     #[RelationOf(PostCollection::class)]
     public function posts(): PostCollection
     {

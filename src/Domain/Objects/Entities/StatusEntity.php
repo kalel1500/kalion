@@ -22,20 +22,4 @@ class StatusEntity extends AbstractEntity
     )
     {
     }
-
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /*---------------------------------------------- Create Functions -----------------------------------------------*/
-
-    protected static function make(array $data): static
-    {
-        return new static(
-            ModelId::from($data['id'] ?? null),
-            new ModelString($data['name']),
-            new ModelBool($data['finalized']),
-            new ModelString($data['code']),
-            new ModelString($data['type']),
-            new ModelStringNull($data['icon'])
-        );
-    }
 }

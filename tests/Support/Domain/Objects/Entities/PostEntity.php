@@ -27,18 +27,6 @@ final class PostEntity extends AbstractEntity
     {
     }
 
-    protected static function make(array $data): static
-    {
-        return new static(
-            ModelId::from($data['id'] ?? null),
-            ModelString::new($data['title']),
-            ModelString::new($data['content']),
-            ModelString::new($data['slug']),
-            ModelId::new($data['user_id']),
-            ModelTimestampNull::new($data['created_at']),
-        );
-    }
-
     #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {
