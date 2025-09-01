@@ -6,6 +6,8 @@ namespace Thehouseofel\Kalion\Tests\Support\Application;
 
 use Thehouseofel\Kalion\Tests\Support\Domain\Exceptions\TestException;
 use Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities\Collections\PostCollection;
+use Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities\Collections\TagCollection;
+use Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities\TagEntity;
 use Thehouseofel\Kalion\Tests\Support\Models\Post;
 
 final class GetPostDataUseCase
@@ -26,17 +28,41 @@ final class GetPostDataUseCase
         return $posts;
     }
 
-    public function getPluckData()
+    public function getPluckData(): bool
     {
-
         $data = Post::query()
-            ->with(['tags.tagType', 'tags.posts', 'comments' => fn($q) => $q->where('id', 99999)])
+            ->with(['tags.tagType', 'tags.posts', 'comments'])
             ->limit(3)
             ->get();
         $posts = PostCollection::fromArray($data->toArray(), ['tags:f' => ['tagType:f', 'posts'], 'comments'], true);
         // $posts = PostCollection::fromArray($data->toArray(), ['tags:f.tagType:f', 'tags.posts'], 'comments);
 
-        $test = $posts->pluck('number_comments');
-        dd($test);
+        $numberComments = $posts->pluck('number_comments');
+
+        if ($numberComments->countInt()->isLessThan(1)) {
+            throw TestException::emptyCollection('$numberComments');
+        }
+
+        $tags = $posts->pluck('tags')->collapse()->toCollection(TagCollection::class);
+
+        $tagTypes = $tags->pluck('tagType')->toArray();
+
+        if (!isset($tagTypes[0]['slug'])) {
+            throw new TestException('No se ha encontrado la key "slug" en el array de $tagTypes');
+        }
+
+        $tagTypes = $tags->pluck('type_slug')->toArray();
+
+        $typeSlugs = [];
+        foreach ($tags as $tag) {
+            /** @var TagEntity $tag */
+            $typeSlugs[] = $tag->tagType()->slug();
+        }
+
+        if ($tagTypes != $typeSlugs) {
+            throw new TestException('Los tipos de tags son diferentes entre el pluck y la relacion');
+        }
+
+        return true;
     }
 }
