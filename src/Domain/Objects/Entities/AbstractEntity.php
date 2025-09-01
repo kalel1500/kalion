@@ -9,6 +9,7 @@ use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Attributes\Computed;
 use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
+use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
@@ -18,6 +19,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 {
     use ParsesRelationFlags;
 
+    private static array       $makeCache      = [];
     private static array       $propsCache     = [];
     private static array       $computedCache  = [];
     protected static ?array    $databaseFields = null;
@@ -31,7 +33,106 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     protected array            $relations      = [];
     protected array            $computed       = [];
 
-    abstract protected static function make(array $data): static;
+    protected static function make(array $data): static
+    {
+        $className = static::class;
+
+        if (!isset(self::$makeCache[$className])) {
+            $ref  = new ReflectionClass($className);
+            $constructor = $ref->getConstructor();
+
+            if (!$constructor) {
+                throw ReflectionException::constructorMissing($className);
+            }
+
+            $params = [];
+
+            foreach ($constructor->getParameters() as $param) {
+                $name = $param->getName();
+                $type = $param->getType();
+
+                // Intersection type → no permitido
+                if ($type instanceof \ReflectionIntersectionType) {
+                    throw ReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
+                }
+
+                // Union type (ej. ModelId|ModelIdNull)
+                if ($type instanceof \ReflectionUnionType) {
+                    $classNames = array_map(
+                        callback: fn($t) => $t->getName(),
+                        array   : array_filter(
+                            array   : $type->getTypes(),
+                            callback: fn($t) => $t instanceof \ReflectionNamedType && !$t->isBuiltin()
+                        )
+                    );
+
+                    $modelIdClass = null;
+                    foreach ($classNames as $class) {
+                        if (is_class_model_id($class) && !str_ends_with($class, 'Null')) {
+                            $modelIdClass = $class;
+                            break;
+                        }
+                    }
+
+                    $params[] = [
+                        'name'      => $name,
+                        'class'     => $modelIdClass, // null si no aplica
+                        'isModelId' => (bool) $modelIdClass,
+                    ];
+                    continue;
+                }
+
+                // Sin tipo, tipo primitivo (int, string, bool, etc.) → valor directo
+                if ($type === null || ($type instanceof \ReflectionNamedType && $type->isBuiltin())) {
+                    $params[] = [
+                        'name'      => $name,
+                        'class'     => null,
+                        'isModelId' => false,
+                    ];
+                    continue;
+                }
+
+                // Named type (Class)
+                if ($type instanceof \ReflectionNamedType) {
+                    $class = $type->getName();
+                    $params[] = [
+                        'name'      => $name,
+                        'class'     => $class,
+                        'isModelId' => false, // para single class → usamos ::new || is_class_model_id($class)
+                    ];
+                    continue;
+                }
+
+                // Cualquier otro caso raro
+                $params[] = [
+                    'name'      => $name,
+                    'class'     => null,
+                    'isModelId' => false,
+                ];
+            }
+
+            self::$makeCache[$className] = $params;
+        }
+
+        $args = [];
+
+        foreach (self::$makeCache[$className] as $meta) {
+            $paramName = $meta['name'];
+            $class     = $meta['class'];
+            $isModelId = $meta['isModelId'];
+            $value     = $data[$paramName] ?? null;
+
+            $value = match (true) {
+                $isModelId || enum_exists($class)                            => $class::from($value),
+                class_exists($class) && method_exists($class, method: 'new') => $class::new($value),
+                default                                                      => $value,
+            };
+
+            $args[] = $value;
+        }
+
+        return new static(...$args);
+    }
 
     /**
      * @template T of array|null
