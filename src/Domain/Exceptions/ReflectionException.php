@@ -17,6 +17,16 @@ class ReflectionException extends KalionRuntimeException
 
     public static function intersectionTypeNotSupported(string $param, string $class, string $method): static
     {
-        return new static("The \$$param parameter in $class::$method uses intersection, not supported.");
+        return new static("Intersection types are not supported for the $$param parameter in $class::$method().");
+    }
+
+    public static function unionTypeNotSupported(string $param, string $class, string $method): static
+    {
+        return new static("Union types are not supported for the $$param parameter in $class::$method().");
+    }
+
+    public static function typeRequiredOnParam(string $param, string $class, string $method): static
+    {
+        return new static("The \$$param parameter in $class::$method() has no declared type");
     }
 }
