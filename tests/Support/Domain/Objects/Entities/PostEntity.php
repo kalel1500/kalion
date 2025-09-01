@@ -27,6 +27,13 @@ final class PostEntity extends AbstractEntity
     {
     }
 
+    #[Computed]
+    public function number_comments(): int
+    {
+        return $this->computed(fn() => $this->comments()->count());
+    }
+
+
     #[RelationOf(UserEntity::class)]
     public function user(): ?UserEntity
     {
@@ -43,11 +50,5 @@ final class PostEntity extends AbstractEntity
     public function tags(): TagCollection
     {
         return $this->getRelation();
-    }
-
-    #[Computed]
-    public function number_comments(): int
-    {
-        return $this->computed(fn() => $this->comments()->count());
     }
 }
