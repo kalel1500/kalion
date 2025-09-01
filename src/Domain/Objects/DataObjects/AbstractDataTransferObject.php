@@ -7,11 +7,10 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
 use Illuminate\Contracts\Support\Jsonable;
 use ReflectionClass;
 use ReflectionIntersectionType;
-use ReflectionNamedType;
 use ReflectionUnionType;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
-use Thehouseofel\Kalion\Domain\Exceptions\AppException;
+use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
@@ -81,7 +80,7 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
             $constructor = $reflection->getConstructor();
 
             if (!$constructor) {
-                throw new AppException("The " . static::class . " class has no constructor.");
+                throw ReflectionException::constructorMissing(static::class);
             }
 
             $paramsMeta = [];
@@ -91,15 +90,15 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
                 $paramType = $param->getType();
 
                 if (is_null($paramType)) {
-                    throw new AppException("The \$$paramName parameter in $className does not have a defined type.");
+                    throw ReflectionException::typeRequiredOnParam($paramName, $className, '__construct');
                 }
 
                 if ($paramType instanceof ReflectionIntersectionType) {
-                    throw new AppException("Reflection cannot be used on DTOs when the constructor uses IntersectionTypes.");
+                    throw ReflectionException::intersectionTypeNotSupported($paramName, $className, '__construct');
                 }
 
                 if ($paramType instanceof ReflectionUnionType) {
-                    throw new AppException("Union types are not supported in AbstractDataTransferObject. Please override make() in your DTO to handle them.");
+                    throw ReflectionException::unionTypeNotSupported($paramName, $className, '__construct');
                 }
 
                 $typeName = $paramType->getName();
