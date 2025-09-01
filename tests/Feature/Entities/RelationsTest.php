@@ -38,4 +38,11 @@ class RelationsTest extends TestCase
             ]
         ], $posts->toArray());
     }
+
+    public function test_post_pluck()
+    {
+        $useCase = new \Thehouseofel\Kalion\Tests\Support\Application\GetPostDataUseCase();
+        $pluck = $useCase->getPluckData();
+        $this->assertTrue($pluck);
+    }
 }
