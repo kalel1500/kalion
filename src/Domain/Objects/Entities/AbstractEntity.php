@@ -38,7 +38,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         $className = static::class;
 
         if (!isset(self::$makeCache[$className])) {
-            $ref  = new ReflectionClass($className);
+            $ref  = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $ref->getConstructor();
 
             if (!$constructor) {

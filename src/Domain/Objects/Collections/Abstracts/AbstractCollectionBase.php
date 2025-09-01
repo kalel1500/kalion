@@ -32,6 +32,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 {
     use ParsesRelationFlags;
 
+    private static array $typeCache = [];
+
     /** @var null|string */
     protected const ITEM_TYPE = null;
 
@@ -57,20 +59,28 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
     protected static function resolveItemType(): string
     {
-        $ref = new ReflectionClass(static::class); // REFLECTION - once
+        $className = static::class;
 
-        // Opción 1: Atributo #[CollectionOf(SomeClass::class)]
-        $attributes = $ref->getAttributes(CollectionOf::class);
-        if (! empty($attributes)) {
-            return $attributes[0]->newInstance()->class;
+        if (! isset(self::$typeCache[$className])) {
+            $ref = new ReflectionClass(static::class); // REFLECTION - cached
+
+            // Opción 1: Atributo #[CollectionOf(SomeClass::class)]
+            $attributes = $ref->getAttributes(CollectionOf::class);
+            if (! empty($attributes)) {
+                self::$typeCache[$className] = $attributes[0]->newInstance()->class;
+                return self::$typeCache[$className];
+            }
+
+            // Opción 2: Constante ITEM_TYPE en la clase hija
+            if (! is_null(static::ITEM_TYPE)) {
+                self::$typeCache[$className] = static::ITEM_TYPE;
+                return self::$typeCache[$className];
+            }
+
+            throw new RequiredDefinitionException(sprintf('Collection %s must define either #[CollectionOf(...)] or const ITEM_TYPE', static::class));
         }
 
-        // Opción 2: Constante ITEM_TYPE en la clase hija
-        if (! is_null(static::ITEM_TYPE)) {
-            return static::ITEM_TYPE;
-        }
-
-        throw new RequiredDefinitionException(sprintf('Collection %s must define either #[CollectionOf(...)] or const ITEM_TYPE', static::class));
+        return self::$typeCache[$className];
     }
 
     private function validateItems(array $items): array
