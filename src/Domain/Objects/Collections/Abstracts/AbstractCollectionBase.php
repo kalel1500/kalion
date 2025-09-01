@@ -40,7 +40,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     protected $items;
 
     protected bool   $shouldSkipValidation;
-    protected string $resolvedItemType;
+    protected ?string $resolvedItemType;
 
     public function __construct(...$args)
     {
@@ -52,16 +52,21 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             default                                       => array_values($args),
         };
 
-        $this->shouldSkipValidation = $this instanceof AbstractCollectionAny;
         $this->resolvedItemType     = static::resolveItemType();
+        $this->shouldSkipValidation = is_null($this->resolvedItemType);
         $this->items                = $this->validateItems($items);
     }
 
-    protected static function resolveItemType(): string
+    protected static function resolveItemType(): ?string
     {
         $className = static::class;
 
         if (! isset(self::$typeCache[$className])) {
+            if (is_subclass_of($className, AbstractCollectionAny::class)) {
+                self::$typeCache[$className] = null;
+                return self::$typeCache[$className];
+            }
+
             $ref = new ReflectionClass(static::class); // REFLECTION - cached
 
             // Opción 1: Atributo #[CollectionOf(SomeClass::class)]
