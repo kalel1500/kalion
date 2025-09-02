@@ -58,7 +58,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         }
 
         /** @var AbstractEntity $entity */
-        $entity       = static::ITEM_TYPE;
+        $entity       = $this->resolvedItemType;
         $isExportable = (is_subclass_of($entity, ExportableEntity::class));
         if (!$isExportable) return $data;
 
@@ -162,7 +162,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
     public static function createFake(int $number, int $startIdOn = 1, array $overwriteParams = []): static
     {
         /** @var AbstractEntity $entity */
-        $entity = static::ITEM_TYPE;
+        $entity = static::resolveItemType();
         $array  = [];
         for ($i = 0; $i <= $number; $i++) {
             $newId                    = $startIdOn + $i;
