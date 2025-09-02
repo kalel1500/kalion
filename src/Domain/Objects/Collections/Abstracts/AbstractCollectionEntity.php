@@ -50,6 +50,9 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         ];
     }
 
+    /**
+     * @experimental This method is subject to change (signature and behavior). It may be removed in future versions.
+     */
     public function toArrayExport(callable $modifyData = null, string $exportMethodName = 'getExportColumns'): array
     {
         $data = $this->toArray();
@@ -159,6 +162,9 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         $this->paginationData = $paginationData;
     }
 
+    /**
+     * @experimental This method is subject to change (signature and behavior). It may be removed in future versions.
+     */
     public static function createFake(int $number, int $startIdOn = 1, array $overwriteParams = []): static
     {
         /** @var AbstractEntity $entity */
