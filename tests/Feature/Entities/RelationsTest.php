@@ -13,7 +13,7 @@ class RelationsTest extends TestCase
 
     public function test_post_relations()
     {
-        $useCase = new \Thehouseofel\Kalion\Tests\Support\Application\GetPostDataUseCase();
+        $useCase = new \Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Application\GetPostDataUseCase();
         $posts = $useCase->getPostsWithRelations();
 
         $this->assertArrayStructure([
@@ -41,7 +41,7 @@ class RelationsTest extends TestCase
 
     public function test_post_pluck()
     {
-        $useCase = new \Thehouseofel\Kalion\Tests\Support\Application\GetPostDataUseCase();
+        $useCase = new \Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Application\GetPostDataUseCase();
         $pluck = $useCase->getPluckData();
         $this->assertTrue($pluck);
     }

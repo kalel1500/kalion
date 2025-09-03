@@ -37,7 +37,7 @@ $app['config']->set('database.connections.testing', [
 $app->make('router')->get('/dd', function () {
 
     try {
-        $useCase = new \Thehouseofel\Kalion\Tests\Support\Application\GetPostDataUseCase();
+        $useCase = new \Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Application\GetPostDataUseCase();
         $posts = $useCase->getPostsWithRelations();
         $pluck = $useCase->getPluckData();
         dd($posts->toArray(), $pluck);

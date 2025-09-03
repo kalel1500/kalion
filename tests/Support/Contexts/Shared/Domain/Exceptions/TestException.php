@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Tests\Support\Domain\Exceptions;
+namespace Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Exceptions;
 
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionRuntimeException;
 

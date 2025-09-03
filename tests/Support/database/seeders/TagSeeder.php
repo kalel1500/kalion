@@ -3,8 +3,8 @@
 namespace Thehouseofel\Kalion\Tests\Support\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Thehouseofel\Kalion\Tests\Support\Models\Tag;
-use Thehouseofel\Kalion\Tests\Support\Models\TagType;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Infrastructure\Models\Tag;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Infrastructure\Models\TagType;
 
 class TagSeeder extends Seeder
 {
