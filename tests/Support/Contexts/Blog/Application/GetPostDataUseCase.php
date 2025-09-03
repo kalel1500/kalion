@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Tests\Support\Application;
+namespace Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Application;
 
-use Thehouseofel\Kalion\Tests\Support\Domain\Exceptions\TestException;
-use Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities\Collections\PostCollection;
-use Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities\Collections\TagCollection;
-use Thehouseofel\Kalion\Tests\Support\Domain\Objects\Entities\TagEntity;
-use Thehouseofel\Kalion\Tests\Support\Models\Post;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Exceptions\TestException;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\PostCollection;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\TagCollection;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\TagEntity;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Infrastructure\Models\Post;
 
 final class GetPostDataUseCase
 {

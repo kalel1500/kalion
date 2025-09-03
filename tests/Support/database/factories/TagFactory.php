@@ -3,8 +3,8 @@
 namespace Thehouseofel\Kalion\Tests\Support\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Thehouseofel\Kalion\Tests\Support\Models\Tag;
-use Thehouseofel\Kalion\Tests\Support\Models\TagType;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Infrastructure\Models\Tag;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Infrastructure\Models\TagType;
 
 /**
  * @extends Factory<Tag>

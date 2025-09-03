@@ -3,9 +3,9 @@
 namespace Thehouseofel\Kalion\Tests\Support\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Thehouseofel\Kalion\Tests\Support\Models\Post;
-use Thehouseofel\Kalion\Tests\Support\Models\Tag;
-use Thehouseofel\Kalion\Tests\Support\Models\User;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Infrastructure\Models\Post;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Infrastructure\Models\Tag;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Infrastructure\Models\User;
 
 class PostSeeder extends Seeder
 {
