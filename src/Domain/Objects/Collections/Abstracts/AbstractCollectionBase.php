@@ -131,8 +131,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     private function toAny(array $data): CollectionAny
     {
         return match (true) {
-            ! $this->isInstanceOfRelatable(), is_null($this->with) => CollectionAny::fromArray($data),
-            default                                                => CollectionAny::fromArray($data, $this->with, $this->isFull),
+            ! $this->isInstanceOfRelatable() => CollectionAny::fromArray($data),
+            default                          => CollectionAny::fromArray($data, $this->with, $this->isFull),
         };
     }
 
