@@ -803,7 +803,6 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         }
 
         $with = is_array($this->with) ? $this->with : [$this->with];
-        $isFull = $this->isFull;
         $relationName = $value;
 
         $newWith = null;
@@ -811,7 +810,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         foreach ($with as $key => $rel) {
 
             if (is_string($key)) {
-                [$key, $isFull] = $this->getInfoFromRelationWithFlag($key, $isFull);
+                [$key, $isFull] = $this->getInfoFromRelationWithFlag($key);
 
                 if ($key === $relationName) {
                     $newWith = $rel;
@@ -821,7 +820,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             } else {
                 $arrayRels = explode('.', $rel);
                 $firstRel = $arrayRels[0];
-                [$firstRel, $isFull] = $this->getInfoFromRelationWithFlag($firstRel, $isFull);
+                [$firstRel, $isFull] = $this->getInfoFromRelationWithFlag($firstRel);
 
                 if ($firstRel === $relationName) {
                     unset($arrayRels[0]);
