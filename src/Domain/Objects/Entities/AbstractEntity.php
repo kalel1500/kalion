@@ -326,9 +326,8 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
                 ? ($hasRelsAfterPoint ? [$relsAfterPoint => $rel] : $rel)
                 : ($hasRelsAfterPoint ? $relsAfterPoint : null);
 
-            $isFull    = null;
             $firstFull = $first;
-            [$first, $isFull] = $this->getInfoFromRelationWithFlag($first, $isFull);
+            [$first, $isFull] = $this->getInfoFromRelationWithFlag($first);
 
             $firstRelations[]     = $first;
             $firstRelationsFull[] = $firstFull;
