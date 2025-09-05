@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.32.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.32.1-beta.1...master)
+
+## [v0.32.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.32.1-beta.0...v0.32.1-beta.1) - 2025-09-05
+
+### Changed
+
+* Refactor interno sin impacto funcional: métodos de la clase `AbstractEntity` ordenados
 
 ## [v0.32.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.32.0-beta.0...v0.32.1-beta.0) - 2025-09-05
 
@@ -40,7 +46,7 @@
 * (fix) Se ha arreglado el método `toAny()` de la clase `AbstractCollectionBase`. Ahora se pasan los parámetros `$with` y `$isFull` al `CollectionAny::fromArray()` siempre que la colección actual extienda de `Relatable` aunque `$with` sea `null`
 * (fix) Se han arreglado los métodos `toArrayExport()` y `createFake()` de la clase `AbstractCollectionEntity`, ya que seguían usando la constante `ITEM_TYPE` que ya no se define siempre. Ahora se usan la propiedad `$resolvedItemType` el método `resolveItemType()` respectivamente.
 
-## [v0.32.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.31.0-beta.0...v0.32.0-beta.0) - 2025-09-05
+## [v0.32.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.31.0-beta.0...v0.32.0-beta.0) - 2025-08-31
 
 ### Added
 
