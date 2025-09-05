@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.32.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.32.0-beta.1...master)
+
+## [v0.32.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.32.0-beta.0...v0.32.0-beta.1) - 2025-09-05
+
+### Changed
+
+* Refactors internos sin impacto funcional:
+    * Métodos de la clase `AbstractEntity` ordenados
 
 ## [v0.32.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.31.0-beta.0...v0.32.0-beta.0) - 2025-09-05
 
