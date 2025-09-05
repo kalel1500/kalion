@@ -10,25 +10,14 @@ use Thehouseofel\Kalion\Domain\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\PaginationDataDto;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Concerns\HasRelatableOptions;
 
 abstract class AbstractCollectionEntity extends AbstractCollectionBase implements Relatable
 {
-    protected string|array|null  $with   = null;
-    protected bool|string|null   $isFull = null;
+    use HasRelatableOptions;
+
     protected bool               $isPaginate;
     protected ?PaginationDataDto $paginationData;
-
-    public function setWith(string|array|null $with): static
-    {
-        $this->with = $with;
-        return $this;
-    }
-
-    public function setIsFull(bool|string|null $isFull): static
-    {
-        $this->isFull = $isFull;
-        return $this;
-    }
 
     /**
      * @return AbstractEntity|null
