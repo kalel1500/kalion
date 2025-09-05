@@ -27,7 +27,6 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     protected static bool      $incrementing   = true;
 
     protected ?array           $with           = null;
-    protected ?array           $withFull       = null;
     protected bool|string|null $isFull;
     protected array            $originalArray;
     protected array            $relations      = [];
@@ -254,8 +253,8 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
             $data = array_merge($data, $this->computedProps($isFull));
         }
 
-        if ($this->withFull) {
-            foreach ($this->withFull as $key => $rel) {
+        if ($this->with) {
+            foreach ($this->with as $key => $rel) {
                 $relation = (is_array($rel)) ? $key : $rel;
                 [$relation, $isFull] = $this->getInfoFromRelationWithFlag($relation);
                 $relationData               = $this->$relation()?->toArray();
@@ -307,9 +306,8 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     {
         if (!$relations) return $this;
 
-        $relations          = is_array($relations) ? $relations : [$relations];
-        $firstRelations     = [];
-        $firstRelationsFull = [];
+        $relations      = is_array($relations) ? $relations : [$relations];
+        $firstRelations = [];
 
         foreach ($relations as $key => $rel) {
 
@@ -326,18 +324,14 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
                 ? ($hasRelsAfterPoint ? [$relsAfterPoint => $rel] : $rel)
                 : ($hasRelsAfterPoint ? $relsAfterPoint : null);
 
-            $firstFull = $first;
+            $firstRelations[] = $first;
             [$first, $isFull] = $this->getInfoFromRelationWithFlag($first);
-
-            $firstRelations[]     = $first;
-            $firstRelationsFull[] = $firstFull;
             $this->setFirstRelation($first);
             $this->setLastRelation($first, $last, $isFull);
         }
 
 //        $this->originalArray = null;
-        $this->with     = $firstRelations;
-        $this->withFull = $firstRelationsFull;
+        $this->with = $firstRelations;
         return $this;
     }
 
