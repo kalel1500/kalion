@@ -133,24 +133,6 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         return new static(...$args);
     }
 
-    /**
-     * @template T of array|null
-     * @param T $data
-     * @param array|string|null $with
-     * @param bool|string $isFull
-     * @return (T is null ? null : static)
-     */
-    public static function fromArray($data, string|array|null $with = null, bool|string $isFull = null)
-    {
-        if (is_null($data)) return null;
-
-        $self                = static::make($data);
-        $self->originalArray = $data;
-        $self->isFull        = $isFull;
-        $self->with($with);
-        return $self;
-    }
-
     protected function props(): array
     {
         $className = static::class;
@@ -183,6 +165,48 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         }
 
         return $props;
+    }
+
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @param array|string|null $with
+     * @param bool|string $isFull
+     * @return (T is null ? null : static)
+     */
+    public static function fromArray($data, string|array|null $with = null, bool|string $isFull = null)
+    {
+        if (is_null($data)) return null;
+
+        $self                = static::make($data);
+        $self->originalArray = $data;
+        $self->isFull        = $isFull;
+        $self->with($with);
+        return $self;
+    }
+
+    public function toArray(): array
+    {
+        [$relation, $defaultIsFull] = $this->getInfoFromRelationWithFlag('flag:' . config('kalion.entity_calculated_props_mode'));
+
+        $data   = $this->props();
+        $isFull = $this->isFull ?? $defaultIsFull;
+        if ($isFull === true) {
+            $data = array_merge($data, $this->computedProps());
+        } elseif (is_string($isFull)) {
+            $data = array_merge($data, $this->computedProps($isFull));
+        }
+
+        if ($this->with) {
+            foreach ($this->with as $key => $rel) {
+                $relation = (is_array($rel)) ? $key : $rel;
+                [$relation, $isFull] = $this->getInfoFromRelationWithFlag($relation);
+                $relationData               = $this->$relation()?->toArray();
+                $data[str_snake($relation)] = $relationData;
+            }
+        }
+
+        return $data;
     }
 
     private function computedProps(?string $context = null): array
@@ -228,43 +252,6 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         return $result;
     }
 
-    /**
-     * La definimos sin lógica para que las clases que existen sepan cuál sobreescriben
-     */
-    public static function createFake(array $overwriteParams = null): static|null
-    {
-        return null;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return $this->toArray();
-    }
-
-    public function toArray(): array
-    {
-        [$relation, $defaultIsFull] = $this->getInfoFromRelationWithFlag('flag:' . config('kalion.entity_calculated_props_mode'));
-
-        $data   = $this->props();
-        $isFull = $this->isFull ?? $defaultIsFull;
-        if ($isFull === true) {
-            $data = array_merge($data, $this->computedProps());
-        } elseif (is_string($isFull)) {
-            $data = array_merge($data, $this->computedProps($isFull));
-        }
-
-        if ($this->with) {
-            foreach ($this->with as $key => $rel) {
-                $relation = (is_array($rel)) ? $key : $rel;
-                [$relation, $isFull] = $this->getInfoFromRelationWithFlag($relation);
-                $relationData               = $this->$relation()?->toArray();
-                $data[str_snake($relation)] = $relationData;
-            }
-        }
-
-        return $data;
-    }
-
     public function toArrayDb($keepId = false): array
     {
         $array = $this->props();
@@ -277,6 +264,15 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         return $array;
     }
 
+    public function toArrayWith(array $fields, $fromArrayDb = false): array
+    {
+        $arrayValues = $fromArrayDb ? $this->toArrayDb() : $this->props();
+        foreach ($arrayValues as $key => $value) {
+            if (!in_array($key, $fields)) unset($arrayValues[$key]);
+        }
+        return $arrayValues;
+    }
+
     public function toArrayWithout(array $fields, $fromArrayDb = false): array
     {
         $array = $fromArrayDb ? $this->toArrayDb() : $this->props();
@@ -287,19 +283,9 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         return $array;
     }
 
-    public function toArrayWith(array $fields, $fromArrayDb = false): array
+    public function jsonSerialize(): array
     {
-        $arrayValues = $fromArrayDb ? $this->toArrayDb() : $this->props();
-        foreach ($arrayValues as $key => $value) {
-            if (!in_array($key, $fields)) unset($arrayValues[$key]);
-        }
-        return $arrayValues;
-    }
-
-    protected function computed(callable $value)
-    {
-        $name = debug_backtrace()[1]['function'];
-        return $this->computed[$name] ??= $value();
+        return $this->toArray();
     }
 
     public function with(string|array|null $relations): static
@@ -381,5 +367,17 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
             throw EntityRelationException::relationNotSetInEntitySetup($name, static::class);
         }
         return $this->relations[$name];
+    }
+
+    protected function computed(callable $value)
+    {
+        $name = debug_backtrace()[1]['function'];
+        return $this->computed[$name] ??= $value();
+    }
+
+
+    public static function createFake(array $overwriteParams = null): static|null
+    {
+        return null;
     }
 }
