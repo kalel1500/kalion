@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Concerns\HasRelatableOptions;
 
 abstract class AbstractCollectionAny extends AbstractCollectionBase implements Relatable
 {
-    protected string|array|null $with   = null;
-    protected bool|string|null  $isFull = null;
+    use HasRelatableOptions;
 
     /**
      * @template T of array|null
