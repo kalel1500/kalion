@@ -1,6 +1,44 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.32.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.32.1-beta.0...master)
+
+## [v0.32.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.32.0-beta.0...v0.32.1-beta.0) - 2025-09-05
+
+### Added
+
+* Nuevo test `test_post_pluck()` para probar el método `pluck()` de las colecciones con relaciones (usando el nuevo `GetPostDataUseCase`).
+* Nueva excepción `ReflectionException`.
+* Nuevo helper `is_class_model_id()`.
+
+### Changed
+
+* (refactor) Se ha eliminado propiedad `$withFull` de la clase `AbstractEntity` y guardar las relaciones completas en la propiedad `$with`.
+* (refactor) Se han movido los métodos `setWith()` y `setIsFull()` y las propiedades `$with` y `$isFull` de las Colecciones `Relatables` al nuevo trait `HasRelatableOptions` para evitar duplicar código.
+* Se han definido los métodos `setWith()`, `setIsFull()` y `fromArray()` en la interfaz `Relatable`.
+* Se ha modificado la firma del método `fromArray()` de la clase `AbstractCollectionAny` para igualarla a la de la clase `AbstractCollectionEntity`
+* (comments) Se han marcado los métodos `toArrayExport()` y `createFake()` de la clase `AbstractCollectionEntity` con `@experimental` para indicar que pueden ser eliminados o modificados.
+* Se ha eliminado la constante `ITEM_TYPE` en la clase `AbstractCollectionAny`.
+  * Se ha modificado método `resolveItemType()` de la clase `AbstractCollectionBase` para devolver `null` si la clase instanciada extiende de `AbstractCollectionAny`.
+  * Ahora el método `resolveItemType()` puede devolver `null`.
+  * Ahora la propiedad `$shouldSkipValidation` de la clase `AbstractCollectionBase` solo depende de si `resolveItemType()` devuelve `null` y no de la instancia de la clase (asi la responsabilidad solo depende del método `resolveItemType()`).
+* Se ha cacheado la reflexión en el método `resolveItemType()` de la clase `AbstractCollectionBase`.
+* Se han modificado los tests:
+  * Métodos `computed` ordenados en las entidades.
+  * Nuevo test `test_post_pluck()` para probar el método `pluck()` de las colecciones con relaciones.
+  * Organizar el código de la carpeta `Support` por contextos para poder añadir más fácilmente. De momento hay `Blogs` y `Shared`.
+  * La carpeta `Models` se ha movido dentro de `Infrastructure`.
+  * Clase `RelationsTest` renombrada a `BlogRelationsTest` para indicar que es un test del contexto `Blog`. Se ha sacado de la carpeta `Entities`, ya que por ahora no hace falta.
+* Se han cambiado las excepciones de la reflexión del método `make()` de la clase `AbstractDataTransferObject` de `AppException` por el nuevo `ReflectionException`.
+* Método `props()` eliminado de todas las entidades, ya que ahora está definido en la clase `AbstractEntity`.
+* Método `make()` eliminado de todas las entidades, ya que ahora está definido en la clase `AbstractEntity`.
+* Se ha añadido la funcionalidad al método `props()` de la clase `AbstractEntity` usando la reflexion para no tener que crearlo en cada entidad.
+* Se ha añadido la funcionalidad al método `make()` de la clase `AbstractEntity` usando la reflexion para no tener que crearlo en cada entidad.
+
+### Fixed
+
+* (fix) Se ha eliminado el parámetro `$isFull` del método `getInfoFromRelationWithFlag()` del trait `ParsesRelationFlags`, ya que en caso de tener dos relaciones concatenadas siendo la primera `full` y la segunda normal, la segunda heredaba el `full` de la primera
+* (fix) Se ha arreglado el método `toAny()` de la clase `AbstractCollectionBase`. Ahora se pasan los parámetros `$with` y `$isFull` al `CollectionAny::fromArray()` siempre que la colección actual extienda de `Relatable` aunque `$with` sea `null`
+* (fix) Se han arreglado los métodos `toArrayExport()` y `createFake()` de la clase `AbstractCollectionEntity`, ya que seguían usando la constante `ITEM_TYPE` que ya no se define siempre. Ahora se usan la propiedad `$resolvedItemType` el método `resolveItemType()` respectivamente.
 
 ## [v0.32.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.31.0-beta.0...v0.32.0-beta.0) - 2025-09-05
 
@@ -16,6 +54,7 @@
 
 ### Changed
 
+* (refactor) Se ha eliminado la propiedad `final` de varias clases
 * Se ha cacheado toda la reflexión en el método `make()` de la clase `AbstractDataTransferObject` (no solo los parámetros)
 * (breaking) Gran cambio en las entidades:
   * Métodos de las entidades renombrados `AbstractEntity`:
