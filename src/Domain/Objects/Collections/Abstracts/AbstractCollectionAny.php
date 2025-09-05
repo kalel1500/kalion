@@ -11,10 +11,17 @@ abstract class AbstractCollectionAny extends AbstractCollectionBase implements R
     protected string|array|null $with   = null;
     protected bool|string|null  $isFull = null;
 
-    public static function fromArray(?array $values, string|array|null $with = null, bool|string|null $isFull = null): static|null
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @param string|array|null $with
+     * @param bool|string $isFull
+     * @return (T is null ? null : static)
+     */
+    public static function fromArray($data, string|array|null $with = null, bool|string|null $isFull = null)
     {
-        if (is_null($values)) return null;
-        $collection         = new static($values);
+        if (is_null($data)) return null;
+        $collection         = new static($data);
         $collection->with   = $with;
         $collection->isFull = $isFull;
         return $collection;
