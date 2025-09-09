@@ -6,8 +6,8 @@ namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 
 use JsonSerializable;
 use ReflectionClass;
-use Thehouseofel\Kalion\Domain\Attributes\Computed;
-use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\Computed;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;

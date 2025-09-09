@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
 use ReflectionClass;
-use Thehouseofel\Kalion\Domain\Attributes\CollectionOf;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Contracts\Relatable;
