@@ -4,7 +4,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
 use Thehouseofel\Kalion\Infrastructure\Services\Commands\StartCommandService;
-use Thehouseofel\Kalion\Infrastructure\Traits\InteractsWithComposerPackages;
+use Thehouseofel\Kalion\Infrastructure\Console\Commands\Concerns\InteractsWithComposerPackages;
 
 class KalionStart extends Command
 {

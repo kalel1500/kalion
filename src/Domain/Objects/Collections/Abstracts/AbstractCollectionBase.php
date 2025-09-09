@@ -22,7 +22,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
-use Thehouseofel\Kalion\Domain\Traits\ParsesRelationFlags;
+use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 use TypeError;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Thehouseofel\Kalion\Infrastructure\Traits;
+namespace Thehouseofel\Kalion\Infrastructure\Console\Commands\Concerns;
 
 use Symfony\Component\Process\Process;
 

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\ServiceProvider;
 use RuntimeException;
-use Thehouseofel\Kalion\Domain\Traits\CountMethods;
+use Thehouseofel\Kalion\Domain\Concerns\CountMethods;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\KalionServiceProvider;
 use Thehouseofel\Kalion\Infrastructure\Services\Version;

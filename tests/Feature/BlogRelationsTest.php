@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Tests\Feature;
 
-use Thehouseofel\Kalion\Domain\Traits\KalionAssertions;
+use Thehouseofel\Kalion\Domain\Concerns\KalionAssertions;
 use Thehouseofel\Kalion\Tests\TestCase;
 
 class BlogRelationsTest extends TestCase

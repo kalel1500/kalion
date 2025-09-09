@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
-use Thehouseofel\Kalion\Domain\Traits\CountMethods;
+use Thehouseofel\Kalion\Domain\Concerns\CountMethods;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
 
 /**

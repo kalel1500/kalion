@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Thehouseofel\Kalion\Domain\Traits\ModelHasPermissions;
+use Thehouseofel\Kalion\Infrastructure\Models\Concerns\ModelHasPermissions;
 
 class ApiUser extends Authenticatable
 {

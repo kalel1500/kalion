@@ -1,6 +1,6 @@
 <?php
 
-namespace Thehouseofel\Kalion\Domain\Traits;
+namespace Thehouseofel\Kalion\Domain\Objects\Entities\Concerns;
 
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\RoleCollection;

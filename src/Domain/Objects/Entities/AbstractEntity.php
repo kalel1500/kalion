@@ -13,7 +13,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
-use Thehouseofel\Kalion\Domain\Traits\ParsesRelationFlags;
+use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 
 abstract class AbstractEntity implements Arrayable, JsonSerializable
 {

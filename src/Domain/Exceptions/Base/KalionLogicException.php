@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Exceptions\Base;
 
 use LogicException;
 use Thehouseofel\Kalion\Domain\Contracts\KalionExceptionInterface;
-use Thehouseofel\Kalion\Domain\Traits\KalionExceptionBehavior;
+use Thehouseofel\Kalion\Domain\Exceptions\Concerns\KalionExceptionBehavior;
 use Throwable;
 
 abstract class KalionLogicException extends LogicException implements KalionExceptionInterface

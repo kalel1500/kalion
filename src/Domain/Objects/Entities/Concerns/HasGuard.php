@@ -1,6 +1,6 @@
 <?php
 
-namespace Thehouseofel\Kalion\Domain\Traits;
+namespace Thehouseofel\Kalion\Domain\Objects\Entities\Concerns;
 
 trait HasGuard
 {

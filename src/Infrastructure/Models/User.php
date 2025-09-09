@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Thehouseofel\Kalion\Database\Factories\UserFactory;
-use Thehouseofel\Kalion\Domain\Traits\ModelHasPermissions;
+use Thehouseofel\Kalion\Infrastructure\Models\Concerns\ModelHasPermissions;
 
 class User extends Authenticatable
 {
