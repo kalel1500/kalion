@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 
 use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUser;
+use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 /**
@@ -13,8 +14,6 @@ use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 final class CurrentUserService implements CurrentUser
 {
     private bool    $loadRoles;
-    private string  $entityClass;
-    private ?string $guard;
     private mixed   $userEntity = null;
 
     public function __construct()
@@ -24,10 +23,10 @@ final class CurrentUserService implements CurrentUser
 
     public function userEntity(string $guard = null)
     {
-        $this->guard       = $guard;
-        $this->entityClass = Kalion::getClassUserEntity($this->guard);
+        /** @var class-string<AbstractEntity> $entityClass */
+        $entityClass = Kalion::getClassUserEntity($guard);
 
-        if ($this->userEntity && $this->userEntity->getGuard() === $this->guard) {
+        if ($this->userEntity && $this->userEntity->getGuard() === $guard) {
             return $this->userEntity;
         }
 
@@ -41,7 +40,7 @@ final class CurrentUserService implements CurrentUser
             $user->load('roles');
             $with = ['roles'];
         }
-        $this->userEntity = $this->entityClass::fromArray($user->toArray(), $with);
+        $this->userEntity = $entityClass::fromArray($user->toArray(), $with);
         $this->userEntity->setGuard($guard);
         return $this->userEntity;
     }
