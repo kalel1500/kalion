@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Services\Repository;
+namespace Thehouseofel\Kalion\Domain\Services\Auth;
 
 use Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract;
 use Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract;
 use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
-use Thehouseofel\Kalion\Domain\Services\PermissionParser;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 /**

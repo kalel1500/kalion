@@ -5,7 +5,7 @@ namespace Thehouseofel\Kalion\Domain\Objects\Entities\Concerns;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
-use Thehouseofel\Kalion\Domain\Services\Repository\UserAccessChecker;
+use Thehouseofel\Kalion\Domain\Services\Auth\UserAccessChecker;
 
 trait EntityHasPermissions
 {
