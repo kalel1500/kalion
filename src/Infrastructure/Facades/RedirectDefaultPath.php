@@ -19,6 +19,6 @@ final class RedirectDefaultPath extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'redirectDefaultPath';
+        return 'thehouseofel.kalion.redirectDefaultPath';
     }
 }

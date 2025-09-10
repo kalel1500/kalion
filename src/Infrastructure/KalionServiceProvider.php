@@ -31,9 +31,9 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'redirectAfterLogin'                                                           => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
-        'redirectDefaultPath'                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
-        'processChecker'                                                               => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
+        'thehouseofel.kalion.redirectAfterLogin'                                       => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
+        'thehouseofel.kalion.redirectDefaultPath'                                      => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
+        'thehouseofel.kalion.processChecker'                                           => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepository::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepository::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepository::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository::class,

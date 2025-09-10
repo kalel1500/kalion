@@ -19,6 +19,6 @@ final class RedirectAfterLogin extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'redirectAfterLogin';
+        return 'thehouseofel.kalion.redirectAfterLogin';
     }
 }
