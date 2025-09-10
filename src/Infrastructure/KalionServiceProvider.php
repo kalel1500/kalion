@@ -136,8 +136,8 @@ return [
 
     protected function registerSingletons(): void
     {
-        $this->app->alias(\Thehouseofel\Kalion\Domain\Services\Contracts\LayoutDataContract::class, 'layoutData');
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Services\Contracts\LayoutDataContract::class, fn($app) => new (Kalion::getClassServiceLayout()));
+        $this->app->alias(\Thehouseofel\Kalion\Domain\Services\Contracts\LayoutData::class, 'layoutData');
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Services\Contracts\LayoutData::class, fn($app) => new (Kalion::getClassServiceLayout()));
         $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\LoginContract::class, fn($app) => new (Kalion::getClassServiceLogin()));
         $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\RegisterContract::class, fn($app) => new (Kalion::getClassServiceRegister()));
         $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordResetContract::class, fn($app) => new (Kalion::getClassServicePasswordReset()));

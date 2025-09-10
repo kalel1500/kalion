@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Domain\Services\Contracts;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
 
-interface LayoutDataContract
+interface LayoutData
 {
     public function getMessageCounter(): int;
     public function getNavbarNotifications(): NavbarItemCollection;
