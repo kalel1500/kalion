@@ -27,7 +27,7 @@ class AuthManager
 
     public function user(string $guard = null)
     {
-        return $this->currentUser->entity($guard);
+        return $this->currentUser->userEntity($guard);
     }
 
     /*----- LoginContract -----*/

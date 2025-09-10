@@ -9,5 +9,5 @@ namespace Thehouseofel\Kalion\Domain\Contracts\Services\Auth;
  */
 interface CurrentUser
 {
-    public function entity(string $guard = null);
+    public function userEntity(string $guard = null);
 }

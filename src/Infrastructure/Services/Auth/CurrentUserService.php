@@ -22,7 +22,7 @@ final class CurrentUserService implements CurrentUser
         $this->loadRoles = config('kalion.auth.load_roles');
     }
 
-    public function entity(string $guard = null)
+    public function userEntity(string $guard = null)
     {
         $this->guard       = $guard;
         $this->entityClass = Kalion::getClassUserEntity($this->guard);
