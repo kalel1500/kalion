@@ -9,7 +9,7 @@ use Src\Shared\Domain\Objects\Entities\TagEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 
-interface TagRepositoryContract
+interface TagRepository
 {
     public function all(): TagCollection;
     public function searchByType(ModelStringNull $typeCode): TagCollection;

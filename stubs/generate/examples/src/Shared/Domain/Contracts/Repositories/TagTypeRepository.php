@@ -8,7 +8,7 @@ use Src\Shared\Domain\Objects\Entities\Collections\TagTypeCollection;
 use Src\Shared\Domain\Objects\Entities\TagTypeEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 
-interface TagTypeRepositoryContract
+interface TagTypeRepository
 {
     public function all(): TagTypeCollection;
     public function findByCode(ModelString $code): TagTypeEntity;

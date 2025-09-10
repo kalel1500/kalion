@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Src\Shared\Infrastructure\Repositories\Eloquent;
 
-use Src\Shared\Domain\Contracts\Repositories\CommentRepositoryContract;
+use Src\Shared\Domain\Contracts\Repositories\CommentRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\CommentCollection;
 use Src\Shared\Domain\Objects\Entities\CommentEntity;
 use Src\Shared\Infrastructure\Models\Comment;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 
-final class EloquentCommentRepository implements CommentRepositoryContract
+final class EloquentCommentRepository implements CommentRepository
 {
     private string $model;
 

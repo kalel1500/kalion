@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Domain\Contracts\Repositories;
 use Thehouseofel\Kalion\Domain\Objects\Entities\PermissionEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 
-interface PermissionRepositoryContract
+interface PermissionRepository
 {
     public function findByName(ModelString $permission): PermissionEntity;
 }

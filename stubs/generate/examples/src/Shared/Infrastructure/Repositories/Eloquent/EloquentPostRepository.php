@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Src\Shared\Infrastructure\Repositories\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
-use Src\Shared\Domain\Contracts\Repositories\PostRepositoryContract;
+use Src\Shared\Domain\Contracts\Repositories\PostRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\PostCollection;
 use Src\Shared\Domain\Objects\Entities\PostEntity;
 use Src\Shared\Infrastructure\Models\Post;
@@ -13,7 +13,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 
-final class EloquentPostRepository implements PostRepositoryContract
+final class EloquentPostRepository implements PostRepository
 {
     private string $model;
 

@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Domain\Contracts\Repositories;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\FailedJobCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\JobCollection;
 
-interface JobRepositoryContract
+interface JobRepository
 {
     public function allExceptProcessing(): JobCollection;
     public function deleteAllExceptThoseNotInProcess(): void;

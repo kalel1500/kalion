@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract;
+use Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Infrastructure\Models\Role;
 
-class EloquentRoleRepository implements RoleRepositoryContract
+class EloquentRoleRepository implements RoleRepository
 {
     protected string $model = Role::class;
 

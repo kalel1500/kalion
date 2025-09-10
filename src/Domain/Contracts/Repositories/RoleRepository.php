@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Domain\Contracts\Repositories;
 use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 
-interface RoleRepositoryContract
+interface RoleRepository
 {
     public function findByName(ModelString $name): RoleEntity;
 }

@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Domain\Contracts\Repositories;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\StatusCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\StatusEntity;
 
-interface StatusRepositoryContract
+interface StatusRepository
 {
     public function all(): StatusCollection;
     public function searchByType(string $type): StatusCollection;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Src\Shared\Infrastructure\Repositories\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
-use Src\Shared\Domain\Contracts\Repositories\TagRepositoryContract;
+use Src\Shared\Domain\Contracts\Repositories\TagRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\TagCollection;
 use Src\Shared\Domain\Objects\Entities\TagEntity;
 use Src\Shared\Infrastructure\Models\Tag;
@@ -14,7 +14,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 
-final class EloquentTagRepository implements TagRepositoryContract
+final class EloquentTagRepository implements TagRepository
 {
     private string $model;
 

@@ -31,15 +31,15 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'authManager'                                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager::class,
-        'redirectAfterLogin'                                                                   => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
-        'redirectDefaultPath'                                                                  => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
-        'processChecker'                                                                       => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUserContract::class         => \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepositoryContract::class     => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentStatusRepository::class,
+        'authManager'                                                                  => \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager::class,
+        'redirectAfterLogin'                                                           => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
+        'redirectDefaultPath'                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
+        'processChecker'                                                               => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUserContract::class => \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepository::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepository::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepository::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepository::class     => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentStatusRepository::class,
     ];
 
     /**

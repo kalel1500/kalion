@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract;
+use Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\FailedJobCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\JobCollection;
 use Thehouseofel\Kalion\Infrastructure\Models\FailedJob;
 use Thehouseofel\Kalion\Infrastructure\Models\Jobs;
 
-class EloquentJobRepository implements JobRepositoryContract
+class EloquentJobRepository implements JobRepository
 {
     protected string $model = Jobs::class;
     protected string $modelFailedJobs = FailedJob::class;

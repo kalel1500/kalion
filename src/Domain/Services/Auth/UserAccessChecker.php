@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Services\Auth;
 
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract;
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract;
+use Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepository;
+use Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
@@ -17,8 +17,8 @@ use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 final readonly class UserAccessChecker
 {
     public function __construct(
-        private RoleRepositoryContract       $repositoryRole,
-        private PermissionRepositoryContract $repositoryPermission
+        private RoleRepository       $repositoryRole,
+        private PermissionRepository $repositoryPermission
     )
     {
     }

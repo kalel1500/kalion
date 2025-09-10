@@ -7,9 +7,9 @@ namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\TabulatorRepositoryContract;
+use Thehouseofel\Kalion\Domain\Contracts\Repositories\TabulatorRepository;
 
-class EloquentTabulatorRepository implements TabulatorRepositoryContract
+class EloquentTabulatorRepository implements TabulatorRepository
 {
     const NULL_EQUIVALENT_VALUES = [
         'No aplicable',

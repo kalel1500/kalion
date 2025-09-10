@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepositoryContract;
+use Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepository;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\StatusCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\StatusEntity;
 use Thehouseofel\Kalion\Infrastructure\Models\Status;
 
-class EloquentStatusRepository implements StatusRepositoryContract
+class EloquentStatusRepository implements StatusRepository
 {
     protected string $model = Status::class;
 

@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 
-interface PostRepositoryContract
+interface PostRepository
 {
     public function all(): PostCollection;
     public function searchByTag(ModelStringNull $tag_code): PostCollection;

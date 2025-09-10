@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract;
+use Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Domain\Objects\Entities\PermissionEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Infrastructure\Models\Permission;
 
-class EloquentPermissionRepository implements PermissionRepositoryContract
+class EloquentPermissionRepository implements PermissionRepository
 {
     protected string $model = Permission::class;
 

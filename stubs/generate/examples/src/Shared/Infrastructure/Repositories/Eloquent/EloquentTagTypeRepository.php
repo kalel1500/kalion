@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Src\Shared\Infrastructure\Repositories\Eloquent;
 
-use Src\Shared\Domain\Contracts\Repositories\TagTypeRepositoryContract;
+use Src\Shared\Domain\Contracts\Repositories\TagTypeRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\TagTypeCollection;
 use Src\Shared\Domain\Objects\Entities\TagTypeEntity;
 use Src\Shared\Infrastructure\Models\TagType;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 
-final class EloquentTagTypeRepository implements TagTypeRepositoryContract
+final class EloquentTagTypeRepository implements TagTypeRepository
 {
     private string $model;
 
