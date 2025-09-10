@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
-use Thehouseofel\Kalion\Domain\Contracts\Enums\TranslatableEnum;
+use Thehouseofel\Kalion\Domain\Contracts\Enums\Translatable;
 use Thehouseofel\Kalion\Domain\Concerns\Enums\HasTranslations;
 
-enum CheckableProcessVo: string implements TranslatableEnum
+enum CheckableProcessVo: string implements Translatable
 {
     use HasTranslations;
 
