@@ -31,7 +31,6 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'authManager'                                                                  => \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthenticationService::class,
         'redirectAfterLogin'                                                           => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
         'redirectDefaultPath'                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
         'processChecker'                                                               => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
@@ -140,6 +139,7 @@ return [
         $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
         $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
         $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
+        $this->app->singleton(\Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Authentication::class, \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthenticationService::class);
     }
 
     /**

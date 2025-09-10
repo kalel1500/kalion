@@ -11,8 +11,9 @@ use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUser;
 use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Login;
 use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Register;
 use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordReset;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Authentication;
 
-class AuthenticationService
+class AuthenticationService implements Authentication
 {
     public function __construct(
         protected CurrentUser   $currentUser,
