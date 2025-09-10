@@ -41,85 +41,6 @@ class KalionServiceProvider extends ServiceProvider
     ];
 
     /**
-     * Remove the given provider from the application's provider bootstrap file.
-     */
-    public static function removeProviderFromBootstrapFile(string $provider, ?string $path = null): bool
-    {
-        $path ??= app()->getBootstrapProvidersPath();
-
-        if (!file_exists($path)) {
-            return false;
-        }
-
-        if (function_exists('opcache_invalidate')) {
-            opcache_invalidate($path, true);
-        }
-
-        // Cargar los proveedores actuales del archivo
-        $providers = collect(require $path)
-            ->reject(fn($p) => $p === $provider) // Eliminar el provider específico
-            ->unique()
-            ->sort()
-            ->values()
-            ->map(fn($p) => '    '.$p.'::class,') // Formatear las líneas
-            ->implode(PHP_EOL);
-
-        $content = '<?php
-
-return [
-'.$providers.'
-];';
-
-        // Escribir el contenido actualizado en el archivo
-        file_put_contents($path, $content.PHP_EOL);
-
-        return true;
-    }
-
-    private function updateNameOfMigrationsIfExist(): void
-    {
-        $filesystem = new Filesystem();
-        $migrationsPath = database_path('migrations');
-
-        // Lista de nombres de migraciones que quieres renombrar (sin timestamp)
-        $migrationFiles = [
-            'create_statuses_table',
-            'create_tags_table',
-            'create_posts_table',
-            'create_comments_table',
-            'create_post_tag_table',
-        ];
-
-        // Verificar si hay al menos una migración publicada usando coincidencia parcial
-        $migrationsExist = collect($filesystem->files($migrationsPath))->some(function ($file) use ($migrationFiles) {
-            return collect($migrationFiles)->contains(fn($migration) => Str::contains($file->getFilename(), $migration));
-        });
-
-        // Salir si no hay migraciones publicadas
-        if (!$migrationsExist) return;
-
-        $timestamp = now(); // Iniciar con el timestamp actual
-
-        foreach ($filesystem->files($migrationsPath) as $file) {
-            foreach ($migrationFiles as $migration) {
-                if (Str::contains($file->getFilename(), $migration)) {
-                    // Generar nuevo nombre con timestamp actual + nombre de la migración
-                    $newName = $timestamp->format('Y_m_d_His') . '_' . $migration . '.php';
-
-                    // Renombrar el archivo
-                    $filesystem->move($file->getPathname(), $migrationsPath . '/' . $newName);
-
-                    // Incrementar el timestamp en 1 segundo para la próxima migración
-                    $timestamp->addSecond();
-
-                    break; // Salimos del bucle interno tras encontrar la coincidencia
-                }
-            }
-        }
-    }
-
-
-    /**
      * Register any application services.
      */
     public function register(): void
@@ -437,5 +358,86 @@ return [
             return $this->merge(['class' => $filteredDefault]);
         });
 
+    }
+
+
+
+
+    /**
+     * Remove the given provider from the application's provider bootstrap file.
+     */
+    public static function removeProviderFromBootstrapFile(string $provider, ?string $path = null): bool
+    {
+        $path ??= app()->getBootstrapProvidersPath();
+
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        if (function_exists('opcache_invalidate')) {
+            opcache_invalidate($path, true);
+        }
+
+        // Cargar los proveedores actuales del archivo
+        $providers = collect(require $path)
+            ->reject(fn($p) => $p === $provider) // Eliminar el provider específico
+            ->unique()
+            ->sort()
+            ->values()
+            ->map(fn($p) => '    '.$p.'::class,') // Formatear las líneas
+            ->implode(PHP_EOL);
+
+        $content = '<?php
+
+return [
+'.$providers.'
+];';
+
+        // Escribir el contenido actualizado en el archivo
+        file_put_contents($path, $content.PHP_EOL);
+
+        return true;
+    }
+
+    private function updateNameOfMigrationsIfExist(): void
+    {
+        $filesystem = new Filesystem();
+        $migrationsPath = database_path('migrations');
+
+        // Lista de nombres de migraciones que quieres renombrar (sin timestamp)
+        $migrationFiles = [
+            'create_statuses_table',
+            'create_tags_table',
+            'create_posts_table',
+            'create_comments_table',
+            'create_post_tag_table',
+        ];
+
+        // Verificar si hay al menos una migración publicada usando coincidencia parcial
+        $migrationsExist = collect($filesystem->files($migrationsPath))->some(function ($file) use ($migrationFiles) {
+            return collect($migrationFiles)->contains(fn($migration) => Str::contains($file->getFilename(), $migration));
+        });
+
+        // Salir si no hay migraciones publicadas
+        if (!$migrationsExist) return;
+
+        $timestamp = now(); // Iniciar con el timestamp actual
+
+        foreach ($filesystem->files($migrationsPath) as $file) {
+            foreach ($migrationFiles as $migration) {
+                if (Str::contains($file->getFilename(), $migration)) {
+                    // Generar nuevo nombre con timestamp actual + nombre de la migración
+                    $newName = $timestamp->format('Y_m_d_His') . '_' . $migration . '.php';
+
+                    // Renombrar el archivo
+                    $filesystem->move($file->getPathname(), $migrationsPath . '/' . $newName);
+
+                    // Incrementar el timestamp en 1 segundo para la próxima migración
+                    $timestamp->addSecond();
+
+                    break; // Salimos del bucle interno tras encontrar la coincidencia
+                }
+            }
+        }
     }
 }
