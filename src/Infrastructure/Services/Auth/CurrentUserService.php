@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class CurrentUserService implements CurrentUser
+class CurrentUserService implements CurrentUser
 {
     private bool    $loadRoles;
     private mixed   $userEntity = null;
