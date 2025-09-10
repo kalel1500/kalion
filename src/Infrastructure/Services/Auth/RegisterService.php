@@ -17,7 +17,7 @@ use Thehouseofel\Kalion\Infrastructure\Models\User;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class Register implements RegisterContract
+class RegisterService implements RegisterContract
 {
     public function view(?Request $request = null): View
     {

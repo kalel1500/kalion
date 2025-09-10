@@ -13,7 +13,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\FeatureUnavailableException;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class PasswordReset implements PasswordResetContract
+class PasswordResetService implements PasswordResetContract
 {
     public function view(?Request $request = null): View
     {

@@ -19,7 +19,7 @@ use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class Login implements LoginContract
+class LoginService implements LoginContract
 {
     protected Request $request;
     protected ?string $requestIp;
