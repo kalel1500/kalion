@@ -427,12 +427,14 @@ final class StartCommandService
 
         $file = 'app/Providers/DependencyServiceProvider.php';
 
-        $this->line(sprintf('%s archivo %s', ($this->reset ? 'Eliminando' : 'Creando'), $file));
+        $reset = $this->reset || $this->skipExamples;
+
+        $this->line(sprintf('%s archivo %s', ($reset ? 'Eliminando' : 'Creando'), $file));
 
         $from = $this->stubsPath($file);
         $to   = base_path($file);
 
-        if ($this->reset) {
+        if ($reset) {
             File::delete($to);
         } else {
             copy($from, $to);

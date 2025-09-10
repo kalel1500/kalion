@@ -32,7 +32,7 @@ Además, esta nomenclatura ayuda a comunicar de manera inmediata que esos compon
 | ->deleteDirectory_Http()                                         | skipExamples |             |
 | ->deleteDirectory_Models()                                       | skipExamples |             |
 | ->deleteFile_Changelog()                                         |              |             |
-| ->modifyFile_BootstrapProviders_toAddDependencyServiceProvider() |              |             |
+| ->modifyFile_BootstrapProviders_toAddDependencyServiceProvider() | skipExamples |             |
 | ->modifyFile_BootstrapApp_toAddMiddlewareRedirect()              |              |             |
 | ->modifyFile_BootstrapApp_toAddExceptionHandler()                |              |             |
 | ->modifyFile_ConfigApp_toUpdateTimezone()                        |              |             |
