@@ -10,7 +10,7 @@ use Src\Shared\Domain\Objects\Entities\TagTypeEntity;
 use Src\Shared\Infrastructure\Models\TagType;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 
-final class TagTypeRepository implements TagTypeRepositoryContract
+final class EloquentTagTypeRepository implements TagTypeRepositoryContract
 {
     private string $model;
 

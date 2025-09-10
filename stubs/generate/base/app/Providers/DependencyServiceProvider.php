@@ -14,9 +14,9 @@ final class DependencyServiceProvider extends ServiceProvider
      * @var array
      */
     public $singletons = [
-        \Src\Shared\Domain\Contracts\Repositories\CommentRepositoryContract::class => \Src\Shared\Infrastructure\Repositories\Eloquent\CommentRepository::class,
-        \Src\Shared\Domain\Contracts\Repositories\PostRepositoryContract::class    => \Src\Shared\Infrastructure\Repositories\Eloquent\PostRepository::class,
-        \Src\Shared\Domain\Contracts\Repositories\TagRepositoryContract::class     => \Src\Shared\Infrastructure\Repositories\Eloquent\TagRepository::class,
-        \Src\Shared\Domain\Contracts\Repositories\TagTypeRepositoryContract::class => \Src\Shared\Infrastructure\Repositories\Eloquent\TagTypeRepository::class,
+        \Src\Shared\Domain\Contracts\Repositories\CommentRepositoryContract::class => \Src\Shared\Infrastructure\Repositories\Eloquent\EloquentCommentRepository::class,
+        \Src\Shared\Domain\Contracts\Repositories\PostRepositoryContract::class    => \Src\Shared\Infrastructure\Repositories\Eloquent\EloquentPostRepository::class,
+        \Src\Shared\Domain\Contracts\Repositories\TagRepositoryContract::class     => \Src\Shared\Infrastructure\Repositories\Eloquent\EloquentTagRepository::class,
+        \Src\Shared\Domain\Contracts\Repositories\TagTypeRepositoryContract::class => \Src\Shared\Infrastructure\Repositories\Eloquent\EloquentTagTypeRepository::class,
     ];
 }

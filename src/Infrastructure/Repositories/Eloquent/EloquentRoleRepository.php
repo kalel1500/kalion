@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Infrastructure\Models\Role;
 
-class RoleRepository implements RoleRepositoryContract
+class EloquentRoleRepository implements RoleRepositoryContract
 {
     protected string $model = Role::class;
 

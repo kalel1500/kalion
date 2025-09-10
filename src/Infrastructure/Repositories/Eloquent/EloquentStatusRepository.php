@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\StatusCollection;
 use Thehouseofel\Kalion\Domain\Objects\Entities\StatusEntity;
 use Thehouseofel\Kalion\Infrastructure\Models\Status;
 
-class StatusRepository implements StatusRepositoryContract
+class EloquentStatusRepository implements StatusRepositoryContract
 {
     protected string $model = Status::class;
 

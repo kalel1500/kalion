@@ -14,7 +14,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 
-final class TagRepository implements TagRepositoryContract
+final class EloquentTagRepository implements TagRepositoryContract
 {
     private string $model;
 

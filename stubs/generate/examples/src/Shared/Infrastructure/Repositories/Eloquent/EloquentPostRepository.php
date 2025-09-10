@@ -13,7 +13,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 
-final class PostRepository implements PostRepositoryContract
+final class EloquentPostRepository implements PostRepositoryContract
 {
     private string $model;
 

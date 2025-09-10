@@ -7,14 +7,13 @@ namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
-class ApiUserRepository
+class EloquentUserRepository
 {
-    protected string $guard = 'api';
     protected string $model;
 
     public function __construct()
     {
-        $this->model = Kalion::getClassUserModel($this->guard);
+        $this->model = Kalion::getClassUserModel();
     }
 
     public function find(int $id): UserEntity
@@ -22,6 +21,6 @@ class ApiUserRepository
         $data = $this->model::query()
             ->with('roles')
             ->findOrFail($id);
-        return Kalion::getClassUserEntity($this->guard)::fromArray($data->toArray(), ['roles']);
+        return Kalion::getClassUserEntity()::fromArray($data->toArray(), ['roles']);
     }
 }

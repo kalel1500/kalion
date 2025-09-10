@@ -10,7 +10,7 @@ use Src\Shared\Domain\Objects\Entities\CommentEntity;
 use Src\Shared\Infrastructure\Models\Comment;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 
-final class CommentRepository implements CommentRepositoryContract
+final class EloquentCommentRepository implements CommentRepositoryContract
 {
     private string $model;
 

@@ -36,10 +36,10 @@ class KalionServiceProvider extends ServiceProvider
         'redirectDefaultPath'                                                                  => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
         'processChecker'                                                                       => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
         \Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUserContract::class         => \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\JobRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\RoleRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\PermissionRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepositoryContract::class     => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\StatusRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepositoryContract::class     => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentStatusRepository::class,
     ];
 
     /**
