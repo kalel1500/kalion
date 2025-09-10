@@ -11,13 +11,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\RegisterContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Register;
 use Thehouseofel\Kalion\Infrastructure\Models\User;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class RegisterService implements RegisterContract
+class RegisterService implements Register
 {
     public function view(?Request $request = null): View
     {

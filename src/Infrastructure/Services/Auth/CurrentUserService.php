@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUserContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUser;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class CurrentUserService implements CurrentUserContract
+final class CurrentUserService implements CurrentUser
 {
     private bool    $loadRoles;
     private string  $entityClass;

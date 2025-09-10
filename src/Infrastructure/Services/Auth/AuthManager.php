@@ -7,18 +7,18 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUserContract;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\LoginContract;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\RegisterContract;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordResetContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUser;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Login;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Register;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordReset;
 
 class AuthManager
 {
     public function __construct(
-        protected CurrentUserContract   $currentUser,
-        protected LoginContract         $login,
-        protected RegisterContract      $register,
-        protected PasswordResetContract $passwordReset,
+        protected CurrentUser   $currentUser,
+        protected Login         $login,
+        protected Register      $register,
+        protected PasswordReset $passwordReset,
     )
     {
     }

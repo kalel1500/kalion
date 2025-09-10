@@ -12,14 +12,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\LoginContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Login;
 use Thehouseofel\Kalion\Infrastructure\Facades\RedirectAfterLogin;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class LoginService implements LoginContract
+class LoginService implements Login
 {
     protected Request $request;
     protected ?string $requestIp;
