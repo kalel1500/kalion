@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Services\Repository;
+namespace Thehouseofel\Kalion\Domain\Services;
 
-use Thehouseofel\Kalion\Domain\Services\Repository\Contracts\LayoutDataContract;
+use Thehouseofel\Kalion\Domain\Services\Contracts\LayoutDataContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
 

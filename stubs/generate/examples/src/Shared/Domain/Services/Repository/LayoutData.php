@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Src\Shared\Domain\Services\Repository;
 
-use Thehouseofel\Kalion\Domain\Services\Repository\Contracts\LayoutDataContract;
+use Thehouseofel\Kalion\Domain\Services\Contracts\LayoutDataContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Domain\Services\Repository\LayoutData as LayoutDataBase;
+use Thehouseofel\Kalion\Domain\Services\LayoutData as LayoutDataBase;
 
 final class LayoutData extends LayoutDataBase implements LayoutDataContract
 {
