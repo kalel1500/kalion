@@ -6,9 +6,9 @@ namespace Src\Shared\Domain\Services\Repository;
 
 use Thehouseofel\Kalion\Domain\Services\Contracts\LayoutDataContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Domain\Services\LayoutData as LayoutDataBase;
+use Thehouseofel\Kalion\Domain\Services\BaseLayoutData;
 
-final class LayoutData extends LayoutDataBase implements LayoutDataContract
+final class LayoutData extends BaseLayoutData implements LayoutDataContract
 {
     public function getMessageCounter(): int
     {

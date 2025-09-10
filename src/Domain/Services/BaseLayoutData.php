@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Services\Contracts\LayoutDataContract;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
 
-class LayoutData implements LayoutDataContract
+class BaseLayoutData implements LayoutDataContract
 {
     public function getMessageCounter(): int
     {
