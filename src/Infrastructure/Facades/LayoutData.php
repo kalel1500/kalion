@@ -7,6 +7,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Facades;
 use Illuminate\Support\Facades\Facade;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
+use Thehouseofel\Kalion\Domain\Services\Contracts\LayoutData as LayoutDataContract;
 
 /**
  * @method static int getMessageCounter()
@@ -22,6 +23,6 @@ final class LayoutData extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'layoutData';
+        return LayoutDataContract::class;
     }
 }
