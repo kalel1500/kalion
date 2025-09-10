@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Authentication as AuthenticationContract;
 
 /**
  * @method static user(string|null $guard = null)
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static View viewPasswordReset(Request $request = null)
  * @method static RedirectResponse reset(Request $request)
  *
- * @see \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager
+ * @see \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthenticationService
  */
 final class Auth extends Facade
 {
@@ -31,6 +32,6 @@ final class Auth extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'authManager';
+        return AuthenticationContract::class;
     }
 }

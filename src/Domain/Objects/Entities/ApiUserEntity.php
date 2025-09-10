@@ -7,8 +7,8 @@ namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
-use Thehouseofel\Kalion\Domain\Traits\EntityHasPermissions;
-use Thehouseofel\Kalion\Domain\Traits\HasGuard;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Concerns\EntityHasPermissions;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Concerns\HasGuard;
 
 class ApiUserEntity extends AbstractEntity
 {

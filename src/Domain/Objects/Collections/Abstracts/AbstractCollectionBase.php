@@ -12,17 +12,17 @@ use Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
 use ReflectionClass;
-use Thehouseofel\Kalion\Domain\Attributes\CollectionOf;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
-use Thehouseofel\Kalion\Domain\Contracts\BuildArrayable;
-use Thehouseofel\Kalion\Domain\Contracts\Relatable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\BuildArrayable;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
-use Thehouseofel\Kalion\Domain\Traits\ParsesRelationFlags;
+use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 use TypeError;
 
 /**

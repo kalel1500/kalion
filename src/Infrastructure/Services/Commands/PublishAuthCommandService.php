@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
-use Thehouseofel\Kalion\Domain\Traits\CountMethods;
+use Thehouseofel\Kalion\Domain\Concerns\CountMethods;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
 
 /**
@@ -83,7 +83,7 @@ final class PublishAuthCommandService
 
             $updatedContent = preg_replace(
                 "/'web'\s*=>\s*env\('KALION_AUTH_REPOSITORY_WEB'.*/",
-                "'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\\\\Kalion\\\\Infrastructure\\\\Repositories\\\\Eloquent\\\\UserRepository::class),",
+                "'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\\\\Kalion\\\\Infrastructure\\\\Repositories\\\\Eloquent\\\\EloquentUserRepository::class),",
                 $updatedContent
             );
         } else {
@@ -95,7 +95,7 @@ final class PublishAuthCommandService
 
             $updatedContent = preg_replace(
                 "/'web'\s*=>\s*env\('KALION_AUTH_REPOSITORY_WEB'.*/",
-                "'web' => env('KALION_AUTH_REPOSITORY_WEB', Src\\\\Shared\\\\Infrastructure\\\\Repositories\\\\Eloquent\\\\UserRepository::class),",
+                "'web' => env('KALION_AUTH_REPOSITORY_WEB', Src\\\\Shared\\\\Infrastructure\\\\Repositories\\\\Eloquent\\\\EloquentUserRepository::class),",
                 $updatedContent
             );
         }

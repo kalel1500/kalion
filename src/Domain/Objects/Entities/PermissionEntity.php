@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 
-use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;

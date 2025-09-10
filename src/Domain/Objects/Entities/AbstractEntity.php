@@ -6,14 +6,14 @@ namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 
 use JsonSerializable;
 use ReflectionClass;
-use Thehouseofel\Kalion\Domain\Attributes\Computed;
-use Thehouseofel\Kalion\Domain\Attributes\RelationOf;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\Computed;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
-use Thehouseofel\Kalion\Domain\Traits\ParsesRelationFlags;
+use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 
 abstract class AbstractEntity implements Arrayable, JsonSerializable
 {

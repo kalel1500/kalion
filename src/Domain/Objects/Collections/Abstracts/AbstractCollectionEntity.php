@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
 use Illuminate\Support\Arr;
-use Thehouseofel\Kalion\Domain\Contracts\ExportableEntity;
-use Thehouseofel\Kalion\Domain\Contracts\Relatable;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Contracts\Exportable;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\PaginationDataDto;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
@@ -51,7 +51,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
 
         /** @var AbstractEntity $entity */
         $entity       = $this->resolvedItemType;
-        $isExportable = (is_subclass_of($entity, ExportableEntity::class));
+        $isExportable = (is_subclass_of($entity, Exportable::class));
         if (!$isExportable) return $data;
 
         $cols    = $entity::$exportMethodName();

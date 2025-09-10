@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Exceptions\Base;
 
 use RuntimeException;
-use Thehouseofel\Kalion\Domain\Contracts\KalionExceptionInterface;
-use Thehouseofel\Kalion\Domain\Traits\KalionExceptionBehavior;
+use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
+use Thehouseofel\Kalion\Domain\Exceptions\Concerns\KalionExceptionBehavior;
 use Throwable;
 
 abstract class KalionRuntimeException extends RuntimeException implements KalionExceptionInterface

@@ -31,95 +31,14 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'authManager'                                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager::class,
-        'redirectAfterLogin'                                                                   => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
-        'redirectDefaultPath'                                                                  => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
-        'processChecker'                                                                       => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Services\CurrentUserContract::class              => \Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUser::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepositoryContract::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\JobRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepositoryContract::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\RoleRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepositoryContract::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\PermissionRepository::class,
-        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepositoryContract::class     => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\StatusRepository::class,
+        'thehouseofel.kalion.redirectAfterLogin'                                       => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
+        'thehouseofel.kalion.redirectDefaultPath'                                      => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
+        'thehouseofel.kalion.processChecker'                                           => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepository::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepository::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepository::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepository::class     => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentStatusRepository::class,
     ];
-
-    /**
-     * Remove the given provider from the application's provider bootstrap file.
-     */
-    public static function removeProviderFromBootstrapFile(string $provider, ?string $path = null): bool
-    {
-        $path ??= app()->getBootstrapProvidersPath();
-
-        if (!file_exists($path)) {
-            return false;
-        }
-
-        if (function_exists('opcache_invalidate')) {
-            opcache_invalidate($path, true);
-        }
-
-        // Cargar los proveedores actuales del archivo
-        $providers = collect(require $path)
-            ->reject(fn($p) => $p === $provider) // Eliminar el provider específico
-            ->unique()
-            ->sort()
-            ->values()
-            ->map(fn($p) => '    '.$p.'::class,') // Formatear las líneas
-            ->implode(PHP_EOL);
-
-        $content = '<?php
-
-return [
-'.$providers.'
-];';
-
-        // Escribir el contenido actualizado en el archivo
-        file_put_contents($path, $content.PHP_EOL);
-
-        return true;
-    }
-
-    private function updateNameOfMigrationsIfExist(): void
-    {
-        $filesystem = new Filesystem();
-        $migrationsPath = database_path('migrations');
-
-        // Lista de nombres de migraciones que quieres renombrar (sin timestamp)
-        $migrationFiles = [
-            'create_statuses_table',
-            'create_tags_table',
-            'create_posts_table',
-            'create_comments_table',
-            'create_post_tag_table',
-        ];
-
-        // Verificar si hay al menos una migración publicada usando coincidencia parcial
-        $migrationsExist = collect($filesystem->files($migrationsPath))->some(function ($file) use ($migrationFiles) {
-            return collect($migrationFiles)->contains(fn($migration) => Str::contains($file->getFilename(), $migration));
-        });
-
-        // Salir si no hay migraciones publicadas
-        if (!$migrationsExist) return;
-
-        $timestamp = now(); // Iniciar con el timestamp actual
-
-        foreach ($filesystem->files($migrationsPath) as $file) {
-            foreach ($migrationFiles as $migration) {
-                if (Str::contains($file->getFilename(), $migration)) {
-                    // Generar nuevo nombre con timestamp actual + nombre de la migración
-                    $newName = $timestamp->format('Y_m_d_His') . '_' . $migration . '.php';
-
-                    // Renombrar el archivo
-                    $filesystem->move($file->getPathname(), $migrationsPath . '/' . $newName);
-
-                    // Incrementar el timestamp en 1 segundo para la próxima migración
-                    $timestamp->addSecond();
-
-                    break; // Salimos del bucle interno tras encontrar la coincidencia
-                }
-            }
-        }
-    }
-
 
     /**
      * Register any application services.
@@ -136,11 +55,12 @@ return [
 
     protected function registerSingletons(): void
     {
-        $this->app->alias(\Thehouseofel\Kalion\Domain\Contracts\Services\LayoutDataContract::class, 'layoutData');
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\LayoutDataContract::class, fn($app) => new (Kalion::getClassServiceLayout()));
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract::class, fn($app) => new (Kalion::getClassServiceLogin()));
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\RegisterContract::class, fn($app) => new (Kalion::getClassServiceRegister()));
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\PasswordResetContract::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Services\Contracts\LayoutData::class, fn($app) => new (Kalion::getClassServiceLayout()));
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUser::class, fn($app) => new (Kalion::getClassServiceCurrentUser()));
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
+        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
+        $this->app->singleton(\Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Authentication::class, \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthenticationService::class);
     }
 
     /**
@@ -438,5 +358,86 @@ return [
             return $this->merge(['class' => $filteredDefault]);
         });
 
+    }
+
+
+
+
+    /**
+     * Remove the given provider from the application's provider bootstrap file.
+     */
+    public static function removeProviderFromBootstrapFile(string $provider, ?string $path = null): bool
+    {
+        $path ??= app()->getBootstrapProvidersPath();
+
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        if (function_exists('opcache_invalidate')) {
+            opcache_invalidate($path, true);
+        }
+
+        // Cargar los proveedores actuales del archivo
+        $providers = collect(require $path)
+            ->reject(fn($p) => $p === $provider) // Eliminar el provider específico
+            ->unique()
+            ->sort()
+            ->values()
+            ->map(fn($p) => '    '.$p.'::class,') // Formatear las líneas
+            ->implode(PHP_EOL);
+
+        $content = '<?php
+
+return [
+'.$providers.'
+];';
+
+        // Escribir el contenido actualizado en el archivo
+        file_put_contents($path, $content.PHP_EOL);
+
+        return true;
+    }
+
+    private function updateNameOfMigrationsIfExist(): void
+    {
+        $filesystem = new Filesystem();
+        $migrationsPath = database_path('migrations');
+
+        // Lista de nombres de migraciones que quieres renombrar (sin timestamp)
+        $migrationFiles = [
+            'create_statuses_table',
+            'create_tags_table',
+            'create_posts_table',
+            'create_comments_table',
+            'create_post_tag_table',
+        ];
+
+        // Verificar si hay al menos una migración publicada usando coincidencia parcial
+        $migrationsExist = collect($filesystem->files($migrationsPath))->some(function ($file) use ($migrationFiles) {
+            return collect($migrationFiles)->contains(fn($migration) => Str::contains($file->getFilename(), $migration));
+        });
+
+        // Salir si no hay migraciones publicadas
+        if (!$migrationsExist) return;
+
+        $timestamp = now(); // Iniciar con el timestamp actual
+
+        foreach ($filesystem->files($migrationsPath) as $file) {
+            foreach ($migrationFiles as $migration) {
+                if (Str::contains($file->getFilename(), $migration)) {
+                    // Generar nuevo nombre con timestamp actual + nombre de la migración
+                    $newName = $timestamp->format('Y_m_d_His') . '_' . $migration . '.php';
+
+                    // Renombrar el archivo
+                    $filesystem->move($file->getPathname(), $migrationsPath . '/' . $newName);
+
+                    // Incrementar el timestamp en 1 segundo para la próxima migración
+                    $timestamp->addSecond();
+
+                    break; // Salimos del bucle interno tras encontrar la coincidencia
+                }
+            }
+        }
     }
 }

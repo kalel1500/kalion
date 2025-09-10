@@ -7,13 +7,14 @@ namespace Thehouseofel\Kalion\Infrastructure\Facades;
 use Illuminate\Support\Facades\Facade;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
+use Thehouseofel\Kalion\Domain\Services\Contracts\LayoutData as LayoutDataContract;
 
 /**
  * @method static int getMessageCounter()
  * @method static NavbarItemCollection getNavbarNotifications()
  * @method static UserInfoDto getUserInfo()
  *
- * @see \Thehouseofel\Kalion\Domain\Services\Repository\LayoutData
+ * @see \Thehouseofel\Kalion\Domain\Services\BaseLayoutData
  */
 final class LayoutData extends Facade
 {
@@ -22,6 +23,6 @@ final class LayoutData extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'layoutData';
+        return LayoutDataContract::class;
     }
 }

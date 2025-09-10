@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Domain\Contracts\KalionExceptionInterface;
+use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity;

@@ -23,6 +23,6 @@ final class ProcessChecker extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'processChecker';
+        return 'thehouseofel.kalion.processChecker';
     }
 }

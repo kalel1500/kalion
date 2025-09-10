@@ -170,7 +170,7 @@ return [
         'sidebar_collapsed' => (bool) env('KALION_LAYOUT_SIDEBAR_COLLAPSED', false),
         'sidebar_state_per_page' => (bool) env('KALION_LAYOUT_SIDEBAR_STATE_PER_PAGE', false),
         'blade_show_main_border' => (bool) env('KALION_LAYOUT_BLADE_SHOW_MAIN_BORDER', false),
-        'service' => env('KALION_LAYOUT_SERVICE', Thehouseofel\Kalion\Domain\Services\Repository\LayoutData::class),
+        'service' => env('KALION_LAYOUT_SERVICE', Thehouseofel\Kalion\Domain\Services\BaseLayoutData::class),
         'asset_path_logo' => env('KALION_LAYOUT_ASSET_PATH_LOGO', 'resources/images/logo.svg'),
         'asset_path_favicon' => env('KALION_LAYOUT_ASSET_PATH_FAVICON', 'resources/images/favicon.ico'),
     ],
@@ -209,13 +209,14 @@ return [
             'api' => env('KALION_AUTH_ENTITY_API', Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity::class),
         ],
         'repositories' => [
-            'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\UserRepository::class),
-            'api' => env('KALION_AUTH_REPOSITORY_API', Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\ApiUserRepository::class),
+            'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentUserRepository::class),
+            'api' => env('KALION_AUTH_REPOSITORY_API', Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository::class),
         ],
         'services' => [
-            'login' => env('KALION_AUTH_SERVICE_LOGIN', Thehouseofel\Kalion\Infrastructure\Services\Auth\Login::class),
-            'register' => env('KALION_AUTH_SERVICE_REGISTER', Thehouseofel\Kalion\Infrastructure\Services\Auth\Register::class),
-            'password_reset' => env('KALION_AUTH_SERVICE_PASSWORD_RESET', Thehouseofel\Kalion\Infrastructure\Services\Auth\PasswordReset::class),
+            'current_user' => env('KALION_AUTH_SERVICE_CURRENT_USER', Thehouseofel\Kalion\Infrastructure\Services\Auth\CurrentUserService::class),
+            'login' => env('KALION_AUTH_SERVICE_LOGIN', Thehouseofel\Kalion\Infrastructure\Services\Auth\LoginService::class),
+            'register' => env('KALION_AUTH_SERVICE_REGISTER', Thehouseofel\Kalion\Infrastructure\Services\Auth\RegisterService::class),
+            'password_reset' => env('KALION_AUTH_SERVICE_PASSWORD_RESET', Thehouseofel\Kalion\Infrastructure\Services\Auth\PasswordResetService::class),
         ],
         'fields' => [
             'web' => env('KALION_AUTH_FIELD', 'email'),

@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Src\Posts\Application;
 
 use Src\Posts\Domain\Objects\DataObjects\ViewDataPostListDto;
-use Src\Shared\Domain\Contracts\Repositories\PostRepositoryContract;
-use Src\Shared\Domain\Contracts\Repositories\TagRepositoryContract;
+use Src\Shared\Domain\Contracts\Repositories\PostRepository;
+use Src\Shared\Domain\Contracts\Repositories\TagRepository;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 
 final readonly class GetViewDataPostListUseCase
 {
     public function __construct(
-        public PostRepositoryContract $repositoryPost,
-        public TagRepositoryContract  $repositoryTag,
+        public PostRepository $repositoryPost,
+        public TagRepository  $repositoryTag,
     )
     {
     }
