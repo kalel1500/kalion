@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
-use Thehouseofel\Kalion\Domain\Contracts\Relatable;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Concerns\HasRelatableOptions;
 
 abstract class AbstractCollectionAny extends AbstractCollectionBase implements Relatable

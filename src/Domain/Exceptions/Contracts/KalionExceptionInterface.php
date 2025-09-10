@@ -1,6 +1,6 @@
 <?php
 
-namespace Thehouseofel\Kalion\Domain\Contracts;
+namespace Thehouseofel\Kalion\Domain\Exceptions\Contracts;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
 

@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Exceptions\Base;
 
 use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Thehouseofel\Kalion\Domain\Contracts\KalionExceptionInterface;
+use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Exceptions\Concerns\KalionExceptionBehavior;
 use Throwable;
 

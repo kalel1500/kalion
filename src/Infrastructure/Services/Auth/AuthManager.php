@@ -7,10 +7,10 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Domain\Contracts\Services\CurrentUserContract;
-use Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract;
-use Thehouseofel\Kalion\Domain\Contracts\Services\RegisterContract;
-use Thehouseofel\Kalion\Domain\Contracts\Services\PasswordResetContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUserContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\LoginContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\RegisterContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordResetContract;
 
 class AuthManager
 {

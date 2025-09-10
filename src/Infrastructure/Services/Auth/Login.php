@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Thehouseofel\Kalion\Domain\Contracts\Services\LoginContract;
+use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\LoginContract;
 use Thehouseofel\Kalion\Infrastructure\Facades\RedirectAfterLogin;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
