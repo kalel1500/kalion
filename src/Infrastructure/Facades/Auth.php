@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static View viewPasswordReset(Request $request = null)
  * @method static RedirectResponse reset(Request $request)
  *
- * @see \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager
+ * @see \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthenticationService
  */
 final class Auth extends Facade
 {

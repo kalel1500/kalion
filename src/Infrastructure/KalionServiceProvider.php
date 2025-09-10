@@ -31,7 +31,7 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'authManager'                                                                  => \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthManager::class,
+        'authManager'                                                                  => \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthenticationService::class,
         'redirectAfterLogin'                                                           => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
         'redirectDefaultPath'                                                          => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
         'processChecker'                                                               => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,

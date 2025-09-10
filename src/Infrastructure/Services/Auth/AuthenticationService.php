@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Login;
 use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Register;
 use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordReset;
 
-class AuthManager
+class AuthenticationService
 {
     public function __construct(
         protected CurrentUser   $currentUser,
