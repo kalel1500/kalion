@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUser;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\CurrentUser;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 

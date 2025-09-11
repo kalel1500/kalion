@@ -7,10 +7,10 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUser;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Login;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Register;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordReset;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\CurrentUser;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Login;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Register;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\PasswordReset;
 use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Authentication;
 
 class AuthenticationService implements Authentication

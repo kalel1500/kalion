@@ -56,10 +56,10 @@ class KalionServiceProvider extends ServiceProvider
     protected function registerSingletons(): void
     {
         $this->app->singleton(\Thehouseofel\Kalion\Domain\Services\Contracts\LayoutData::class, fn($app) => new (Kalion::getClassServiceLayout()));
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\CurrentUser::class, fn($app) => new (Kalion::getClassServiceCurrentUser()));
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
-        $this->app->singleton(\Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
+        $this->app->singleton(\Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\CurrentUser::class, fn($app) => new (Kalion::getClassServiceCurrentUser()));
+        $this->app->singleton(\Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
+        $this->app->singleton(\Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
+        $this->app->singleton(\Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
         $this->app->singleton(\Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Authentication::class, \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthenticationService::class);
     }
 

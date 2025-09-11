@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Domain\Contracts\Services\Auth\PasswordReset;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\PasswordReset;
 use Thehouseofel\Kalion\Domain\Exceptions\FeatureUnavailableException;
 
 /**
