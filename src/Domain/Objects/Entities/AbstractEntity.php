@@ -344,19 +344,22 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 
     private function setDeepRelations(string $relation, string|array|null $relationRels, bool|string|null $isFull): void
     {
-        $isEntity     = is_subclass_of($this->relations[$relation], AbstractEntity::class);
-        $isCollection = is_subclass_of($this->relations[$relation], AbstractCollectionEntity::class);
+        /** @var AbstractEntity|AbstractCollectionEntity $relationItem */
+        $relationItem = $this->relations[$relation];
+
+        $isEntity     = is_subclass_of($relationItem, AbstractEntity::class);
+        $isCollection = is_subclass_of($relationItem, AbstractCollectionEntity::class);
 
         if ($isEntity) {
-            $this->relations[$relation]->with($relationRels);
-            $this->relations[$relation]->isFull = $isFull;
+            $relationItem->with($relationRels);
+            $relationItem->isFull = $isFull;
         }
         if ($isCollection) {
-            foreach ($this->relations[$relation] as $item) {
+            foreach ($relationItem as $item) {
                 $item->with($relationRels);
                 $item->isFull = $isFull;
             }
-            $this->relations[$relation]->setWith($relationRels)->setIsFull($isFull);
+            $relationItem->setWith($relationRels)->setIsFull($isFull);
         }
     }
 
