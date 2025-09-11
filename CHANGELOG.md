@@ -1,6 +1,90 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.32.1-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.33.0-beta.0...master)
+
+## [v0.33.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.32.1-beta.1...v0.33.0-beta.0) - 2025-09-11
+
+### Added
+
+* Nueva interfaz `Authentication` para la clase `AuthenticationService`.
+
+### Changed
+
+* (breaking) Se ha añadido el prefijo `thehouseofel.kalion.` a todos los alias de las Facades para evitar conflictos con otros paquetes. Nota: Si accedías a los servicios mediante alguno de los siguientes alias, deberás renombrarlos: 
+  * `redirectAfterLogin`  &rarr;  `thehouseofel.kalion.redirectAfterLogin`
+  * `redirectDefaultPath` &rarr;  `thehouseofel.kalion.redirectDefaultPath`
+  * `processChecker`      &rarr;  `thehouseofel.kalion.processChecker`
+* (refactor) Se han ordenado los métodos de la clase `KalionServiceProvider`
+* (refactor) Ahora la Facade `Auth` se resuelve directamente contra el nuevo contrato `Authentication::class`. Nota: el alias de contenedor `authManager` ha sido eliminado. Si accedías al servicio mediante app(`authManager`), deberás usar `app(Authentication::class)`.
+* Se ha eliminado la propiedad `final` de la clase `CurrentUserService` para hacerla heredable. También se ha modificado el `singleton` para apuntar a la configuración `kalion.auth.services.current_user` y por último se ha creado la variable de entorno `KALION_AUTH_SERVICE_CURRENT_USER` para poder definirla desde el `.env`
+* (refactor) Ahora la Facade `LayoutData` se resuelve directamente contra el contrato `Thehouseofel\Kalion\Domain\Services\Contracts\LayoutData::class`. Nota: el alias de contenedor `layoutData` ha sido eliminado. Si accedías al servicio mediante app(`layoutData`), deberás usar `app(LayoutData::class)`.
+* (refactor) Se ha mejorado el método `userEntity` de la clase `CurrentUserService` usando variables locales y añadiendo documentación para tipar la variable `$entityClass`
+* (refactor) Se ha renombrado el método `entity()` de `CurrentUser` a `userEntity()`
+* (breaking) Se han movido y renombrado los Atributos, Interfaces, Traits y otras clases:
+  * Atributos:
+    * `Domain/Attributes/CollectionOf.php` &rarr; `Domain/Objects/Collections/Attributes/CollectionOf.php`
+    * `Domain/Attributes/Computed.php`     &rarr; `Domain/Objects/Entities/Attributes/CollectionOf.php`
+    * `Domain/Attributes/RelationOf.php`   &rarr; `Domain/Objects/Entities/Attributes/CollectionOf.php`
+  * Traits:
+    * `Domain/Traits/HasIds.php`                                &rarr; `Domain/Concerns/Enums/HasIds.php`
+    * `Domain/Traits/HasTranslations.php`                       &rarr; `Domain/Concerns/Enums/HasTranslations.php`
+    * `Domain/Traits/ParsesRelationFlags.php`                   &rarr; `Domain/Concerns/Relations/ParsesRelationFlags.php`
+    * `Domain/Traits/CountMethods.php`                          &rarr; `Domain/Concerns/CountMethods.php`
+    * `Domain/Traits/Instantiable.php`                          &rarr; `Domain/Concerns/Instantiable.php`
+    * `Domain/Traits/KalionAssertions.php`                      &rarr; `Domain/Concerns/KalionAssertions.php`
+    * `Domain/Traits/Singelton.php`                             &rarr; `Domain/Concerns/Singelton.php`
+    * `Domain/Traits/KalionExceptionBehavior.php`               &rarr; `Domain/Exceptions/Concerns/KalionExceptionBehavior.php`
+    * `Domain/Traits/EntityHasPermissions.php`                  &rarr; `Domain/Objects/Entities/Concerns/EntityHasPermissions.php`
+    * `Domain/Traits/HasGuard.php`                              &rarr; `Domain/Objects/Entities/Concerns/HasGuard.php`
+    * `Domain/Traits/ModelHasPermissions.php`                   &rarr; `Infrastructure/Models/Concerns/ModelHasPermissions.php`
+    * `Infrastructure/Traits/InteractsWithComposerPackages.php` &rarr; `Infrastructure/Console/Commands/Concerns/InteractsWithComposerPackages.php`
+  * Interfaces:
+    * `Domain/Contracts/IdentifiableEnum.php`                                      &rarr; `Domain/Contracts/Enums/Identifiable.php`
+    * `Domain/Contracts/TranslatableEnum.php`                                      &rarr; `Domain/Contracts/Enums/Translatable.php`
+    * `Domain/Contracts/Services/CurrentUserContract.php`                          &rarr; `Infrastructure/Services/Auth/Contracts/CurrentUser.php`
+    * `Domain/Contracts/Services/LoginContract.php`                                &rarr; `Infrastructure/Services/Auth/Contracts/Login.php`
+    * `Domain/Contracts/Services/PasswordResetContract.php`                        &rarr; `Infrastructure/Services/Auth/Contracts/PasswordReset.php`
+    * `Domain/Contracts/Services/RegisterContract.php`                             &rarr; `Infrastructure/Services/Auth/Contracts/Register.php`
+    * `Domain/Contracts/KalionExceptionInterface.php`                              &rarr; `Domain/Exceptions/Contracts/KalionExceptionInterface.php`
+    * `Domain/Contracts/Relatable.php`                                             &rarr; `Domain/Objects/Collections/Contracts/Relatable.php`
+    * `Domain/Contracts/BuildArrayable.php`                                        &rarr; `Domain/Objects/DataObjects/Contracts/BuildArrayable.php`
+    * `Domain/Contracts/ExportableEntity.php`                                      &rarr; `Domain/Objects/Entities/Contracts/Exportable.php`
+    * `Domain/Contracts/Services/LayoutDataContract.php`                           &rarr; `Domain/Services/Contracts/LayoutData.php`
+    * `Domain/Contracts/Repositories/JobRepositoryContract.php`                    &rarr; `Domain/Contracts/Repositories/JobRepository.php`
+    * `Domain/Contracts/Repositories/PermissionRepositoryContract.php`             &rarr; `Domain/Contracts/Repositories/PermissionRepository.php`
+    * `Domain/Contracts/Repositories/RoleRepositoryContract.php`                   &rarr; `Domain/Contracts/Repositories/RoleRepository.php`
+    * `Domain/Contracts/Repositories/StatusRepositoryContract.php`                 &rarr; `Domain/Contracts/Repositories/StatusRepository.php`
+    * `Domain/Contracts/Repositories/TabulatorRepositoryContract.php`              &rarr; `Domain/Contracts/Repositories/TabulatorRepository.php`
+    * (stubs) `Shared/Domain/Contracts/Repositories/CommentRepositoryContract.php` &rarr; `Domain/Contracts/Repositories/CommentRepository.php`
+    * (stubs) `Shared/Domain/Contracts/Repositories/PostRepositoryContract.php`    &rarr; `Domain/Contracts/Repositories/PostRepository.php`
+    * (stubs) `Shared/Domain/Contracts/Repositories/TagRepositoryContract.php`     &rarr; `Domain/Contracts/Repositories/TagRepository.php`
+    * (stubs) `Shared/Domain/Contracts/Repositories/TagTypeRepositoryContract.php` &rarr; `Domain/Contracts/Repositories/TagTypeRepository.php`
+  * Otras clases:
+    * `Domain/Services/PermissionParser.php`                                      &rarr; `Domain/Services/Auth/PermissionParser.php`
+    * `Domain/Services/Repository/UserAccessChecker.php`                          &rarr; `Domain/Services/Auth/UserAccessChecker.php`
+    * `Domain/Services/Repository/LayoutData.php`                                 &rarr; `Domain/Services/BaseLayoutData.php`
+    * (stubs) `Shared/Domain/Services/Repository/LayoutData.php`                  &rarr; `Shared/Domain/Services/Repository/AppLayoutData.php`
+    * `Infrastructure/Repositories/Eloquent/ApiUserRepository.php`                &rarr; `Infrastructure/Repositories/Eloquent/EloquentApiUserRepository.php`
+    * `Infrastructure/Repositories/Eloquent/JobRepository.php`                    &rarr; `Infrastructure/Repositories/Eloquent/EloquentJobRepository.php`
+    * `Infrastructure/Repositories/Eloquent/PermissionRepository.php`             &rarr; `Infrastructure/Repositories/Eloquent/EloquentPermissionRepository.php`
+    * `Infrastructure/Repositories/Eloquent/RoleRepository.php`                   &rarr; `Infrastructure/Repositories/Eloquent/EloquentRoleRepository.php`
+    * `Infrastructure/Repositories/Eloquent/StatusRepository.php`                 &rarr; `Infrastructure/Repositories/Eloquent/EloquentStatusRepository.php`
+    * `Infrastructure/Repositories/Eloquent/TabulatorRepository.php`              &rarr; `Infrastructure/Repositories/Eloquent/EloquentTabulatorRepository.php`
+    * `Infrastructure/Repositories/Eloquent/UserRepository.php`                   &rarr; `Infrastructure/Repositories/Eloquent/EloquentUserRepository.php`
+    * (stubs) `Shared/Infrastructure/Repositories/Eloquent/CommentRepository.php` &rarr; `Shared/Infrastructure/Repositories/Eloquent/EloquentCommentRepository.php`
+    * (stubs) `Shared/Infrastructure/Repositories/Eloquent/PostRepository.php`    &rarr; `Shared/Infrastructure/Repositories/Eloquent/EloquentPostRepository.php`
+    * (stubs) `Shared/Infrastructure/Repositories/Eloquent/TagRepository.php`     &rarr; `Shared/Infrastructure/Repositories/Eloquent/TagRepository.php`
+    * (stubs) `Shared/Infrastructure/Repositories/Eloquent/TagTypeRepository.php` &rarr; `Shared/Infrastructure/Repositories/Eloquent/EloquentTagTypeRepository.php`
+    * (stubs) `Shared/Infrastructure/Repositories/Eloquent/UserRepository.php`    &rarr; `Shared/Infrastructure/Repositories/Eloquent/EloquentUserRepository.php`
+    * `Infrastructure/Services/Auth/CurrentUser.php`                              &rarr; `Infrastructure/Services/Auth/CurrentUserService.php`
+    * `Infrastructure/Services/Auth/Login.php`                                    &rarr; `Infrastructure/Services/Auth/LoginService.php`
+    * `Infrastructure/Services/Auth/PasswordReset.php`                            &rarr; `Infrastructure/Services/Auth/PasswordResetService.php`
+    * `Infrastructure/Services/Auth/Register.php`                                 &rarr; `Infrastructure/Services/Auth/RegisterService.php`
+    * `Infrastructure/Services/Auth/AuthManager.php`                              &rarr; `Infrastructure/Services/Auth/AuthenticationService.php`
+
+### Fixed
+
+* (fix) stubs: Se ha movido el `DependencyServiceProvider` de la carpeta `base` a la carpeta `examples`, ya que solo se usa con los ejemplos
 
 ## [v0.32.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.32.1-beta.0...v0.32.1-beta.1) - 2025-09-05
 
