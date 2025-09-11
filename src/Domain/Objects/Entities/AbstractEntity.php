@@ -355,9 +355,9 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
             $relationItem->isFull = $isFull;
         }
         if ($isCollection) {
-            foreach ($relationItem as $item) {
-                $item->with($relationRels);
-                $item->isFull = $isFull;
+            foreach ($relationItem as $entity) {
+                $entity->with($relationRels);
+                $entity->isFull = $isFull;
             }
             $relationItem->setWith($relationRels)->setIsFull($isFull);
         }
