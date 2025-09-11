@@ -293,70 +293,70 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         if (!$relations) return $this;
 
         $relations      = is_array($relations) ? $relations : [$relations];
-        $firstRelations = [];
+        $entityRelations = [];
 
-        foreach ($relations as $key => $rel) {
+        foreach ($relations as $key => $segment) {
 
-            if (is_null($rel)) continue;
+            if (is_null($segment)) continue;
 
-            $currentRel = ($isKey = is_string($key)) ? $key : $rel;
+            $currentSegment = ($isKey = is_string($key)) ? $key : $segment;
 
-            $currentRels = explode('.', $currentRel);
-            $first       = $currentRels[0];
+            $currentRels = explode('.', $currentSegment);
+            $entityRel       = $currentRels[0];
             unset($currentRels[0]);
             $hasRelsAfterPoint = ($relsAfterPoint = implode('.', $currentRels)) !== '';
 
-            $last = ($isKey)
-                ? ($hasRelsAfterPoint ? [$relsAfterPoint => $rel] : $rel)
+            $subRels = ($isKey)
+                ? ($hasRelsAfterPoint ? [$relsAfterPoint => $segment] : $segment)
                 : ($hasRelsAfterPoint ? $relsAfterPoint : null);
 
-            $firstRelations[] = $first;
-            [$first, $isFull] = $this->getInfoFromRelationWithFlag($first);
-            $this->setFirstRelation($first);
-            $this->setLastRelation($first, $last, $isFull);
+            $entityRelations[] = $entityRel;
+            [$entityRelName, $isFull] = $this->getInfoFromRelationWithFlag($entityRel);
+            $this->setCurrentRelation($entityRelName);
+            $this->setDeepRelations($entityRelName, $subRels, $isFull);
         }
 
 //        $this->originalArray = null;
-        $this->with = $firstRelations;
+        $this->with = $entityRelations;
         return $this;
     }
 
-    private function setFirstRelation(string $first): void
+    private function setCurrentRelation(string $relation): void
     {
-        $relationName = str_snake($first);
+        $relationName = str_snake($relation);
         if (!array_key_exists($relationName, $this->originalArray)) {
             throw EntityRelationException::relationNotLoadedInEloquentResult($relationName, static::class);
         }
         $relationData = $this->originalArray[$relationName];
 
         $ref        = new ReflectionClass(static::class); // REFLECTION - delete
-        $attributes = $ref->getMethod($first)->getAttributes(RelationOf::class);
+        $attributes = $ref->getMethod($relation)->getAttributes(RelationOf::class);
 
         if (empty($attributes)) {
             $class = static::class;
-            throw new RequiredDefinitionException("The $class::$first method must have the #[RelationOf(...)] attribute defined.");
+            throw new RequiredDefinitionException("The $class::$relation method must have the #[RelationOf(...)] attribute defined.");
         }
 
         /** @var AbstractEntity|AbstractCollectionEntity $class */
-        $class                   = $attributes[0]->newInstance()->class;
-        $this->relations[$first] = $class::fromArray($relationData);
+        $class                      = $attributes[0]->newInstance()->class;
+        $this->relations[$relation] = $class::fromArray($relationData);
     }
 
-    private function setLastRelation(string $first, string|array|null $last, bool|string|null $isFull): void
+    private function setDeepRelations(string $relation, string|array|null $relationRels, bool|string|null $isFull): void
     {
-        $isEntity     = is_subclass_of($this->relations[$first], AbstractEntity::class);
-        $isCollection = is_subclass_of($this->relations[$first], AbstractCollectionEntity::class);
+        $isEntity     = is_subclass_of($this->relations[$relation], AbstractEntity::class);
+        $isCollection = is_subclass_of($this->relations[$relation], AbstractCollectionEntity::class);
 
         if ($isEntity) {
-            $this->relations[$first]->with($last);
-            $this->relations[$first]->isFull = $isFull;
+            $this->relations[$relation]->with($relationRels);
+            $this->relations[$relation]->isFull = $isFull;
         }
         if ($isCollection) {
-            foreach ($this->relations[$first] as $item) {
-                $item->with($last);
+            foreach ($this->relations[$relation] as $item) {
+                $item->with($relationRels);
                 $item->isFull = $isFull;
             }
-            $this->relations[$first]->setWith($last)->setIsFull($isFull);
+            $this->relations[$relation]->setWith($relationRels)->setIsFull($isFull);
         }
     }
 
