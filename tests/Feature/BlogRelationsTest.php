@@ -7,6 +7,7 @@ namespace Thehouseofel\Kalion\Tests\Feature;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Thehouseofel\Kalion\Domain\Concerns\KalionAssertions;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\PostCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDto;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDtoCollection;
 use Thehouseofel\Kalion\Tests\TestCase;
@@ -15,11 +16,19 @@ class BlogRelationsTest extends TestCase
 {
     use KalionAssertions;
 
-    public function test_post_relations()
+    public static function getPosts(): array
     {
         $useCase = new \Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Application\GetPostDataUseCase();
-        $posts = $useCase->getPostsWithRelations();
+        return [
+            [fn () => $useCase->getPostsWithRelations()],
+        ];
+    }
 
+    #[DataProvider('getPosts')]
+    public function test_post_relations(callable $getPosts)
+    {
+        /** @var PostCollection $posts */
+        $posts = $getPosts();
         $this->assertArrayStructure([
             '*' => [
                 'number_comments',
@@ -43,7 +52,8 @@ class BlogRelationsTest extends TestCase
         ], $posts->toArray());
     }
 
-    public function test_post_pluck()
+    #[DataProvider('getPosts')]
+    public function test_post_pluck(callable $getPosts)
     {
         $useCase = new \Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Application\GetPostDataUseCase();
         $pluck = $useCase->getPluckData();
