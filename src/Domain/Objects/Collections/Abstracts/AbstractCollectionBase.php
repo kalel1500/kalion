@@ -775,6 +775,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $collectionItem->toArrayForBuild()[$pluckField];
             }
 
+            if ($collectionItem instanceof Arrayable) {
+                return $collectionItem->toArray()[$pluckField];
+            }
+
             return null;
         };
         $clearItemValue = function ($item) {
