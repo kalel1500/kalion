@@ -769,8 +769,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $collectionItem->$pluckField();
             }
 
-            $itemClass = new ReflectionClass($collectionItem); // REFLECTION - delete
-            if ($itemClass->hasProperty($pluckField) && $itemClass->getProperty($pluckField)->isPublic()) {
+            if (property_exists($collectionItem, $pluckField)) {
                 return $collectionItem->$pluckField;
             }
 
