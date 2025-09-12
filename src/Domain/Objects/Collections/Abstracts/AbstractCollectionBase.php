@@ -788,6 +788,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             return match (true) {
                 $item instanceof Arrayable           => $item->toArray(),
                 $item instanceof AbstractValueObject => $item->value(),
+                $item instanceof \BackedEnum         => $item->value,
                 default                              => $item
             };
         };
