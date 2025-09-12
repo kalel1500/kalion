@@ -39,8 +39,7 @@ $app->make('router')->get('/dd', function () {
     try {
         $useCase = new \Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Application\GetPostDataUseCase();
         $posts = $useCase->getPostsWithRelations();
-        $pluck = $useCase->getPluckData();
-        dd($posts->toArray(), $pluck);
+        dd($posts->toArray());
     } catch (\Throwable $th) {
         dd($th);
     }
