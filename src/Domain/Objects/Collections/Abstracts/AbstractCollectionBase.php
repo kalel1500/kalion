@@ -755,8 +755,6 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function pluck($value, $key = null)
     {
         $getItemValue   = function ($collectionItem, string $pluckField) {
-            /** @var Arrayable|BuildArrayable $collectionItem */
-
             if (is_array($collectionItem)) {
                 return $collectionItem[str_snake($pluckField)];
             }
@@ -773,7 +771,11 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $collectionItem->$pluckField;
             }
 
-            return $collectionItem->toArrayForBuild()[$pluckField];
+            if ($collectionItem instanceof BuildArrayable) {
+                return $collectionItem->toArrayForBuild()[$pluckField];
+            }
+
+            return null;
         };
         $clearItemValue = function ($item) {
             return match (true) {
