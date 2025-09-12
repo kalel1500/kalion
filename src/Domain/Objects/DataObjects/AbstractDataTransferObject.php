@@ -117,8 +117,8 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
 
         $args = [];
 
-        foreach (self::$reflectionCache[$className] as $meta) {
-            $paramName = $meta['name'];
+        foreach (self::$reflectionCache[$className] as $key => $meta) {
+            $paramName = arr_is_assoc($data) ? $meta['name'] : $key;
             $typeName  = $meta['type'];
             $value     = $data[$paramName] ?? null;
 
