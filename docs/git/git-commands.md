@@ -45,3 +45,12 @@ git push origin --delete branch_name  # (Opcional) Eliminar la rama remota
 git tag -d nombre_tag         # Eliminar un tag en local
 git push -d origin nombre_tag # Eliminar el tag del servidor
 ```
+
+### Establecer la hora de un commit y abrir el editor para poder poner comillas dobles
+
+```shell
+export GIT_AUTHOR_DATE="2025-09-13 01:57:00"
+export GIT_COMMITTER_DATE="2025-09-13 01:57:00"
+git add .
+git commit
+```

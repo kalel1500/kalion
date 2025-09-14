@@ -369,3 +369,10 @@ if (!function_exists('is_class_model_id')) {
         return is_subclass_of($class, AbstractModelId::class);
     }
 }
+
+if (!function_exists('arr_is_assoc')) {
+    function arr_is_assoc(array $array): bool
+    {
+        return ! array_is_list($array);
+    }
+}

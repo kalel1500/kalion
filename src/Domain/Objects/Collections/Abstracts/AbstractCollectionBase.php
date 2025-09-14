@@ -755,8 +755,6 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function pluck($value, $key = null)
     {
         $getItemValue   = function ($collectionItem, string $pluckField) {
-            /** @var Arrayable|BuildArrayable $collectionItem */
-
             if (is_array($collectionItem)) {
                 return $collectionItem[str_snake($pluckField)];
             }
@@ -769,17 +767,28 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $collectionItem->$pluckField();
             }
 
-            $itemClass = new ReflectionClass($collectionItem); // REFLECTION - delete
-            if ($itemClass->hasProperty($pluckField) && $itemClass->getProperty($pluckField)->isPublic()) {
+            if (property_exists($collectionItem, $pluckField)) {
                 return $collectionItem->$pluckField;
             }
 
-            return $collectionItem->toArrayForBuild()[$pluckField];
+            if ($collectionItem instanceof BuildArrayable) {
+                $value = $collectionItem->toArrayForBuild()[$pluckField] ?? null;
+                if (!is_null($value)) {
+                    return $value;
+                }
+            }
+
+            if ($collectionItem instanceof Arrayable) {
+                return $collectionItem->toArray()[$pluckField];
+            }
+
+            return null;
         };
         $clearItemValue = function ($item) {
             return match (true) {
                 $item instanceof Arrayable           => $item->toArray(),
                 $item instanceof AbstractValueObject => $item->value(),
+                $item instanceof \BackedEnum         => $item->value,
                 default                              => $item
             };
         };
