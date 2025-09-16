@@ -144,10 +144,16 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         // Cachear la reflexión de propiedades públicas
         if (!isset(self::$propsCache[$className])) {
             $ref    = new ReflectionClass($this); // REFLECTION - cached
+            $constructor = $ref->getConstructor();
+
+            if (!$constructor) {
+                throw ReflectionException::constructorMissing($className);
+            }
+
             $cached = [];
 
-            foreach ($ref->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-                $cached[] = $property->getName();
+            foreach ($constructor->getParameters() as $parameter) {
+                $cached[] = $parameter->getName();
             }
 
             self::$propsCache[$className] = $cached;
