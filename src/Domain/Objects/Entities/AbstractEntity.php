@@ -22,7 +22,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
 {
     use ParsesRelationFlags;
 
-    private static array          $makeCache      = [];
+    private static array          $constructCache = [];
     private static array          $propsCache     = [];
     private static array          $computedCache  = [];
     protected static ?array       $databaseFields = null;
@@ -41,7 +41,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
      */
     private static function getConstructorTypes(string $className): array
     {
-        if (!isset(self::$makeCache[$className])) {
+        if (!isset(self::$constructCache[$className])) {
             $ref  = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $ref->getConstructor();
 
@@ -115,10 +115,10 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
                 ];
             }
 
-            self::$makeCache[$className] = $params;
+            self::$constructCache[$className] = $params;
         }
 
-        return self::$makeCache[$className];
+        return self::$constructCache[$className];
     }
 
     /**
