@@ -96,7 +96,7 @@ class BlogRelationsTest extends TestCase
     public function test_dto_pluck_with_backed_enum(ExampleDtoCollection $dto)
     {
         $firstCheck = $dto->pluck('enum')->first();
-        $this->assertEquals(CheckableProcessVo::queue->value, $firstCheck);
+        $this->assertEquals(CheckableProcessVo::queue, $firstCheck);
     }
 
     #[DataProvider('getDto')]
