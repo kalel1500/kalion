@@ -14,17 +14,21 @@ use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractJsonVo;
 
 abstract class AbstractEntity implements Arrayable, JsonSerializable
 {
     use ParsesRelationFlags;
 
-    private static array       $makeCache      = [];
-    private static array       $propsCache     = [];
-    private static array       $computedCache  = [];
-    protected static ?array    $databaseFields = null;
-    protected static string    $primaryKey     = 'id';
-    protected static bool      $incrementing   = true;
+    private static array          $makeCache      = [];
+    private static array          $propsCache     = [];
+    private static array          $computedCache  = [];
+    protected static ?array       $databaseFields = null;
+    protected static string       $primaryKey     = 'id';
+    protected static bool         $incrementing   = true;
+    protected static JsonMethodVo $jsonMethod     = JsonMethodVo::encodedValue;
 
     protected ?array           $with           = null;
     protected bool|string|null $isFull;
@@ -225,13 +229,20 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
                     continue;
                 }
 
+                $returnType = $method->getReturnType();
+
+                if (!($returnType instanceof \ReflectionNamedType)) {
+                    throw ReflectionException::wrongComputedReturnType();
+                }
+
                 /** @var Computed $attr */
                 $attr = $attrs[0]->newInstance();
 
                 $cached[] = [
-                    'name'      => $method->getName(),
-                    'contexts'  => is_string($attr->contexts) ? [$attr->contexts] : $attr->contexts,
-                    'addOnFull' => $attr->addOnFull,
+                    'name'       => $method->getName(),
+                    'returnType' => $returnType->getName(),
+                    'contexts'   => is_string($attr->contexts) ? [$attr->contexts] : $attr->contexts,
+                    'addOnFull'  => $attr->addOnFull,
                 ];
             }
 
@@ -257,7 +268,15 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
             }
 
             $name = $meta['name'];
-            $result[$name] = $this->{$name}();
+            $value = $this->{$name}();
+            $jsonMethod = static::$jsonMethod->value;
+            $result[$name] = match (true) {
+                is_a($meta['returnType'], class: \BackedEnum::class,         allow_string: true) => $value->value,
+                is_a($meta['returnType'], class: AbstractJsonVo::class,      allow_string: true) => $value->{$jsonMethod}(),
+                is_a($meta['returnType'], class: AbstractValueObject::class, allow_string: true) => $value->value(),
+                is_a($meta['returnType'], class: Arrayable::class,           allow_string: true) => $value->toArray(),
+                default                                                                          => $value,
+            };
         }
 
         return $result;

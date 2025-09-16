@@ -29,4 +29,9 @@ class ReflectionException extends KalionRuntimeException
     {
         return new static("The \$$param parameter in $class::$method() has no declared type");
     }
+
+    public static function wrongComputedReturnType(): static
+    {
+        return new static("Computed method return types must not be null. Union and intersection return types are not supported.");
+    }
 }
