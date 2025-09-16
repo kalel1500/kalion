@@ -6,11 +6,16 @@ trait ParsesRelationFlags
 {
     protected function getInfoFromRelationWithFlag(string $relation): array
     {
-        $isFull = null;
         if (str_contains($relation, ':')) {
-            [$relation, $flag] = explode(':', $relation);
-            $isFull = $flag === 'f' ? true : ($flag === 's' ? false : $flag);
+            [$name, $flag] = explode(':', $relation, 2);
+            $flag = match (true) {
+                $flag === 'f' => true,
+                $flag === 's' => false,
+                default       => $flag,
+            };
+            return [$name, $flag];
         }
-        return [$relation, $isFull];
+
+        return [$relation, null];
     }
 }
