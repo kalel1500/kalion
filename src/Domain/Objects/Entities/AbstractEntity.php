@@ -23,7 +23,6 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     use ParsesRelationFlags;
 
     private static array          $constructCache = [];
-    private static array          $propsCache     = [];
     private static array          $computedCache  = [];
     protected static ?array       $databaseFields = null;
     protected static string       $primaryKey     = 'id';
@@ -147,32 +146,17 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         return new static(...$args);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     protected function props(): array
     {
         $className = static::class;
-
-        // Cachear la reflexión de propiedades públicas
-        if (!isset(self::$propsCache[$className])) {
-            $ref    = new ReflectionClass($this); // REFLECTION - cached
-            $constructor = $ref->getConstructor();
-
-            if (!$constructor) {
-                throw ReflectionException::constructorMissing($className);
-            }
-
-            $cached = [];
-
-            foreach ($constructor->getParameters() as $parameter) {
-                $cached[] = $parameter->getName();
-            }
-
-            self::$propsCache[$className] = $cached;
-        }
-
         $props = [];
 
         // Recorrer los nombres ya cacheados
-        foreach (self::$propsCache[$className] as $name) {
+        foreach (self::getConstructorTypes($className) as $meta) {
+            $name = $meta['name'];
             $value = $this->{$name};
 
             $value = match (true) {
