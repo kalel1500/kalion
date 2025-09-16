@@ -1,6 +1,33 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.33.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.33.1-beta.0...master)
+
+## [v0.33.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.33.0-beta.0...v0.33.1-beta.0) - 2025-09-16
+
+### Added
+
+* Nuevo helper `arr_is_assoc()`
+
+### Changed
+
+* Se ha modificado el método `make()` de la clase `AbstractDataTransferObject` para permitir que el método `fromArray()` reciba un array no asociativo (esto incluye el `fromArray()` de las colecciones de DTOs).
+* Tests:
+  * Nuevos tests `test_dto_pluck_with_backed_enum()` y `test_dto_pluck_field_only_in_to_array()` para probar que el pluck funciona con campos `enum` y con campos que solo existen en el método `toArray()`
+  * (refactor) Ahora se usa el atributo `#[DataProvider('getPosts')]` en el test `test_post_relations()` para recibir los posts en vez de llamar al `useCase` en el test
+  * (refactor) Se han sacado las validaciones del test `test_post_pluck()` fuera del `GetPostDataUseCase::getPluckData()`
+* Se ha eliminado la reflexion en el método `pluck()` de la clase `AbstractCollectionBase`, ya que es innecesaria porque puede usar la función `property_exists()`. Ahora ya no se comprueba que la propiedad sea public.
+* (refactor) Se han mejorado los nombres de métodos y variables de la clase `AbstractEntity`
+  * Renombrar variables y métodos privados usados en el método `with()` de la clase `AbstractEntity`
+  * Mejorar método `setDeepRelations()` de la clase `AbstractEntity` guardando en la variable `$relationItem` el valor `$this->relations[$relation]`
+  * Mejorar método `setDeepRelations()` de la clase `AbstractEntity` renombrando la variable del foreach de `$item` a `$entity`
+
+### Fixed
+
+* (fix) Se han corregido varios errores del método `pluck()` de la clase `AbstractCollectionBase`:
+  * Ahora se comprueba si la variable `$collectionItem` es una instancia de `BuildArrayable` antes de llamar al método `toArrayForBuild()`. Si no, devuelve `null`.
+  * Ahora se comprueba si la variable `$collectionItem` es una instancia de `Arrayable` y en ese caso se llama al método `toArray()`.
+  * Ahora se comprueba si el campo existe dentro del `toArrayForBuild()`. Si no existe se intenta sacar del método `toArray()`.
+  * Ahora se comprueba que el valor de `$this->with` no sea null antes de intentar hacer el pluck de la relación.
 
 ## [v0.33.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.32.1-beta.1...v0.33.0-beta.0) - 2025-09-11
 
