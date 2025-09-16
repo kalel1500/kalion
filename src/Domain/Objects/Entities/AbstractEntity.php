@@ -229,8 +229,9 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
                 $attr = $attrs[0]->newInstance();
 
                 $cached[] = [
-                    'name'     => $method->getName(),
-                    'contexts' => $attr->contexts,
+                    'name'      => $method->getName(),
+                    'contexts'  => is_string($attr->contexts) ? [$attr->contexts] : $attr->contexts,
+                    'addOnFull' => $attr->addOnFull,
                 ];
             }
 
@@ -240,9 +241,19 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         $result = [];
 
         foreach (self::$computedCache[$className] as $meta) {
-            // Contexto no coincide → saltar
-            if ($context && !empty($meta['contexts']) && !in_array($context, $meta['contexts'], true)) {
-                continue;
+            $contexts  = $meta['contexts'];
+            $addOnFull = $meta['addOnFull'];
+
+            if ($context === null) {
+                // Solo sin contextos, o con contextos + addOnFull = true
+                if (!empty($contexts) && !$addOnFull) {
+                    continue;
+                }
+            } else {
+                // Solo si el contexto está en contexts (independiente de addOnFull)
+                if (empty($contexts) || !in_array($context, $contexts, true)) {
+                    continue;
+                }
             }
 
             $name = $meta['name'];
