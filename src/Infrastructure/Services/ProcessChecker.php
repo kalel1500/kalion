@@ -53,7 +53,7 @@ final class ProcessChecker
             $process = Process::fromShellCommandline($command);
 
             // Opcional: un timeout pequeño para no colgarnos
-            $process->setTimeout(5);
+            $process->setTimeout(30);
             $process->run();
 
             if (! $process->isSuccessful()) {
