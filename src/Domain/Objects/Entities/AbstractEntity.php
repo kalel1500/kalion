@@ -114,7 +114,31 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
                 ];
             }
 
-            self::$constructCache[$className] = $params;
+            $newParams = [];
+            foreach ($params as $meta) {
+                $class     = $meta['class'];
+                $isModelId = $meta['isModelId'];
+
+                $makeMethod = match (true) {
+                    $isModelId || is_a($class, class: \BackedEnum::class, allow_string: true) => 'from',
+                    is_a($class, class: AbstractValueObject::class, allow_string: true)       => 'new',
+                    default                                                                   => null,
+                };
+
+                $propsMethod = match (true) {
+                    is_a($class, class: AbstractValueObject::class, allow_string: true) => 'value',
+                    default                                                             => null,
+                };
+
+                $newParams[] = [
+                    ...$meta,
+                    'makeMethod' => $makeMethod,
+                    'propsMethod' => $propsMethod,
+                    'propsIsEnum' => is_a($class, class: \BackedEnum::class, allow_string: true),
+                ];
+            }
+
+            self::$constructCache[$className] = $newParams;
         }
 
         return self::$constructCache[$className];
@@ -129,15 +153,15 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         $args = [];
 
         foreach (self::getConstructorTypes($className) as $meta) {
-            $paramName = $meta['name'];
-            $class     = $meta['class'];
-            $isModelId = $meta['isModelId'];
-            $value     = $data[$paramName] ?? null;
+            $paramName  = $meta['name'];
+            $class      = $meta['class'];
+            $makeMethod = $meta['makeMethod'];
+            $value      = $data[$paramName] ?? null;
 
-            $value = match (true) {
-                $isModelId || enum_exists($class)                            => $class::from($value),
-                class_exists($class) && method_exists($class, method: 'new') => $class::new($value),
-                default                                                      => $value,
+            $value = match ($makeMethod) {
+                'from'  => $class::from($value),
+                'new'   => $class::new($value),
+                default => $value,
             };
 
             $args[] = $value;
@@ -157,12 +181,14 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         // Recorrer los nombres ya cacheados
         foreach (self::getConstructorTypes($className) as $meta) {
             $name = $meta['name'];
+            $propsMethod = $meta['propsMethod'];
+            $propsIsEnum = $meta['propsIsEnum'];
             $value = $this->{$name};
 
             $value = match (true) {
-                is_object($value) && method_exists($value, 'value') => $value->value(),
-                is_object($value) && property_exists($value, 'value') => $value->value,
-                default => $value,
+                $propsMethod === 'value' => $value->value(),
+                $propsIsEnum             => $value->value,
+                default                  => $value,
             };
 
             $props[$name] = $value;
