@@ -36,10 +36,11 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     protected array            $relations      = [];
     protected array            $computed       = [];
 
-    protected static function make(array $data): static
+    /**
+     * @throws \ReflectionException
+     */
+    private static function getConstructorTypes(string $className): array
     {
-        $className = static::class;
-
         if (!isset(self::$makeCache[$className])) {
             $ref  = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $ref->getConstructor();
@@ -117,9 +118,18 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
             self::$makeCache[$className] = $params;
         }
 
+        return self::$makeCache[$className];
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    protected static function make(array $data): static
+    {
+        $className = static::class;
         $args = [];
 
-        foreach (self::$makeCache[$className] as $meta) {
+        foreach (self::getConstructorTypes($className) as $meta) {
             $paramName = $meta['name'];
             $class     = $meta['class'];
             $isModelId = $meta['isModelId'];
@@ -183,6 +193,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
      * @param array|string|null $with
      * @param bool|string $isFull
      * @return (T is null ? null : static)
+     * @throws \ReflectionException
      */
     public static function fromArray($data, string|array|null $with = null, bool|string $isFull = null)
     {
