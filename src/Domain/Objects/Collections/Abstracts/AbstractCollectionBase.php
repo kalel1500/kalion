@@ -807,7 +807,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             }
         }
 
-        if (! $this->isInstanceOfRelatable()) {
+        if (! $this->isInstanceOfRelatable() || is_null($this->with)) {
             return CollectionAny::fromArray($result);
         }
 
