@@ -1,6 +1,39 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.33.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.34.0-beta.0...master)
+
+## [v0.34.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.33.1-beta.0...v0.34.0-beta.0) - 2025-09-17
+
+### Added
+
+* Nuevo atributo `DisableReflection`.
+* Nuevo enum `JsonMethodVo`.
+
+### Changed
+
+* Se ha realizado modificaciones en el test `test_dto_pluck_with_backed_enum()`:
+  * La primera comprobación del `enum` no devuelve el `string` sino el propio `enum`.
+  * Se ha añadido una nueva comprobación para el método `pluckValue()`.
+* Se han realizado varias modificaciones en la clase `AbstractCollectionBase`:
+  * (refactor) Se ha movido la lógica del método `pluck()` de al nuevo método privado `doPluck()` para poder usarlo varias veces sin duplicar el código.
+  * Se ha añadido el parámetro `$clean` al método `doPluck()` para poder indicar cuando limpiar o no el valor. 
+  * (breaking) Ahora el método `pluck()` llama al `doPluck()` con al parámetro `$clean` a `false` por lo que ya no limpiará los valores. 
+  * Se ha añadido nuevo método `pluckValue()` que si limpia los valores.
+  * Se ha añadido comprobación de la instancia `BackedEnum` en la función anónima `$clearItemValue` dentro del `doPluck()`. Ahora el `pluckValue()` también limpiará los enums.
+* Se han realizado varias modificaciones en la clase `AbstractDataTransferObject`:
+  * (breaking) Se ha eliminado la propiedad estática `REFLECTION_ACTIVE` y ahora se usa la reflexion en su lugar (leyendo el nuevo atributo `DisableReflection`). Al contrario que antes, ahora por defecto está activada y se desactiva con el atributo.
+  * (refactor) Se ha extraído la lógica de la cache del método `make()` al nuevo método privado `getConstructorParams()`.
+  * Se han eliminado los métodos `make()` de los DTOs que no lo necesitan.
+* (refactor) Se ha mejorado el código del método `getInfoFromRelationWithFlag()` del trit `ParsesRelationFlags` para una mejor comprensión.
+* Se ha aumentado el `timeout` del `ProcessChecker` de 5 a 30 segundos.
+* Se han realizado varias modificaciones en la clase `AbstractEntity`:
+  * Ahora los métodos computados pueden devolver clases (`BackedEnum`, `AbstractJsonVo`, `AbstractValueObject`, `Arrayable`).
+  * Ahora el método `props()` obtiene los parámetros del constructor en vez de las propiedades públicas. De esta forma se permite que se definan otras propiedades públicas en las entidades.
+  * (refactor) Se ha extraído la lógica de la cache del método `make()` al nuevo método privado `getConstructorTypes()`.
+  * (refactor) Se ha renombrado la propiedad privada `$makeCache` a `$constructCache`.
+  * (refactor) Se ha eliminado la lógica de la cache del método `props()` y ahora se usa el método `getConstructorTypes()`.
+  * (refactor) Se ha movido la lógica para obtener el `$value` de los métodos `props()` y `make()` al método `getConstructorTypes()`. Ahora se usa la función `is_a()` para comprobar la clase en vez del `method_exists()`.
+* (breaking) Se ha modificado el atributo `Computed` para que en vez de recibir un array desestructurado, reciba los parámetros `$contexts` y `$addOnFull`. NOTA: Ahora cuando se pasa un contexto al atributo, este atributo por defecto no se añadirá en el `toArray()` aunque el `isFull` sea `true` a no ser que se indique el segundo parámetro del atributo `$addOnFull` a `true`.
 
 ## [v0.33.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.33.0-beta.0...v0.33.1-beta.0) - 2025-09-16
 
