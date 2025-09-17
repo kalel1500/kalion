@@ -121,7 +121,12 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
         return object_to_array($coll);
     }
 
-    public static function fromArray(?array $data): static|null
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @return (T is null ? null : static)
+     */
+    public static function fromArray(?array $data): ?static
     {
         if (is_null($data)) return null;
         return static::make($data);

@@ -21,13 +21,19 @@ abstract class AbstractCollectionVo extends AbstractCollectionBase
         return $this->first()?->value();
     }
 
-    public static function fromArray(?array $values, callable $valueModifierCallback = null): static|null
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @param callable|null $valueModifierCallback
+     * @return (T is null ? null : static)
+     */
+    public static function fromArray(?array $data, callable $valueModifierCallback = null): ?static
     {
-        if (is_null($values)) return null;
+        if (is_null($data)) return null;
 
         $valueClass = static::resolveItemType();
         $res = [];
-        foreach ($values as $key => $value) {
+        foreach ($data as $key => $value) {
             if ($value instanceof $valueClass) {
                 $res[$key] = $value;
             } else {

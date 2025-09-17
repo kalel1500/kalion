@@ -22,14 +22,19 @@ abstract class AbstractCollectionDto extends AbstractCollectionBase implements M
         return array_map(fn(AbstractDataTransferObject $item) => $item->toMakeParams(), $this->items);
     }
 
-    public static function fromArray(?array $values): ?static
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @return (T is null ? null : static)
+     */
+    public static function fromArray(?array $data): ?static
     {
-        if (is_null($values)) return null;
+        if (is_null($data)) return null;
 
         /** @var AbstractDataTransferObject $valueClass */
         $valueClass = static::resolveItemType();
         $res = [];
-        foreach ($values as $key => $value) {
+        foreach ($data as $key => $value) {
             $res[$key] = ($value instanceof $valueClass) ? $value : $valueClass::fromArray($value);
         }
         return new static($res);

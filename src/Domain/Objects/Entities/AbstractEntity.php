@@ -205,7 +205,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
      * @return (T is null ? null : static)
      * @throws \ReflectionException
      */
-    public static function fromArray($data, string|array|null $with = null, bool|string $isFull = null)
+    public static function fromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
     {
         if (is_null($data)) return null;
 

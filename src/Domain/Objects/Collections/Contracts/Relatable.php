@@ -16,5 +16,5 @@ interface Relatable
      * @param bool|string $isFull
      * @return (T is null ? null : static)
      */
-    public static function fromArray($data, string|array|null $with = null, bool|string $isFull = null);
+    public static function fromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static;
 }
