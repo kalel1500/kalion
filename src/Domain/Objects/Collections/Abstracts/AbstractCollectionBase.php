@@ -14,7 +14,7 @@ use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\BuildArrayable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
@@ -766,8 +766,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $collectionItem->$pluckField;
             }
 
-            if ($collectionItem instanceof BuildArrayable) {
-                $value = $collectionItem->toArrayForBuild()[$pluckField] ?? null;
+            if ($collectionItem instanceof MakeParamsArrayable) {
+                $value = $collectionItem->toMakeParams()[$pluckField] ?? null;
                 if (!is_null($value)) {
                     return $value;
                 }
@@ -1131,10 +1131,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         foreach ($this->items as $key => $item) {
             $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
             $item = match (true) {
-                $item instanceof BuildArrayable && $fromThisClass => $item->toArrayForBuild(),
-                $item instanceof Arrayable                        => $item->toArray(),
-                $item instanceof AbstractValueObject              => $item->value(),
-                default                                           => $item,
+                $item instanceof MakeParamsArrayable && $fromThisClass => $item->toMakeParams(),
+                $item instanceof Arrayable                             => $item->toArray(),
+                $item instanceof AbstractValueObject                   => $item->value(),
+                default                                                => $item,
             };
             $result[$key] = $item;
         }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts;
 
-interface BuildArrayable
+interface MakeParamsArrayable
 {
-    public function toArrayForBuild(): array;
+    public function toMakeParams(): array;
 }

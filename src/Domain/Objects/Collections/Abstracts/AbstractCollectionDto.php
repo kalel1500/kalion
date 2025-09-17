@@ -17,9 +17,9 @@ abstract class AbstractCollectionDto extends AbstractCollectionBase
         return parent::first(...func_get_args());
     }
 
-    public function toArrayForBuild(): array
+    public function toMakeParams(): array
     {
-        return array_map(fn($item) => $item->toArrayForBuild(), $this->items);
+        return array_map(fn($item) => $item->toMakeParams(), $this->items);
     }
 
     public static function fromArray(?array $values): ?static
