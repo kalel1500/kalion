@@ -15,12 +15,4 @@ final class ViewIconsDto extends AbstractDataTransferObject
     )
     {
     }
-
-    protected static function make(array $data): static
-    {
-        return new static(
-            IconCollection::fromArray($data['icons'] ?? null),
-            BoolVo::new($data['show_name_short'] ?? null)
-        );
-    }
 }
