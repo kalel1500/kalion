@@ -34,4 +34,9 @@ class ReflectionException extends KalionRuntimeException
     {
         return new static("Computed method return types must not be null. Union and intersection return types are not supported.");
     }
+
+    public static function unexpectedTypeInDtoConstructor(string $class, string $parameter): static
+    {
+        return new static("Unexpected argument type when constructing the class $class. The argument $parameter was passed with an incorrect type. It was expected to be a primitive type (such as string, int, bool, etc.) or an instance of a class that extends BackedEnum, AbstractValueObject, or ArrayConvertible.");
+    }
 }

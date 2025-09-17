@@ -49,18 +49,54 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
                     throw ReflectionException::unionTypeNotSupported($name, $className, '__construct');
                 }
 
-                $typeName = $type?->getName();
+                // Named type (Class)
+                if ($type instanceof \ReflectionNamedType) {
+                    $params[] = [
+                        'name'  => $name,
+                        'class' => $type->isBuiltin() ? null : $type->getName(),
+                    ];
+                    continue;
+                }
 
+                // Sin tipo
                 $params[] = [
-                    'name'     => $name,
-                    'type'     => $typeName,
-                    'isClass'  => $typeName === null ? null : class_exists($typeName),
-                    'isEnum'   => is_a($typeName, \BackedEnum::class, true),
-                    'isVO'     => is_a($typeName, AbstractValueObject::class, true),
+                    'name'  => $name,
+                    'class' => null,
                 ];
             }
 
-            self::$reflectionCache[$className] = $params;
+            $newParams = [];
+            foreach ($params as $meta) {
+                $class = $meta['class'];
+
+                $classIsNull = $class === null;
+                $isEnum      = !$classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
+                $isVo        = !$classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
+                $isArray     = !$classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
+
+                $makeMethod = match (true) {
+                    $classIsNull => null,
+                    $isEnum      => 'from',
+                    $isVo        => 'new',
+                    $isArray     => 'fromArray',
+                    default  => throw ReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
+                };
+
+                $propsMethod = match (true) {
+                    $isVo    => 'value',
+                    $isArray => 'toArray',
+                    default  => null,
+                };
+
+                $newParams[] = [
+                    ...$meta,
+                    'makeMethod' => $makeMethod,
+                    'propsMethod' => $propsMethod,
+                    'propsIsEnum' => $isEnum,
+                ];
+            }
+
+            self::$reflectionCache[$className] = $newParams;
         }
 
         return self::$reflectionCache[$className];
@@ -89,22 +125,16 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
         foreach (self::getConstructorParams() as $key => $meta) {
             $paramName = arr_is_assoc($data) ? $meta['name'] : $key;
-            $typeName  = $meta['type'];
+            $class  = $meta['class'];
             $value     = $data[$paramName] ?? null;
 
-            // Si es primitivo o ya recibimos la instancia de la clase, lo usamos directamente
-            if (!$meta['isClass'] || ($value instanceof $typeName)) {
-                $args[] = $value;
-                continue;
-            }
-
-            $method = match (true) {
-                $meta['isEnum'] => 'from',
-                $meta['isVO']   => 'new',
-                default         => 'fromArray',
+            $method = $meta['makeMethod'];
+            $value = match (true) {
+                $method === null || ($value instanceof $class)  => $value,
+                default                                         => $class::$method($value),
             };
 
-            $args[] = $typeName::$method($value);
+            $args[] = $value;
         }
 
         return new static(...$args);
