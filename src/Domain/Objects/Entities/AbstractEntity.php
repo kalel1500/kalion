@@ -262,14 +262,23 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     throw ReflectionException::wrongComputedReturnType();
                 }
 
+                $returnClass = $returnType->getName();
+                $propMethod = match (true) {
+                    is_a($returnClass, class: AbstractJsonVo::class,      allow_string: true) => static::$jsonMethod->value,
+                    is_a($returnClass, class: AbstractValueObject::class, allow_string: true) => 'value',
+                    is_a($returnClass, class: ArrayConvertible::class,    allow_string: true) => 'toArray',
+                    default                                                                   => null,
+                };
+
                 /** @var Computed $attr */
                 $attr = $attrs[0]->newInstance();
 
                 $cached[] = [
-                    'name'       => $method->getName(),
-                    'returnType' => $returnType->getName(),
-                    'contexts'   => is_string($attr->contexts) ? [$attr->contexts] : $attr->contexts,
-                    'addOnFull'  => $attr->addOnFull,
+                    'name'      => $method->getName(),
+                    'contexts'  => is_string($attr->contexts) ? [$attr->contexts] : $attr->contexts,
+                    'addOnFull' => $attr->addOnFull,
+                    'method'    => $propMethod,
+                    'isEnum'    => is_a($returnClass, class: \BackedEnum::class, allow_string: true),
                 ];
             }
 
@@ -295,14 +304,12 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             }
 
             $name = $meta['name'];
+            $method = $meta['method'];
             $value = $this->{$name}();
-            $jsonMethod = static::$jsonMethod->value;
             $result[$name] = match (true) {
-                is_a($meta['returnType'], class: \BackedEnum::class,         allow_string: true) => $value->value,
-                is_a($meta['returnType'], class: AbstractJsonVo::class,      allow_string: true) => $value->{$jsonMethod}(),
-                is_a($meta['returnType'], class: AbstractValueObject::class, allow_string: true) => $value->value(),
-                is_a($meta['returnType'], class: ArrayConvertible::class,    allow_string: true) => $value->toArray(),
-                default                                                                          => $value,
+                $meta['isEnum']  => $value->value,
+                $method !== null => $value->{$method}(),
+                default          => $value,
             };
         }
 
