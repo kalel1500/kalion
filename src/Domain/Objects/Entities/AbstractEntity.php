@@ -119,22 +119,25 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $class     = $meta['class'];
                 $isModelId = $meta['isModelId'];
 
+                $isEnum = is_a($class, class: \BackedEnum::class, allow_string: true);
+                $isVo   = is_a($class, class: AbstractValueObject::class, allow_string: true);
+
                 $makeMethod = match (true) {
-                    $isModelId || is_a($class, class: \BackedEnum::class, allow_string: true) => 'from',
-                    is_a($class, class: AbstractValueObject::class, allow_string: true)       => 'new',
-                    default                                                                   => null,
+                    $isModelId || $isEnum => 'from',
+                    $isVo                 => 'new',
+                    default               => null,
                 };
 
                 $propsMethod = match (true) {
-                    is_a($class, class: AbstractValueObject::class, allow_string: true) => 'value',
-                    default                                                             => null,
+                    $isVo   => 'value',
+                    default => null,
                 };
 
                 $newParams[] = [
                     ...$meta,
                     'makeMethod' => $makeMethod,
                     'propsMethod' => $propsMethod,
-                    'propsIsEnum' => is_a($class, class: \BackedEnum::class, allow_string: true),
+                    'propsIsEnum' => $isEnum,
                 ];
             }
 
