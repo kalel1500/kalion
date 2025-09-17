@@ -34,44 +34,8 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
         return object_to_array($coll);
     }
 
-    public function toArray(): array
+    private static function getConstructorParams(): array
     {
-        return $this->toArrayVisible();
-    }
-
-    public function toArrayForBuild(): array
-    {
-        return $this->toArrayVisible();
-    }
-
-    public function toObject(): object|array
-    {
-        return array_to_object($this->toArrayVisible());
-    }
-
-    public function toArrayVo(): ArrayVo
-    {
-        return ArrayVo::new($this->toArray());
-    }
-
-    public static function fromArray(?array $data): static|null
-    {
-        if (is_null($data)) return null;
-        return static::make($data);
-    }
-
-    public static function fromJson(?string $data): static|null
-    {
-        if (is_null($data)) return null;
-        return static::fromArray(json_decode($data, true));
-    }
-
-    protected static function make(array $data): static
-    {
-        if (!static::REFLECTION_ACTIVE) {
-            return new static(...array_values($data));
-        }
-
         $className = static::class;
 
         // Cacheamos ya los parámetros procesados
@@ -115,9 +79,50 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
             self::$reflectionCache[$className] = $paramsMeta;
         }
 
+        return self::$reflectionCache[$className];
+    }
+
+    public function toArray(): array
+    {
+        return $this->toArrayVisible();
+    }
+
+    public function toArrayForBuild(): array
+    {
+        return $this->toArrayVisible();
+    }
+
+    public function toObject(): object|array
+    {
+        return array_to_object($this->toArrayVisible());
+    }
+
+    public function toArrayVo(): ArrayVo
+    {
+        return ArrayVo::new($this->toArray());
+    }
+
+    public static function fromArray(?array $data): static|null
+    {
+        if (is_null($data)) return null;
+        return static::make($data);
+    }
+
+    public static function fromJson(?string $data): static|null
+    {
+        if (is_null($data)) return null;
+        return static::fromArray(json_decode($data, true));
+    }
+
+    protected static function make(array $data): static
+    {
+        if (!static::REFLECTION_ACTIVE) {
+            return new static(...array_values($data));
+        }
+
         $args = [];
 
-        foreach (self::$reflectionCache[$className] as $key => $meta) {
+        foreach (self::getConstructorParams() as $key => $meta) {
             $paramName = arr_is_assoc($data) ? $meta['name'] : $key;
             $typeName  = $meta['type'];
             $value     = $data[$paramName] ?? null;
