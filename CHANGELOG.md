@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.34.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.34.0-beta.1...master)
+
+## [v0.34.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.34.0-beta.0...v0.34.0-beta.1) - 2025-09-17
+
+### Changed
+
+* Refactor interno sin impacto funcional: Se han ordenado los métodos de la clase `AbstractDataTransferObject`
 
 ## [v0.34.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.33.1-beta.0...v0.34.0-beta.0) - 2025-09-17
 
