@@ -6,8 +6,9 @@ namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
 use BackedEnum;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
 
-abstract class AbstractCollectionDto extends AbstractCollectionBase
+abstract class AbstractCollectionDto extends AbstractCollectionBase implements MakeParamsArrayable
 {
     /**
      * @return AbstractDataTransferObject|null
@@ -19,7 +20,7 @@ abstract class AbstractCollectionDto extends AbstractCollectionBase
 
     public function toMakeParams(): array
     {
-        return array_map(fn($item) => $item->toMakeParams(), $this->items);
+        return array_map(fn(AbstractDataTransferObject $item) => $item->toMakeParams(), $this->items);
     }
 
     public static function fromArray(?array $values): ?static
