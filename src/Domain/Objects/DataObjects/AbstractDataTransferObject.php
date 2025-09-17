@@ -112,7 +112,7 @@ abstract class AbstractDataTransferObject implements Arrayable, MakeParamsArraya
         return new static(...$args);
     }
 
-    private function props(): array
+    protected function props(): array
     {
         $coll = [];
         foreach ($this as $clave => $valor) {
