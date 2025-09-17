@@ -150,7 +150,7 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
 
     public function toObject(): object|array
     {
-        return array_to_object($this->props());
+        return array_to_object($this->toArray());
     }
 
     public function toJson($options = 0): false|string
