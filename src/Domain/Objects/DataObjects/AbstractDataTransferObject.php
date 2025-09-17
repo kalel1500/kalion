@@ -9,6 +9,7 @@ use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionUnionType;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
@@ -16,8 +17,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
 abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, Jsonable
 {
-    protected const REFLECTION_ACTIVE = false;
-
+    private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];
 
     private function getValue($value)
@@ -82,6 +82,19 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
         return self::$reflectionCache[$className];
     }
 
+    private static function isReflectionDisabled(): bool
+    {
+        $className = static::class;
+
+        if (!isset(self::$reflectionDisabled[$className])) {
+            $reflection                           = new ReflectionClass($className); // REFLECTION - cached
+            $attributes                           = $reflection->getAttributes(DisableReflection::class);
+            self::$reflectionDisabled[$className] = !empty($attributes);
+        }
+
+        return self::$reflectionDisabled[$className];
+    }
+
     public function toArray(): array
     {
         return $this->toArrayVisible();
@@ -116,7 +129,7 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
 
     protected static function make(array $data): static
     {
-        if (!static::REFLECTION_ACTIVE) {
+        if (self::isReflectionDisabled()) {
             return new static(...array_values($data));
         }
 

@@ -9,8 +9,6 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessV
 
 final class ExampleDto extends AbstractDataTransferObject
 {
-    protected const REFLECTION_ACTIVE = true;
-
     public function __construct(
         public readonly string             $string1,
         public readonly string             $string2,
