@@ -747,7 +747,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-    private function doPluck(string $value, ?string $key): CollectionAny
+    private function doPluck(bool $clean, string $value, ?string $key): CollectionAny
     {
         $getItemValue   = function ($collectionItem, string $pluckField) {
             if (is_array($collectionItem)) {
@@ -791,7 +791,9 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         $result = [];
         foreach ($this->items as $item) {
             $fieldValue = $getItemValue($item, $value);
-            $fieldValue = $clearItemValue($fieldValue);
+            if ($clean) {
+                $fieldValue = $clearItemValue($fieldValue);
+            }
 
             if (is_null($key)) {
                 $result[] = $fieldValue;
@@ -846,7 +848,17 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function pluck($value, $key = null)
     {
-        return $this->doPluck($value, $key);
+        return $this->doPluck(false, $value, $key);
+    }
+
+    /**
+     * @param string $value
+     * @param string|null $key
+     * @return CollectionAny
+     */
+    public function pluckValue($value, $key = null)
+    {
+        return $this->doPluck(true, $value, $key);
     }
 
     /**
