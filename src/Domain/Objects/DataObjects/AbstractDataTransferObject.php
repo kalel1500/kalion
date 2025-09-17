@@ -33,28 +33,31 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
                 throw ReflectionException::constructorMissing(static::class);
             }
 
-            $paramsMeta = [];
+            $params = [];
 
             foreach ($constructor->getParameters() as $param) {
-                $paramName = $param->getName();
-                $paramType = $param->getType();
+                $name = $param->getName();
+                $type = $param->getType();
 
-                if (is_null($paramType)) {
-                    throw ReflectionException::typeRequiredOnParam($paramName, $className, '__construct');
+                // Intersection type → no permitido
+                if ($type instanceof ReflectionIntersectionType) {
+                    throw ReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
                 }
 
-                if ($paramType instanceof ReflectionIntersectionType) {
-                    throw ReflectionException::intersectionTypeNotSupported($paramName, $className, '__construct');
+                // Union type → no permitido
+                if ($type instanceof ReflectionUnionType) {
+                    throw ReflectionException::unionTypeNotSupported($name, $className, '__construct');
                 }
 
-                if ($paramType instanceof ReflectionUnionType) {
-                    throw ReflectionException::unionTypeNotSupported($paramName, $className, '__construct');
+                // Sin tipo → no permitido
+                if ($type === null) {
+                    throw ReflectionException::typeRequiredOnParam($name, $className, '__construct');
                 }
 
-                $typeName = $paramType->getName();
+                $typeName = $type->getName();
 
-                $paramsMeta[] = [
-                    'name'     => $paramName,
+                $params[] = [
+                    'name'     => $name,
                     'type'     => $typeName,
                     'isClass'  => class_exists($typeName),
                     'isEnum'   => is_a($typeName, \BackedEnum::class, true),
@@ -62,7 +65,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
                 ];
             }
 
-            self::$reflectionCache[$className] = $paramsMeta;
+            self::$reflectionCache[$className] = $params;
         }
 
         return self::$reflectionCache[$className];
