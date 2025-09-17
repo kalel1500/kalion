@@ -85,28 +85,17 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     continue;
                 }
 
-                // Sin tipo, tipo primitivo (int, string, bool, etc.) → valor directo
-                if ($type === null || ($type instanceof \ReflectionNamedType && $type->isBuiltin())) {
-                    $params[] = [
-                        'name'      => $name,
-                        'class'     => null,
-                        'isModelId' => false,
-                    ];
-                    continue;
-                }
-
-                // Named type (Class)
+                // Named type (Class), tipo primitivo (int, string, bool, etc.)
                 if ($type instanceof \ReflectionNamedType) {
-                    $class = $type->getName();
                     $params[] = [
                         'name'      => $name,
-                        'class'     => $class,
+                        'class'     => $type->isBuiltin() ? null : $type->getName(),
                         'isModelId' => false, // para single class → usamos ::new || is_class_model_id($class)
                     ];
                     continue;
                 }
 
-                // Cualquier otro caso raro
+                // Sin tipo
                 $params[] = [
                     'name'      => $name,
                     'class'     => null,
