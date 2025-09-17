@@ -117,7 +117,7 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
         return ($value instanceof AbstractValueObject) ? $value->value() : $value;
     }
 
-    private function toArrayVisible(): array
+    private function props(): array
     {
         $coll = [];
         foreach ($this as $clave => $valor) {
@@ -140,12 +140,12 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
 
     public function toArray(): array
     {
-        return $this->toArrayVisible();
+        return $this->props();
     }
 
     public function toArrayForBuild(): array
     {
-        return $this->toArrayVisible();
+        return $this->props();
     }
 
     public function toArrayVo(): ArrayVo
@@ -155,7 +155,7 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
 
     public function toObject(): object|array
     {
-        return array_to_object($this->toArrayVisible());
+        return array_to_object($this->props());
     }
 
     public function toJson($options = 0): false|string
