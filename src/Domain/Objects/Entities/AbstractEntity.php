@@ -38,7 +38,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
     /**
      * @throws \ReflectionException
      */
-    private static function getConstructorTypes(string $className): array
+    private static function resolveConstructorParams(string $className): array
     {
         if (!isset(self::$constructCache[$className])) {
             $ref  = new ReflectionClass($className); // REFLECTION - cached
@@ -146,7 +146,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         $className = static::class;
         $args = [];
 
-        foreach (self::getConstructorTypes($className) as $meta) {
+        foreach (self::resolveConstructorParams($className) as $meta) {
             $paramName = $meta['name'];
             $class     = $meta['class'];
             $method    = $meta['makeMethod'];
@@ -172,7 +172,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         $props = [];
 
         // Recorrer los nombres ya cacheados
-        foreach (self::getConstructorTypes($className) as $meta) {
+        foreach (self::resolveConstructorParams($className) as $meta) {
             $name   = $meta['name'];
             $method = $meta['propsMethod'];
             $isEnum = $meta['propsIsEnum'];

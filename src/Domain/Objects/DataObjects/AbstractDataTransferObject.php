@@ -20,7 +20,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
     private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];
 
-    private static function getConstructorParams(): array
+    private static function resolveConstructorParams(): array
     {
         $className = static::class;
 
@@ -123,7 +123,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
         $args = [];
 
-        foreach (self::getConstructorParams() as $key => $meta) {
+        foreach (self::resolveConstructorParams() as $key => $meta) {
             $paramName = arr_is_assoc($data) ? $meta['name'] : $key;
             $class  = $meta['class'];
             $value     = $data[$paramName] ?? null;
