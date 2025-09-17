@@ -49,17 +49,12 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
                     throw ReflectionException::unionTypeNotSupported($name, $className, '__construct');
                 }
 
-                // Sin tipo → no permitido
-                if ($type === null) {
-                    throw ReflectionException::typeRequiredOnParam($name, $className, '__construct');
-                }
-
-                $typeName = $type->getName();
+                $typeName = $type?->getName();
 
                 $params[] = [
                     'name'     => $name,
                     'type'     => $typeName,
-                    'isClass'  => class_exists($typeName),
+                    'isClass'  => $typeName === null ? null : class_exists($typeName),
                     'isEnum'   => is_a($typeName, \BackedEnum::class, true),
                     'isVO'     => is_a($typeName, AbstractValueObject::class, true),
                 ];
