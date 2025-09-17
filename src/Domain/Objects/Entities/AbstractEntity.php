@@ -108,13 +108,15 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $class     = $meta['class'];
                 $isModelId = $meta['isModelId'];
 
-                $isEnum = is_a($class, class: \BackedEnum::class, allow_string: true);
-                $isVo   = is_a($class, class: AbstractValueObject::class, allow_string: true);
+                $classIsNull = $class === null;
+                $isEnum      = !$classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
+                $isVo        = !$classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
 
                 $makeMethod = match (true) {
+                    $classIsNull          => null,
                     $isModelId || $isEnum => 'from',
                     $isVo                 => 'new',
-                    default               => null,
+                    default               => throw ReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
 
                 $propsMethod = match (true) {
@@ -145,15 +147,14 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         $args = [];
 
         foreach (self::getConstructorTypes($className) as $meta) {
-            $paramName  = $meta['name'];
-            $class      = $meta['class'];
-            $makeMethod = $meta['makeMethod'];
-            $value      = $data[$paramName] ?? null;
+            $paramName = $meta['name'];
+            $class     = $meta['class'];
+            $method    = $meta['makeMethod'];
+            $value     = $data[$paramName] ?? null;
 
-            $value = match ($makeMethod) {
-                'from'  => $class::from($value),
-                'new'   => $class::new($value),
-                default => $value,
+            $value = match (true) {
+                $method === null || ($value instanceof $class)  => $value,
+                default                                         => $class::$method($value),
             };
 
             $args[] = $value;
@@ -172,15 +173,15 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
         // Recorrer los nombres ya cacheados
         foreach (self::getConstructorTypes($className) as $meta) {
-            $name = $meta['name'];
-            $propsMethod = $meta['propsMethod'];
-            $propsIsEnum = $meta['propsIsEnum'];
-            $value = $this->{$name};
+            $name   = $meta['name'];
+            $method = $meta['propsMethod'];
+            $isEnum = $meta['propsIsEnum'];
+            $value  = $this->{$name};
 
             $value = match (true) {
-                $propsMethod === 'value' => $value->value(),
-                $propsIsEnum             => $value->value,
-                default                  => $value,
+                $isEnum          => $value->value,
+                $method === null => $value,
+                default          => $value->{$method}($value),
             };
 
             $props[$name] = $value;
