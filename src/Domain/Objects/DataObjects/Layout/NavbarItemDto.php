@@ -32,21 +32,4 @@ final class NavbarItemDto extends NavigationItem
             $dropdown,
         );
     }
-
-    protected static function make(array $data): static
-    {
-        return new static(
-            $data['code'] ?? null,
-            $data['icon'] ?? null,
-            $data['text'] ?? null,
-            $data['time'] ?? null,
-            $data['tooltip'] ?? null,
-            $data['route_name'] ?? null,
-            $data['is_post'] ?? null,
-            $data['is_theme_toggle'] ?? null,
-            $data['is_user'] ?? null,
-            $data['is_separator'] ?? null,
-            NavbarDropdownDto::fromArray($data['dropdown'] ?? null)
-        );
-    }
 }

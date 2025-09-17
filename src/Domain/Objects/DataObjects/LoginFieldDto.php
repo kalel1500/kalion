@@ -19,14 +19,4 @@ final class LoginFieldDto extends AbstractDataTransferObject
     )
     {
     }
-
-    protected static function make(array $data): static
-    {
-        return new static(
-            $data['name'],
-            $data['label'],
-            $data['type'],
-            $data['placeholder']
-        );
-    }
 }

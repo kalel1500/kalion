@@ -6,11 +6,13 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Throwable;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
+#[DisableReflection]
 final class ExceptionContextDto extends AbstractDataTransferObject
 {
     public readonly string $title;

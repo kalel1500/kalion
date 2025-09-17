@@ -32,3 +32,15 @@ Durante el desarrollo, en la aplicación se pueden configurar las siguientes var
 KALION_PACKAGE_IN_DEVELOP=true
 KALION_KEEP_MIGRATIONS_DATE=true
 ```
+
+## Lanzar los tests
+
+```bash
+./vendor/bin/phpunit
+```
+
+## Iniciar el servidor de test
+
+```bash
+php -S localhost:8000 tests/server.php
+```

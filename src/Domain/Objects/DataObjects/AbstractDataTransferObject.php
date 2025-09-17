@@ -9,6 +9,7 @@ use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionUnionType;
 use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\BuildArrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
@@ -16,8 +17,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
 abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, Jsonable
 {
-    protected const REFLECTION_ACTIVE = false;
-
+    private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];
 
     private function getValue($value)
@@ -34,44 +34,8 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
         return object_to_array($coll);
     }
 
-    public function toArray(): array
+    private static function getConstructorParams(): array
     {
-        return $this->toArrayVisible();
-    }
-
-    public function toArrayForBuild(): array
-    {
-        return $this->toArrayVisible();
-    }
-
-    public function toObject(): object|array
-    {
-        return array_to_object($this->toArrayVisible());
-    }
-
-    public function toArrayVo(): ArrayVo
-    {
-        return ArrayVo::new($this->toArray());
-    }
-
-    public static function fromArray(?array $data): static|null
-    {
-        if (is_null($data)) return null;
-        return static::make($data);
-    }
-
-    public static function fromJson(?string $data): static|null
-    {
-        if (is_null($data)) return null;
-        return static::fromArray(json_decode($data, true));
-    }
-
-    protected static function make(array $data): static
-    {
-        if (!static::REFLECTION_ACTIVE) {
-            return new static(...array_values($data));
-        }
-
         $className = static::class;
 
         // Cacheamos ya los parámetros procesados
@@ -115,9 +79,63 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
             self::$reflectionCache[$className] = $paramsMeta;
         }
 
+        return self::$reflectionCache[$className];
+    }
+
+    private static function isReflectionDisabled(): bool
+    {
+        $className = static::class;
+
+        if (!isset(self::$reflectionDisabled[$className])) {
+            $reflection                           = new ReflectionClass($className); // REFLECTION - cached
+            $attributes                           = $reflection->getAttributes(DisableReflection::class);
+            self::$reflectionDisabled[$className] = !empty($attributes);
+        }
+
+        return self::$reflectionDisabled[$className];
+    }
+
+    public function toArray(): array
+    {
+        return $this->toArrayVisible();
+    }
+
+    public function toArrayForBuild(): array
+    {
+        return $this->toArrayVisible();
+    }
+
+    public function toObject(): object|array
+    {
+        return array_to_object($this->toArrayVisible());
+    }
+
+    public function toArrayVo(): ArrayVo
+    {
+        return ArrayVo::new($this->toArray());
+    }
+
+    public static function fromArray(?array $data): static|null
+    {
+        if (is_null($data)) return null;
+        return static::make($data);
+    }
+
+    public static function fromJson(?string $data): static|null
+    {
+        if (is_null($data)) return null;
+        return static::fromArray(json_decode($data, true));
+    }
+
+    protected static function make(array $data): static
+    {
+        if (self::isReflectionDisabled()) {
+            return new static(...array_values($data));
+        }
+
         $args = [];
 
-        foreach (self::$reflectionCache[$className] as $key => $meta) {
+        foreach (self::getConstructorParams() as $key => $meta) {
             $paramName = arr_is_assoc($data) ? $meta['name'] : $key;
             $typeName  = $meta['type'];
             $value     = $data[$paramName] ?? null;

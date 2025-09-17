@@ -37,22 +37,6 @@ final class SidebarItemDto extends NavigationItem
         $this->hasCounter = !is_null($counter_action);
     }
 
-    protected static function make(array $data): static
-    {
-        return new static(
-            $data['code'] ?? null,
-            $data['icon'] ?? null,
-            $data['text'] ?? null,
-            $data['tooltip'] ?? null,
-            $data['route_name'] ?? null,
-            $data['is_post'] ?? null,
-            $data['counter_action'] ?? null,
-            $data['collapsed'] ?? null,
-            $data['is_separator'] ?? null,
-            SidebarItemCollection::fromArray($data['dropdown'] ?? null)
-        );
-    }
-
     public function hasCounter(): bool
     {
         return $this->hasCounter;

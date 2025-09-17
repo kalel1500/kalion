@@ -14,17 +14,20 @@ use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractJsonVo;
 
 abstract class AbstractEntity implements Arrayable, JsonSerializable
 {
     use ParsesRelationFlags;
 
-    private static array       $makeCache      = [];
-    private static array       $propsCache     = [];
-    private static array       $computedCache  = [];
-    protected static ?array    $databaseFields = null;
-    protected static string    $primaryKey     = 'id';
-    protected static bool      $incrementing   = true;
+    private static array          $constructCache = [];
+    private static array          $computedCache  = [];
+    protected static ?array       $databaseFields = null;
+    protected static string       $primaryKey     = 'id';
+    protected static bool         $incrementing   = true;
+    protected static JsonMethodVo $jsonMethod     = JsonMethodVo::encodedValue;
 
     protected ?array           $with           = null;
     protected bool|string|null $isFull;
@@ -32,11 +35,12 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
     protected array            $relations      = [];
     protected array            $computed       = [];
 
-    protected static function make(array $data): static
+    /**
+     * @throws \ReflectionException
+     */
+    private static function getConstructorTypes(string $className): array
     {
-        $className = static::class;
-
-        if (!isset(self::$makeCache[$className])) {
+        if (!isset(self::$constructCache[$className])) {
             $ref  = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $ref->getConstructor();
 
@@ -110,21 +114,54 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
                 ];
             }
 
-            self::$makeCache[$className] = $params;
+            $newParams = [];
+            foreach ($params as $meta) {
+                $class     = $meta['class'];
+                $isModelId = $meta['isModelId'];
+
+                $makeMethod = match (true) {
+                    $isModelId || is_a($class, class: \BackedEnum::class, allow_string: true) => 'from',
+                    is_a($class, class: AbstractValueObject::class, allow_string: true)       => 'new',
+                    default                                                                   => null,
+                };
+
+                $propsMethod = match (true) {
+                    is_a($class, class: AbstractValueObject::class, allow_string: true) => 'value',
+                    default                                                             => null,
+                };
+
+                $newParams[] = [
+                    ...$meta,
+                    'makeMethod' => $makeMethod,
+                    'propsMethod' => $propsMethod,
+                    'propsIsEnum' => is_a($class, class: \BackedEnum::class, allow_string: true),
+                ];
+            }
+
+            self::$constructCache[$className] = $newParams;
         }
 
+        return self::$constructCache[$className];
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    protected static function make(array $data): static
+    {
+        $className = static::class;
         $args = [];
 
-        foreach (self::$makeCache[$className] as $meta) {
-            $paramName = $meta['name'];
-            $class     = $meta['class'];
-            $isModelId = $meta['isModelId'];
-            $value     = $data[$paramName] ?? null;
+        foreach (self::getConstructorTypes($className) as $meta) {
+            $paramName  = $meta['name'];
+            $class      = $meta['class'];
+            $makeMethod = $meta['makeMethod'];
+            $value      = $data[$paramName] ?? null;
 
-            $value = match (true) {
-                $isModelId || enum_exists($class)                            => $class::from($value),
-                class_exists($class) && method_exists($class, method: 'new') => $class::new($value),
-                default                                                      => $value,
+            $value = match ($makeMethod) {
+                'from'  => $class::from($value),
+                'new'   => $class::new($value),
+                default => $value,
             };
 
             $args[] = $value;
@@ -133,32 +170,25 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         return new static(...$args);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     protected function props(): array
     {
         $className = static::class;
-
-        // Cachear la reflexión de propiedades públicas
-        if (!isset(self::$propsCache[$className])) {
-            $ref    = new ReflectionClass($this); // REFLECTION - cached
-            $cached = [];
-
-            foreach ($ref->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-                $cached[] = $property->getName();
-            }
-
-            self::$propsCache[$className] = $cached;
-        }
-
         $props = [];
 
         // Recorrer los nombres ya cacheados
-        foreach (self::$propsCache[$className] as $name) {
+        foreach (self::getConstructorTypes($className) as $meta) {
+            $name = $meta['name'];
+            $propsMethod = $meta['propsMethod'];
+            $propsIsEnum = $meta['propsIsEnum'];
             $value = $this->{$name};
 
             $value = match (true) {
-                is_object($value) && method_exists($value, 'value') => $value->value(),
-                is_object($value) && property_exists($value, 'value') => $value->value,
-                default => $value,
+                $propsMethod === 'value' => $value->value(),
+                $propsIsEnum             => $value->value,
+                default                  => $value,
             };
 
             $props[$name] = $value;
@@ -173,6 +203,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
      * @param array|string|null $with
      * @param bool|string $isFull
      * @return (T is null ? null : static)
+     * @throws \ReflectionException
      */
     public static function fromArray($data, string|array|null $with = null, bool|string $isFull = null)
     {
@@ -225,12 +256,20 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
                     continue;
                 }
 
+                $returnType = $method->getReturnType();
+
+                if (!($returnType instanceof \ReflectionNamedType)) {
+                    throw ReflectionException::wrongComputedReturnType();
+                }
+
                 /** @var Computed $attr */
                 $attr = $attrs[0]->newInstance();
 
                 $cached[] = [
-                    'name'     => $method->getName(),
-                    'contexts' => $attr->contexts,
+                    'name'       => $method->getName(),
+                    'returnType' => $returnType->getName(),
+                    'contexts'   => is_string($attr->contexts) ? [$attr->contexts] : $attr->contexts,
+                    'addOnFull'  => $attr->addOnFull,
                 ];
             }
 
@@ -240,13 +279,31 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
         $result = [];
 
         foreach (self::$computedCache[$className] as $meta) {
-            // Contexto no coincide → saltar
-            if ($context && !empty($meta['contexts']) && !in_array($context, $meta['contexts'], true)) {
-                continue;
+            $contexts  = $meta['contexts'];
+            $addOnFull = $meta['addOnFull'];
+
+            if ($context === null) {
+                // Solo sin contextos, o con contextos + addOnFull = true
+                if (!empty($contexts) && !$addOnFull) {
+                    continue;
+                }
+            } else {
+                // Solo si el contexto está en contexts (independiente de addOnFull)
+                if (empty($contexts) || !in_array($context, $contexts, true)) {
+                    continue;
+                }
             }
 
             $name = $meta['name'];
-            $result[$name] = $this->{$name}();
+            $value = $this->{$name}();
+            $jsonMethod = static::$jsonMethod->value;
+            $result[$name] = match (true) {
+                is_a($meta['returnType'], class: \BackedEnum::class,         allow_string: true) => $value->value,
+                is_a($meta['returnType'], class: AbstractJsonVo::class,      allow_string: true) => $value->{$jsonMethod}(),
+                is_a($meta['returnType'], class: AbstractValueObject::class, allow_string: true) => $value->value(),
+                is_a($meta['returnType'], class: Arrayable::class,           allow_string: true) => $value->toArray(),
+                default                                                                          => $value,
+            };
         }
 
         return $result;

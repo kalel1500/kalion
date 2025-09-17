@@ -9,10 +9,10 @@ use Attribute;
 #[Attribute(Attribute::TARGET_METHOD)]
 final class Computed
 {
-    public array $contexts;
-
-    public function __construct(string ...$contexts)
+    public function __construct(
+        public readonly string|array $contexts = [],
+        public readonly bool $addOnFull = false,
+    )
     {
-        $this->contexts = $contexts;
     }
 }
