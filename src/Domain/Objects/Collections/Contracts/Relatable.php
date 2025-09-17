@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Contracts;
 
-interface Relatable
+use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
+
+interface Relatable extends ArrayConvertible
 {
     public function setWith(string|array|null $with): static;
     public function setIsFull(bool|string|null $isFull): static;
