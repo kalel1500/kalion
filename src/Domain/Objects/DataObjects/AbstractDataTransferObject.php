@@ -112,16 +112,11 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
         return new static(...$args);
     }
 
-    private function getValue($value)
-    {
-        return ($value instanceof AbstractValueObject) ? $value->value() : $value;
-    }
-
     private function props(): array
     {
         $coll = [];
         foreach ($this as $clave => $valor) {
-            $coll[$clave] = $this->getValue($valor);
+            $coll[$clave] = ($valor instanceof AbstractValueObject) ? $valor->value() : $valor;
         }
         return object_to_array($coll);
     }
