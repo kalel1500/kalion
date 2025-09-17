@@ -20,20 +20,6 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
     private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];
 
-    private function getValue($value)
-    {
-        return ($value instanceof AbstractValueObject) ? $value->value() : $value;
-    }
-
-    private function toArrayVisible(): array
-    {
-        $coll = [];
-        foreach ($this as $clave => $valor) {
-            $coll[$clave] = $this->getValue($valor);
-        }
-        return object_to_array($coll);
-    }
-
     private static function getConstructorParams(): array
     {
         $className = static::class;
@@ -95,38 +81,6 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
         return self::$reflectionDisabled[$className];
     }
 
-    public function toArray(): array
-    {
-        return $this->toArrayVisible();
-    }
-
-    public function toArrayForBuild(): array
-    {
-        return $this->toArrayVisible();
-    }
-
-    public function toObject(): object|array
-    {
-        return array_to_object($this->toArrayVisible());
-    }
-
-    public function toArrayVo(): ArrayVo
-    {
-        return ArrayVo::new($this->toArray());
-    }
-
-    public static function fromArray(?array $data): static|null
-    {
-        if (is_null($data)) return null;
-        return static::make($data);
-    }
-
-    public static function fromJson(?string $data): static|null
-    {
-        if (is_null($data)) return null;
-        return static::fromArray(json_decode($data, true));
-    }
-
     protected static function make(array $data): static
     {
         if (self::isReflectionDisabled()) {
@@ -156,6 +110,52 @@ abstract class AbstractDataTransferObject implements Arrayable, BuildArrayable, 
         }
 
         return new static(...$args);
+    }
+
+    private function getValue($value)
+    {
+        return ($value instanceof AbstractValueObject) ? $value->value() : $value;
+    }
+
+    private function toArrayVisible(): array
+    {
+        $coll = [];
+        foreach ($this as $clave => $valor) {
+            $coll[$clave] = $this->getValue($valor);
+        }
+        return object_to_array($coll);
+    }
+
+    public static function fromArray(?array $data): static|null
+    {
+        if (is_null($data)) return null;
+        return static::make($data);
+    }
+
+    public static function fromJson(?string $data): static|null
+    {
+        if (is_null($data)) return null;
+        return static::fromArray(json_decode($data, true));
+    }
+
+    public function toArray(): array
+    {
+        return $this->toArrayVisible();
+    }
+
+    public function toArrayForBuild(): array
+    {
+        return $this->toArrayVisible();
+    }
+
+    public function toArrayVo(): ArrayVo
+    {
+        return ArrayVo::new($this->toArray());
+    }
+
+    public function toObject(): object|array
+    {
+        return array_to_object($this->toArrayVisible());
     }
 
     public function toJson($options = 0): false|string
