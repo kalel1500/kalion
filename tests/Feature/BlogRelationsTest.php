@@ -97,6 +97,9 @@ class BlogRelationsTest extends TestCase
     {
         $firstCheck = $dto->pluck('enum')->first();
         $this->assertEquals(CheckableProcessVo::queue, $firstCheck);
+
+        $firstCheck = $dto->pluckValue('enum')->first();
+        $this->assertEquals(CheckableProcessVo::queue->value, $firstCheck);
     }
 
     #[DataProvider('getDto')]
