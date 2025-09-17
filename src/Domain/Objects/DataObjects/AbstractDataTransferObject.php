@@ -8,14 +8,14 @@ use Illuminate\Contracts\Support\Jsonable;
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionUnionType;
-use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
+use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
-abstract class AbstractDataTransferObject implements Arrayable, MakeParamsArrayable, Jsonable
+abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParamsArrayable, Jsonable
 {
     private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];

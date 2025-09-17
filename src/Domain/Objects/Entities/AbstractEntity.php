@@ -8,7 +8,7 @@ use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
-use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
+use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
@@ -18,7 +18,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractJsonVo;
 
-abstract class AbstractEntity implements Arrayable, JsonSerializable
+abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 {
     use ParsesRelationFlags;
 
@@ -301,7 +301,7 @@ abstract class AbstractEntity implements Arrayable, JsonSerializable
                 is_a($meta['returnType'], class: \BackedEnum::class,         allow_string: true) => $value->value,
                 is_a($meta['returnType'], class: AbstractJsonVo::class,      allow_string: true) => $value->{$jsonMethod}(),
                 is_a($meta['returnType'], class: AbstractValueObject::class, allow_string: true) => $value->value(),
-                is_a($meta['returnType'], class: Arrayable::class,           allow_string: true) => $value->toArray(),
+                is_a($meta['returnType'], class: ArrayConvertible::class,    allow_string: true) => $value->toArray(),
                 default                                                                          => $value,
             };
         }

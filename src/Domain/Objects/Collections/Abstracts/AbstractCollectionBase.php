@@ -13,7 +13,7 @@ use IteratorAggregate;
 use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Attributes\CollectionOf;
-use Thehouseofel\Kalion\Domain\Contracts\Arrayable;
+use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
@@ -28,7 +28,7 @@ use TypeError;
 /**
  * @template T of AbstractCollectionBase
  */
-abstract class AbstractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, Arrayable, JsonSerializable
+abstract class AbstractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, ArrayConvertible, JsonSerializable
 {
     use ParsesRelationFlags;
 
@@ -773,7 +773,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 }
             }
 
-            if ($collectionItem instanceof Arrayable) {
+            if ($collectionItem instanceof ArrayConvertible) {
                 return $collectionItem->toArray()[$pluckField];
             }
 
@@ -781,7 +781,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         };
         $clearItemValue = function ($item) {
             return match (true) {
-                $item instanceof Arrayable           => $item->toArray(),
+                $item instanceof ArrayConvertible    => $item->toArray(),
                 $item instanceof AbstractValueObject => $item->value(),
                 $item instanceof \BackedEnum         => $item->value,
                 default                              => $item
@@ -1132,7 +1132,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
             $item = match (true) {
                 $item instanceof MakeParamsArrayable && $fromThisClass => $item->toMakeParams(),
-                $item instanceof Arrayable                             => $item->toArray(),
+                $item instanceof ArrayConvertible                      => $item->toArray(),
                 $item instanceof AbstractValueObject                   => $item->value(),
                 default                                                => $item,
             };
