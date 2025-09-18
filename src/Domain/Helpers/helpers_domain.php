@@ -126,24 +126,24 @@ if (!function_exists('collect_any')) {
     }
 }
 
-if (!function_exists('object_to_array')) {
-    function object_to_array($object): array|object
+if (!function_exists('legacy_json_to_array')) {
+    function legacy_json_to_array($object): array|object
     {
         $string = json_encode($object);
         return json_decode($string, true);
     }
 }
 
-if (!function_exists('array_to_object')) {
-    function array_to_object($object): array|object
+if (!function_exists('legacy_json_to_object')) {
+    function legacy_json_to_object($object): array|object
     {
         $string = json_encode($object);
         return json_decode($string);
     }
 }
 
-if (!function_exists('obj_clone')) {
-    function obj_clone($object)
+if (!function_exists('legacy_deep_clone')) {
+    function legacy_deep_clone($object)
     {
         return unserialize(serialize($object));
     }

@@ -179,7 +179,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
                 foreach ($this as $key => $value) {
                     $props[$key] = $value;
                 }
-                return object_to_array($props);
+                return legacy_json_to_array($props);
             }
 
             return throw ReflectionException::disabledReflectionInDto(static::class);
@@ -239,7 +239,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
     public function toObject(): object|array
     {
-        return array_to_object($this->toArray());
+        return legacy_json_to_object($this->toArray());
     }
 
     public function toJson($options = 0): false|string

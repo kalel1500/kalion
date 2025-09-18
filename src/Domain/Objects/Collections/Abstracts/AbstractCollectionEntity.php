@@ -109,7 +109,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         }
 
         if (is_object(Arr::first($data))) {
-            $data = object_to_array($data);
+            $data = legacy_json_to_array($data);
         }
 
         /** @var class-string<AbstractEntity> $entity */

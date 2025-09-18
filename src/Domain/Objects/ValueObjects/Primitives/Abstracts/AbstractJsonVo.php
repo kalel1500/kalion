@@ -59,8 +59,8 @@ abstract class AbstractJsonVo extends AbstractValueObject
         }
 
         if (is_array($value) || is_object($value)) {
-            $this->arrayValue   = object_to_array($value);
-            $this->objectValue  = array_to_object($value);
+            $this->arrayValue   = legacy_json_to_array($value);
+            $this->objectValue  = legacy_json_to_object($value);
             $this->encodedValue = json_encode($value);
         }
     }

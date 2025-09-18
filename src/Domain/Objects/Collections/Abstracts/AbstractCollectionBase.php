@@ -1148,12 +1148,12 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function toClearedArray(): array
     {
-        return object_to_array($this->toArray());
+        return legacy_json_to_array($this->toArray());
     }
 
     public function toClearedObject(): object|array
     {
-        return array_to_object($this->toArray());
+        return legacy_json_to_object($this->toArray());
     }
 
     public function toCollect(): Collection

@@ -49,12 +49,12 @@ final class MyMailDM
 
     public function getRecipientsTo()
     {
-        return array_to_object($this->mailable->to);
+        return legacy_json_to_object($this->mailable->to);
     }
 
     public function getRecipientsCc()
     {
-        return array_to_object($this->mailable->cc);
+        return legacy_json_to_object($this->mailable->cc);
     }
 
     public static function getRecipientsFromStringVariable($stringRecipients)
