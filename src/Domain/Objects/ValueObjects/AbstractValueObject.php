@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects;
 
+use JsonSerializable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractBoolVo;
 
 /**
  * @template T of AbstractValueObject
  */
-abstract class AbstractValueObject
+abstract class AbstractValueObject implements JsonSerializable
 {
     protected const IS_MODEL = false;
     protected const CLASS_REQUIRED = null;
@@ -128,6 +129,11 @@ abstract class AbstractValueObject
         if (!$this->nullable && is_null($value)) {
             throw new InvalidValueException(sprintf('<%s> does not allow the value <%s>.', class_basename(static::class), 'null'));
         }
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->value;
     }
 
     public function __toString()

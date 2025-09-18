@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
 
 use Illuminate\Contracts\Support\Jsonable;
+use JsonSerializable;
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionUnionType;
@@ -15,7 +16,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
-abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParamsArrayable, Jsonable
+abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParamsArrayable, Jsonable, JsonSerializable
 {
     private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];
@@ -215,6 +216,11 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
     public function toJson($options = 0): false|string
     {
         return json_encode($this->toArray(), $options);
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
     }
 
     public function __toString()
