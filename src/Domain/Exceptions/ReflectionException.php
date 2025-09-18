@@ -44,4 +44,9 @@ class ReflectionException extends KalionRuntimeException
     {
         return new static("Unexpected argument type when constructing the DataObject $class. The argument $parameter was passed with an incorrect type. It was expected to be a primitive type (such as string, int, bool, etc.) or an instance of a class that extends BackedEnum, AbstractValueObject, or ArrayConvertible.");
     }
+
+    public static function disabledReflectionInDto(string $class): static
+    {
+        return new static("The $class class has the DisableReflection attribute defined. In these cases, it is necessary to define either the props() method or the toMakeParams() and toArray() methods.");
+    }
 }

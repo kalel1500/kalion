@@ -169,11 +169,32 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
     protected function props(): array
     {
-        $coll = [];
-        foreach ($this as $clave => $valor) {
-            $coll[$clave] = ($valor instanceof AbstractValueObject) ? $valor->value() : $valor;
+        if (self::isReflectionDisabled()) {
+            $props = [];
+            foreach ($this as $key => $value) {
+                $props[$key] = $value;
+            }
+            return object_to_array($props);
         }
-        return object_to_array($coll);
+
+        $props = [];
+        $params = self::resolveConstructorParams()['props'];
+        foreach ($params as $meta) {
+            $name   = $meta['name'];
+            $method = $meta['propsMethod'];
+            $isEnum = $meta['propsIsEnum'];
+            $value  = $this->{$name};
+
+            $value = match (true) {
+                $isEnum          => $value->value,
+                $method === null => $value,
+                default          => $value->{$method}($value),
+            };
+
+            $props[$name] = $value;
+        }
+
+        return $props;
     }
 
     /**
