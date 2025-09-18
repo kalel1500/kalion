@@ -128,14 +128,17 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
         return self::$reflectionCache[$className];
     }
 
-    private static function isReflectionDisabled(): bool
+    private static function reflectionDisabledData(): array
     {
         $className = static::class;
 
         if (!isset(self::$reflectionDisabled[$className])) {
             $reflection                           = new ReflectionClass($className); // REFLECTION - cached
             $attributes                           = $reflection->getAttributes(DisableReflection::class);
-            self::$reflectionDisabled[$className] = !empty($attributes);
+            self::$reflectionDisabled[$className] = [
+                'isDisabled' => !empty($attributes),
+                'useJsonSerialization' => !empty($attributes) && $attributes[0]->newInstance()->useJsonSerialization
+            ];
         }
 
         return self::$reflectionDisabled[$className];
@@ -143,7 +146,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
     protected static function make(array $data): static
     {
-        if (self::isReflectionDisabled()) {
+        if (self::reflectionDisabledData()['isDisabled']) {
             return new static(...array_values($data));
         }
 
@@ -169,12 +172,17 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
     protected function props(): array
     {
-        if (self::isReflectionDisabled()) {
-            $props = [];
-            foreach ($this as $key => $value) {
-                $props[$key] = $value;
+        $disabled = self::reflectionDisabledData();
+        if ($disabled['isDisabled']) {
+            if ($disabled['useJsonSerialization']) {
+                $props = [];
+                foreach ($this as $key => $value) {
+                    $props[$key] = $value;
+                }
+                return object_to_array($props);
             }
-            return object_to_array($props);
+
+            return throw ReflectionException::disabledReflectionInDto(static::class);
         }
 
         $props = [];

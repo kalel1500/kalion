@@ -9,5 +9,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS)]
 final class DisableReflection
 {
-    public function __construct() {}
+    public function __construct(
+        public bool $useJsonSerialization = false,
+    ) {}
 }
