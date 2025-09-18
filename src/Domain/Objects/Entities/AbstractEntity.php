@@ -153,10 +153,15 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $method    = $meta['makeMethod'];
             $value     = $data[$paramName] ?? null;
 
-            $value = match (true) {
-                $method === null || ($value instanceof $class)  => $value,
-                default                                         => $class::$method($value),
-            };
+            try {
+                $value = match (true) {
+                    $method === null || ($value instanceof $class)  => $value,
+                    default                                         => $class::$method($value),
+                };
+            } catch (\Throwable $t) {
+                $className = static::class;
+                throw new ReflectionException($t->getMessage() . " | Param $paramName in $className class", $t);
+            }
 
             $args[] = $value;
         }
