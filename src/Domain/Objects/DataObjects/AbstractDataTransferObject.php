@@ -20,6 +20,69 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
     private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];
 
+    private static function getParamType(\ReflectionParameter|\ReflectionProperty $param): array
+    {
+        $className = static::class;
+        $name = $param->getName();
+        $type = $param->getType();
+
+        // Intersection type → no permitido
+        if ($type instanceof ReflectionIntersectionType) {
+            throw ReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
+        }
+
+        // Union type → no permitido
+        if ($type instanceof ReflectionUnionType) {
+            throw ReflectionException::unionTypeNotSupported($name, $className, '__construct');
+        }
+
+        // Named type (Class)
+        if ($type instanceof \ReflectionNamedType) {
+            return [
+                'name'  => $name,
+                'class' => $type->isBuiltin() ? null : $type->getName(),
+            ];
+        }
+
+        // Sin tipo
+        return [
+            'name'  => $name,
+            'class' => null,
+        ];
+    }
+
+    private static function getParamMeta(array $meta): array
+    {
+        $className = static::class;
+        $class = $meta['class'];
+
+        $classIsNull = $class === null;
+        $isEnum      = !$classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
+        $isVo        = !$classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
+        $isArray     = !$classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
+
+        $makeMethod = match (true) {
+            $classIsNull => null,
+            $isEnum      => 'from',
+            $isVo        => 'new',
+            $isArray     => 'fromArray',
+            default  => throw ReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
+        };
+
+        $propsMethod = match (true) {
+            $isVo    => 'value',
+            $isArray => 'toArray',
+            default  => null,
+        };
+
+        return [
+            ...$meta,
+            'makeMethod' => $makeMethod,
+            'propsMethod' => $propsMethod,
+            'propsIsEnum' => $isEnum,
+        ];
+    }
+
     private static function resolveConstructorParams(): array
     {
         $className = static::class;
@@ -33,70 +96,32 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
                 throw ReflectionException::constructorMissing(static::class);
             }
 
-            $params = [];
+            $paramsMake = [];
+            $paramsProps = [];
 
+            // Make
             foreach ($constructor->getParameters() as $param) {
-                $name = $param->getName();
-                $type = $param->getType();
-
-                // Intersection type → no permitido
-                if ($type instanceof ReflectionIntersectionType) {
-                    throw ReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
-                }
-
-                // Union type → no permitido
-                if ($type instanceof ReflectionUnionType) {
-                    throw ReflectionException::unionTypeNotSupported($name, $className, '__construct');
-                }
-
-                // Named type (Class)
-                if ($type instanceof \ReflectionNamedType) {
-                    $params[] = [
-                        'name'  => $name,
-                        'class' => $type->isBuiltin() ? null : $type->getName(),
-                    ];
-                    continue;
-                }
-
-                // Sin tipo
-                $params[] = [
-                    'name'  => $name,
-                    'class' => null,
-                ];
+                $paramsMake[] = self::getParamType($param);
             }
 
-            $newParams = [];
-            foreach ($params as $meta) {
-                $class = $meta['class'];
-
-                $classIsNull = $class === null;
-                $isEnum      = !$classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
-                $isVo        = !$classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
-                $isArray     = !$classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
-
-                $makeMethod = match (true) {
-                    $classIsNull => null,
-                    $isEnum      => 'from',
-                    $isVo        => 'new',
-                    $isArray     => 'fromArray',
-                    default  => throw ReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
-                };
-
-                $propsMethod = match (true) {
-                    $isVo    => 'value',
-                    $isArray => 'toArray',
-                    default  => null,
-                };
-
-                $newParams[] = [
-                    ...$meta,
-                    'makeMethod' => $makeMethod,
-                    'propsMethod' => $propsMethod,
-                    'propsIsEnum' => $isEnum,
-                ];
+            // Props
+            foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $param) {
+                $paramsProps[] = self::getParamType($param);
             }
 
-            self::$reflectionCache[$className] = $newParams;
+            $newParamsMake = [];
+            $newParamsProps = [];
+            foreach ($paramsMake as $meta) {
+                $newParamsMake[] = self::getParamMeta($meta);
+            }
+            foreach ($paramsProps as $meta) {
+                $newParamsProps[] = self::getParamMeta($meta);
+            }
+
+            self::$reflectionCache[$className] = [
+                'make' => $newParamsMake,
+                'props' => $newParamsProps,
+            ];
         }
 
         return self::$reflectionCache[$className];
@@ -123,7 +148,8 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
         $args = [];
 
-        foreach (self::resolveConstructorParams() as $key => $meta) {
+        $params = self::resolveConstructorParams()['make'];
+        foreach ($params as $key => $meta) {
             $paramName = arr_is_assoc($data) ? $meta['name'] : $key;
             $class  = $meta['class'];
             $value     = $data[$paramName] ?? null;
