@@ -16,7 +16,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
 {
     use HasRelatableOptions;
 
-    protected bool               $isPaginate;
+    protected bool               $isPaginate = false;
     protected ?PaginationDataDto $paginationData;
 
     /**
