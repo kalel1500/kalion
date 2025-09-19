@@ -35,9 +35,6 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
     protected array            $relations      = [];
     protected array            $computed       = [];
 
-    /**
-     * @throws \ReflectionException
-     */
     private static function resolveConstructorParams(): array
     {
         $className = static::class;
@@ -140,9 +137,6 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         return self::$constructCache[$className];
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected static function make(array $data): static
     {
         $args = [];
@@ -169,9 +163,6 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         return new static(...$args);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     protected function props(): array
     {
         $props = [];
@@ -201,7 +192,6 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
      * @param array|string|null $with
      * @param bool|string $isFull
      * @return (T is null ? null : static)
-     * @throws \ReflectionException
      */
     public static function fromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
     {
