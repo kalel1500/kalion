@@ -12,7 +12,7 @@ use ReflectionUnionType;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
-use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
+use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
@@ -29,12 +29,12 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
         // Intersection type → no permitido
         if ($type instanceof ReflectionIntersectionType) {
-            throw ReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
+            throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
         }
 
         // Union type → no permitido
         if ($type instanceof ReflectionUnionType) {
-            throw ReflectionException::unionTypeNotSupported($name, $className, '__construct');
+            throw KalionReflectionException::unionTypeNotSupported($name, $className, '__construct');
         }
 
         // Named type (Class)
@@ -67,7 +67,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
             $isEnum      => 'from',
             $isVo        => 'new',
             $isArray     => 'fromArray',
-            default  => throw ReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
+            default  => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
         };
 
         $propsMethod = match (true) {
@@ -94,7 +94,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
             $constructor = $reflection->getConstructor();
 
             if (!$constructor) {
-                throw ReflectionException::constructorMissing(static::class);
+                throw KalionReflectionException::constructorMissing(static::class);
             }
 
             $paramsMake = [];
@@ -182,7 +182,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
                 return legacy_json_to_array($props);
             }
 
-            return throw ReflectionException::disabledReflectionInDto(static::class);
+            return throw KalionReflectionException::disabledReflectionInDto(static::class);
         }
 
         $props = [];

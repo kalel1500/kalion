@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Domain\Exceptions;
 
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionRuntimeException;
 
-class ReflectionException extends KalionRuntimeException
+class KalionReflectionException extends KalionRuntimeException
 {
     const STATUS_CODE = 500; // HTTP_INTERNAL_SERVER_ERROR
 

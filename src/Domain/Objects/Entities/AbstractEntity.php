@@ -9,7 +9,7 @@ use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
-use Thehouseofel\Kalion\Domain\Exceptions\ReflectionException;
+use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
@@ -47,7 +47,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $constructor = $ref->getConstructor();
 
             if (!$constructor) {
-                throw ReflectionException::constructorMissing($className);
+                throw KalionReflectionException::constructorMissing($className);
             }
 
             $params = [];
@@ -58,7 +58,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
                 // Intersection type → no permitido
                 if ($type instanceof \ReflectionIntersectionType) {
-                    throw ReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
+                    throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
                 }
 
                 // Union type (ej. ModelId|ModelIdNull)
@@ -118,7 +118,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     $classIsNull          => null,
                     $isModelId || $isEnum => 'from',
                     $isVo                 => 'new',
-                    default               => throw ReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
+                    default               => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
 
                 $propsMethod = match (true) {
@@ -160,7 +160,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 };
             } catch (\Throwable $t) {
                 $className = static::class;
-                throw new ReflectionException($t->getMessage() . " | Param $paramName in $className class", $t);
+                throw new KalionReflectionException($t->getMessage() . " | Param $paramName in $className class", $t);
             }
 
             $args[] = $value;
@@ -257,7 +257,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $returnType = $method->getReturnType();
 
                 if (!($returnType instanceof \ReflectionNamedType)) {
-                    throw ReflectionException::wrongComputedReturnType();
+                    throw KalionReflectionException::wrongComputedReturnType();
                 }
 
                 $returnClass = $returnType->getName();
