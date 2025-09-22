@@ -218,8 +218,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             foreach ($this->with as $key => $rel) {
                 $relation = (is_array($rel)) ? $key : $rel;
                 [$relation, $isFull] = $this->getInfoFromRelationWithFlag($relation);
-                $relationData               = $this->$relation()?->toArray();
-                $data[str_snake($relation)] = $relationData;
+                $data[str_snake($relation)] = $this->$relation()?->toArray();
             }
         }
 
