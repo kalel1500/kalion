@@ -1,6 +1,61 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.34.0-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.35.0-beta.0...master)
+
+## [v0.35.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.34.0-beta.1...v0.35.0-beta.0) - 2025-09-23
+
+### Changed
+
+* Se han realizado varias modificaciones en la clase `AbstractEntity`:
+  * (refactor) Se ha optimizado el método `computedProps()` moviendo la comprobación de la instancia de las propiedades calculadas dentro de la `cache` para no recalcularlo cada vez.
+  * (refactor) Se ha optimizado el método `getConstructorTypes()` usando variables para no repetir la función `is_a()`.
+  * (refactor) Se ha eliminado la lógica redundante en el método `getConstructorTypes()` de la clase `AbstractEntity`.
+  * (refactor) Se han optimizado los métodos `getConstructorTypes()`, `make()` y `props()` para acceder al valor dinámicamente (usando `$class::$method($value)` y `$value->{$method}($value)` en vez de definir cada metodo en el `match`).
+  * Ahora se permite recibir una instancia de `AbstractValueObject` o `BackedEnum` en el `(array)$data` del método `fromArray()`.
+  * Ahora en el método `getConstructorTypes()` se comprueba si el tipo de algúna propiedad es de una clase que no tenemos contemplada y en ese caso se lanza una excepción.
+  * Se ha renombrado el método `getConstructorTypes()` a `resolveConstructorParams()`.
+  * (refactor) Se ha eliminado el parametro `$className` del método `resolveConstructorParams()` y ahora se obtiene dentro del propio método con `$className = static::class`.
+  * Se ha mejorado la gestión del error en el método `make()` cuando alguno de los parámetros de la entidad no existe en el `(array)$data`. Ahora se proporciona un mensaje de error más descriptivo para facilitar la depuración.
+  * (comments) Se ha eliminado el `@throws` de del método `resolveConstructorParams()` y de los que lo llaman.
+  * (refactor) Se ha simplificado el código del método `toArray()`:
+    * Ahora el `$defaultIsFull` se obtiene directamente de la `config` en vez de llamar al método `getInfoFromRelationWithFlag()` pasandole una relacion falsa para sacar el flag.
+    * Se ha eliminado la variable innecesaria `$relationData`.
+* Se han realizado varias modificaciones en la clase `AbstractDataTransferObject`:
+  * (refactor) Se ha renombrado el método privado `toArrayVisible()` a `props()`.
+  * (refactor) Se ha eliminado el método privado `getValue()` y movido la lógica dentro del método `props()`.
+  * (breaking) Ahora el método `toObject()` llama al método `toArray()` en vez de al `props()` (antiguo `toArrayVisible()`) para mantener la coherencia con los demás métodos.
+  * Se ha modificado la visibilidad del método `props()` de `private` a `protected` para poder sobreescribirlo.
+  * (refactor) Se han renombrado algunas variables y ordenado algunas comprobaciones en el método `getConstructorParams()`.
+  * Se ha modificado el método `getConstructorParams()` para permitir que las propiedades de los `DTOs` no tengan un tipo definido.
+  * Se ha optimizado el método `make()` moviendo la lógica de la obtención del método a la `cache` en el método `getConstructorParams()`.
+  * Ahora en el método `getConstructorParams()` se comprueba si el tipo de las propiedades de la clase es de una clase que no tenemos contemplada y en ese caso se lanza una excepción.
+  * Se ha renombrado el método `getConstructorParams()` a `resolveConstructorParams()`.
+  * (refactor) Se ha mejorado la lógica del método `resolveConstructorParams()`, separando los bucles de los parametros en los dos nuevos métodos privados `getParamType()` y `getParamMeta()`.
+  * Ahora en el método `resolveConstructorParams()` se guardan dos arrays: uno con los parámetros del `make` y otro con los del `props` (ya que es posible que no coincidan siempre). De esta forma ahora se permite que las propiedades de un `DTO` y los argumentos del constructor no concidan.
+  * Ahora el método `props()` usa la reflexión cacheada en lugar de `json_encode/json_decode` para generar arrays. Este cambio mejora el rendimiento y la claridad, pero podría afectar ligeramente el formato de salida en algunos casos edge. Si la reflexion está deshabilitada se sigue usando la version anterior. También se ha eliminado la comprobación de si es un `Vo` para acceder al `value()` (cuando la reflexion está deshabilitada) porque ahora implementan la interfaz `JsonSerializable`.
+  * Se ha renombrado el método `isReflectionDisabled()` a `reflectionDisabledData()`.
+  * Se ha modificado el método `reflectionDisabledData()` para que en vez de devolver `bool`, devuelva un array con los campos `isDisabled` y `useJsonSerialization`.
+  * Se ha modificado el método `props()` para que solo use el `json_encode_decode()` si la propiedad `useJsonSerialization` es `true`. De lo contrario lanzar una excepción.
+* Se han realizado varias modificaciones en la clase `AbstractCollectionDto`:
+  * (breaking) Se ha implementado la interfaz `MakeParamsArrayable`.
+  * (refactor) Se ha añadido el tipo `AbstractDataTransferObject` en el callback del `array_map()` dentro del método `toMakeParams()`.
+  * Se ha eliminado la comprobación de la instancia `BackedEnum` en el método `fromArray()` ya que todos los valores deben ser DTOs.
+* Se ha añadido la propiedad `$useJsonSerialization` en el atributo `DisableReflection`.
+* Se ha implementado la interfaz `JsonSerializable` en las clases `AbstractValueObject` y `AbstractDataTransferObject`.
+* Se ha extendido la interfaz `Relatable` con la interfaz `ArrayConvertible`.
+* Se ha añadido el método `fromArray()` a la interfaz `ArrayConvertible`.
+* Se ha igualado el método `fromArray()` en todas las clases donde está definido, añadiendo el docblock y tipando el argumento `$data` y el `returnType`.
+* (breaking) Se han renombrado los siguientes helpers:
+  * `object_to_array()` &rarr; `legacy_json_to_array()`
+  * `array_to_object()` &rarr; `legacy_json_to_object()`
+  * `obj_clone()` &rarr; `legacy_deep_clone()`
+* (breaking) Se ha renombrado la excepcion `ReflectionException` a `KalionReflectionException`
+* (breaking) Se ha renombrado la interfaz `Arrayable` a `ArrayConvertible`.
+* (breaking) Se ha renombrado la interfaz `BuildArrayable` a `MakeParamsArrayable` y su método `toArrayForBuild()` a `toMakeParams()`.
+
+### Fixed
+
+(fix) Se ha añadido el valor por defecto (`false`) a la propiedad `$isPaginate` de la clase `AbstractCollectionEntity` para prevenir el error cuando se instancia una colección de entidades usando el constructor.
 
 ## [v0.34.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.34.0-beta.0...v0.34.0-beta.1) - 2025-09-17
 
