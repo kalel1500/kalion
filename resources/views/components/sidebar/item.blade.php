@@ -1,4 +1,4 @@
-@props(['href' => '#', 'icon', 'dropdown', 'counter', 'level', 'active' => false])
+@props(['href' => '#', 'icon', 'dropdown', 'counter', 'level' => 0, 'active' => false])
 
 @php
     $isDropdown = isset($dropdown);
