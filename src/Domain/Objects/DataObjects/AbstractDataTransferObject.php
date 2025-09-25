@@ -21,7 +21,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
     private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];
 
-    private static function getParamType(\ReflectionParameter|\ReflectionProperty $param): array
+    private static function getParamType(\ReflectionParameter|\ReflectionProperty $param, bool $allowUnionTypes): array
     {
         $className = static::class;
         $name = $param->getName();
@@ -34,7 +34,11 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
         // Union type → no permitido
         if ($type instanceof ReflectionUnionType) {
-            throw KalionReflectionException::unionTypeNotSupported($name, $className, '__construct');
+            if (!$allowUnionTypes) {
+                throw KalionReflectionException::unionTypeNotSupported($name, $className, '__construct');
+            }
+
+            $type = $type->getTypes()[0];
         }
 
         // Named type (Class)
@@ -102,12 +106,12 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
             // Make
             foreach ($constructor->getParameters() as $param) {
-                $paramsMake[] = self::getParamType($param);
+                $paramsMake[] = self::getParamType($param, false);
             }
 
             // Props
             foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $param) {
-                $paramsProps[] = self::getParamType($param);
+                $paramsProps[] = self::getParamType($param, true);
             }
 
             $newParamsMake = [];
