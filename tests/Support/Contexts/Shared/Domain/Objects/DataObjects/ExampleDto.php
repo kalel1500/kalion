@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 
 final class ExampleDto extends AbstractDataTransferObject
 {
     public function __construct(
-        public readonly string             $string1,
-        public readonly string             $string2,
-        public readonly int                $number,
-        public readonly CheckableProcessVo $enum,
+        public readonly string              $string1,
+        public readonly string              $string2,
+        public readonly int                 $number,
+        public readonly ?CheckableProcessVo $enum,
+        public readonly ?ModelString        $modelString,
     )
     {
     }

@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Tests\Feature;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use Thehouseofel\Kalion\Domain\Concerns\KalionAssertions;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\PostCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\TagCollection;
@@ -86,8 +87,8 @@ class BlogRelationsTest extends TestCase
     {
         return [
             [new ExampleDtoCollection(
-                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue),
-                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue),
+                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, ModelString::new('aa')),
+                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, ModelString::new('aa')),
             )],
         ];
     }
@@ -107,5 +108,23 @@ class BlogRelationsTest extends TestCase
     {
         $firstOnlyInToArray = $dto->pluck('only_in_to_array')->first();
         $this->assertEquals('text', $firstOnlyInToArray);
+    }
+
+    public function test_dto_to_array_with_null_values()
+    {
+        $dto = new ExampleDto('aaa', 'bbb', 3, null, null);
+        $this->assertIsArray($dto->toArray());
+    }
+
+    public function test_dto_from_array_with_null_values()
+    {
+        $dto = ExampleDto::fromArray([
+            'string1' => 'aaa',
+            'string2' => 'bbb',
+            'number' => 1,
+            'enum' => null,
+            'modelString' => null,
+        ]);
+        $this->assertInstanceOf(ExampleDto::class, $dto);
     }
 }
