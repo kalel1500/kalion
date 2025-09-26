@@ -223,7 +223,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
      */
     public static function fromArray(?array $data): ?static
     {
-        if (is_null($data)) return null;
+        if (empty($data)) return null;
         return static::make($data);
     }
 

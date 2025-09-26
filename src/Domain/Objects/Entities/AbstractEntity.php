@@ -198,7 +198,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
      */
     public static function fromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
     {
-        if (is_null($data)) return null;
+        if (empty($data)) return null;
 
         $self                = static::make($data);
         $self->originalArray = $data;
