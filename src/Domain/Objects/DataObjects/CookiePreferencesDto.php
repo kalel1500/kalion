@@ -19,14 +19,4 @@ final class CookiePreferencesDto extends AbstractDataTransferObject
     )
     {
     }
-
-    protected static function make(array $data): static
-    {
-        return new static(
-            $data['version'],
-            ThemeVo::from($data['theme']),
-            $data['sidebar_collapsed'],
-            $data['sidebar_state_per_page']
-        );
-    }
 }
