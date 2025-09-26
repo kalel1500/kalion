@@ -166,10 +166,14 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
             $value      = $data[$paramName] ?? null;
 
             $method = $meta['makeMethod'];
-            $value = match (true) {
-                ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
-                default                                                                             => $class::$method($value),
-            };
+            try {
+                $value = match (true) {
+                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
+                    default                                                                             => $class::$method($value),
+                };
+            } catch (\Throwable $t) {
+                throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, get_debug_type($value));
+            }
 
             $args[] = $value;
         }
