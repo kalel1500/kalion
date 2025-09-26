@@ -4,38 +4,29 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractEnumVo;
-
-final class ThemeVo extends AbstractEnumVo
+enum ThemeVo: string
 {
-    const dark   = 'dark';
-    const light  = 'light';
-    const system = 'system';
-
-    protected ?array $permittedValues = [
-        self::dark,
-        self::light,
-        self::system,
-    ];
-
+    case dark   = 'dark';
+    case light  = 'light';
+    case system = 'system';
 
     public function isDark(): bool
     {
-        return ($this->value === static::dark);
+        return ($this === self::dark);
     }
 
     public function isLight(): bool
     {
-        return ($this->value === static::light);
+        return ($this === self::light);
     }
 
     public function isSystem(): bool
     {
-        return ($this->value === static::system);
+        return ($this === self::system);
     }
 
     public function getDataTheme(): string
     {
-        return $this->isSystem() ? '' : $this->value();
+        return $this->isSystem() ? '' : $this->value;
     }
 }

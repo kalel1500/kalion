@@ -33,7 +33,7 @@ class App extends Component
         $this->darkMode         = $preferences->theme->isDark();
         $this->sidebarCollapsed = $preferences->sidebar_state_per_page ? $this->calculateSidebarCollapsedFromItems() : $preferences->sidebar_collapsed;
         $this->dataTheme        = $preferences->theme->getDataTheme();
-        $this->colorTheme       = $preferences->theme->value();
+        $this->colorTheme       = $preferences->theme->value;
     }
 
     /**

@@ -24,7 +24,7 @@ final class CookiePreferencesDto extends AbstractDataTransferObject
     {
         return new static(
             $data['version'],
-            ThemeVo::new($data['theme'] ?? ThemeVo::system),
+            ThemeVo::from($data['theme'] ?? ThemeVo::system->value),
             $data['sidebar_collapsed'],
             $data['sidebar_state_per_page']
         );
