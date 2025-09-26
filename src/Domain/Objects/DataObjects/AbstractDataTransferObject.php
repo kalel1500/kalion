@@ -44,15 +44,17 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
         // Named type (Class)
         if ($type instanceof \ReflectionNamedType) {
             return [
-                'name'  => $name,
-                'class' => $type->isBuiltin() ? null : $type->getName(),
+                'name'       => $name,
+                'class'      => $type->isBuiltin() ? null : $type->getName(),
+                'allowsNull' => $type->allowsNull(),
             ];
         }
 
         // Sin tipo
         return [
-            'name'  => $name,
-            'class' => null,
+            'name'       => $name,
+            'class'      => null,
+            'allowsNull' => true,
         ];
     }
 
@@ -158,14 +160,15 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
         $params = self::resolveConstructorParams()['make'];
         foreach ($params as $key => $meta) {
-            $paramName = arr_is_assoc($data) ? $meta['name'] : $key;
-            $class  = $meta['class'];
-            $value     = $data[$paramName] ?? null;
+            $paramName  = arr_is_assoc($data) ? $meta['name'] : $key;
+            $class      = $meta['class'];
+            $allowsNull = $meta['allowsNull'];
+            $value      = $data[$paramName] ?? null;
 
             $method = $meta['makeMethod'];
             $value = match (true) {
-                $method === null || ($value instanceof $class)  => $value,
-                default                                         => $class::$method($value),
+                ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
+                default                                                                             => $class::$method($value),
             };
 
             $args[] = $value;

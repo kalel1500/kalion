@@ -77,9 +77,10 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     }
 
                     $params[] = [
-                        'name'      => $name,
-                        'class'     => $modelIdClass, // null si no aplica
-                        'isModelId' => (bool) $modelIdClass,
+                        'name'       => $name,
+                        'class'      => $modelIdClass, // null si no aplica
+                        'isModelId'  => (bool) $modelIdClass,
+                        'allowsNull' => $type->allowsNull(),
                     ];
                     continue;
                 }
@@ -87,9 +88,10 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 // Named type (Class), tipo primitivo (int, string, bool, etc.)
                 if ($type instanceof \ReflectionNamedType) {
                     $params[] = [
-                        'name'      => $name,
-                        'class'     => $type->isBuiltin() ? null : $type->getName(),
-                        'isModelId' => false, // para single class → usamos ::new || is_class_model_id($class)
+                        'name'       => $name,
+                        'class'      => $type->isBuiltin() ? null : $type->getName(),
+                        'isModelId'  => false, // para single class → usamos ::new || is_class_model_id($class)
+                        'allowsNull' => $type->allowsNull(),
                     ];
                     continue;
                 }
@@ -99,6 +101,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     'name'      => $name,
                     'class'     => null,
                     'isModelId' => false,
+                    'allowsNull' => true,
                 ];
             }
 
@@ -142,15 +145,16 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         $args = [];
 
         foreach (self::resolveConstructorParams() as $meta) {
-            $paramName = $meta['name'];
-            $class     = $meta['class'];
-            $method    = $meta['makeMethod'];
-            $value     = $data[$paramName] ?? null;
+            $paramName  = $meta['name'];
+            $class      = $meta['class'];
+            $allowsNull = $meta['allowsNull'];
+            $method     = $meta['makeMethod'];
+            $value      = $data[$paramName] ?? null;
 
             try {
                 $value = match (true) {
-                    $method === null || ($value instanceof $class)  => $value,
-                    default                                         => $class::$method($value),
+                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
+                    default                                                                             => $class::$method($value),
                 };
             } catch (\Throwable $t) {
                 $className = static::class;
