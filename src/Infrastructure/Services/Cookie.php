@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie as CookieFacade;
 use Symfony\Component\HttpFoundation\Cookie as HttpCookie;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\CookiePreferencesDto;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
 final class Cookie
 {
@@ -24,7 +25,7 @@ final class Cookie
         $this->cookieVersion  = config('kalion.cookie.version');
         $this->preferences    = CookiePreferencesDto::fromArray([
             'version'                => config('kalion.cookie.version'),
-            'theme'                  => config('kalion.layout.theme'),
+            'theme'                  => config('kalion.layout.theme') ?? ThemeVo::getDefault()->value,
             'sidebar_collapsed'      => config('kalion.layout.sidebar_collapsed'),
             'sidebar_state_per_page' => config('kalion.layout.sidebar_state_per_page'),
         ]);

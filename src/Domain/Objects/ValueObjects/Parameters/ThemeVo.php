@@ -32,4 +32,9 @@ enum ThemeVo: string
     {
         return $this->isSystem() ? '' : $this->value;
     }
+
+    public static function getDefault(): ThemeVo
+    {
+        return self::system;
+    }
 }
