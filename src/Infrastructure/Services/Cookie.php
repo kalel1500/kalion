@@ -98,7 +98,7 @@ final class Cookie
 
     public function resetAndQueueIfExistInvalid(): ?self
     {
-        if ($this->cookieVersion !== static::readOrNew()->preferences->version()) {
+        if ($this->cookieVersion !== static::readOrNew()->preferences->version) {
             return static::new()->create()->queue();
         }
         return null;
