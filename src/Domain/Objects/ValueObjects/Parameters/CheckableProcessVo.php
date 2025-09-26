@@ -7,6 +7,9 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 use Thehouseofel\Kalion\Domain\Contracts\Enums\Translatable;
 use Thehouseofel\Kalion\Domain\Concerns\Enums\HasTranslations;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 enum CheckableProcessVo: string implements Translatable
 {
     use HasTranslations;

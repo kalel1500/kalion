@@ -8,6 +8,9 @@ use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractArrayVo;
 use Thehouseofel\Kalion\Infrastructure\Services\Date;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class ArrayTabulatorFiltersVo extends AbstractArrayVo
 {
     private const MAX_DAYS_TO_FILTER_RANGE = 50;
