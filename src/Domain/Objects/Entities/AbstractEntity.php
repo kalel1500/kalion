@@ -175,9 +175,9 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $value  = $this->{$name};
 
             $value = match (true) {
-                $isEnum          => $value->value,
+                $isEnum          => $value?->value,
                 $method === null => $value,
-                default          => $value->{$method}($value),
+                default          => $value?->{$method}($value),
             };
 
             $props[$name] = $value;
