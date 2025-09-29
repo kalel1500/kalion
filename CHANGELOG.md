@@ -1,6 +1,43 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.35.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.35.1-beta.0...master)
+
+## [v0.35.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.35.0-beta.0...v0.35.1-beta.0) - 2025-09-29
+
+### Changed
+
+* Se han modificado los tests:
+  * Nuevos tests `test_dto_to_array_with_null_values()` y `test_dto_from_array_with_null_values()` en la clase `BlogRelationsTest`.
+  * Se han movido los tests de los DTOs de la clase `Tests\Feature\BlogRelationsTest` a la clase `Tests\Unit\ObjectsTest`.
+  * Se ha añadido el contexto `InferenceProblem` con nuevas clases para probar el problema de inferencia de tipos de PhpStorm.
+* Se ha simplificado el DTO `CookiePreferencesDto`:
+  * Se ha eliminado el valor por defecto del campo `theme` en el método `make()`.
+  * En su lugar se ha añadido en la clase `Cookie` al instanciar el DTO (se usa el nuevo método `getDefault()` del enum `ThemeVo`).
+  * (refactor) Se ha eliminado el método `make()` de la clase `CookiePreferencesDto`, ya que al no tener ningun dato por defecto ahora se puede usar la reflexión.
+* (warn) Se ha marcado varias clases `@internal` con DocBlock:
+  * `CookiePreferencesDto`
+  * `ArrayTabulatorFiltersVo`
+  * `CheckableProcessVo`
+  * `Env`
+  * `JsonMethodVo`
+  * `StatusPluckFieldVo`
+  * `StatusPluckKeyVo`
+  * `ThemeVo`
+* (warn) Se ha cambiado la clase `ThemeVo` de un `AbstractEnumVo` a un `enum` nativo de PHP. Se ha reemplazado el `->value()` por `->value` en los lugares donde se lee el valor.
+* (warn) Se han hecho públicas las propiedades de la clase `CookiePreferencesDto` y se han eliminado los `getters` y `setters`. Se han eliminado los `()` de los lugares donde se leen las propiedades.
+* Se ha mejorado la gestion de los Errores en la reflexion de las clases `AbstractEntity` y `AbstractDataTransferObject`:
+  * Se ha mejorado el mensaje de error que devuelve la clase `AbstractEntity` cuando hay un fallo al instanciar la clase de uno de sus parametros.
+  * Se ha envuelto el `match` del `$value` de la clase `AbstractDataTransferObject` para devolver un error más claro cuando hay un fallo al instanciar la clase de uno de sus parametros.
+* Ahora los `DTOs` pueden tener propiedades con `UnionTypes`. De esta forma en una clase padre se pueden definir propiedades con varios tipos.
+* Se ha añadido el valor por defecto `0` a la propiedad `level` del componente `<x-kal::sidebar.item />`. Esto mejora la usabilidad y simplifica el uso manual del componente permitiendo que sea opcional.
+* stubs: Se han actualizado los archivos segun la instalación de Laravel 12.
+
+### Fixed
+
+* (fix) Ahora se devuelve `null` en el método `fromArray()` de las clases `AbstractEntity` y `AbstractDataTransferObject` si se recibe un `array` vacio.
+* (fix) Se ha arreglado un error en el método `fromArray()` de `entidades` y `DTOs` si alguna de las propiedades es `nullable` y se le pasa un `null`. Ahora se guarda el parametro `allowsNull` en el `$meta` de la Reflexion y en el caso de que un parametro sea `nullable` y venga a `null` ya no se intenta instanciar la clase.
+* (fix) Se ha arreglado un error en el método `toArray()` de `entidades` y `DTOs` si alguna de las propiedades es `nullable`. Se ha añadido el `null-safe operator` en el `match` del `$value` en los métodos `props()` de las clases `AbstractEntity` y `AbstractDataTransferObject`.
+* (fix) Se ha arreglado un error del comando `kalion:start`: Ahora se obtiene el `DependencyServiceProvider` de la carpeta `examples`, en el método `stubsCopyFile_DependencyServiceProvider()` ya que se movio y ya no existe en la carpeta `base`.
 
 ## [v0.35.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.34.0-beta.1...v0.35.0-beta.0) - 2025-09-23
 
