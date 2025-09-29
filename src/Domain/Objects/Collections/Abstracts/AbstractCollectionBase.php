@@ -25,9 +25,6 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
 use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 use TypeError;
 
-/**
- * @template T of AbstractCollectionBase
- */
 abstract class AbstractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, ArrayConvertible, JsonSerializable
 {
     use ParsesRelationFlags;
@@ -862,6 +859,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     }
 
     /**
+     * @template T of AbstractCollectionBase
+     *
      * @param string $field
      * @param class-string<T> $to
      * @return T
@@ -1162,6 +1161,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     }
 
     /**
+     * @template T of AbstractCollectionBase
+     *
      * @param class-string<T> $collectionClass
      * @return T
      */

@@ -21,7 +21,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
     private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];
 
-    private static function getParamType(\ReflectionParameter|\ReflectionProperty $param): array
+    private static function getParamType(\ReflectionParameter|\ReflectionProperty $param, bool $allowUnionTypes): array
     {
         $className = static::class;
         $name = $param->getName();
@@ -34,21 +34,27 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
         // Union type → no permitido
         if ($type instanceof ReflectionUnionType) {
-            throw KalionReflectionException::unionTypeNotSupported($name, $className, '__construct');
+            if (!$allowUnionTypes) {
+                throw KalionReflectionException::unionTypeNotSupported($name, $className, '__construct');
+            }
+
+            $type = $type->getTypes()[0];
         }
 
         // Named type (Class)
         if ($type instanceof \ReflectionNamedType) {
             return [
-                'name'  => $name,
-                'class' => $type->isBuiltin() ? null : $type->getName(),
+                'name'       => $name,
+                'class'      => $type->isBuiltin() ? null : $type->getName(),
+                'allowsNull' => $type->allowsNull(),
             ];
         }
 
         // Sin tipo
         return [
-            'name'  => $name,
-            'class' => null,
+            'name'       => $name,
+            'class'      => null,
+            'allowsNull' => true,
         ];
     }
 
@@ -102,12 +108,12 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
             // Make
             foreach ($constructor->getParameters() as $param) {
-                $paramsMake[] = self::getParamType($param);
+                $paramsMake[] = self::getParamType($param, false);
             }
 
             // Props
             foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $param) {
-                $paramsProps[] = self::getParamType($param);
+                $paramsProps[] = self::getParamType($param, true);
             }
 
             $newParamsMake = [];
@@ -154,15 +160,20 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
 
         $params = self::resolveConstructorParams()['make'];
         foreach ($params as $key => $meta) {
-            $paramName = arr_is_assoc($data) ? $meta['name'] : $key;
-            $class  = $meta['class'];
-            $value     = $data[$paramName] ?? null;
+            $paramName  = arr_is_assoc($data) ? $meta['name'] : $key;
+            $class      = $meta['class'];
+            $allowsNull = $meta['allowsNull'];
+            $value      = $data[$paramName] ?? null;
 
             $method = $meta['makeMethod'];
-            $value = match (true) {
-                $method === null || ($value instanceof $class)  => $value,
-                default                                         => $class::$method($value),
-            };
+            try {
+                $value = match (true) {
+                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
+                    default                                                                             => $class::$method($value),
+                };
+            } catch (\Throwable $t) {
+                throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, get_debug_type($value));
+            }
 
             $args[] = $value;
         }
@@ -194,9 +205,9 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
             $value  = $this->{$name};
 
             $value = match (true) {
-                $isEnum          => $value->value,
+                $isEnum          => $value?->value,
                 $method === null => $value,
-                default          => $value->{$method}($value),
+                default          => $value?->{$method}($value),
             };
 
             $props[$name] = $value;
@@ -212,7 +223,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
      */
     public static function fromArray(?array $data): ?static
     {
-        if (is_null($data)) return null;
+        if (empty($data)) return null;
         return static::make($data);
     }
 

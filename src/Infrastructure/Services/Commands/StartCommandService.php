@@ -431,7 +431,7 @@ final class StartCommandService
 
         $this->line(sprintf('%s archivo %s', ($reset ? 'Eliminando' : 'Creando'), $file));
 
-        $from = $this->stubsPath($file);
+        $from = $this->stubsPath($file, true);
         $to   = base_path($file);
 
         if ($reset) {

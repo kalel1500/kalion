@@ -6,6 +6,9 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractEnumVo;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class Env extends AbstractEnumVo
 {
     const local         = 'local';
