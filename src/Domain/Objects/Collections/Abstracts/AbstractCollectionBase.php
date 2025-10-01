@@ -434,7 +434,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function filter(callable $callback = null)
     {
-        $collResult = collect($this->toArray())->filter($callback)->values();
+        $collResult = collect($this->toArray())->filter($callback);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -477,7 +477,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function flatten($depth = INF)
     {
-        $collResult = collect($this->toArray())->flatten($depth)->values();
+        $collResult = collect($this->toArray())->flatten($depth);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1020,7 +1020,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function sort($callback = null)
     {
-        $collResult = collect($this->toArray())->sort($callback)->values();
+        $collResult = collect($this->toArray())->sort($callback);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1032,7 +1032,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function sortBy($callback, $options = SORT_REGULAR, $descending = false)
     {
-        $collResult = collect($this->toArray())->sortBy($callback, $options, $descending)->values();
+        $collResult = collect($this->toArray())->sortBy($callback, $options, $descending);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1052,7 +1052,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function sortDesc($options = SORT_REGULAR)
     {
-        $collResult = collect($this->toArray())->sortDesc($options)->values();
+        $collResult = collect($this->toArray())->sortDesc($options);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1097,7 +1097,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function take($limit)
     {
-        $collResult = collect($this->toArray())->take($limit)->values();
+        $collResult = collect($this->toArray())->take($limit);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1210,7 +1210,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function unique($key = null, $strict = false)
     {
-        $collResult = collect($this->toArray())->unique($key, $strict)->values();
+        $collResult = collect($this->toArray())->unique($key, $strict);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1275,7 +1275,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function where($key, $operator = null, $value = null)
     {
-        $collResult = collect($this->toArray())->where(...func_get_args())->values();
+        $collResult = collect($this->toArray())->where(...func_get_args());
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1297,7 +1297,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function whereIn($key, $values, $strict = false)
     {
-        $collResult = collect($this->toArray())->whereIn($key, $values, $strict)->values();
+        $collResult = collect($this->toArray())->whereIn($key, $values, $strict);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1324,7 +1324,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function whereNotIn($key, $values, $strict = false)
     {
-        $collResult = collect($this->toArray())->whereNotIn($key, $values, $strict)->values();
+        $collResult = collect($this->toArray())->whereNotIn($key, $values, $strict);
         return $this->toStatic($collResult->toArray());
     }
 
