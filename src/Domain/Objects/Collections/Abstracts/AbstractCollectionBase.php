@@ -764,7 +764,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             }
 
             if ($collectionItem instanceof MakeParamsArrayable) {
-                $value = $collectionItem->toMakeParams()[$pluckField] ?? null;
+                $value = $collectionItem->toMakeArray()[$pluckField] ?? null;
                 if (!is_null($value)) {
                     return $value;
                 }
@@ -1130,7 +1130,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         foreach ($this->items as $key => $item) {
             $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
             $item = match (true) {
-                $item instanceof MakeParamsArrayable && $fromThisClass => $item->toMakeParams(),
+                $item instanceof MakeParamsArrayable && $fromThisClass => $item->toMakeArray(),
                 $item instanceof ArrayConvertible                      => $item->toArray(),
                 $item instanceof AbstractValueObject                   => $item->value(),
                 default                                                => $item,

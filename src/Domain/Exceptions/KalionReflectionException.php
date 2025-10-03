@@ -47,7 +47,7 @@ class KalionReflectionException extends KalionRuntimeException
 
     public static function disabledReflectionInDto(string $class): static
     {
-        return new static("The $class class has the DisableReflection attribute defined. In these cases, it is necessary to define either the props() method or the toMakeParams() and toArray() methods.");
+        return new static("The $class class has the DisableReflection attribute defined. In these cases, it is necessary to define either the props() method or the toMakeArray() and toArray() methods.");
     }
 
     public static function failedToHydrateUsingFromArray(string $class, string $param, string $expectedClass, string $value): static

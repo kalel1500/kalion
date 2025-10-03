@@ -238,7 +238,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
         return $this->props();
     }
 
-    public function toMakeParams(): array
+    public function toMakeArray(): array
     {
         return $this->props();
     }

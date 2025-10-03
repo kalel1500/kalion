@@ -17,9 +17,9 @@ abstract class AbstractCollectionDto extends AbstractCollectionBase implements M
         return parent::first(...func_get_args());
     }
 
-    public function toMakeParams(): array
+    public function toMakeArray(): array
     {
-        return array_map(fn(AbstractDataTransferObject $item) => $item->toMakeParams(), $this->items);
+        return array_map(fn(AbstractDataTransferObject $item) => $item->toMakeArray(), $this->items);
     }
 
     /**

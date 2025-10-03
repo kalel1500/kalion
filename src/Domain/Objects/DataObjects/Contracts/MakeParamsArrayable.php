@@ -6,5 +6,5 @@ namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts;
 
 interface MakeParamsArrayable
 {
-    public function toMakeParams(): array;
+    public function toMakeArray(): array;
 }
