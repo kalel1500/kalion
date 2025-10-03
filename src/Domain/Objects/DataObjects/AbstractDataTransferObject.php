@@ -11,12 +11,12 @@ use ReflectionIntersectionType;
 use ReflectionUnionType;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
-abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParamsArrayable, Jsonable, JsonSerializable
+abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArrayable, Jsonable, JsonSerializable
 {
     private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];

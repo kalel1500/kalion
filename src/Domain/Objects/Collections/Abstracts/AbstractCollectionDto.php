@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 
-abstract class AbstractCollectionDto extends AbstractCollectionBase implements MakeParamsArrayable
+abstract class AbstractCollectionDto extends AbstractCollectionBase implements MakeArrayable
 {
     /**
      * @return AbstractDataTransferObject|null

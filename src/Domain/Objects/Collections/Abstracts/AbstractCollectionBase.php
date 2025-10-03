@@ -14,7 +14,7 @@ use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
@@ -763,7 +763,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $collectionItem->$pluckField;
             }
 
-            if ($collectionItem instanceof MakeParamsArrayable) {
+            if ($collectionItem instanceof MakeArrayable) {
                 $value = $collectionItem->toMakeArray()[$pluckField] ?? null;
                 if (!is_null($value)) {
                     return $value;
@@ -1130,10 +1130,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         foreach ($this->items as $key => $item) {
             $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
             $item = match (true) {
-                $item instanceof MakeParamsArrayable && $fromThisClass => $item->toMakeArray(),
-                $item instanceof ArrayConvertible                      => $item->toArray(),
-                $item instanceof AbstractValueObject                   => $item->value(),
-                default                                                => $item,
+                $item instanceof MakeArrayable && $fromThisClass => $item->toMakeArray(),
+                $item instanceof ArrayConvertible                => $item->toArray(),
+                $item instanceof AbstractValueObject             => $item->value(),
+                default                                          => $item,
             };
             $result[$key] = $item;
         }
