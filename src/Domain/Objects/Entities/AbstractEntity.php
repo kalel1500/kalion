@@ -156,8 +156,8 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
                     default                                                                             => $class::$method($value),
                 };
-            } catch (\Throwable $t) {
-                throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, get_debug_type($value));
+            } catch (\Throwable $th) {
+                throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, get_debug_type($value), $th->getMessage());
             }
 
             $args[] = $value;
