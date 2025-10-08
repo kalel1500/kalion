@@ -12,7 +12,6 @@ use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
-use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
 use Throwable;
@@ -64,13 +63,12 @@ final class ExceptionHandler
                     return self::renderJson($context);
                 }
 
-                // En PROD devolvemos nuestra vista personalizada
-                if ($isDebugInactive) {
-                    return self::renderHtmlCustom($context);
-                }
-
-                // Si es una excepcion HTTP y no debe mostrar el trace en desarrollo, devolvemos nuestra vista personalizada
-                if ($e instanceof KalionHttpException && !$e::SHOULD_RENDER_TRACE) {
+                /**
+                 * Devolver la vista de error personalizada solo si se cumple alguna de estas opciones:
+                 *  - El debug está desactivado
+                 *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "false"
+                 */
+                if ($isDebugInactive || ($e instanceof KalionHttpException && !$e::SHOULD_RENDER_TRACE)) {
                     return self::renderHtmlCustom($context);
                 }
 
