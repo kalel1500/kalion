@@ -69,13 +69,8 @@ final class ExceptionHandler
                     return self::renderHtmlCustom($context);
                 }
 
-                // Si la excepción es una instancia de "AbortException" renderizamos la vista de errores de Laravel
-                if ($e instanceof AbortException) {
-                    return self::renderHtmlDebug($e, $request);
-                }
-
-                // Si es "KalionHttpException" devolvemos nuestra vista personalizada
-                if ($e instanceof KalionHttpException) {
+                // Si es una excepcion HTTP y no debe mostrar el trace en desarrollo, devolvemos nuestra vista personalizada
+                if ($e instanceof KalionHttpException && !$e::SHOULD_RENDER_TRACE) {
                     return self::renderHtmlCustom($context);
                 }
 
