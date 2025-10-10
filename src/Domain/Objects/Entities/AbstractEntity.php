@@ -298,6 +298,10 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
     private function contextMatch(?string $selectedContext, array $attributeContexts, bool $addOnFull): bool
     {
+        if (in_array(Computed::AS_ATTRIBUTE, $attributeContexts)) {
+            return true;
+        }
+
         $isFull = is_null($selectedContext);
 
         // IS_FULL: sin contextos, o con contextos + addOnFull = true
