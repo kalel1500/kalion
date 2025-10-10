@@ -279,16 +279,8 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $contexts  = $meta['contexts'];
             $addOnFull = $meta['addOnFull'];
 
-            if ($context === null) {
-                // Solo sin contextos, o con contextos + addOnFull = true
-                if (!empty($contexts) && !$addOnFull) {
-                    continue;
-                }
-            } else {
-                // Solo si el contexto está en contexts (independiente de addOnFull)
-                if (empty($contexts) || !in_array($context, $contexts, true)) {
-                    continue;
-                }
+            if (!$this->contextMatch($context, $contexts, $addOnFull)) {
+                continue;
             }
 
             $name = $meta['name'];
@@ -302,6 +294,23 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         }
 
         return $result;
+    }
+
+    private function contextMatch(?string $selectedContext, array $attributeContexts, bool $addOnFull): bool
+    {
+        $isFull = is_null($selectedContext);
+
+        // IS_FULL: sin contextos, o con contextos + addOnFull = true
+        if ($isFull && (empty($attributeContexts) || $addOnFull)) {
+            return true;
+        }
+
+        // IS_CONTEXT: si el contexto está en contexts (independiente de addOnFull)
+        if (!$isFull && in_array($selectedContext, $attributeContexts)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function toArrayDb($keepId = false): array
