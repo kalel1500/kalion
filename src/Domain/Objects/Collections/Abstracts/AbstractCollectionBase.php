@@ -751,65 +751,25 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function pluck($value, $key = null)
     {
-        $getItemValue   = function ($collectionItem, string $pluckField) {
-            if (is_array($collectionItem)) {
-                return $collectionItem[str_snake($pluckField)];
-            }
+        $relationName = $value;
 
-            if (! is_object($collectionItem)) {
-                return null;
-            }
-
-            if (method_exists($collectionItem, $pluckField)) {
-                return $collectionItem->$pluckField();
-            }
-
-            if (property_exists($collectionItem, $pluckField)) {
-                return $collectionItem->$pluckField;
-            }
-
-            if ($collectionItem instanceof MakeArrayable) {
-                $value = $collectionItem->toMakeArray()[$pluckField] ?? null;
-                if (!is_null($value)) {
-                    return $value;
-                }
-            }
-
-            if ($collectionItem instanceof ArrayConvertible) {
-                return $collectionItem->toArray()[$pluckField];
-            }
-
-            return null;
-        };
-        $clearItemValue = function ($item) {
-            return match (true) {
-                $item instanceof ArrayConvertible    => $item->toArray(),
-                $item instanceof AbstractValueObject => $item->value(),
-                $item instanceof \BackedEnum         => $item->value,
-                default                              => $item
-            };
-        };
-
-        $result = [];
-        foreach ($this->items as $item) {
-            $fieldValue = $getItemValue($item, $value);
-            $fieldValue = $clearItemValue($fieldValue);
-
-            if (is_null($key)) {
-                $result[] = $fieldValue;
-            } else {
-                $keyValue          = $getItemValue($item, $key);
-                $keyValue          = $clearItemValue($keyValue);
-                $result[$keyValue] = $fieldValue;
-            }
+        $arr = $this->toArray();
+        $value = $this->normalizeDotPath($arr, $value);
+        if (!is_null($key)) {
+            $key = $this->normalizeDotPath($arr, $key);
         }
+
+        $result = collect($arr)->pluck($value, $key)->toArray();
 
         if (! $this->isInstanceOfRelatable() || is_null($this->with)) {
             return CollectionAny::fromArray($result);
         }
 
+        if (str_contains($relationName, '.')) {
+            return CollectionAny::fromArray($result);
+        }
+
         $with = is_array($this->with) ? $this->with : [$this->with];
-        $relationName = $value;
 
         $newWith = null;
         $newIsFull = null;
@@ -840,6 +800,53 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
         return CollectionAny::fromArray($result, $newWith, $newIsFull);
     }
+
+    private function normalizeDotPath(array $data, string $path): string
+    {
+        if (empty($data)) {
+            return $path;
+        }
+
+        $segments = explode('.', $path);
+        $current = $data[0] ?? $data; // por si la colección no tiene índice numérico
+        $normalized = [];
+
+        foreach ($segments as $segment) {
+            // Si llegamos a un valor escalar, no podemos seguir profundizando
+            if (!is_array($current)) {
+                $normalized[] = $segment;
+                break;
+            }
+
+            // Si el segmento no existe en el nivel actual, intenta su versión snake_case
+            if (!array_key_exists($segment, $current)) {
+                $snake = str_snake($segment);
+
+                if (array_key_exists($snake, $current)) {
+                    $segment = $snake;
+                }
+            }
+
+            $normalized[] = $segment;
+
+            // Avanza un nivel más si el valor actual es un array
+            $next = $current[$segment] ?? null;
+            if (is_array($next)) {
+                // Si el siguiente nivel es una colección (índices numéricos), usamos el primer elemento
+                if (array_is_list($next)) {
+                    $current = $next[array_key_first($next)] ?? [];
+                } else {
+                    $current = $next;
+                }
+            } else {
+                // No hay más niveles
+                $current = [];
+            }
+        }
+
+        return implode('.', $normalized);
+    }
+
 
     /**
      * @template T of AbstractCollectionBase
