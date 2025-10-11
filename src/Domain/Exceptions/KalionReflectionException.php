@@ -50,7 +50,7 @@ class KalionReflectionException extends KalionRuntimeException
         return new static("The $class class has the DisableReflection attribute defined. In these cases, it is necessary to define either the props() method or the toMakeArray() and toArray() methods.");
     }
 
-    public static function failedToHydrateUsingFromArray(string $class, string $param, string $expectedClass, string $value, string $errorMessage): static
+    public static function failedToHydrateUsingFromArray(string $class, string $param, string $expectedClass, $value, string $errorMessage): static
     {
         $type = get_debug_type($value);
         return new static("Failed to hydrate $class using fromArray(): parameter \"$param\" expected an instance of $expectedClass (or a compatible primitive), but received $type. Error: $errorMessage");
