@@ -10,6 +10,8 @@ use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLog
 
 final class Kalion
 {
+    public const ENUM_NULL_VALUE = 'k_null';
+
     public static function setLogChannels(): void
     {
         config([

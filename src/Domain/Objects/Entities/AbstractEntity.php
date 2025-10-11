@@ -17,6 +17,7 @@ use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractJsonVo;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 {
@@ -148,12 +149,14 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $paramName  = $meta['name'];
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
+            $isEnum     = $meta['propsIsEnum'];
             $method     = $meta['makeMethod'];
             $value      = $data[$paramName] ?? null;
 
             try {
                 $value = match (true) {
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
+                    (!$allowsNull && $value === null && $isEnum)                                        => $class::$method(Kalion::ENUM_NULL_VALUE),
                     default                                                                             => $class::$method($value),
                 };
             } catch (\Throwable $th) {
@@ -182,6 +185,10 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $method === null => $value,
                 default          => $value?->{$method}($value),
             };
+
+            if ($isEnum && $value === Kalion::ENUM_NULL_VALUE) {
+                $value = null;
+            }
 
             $props[$name] = $value;
         }
@@ -291,6 +298,10 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $method !== null => $value->{$method}(),
                 default          => $value,
             };
+
+            if ($meta['isEnum'] && $result[$name] === Kalion::ENUM_NULL_VALUE) {
+                $result[$name] = null;
+            }
         }
 
         return $result;

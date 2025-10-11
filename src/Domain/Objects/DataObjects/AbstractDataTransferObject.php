@@ -15,6 +15,7 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArrayable, Jsonable, JsonSerializable
 {
@@ -163,12 +164,14 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $paramName  = arr_is_assoc($data) ? $meta['name'] : $key;
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
+            $isEnum     = $meta['propsIsEnum'];
             $value      = $data[$paramName] ?? null;
 
             $method = $meta['makeMethod'];
             try {
                 $value = match (true) {
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
+                    (!$allowsNull && $value === null && $isEnum)                                        => $class::$method(Kalion::ENUM_NULL_VALUE),
                     default                                                                             => $class::$method($value),
                 };
             } catch (\Throwable $th) {
@@ -209,6 +212,10 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
                 $method === null => $value,
                 default          => $value?->{$method}($value),
             };
+
+            if ($isEnum && $value === Kalion::ENUM_NULL_VALUE) {
+                $value = null;
+            }
 
             $props[$name] = $value;
         }
