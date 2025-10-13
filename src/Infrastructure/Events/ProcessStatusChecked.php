@@ -38,7 +38,7 @@ final class ProcessStatusChecked implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'EventCheckQueuesStatus';
+        return 'ProcessStatusChecked';
     }
 
     public function broadcastWith(): array
