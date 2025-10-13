@@ -10,6 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Queue\SerializesModels;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 
 final class ProcessStatusChecked implements ShouldBroadcast
 {
@@ -19,7 +20,8 @@ final class ProcessStatusChecked implements ShouldBroadcast
      * Create a new event instance.
      */
     public function __construct(
-        private JsonResponse $response
+        private CheckableProcessVo $processName,
+        private JsonResponse       $response
     )
     {
     }
@@ -44,7 +46,8 @@ final class ProcessStatusChecked implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'response' => $this->response->getData(),
+            'processName' => $this->processName->value,
+            'response'    => $this->response->getData(),
         ];
     }
 }
