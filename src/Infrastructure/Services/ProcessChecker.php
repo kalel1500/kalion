@@ -41,11 +41,9 @@ final class ProcessChecker
     /**
      * @throws ProcessException
      */
-    private function checkSystemFor(string $processName): bool
+    private function checkSystemFor(CheckableProcessVo $processName): bool
     {
         try {
-            $processName = CheckableProcessVo::from($processName);
-
             $command = so_is_windows()
                 ? $this->getWindowsCommand($processName)
                 : $this->getLinuxCommand($processName);
@@ -74,7 +72,7 @@ final class ProcessChecker
     /**
      * @throws ProcessException
      */
-    public function isRunning(string $processName): bool
+    public function isRunning(CheckableProcessVo $processName): bool
     {
         return $this->checkSystemFor($processName);
     }
@@ -82,10 +80,10 @@ final class ProcessChecker
     /**
      * @throws ProcessException
      */
-    public function assert(string $processName, string $errorMessage = null): void
+    public function assert(CheckableProcessVo $processName, string $errorMessage = null): void
     {
         if(! $this->isRunning($processName)) {
-            throw ProcessException::isNotRunningWithOptionalMessage($processName, $errorMessage);
+            throw ProcessException::isNotRunningWithOptionalMessage($processName->value, $errorMessage);
         }
     }
 
@@ -94,7 +92,7 @@ final class ProcessChecker
      */
     public function checkQueue(): bool
     {
-        return $this->isRunning(CheckableProcessVo::queue->value);
+        return $this->isRunning(CheckableProcessVo::queue);
     }
 
     /**
@@ -102,7 +100,7 @@ final class ProcessChecker
      */
     public function assertQueue($errorMessage = null): void
     {
-        $this->assert(CheckableProcessVo::queue->value, $errorMessage);
+        $this->assert(CheckableProcessVo::queue, $errorMessage);
     }
 
     /**
@@ -110,7 +108,7 @@ final class ProcessChecker
      */
     public function checkReverb(): bool
     {
-        return $this->isRunning(CheckableProcessVo::reverb->value);
+        return $this->isRunning(CheckableProcessVo::reverb);
     }
 
     /**
@@ -118,6 +116,6 @@ final class ProcessChecker
      */
     public function assertReverb($errorMessage = null): void
     {
-        $this->assert(CheckableProcessVo::reverb->value, $errorMessage);
+        $this->assert(CheckableProcessVo::reverb, $errorMessage);
     }
 }
