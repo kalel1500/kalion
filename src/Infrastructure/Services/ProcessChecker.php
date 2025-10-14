@@ -41,7 +41,7 @@ final class ProcessChecker
     /**
      * @throws ProcessException
      */
-    public function isRunning(string $processName): bool
+    private function checkSystemFor(string $processName): bool
     {
         try {
             $processName = CheckableProcessVo::from($processName);
@@ -69,6 +69,14 @@ final class ProcessChecker
         } catch (\Throwable $th) {
             throw new ProcessException(message: $th->getMessage(), previous: $th);
         }
+    }
+
+    /**
+     * @throws ProcessException
+     */
+    public function isRunning(string $processName): bool
+    {
+        return $this->checkSystemFor($processName);
     }
 
     /**
