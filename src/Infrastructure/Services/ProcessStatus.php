@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\ProcessStatusKeysVo;
 
 final class ProcessStatus
@@ -24,6 +25,22 @@ final class ProcessStatus
     private static function isDisabled(ProcessStatusKeysVo $key): bool
     {
         return (bool) Cache::get($key->value, false);
+    }
+
+    public static function update(CheckableProcessVo $processName, bool $active): void
+    {
+        $keyName = $processName->value . '_disabled';
+
+        $key = ProcessStatusKeysVo::tryFrom($keyName);
+        if (! $key) {
+            return;
+        }
+
+        if ($active) {
+            self::markAsEnabled($key);
+        } else {
+            self::markAsDisabled($key);
+        }
     }
 
 

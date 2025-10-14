@@ -10,6 +10,8 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessV
 
 final class ProcessChecker
 {
+    private bool $cacheStatus = false;
+
     private function getWindowsCommand(CheckableProcessVo $service): string
     {
         // Windows: PowerShell + CIM. Filtramos por 'php.exe', 'artisan' y el servicio (regex escapado).
@@ -69,12 +71,30 @@ final class ProcessChecker
         }
     }
 
+    public function enableCache(): static
+    {
+        $this->cacheStatus = true;
+        return $this;
+    }
+
+    public function disableCache(): static
+    {
+        $this->cacheStatus = false;
+        return $this;
+    }
+
     /**
      * @throws ProcessException
      */
     public function isRunning(CheckableProcessVo $processName): bool
     {
-        return $this->checkSystemFor($processName);
+        $active = $this->checkSystemFor($processName);
+
+        if ($this->cacheStatus) {
+            ProcessStatus::update($processName, $active);
+        }
+
+        return $active;
     }
 
     /**
