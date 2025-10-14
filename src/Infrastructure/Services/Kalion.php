@@ -138,6 +138,11 @@ final class Kalion
         return config('kalion.auth.services.password_reset');
     }
 
+    public static function shouldCacheProcessStatus(): bool
+    {
+        return config('kalion.process.status_should_use_cache');
+    }
+
     public static function redirectAfterLoginTo(callable|string $redirect): void
     {
         $redirect = is_string($redirect) ? fn () => $redirect : $redirect;

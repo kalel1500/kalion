@@ -10,7 +10,12 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessV
 
 final class ProcessChecker
 {
-    private bool $cacheStatus = false;
+    private bool $cacheStatus;
+
+    public function __construct()
+    {
+        $this->cacheStatus = Kalion::shouldCacheProcessStatus();
+    }
 
     private function getWindowsCommand(CheckableProcessVo $service): string
     {
