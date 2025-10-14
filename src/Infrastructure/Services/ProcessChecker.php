@@ -82,7 +82,7 @@ final class ProcessChecker
     {
         $clone = clone $this;
         $clone->cacheStatus = false;
-        return $this;
+        return $clone;
     }
 
     /**
