@@ -71,14 +71,14 @@ final class ProcessChecker
         }
     }
 
-    public function enableCache(): static
+    public function withCache(): static
     {
         $clone = clone $this;
         $clone->cacheStatus = true;
         return $clone;
     }
 
-    public function disableCache(): static
+    public function withoutCache(): static
     {
         $clone = clone $this;
         $clone->cacheStatus = false;

@@ -7,8 +7,8 @@ namespace Thehouseofel\Kalion\Infrastructure\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker enableCache()
- * @method static \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker disableCache()
+ * @method static \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker withCache()
+ * @method static \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker withoutCache()
  * @method static bool isRunning(string $processName)
  * @method static void assert(string $processName, string $errorMessage = null)
  * @method static bool checkQueue()
