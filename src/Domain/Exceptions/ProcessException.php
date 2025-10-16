@@ -34,4 +34,9 @@ class ProcessException extends KalionException
         };
         return new static("Command error: $message");
     }
+
+    public static function processFailed(string $name, string $message, ?\Throwable $previous = null): static
+    {
+        return new static(message: "Ha habido algún error al comprobar el proceso $name: $message", previous: $previous);
+    }
 }

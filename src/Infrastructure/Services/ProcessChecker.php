@@ -72,7 +72,7 @@ final class ProcessChecker
 
             return $output !== '';
         } catch (\Throwable $th) {
-            throw new ProcessException(message: $th->getMessage(), previous: $th);
+            throw ProcessException::processFailed(name: $processName->value, message: $th->getMessage(), previous: $th);
         }
     }
 
