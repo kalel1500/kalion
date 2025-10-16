@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 
 /**
  * @method static \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker withCache()
  * @method static \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker withoutCache()
- * @method static bool isRunning(string $processName)
- * @method static bool tryIsRunning(string $processName)
+ * @method static bool isRunning(CheckableProcessVo $processName)
+ * @method static bool tryIsRunning(CheckableProcessVo $processName)
  * @method static void assert(string $processName, string $errorMessage = null)
  * @method static bool isRunningQueue()
  * @method static bool tryIsRunningQueue()
