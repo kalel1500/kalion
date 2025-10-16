@@ -10,10 +10,13 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker withCache()
  * @method static \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker withoutCache()
  * @method static bool isRunning(string $processName)
+ * @method static bool tryIsRunning(string $processName)
  * @method static void assert(string $processName, string $errorMessage = null)
  * @method static bool isRunningQueue()
+ * @method static bool tryIsRunningQueue()
  * @method static void assertQueue(string $errorMessage = null)
  * @method static bool isRunningReverb()
+ * @method static bool tryIsRunningReverb()
  * @method static void assertReverb(string $errorMessage = null)
  *
  * @see \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker

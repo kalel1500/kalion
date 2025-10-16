@@ -104,6 +104,15 @@ final class ProcessChecker
         return $active;
     }
 
+    public function tryIsRunning(CheckableProcessVo $processName): bool
+    {
+        try {
+            return $this->isRunning($processName);
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
+
     /**
      * @throws ProcessException
      */
@@ -122,6 +131,11 @@ final class ProcessChecker
         return $this->isRunning(CheckableProcessVo::queue);
     }
 
+    public function tryIsRunningQueue(): bool
+    {
+        return $this->tryIsRunning(CheckableProcessVo::queue);
+    }
+
     /**
      * @throws ProcessException
      */
@@ -136,6 +150,11 @@ final class ProcessChecker
     public function isRunningReverb(): bool
     {
         return $this->isRunning(CheckableProcessVo::reverb);
+    }
+
+    public function tryIsRunningReverb(): bool
+    {
+        return $this->tryIsRunning(CheckableProcessVo::reverb);
     }
 
     /**
