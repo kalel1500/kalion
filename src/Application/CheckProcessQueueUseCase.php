@@ -11,7 +11,7 @@ final readonly class CheckProcessQueueUseCase
 {
     public function __invoke(): JsonResponse
     {
-        $active  = ProcessChecker::checkQueue();
+        $active  = ProcessChecker::isRunningQueue();
         $message = $active ? __('k::process.queues.active') : __('k::process.queues.inactive');
         return response_json(success: $active, message: $message);
     }

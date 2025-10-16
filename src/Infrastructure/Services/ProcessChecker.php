@@ -117,7 +117,7 @@ final class ProcessChecker
     /**
      * @throws ProcessException
      */
-    public function checkQueue(): bool
+    public function isRunningQueue(): bool
     {
         return $this->isRunning(CheckableProcessVo::queue);
     }
@@ -133,7 +133,7 @@ final class ProcessChecker
     /**
      * @throws ProcessException
      */
-    public function checkReverb(): bool
+    public function isRunningReverb(): bool
     {
         return $this->isRunning(CheckableProcessVo::reverb);
     }

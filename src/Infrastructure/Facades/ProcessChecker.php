@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker withoutCache()
  * @method static bool isRunning(string $processName)
  * @method static void assert(string $processName, string $errorMessage = null)
- * @method static bool checkQueue()
+ * @method static bool isRunningQueue()
  * @method static void assertQueue(string $errorMessage = null)
- * @method static bool checkReverb()
+ * @method static bool isRunningReverb()
  * @method static void assertReverb(string $errorMessage = null)
  *
  * @see \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker
