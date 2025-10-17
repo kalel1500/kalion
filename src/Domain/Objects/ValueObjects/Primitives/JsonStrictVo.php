@@ -8,6 +8,6 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Abstrac
 
 class JsonStrictVo extends AbstractJsonVo
 {
-    protected bool $nullable                = false;
-    protected bool $allowStringInformatable = false;
+    protected bool $nullable         = false;
+    protected bool $allowInvalidJson = false;
 }
