@@ -9,6 +9,6 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
 
 interface TabulatorRepository
 {
-    public static function tabulatorFiltering(Builder $query, ?array $filters, array $dontFilter = []): Builder;
-    public static function basicFiltering(Builder|QueryBuilder $query, ?string $field, ?string $type, mixed $value, ?string $fromOtherDBTable = null): Builder|QueryBuilder;
+    public function tabulatorFiltering(Builder $query, ?array $filters, array $dontFilter = []): Builder;
+    public function basicFiltering(Builder|QueryBuilder $query, ?string $field, ?string $type, mixed $value, ?string $fromOtherDBTable = null): Builder|QueryBuilder;
 }

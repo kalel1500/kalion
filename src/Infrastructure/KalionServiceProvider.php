@@ -34,6 +34,7 @@ class KalionServiceProvider extends ServiceProvider
         'thehouseofel.kalion.redirectAfterLogin'                                       => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
         'thehouseofel.kalion.redirectDefaultPath'                                      => \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
         'thehouseofel.kalion.processChecker'                                           => \Thehouseofel\Kalion\Infrastructure\Services\ProcessChecker::class,
+        \Thehouseofel\Kalion\Domain\Contracts\Repositories\TabulatorRepository::class  => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentTabulatorRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepository::class        => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepository::class       => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
         \Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepository::class => \Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository::class,

@@ -16,12 +16,12 @@ class EloquentTabulatorRepository implements TabulatorRepository
         'n/a',
     ];
 
-    public static function tabulatorFiltering(Builder $query, ?array $filters, array $dontFilter = []): Builder
+    public function tabulatorFiltering(Builder $query, ?array $filters, array $dontFilter = []): Builder
     {
         /*Filtradores TABULATOR*/
         if (!is_null($filters)) {
             foreach ($filters as $filter) {
-                $query = static::applyFilter($query, $filter, $dontFilter);
+                $query = $this->applyFilter($query, $filter, $dontFilter);
             }
         }
 
@@ -29,7 +29,7 @@ class EloquentTabulatorRepository implements TabulatorRepository
         /*if (isset($arrParams['sorters'])) {
             $sorters = $arrParams['sorters'];
             foreach ($sorters as $sorter) {
-                $query = static::applySorter($query, $sorter);
+                $query = $this->applySorter($query, $sorter);
             }
         }*/
 
@@ -37,7 +37,7 @@ class EloquentTabulatorRepository implements TabulatorRepository
         return $query;
     }
 
-    private static function applyFilter(Builder $query, array $filter, array $dontFilter = []): Builder
+    private function applyFilter(Builder $query, array $filter, array $dontFilter = []): Builder
     {
         $field = $filter["field"] ?? null;
         $type = $filter["type"] ?? null;
@@ -52,7 +52,7 @@ class EloquentTabulatorRepository implements TabulatorRepository
         if (!str_contains($field, ".")) {
 //            $originTable = $query->getModel()->getTable();
 //            $field = $originTable . '.' . $field;
-            return static::basicFiltering($query, $field, $type, $value);
+            return $this->basicFiltering($query, $field, $type, $value);
         }
 
         // Si hay puntos en el campo, separamos por punto y recorremos para crear el nombre del whereHas
@@ -97,11 +97,11 @@ class EloquentTabulatorRepository implements TabulatorRepository
 
         // Filtramos la relacion
         return $query->whereHas($relName, function ($q) use($relName, $colName, $type, $value, $field) {
-            return static::basicFiltering($q, $colName, $type, $value);
+            return $this->basicFiltering($q, $colName, $type, $value);
         });
     }
 
-    private static function applySorter(Builder $query, array $sorter): Builder
+    private function applySorter(Builder $query, array $sorter): Builder
     {
         $field = $sorter["field"];
         $dir = $sorter["dir"];
@@ -126,7 +126,7 @@ class EloquentTabulatorRepository implements TabulatorRepository
         return $query;
     }
 
-    public static function basicFiltering(
+    public function basicFiltering(
         Builder|QueryBuilder $query,
         ?string $field,
         ?string $type,
