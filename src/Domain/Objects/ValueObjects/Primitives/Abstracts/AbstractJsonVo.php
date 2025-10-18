@@ -23,7 +23,7 @@ abstract class AbstractJsonVo extends AbstractValueObject
     protected ?array            $valueArray   = null;
     protected array|object|null $valueObject  = null;
     protected ?string           $valueString  = null;
-    protected bool              $failAtFormat = false;
+    protected bool              $invalidJson  = false;
 
     public function __construct($value)
     {
@@ -61,7 +61,7 @@ abstract class AbstractJsonVo extends AbstractValueObject
             if (! $this->allowInvalidJson) {
                 throw new InvalidValueException(sprintf('Invalid JSON passed to constructor of class <%s>.', class_basename(static::class)));
             }
-            $this->failAtFormat = true;
+            $this->invalidJson = true;
         }
     }
 
@@ -80,9 +80,9 @@ abstract class AbstractJsonVo extends AbstractValueObject
         return $this->valueObject;
     }
 
-    public function failAtFormat(): bool
+    public function invalidJson(): bool
     {
-        return $this->failAtFormat;
+        return $this->invalidJson;
     }
 
     public function isNull(): bool
