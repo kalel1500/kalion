@@ -20,9 +20,9 @@ abstract class AbstractJsonVo extends AbstractValueObject
 
     protected bool $allowInvalidJson = true;
 
-    protected ?array            $arrayValue   = null;
-    protected array|object|null $objectValue  = null;
-    protected ?string           $encodedValue = null;
+    protected ?array            $valueArray   = null;
+    protected array|object|null $valueObject  = null;
+    protected ?string           $valueString  = null;
     protected bool              $failAtFormat = false;
 
     public function __construct($value)
@@ -46,12 +46,12 @@ abstract class AbstractJsonVo extends AbstractValueObject
         if (empty($value)) return;
 
         if (is_string($value)) {
-            $this->arrayValue   = json_decode($value, true);
-            $this->objectValue  = json_decode($value);
-            $this->encodedValue = $value;
-            if (is_null($this->objectValue)) {
+            $this->valueArray   = json_decode($value, true);
+            $this->valueObject  = json_decode($value);
+            $this->valueString = $value;
+            if (is_null($this->valueObject)) {
                 $this->failAtFormat = true;
-                $this->encodedValue = json_encode($value);
+                $this->valueString  = json_encode($value);
                 if (!$this->allowInvalidJson) {
                     throw new InvalidValueException(sprintf('Invalid JSON passed to constructor of class <%s>.', class_basename(static::class)));
                 }
@@ -59,9 +59,9 @@ abstract class AbstractJsonVo extends AbstractValueObject
         }
 
         if (is_array($value) || is_object($value)) {
-            $this->arrayValue   = legacy_json_to_array($value);
-            $this->objectValue  = legacy_json_to_object($value);
-            $this->encodedValue = json_encode($value);
+            $this->valueArray   = legacy_json_to_array($value);
+            $this->valueObject  = legacy_json_to_object($value);
+            $this->valueString = json_encode($value);
         }
     }
 
@@ -72,17 +72,17 @@ abstract class AbstractJsonVo extends AbstractValueObject
 
     public function valueArray(): ?array
     {
-        return $this->arrayValue;
+        return $this->valueArray;
     }
 
     public function valueObj(): array|object|null
     {
-        return $this->objectValue;
+        return $this->valueObject;
     }
 
     public function valueEncoded(): ?string
     {
-        return $this->encodedValue;
+        return $this->valueString;
     }
 
     public function failAtFormat(): bool
@@ -102,12 +102,12 @@ abstract class AbstractJsonVo extends AbstractValueObject
 
     public function isNullStrict(): bool
     {
-        return (is_null($this->arrayValue) || is_null($this->objectValue) || is_null($this->encodedValue));
+        return (is_null($this->valueArray) || is_null($this->valueObject) || is_null($this->valueString));
     }
 
     public function isEmptyStrict(): bool
     {
-        return (empty($this->arrayValue) || empty($this->objectValue) || empty($this->encodedValue));
+        return (empty($this->valueArray) || empty($this->valueObject) || empty($this->valueString));
     }
 
 
@@ -117,19 +117,19 @@ abstract class AbstractJsonVo extends AbstractValueObject
 
     public function toArray(): static
     {
-        $this->value = $this->arrayValue;
+        $this->value = $this->valueArray;
         return $this;
     }
 
     public function toObject(): static
     {
-        $this->value = $this->objectValue;
+        $this->value = $this->valueObject;
         return $this;
     }
 
     public function encode(): static
     {
-        $this->value = $this->encodedValue;
+        $this->value = $this->valueString;
         return $this;
     }
 }
