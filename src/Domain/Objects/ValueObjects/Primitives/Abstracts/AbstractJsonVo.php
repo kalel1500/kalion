@@ -49,18 +49,19 @@ abstract class AbstractJsonVo extends AbstractValueObject
             $this->valueArray  = json_decode($value, true);
             $this->valueObject = json_decode($value);
             $this->valueString = $value;
-            if (is_null($this->valueObject)) {
-                $this->failAtFormat = true;
-                if (!$this->allowInvalidJson) {
-                    throw new InvalidValueException(sprintf('Invalid JSON passed to constructor of class <%s>.', class_basename(static::class)));
-                }
-            }
         }
 
         if (is_array($value) || is_object($value)) {
             $this->valueArray  = legacy_json_to_array($value);
             $this->valueObject = legacy_json_to_object($value);
             $this->valueString = (!$decoded = json_encode($value)) ? null : $decoded;
+        }
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            if (! $this->allowInvalidJson) {
+                throw new InvalidValueException(sprintf('Invalid JSON passed to constructor of class <%s>.', class_basename(static::class)));
+            }
+            $this->failAtFormat = true;
         }
     }
 
