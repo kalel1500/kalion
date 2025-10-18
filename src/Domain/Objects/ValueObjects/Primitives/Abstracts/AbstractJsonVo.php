@@ -97,16 +97,6 @@ abstract class AbstractJsonVo extends AbstractValueObject
 
     public function isEmpty(): bool
     {
-        return empty($this->value);
-    }
-
-    public function isNullStrict(): bool
-    {
-        return (is_null($this->valueArray) || is_null($this->valueObject) || is_null($this->valueString));
-    }
-
-    public function isEmptyStrict(): bool
-    {
-        return (empty($this->valueArray) || empty($this->valueObject) || empty($this->valueString));
+        return empty($this->value) || empty($this->valueArray);
     }
 }
