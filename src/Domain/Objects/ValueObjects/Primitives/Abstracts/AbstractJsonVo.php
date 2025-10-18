@@ -70,19 +70,14 @@ abstract class AbstractJsonVo extends AbstractValueObject
         return $this->value;
     }
 
-    public function valueArray(): ?array
+    public function decodeAssoc(): ?array
     {
         return $this->valueArray;
     }
 
-    public function valueObj(): array|object|null
+    public function decodeObj(): array|object|null
     {
         return $this->valueObject;
-    }
-
-    public function valueEncoded(): ?string
-    {
-        return $this->valueString;
     }
 
     public function failAtFormat(): bool
