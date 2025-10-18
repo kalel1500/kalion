@@ -18,17 +18,15 @@ abstract class AbstractJsonVo extends AbstractValueObject
     protected const CLASS_MODEL_REQUIRED = ModelJsonVo::class;
     protected const CLASS_MODEL_NULLABLE = ModelJsonNullVo::class;
 
-    protected bool $allowInvalidJson = true;
-
     protected ?array            $valueArray   = null;
     protected array|object|null $valueObject  = null;
     protected ?string           $valueString  = null;
     protected bool              $invalidJson  = false;
 
-    public function __construct($value)
+    public function __construct($value, bool $try = false)
     {
         $this->ensureIsValidValue($value);
-        $this->setValues($value);
+        $this->setValues($value, $try);
         $this->value = $this->valueString;
     }
 
@@ -41,7 +39,7 @@ abstract class AbstractJsonVo extends AbstractValueObject
         }
     }
 
-    protected function setValues($value): void
+    protected function setValues($value, bool $try): void
     {
         if (empty($value)) return;
 
@@ -58,11 +56,16 @@ abstract class AbstractJsonVo extends AbstractValueObject
         }
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            if (! $this->allowInvalidJson) {
+            if (! $try) {
                 throw new InvalidValueException(sprintf('Invalid JSON passed to constructor of class <%s>.', class_basename(static::class)));
             }
             $this->invalidJson = true;
         }
+    }
+
+    public static function tryFrom($value): static
+    {
+        return new static($value, true);
     }
 
     public function value(): null|array|object|string
