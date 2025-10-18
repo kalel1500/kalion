@@ -109,27 +109,4 @@ abstract class AbstractJsonVo extends AbstractValueObject
     {
         return (empty($this->valueArray) || empty($this->valueObject) || empty($this->valueString));
     }
-
-
-    /*----------------------------------------------------------------------------------------------------------------------------------------------*/
-    /*----------------------------------------------------------------MODIFIERS---------------------------------------------------------------------*/
-
-
-    public function toArray(): static
-    {
-        $this->value = $this->valueArray;
-        return $this;
-    }
-
-    public function toObject(): static
-    {
-        $this->value = $this->valueObject;
-        return $this;
-    }
-
-    public function encode(): static
-    {
-        $this->value = $this->valueString;
-        return $this;
-    }
 }
