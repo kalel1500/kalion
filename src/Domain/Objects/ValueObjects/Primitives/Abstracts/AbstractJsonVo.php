@@ -46,12 +46,11 @@ abstract class AbstractJsonVo extends AbstractValueObject
         if (empty($value)) return;
 
         if (is_string($value)) {
-            $this->valueArray   = json_decode($value, true);
-            $this->valueObject  = json_decode($value);
+            $this->valueArray  = json_decode($value, true);
+            $this->valueObject = json_decode($value);
             $this->valueString = $value;
             if (is_null($this->valueObject)) {
                 $this->failAtFormat = true;
-                $this->valueString  = json_encode($value);
                 if (!$this->allowInvalidJson) {
                     throw new InvalidValueException(sprintf('Invalid JSON passed to constructor of class <%s>.', class_basename(static::class)));
                 }
@@ -59,9 +58,9 @@ abstract class AbstractJsonVo extends AbstractValueObject
         }
 
         if (is_array($value) || is_object($value)) {
-            $this->valueArray   = legacy_json_to_array($value);
-            $this->valueObject  = legacy_json_to_object($value);
-            $this->valueString = json_encode($value);
+            $this->valueArray  = legacy_json_to_array($value);
+            $this->valueObject = legacy_json_to_object($value);
+            $this->valueString = (!$decoded = json_encode($value)) ? null : $decoded;
         }
     }
 
