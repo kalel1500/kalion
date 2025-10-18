@@ -41,8 +41,6 @@ abstract class AbstractJsonVo extends AbstractValueObject
 
     protected function setValues($value, bool $try): void
     {
-        if (empty($value)) return;
-
         if (is_string($value)) {
             $this->valueArray  = json_decode($value, true);
             $this->valueObject = json_decode($value);
