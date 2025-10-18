@@ -29,7 +29,7 @@ abstract class AbstractJsonVo extends AbstractValueObject
     {
         $this->ensureIsValidValue($value);
         $this->setValues($value);
-        $this->value = $value;
+        $this->value = $this->valueString;
     }
 
     protected function ensureIsValidValue($value): void
