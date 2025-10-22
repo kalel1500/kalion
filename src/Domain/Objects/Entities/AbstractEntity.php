@@ -17,6 +17,7 @@ use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractJsonVo;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 {
@@ -148,16 +149,18 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $paramName  = $meta['name'];
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
+            $isEnum     = $meta['propsIsEnum'];
             $method     = $meta['makeMethod'];
             $value      = $data[$paramName] ?? null;
 
             try {
                 $value = match (true) {
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
+                    (!$allowsNull && $value === null && $isEnum)                                        => $class::$method(Kalion::ENUM_NULL_VALUE),
                     default                                                                             => $class::$method($value),
                 };
-            } catch (\Throwable $t) {
-                throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, get_debug_type($value));
+            } catch (\Throwable $th) {
+                throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, $value, $th->getMessage());
             }
 
             $args[] = $value;
@@ -182,6 +185,10 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $method === null => $value,
                 default          => $value?->{$method}($value),
             };
+
+            if ($isEnum && $value === Kalion::ENUM_NULL_VALUE) {
+                $value = null;
+            }
 
             $props[$name] = $value;
         }
@@ -279,16 +286,8 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $contexts  = $meta['contexts'];
             $addOnFull = $meta['addOnFull'];
 
-            if ($context === null) {
-                // Solo sin contextos, o con contextos + addOnFull = true
-                if (!empty($contexts) && !$addOnFull) {
-                    continue;
-                }
-            } else {
-                // Solo si el contexto está en contexts (independiente de addOnFull)
-                if (empty($contexts) || !in_array($context, $contexts, true)) {
-                    continue;
-                }
+            if (!$this->contextMatch($context, $contexts, $addOnFull)) {
+                continue;
             }
 
             $name = $meta['name'];
@@ -299,9 +298,34 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $method !== null => $value->{$method}(),
                 default          => $value,
             };
+
+            if ($meta['isEnum'] && $result[$name] === Kalion::ENUM_NULL_VALUE) {
+                $result[$name] = null;
+            }
         }
 
         return $result;
+    }
+
+    private function contextMatch(?string $selectedContext, array $attributeContexts, bool $addOnFull): bool
+    {
+        if (in_array(Computed::AS_ATTRIBUTE, $attributeContexts)) {
+            return true;
+        }
+
+        $isFull = is_null($selectedContext);
+
+        // IS_FULL: sin contextos, o con contextos + addOnFull = true
+        if ($isFull && (empty($attributeContexts) || $addOnFull)) {
+            return true;
+        }
+
+        // IS_CONTEXT: si el contexto está en contexts (independiente de addOnFull)
+        if (!$isFull && in_array($selectedContext, $attributeContexts)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function toArrayDb($keepId = false): array

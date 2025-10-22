@@ -10,6 +10,8 @@ use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLog
 
 final class Kalion
 {
+    public const ENUM_NULL_VALUE = 'k_null';
+
     public static function setLogChannels(): void
     {
         config([
@@ -134,6 +136,11 @@ final class Kalion
     public static function getClassServicePasswordReset()
     {
         return config('kalion.auth.services.password_reset');
+    }
+
+    public static function shouldCacheProcessStatus(): bool
+    {
+        return config('kalion.process.status_should_use_cache');
     }
 
     public static function redirectAfterLoginTo(callable|string $redirect): void

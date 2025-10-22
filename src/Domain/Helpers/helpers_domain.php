@@ -127,17 +127,23 @@ if (!function_exists('collect_any')) {
 }
 
 if (!function_exists('legacy_json_to_array')) {
-    function legacy_json_to_array($object): array|object
+    function legacy_json_to_array($object): array|object|null
     {
         $string = json_encode($object);
+        if (!$string) {
+            return null;
+        }
         return json_decode($string, true);
     }
 }
 
 if (!function_exists('legacy_json_to_object')) {
-    function legacy_json_to_object($object): array|object
+    function legacy_json_to_object($object): array|object|null
     {
         $string = json_encode($object);
+        if (!$string) {
+            return null;
+        }
         return json_decode($string);
     }
 }

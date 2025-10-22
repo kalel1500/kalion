@@ -11,7 +11,7 @@ final readonly class CheckProcessReverbUseCase
 {
     public function __invoke(): JsonResponse
     {
-        $active  = ProcessChecker::checkReverb();
+        $active  = ProcessChecker::isRunningReverb();
         $message = $active ? __('k::process.reverb.active') : __('k::process.reverb.inactive');
         return response_json(success: $active, message: $message);
     }

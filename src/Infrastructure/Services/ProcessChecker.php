@@ -10,6 +10,13 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessV
 
 final class ProcessChecker
 {
+    private bool $cacheStatus;
+
+    public function __construct()
+    {
+        $this->cacheStatus = Kalion::shouldCacheProcessStatus();
+    }
+
     private function getWindowsCommand(CheckableProcessVo $service): string
     {
         // Windows: PowerShell + CIM. Filtramos por 'php.exe', 'artisan' y el servicio (regex escapado).
@@ -41,11 +48,9 @@ final class ProcessChecker
     /**
      * @throws ProcessException
      */
-    public function isRunning(string $processName): bool
+    private function checkSystemFor(CheckableProcessVo $processName): bool
     {
         try {
-            $processName = CheckableProcessVo::from($processName);
-
             $command = so_is_windows()
                 ? $this->getWindowsCommand($processName)
                 : $this->getLinuxCommand($processName);
@@ -67,26 +72,68 @@ final class ProcessChecker
 
             return $output !== '';
         } catch (\Throwable $th) {
-            throw new ProcessException(message: $th->getMessage(), previous: $th);
+            throw ProcessException::processFailed(name: $processName->value, message: $th->getMessage(), previous: $th);
+        }
+    }
+
+    public function withCache(): static
+    {
+        $clone = clone $this;
+        $clone->cacheStatus = true;
+        return $clone;
+    }
+
+    public function withoutCache(): static
+    {
+        $clone = clone $this;
+        $clone->cacheStatus = false;
+        return $clone;
+    }
+
+    /**
+     * @throws ProcessException
+     */
+    public function isRunning(CheckableProcessVo $processName): bool
+    {
+        $active = $this->checkSystemFor($processName);
+
+        if ($this->cacheStatus) {
+            ProcessStatus::update($processName, $active);
+        }
+
+        return $active;
+    }
+
+    public function tryIsRunning(CheckableProcessVo $processName): bool
+    {
+        try {
+            return $this->isRunning($processName);
+        } catch (\Throwable $th) {
+            return false;
         }
     }
 
     /**
      * @throws ProcessException
      */
-    public function assert(string $processName, string $errorMessage = null): void
+    public function assert(CheckableProcessVo $processName, string $errorMessage = null): void
     {
         if(! $this->isRunning($processName)) {
-            throw ProcessException::isNotRunningWithOptionalMessage($processName, $errorMessage);
+            throw ProcessException::isNotRunningWithOptionalMessage($processName->value, $errorMessage);
         }
     }
 
     /**
      * @throws ProcessException
      */
-    public function checkQueue(): bool
+    public function isRunningQueue(): bool
     {
-        return $this->isRunning(CheckableProcessVo::queue->value);
+        return $this->isRunning(CheckableProcessVo::queue);
+    }
+
+    public function tryIsRunningQueue(): bool
+    {
+        return $this->tryIsRunning(CheckableProcessVo::queue);
     }
 
     /**
@@ -94,15 +141,20 @@ final class ProcessChecker
      */
     public function assertQueue($errorMessage = null): void
     {
-        $this->assert(CheckableProcessVo::queue->value, $errorMessage);
+        $this->assert(CheckableProcessVo::queue, $errorMessage);
     }
 
     /**
      * @throws ProcessException
      */
-    public function checkReverb(): bool
+    public function isRunningReverb(): bool
     {
-        return $this->isRunning(CheckableProcessVo::reverb->value);
+        return $this->isRunning(CheckableProcessVo::reverb);
+    }
+
+    public function tryIsRunningReverb(): bool
+    {
+        return $this->tryIsRunning(CheckableProcessVo::reverb);
     }
 
     /**
@@ -110,6 +162,6 @@ final class ProcessChecker
      */
     public function assertReverb($errorMessage = null): void
     {
-        $this->assert(CheckableProcessVo::reverb->value, $errorMessage);
+        $this->assert(CheckableProcessVo::reverb, $errorMessage);
     }
 }

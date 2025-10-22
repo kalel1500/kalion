@@ -14,6 +14,8 @@ abstract class KalionHttpException extends RuntimeException implements KalionExc
 {
     use KalionExceptionBehavior;
 
+    const SHOULD_RENDER_TRACE = false;
+
     public function __construct(
         ?int       $statusCode = null,
         ?string    $message = null,

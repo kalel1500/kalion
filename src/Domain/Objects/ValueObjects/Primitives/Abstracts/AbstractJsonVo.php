@@ -18,18 +18,16 @@ abstract class AbstractJsonVo extends AbstractValueObject
     protected const CLASS_MODEL_REQUIRED = ModelJsonVo::class;
     protected const CLASS_MODEL_NULLABLE = ModelJsonNullVo::class;
 
-    protected bool $allowStringInformatable = true;
+    protected ?array            $valueArray   = null;
+    protected array|object|null $valueObject  = null;
+    protected ?string           $valueString  = null;
+    protected bool              $invalidJson  = false;
 
-    protected ?array            $arrayValue   = null;
-    protected array|object|null $objectValue  = null;
-    protected ?string           $encodedValue = null;
-    protected bool              $failAtFormat = false;
-
-    public function __construct($value)
+    public function __construct($value, bool $try = false)
     {
         $this->ensureIsValidValue($value);
-        $this->setValues($value);
-        $this->value = $value;
+        $this->setValues($value, $try);
+        $this->value = $this->valueString;
     }
 
     protected function ensureIsValidValue($value): void
@@ -41,28 +39,31 @@ abstract class AbstractJsonVo extends AbstractValueObject
         }
     }
 
-    protected function setValues($value): void
+    protected function setValues($value, bool $try): void
     {
-        if (empty($value)) return;
-
         if (is_string($value)) {
-            $this->arrayValue   = json_decode($value, true);
-            $this->objectValue  = json_decode($value);
-            $this->encodedValue = $value;
-            if (is_null($this->objectValue)) {
-                $this->failAtFormat = true;
-                $this->encodedValue = json_encode($value);
-                if (!$this->allowStringInformatable) {
-                    throw new InvalidValueException(sprintf('Invalid JSON passed to constructor of class <%s>.', class_basename(static::class)));
-                }
-            }
+            $this->valueArray  = json_decode($value, true);
+            $this->valueObject = json_decode($value);
+            $this->valueString = $value;
         }
 
         if (is_array($value) || is_object($value)) {
-            $this->arrayValue   = legacy_json_to_array($value);
-            $this->objectValue  = legacy_json_to_object($value);
-            $this->encodedValue = json_encode($value);
+            $this->valueArray  = legacy_json_to_array($value);
+            $this->valueObject = legacy_json_to_object($value);
+            $this->valueString = (!$decoded = json_encode($value)) ? null : $decoded;
         }
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            if (! $try) {
+                throw new InvalidValueException(sprintf('Invalid JSON passed to constructor of class <%s>.', class_basename(static::class)));
+            }
+            $this->invalidJson = true;
+        }
+    }
+
+    public static function tryFrom($value): static
+    {
+        return new static($value, true);
     }
 
     public function value(): null|array|object|string
@@ -70,24 +71,19 @@ abstract class AbstractJsonVo extends AbstractValueObject
         return $this->value;
     }
 
-    public function valueArray(): ?array
+    public function decodeAssoc(): ?array
     {
-        return $this->arrayValue;
+        return $this->valueArray;
     }
 
-    public function valueObj(): array|object|null
+    public function decodeObj(): array|object|null
     {
-        return $this->objectValue;
+        return $this->valueObject;
     }
 
-    public function valueEncoded(): ?string
+    public function invalidJson(): bool
     {
-        return $this->encodedValue;
-    }
-
-    public function failAtFormat(): bool
-    {
-        return $this->failAtFormat;
+        return $this->invalidJson;
     }
 
     public function isNull(): bool
@@ -97,39 +93,6 @@ abstract class AbstractJsonVo extends AbstractValueObject
 
     public function isEmpty(): bool
     {
-        return empty($this->value);
-    }
-
-    public function isNullStrict(): bool
-    {
-        return (is_null($this->arrayValue) || is_null($this->objectValue) || is_null($this->encodedValue));
-    }
-
-    public function isEmptyStrict(): bool
-    {
-        return (empty($this->arrayValue) || empty($this->objectValue) || empty($this->encodedValue));
-    }
-
-
-    /*----------------------------------------------------------------------------------------------------------------------------------------------*/
-    /*----------------------------------------------------------------MODIFIERS---------------------------------------------------------------------*/
-
-
-    public function toArray(): static
-    {
-        $this->value = $this->arrayValue;
-        return $this;
-    }
-
-    public function toObject(): static
-    {
-        $this->value = $this->objectValue;
-        return $this;
-    }
-
-    public function encode(): static
-    {
-        $this->value = $this->encodedValue;
-        return $this;
+        return empty($this->value) || empty($this->valueArray);
     }
 }

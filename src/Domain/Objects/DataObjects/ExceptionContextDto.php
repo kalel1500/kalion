@@ -86,7 +86,7 @@ final class ExceptionContextDto extends AbstractDataTransferObject
         ];
     }
 
-    public function toMakeParams(): array
+    public function toMakeArray(): array
     {
         return [
             'statusCode' => $this->statusCode,

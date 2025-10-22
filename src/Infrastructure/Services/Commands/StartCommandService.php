@@ -804,7 +804,8 @@ final class StartCommandService
         }
 
         if ($this->reset) {
-            KalionServiceProvider::removeProviderFromBootstrapFile('App\Providers\DependencyServiceProvider');
+            // TODO Canals - A partir de la version de Laravel 12.32.0 este método ya existe en el "ServiceProvider"
+            self::removeProviderFromBootstrapFile('App\Providers\DependencyServiceProvider');
         } else {
             ServiceProvider::addProviderToBootstrapFile('App\Providers\DependencyServiceProvider');
         }
@@ -1300,4 +1301,39 @@ EOD;
         return $this;
     }
 
+    /**
+     * Remove the given provider from the application's provider bootstrap file.
+     */
+    private static function removeProviderFromBootstrapFile(string $provider, ?string $path = null): bool
+    {
+        $path ??= app()->getBootstrapProvidersPath();
+
+        if (!file_exists($path)) {
+            return false;
+        }
+
+        if (function_exists('opcache_invalidate')) {
+            opcache_invalidate($path, true);
+        }
+
+        // Cargar los proveedores actuales del archivo
+        $providers = collect(require $path)
+            ->reject(fn($p) => $p === $provider) // Eliminar el provider específico
+            ->unique()
+            ->sort()
+            ->values()
+            ->map(fn($p) => '    '.$p.'::class,') // Formatear las líneas
+            ->implode(PHP_EOL);
+
+        $content = '<?php
+
+return [
+'.$providers.'
+];';
+
+        // Escribir el contenido actualizado en el archivo
+        file_put_contents($path, $content.PHP_EOL);
+
+        return true;
+    }
 }

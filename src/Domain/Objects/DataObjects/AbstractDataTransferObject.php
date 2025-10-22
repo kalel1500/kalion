@@ -11,12 +11,13 @@ use ReflectionIntersectionType;
 use ReflectionUnionType;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
+use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
-abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParamsArrayable, Jsonable, JsonSerializable
+abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArrayable, Jsonable, JsonSerializable
 {
     private static array $reflectionDisabled = [];
     private static array $reflectionCache = [];
@@ -163,16 +164,18 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
             $paramName  = arr_is_assoc($data) ? $meta['name'] : $key;
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
+            $isEnum     = $meta['propsIsEnum'];
             $value      = $data[$paramName] ?? null;
 
             $method = $meta['makeMethod'];
             try {
                 $value = match (true) {
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
+                    (!$allowsNull && $value === null && $isEnum)                                        => $class::$method(Kalion::ENUM_NULL_VALUE),
                     default                                                                             => $class::$method($value),
                 };
-            } catch (\Throwable $t) {
-                throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, get_debug_type($value));
+            } catch (\Throwable $th) {
+                throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, $value, $th->getMessage());
             }
 
             $args[] = $value;
@@ -210,6 +213,10 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
                 default          => $value?->{$method}($value),
             };
 
+            if ($isEnum && $value === Kalion::ENUM_NULL_VALUE) {
+                $value = null;
+            }
+
             $props[$name] = $value;
         }
 
@@ -238,7 +245,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeParam
         return $this->props();
     }
 
-    public function toMakeParams(): array
+    public function toMakeArray(): array
     {
         return $this->props();
     }

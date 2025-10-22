@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 use Thehouseofel\Kalion\Infrastructure\Facades\ProcessChecker;
 
 final class ProcessCheck extends Command
@@ -29,7 +30,7 @@ final class ProcessCheck extends Command
      */
     public function handle()
     {
-        $isActive = ProcessChecker::isRunning($this->argument('process'));
+        $isActive = ProcessChecker::isRunning(CheckableProcessVo::from($this->argument('process')));
 
         $text = $isActive ? 'true' : 'false';
         $this->info($text);

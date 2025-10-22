@@ -255,6 +255,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Processes
+    |--------------------------------------------------------------------------
+    |
+    | The following option allows you to set whether the ProcessChecker class
+    | will save the results in the Laravel cache.
+    |
+    */
+
+    'process' => [
+        'status_should_use_cache' => (bool) env('KALION_PROCESS_STATUS_SHOULD_USE_CACHE', true),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | NPM engines versions for the Start command
     |--------------------------------------------------------------------------
     |

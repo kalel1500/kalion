@@ -1,11 +1,19 @@
 @use('Thehouseofel\Kalion\Infrastructure\Services\Renderer')
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@yield('title')</title>
+
+    {{-- Js para cargar el DarkMode --}}
+    <script>
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            document.documentElement.classList.add("dark");
+            document.documentElement.setAttribute("data-theme", "dark");
+        }
+    </script>
 
     <!-- JavaScript y CSS del paquete -->
     {!! Renderer::css() !!}

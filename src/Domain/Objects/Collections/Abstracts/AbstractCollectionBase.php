@@ -14,7 +14,7 @@ use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeParamsArrayable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
@@ -313,14 +313,14 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         if (! is_null($field)) {
             $diff       = collect();
             $dictionary = $items->pluck($field);
-            foreach ($this->toArray() as $item) {
+            foreach ($this->toArrayMake() as $item) {
                 if (! $dictionary->contains($item[$field])) {
                     $diff->add($item);
                 }
             }
         } else {
-            $array1 = array_map('json_encode', $this->toArray());
-            $array2 = array_map('json_encode', $items->toArray());
+            $array1 = array_map('json_encode', $this->toArrayMake());
+            $array2 = array_map('json_encode', $items->toArrayMake());
 
             $result = array_diff($array1, $array2);
             $result = array_map(fn($item) => json_decode($item, true), $result);
@@ -347,7 +347,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function diffKeys($items)
     {
-        $array1 = $this->toArray();
+        $array1 = $this->toArrayMake();
         $array2 = $this->getArrayableItems($items);
         $result = array_diff_key($array1, $array2);
         $diff   = collect($result);
@@ -434,7 +434,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function filter(callable $callback = null)
     {
-        $collResult = collect($this->toArray())->filter($callback)->values();
+        $collResult = collect($this->toArrayMake())->filter($callback);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -477,7 +477,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function flatten($depth = INF)
     {
-        $collResult = collect($this->toArray())->flatten($depth)->values();
+        $collResult = collect($this->toArrayMake())->flatten($depth);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -486,7 +486,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function flip()
     {
-        $result = array_flip($this->toArray());
+        $result = array_flip($this->toArrayMake());
         $diff   = collect($result);
         return $this->toStatic($diff->toArray());
     }
@@ -527,7 +527,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function groupBy($groupBy, $preserveKeys = false)
     {
-        $collResult = collect($this->toArray())->groupBy($groupBy, $preserveKeys);
+        $collResult = collect($this->toArrayMake())->groupBy($groupBy, $preserveKeys);
         if ($collResult->keys()->some('')) throw new RequiredDefinitionException('La key que has indicado no se encuentra en el array del objeto');
         $new = $collResult->map(fn($group) => $this->toStatic($group->toArray()));
         return $this->toAny($new->toArray());
@@ -744,69 +744,32 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-    private function doPluck(bool $clean, string $value, ?string $key): CollectionAny
+    /**
+     * @param string $value
+     * @param string|null $key
+     * @return CollectionAny
+     */
+    public function pluck($value, $key = null)
     {
-        $getItemValue   = function ($collectionItem, string $pluckField) {
-            if (is_array($collectionItem)) {
-                return $collectionItem[str_snake($pluckField)];
-            }
+        $relationName = $value;
 
-            if (! is_object($collectionItem)) {
-                return null;
-            }
-
-            if (method_exists($collectionItem, $pluckField)) {
-                return $collectionItem->$pluckField();
-            }
-
-            if (property_exists($collectionItem, $pluckField)) {
-                return $collectionItem->$pluckField;
-            }
-
-            if ($collectionItem instanceof MakeParamsArrayable) {
-                $value = $collectionItem->toMakeParams()[$pluckField] ?? null;
-                if (!is_null($value)) {
-                    return $value;
-                }
-            }
-
-            if ($collectionItem instanceof ArrayConvertible) {
-                return $collectionItem->toArray()[$pluckField];
-            }
-
-            return null;
-        };
-        $clearItemValue = function ($item) {
-            return match (true) {
-                $item instanceof ArrayConvertible    => $item->toArray(),
-                $item instanceof AbstractValueObject => $item->value(),
-                $item instanceof \BackedEnum         => $item->value,
-                default                              => $item
-            };
-        };
-
-        $result = [];
-        foreach ($this->items as $item) {
-            $fieldValue = $getItemValue($item, $value);
-            if ($clean) {
-                $fieldValue = $clearItemValue($fieldValue);
-            }
-
-            if (is_null($key)) {
-                $result[] = $fieldValue;
-            } else {
-                $keyValue          = $getItemValue($item, $key);
-                $keyValue          = $clearItemValue($keyValue);
-                $result[$keyValue] = $fieldValue;
-            }
+        $arr = $this->toArray();
+        $value = $this->normalizeDotPath($arr, $value);
+        if (!is_null($key)) {
+            $key = $this->normalizeDotPath($arr, $key);
         }
+
+        $result = collect($arr)->pluck($value, $key)->toArray();
 
         if (! $this->isInstanceOfRelatable() || is_null($this->with)) {
             return CollectionAny::fromArray($result);
         }
 
+        if (str_contains($relationName, '.')) {
+            return CollectionAny::fromArray($result);
+        }
+
         $with = is_array($this->with) ? $this->with : [$this->with];
-        $relationName = $value;
 
         $newWith = null;
         $newIsFull = null;
@@ -838,25 +801,52 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return CollectionAny::fromArray($result, $newWith, $newIsFull);
     }
 
-    /**
-     * @param string $value
-     * @param string|null $key
-     * @return CollectionAny
-     */
-    public function pluck($value, $key = null)
+    private function normalizeDotPath(array $data, string $path): string
     {
-        return $this->doPluck(false, $value, $key);
+        if (empty($data)) {
+            return $path;
+        }
+
+        $segments = explode('.', $path);
+        $current = $data[0] ?? $data; // por si la colección no tiene índice numérico
+        $normalized = [];
+
+        foreach ($segments as $segment) {
+            // Si llegamos a un valor escalar, no podemos seguir profundizando
+            if (!is_array($current)) {
+                $normalized[] = $segment;
+                break;
+            }
+
+            // Si el segmento no existe en el nivel actual, intenta su versión snake_case
+            if (!array_key_exists($segment, $current)) {
+                $snake = str_snake($segment);
+
+                if (array_key_exists($snake, $current)) {
+                    $segment = $snake;
+                }
+            }
+
+            $normalized[] = $segment;
+
+            // Avanza un nivel más si el valor actual es un array
+            $next = $current[$segment] ?? null;
+            if (is_array($next)) {
+                // Si el siguiente nivel es una colección (índices numéricos), usamos el primer elemento
+                if (array_is_list($next)) {
+                    $current = $next[array_key_first($next)] ?? [];
+                } else {
+                    $current = $next;
+                }
+            } else {
+                // No hay más niveles
+                $current = [];
+            }
+        }
+
+        return implode('.', $normalized);
     }
 
-    /**
-     * @param string $value
-     * @param string|null $key
-     * @return CollectionAny
-     */
-    public function pluckValue($value, $key = null)
-    {
-        return $this->doPluck(true, $value, $key);
-    }
 
     /**
      * @template T of AbstractCollectionBase
@@ -963,7 +953,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function select($keys)
     {
         $keys       = is_array($keys) ? $keys : func_get_args();
-        $collResult = collect($this->toArray())
+        $collResult = collect($this->toArrayMake())
             ->map(fn($item) => collect($item)->only($keys)->toArray())
             ->values();
         return $this->toStatic($collResult->toArray());
@@ -1020,7 +1010,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function sort($callback = null)
     {
-        $collResult = collect($this->toArray())->sort($callback)->values();
+        $collResult = collect($this->toArrayMake())->sort($callback);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1032,7 +1022,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function sortBy($callback, $options = SORT_REGULAR, $descending = false)
     {
-        $collResult = collect($this->toArray())->sortBy($callback, $options, $descending)->values();
+        $collResult = collect($this->toArrayMake())->sortBy($callback, $options, $descending);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1052,7 +1042,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function sortDesc($options = SORT_REGULAR)
     {
-        $collResult = collect($this->toArray())->sortDesc($options)->values();
+        $collResult = collect($this->toArrayMake())->sortDesc($options);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1097,7 +1087,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function take($limit)
     {
-        $collResult = collect($this->toArray())->take($limit)->values();
+        $collResult = collect($this->toArrayMake())->take($limit);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1121,23 +1111,29 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-    /**
-     * @return array
-     */
-    public function toArray(): array
+    private function buildArray(bool $forMakeArray): array
     {
         $result = [];
         foreach ($this->items as $key => $item) {
-            $fromThisClass = (debug_backtrace()[0]['file'] === __FILE__);
             $item = match (true) {
-                $item instanceof MakeParamsArrayable && $fromThisClass => $item->toMakeParams(),
-                $item instanceof ArrayConvertible                      => $item->toArray(),
-                $item instanceof AbstractValueObject                   => $item->value(),
-                default                                                => $item,
+                $item instanceof MakeArrayable && $forMakeArray => $item->toMakeArray(),
+                $item instanceof ArrayConvertible               => $item->toArray(),
+                $item instanceof AbstractValueObject            => $item->value(),
+                default                                         => $item,
             };
             $result[$key] = $item;
         }
         return $result;
+    }
+
+    private function toArrayMake(): array
+    {
+        return $this->buildArray(true);
+    }
+
+    public function toArray(): array
+    {
+        return $this->buildArray(false);
     }
 
     public function toArrayDynamic($toArrayMethod, ...$params): array
@@ -1169,9 +1165,9 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function toCollection(string $collectionClass)
     {
         if (is_subclass_of($collectionClass, Relatable::class)) {
-            return $collectionClass::fromArray($this->toArray(), $this->with, $this->isFull);
+            return $collectionClass::fromArray($this->toArrayMake(), $this->with, $this->isFull);
         }
-        return $collectionClass::fromArray($this->toArray());
+        return $collectionClass::fromArray($this->toArrayMake());
     }
 
     /**
@@ -1210,7 +1206,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function unique($key = null, $strict = false)
     {
-        $collResult = collect($this->toArray())->unique($key, $strict)->values();
+        $collResult = collect($this->toArrayMake())->unique($key, $strict);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1249,7 +1245,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function values()
     {
-        return $this->toStatic(array_values($this->toArray()));
+        return $this->toStatic(array_values($this->toArrayMake()));
     }
 
 //    public function when()
@@ -1275,7 +1271,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function where($key, $operator = null, $value = null)
     {
-        $collResult = collect($this->toArray())->where(...func_get_args())->values();
+        $collResult = collect($this->toArrayMake())->where(...func_get_args());
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1297,7 +1293,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function whereIn($key, $values, $strict = false)
     {
-        $collResult = collect($this->toArray())->whereIn($key, $values, $strict)->values();
+        $collResult = collect($this->toArrayMake())->whereIn($key, $values, $strict);
         return $this->toStatic($collResult->toArray());
     }
 
@@ -1324,7 +1320,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function whereNotIn($key, $values, $strict = false)
     {
-        $collResult = collect($this->toArray())->whereNotIn($key, $values, $strict)->values();
+        $collResult = collect($this->toArrayMake())->whereNotIn($key, $values, $strict);
         return $this->toStatic($collResult->toArray());
     }
 
