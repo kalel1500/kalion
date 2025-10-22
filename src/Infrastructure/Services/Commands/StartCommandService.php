@@ -308,7 +308,7 @@ final class StartCommandService
     {
         $this->transformComposerJson(
             function (array $composer) {
-                $packages = ['tightenco/ziggy' => '^2.5'];
+                $packages = ['tightenco/ziggy' => '^2.6'];
                 $require  = $composer['require'] ?? [];
 
                 if ($this->reset) {
@@ -982,11 +982,11 @@ EOD;
         $packages = [
             'flowbite'                    => '3.1.2',
             '@types/node'                 => '22.15.24',
-            'prettier'                    => '3.5.3',
+            'prettier'                    => '3.6.2',
             'prettier-plugin-blade'       => '2.1.21',
-            'prettier-plugin-tailwindcss' => '0.6.11',
-            'typescript'                  => '5.8.3',
-            '@kalel1500/kalion-js'        => '0.9.1-beta.1',
+            'prettier-plugin-tailwindcss' => '0.7.1',
+            'typescript'                  => '5.9.3',
+            '@kalel1500/kalion-js'        => '0.10.0-beta.0',
         ];
 
         $versions = [];
