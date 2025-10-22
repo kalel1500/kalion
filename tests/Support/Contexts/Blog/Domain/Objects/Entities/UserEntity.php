@@ -6,21 +6,21 @@ namespace Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entitie
 
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity as BaseUserEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdNullVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\CommentCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\PostCollection;
 
 class UserEntity extends BaseUserEntity
 {
     public function __construct(
-        ModelId|ModelIdNull $id,
-        ModelString         $name,
-        ModelString         $email,
-        ModelStringNull     $email_verified_at,
-        public readonly     ModelStringNull $other_field,
+        IdVo|IdNullVo                $id,
+        StringVo                     $name,
+        StringVo                     $email,
+        StringNullVo                 $email_verified_at,
+        public readonly StringNullVo $other_field,
     )
     {
         parent::__construct($id, $name, $email, $email_verified_at);

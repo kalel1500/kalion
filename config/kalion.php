@@ -115,15 +115,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | ModelId value object
+    | Id value object
     |--------------------------------------------------------------------------
     |
     | The following option allows you to configure the minimum value allowed
-    | in the Value Object "ModelId"
+    | in the Value Object "IdVo"
     |
     */
 
-    'minimum_value_for_model_id' => (int) env('KALION_MINIMUM_VALUE_FOR_MODEL_ID', 1),
+    'minimum_value_for_id' => (int) env('KALION_MINIMUM_VALUE_FOR_ID', 1),
 
     /*
     |--------------------------------------------------------------------------

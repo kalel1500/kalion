@@ -6,22 +6,22 @@ namespace Src\Shared\Domain\Objects\Entities;
 
 use Src\Shared\Domain\Objects\Entities\Collections\CommentCollection;
 use Src\Shared\Domain\Objects\Entities\Collections\TagCollection;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelTimestampNull;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdNullVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\TimestampNullVo;
 
 final class PostEntity extends AbstractEntity
 {
     public function __construct(
-        public readonly ModelId|ModelIdNull $id,
-        public readonly ModelString         $title,
-        public readonly ModelString         $content,
-        public readonly ModelString         $slug,
-        public readonly ModelId             $user_id,
-        public readonly ModelTimestampNull  $created_at,
+        public readonly IdVo|IdNullVo   $id,
+        public readonly StringVo        $title,
+        public readonly StringVo        $content,
+        public readonly StringVo        $slug,
+        public readonly IdVo            $user_id,
+        public readonly TimestampNullVo $created_at,
     )
     {
     }

@@ -8,7 +8,7 @@ use Src\Shared\Domain\Contracts\Repositories\TagTypeRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\TagTypeCollection;
 use Src\Shared\Domain\Objects\Entities\TagTypeEntity;
 use Src\Shared\Infrastructure\Models\TagType;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 
 final class EloquentTagTypeRepository implements TagTypeRepository
 {
@@ -25,7 +25,7 @@ final class EloquentTagTypeRepository implements TagTypeRepository
         return TagTypeCollection::fromArray($data->toArray());
     }
 
-    public function findByCode(ModelString $code): TagTypeEntity
+    public function findByCode(StringVo $code): TagTypeEntity
     {
         $data = $this->model::query()->where('code', $code->value())->firstOrFail();
         return TagTypeEntity::fromArray($data->toArray());

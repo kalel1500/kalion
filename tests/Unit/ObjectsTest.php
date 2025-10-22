@@ -5,8 +5,9 @@ namespace Thehouseofel\Kalion\Tests\Unit;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\PostEntity;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDto;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDtoCollection;
 
@@ -16,8 +17,8 @@ class ObjectsTest extends TestCase
     {
         return [
             [new ExampleDtoCollection(
-                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, ModelString::new('aa')),
-                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, ModelString::new('aa')),
+                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, StringVo::from('aa')),
+                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, StringVo::from('aa')),
             )],
         ];
     }
@@ -206,5 +207,16 @@ class ObjectsTest extends TestCase
             '1' => ['product' => 'Chair','price' => 80],
             '4' => ['product' => 'Door', 'price' => 100],
         ], $result);
+    }
+
+    public function test_create_entity_without_id()
+    {
+        $test = PostEntity::fromArray([
+            'title' => 'aa',
+            'content' => 'bb',
+            'slug' => 'cc',
+            'user_id' => 1,
+        ]);
+        $this->assertEquals('aa', $test->title->value());
     }
 }

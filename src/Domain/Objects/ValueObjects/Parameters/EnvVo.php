@@ -9,20 +9,15 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Abstrac
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class Env extends AbstractEnumVo
+final class EnvVo extends AbstractEnumVo
 {
     const local         = 'local';
     const preproduction = 'preproduction';
     const production    = 'production';
     const testing       = 'testing';
 
+    protected ?array $permittedValues = [self::local, self::preproduction, self::production,];
     private bool $isTesting = false;
-
-    protected ?array $permittedValues = [
-        self::local,
-        self::preproduction,
-        self::production,
-    ];
 
     public function __construct(string $value)
     {
@@ -31,12 +26,6 @@ final class Env extends AbstractEnumVo
             $value = config('kalion.real_env_in_tests');
         }
         parent::__construct($value);
-    }
-
-    public static function new($value = null): static
-    {
-        $value = $value ?? config('app.env');
-        return new static($value);
     }
 
     public function isLocal(): bool
@@ -54,7 +43,7 @@ final class Env extends AbstractEnumVo
         return ($this->value === static::production);
     }
 
-    public function isTest(): bool
+    public function isTesting(): bool
     {
         return $this->isTesting;
     }

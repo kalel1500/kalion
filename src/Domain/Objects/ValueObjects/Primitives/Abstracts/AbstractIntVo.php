@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelInt;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIntNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
 
@@ -14,8 +12,6 @@ abstract class AbstractIntVo extends AbstractValueObject
 {
     protected const CLASS_REQUIRED = IntVo::class;
     protected const CLASS_NULLABLE = IntNullVo::class;
-    protected const CLASS_MODEL_REQUIRED = ModelInt::class;
-    protected const CLASS_MODEL_NULLABLE = ModelIntNull::class;
 
     public function __construct(?int $value)
     {

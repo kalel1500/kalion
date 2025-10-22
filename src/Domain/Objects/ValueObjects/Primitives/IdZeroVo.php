@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields;
+namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Abstracts\AbstractModelId;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractIdZero;
 
-final class ModelId extends AbstractModelId
+final class IdZeroVo extends AbstractIdZero
 {
-    protected const IS_MODEL = true;
-
     protected bool $nullable = false;
 
     public function __construct(int $value)

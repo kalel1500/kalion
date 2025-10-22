@@ -13,16 +13,13 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Abstrac
  */
 abstract class AbstractValueObject implements JsonSerializable
 {
-    protected const IS_MODEL = false;
     protected const CLASS_REQUIRED = null;
     protected const CLASS_NULLABLE = null;
-    protected const CLASS_MODEL_REQUIRED = null;
-    protected const CLASS_MODEL_NULLABLE = null;
 
     protected bool $nullable = true;
     protected $value;
 
-    public static function new($value): static
+    public static function from($value): static
     {
         return new static($value);
     }
@@ -93,8 +90,8 @@ abstract class AbstractValueObject implements JsonSerializable
      */
     public function toNull()
     {
-        $class = static::IS_MODEL ? static::CLASS_MODEL_NULLABLE : static::CLASS_NULLABLE;
-        return $class::new($this->value);
+        $class = static::CLASS_NULLABLE;
+        return $class::from($this->value);
     }
 
     /**
@@ -102,26 +99,8 @@ abstract class AbstractValueObject implements JsonSerializable
      */
     public function toNotNull()
     {
-        $class = static::IS_MODEL ? static::CLASS_MODEL_REQUIRED : static::CLASS_REQUIRED;
-        return $class::new($this->value);
-    }
-
-    /**
-     * @return T
-     */
-    public function toModel()
-    {
-        $class = $this->nullable ? static::CLASS_MODEL_NULLABLE : static::CLASS_MODEL_REQUIRED;
-        return $class::new($this->value);
-    }
-
-    /**
-     * @return T
-     */
-    public function toNotModel()
-    {
-        $class = $this->nullable ? static::CLASS_NULLABLE : static::CLASS_REQUIRED;
-        return $class::new($this->value);
+        $class = static::CLASS_REQUIRED;
+        return $class::from($this->value);
     }
 
     protected function checkNullable($value): void

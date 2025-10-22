@@ -6,7 +6,7 @@ namespace Src\Posts\Application;
 
 use Src\Shared\Domain\Contracts\Repositories\PostRepository;
 use Src\Shared\Domain\Objects\Entities\PostEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 
 final readonly class GetViewDataPostDetailUseCase
 {
@@ -18,6 +18,6 @@ final readonly class GetViewDataPostDetailUseCase
 
     public function __invoke(string $slug): PostEntity
     {
-        return $this->repositoryPost->findBySlug(ModelString::new($slug));
+        return $this->repositoryPost->findBySlug(StringVo::from($slug));
     }
 }

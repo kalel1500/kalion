@@ -6,7 +6,7 @@ namespace Src\Tags\Application;
 
 use Src\Shared\Domain\Contracts\Repositories\TagRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\TagCollection;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 
 final readonly class GetTagListUseCase
 {
@@ -18,6 +18,6 @@ final readonly class GetTagListUseCase
 
     public function __invoke(string $type = null): TagCollection
     {
-        return $this->tagRepository->searchByType(ModelStringNull::new($type));
+        return $this->tagRepository->searchByType(StringNullVo::from($type));
     }
 }
