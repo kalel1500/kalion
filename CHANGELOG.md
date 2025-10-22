@@ -1,6 +1,100 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.35.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.36.0-beta.0...master)
+
+## [v0.36.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.35.1-beta.0...v0.36.0-beta.0) - 2025-10-22
+
+### Changed
+
+* (breaking) Se ha rehecho por completo la clase `AbstractJsonVo`:
+  * (refactor) Se ha renombrado la propiedad `$allowStringInformatable` de la clase `AbstractJsonVo` a `$allowInvalidJson`.
+  * (refactor) Se han renombrado las siguientes propiedades de los valores:
+    * `$arrayValue` => `$valueArray`
+    * `$objectValue` => `$valueObject`
+    * `$encodedValue` => `$valueString`
+  * (fix) Se han arreglado dos errores en el método `setValues()`.
+  * (fix) Se ha mejorado la gestion de los errores en el metodo `setValues()` de la clase `AbstractJsonVo` usando el `json_last_error()` y moviendo la validacion al final del método. De esta manera no solo se valida cuando el valor recibido es un string sino también cuando es un array.
+  * Se han eliminado los modificadores de la clase AbstractJsonVo, ya que no hace falta sobreescribir el valor:
+    * `toArray()`
+    * `toObject()`
+    * `encode()`
+  * Se han eliminado los métodos `isNullStrict()` y `isEmptyStrict()`, ya que son redundantes.
+  * Se ha eliminado el método `valueEncoded`, ya que basta con el `value` porque el $value siempre será igual al `valueString`. También se han renombrado los métodos `valueArray` y `valueObj` a `decodeAssoc` y `decodeObj` respectivamente.
+  * Se han renombrado la propiedad y el método `failAtFormat` a `invalidJson`.
+  * Ahora la propiedad `$value` siempre tendra el valor del `valueString`, en vez de guardar lo que recibe. De esta forma el comportamiento es más predecible. Por este motivo se ha eliminado el método `valueEncoded()`, ya que ahora basta con el `value`.
+  * Para permitir un json inválido ya no se usa la propiedad `$allowInvalidJson` (eliminada). Ahora el constructor recibe un segundo parametro `$try`. De esta forma con la misma clase se pueden tener jsons invalidos.
+  * Como ya no hacen falta otras clases para tener jsons estrictos, se han eliminado las siguientes clases:
+    * `JsonStrictVo`
+    * `JsonStrictNullVo`
+    * `ModelJsonStrictVo`
+    * `ModelJsonStrictNullVo`
+  * Se ha creado el nuevo método estatico `tryFrom` para crear una instancia con el parametro `$try` a `true`.
+  * Se ha eliminado el `early return` `empty($value)` del método `setValues()` para que se intente asignar el valor vacio y si es un string se lance un error y si es un array o un objeto se cree el json.
+* (breaking) Se ha eliminado el modificador `static` de los métodos del `TabulatorRepository` para poder usar la interfaz para inyectarlo en vez de tener que usar directamente la implementacion `EloquentTabulatorRepository`.
+* Se ha mejorado el sistema para comprobar procesos (`ChekProcess`):
+  * Se ha añadido el argumento `$processName` al constructor del evento `ProcessStatusChecked` y ahora se pasa el parametro al array del `broadcastWith()` para poder distinguir el evento en el front.
+  * (refactor) Se ha movido la logica del método `isRunning()` de la clase `ProcessChecker` al nuevo método privado `checkSystemFor()` y llamarlo desde el `isRunning()`.
+  * (breaking) Ahora los métodos `isRunning()` y `assert()` de la clase `ProcessChecker` reciben directamente el enum `CheckableProcessVo` en vez de un string en el parametro `$processName`.
+    * Ahora se pasa una instancia de `CheckableProcessVo` al `ProcessChecker::isRunning()` en el comando `ProcessCheck` (`kalion:process-check`).
+  * Se ha añadido la funcionalidad de Cache en la clase `ProcessChecker`:
+    * Se han creado las nuevas clases `Domain\Objects\ValueObjects\Parameters\ProcessStatusKeysVo` y `Infrastructure\Services\ProcessStatus` para guardar en cache el estado de los procesos.
+    * Nueva propiedad privada `$cacheStatus` para guardar si esta o no activada la cache. Esta variable por defecto lee el valor de la configuración (`process.status_should_use_cache`).
+    * Nuevos métodos `withCache()` y `withoutCache()` para poder modificar la variable `$cacheStatus`.
+    * Se ha modificado el `isRunning()` para llamar al `ProcessStatus::update()` si la cache esta activada.
+    * Se ha mejorado el mensaje de error que se lanza en el `catch` del método `checkSystemFor` de la clase `ProcessChecker`.
+    * (breaking) Se han renombrado los métodos `checkQueue()` y `checkReverb()` a `isRunningQueue()` y `isRunningReverb()` respectivamente.
+    * Nuevos métodos en la clase ProcessChecker:
+      * `tryIsRunning`
+      * `tryIsRunningQueue`
+      * `tryIsRunningReverb`
+* Nuevo sistema para permitir que los enums puedan ser `nullables` (internamente tienen un valor null pero no se transforma en el `toArray()`):
+  * Nueva constante ENUM_NULL_VALUE en la clase `Kalion`.
+  * Nuevo trait `Nullable` con los métodos `isNull()` e `isNotNull()` y la constante `NULL_VALUE`.
+  * Reflexion modificada en las clases `AbstractEntity` y `AbstractDataTransferObject` para hacer que cuando las propiedades enum sean `null` se instancien con el valor `Kalion::ENUM_NULL_VALUE (k_null)` y devuelvan `null` (para que no se guarde ese valor en BD).
+* Se ha modificado el `pluck()` de las colecciones (en la clase `AbstractCollectionBase`):
+  * (breaking) Se ha eliminado el método `pluckValue()` y ahora el `pluck()` vuelve a limpiar los valores. También se ha eliminado el método interno `doPluck`.
+  * (breaking) Se ha modificado el método `pluck()` para que internamente use el `pluck` de Laravel. Nota: Al usar el `toArray()` en vez de calcular cada valor manualmente ahora solo se pueden indicar valores que devuelva el `toArray()`. Es decir, propiedades, relaciones y métodos computed pero no otros métodos o propiedades privadas.
+  * Nota: Se mantiene el sistema para heredar las relaciones siempre que el valor recibido no use la notacion dot.
+  * (tests) Se han adaptado los test al nuevo `pluck`.
+* Nuevo contexto `addAlways` en el atributo `Computed` para añadir siempre ese método al `toArray()`:
+  * (refactor) Se ha extraido lógica del verificado del contexto del método `computedProps` al nuevo método privado `contextMatch()` en la clase `AbstractEntity`.
+  * Nueva constante `AS_ATTRIBUTE` en el atributo `Computed` para guardar el contexto `addAlways`.
+  * Ahora el método `contextMatch()` comprueba si el atributo `Computed` tiene el contexto `addAlways` usando la constante `Computed::AS_ATTRIBUTE` y en ese caso devuelve `true`.
+* Se han mejorado las el método `KalionReflectionException::failedToHydrateUsingFromArray()`:
+  * Se ha añadido el parámetro `$errorMessage` para dar más información del error.
+  * Se ha modificado para que el parámetro `$value` sea el valor en vez del tipo y calcular el `$type` dentro.
+* (refactor) Se ha ordenado el codigo de `ExceptionHandler::getUsingCallback()` para mejorar la lectura.
+* Se ha añadido la posibilidad de configurar el renderizado de las excepciones HTTP, ya que antes, excepto `AbortException`, todas devolvian la vista custom aunque el debug sea true:
+  * Se ha creado la nueva constante `SHOULD_RENDER_TRACE = false` en la clase `KalionHttpException`.
+  * Se ha modificado la lógica del `ExceptionHandler::getUsingCallback()`. En vez de renderizar la vista de error en todas las excepciones HTTP menos en la `AbortException` ahora se comprueba que el valor de `SHOULD_RENDER_TRACE` sea `false` para renderizar la vista de error.
+  * Se ha añadido la constante `SHOULD_RENDER_TRACE = true` en la clase `AbortException`.
+* Se ha añadido un bloque de `JS` en la layout `pages/exceptions/minimal.blade.php` para añadir la clase `dark` al html si las preferencias del sistema están marcadas como `dark`.
+* Ahora el método `toArray()` de la clase `AbstractCollectionBase` siempre llama al método `toArray()` de cada `$item`. Antes, cuando se le llamaba desde algún otro metodo de la clase, se usaba el `toMakeArray()`:
+  * Se ha movido la logica del `toArray()` al nuevo metodo privado `buildArray()` que recibe el parametro `$forMakeArray` y se usa este parámetro en vez del `$fromThisClass` para llamar al `toMakeArray()` del `$item`.
+  * El método `toArray()` ahora llama al `buildArray()` pasandole el parámetro `false`.
+  * Nuevo método `toArrayMake()` que llama al `buildArray()` pasandole el parámetro `true`.
+  * Se han modificado los métodos de la clase que llaman al `toStatic()` para usar el `toArrayMake()` en vez del `toArray()`.
+* (breaking) Interfaz `MakeParamsArrayable` renombrada a `MakeArrayable`.
+* (breaking) Método `toMakeParams()` de la interfaz `MakeParamsArrayable` renombrado a `toMakeArray()`.
+* Se han añadido nuevos tests en la clase `ObjectsTest` para probar los métodos de las colecciones.
+* (breaking) Se han modificado varios métodos de la clase `AbstractCollectionBase`, para mantener las keys asociativas en la colección devuelta (eliminado la llamada al método `values()`):
+  * `filter`
+  * `flatten`
+  * `sort`
+  * `sortBy`
+  * `sortDesc`
+  * `take`
+  * `unique`
+  * `where`
+  * `whereIn`
+  * `whereNotIn`
+
+### Fixed
+
+* (fix) Se ha prevenido el error en los helpers `legacy_json_to_array()` y `legacy_json_to_object()` cuando el valor recibido no se puede convertir a JSON. En ese caso ahora devuelven null.
+* (fix) Adaptar a `Laravel 12.32.0`: Se ha movido el método `removeProviderFromBootstrapFile()` de la clase `KalionServiceProvider` a la clase `StartCommandService`, para evitar conflictos con el ServiceProvider de Laravel, ya que a partir de la version `12.32.0` han añadido el mismo metodo.
+* (fix) Se ha corregido el nombre del evento `ProcessStatusChecked` en el return del método `broadcastAs()`.
+* (fix) Se ha eliminado el tipado (`string`) del parametro `$value` en el método `KalionReflectionException::failedToHydrateUsingFromArray()` porque puede recibir `null`.
 
 ## [v0.35.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.35.0-beta.0...v0.35.1-beta.0) - 2025-09-29
 
