@@ -30,7 +30,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         return new static($value, $formats);
     }
 
-    public static function from($value): static
+    public static function parse($value): static
     {
         $formatted = Date::parse($value)
             ->setTimezone(config('app.timezone'))
