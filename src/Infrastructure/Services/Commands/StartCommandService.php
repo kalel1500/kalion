@@ -804,7 +804,7 @@ final class StartCommandService
         }
 
         if ($this->reset) {
-            // TODO Canals - A partir de la version de Laravel 12.32.0 este método ya existe en el "ServiceProvider"
+            // A partir de la version de Laravel 12.32.0 este metodo ya existe en el "ServiceProvider"
             self::removeProviderFromBootstrapFile('App\Providers\DependencyServiceProvider');
         } else {
             ServiceProvider::addProviderToBootstrapFile('App\Providers\DependencyServiceProvider');
