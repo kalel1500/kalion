@@ -42,7 +42,7 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
         $this->checkFilterTime($isRequiredFilterTime);
     }
 
-    public static function new(
+    public static function from(
         $value,
         string $filterTimeName = 'null',
         bool $isRequired = false,

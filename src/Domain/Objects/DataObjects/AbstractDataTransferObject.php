@@ -71,10 +71,9 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
 
         $makeMethod = match (true) {
             $classIsNull => null,
-            $isEnum      => 'from',
-            $isVo        => 'new',
-            $isArray     => 'fromArray',
-            default  => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
+            $isEnum || $isVo => 'from',
+            $isArray         => 'fromArray',
+            default          => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
         };
 
         $propsMethod = match (true) {
@@ -252,7 +251,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
 
     public function toArrayVo(): ArrayVo
     {
-        return ArrayVo::new($this->toArray());
+        return ArrayVo::from($this->toArray());
     }
 
     public function toObject(): object|array

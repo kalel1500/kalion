@@ -40,6 +40,6 @@ abstract class AbstractId extends AbstractIntVo
     public static function resolve(?int $id)
     {
         $class = is_null($id) ? static::CLASS_NULLABLE : static::CLASS_REQUIRED;
-        return $class::new($id);
+        return $class::from($id);
     }
 }

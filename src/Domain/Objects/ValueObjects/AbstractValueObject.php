@@ -19,7 +19,7 @@ abstract class AbstractValueObject implements JsonSerializable
     protected bool $nullable = true;
     protected $value;
 
-    public static function new($value): static
+    public static function from($value): static
     {
         return new static($value);
     }
@@ -91,7 +91,7 @@ abstract class AbstractValueObject implements JsonSerializable
     public function toNull()
     {
         $class = static::CLASS_NULLABLE;
-        return $class::new($this->value);
+        return $class::from($this->value);
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class AbstractValueObject implements JsonSerializable
     public function toNotNull()
     {
         $class = static::CLASS_REQUIRED;
-        return $class::new($this->value);
+        return $class::from($this->value);
     }
 
     protected function checkNullable($value): void

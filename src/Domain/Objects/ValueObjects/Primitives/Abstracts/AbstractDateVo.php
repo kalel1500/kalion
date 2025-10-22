@@ -25,7 +25,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         parent::__construct($value);
     }
 
-    public static function new($value, ?array $formats = null): static
+    public static function from($value, ?array $formats = null): static
     {
         return new static($value, $formats);
     }
@@ -35,7 +35,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         $formatted = Date::parse($value)
             ->setTimezone(config('app.timezone'))
             ->format('Y-m-d H:i:s');
-        return static::new($formatted);
+        return static::from($formatted);
     }
 
     protected function ensureIsValidValue(?string $value): void

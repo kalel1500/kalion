@@ -22,7 +22,7 @@ final readonly class GetViewDataTagsUseCase
     public function __invoke(bool $expectsJson, ?string $currentTypeCode): ViewTagsDto|FrontTagsDto
     {
         $tagTypes       = $this->tagTypeRepository->all();
-        $currentTagType = $this->tagTypeService->findByCode(StringNullVo::new($currentTypeCode));
+        $currentTagType = $this->tagTypeService->findByCode(StringNullVo::from($currentTypeCode));
         if ($expectsJson) {
             return FrontTagsDto::fromArray([
                 'currentTagType' => $currentTagType,

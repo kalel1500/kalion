@@ -18,6 +18,6 @@ final readonly class GetTagListUseCase
 
     public function __invoke(string $type = null): TagCollection
     {
-        return $this->tagRepository->searchByType(StringNullVo::new($type));
+        return $this->tagRepository->searchByType(StringNullVo::from($type));
     }
 }

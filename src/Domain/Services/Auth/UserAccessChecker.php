@@ -41,7 +41,7 @@ final readonly class UserAccessChecker
         if ($user->all_permissions()) return true;
 
         // Obtener la Entidad Permission con todos los roles
-        $permission = $this->repositoryPermission->findByName(StringVo::new($permission));
+        $permission = $this->repositoryPermission->findByName(StringVo::from($permission));
 
         // Recorrer los roles del permiso
         return $permission->roles()->contains(function (RoleEntity $role) use ($user, $permission, $params) {
@@ -57,7 +57,7 @@ final readonly class UserAccessChecker
 
     protected function userHasRole(UserEntity $user, string $role, array $params = []): bool
     {
-        $role = $this->repositoryRole->findByName(StringVo::new($role));
+        $role = $this->repositoryRole->findByName(StringVo::from($role));
         return $user->roles()->contains(function (RoleEntity $userRole) use ($user, $role, $params) {
             // Set user repository
             $repositoryUser = new (Kalion::getClassUserRepository($user->getGuard()));

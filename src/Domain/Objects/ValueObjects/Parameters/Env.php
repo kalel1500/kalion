@@ -33,7 +33,7 @@ final class Env extends AbstractEnumVo
         parent::__construct($value);
     }
 
-    public static function new($value = null): static
+    public static function from($value = null): static
     {
         $value = $value ?? config('app.env');
         return new static($value);

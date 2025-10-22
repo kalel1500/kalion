@@ -21,7 +21,7 @@ final readonly class GetViewDataPostListUseCase
     public function __invoke(?string $tag): ViewDataPostListDto
     {
         $tags  = $this->repositoryTag->all();
-        $posts = $this->repositoryPost->searchByTag(StringNullVo::new($tag));
+        $posts = $this->repositoryPost->searchByTag(StringNullVo::from($tag));
         return ViewDataPostListDto::fromArray([
             $tags,
             $posts,

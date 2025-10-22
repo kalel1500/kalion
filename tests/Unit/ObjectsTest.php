@@ -16,8 +16,8 @@ class ObjectsTest extends TestCase
     {
         return [
             [new ExampleDtoCollection(
-                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, StringVo::new('aa')),
-                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, StringVo::new('aa')),
+                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, StringVo::from('aa')),
+                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, StringVo::from('aa')),
             )],
         ];
     }

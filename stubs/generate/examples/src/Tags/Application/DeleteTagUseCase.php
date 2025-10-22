@@ -17,7 +17,7 @@ final readonly class DeleteTagUseCase
 
     public function __invoke(int $id): void
     {
-        $id = IdVo::new($id);
+        $id = IdVo::from($id);
         $this->tagRepository->throwIfIsUsedByRelation($id);
         $this->tagRepository->delete($id);
     }

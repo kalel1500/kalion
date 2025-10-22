@@ -18,6 +18,6 @@ final readonly class GetViewDataPostDetailUseCase
 
     public function __invoke(string $slug): PostEntity
     {
-        return $this->repositoryPost->findBySlug(StringVo::new($slug));
+        return $this->repositoryPost->findBySlug(StringVo::from($slug));
     }
 }
