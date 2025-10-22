@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities;
 
-use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelIdNull;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdNullVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\CommentCollection;
 
 final class CommentEntity extends AbstractEntity
 {
     public function __construct(
-        public readonly ModelId|ModelIdNull $id,
-        public readonly ModelString     $content,
-        public readonly ModelId         $user_id,
-        public readonly ModelIdNull     $post_id,
-        public readonly ModelIdNull     $comment_id,
+        public readonly IdVo|IdNullVo $id,
+        public readonly StringVo      $content,
+        public readonly IdVo          $user_id,
+        public readonly IdNullVo      $post_id,
+        public readonly IdNullVo      $comment_id,
     )
     {
     }

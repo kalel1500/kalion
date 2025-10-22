@@ -6,7 +6,7 @@ namespace Src\Shared\Domain\Services\Repository;
 
 use Src\Shared\Domain\Contracts\Repositories\TagTypeRepository;
 use Src\Shared\Domain\Objects\Entities\TagTypeEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 
 final readonly class TagTypeService
 {
@@ -16,7 +16,7 @@ final readonly class TagTypeService
     {
     }
 
-    public function findByCode(ModelStringNull $code): ?TagTypeEntity
+    public function findByCode(StringNullVo $code): ?TagTypeEntity
     {
         if ($code->isNull()) return null;
 

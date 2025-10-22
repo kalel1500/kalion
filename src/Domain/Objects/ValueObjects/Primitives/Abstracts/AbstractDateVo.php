@@ -6,8 +6,6 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
 use Carbon\CarbonImmutable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelDate;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelDateNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateVo;
 use Thehouseofel\Kalion\Infrastructure\Services\Date;
@@ -16,8 +14,6 @@ abstract class AbstractDateVo extends AbstractStringVo
 {
     protected const CLASS_REQUIRED       = DateVo::class;
     protected const CLASS_NULLABLE       = DateNullVo::class;
-    protected const CLASS_MODEL_REQUIRED = ModelDate::class;
-    protected const CLASS_MODEL_NULLABLE = ModelDateNull::class;
 
     protected bool  $allowZeros = false;
     protected array $formats    = ['Y-m-d H:i:s'];

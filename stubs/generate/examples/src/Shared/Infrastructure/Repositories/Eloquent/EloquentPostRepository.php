@@ -9,9 +9,9 @@ use Src\Shared\Domain\Contracts\Repositories\PostRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\PostCollection;
 use Src\Shared\Domain\Objects\Entities\PostEntity;
 use Src\Shared\Infrastructure\Models\Post;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 
 final class EloquentPostRepository implements PostRepository
 {
@@ -28,7 +28,7 @@ final class EloquentPostRepository implements PostRepository
         return PostCollection::fromArray($data->toArray(), ['comments']);
     }
 
-    public function searchByTag(ModelStringNull $tag_code): PostCollection
+    public function searchByTag(StringNullVo $tag_code): PostCollection
     {
         $data = $this->model::query()
             ->with('tags')
@@ -43,13 +43,13 @@ final class EloquentPostRepository implements PostRepository
         return PostCollection::fromArray($data->toArray(), ['tags']);
     }
 
-    public function find(ModelId $id): PostEntity
+    public function find(IdVo $id): PostEntity
     {
         $data = $this->model::query()->with('comments')->findOrFail($id);
         return PostEntity::fromArray($data->toArray(), ['comments']);
     }
 
-    public function findBySlug(ModelString $slug): PostEntity
+    public function findBySlug(StringVo $slug): PostEntity
     {
         $data = $this->model::query()
             ->with('comments')

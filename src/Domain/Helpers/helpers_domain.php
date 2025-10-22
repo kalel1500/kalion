@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\Abstracts\AbstractModelId;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 use Thehouseofel\Kalion\Infrastructure\Facades\Auth;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
@@ -358,8 +358,8 @@ if (!function_exists('weighted_random_numbers')) {
     }
 }
 
-if (!function_exists('is_class_model_id')) {
-    function is_class_model_id(string $class): bool
+if (!function_exists('is_class_id')) {
+    function is_class_id(string $class): bool
     {
         if (!class_exists($class)) {
             return false;
@@ -368,11 +368,11 @@ if (!function_exists('is_class_model_id')) {
         // Obtener solo el nombre corto de la clase (sin namespace)
         $short = substr(strrchr($class, '\\') ?: $class, 1) ?: $class;
 
-        if (str_starts_with($short, 'ModelId')) {
+        if (str_starts_with($short, 'Id')) {
             return true;
         }
 
-        return is_subclass_of($class, AbstractModelId::class);
+        return is_subclass_of($class, AbstractId::class);
     }
 }
 

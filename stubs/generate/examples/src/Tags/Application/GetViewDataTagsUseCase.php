@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Src\Tags\Application;
 
-use Src\Tags\Domain\Objects\DataObjects\FrontTagsDto;
-use Src\Tags\Domain\Objects\DataObjects\ViewTagsDto;
 use Src\Shared\Domain\Contracts\Repositories\TagTypeRepository;
 use Src\Shared\Domain\Services\Repository\TagTypeService;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
+use Src\Tags\Domain\Objects\DataObjects\FrontTagsDto;
+use Src\Tags\Domain\Objects\DataObjects\ViewTagsDto;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 
 final readonly class GetViewDataTagsUseCase
 {
@@ -22,7 +22,7 @@ final readonly class GetViewDataTagsUseCase
     public function __invoke(bool $expectsJson, ?string $currentTypeCode): ViewTagsDto|FrontTagsDto
     {
         $tagTypes       = $this->tagTypeRepository->all();
-        $currentTagType = $this->tagTypeService->findByCode(ModelStringNull::new($currentTypeCode));
+        $currentTagType = $this->tagTypeService->findByCode(StringNullVo::new($currentTypeCode));
         if ($expectsJson) {
             return FrontTagsDto::fromArray([
                 'currentTagType' => $currentTagType,

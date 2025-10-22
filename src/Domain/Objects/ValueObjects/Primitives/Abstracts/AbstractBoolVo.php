@@ -6,21 +6,13 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelBool;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelBoolNull;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelDate;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelDateNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\BoolNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\BoolVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateVo;
 
 abstract class AbstractBoolVo extends AbstractValueObject
 {
     protected const CLASS_REQUIRED = BoolVo::class;
     protected const CLASS_NULLABLE = BoolNullVo::class;
-    protected const CLASS_MODEL_REQUIRED = ModelBool::class;
-    protected const CLASS_MODEL_NULLABLE = ModelBoolNull::class;
 
     public function __construct($value)
     {

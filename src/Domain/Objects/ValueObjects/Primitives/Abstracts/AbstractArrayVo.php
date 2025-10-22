@@ -8,8 +8,6 @@ use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelArray;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelArrayNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
@@ -17,8 +15,6 @@ abstract class AbstractArrayVo extends AbstractValueObject implements ArrayAcces
 {
     protected const CLASS_REQUIRED = ArrayVo::class;
     protected const CLASS_NULLABLE = ArrayNullVo::class;
-    protected const CLASS_MODEL_REQUIRED = ModelArray::class;
-    protected const CLASS_MODEL_NULLABLE = ModelArrayNull::class;
 
     public function __construct(?array $value)
     {

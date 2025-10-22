@@ -13,11 +13,8 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Abstrac
  */
 abstract class AbstractValueObject implements JsonSerializable
 {
-    protected const IS_MODEL = false;
     protected const CLASS_REQUIRED = null;
     protected const CLASS_NULLABLE = null;
-    protected const CLASS_MODEL_REQUIRED = null;
-    protected const CLASS_MODEL_NULLABLE = null;
 
     protected bool $nullable = true;
     protected $value;
@@ -89,38 +86,20 @@ abstract class AbstractValueObject implements JsonSerializable
     }
 
     /**
-     * @return T
+     * @return mixed
      */
     public function toNull()
     {
-        $class = static::IS_MODEL ? static::CLASS_MODEL_NULLABLE : static::CLASS_NULLABLE;
+        $class = static::CLASS_NULLABLE;
         return $class::new($this->value);
     }
 
     /**
-     * @return T
+     * @return mixed
      */
     public function toNotNull()
     {
-        $class = static::IS_MODEL ? static::CLASS_MODEL_REQUIRED : static::CLASS_REQUIRED;
-        return $class::new($this->value);
-    }
-
-    /**
-     * @return T
-     */
-    public function toModel()
-    {
-        $class = $this->nullable ? static::CLASS_MODEL_NULLABLE : static::CLASS_MODEL_REQUIRED;
-        return $class::new($this->value);
-    }
-
-    /**
-     * @return T
-     */
-    public function toNotModel()
-    {
-        $class = $this->nullable ? static::CLASS_NULLABLE : static::CLASS_REQUIRED;
+        $class = static::CLASS_REQUIRED;
         return $class::new($this->value);
     }
 

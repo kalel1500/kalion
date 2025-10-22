@@ -11,8 +11,8 @@ use Src\Shared\Domain\Objects\Entities\TagEntity;
 use Src\Shared\Infrastructure\Models\Tag;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\DuplicatedRecordException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 
 final class EloquentTagRepository implements TagRepository
 {
@@ -29,7 +29,7 @@ final class EloquentTagRepository implements TagRepository
         return TagCollection::fromArray($data->toArray());
     }
 
-    public function searchByType(ModelStringNull $typeCode): TagCollection
+    public function searchByType(StringNullVo $typeCode): TagCollection
     {
         $data = $this->model::query()
             ->where(function (Builder $query) use ($typeCode) {
@@ -55,7 +55,7 @@ final class EloquentTagRepository implements TagRepository
             ->update($tag->toArrayDb());
     }
 
-    public function delete(ModelId $id): void
+    public function delete(IdVo $id): void
     {
         $this->model::query()
             ->findOrFail($id->value())
@@ -84,7 +84,7 @@ final class EloquentTagRepository implements TagRepository
         }
     }
 
-    public function throwIfIsUsedByRelation(ModelId $id): void
+    public function throwIfIsUsedByRelation(IdVo $id): void
     {
         $hasRelation = $this->model::query()
             ->findOrFail($id->value())

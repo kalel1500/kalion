@@ -5,8 +5,8 @@ namespace Thehouseofel\Kalion\Tests\Unit;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDto;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDtoCollection;
 
@@ -16,8 +16,8 @@ class ObjectsTest extends TestCase
     {
         return [
             [new ExampleDtoCollection(
-                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, ModelString::new('aa')),
-                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, ModelString::new('aa')),
+                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, StringVo::new('aa')),
+                new ExampleDto('aaa', 'bbb', 3, CheckableProcessVo::queue, StringVo::new('aa')),
             )],
         ];
     }

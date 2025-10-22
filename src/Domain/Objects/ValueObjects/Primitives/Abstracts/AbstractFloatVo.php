@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelFloat;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelFloatNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\FloatNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\FloatVo;
 
@@ -14,8 +12,6 @@ abstract class AbstractFloatVo extends AbstractValueObject
 {
     protected const CLASS_REQUIRED = FloatVo::class;
     protected const CLASS_NULLABLE = FloatNullVo::class;
-    protected const CLASS_MODEL_REQUIRED = ModelFloat::class;
-    protected const CLASS_MODEL_NULLABLE = ModelFloatNull::class;
 
     public function __construct(?float $value)
     {

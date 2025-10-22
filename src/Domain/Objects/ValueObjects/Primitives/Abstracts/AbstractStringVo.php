@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 
@@ -14,8 +12,6 @@ abstract class AbstractStringVo extends AbstractValueObject
 {
     protected const CLASS_REQUIRED = StringVo::class;
     protected const CLASS_NULLABLE = StringNullVo::class;
-    protected const CLASS_MODEL_REQUIRED = ModelString::class;
-    protected const CLASS_MODEL_NULLABLE = ModelStringNull::class;
 
     public function __construct(?string $value)
     {

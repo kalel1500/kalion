@@ -6,14 +6,14 @@ namespace Src\Shared\Domain\Contracts\Repositories;
 
 use Src\Shared\Domain\Objects\Entities\Collections\PostCollection;
 use Src\Shared\Domain\Objects\Entities\PostEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelStringNull;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 
 interface PostRepository
 {
     public function all(): PostCollection;
-    public function searchByTag(ModelStringNull $tag_code): PostCollection;
-    public function find(ModelId $id): PostEntity;
-    public function findBySlug(ModelString $slug): PostEntity;
+    public function searchByTag(StringNullVo $tag_code): PostCollection;
+    public function find(IdVo $id): PostEntity;
+    public function findBySlug(StringVo $slug): PostEntity;
 }

@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelString;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 /**
@@ -41,7 +41,7 @@ final readonly class UserAccessChecker
         if ($user->all_permissions()) return true;
 
         // Obtener la Entidad Permission con todos los roles
-        $permission = $this->repositoryPermission->findByName(ModelString::new($permission));
+        $permission = $this->repositoryPermission->findByName(StringVo::new($permission));
 
         // Recorrer los roles del permiso
         return $permission->roles()->contains(function (RoleEntity $role) use ($user, $permission, $params) {
@@ -57,7 +57,7 @@ final readonly class UserAccessChecker
 
     protected function userHasRole(UserEntity $user, string $role, array $params = []): bool
     {
-        $role = $this->repositoryRole->findByName(ModelString::new($role));
+        $role = $this->repositoryRole->findByName(StringVo::new($role));
         return $user->roles()->contains(function (RoleEntity $userRole) use ($user, $role, $params) {
             // Set user repository
             $repositoryUser = new (Kalion::getClassUserRepository($user->getGuard()));

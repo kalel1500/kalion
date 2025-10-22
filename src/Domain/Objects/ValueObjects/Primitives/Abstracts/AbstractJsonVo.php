@@ -6,8 +6,6 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelJsonNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelJsonVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonNullVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
 
@@ -15,8 +13,6 @@ abstract class AbstractJsonVo extends AbstractValueObject
 {
     protected const CLASS_REQUIRED       = JsonVo::class;
     protected const CLASS_NULLABLE       = JsonNullVo::class;
-    protected const CLASS_MODEL_REQUIRED = ModelJsonVo::class;
-    protected const CLASS_MODEL_NULLABLE = ModelJsonNullVo::class;
 
     protected ?array            $valueArray   = null;
     protected array|object|null $valueObject  = null;

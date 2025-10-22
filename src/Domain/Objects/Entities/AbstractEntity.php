@@ -59,7 +59,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
                 }
 
-                // Union type (ej. ModelId|ModelIdNull)
+                // Union type (ej. IdVo|IdNullVo)
                 if ($type instanceof \ReflectionUnionType) {
                     $classNames = array_map(
                         callback: fn($t) => $t->getName(),
@@ -69,18 +69,18 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                         )
                     );
 
-                    $modelIdClass = null;
+                    $idClass = null;
                     foreach ($classNames as $class) {
-                        if (is_class_model_id($class) && !str_ends_with($class, 'Null')) {
-                            $modelIdClass = $class;
+                        if (is_class_id($class) && !str_ends_with($class, 'NullVo')) {
+                            $idClass = $class;
                             break;
                         }
                     }
 
                     $params[] = [
                         'name'       => $name,
-                        'class'      => $modelIdClass, // null si no aplica
-                        'isModelId'  => (bool) $modelIdClass,
+                        'class'      => $idClass, // null si no aplica
+                        'isId'       => (bool) $idClass,
                         'allowsNull' => $type->allowsNull(),
                     ];
                     continue;
@@ -91,7 +91,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     $params[] = [
                         'name'       => $name,
                         'class'      => $type->isBuiltin() ? null : $type->getName(),
-                        'isModelId'  => false, // para single class → usamos ::new || is_class_model_id($class)
+                        'isId'  => false, // para single class → usamos ::new || is_class_id($class)
                         'allowsNull' => $type->allowsNull(),
                     ];
                     continue;
@@ -99,27 +99,27 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
                 // Sin tipo
                 $params[] = [
-                    'name'      => $name,
-                    'class'     => null,
-                    'isModelId' => false,
+                    'name'       => $name,
+                    'class'      => null,
+                    'isId'       => false,
                     'allowsNull' => true,
                 ];
             }
 
             $newParams = [];
             foreach ($params as $meta) {
-                $class     = $meta['class'];
-                $isModelId = $meta['isModelId'];
+                $class = $meta['class'];
+                $isId  = $meta['isId'];
 
                 $classIsNull = $class === null;
                 $isEnum      = !$classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
                 $isVo        = !$classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
 
                 $makeMethod = match (true) {
-                    $classIsNull          => null,
-                    $isModelId || $isEnum => 'from',
-                    $isVo                 => 'new',
-                    default               => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
+                    $classIsNull     => null,
+                    $isId || $isEnum => 'from',
+                    $isVo            => 'new',
+                    default          => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
 
                 $propsMethod = match (true) {

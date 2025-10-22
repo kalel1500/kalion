@@ -8,7 +8,7 @@ use Src\Shared\Domain\Contracts\Repositories\CommentRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\CommentCollection;
 use Src\Shared\Domain\Objects\Entities\CommentEntity;
 use Src\Shared\Infrastructure\Models\Comment;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\EntityFields\ModelId;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
 
 final class EloquentCommentRepository implements CommentRepository
 {
@@ -19,7 +19,7 @@ final class EloquentCommentRepository implements CommentRepository
         $this->model = Comment::class;
     }
 
-    public function searchByPost(ModelId $post_id): CommentCollection
+    public function searchByPost(IdVo $post_id): CommentCollection
     {
         $data = $this->model::query()
             ->with('post')
