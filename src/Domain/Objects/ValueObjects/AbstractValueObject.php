@@ -86,7 +86,7 @@ abstract class AbstractValueObject implements JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return T
      */
     public function toNull()
     {
@@ -95,7 +95,7 @@ abstract class AbstractValueObject implements JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return T
      */
     public function toNotNull()
     {
