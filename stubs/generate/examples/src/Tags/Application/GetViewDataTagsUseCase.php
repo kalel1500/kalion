@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Src\Tags\Application;
 
 use Src\Shared\Domain\Contracts\Repositories\TagTypeRepository;
-use Src\Shared\Domain\Services\Repository\TagTypeService;
 use Src\Tags\Domain\Objects\DataObjects\FrontTagsDto;
 use Src\Tags\Domain\Objects\DataObjects\ViewTagsDto;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
@@ -14,7 +13,6 @@ final readonly class GetViewDataTagsUseCase
 {
     public function __construct(
         private TagTypeRepository $tagTypeRepository,
-        private TagTypeService    $tagTypeService,
     )
     {
     }
@@ -22,7 +20,12 @@ final readonly class GetViewDataTagsUseCase
     public function __invoke(bool $expectsJson, ?string $currentTypeCode): ViewTagsDto|FrontTagsDto
     {
         $tagTypes       = $this->tagTypeRepository->all();
-        $currentTagType = $this->tagTypeService->findByCode(StringNullVo::from($currentTypeCode));
+
+        $code = StringNullVo::from($currentTypeCode);
+        $currentTagType = $code->isNull()
+            ? null :
+            $this->tagTypeRepository->findByCode($code->toNotNull());
+
         if ($expectsJson) {
             return FrontTagsDto::fromArray([
                 'currentTagType' => $currentTagType,
