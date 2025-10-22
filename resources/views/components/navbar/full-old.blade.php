@@ -118,7 +118,7 @@
 
                 <x-kal::navbar.dropdown>
                     <x-slot:header href="#">
-                        <x-kal::navbar.dropdown.user-info name="Neil Sims" email="name@flowbite.com"/>
+                        <x-kal::navbar.dropdown.user-info id="1" name="Neil Sims" email="name@flowbite.com"/>
                     </x-slot:header>
 
                     <x-kal::navbar.dropdown.link href="#">My profile</x-kal::navbar.dropdown.link>

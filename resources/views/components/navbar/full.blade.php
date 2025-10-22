@@ -42,7 +42,7 @@
                             >
                                 @if($item->is_user)
                                     <x-slot:header href="#">
-                                        <x-kal::navbar.dropdown.user-info :name="$item->dropdown->userInfo?->name" :email="$item->dropdown->userInfo?->email"/>
+                                        <x-kal::navbar.dropdown.user-info :id="$item->dropdown->userInfo?->id" :name="$item->dropdown->userInfo?->name" :email="$item->dropdown->userInfo?->email"/>
                                     </x-slot:header>
                                 @endif
 
