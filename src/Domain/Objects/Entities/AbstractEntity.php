@@ -117,7 +117,8 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
                 $makeMethod = match (true) {
                     $classIsNull     => null,
-                    $isId || $isEnum => 'from',
+                    $isEnum          => 'from',
+                    $isId            => 'resolve',
                     $isVo            => 'new',
                     default          => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
