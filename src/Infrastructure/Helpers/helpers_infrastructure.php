@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\ComponentAttributeBag;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\EnvVo;
 use Thehouseofel\Kalion\Infrastructure\Facades\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;
 
@@ -213,5 +214,40 @@ if (!function_exists('vite_asset')) {
         } catch (\Illuminate\Foundation\ViteException $exception) {
             return $exception->getMessage();
         }
+    }
+}
+
+if (! function_exists('get_environment')) {
+    function get_environment(): EnvVo
+    {
+        return EnvVo::from(config('app.env'));
+    }
+}
+
+if (! function_exists('env_isTesting')) {
+    function env_isTesting(): bool
+    {
+        return get_environment()->isTesting();
+    }
+}
+
+if (! function_exists('env_isLocal')) {
+    function env_isLocal(): bool
+    {
+        return get_environment()->isLocal();
+    }
+}
+
+if (! function_exists('env_isPre')) {
+    function env_isPre(): bool
+    {
+        return get_environment()->isPre();
+    }
+}
+
+if (! function_exists('env_isProd')) {
+    function env_isProd(): bool
+    {
+        return get_environment()->isProd();
     }
 }
