@@ -1,6 +1,43 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.36.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.37.0-beta.0...master)
+
+## [v0.37.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.36.0-beta.0...v0.36.0-beta.0) - 2025-10-22
+
+### Changed
+
+* startCommand: Se han movido los tipos de TS a `src/shared/_types`
+* startCommand: Se ha añadido el alias `@` en los imports de los archivos de TS de los `stubs`
+* Se han actualizado varias dependencias de NPM: 
+  * `@tailwindcss/vite` => `^4.1.15`
+  * `laravel-vite-plugin` => `^2.0.0`
+  * `tailwindcss` => `^4.1.15`
+  * `typescript` => `^5.9.3`
+  * `vite` => `^7.0.4`
+  * `@kalel1500/kalion-js` => `^0.10.0-beta.0`
+* (breaking) Se han realizado varios cambios en los archivos del comando `kalion:start`:
+  * Actualizar variable de entorno `APP_URL` del `.env.save.local`
+  * Se ha eliminado la clase `TagTypeService` y se ha movido la lógica al `GetViewDataTagsUseCase`
+  * Se ha sacado la clase `AppLayoutData` de la carpeta `Repository`
+  * Actualizar instalacion Laravel 12
+  * Actualizar versiones manuales de las dependencias en el `StartCommandService`
+* (docs) Nuevo archivo `starter-template.md` con la información que hay en el repositorio `laravel-starter-template`
+* Se ha añadido el campo `id` en la información del usuario y se pasa al componente `user-info.blade.php`
+* (breaking) Se ha rehecho el sistema de comprobación del ENV:
+  * Se ha renombrado la clase `Env` a `EnvVo`.
+  * Se ha eliminado el método `from` (ya que era confuso porque si no recibía valor se obtenía de la config).
+  * Se ha renombrado el método `isTest()` a `isTesting()`.
+  * Se han creado 6 nuevos helpers para consultar el entorno (estos helpers ya tienen a logica del entorno real en los tests):
+    * `get_environment()`
+    * `env_isTesting()`
+    * `env_isLocal()`
+    * `env_isPre()`
+    * `env_isProd()`
+* Nuevo test `test_create_entity_without_id()` para validar que se puede crear una entidad sin pasarle el campo `id` usando el método `fromArray()`
+* (breaking) Se ha renombrado el método `new()` de la clase `AbstractValueObject` a `from()`.
+* (breaking) Se ha renombrado el método `from()` de la clase `AbstractId` a `resolve()`
+* (breaking) Se ha renombrado el método `from()` de la clase `AbstractDateVo` a `parse()`
+* (breaking) Se han eliminado los Value Objects especificos de las Entidades (los que tenian el prefijo `Model`). Ahora en las entidades se usan los Value Objects primitivos. Los `ids` que solo existian en los modelos se han trasladado a los primitivos.
 
 ## [v0.36.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.35.1-beta.0...v0.36.0-beta.0) - 2025-10-22
 
