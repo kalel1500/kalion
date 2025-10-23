@@ -1,8 +1,8 @@
 import 'flowbite';
-import './constants';
-import './translations';
+import '@/config/constants';
+import '@/config/translations';
 import { EnvVariables, Route, UtilitiesServiceProvider } from '@kalel1500/kalion-js';
-import { defineRoutes } from './routes';
+import { defineRoutes } from '@/config/routes';
 
 // Declare .env variables
 declare global {

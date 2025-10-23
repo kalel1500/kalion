@@ -1,5 +1,5 @@
-import es from './lang/es.json';
-import en from './lang/en.json';
+import es from '@/config/lang/es.json';
+import en from '@/config/lang/en.json';
 import { DefaultTranslations, TranslationReplacements, Translator } from '@kalel1500/kalion-js';
 
 export interface AppTranslations extends DefaultTranslations {

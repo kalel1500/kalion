@@ -1,8 +1,8 @@
 import { Instantiable, TableSettingEvents, Ttable, ValidationRules } from "@kalel1500/kalion-js";
-import { DataViewTags } from "../infrastructure/TagsController";
 import { route } from "ziggy-js";
 import { CellEventCallback, Formatter, Options } from "tabulator-tables";
-import { __ } from "../../../config/translations";
+import { __ } from '@/config/translations';
+import { DataViewTags } from '@/src/tags/infrastructure/TagsController';
 
 export default class TagsListUseCase extends Instantiable
 {

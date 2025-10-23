@@ -1,4 +1,4 @@
-import HomeUseCase from '../application/HomeUseCase';
+import HomeUseCase from '@/src/home/application/HomeUseCase';
 
 export default class HomeController {
     home() {
