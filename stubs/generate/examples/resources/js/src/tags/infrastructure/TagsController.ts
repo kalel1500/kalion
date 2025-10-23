@@ -1,5 +1,5 @@
 import { ViewData } from "@kalel1500/kalion-js";
-import { TagType } from '@/src/shared/domain/entities/TagType';
+import { TagType } from '@/src/shared/_types';
 import TagsListUseCase from '@/src/tags/application/TagsListUseCase';
 
 export type DataViewTags = {
