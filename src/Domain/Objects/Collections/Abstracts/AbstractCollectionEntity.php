@@ -39,35 +39,6 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         ];
     }
 
-    /**
-     * @experimental This method is subject to change (signature and behavior). It may be removed in future versions.
-     */
-    public function toArrayExport(callable $modifyData = null, string $exportMethodName = 'getExportColumns'): array
-    {
-        $data = $this->toArray();
-        if (!is_null($modifyData)) {
-            $data = $modifyData($data);
-        }
-
-        /** @var AbstractEntity $entity */
-        $entity       = $this->resolvedItemType;
-        $isExportable = (is_subclass_of($entity, Exportable::class));
-        if (!$isExportable) return $data;
-
-        $cols    = $entity::$exportMethodName();
-        $newData = collect($data)->map(function ($item) use ($cols) {
-            $newItem = [];
-            foreach ($cols as $col) {
-                $key       = $col['key'];
-                $newItem[] = array_key_exists($key, $item) ? $item[$key] : ' ';
-            }
-            return $newItem;
-        })->toArray();
-
-        $headers = collect($cols)->pluck('name')->toArray();
-        return array_merge([$headers], $newData);
-    }
-
     public function toArrayDb(): array
     {
         return $this->toArrayDynamic(__FUNCTION__);
