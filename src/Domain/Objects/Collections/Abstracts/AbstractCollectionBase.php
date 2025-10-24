@@ -51,7 +51,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
         $this->resolvedItemType     = static::resolveItemType();
         $this->shouldSkipValidation = is_null($this->resolvedItemType);
-        $this->items                = $this->validateItems($items);
+        $this->items                = $this->assertItemsTypeResolved($items);
     }
 
     protected static function resolveItemType(): ?string
@@ -85,34 +85,44 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return self::$typeCache[$className];
     }
 
-    private function validateItems(array $items): array
+    private function assertItemsTypeResolved(array $items): array
     {
         if ($this->shouldSkipValidation) return $items;
 
         foreach ($items as $item) {
-            $this->validateItem($item);
+            $this->assertItemTypeResolved($item);
         }
 
         return $items;
     }
 
-    private function validateItem(mixed $item): void
+    private function doAssertItemType(mixed $item, string $expectedType): void
     {
         if ($this->shouldSkipValidation) return;
 
         $line = __LINE__ - 4;
-        if (! ($item instanceof $this->resolvedItemType)) {
+        if (! ($item instanceof $expectedType)) {
             $givenType = is_object($item) ? get_class($item) : gettype($item);
             throw new TypeError(sprintf(
                 '%s::%s(): Argument #1 ($item) must be of type %s, %s given, called in %s on line %s',
                 self::class,
                 __FUNCTION__,
-                $this->resolvedItemType,
+                $expectedType,
                 $givenType,
                 __FILE__,
                 $line,
             ));
         }
+    }
+
+    protected function assertItemTypeResolved(mixed $item): void
+    {
+        $this->doAssertItemType($item, $this->resolvedItemType);
+    }
+
+    protected function assertItemType(mixed $item, string $expectedType): void
+    {
+        $this->doAssertItemType($item, $expectedType);
     }
 
     private function toStatic(array $collResult): static
@@ -882,7 +892,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function push(...$values)
     {
         foreach ($values as $value) {
-            $this->validateItem($value);
+            $this->assertItemTypeResolved($value);
             $this->items[] = $value;
         }
         return $this;
@@ -895,7 +905,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function put($key, $value)
     {
-        $this->validateItem($value);
+        $this->assertItemTypeResolved($value);
         $this->offsetSet($key, $value);
 
         return $this;
