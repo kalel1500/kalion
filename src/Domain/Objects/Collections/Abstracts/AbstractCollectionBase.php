@@ -101,14 +101,13 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         if ($this->shouldSkipValidation) return;
 
         if (! ($item instanceof $expectedType)) {
-            $givenType = is_object($item) ? get_class($item) : gettype($item);
             $traceData = debug_backtrace(limit: 4)[3];
             throw new TypeError(sprintf(
                 '%s::%s(): Argument #1 ($item) must be of type %s, %s given, called in %s on line %s',
                 $traceData['class'],
                 $traceData['function'],
                 $expectedType,
-                $givenType,
+                get_debug_type($item),
                 $traceData['file'],
                 $traceData['line'],
             ));
