@@ -100,17 +100,17 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         if ($this->shouldSkipValidation) return;
 
-        $line = __LINE__ - 4;
         if (! ($item instanceof $expectedType)) {
             $givenType = is_object($item) ? get_class($item) : gettype($item);
+            $traceData = debug_backtrace(limit: 4)[3];
             throw new TypeError(sprintf(
                 '%s::%s(): Argument #1 ($item) must be of type %s, %s given, called in %s on line %s',
-                self::class,
-                __FUNCTION__,
+                $traceData['class'],
+                $traceData['function'],
                 $expectedType,
                 $givenType,
-                __FILE__,
-                $line,
+                $traceData['file'],
+                $traceData['line'],
             ));
         }
     }
