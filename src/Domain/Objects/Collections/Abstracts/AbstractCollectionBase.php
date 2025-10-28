@@ -96,7 +96,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return $items;
     }
 
-    private function doAssertItemType(mixed $item, string $expectedType): void
+    private function doAssertItemType(mixed $item, ?string $expectedType): void
     {
         if ($this->shouldSkipValidation) return;
 
