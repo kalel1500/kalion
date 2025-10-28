@@ -25,14 +25,9 @@ abstract class AbstractValueObject implements JsonSerializable
 
     abstract public function value(): mixed;
 
-    protected function isNullReceived(): bool
-    {
-        return is_null($this->value);
-    }
-
     public function isNull(): bool
     {
-        return is_null($this->value());
+        return is_null($this->value);
     }
 
     public function isNotNull(): bool
