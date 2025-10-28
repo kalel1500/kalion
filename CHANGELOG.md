@@ -1658,9 +1658,9 @@
       * `Regards`
       * `Whoops!`
       * `Hello!`
-      * `If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser: [:actionURL](:actionURL)`
-      * `If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser: [:displayableActionUrl](:actionURL)`
-      * `If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\ninto your web browser:`
+      * `If you’re having trouble clicking the \':actionText\' button, copy and paste the URL below\ninto your web browser: [:actionURL](:actionURL)`
+      * `If you’re having trouble clicking the \':actionText\' button, copy and paste the URL below\ninto your web browser: [:displayableActionUrl](:actionURL)`
+      * `If you’re having trouble clicking the \':actionText\' button, copy and paste the URL below\ninto your web browser:`
       * `Send Password Reset Link`
       * `Logout`
       * `Verify Email Address`
