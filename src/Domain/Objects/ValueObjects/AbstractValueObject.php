@@ -85,18 +85,12 @@ abstract class AbstractValueObject implements JsonSerializable
         return $this;
     }
 
-    /**
-     * @return T
-     */
     public function toNull()
     {
         $class = static::CLASS_NULLABLE;
         return $class::from($this->value);
     }
 
-    /**
-     * @return T
-     */
     public function toNotNull()
     {
         $class = static::CLASS_REQUIRED;
