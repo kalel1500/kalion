@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
 use Illuminate\Support\Arr;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Contracts\Exportable;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\PaginationDataDto;
