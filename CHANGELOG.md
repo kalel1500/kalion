@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.37.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.37.1-beta.1...master)
+
+## [v0.37.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.37.1-beta.0...v0.37.1-beta.1) - 2025-10-28
+
+### Changed
+
+* (refactor-format) Se ha formateado el codigo de todos los archivos de la carpeta "src"
+* (fix) Se ha eliminado el import de una clase que ya no existe.
 
 ## [v0.37.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.37.0-beta.0...v0.37.1-beta.0) - 2025-10-28
 
