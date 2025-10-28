@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
+use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
@@ -13,7 +12,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Abstrac
 use Thehouseofel\Kalion\Infrastructure\Facades\Auth;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
-if (!function_exists('user')) {
+if (! function_exists('user')) {
     /**
      * Get the currently authenticated user entity.
      *
@@ -26,7 +25,7 @@ if (!function_exists('user')) {
     }
 }
 
-if (!function_exists('str_camel')) {
+if (! function_exists('str_camel')) {
     function str_camel(?string $string): ?string
     {
         if (is_null($string)) return null;
@@ -34,7 +33,7 @@ if (!function_exists('str_camel')) {
     }
 }
 
-if (!function_exists('str_truncate')) {
+if (! function_exists('str_truncate')) {
     function str_truncate(string $string, int $length = 100, string $append = '&hellip;'): ?string
     {
         // Check append length
@@ -62,26 +61,26 @@ if (!function_exists('str_truncate')) {
     }
 }
 
-if (!function_exists('validate_email')) {
+if (! function_exists('validate_email')) {
     function validate_email(string $email): string|false
     {
         return (filter_var($email, FILTER_VALIDATE_EMAIL));
     }
 }
 
-if (!function_exists('explode_by_uppercase')) {
+if (! function_exists('explode_by_uppercase')) {
     function explode_by_uppercase(string $value): array|false
     {
         return preg_split('/(?=[A-Z])/', $value, -1, PREG_SPLIT_NO_EMPTY);
     }
 }
 
-if (!function_exists('abort_d')) {
+if (! function_exists('abort_d')) {
     function abort_d(
-        int $statusCode,
-        string $message,
-        ?array $data = null,
-        bool $success = false,
+        int        $statusCode,
+        string     $message,
+        ?array     $data = null,
+        bool       $success = false,
         ?Throwable $previous = null
     ): void
     {
@@ -89,13 +88,13 @@ if (!function_exists('abort_d')) {
     }
 }
 
-if (!function_exists('abort_d_if')) {
+if (! function_exists('abort_d_if')) {
     function abort_d_if(
-        bool $condition,
-        int $code,
-        string $message,
-        ?array $data = null,
-        bool $success = false,
+        bool       $condition,
+        int        $code,
+        string     $message,
+        ?array     $data = null,
+        bool       $success = false,
         ?Throwable $previous = null
     ): void
     {
@@ -105,84 +104,85 @@ if (!function_exists('abort_d_if')) {
     }
 }
 
-if (!function_exists('is_valid_bool')) {
+if (! function_exists('is_valid_bool')) {
     function is_valid_bool($value): bool
     {
         return (is_bool($value) || (($value === 0 || $value === 1)));
     }
 }
 
-if (!function_exists('is_kalion_exception')) {
+if (! function_exists('is_kalion_exception')) {
     function is_kalion_exception(Throwable $e): bool
     {
         return ($e instanceof KalionExceptionInterface);
     }
 }
 
-if (!function_exists('collect_any')) {
+if (! function_exists('collect_any')) {
     function collect_any(array $array): CollectionAny
     {
         return CollectionAny::fromArray($array);
     }
 }
 
-if (!function_exists('legacy_json_to_array')) {
+if (! function_exists('legacy_json_to_array')) {
     function legacy_json_to_array($object): array|object|null
     {
         $string = json_encode($object);
-        if (!$string) {
+        if (! $string) {
             return null;
         }
         return json_decode($string, true);
     }
 }
 
-if (!function_exists('legacy_json_to_object')) {
+if (! function_exists('legacy_json_to_object')) {
     function legacy_json_to_object($object): array|object|null
     {
         $string = json_encode($object);
-        if (!$string) {
+        if (! $string) {
             return null;
         }
         return json_decode($string);
     }
 }
 
-if (!function_exists('legacy_deep_clone')) {
+if (! function_exists('legacy_deep_clone')) {
     function legacy_deep_clone($object)
     {
         return unserialize(serialize($object));
     }
 }
 
-if (!function_exists('array_keep')) {
+if (! function_exists('array_keep')) {
     function array_keep(array $arrayData, array $arrayKeys): array
     {
         return array_intersect_key($arrayData, array_flip($arrayKeys));
     }
 }
 
-if (!function_exists('array_delete')) {
+if (! function_exists('array_delete')) {
     function array_delete(array $arrayData, array $arrayKeys): array
     {
         return array_diff_key($arrayData, array_flip($arrayKeys));
     }
 }
 
-if (!function_exists('array_diff_assoc_deep')) {
-    function array_diff_assoc_deep(array $array1, array $array2): array {
+if (! function_exists('array_diff_assoc_deep')) {
+    function array_diff_assoc_deep(array $array1, array $array2): array
+    {
         $difference = array();
-        foreach($array1 as $key => $value) {
-            if( is_array($value) ) {
-                if( !isset($array2[$key]) || !is_array($array2[$key]) ) {
+        foreach ($array1 as $key => $value) {
+            if (is_array($value)) {
+                if (! isset($array2[$key]) || ! is_array($array2[$key])) {
                     $difference[$key] = $value;
                 } else {
                     $new_diff = array_diff_assoc_deep($value, $array2[$key]);
-                    if(!empty($new_diff)) {
+                    if (! empty($new_diff)) {
                         $difference[$key] = $new_diff;
                     }
                 }
-            } else if( !array_key_exists($key,$array2) || $array2[$key] !== $value ) {
+            } else if (! array_key_exists($key, $array2) || $array2[$key] !== $value) {
                 $difference[$key] = $value;
             }
 
@@ -207,16 +207,16 @@ if (!function_exists('array_diff_assoc_deep')) {
 
 }
 
-if (!function_exists('array_unshift_assoc')) {
+if (! function_exists('array_unshift_assoc')) {
     function array_unshift_assoc($arr, $key, $val): array
     {
-        $arr = array_reverse($arr, true);
+        $arr       = array_reverse($arr, true);
         $arr[$key] = $val;
         return array_reverse($arr, true);
     }
 }
 
-if (!function_exists('so_is_windows')) {
+if (! function_exists('so_is_windows')) {
     function so_is_windows(): bool
     {
         $so = strtoupper(substr(PHP_OS, 0, 3));
@@ -224,14 +224,14 @@ if (!function_exists('so_is_windows')) {
     }
 }
 
-if (!function_exists('str_contains_html')) {
+if (! function_exists('str_contains_html')) {
     function str_contains_html(string $value): bool
     {
         return $value !== strip_tags($value);
     }
 }
 
-if (!function_exists('normalize_path')) {
+if (! function_exists('normalize_path')) {
     function normalize_path(string $path): string
     {
         return DIRECTORY_SEPARATOR === '\\'
@@ -240,7 +240,7 @@ if (!function_exists('normalize_path')) {
     }
 }
 
-if (!function_exists('pipe_str_to_array')) {
+if (! function_exists('pipe_str_to_array')) {
     function pipe_str_to_array(array|string $value): array
     {
         return is_array($value)
@@ -249,12 +249,12 @@ if (!function_exists('pipe_str_to_array')) {
     }
 }
 
-if (!function_exists('get_class_from_file')) {
+if (! function_exists('get_class_from_file')) {
     function get_class_from_file($filePath): ?string
     {
         $filePath = normalize_path($filePath);
 
-        if (!file_exists($filePath)) return null;
+        if (! file_exists($filePath)) return null;
 
         $contents = file_get_contents($filePath);
 
@@ -277,10 +277,10 @@ if (!function_exists('get_class_from_file')) {
     }
 }
 
-if (!function_exists('get_guard')) {
+if (! function_exists('get_guard')) {
     function get_guard(?string $guard = null): string
     {
-        if (!is_null($guard)) {
+        if (! is_null($guard)) {
             return $guard;
         }
 
@@ -288,7 +288,7 @@ if (!function_exists('get_guard')) {
     }
 }
 
-if (!function_exists('weighted_random_numbers')) {
+if (! function_exists('weighted_random_numbers')) {
     function weighted_random_numbers(
         int   $quantity,
         int   $min_value,
@@ -317,7 +317,7 @@ if (!function_exists('weighted_random_numbers')) {
         $remainingProbability = 100 - $totalCustomProbability;
 
         // Paso 4: Números sin probabilidad definida
-        $remainingNumbers = array_diff($range, array_keys($custom_weights));
+        $remainingNumbers  = array_diff($range, array_keys($custom_weights));
         $quantityRemaining = count($remainingNumbers);
 
         // Si hay números restantes, repartir el porcentaje sobrante de manera uniforme
@@ -337,7 +337,7 @@ if (!function_exists('weighted_random_numbers')) {
         // Paso 5: Crear la distribución ponderada
         $distribution = [];
         foreach ($fullProbabilities as $number => $probability) {
-            $veces = (int) round($probability * 10); // *10 para mayor precisión
+            $veces = (int)round($probability * 10); // *10 para mayor precisión
             for ($i = 0; $i < $veces; $i++) {
                 $distribution[] = $number;
             }
@@ -350,7 +350,7 @@ if (!function_exists('weighted_random_numbers')) {
         // Paso 6: Generar los números aleatorios según la distribución
         $resultados = [];
         for ($i = 0; $i < $quantity; $i++) {
-            $indice = array_rand($distribution);
+            $indice       = array_rand($distribution);
             $resultados[] = $distribution[$indice];
         }
 
@@ -358,10 +358,10 @@ if (!function_exists('weighted_random_numbers')) {
     }
 }
 
-if (!function_exists('is_class_id')) {
+if (! function_exists('is_class_id')) {
     function is_class_id(string $class): bool
     {
-        if (!class_exists($class)) {
+        if (! class_exists($class)) {
             return false;
         }
 
@@ -376,7 +376,7 @@ if (!function_exists('is_class_id')) {
     }
 }
 
-if (!function_exists('arr_is_assoc')) {
+if (! function_exists('arr_is_assoc')) {
     function arr_is_assoc(array $array): bool
     {
         return ! array_is_list($array);

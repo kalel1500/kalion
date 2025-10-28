@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
 
 use Illuminate\Support\Arr;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Concerns\HasRelatableOptions;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\PaginationDataDto;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Concerns\HasRelatableOptions;
 
 abstract class AbstractCollectionEntity extends AbstractCollectionBase implements Relatable
 {
@@ -28,7 +28,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
 
     public function jsonSerialize(): array
     {
-        if (!$this->isPaginate()) {
+        if (! $this->isPaginate()) {
             return parent::jsonSerialize();
         }
         return [
@@ -59,7 +59,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
     {
         if (is_null($data)) return null;
 
-        if (!is_null($with) && ($with === '' || is_array($with) && in_array('', $with))) {
+        if (! is_null($with) && ($with === '' || is_array($with) && in_array('', $with))) {
             throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class AbstractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
         }
 
@@ -134,7 +134,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
             $makeValuesRandom         = function ($item) use ($newId) {
                 $hasInfoApply = (is_array($item) && (count($item) === 2));
                 $value        = ($hasInfoApply) ? $item[0] : $item;
-                if ($hasInfoApply && !$item[1]) return $value;
+                if ($hasInfoApply && ! $item[1]) return $value;
                 if (is_string($value)) return $value . $newId;
                 if (is_int($value)) return $value + $newId;
                 if (is_bool($value)) return ((bool)mt_rand(0, 1));

@@ -3,8 +3,8 @@
 namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
-use Thehouseofel\Kalion\Infrastructure\Services\Commands\StartCommandService;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\Concerns\InteractsWithComposerPackages;
+use Thehouseofel\Kalion\Infrastructure\Services\Commands\StartCommandService;
 
 class KalionStart extends Command
 {
@@ -41,7 +41,7 @@ class KalionStart extends Command
      */
     public function handle()
     {
-        $reset = $this->option('reset');
+        $reset        = $this->option('reset');
         $skipExamples = $this->option('skip-examples');
 
         $developString = config('kalion.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';

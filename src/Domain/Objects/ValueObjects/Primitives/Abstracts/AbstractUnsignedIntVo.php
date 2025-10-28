@@ -17,7 +17,7 @@ abstract class AbstractUnsignedIntVo extends AbstractIntVo
     {
         $this->checkNullable($value);
 
-        if (!is_null($value) && $value < 0) {
+        if (! is_null($value) && $value < 0) {
             throw new InvalidValueException(sprintf('<%s> does not allow the value <%s>.', class_basename(static::class), $value));
         }
     }

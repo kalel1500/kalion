@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Abstracts\NavigationItem;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
 
 final class SidebarItemDto extends NavigationItem
 {
@@ -34,7 +34,7 @@ final class SidebarItemDto extends NavigationItem
             $is_post,
             $dropdown,
         );
-        $this->hasCounter = !is_null($counter_action);
+        $this->hasCounter = ! is_null($counter_action);
     }
 
     public function hasCounter(): bool

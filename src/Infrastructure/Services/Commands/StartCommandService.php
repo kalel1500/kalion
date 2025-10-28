@@ -14,7 +14,6 @@ use Illuminate\Support\ServiceProvider;
 use RuntimeException;
 use Thehouseofel\Kalion\Domain\Concerns\CountMethods;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
-use Thehouseofel\Kalion\Infrastructure\KalionServiceProvider;
 use Thehouseofel\Kalion\Infrastructure\Services\Version;
 use Throwable;
 use function Illuminate\Filesystem\join_paths;
@@ -30,13 +29,13 @@ final class StartCommandService
     private readonly string $stubsPathExamples;
     private readonly string $originalStubsPath;
 
-    private readonly int        $steps;
-    private int                 $number                  = 0;
-    private readonly bool       $developMode;
-    private readonly bool       $keepMigrationsDate;
-    private readonly string     $packageVersion;
-    private readonly string     $lockFilePath;
-    private readonly array      $stubFilesRelativePaths;
+    private readonly int    $steps;
+    private int             $number = 0;
+    private readonly bool   $developMode;
+    private readonly bool   $keepMigrationsDate;
+    private readonly string $packageVersion;
+    private readonly string $lockFilePath;
+    private readonly array  $stubFilesRelativePaths;
 
     private Carbon $migrationsTimestamp;
 
@@ -145,7 +144,7 @@ final class StartCommandService
 
         $timestamp = now()->toDateTimeString();
         if ($this->developMode && $exists) {
-            $old         = json_decode(File::get($this->lockFilePath), true);
+            $old       = json_decode(File::get($this->lockFilePath), true);
             $timestamp = $old['timestamp'];
         }
         $payload = [
@@ -155,7 +154,7 @@ final class StartCommandService
             'stubs'     => $this->stubFilesRelativePaths,
         ];
 
-        $body = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).PHP_EOL;
+        $body = json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . PHP_EOL;
         File::put($this->lockFilePath, $body);
     }
 
@@ -606,8 +605,8 @@ final class StartCommandService
 
         // Views
         $folder = 'resources';
-        $dir  = ($this->reset) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
-        $dest = base_path($folder);
+        $dir    = ($this->reset) ? $this->originalStubsPath($folder) : $this->stubsPath($folder);
+        $dest   = base_path($folder);
 
         $this->line(sprintf('Copiando carpeta %s', $folder));
 
@@ -619,7 +618,7 @@ final class StartCommandService
         File::copyDirectory($dir, $dest);
 
         if (! $this->reset && ! $this->skipExamples) {
-            $dir  = $this->stubsPath($folder, true);
+            $dir = $this->stubsPath($folder, true);
             File::copyDirectory($dir, $dest);
         }
 
@@ -650,7 +649,7 @@ final class StartCommandService
             File::copyDirectory($dir, $dest);
 
             if (! $this->skipExamples) {
-                $dir  = $this->stubsPath($folder, true);
+                $dir = $this->stubsPath($folder, true);
                 File::copyDirectory($dir, $dest);
             }
         }
@@ -997,7 +996,7 @@ EOD;
                 }
 
                 $this->line('=> Consultando version ' . $package, false);
-                $result = Http::get('https://registry.npmjs.org/'.$package.'/latest');
+                $result = Http::get('https://registry.npmjs.org/' . $package . '/latest');
                 if ($result->failed()) {
                     throw new ConnectionException();
                 }
@@ -1308,7 +1307,7 @@ EOD;
     {
         $path ??= app()->getBootstrapProvidersPath();
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             return false;
         }
 
@@ -1322,17 +1321,17 @@ EOD;
             ->unique()
             ->sort()
             ->values()
-            ->map(fn($p) => '    '.$p.'::class,') // Formatear las líneas
+            ->map(fn($p) => '    ' . $p . '::class,') // Formatear las líneas
             ->implode(PHP_EOL);
 
         $content = '<?php
 
 return [
-'.$providers.'
+' . $providers . '
 ];';
 
         // Escribir el contenido actualizado en el archivo
-        file_put_contents($path, $content.PHP_EOL);
+        file_put_contents($path, $content . PHP_EOL);
 
         return true;
     }

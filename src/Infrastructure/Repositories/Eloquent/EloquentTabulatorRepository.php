@@ -19,7 +19,7 @@ class EloquentTabulatorRepository implements TabulatorRepository
     public function tabulatorFiltering(Builder $query, ?array $filters, array $dontFilter = []): Builder
     {
         /*Filtradores TABULATOR*/
-        if (!is_null($filters)) {
+        if (! is_null($filters)) {
             foreach ($filters as $filter) {
                 $query = $this->applyFilter($query, $filter, $dontFilter);
             }
@@ -40,46 +40,46 @@ class EloquentTabulatorRepository implements TabulatorRepository
     private function applyFilter(Builder $query, array $filter, array $dontFilter = []): Builder
     {
         $field = $filter["field"] ?? null;
-        $type = $filter["type"] ?? null;
+        $type  = $filter["type"] ?? null;
         $value = $filter["value"] ?? null;
 
         //Solo filtramos los que no están excepcionados
-        if(in_array($field, $dontFilter)){
+        if (in_array($field, $dontFilter)) {
             return $query;
         }
 
         // Si no hay puntos (relaciones), filtramos directamente
-        if (!str_contains($field, ".")) {
+        if (! str_contains($field, ".")) {
 //            $originTable = $query->getModel()->getTable();
 //            $field = $originTable . '.' . $field;
             return $this->basicFiltering($query, $field, $type, $value);
         }
 
         // Si hay puntos en el campo, separamos por punto y recorremos para crear el nombre del whereHas
-        $expField = explode('.', $field);
-        $relName = '';
-        $colName = '';
+        $expField    = explode('.', $field);
+        $relName     = '';
+        $colName     = '';
         $numberFound = false;
-        foreach ($expField as $key => $fieldPart){
+        foreach ($expField as $key => $fieldPart) {
 
             /*Si es el último elemento, pasa a ser el nombhre de la columna*/
-            if ($key === count($expField)-1) {
+            if ($key === count($expField) - 1) {
                 $colName .= $fieldPart;
                 continue;
             }
 
             /*Si no es el último elemento, preparamos el nombre de la relación*/
-            if (!$numberFound) {
-                $fieldPart = lcfirst(str_replace('_','',ucwords($fieldPart,'_')));
+            if (! $numberFound) {
+                $fieldPart = lcfirst(str_replace('_', '', ucwords($fieldPart, '_')));
             }
 
             // Si es numérico, se trata de un elemento de un array y no lo tenemos que usar
             if ($numberFound) {
-                $colName = $fieldPart.'.';
+                $colName = $fieldPart . '.';
                 continue;
             }
 
-            if(is_numeric($fieldPart)) {
+            if (is_numeric($fieldPart)) {
                 $numberFound = true;
                 continue;
             }
@@ -96,23 +96,23 @@ class EloquentTabulatorRepository implements TabulatorRepository
         }
 
         // Filtramos la relacion
-        return $query->whereHas($relName, function ($q) use($relName, $colName, $type, $value, $field) {
+        return $query->whereHas($relName, function ($q) use ($relName, $colName, $type, $value, $field) {
             return $this->basicFiltering($q, $colName, $type, $value);
         });
     }
 
     private function applySorter(Builder $query, array $sorter): Builder
     {
-        $field = $sorter["field"];
-        $dir = $sorter["dir"];
+        $field       = $sorter["field"];
+        $dir         = $sorter["dir"];
         $originTable = $query->getModel()->getTable();
 
-        if (!Str::contains($field, '.')) {
+        if (! Str::contains($field, '.')) {
             return $query->orderBy($field, $dir);
         }
 
-        $relName = Str::beforeLast($field, '.');
-        $colName = Str::afterLast($field, '.');
+        $relName  = Str::beforeLast($field, '.');
+        $colName  = Str::afterLast($field, '.');
         $joinName = Str::plural($relName);
 
         $expRelName = explode('.', $relName);
@@ -128,14 +128,14 @@ class EloquentTabulatorRepository implements TabulatorRepository
 
     public function basicFiltering(
         Builder|QueryBuilder $query,
-        ?string $field,
-        ?string $type,
-        mixed $value,
-        ?string $fromOtherDBTable = null
+        ?string              $field,
+        ?string              $type,
+        mixed                $value,
+        ?string              $fromOtherDBTable = null
     ): Builder|QueryBuilder
     {
         // Relacionar con una tabla de otra base de datos para g2r.sist
-        if (!is_null($fromOtherDBTable)) {
+        if (! is_null($fromOtherDBTable)) {
             $query->from($fromOtherDBTable);
         }
 
@@ -149,7 +149,7 @@ class EloquentTabulatorRepository implements TabulatorRepository
         }
 
         if ($type === 'like') {  // Like
-            return $query->where($field, $type, '%'.$value.'%');
+            return $query->where($field, $type, '%' . $value . '%');
         }
 
         if ($type === '=') {

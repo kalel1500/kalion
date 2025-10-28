@@ -12,8 +12,8 @@ use Thehouseofel\Kalion\Infrastructure\Services\Date;
 
 abstract class AbstractDateVo extends AbstractStringVo
 {
-    protected const CLASS_REQUIRED       = DateVo::class;
-    protected const CLASS_NULLABLE       = DateNullVo::class;
+    protected const CLASS_REQUIRED = DateVo::class;
+    protected const CLASS_NULLABLE = DateNullVo::class;
 
     protected bool  $allowZeros = false;
     protected array $formats    = ['Y-m-d H:i:s'];
@@ -42,7 +42,7 @@ abstract class AbstractDateVo extends AbstractStringVo
     {
         parent::ensureIsValidValue($value);
 
-        if (!is_null($value) && !Date::checkFormats($value, $this->formats, $this->allowZeros)) {
+        if (! is_null($value) && ! Date::checkFormats($value, $this->formats, $this->allowZeros)) {
             throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $this->formats)));
         }
     }

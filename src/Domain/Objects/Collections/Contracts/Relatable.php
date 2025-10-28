@@ -9,6 +9,7 @@ use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
 interface Relatable extends ArrayConvertible
 {
     public function setWith(string|array|null $with): static;
+
     public function setIsFull(bool|string|null $isFull): static;
 
     /**

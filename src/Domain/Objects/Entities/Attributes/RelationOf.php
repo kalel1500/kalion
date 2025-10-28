@@ -9,5 +9,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_METHOD)]
 final class RelationOf
 {
-    public function __construct(public string $class) {}
+    public function __construct(public string $class)
+    {
+    }
 }

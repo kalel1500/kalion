@@ -30,7 +30,7 @@ final class PublishAuth extends Command
      */
     public function handle()
     {
-        $reset = $this->option('reset');
+        $reset      = $this->option('reset');
         $onlyUpdate = $this->option('onlyUpdate');
 
         $developString = config('kalion.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';

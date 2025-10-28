@@ -20,13 +20,13 @@ final class TestController extends Controller
 
     public function sessions()
     {
-        if (!debug_is_active()) {
+        if (! debug_is_active()) {
             throw new NotFoundHttpException();
         }
         $sessions = DB::table('sessions')->get();
         foreach ($sessions as $session) {
             $decoded = base64_decode($session->payload);
-            $array = unserialize($decoded);
+            $array   = unserialize($decoded);
             dump($array);
         }
     }

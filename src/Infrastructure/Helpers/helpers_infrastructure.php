@@ -2,27 +2,20 @@
 
 declare(strict_types=1);
 
-use Faker\Factory as Faker;
-use Illuminate\Database\Eloquent\Collection as CollectionE;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request as RequestF;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
-use Illuminate\View\ComponentAttributeBag;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\EnvVo;
 use Thehouseofel\Kalion\Infrastructure\Facades\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;
 
-if (!function_exists('dropdown_is_open')) {
+if (! function_exists('dropdown_is_open')) {
     function dropdown_is_open(string $htmlLinks): bool
     {
         $currentUrl = RequestF::fullUrl();
@@ -34,7 +27,8 @@ if (!function_exists('dropdown_is_open')) {
 }
 
 if (! function_exists('debug_is_active')) {
-    function debug_is_active(): bool {
+    function debug_is_active(): bool
+    {
         return config('app.debug');
     }
 }
@@ -46,13 +40,17 @@ if (! function_exists('filter_valid_emails')) {
             $emails = explode(',', $emails);
         }
         return collect($emails)
-            ->map(function ($value) {return trim($value);})
-            ->filter(function ($value) {return filter_var($value, FILTER_VALIDATE_EMAIL);})
+            ->map(function ($value) {
+                return trim($value);
+            })
+            ->filter(function ($value) {
+                return filter_var($value, FILTER_VALIDATE_EMAIL);
+            })
             ->all();
     }
 }
 
-if (!function_exists('url_contains_ajax')) {
+if (! function_exists('url_contains_ajax')) {
     function url_contains_ajax(): bool
     {
         return (str_contains(URL::current(), '/ajax/'));
@@ -65,7 +63,7 @@ if (! function_exists('response_json')) {
         return response()->json([
             'success' => $success,
             'message' => $message,
-            'data' => $data
+            'data'    => $data
         ], $responseCode);
     }
 }
@@ -97,18 +95,18 @@ if (! function_exists('src_path')) {
     }
 }
 
-if (!function_exists('str_snake')) {
+if (! function_exists('str_snake')) {
     function str_snake($str): string
     {
         return Str::snake($str);
     }
 }
 
-if (!function_exists('array_has_only_arrays')) {
+if (! function_exists('array_has_only_arrays')) {
     function array_has_only_arrays(array $array): bool
     {
         $filtered = Arr::where($array, function ($value, $key) {
-            return !is_array($value);
+            return ! is_array($value);
         });
         return (count($filtered) === 0);
     }
@@ -118,8 +116,8 @@ if (! function_exists('safe_route')) {
     function safe_route(?string $name, string $default = null): ?string
     {
         $fallback = match ($default) {
-            null => null,
-            '#' => '#',
+            null    => null,
+            '#'     => '#',
             default => url($default),
         };
 
@@ -131,30 +129,30 @@ if (! function_exists('safe_route')) {
     }
 }
 
-if (!function_exists('concat_fields_with')) {
+if (! function_exists('concat_fields_with')) {
     function concat_fields_with(array $fields = ['name', 'code'], string $separator = 'or'): string
     {
-        $separator = __('k::art.'.$separator);
-        $fields = array_map(fn(string $item): string => '"'.ucfirst(__('k::field.'.$item)).'"', $fields);
+        $separator = __('k::art.' . $separator);
+        $fields    = array_map(fn(string $item): string => '"' . ucfirst(__('k::field.' . $item)) . '"', $fields);
         return implode(" $separator ", $fields);
     }
 }
 
-if (!function_exists('get_html_laravel_debug_stack_trace')) {
+if (! function_exists('get_html_laravel_debug_stack_trace')) {
     function get_html_laravel_debug_stack_trace(Request $request, Throwable $exception): string
     {
         return app()->make(\Illuminate\Foundation\Exceptions\Renderer\Renderer::class)->render($request, $exception);
     }
 }
 
-if (!function_exists('app_url')) {
+if (! function_exists('app_url')) {
     function app_url(): string
     {
         return url('/');
     }
 }
 
-if (!function_exists('default_url')) {
+if (! function_exists('default_url')) {
     function default_url(): string
     {
         $defaultUrl = RedirectDefaultPath::redirectTo();
@@ -167,46 +165,46 @@ if (!function_exists('default_url')) {
     }
 }
 
-if (!function_exists('log_if_fail')) {
+if (! function_exists('log_if_fail')) {
     function log_if_fail(string $errorPrefix, callable $callback, ?string $logChannel = null): void
     {
         try {
             $callback();
         } catch (Throwable $exception) {
-            Log::channel($logChannel)->error($errorPrefix.$exception->getMessage());
+            Log::channel($logChannel)->error($errorPrefix . $exception->getMessage());
         }
     }
 }
 
-if (!function_exists('log_error')) {
+if (! function_exists('log_error')) {
     function log_error(string $message): void
     {
         Log::error($message);
     }
 }
 
-if (!function_exists('log_error_on')) {
+if (! function_exists('log_error_on')) {
     function log_error_on(string $channel, string $message): void
     {
         Log::channel($channel)->error($message);
     }
 }
 
-if (!function_exists('log_error_on_queues')) {
+if (! function_exists('log_error_on_queues')) {
     function log_error_on_queues(string $message): void
     {
         Log::channel('queues')->error($message);
     }
 }
 
-if (!function_exists('log_error_on_loads')) {
+if (! function_exists('log_error_on_loads')) {
     function log_error_on_loads(string $message): void
     {
         Log::channel('loads')->error($message);
     }
 }
 
-if (!function_exists('vite_asset')) {
+if (! function_exists('vite_asset')) {
     function vite_asset(string $asset): string
     {
         try {

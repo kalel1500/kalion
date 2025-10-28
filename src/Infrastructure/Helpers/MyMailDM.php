@@ -11,10 +11,10 @@ final class MyMailDM
 {
     public function __construct(protected Mailable $mailable, $keepOriginalRecipientsEvenInTests = false)
     {
-        if (config('kalion.mail_active_tests') && !$keepOriginalRecipientsEvenInTests) {
-            $arrayTo = static::getRecipientsFromStringVariable(config('kalion.mail_test_recipients'));
-            $this->mailable->to = [];
-            $this->mailable->cc = [];
+        if (config('kalion.mail_active_tests') && ! $keepOriginalRecipientsEvenInTests) {
+            $arrayTo             = static::getRecipientsFromStringVariable(config('kalion.mail_test_recipients'));
+            $this->mailable->to  = [];
+            $this->mailable->cc  = [];
             $this->mailable->bcc = [];
             $this->mailable->to($arrayTo);
         }
@@ -22,7 +22,7 @@ final class MyMailDM
 
     public function send()
     {
-        if (!config('kalion.mail_is_active')) {
+        if (! config('kalion.mail_is_active')) {
             return;
         }
         if (empty($this->mailable->to)) {
@@ -36,7 +36,7 @@ final class MyMailDM
 
     public function sendToRecipients($recipients)
     {
-        if (!config('kalion.mail_is_active')) {
+        if (! config('kalion.mail_is_active')) {
             return null;
         }
         Mail::to($recipients)->send($this->mailable);
@@ -65,9 +65,15 @@ final class MyMailDM
 
         $testRecipients = collect(explode(',', $stringRecipients));
 
-        $formatted_mailRecipients = $testRecipients->filter(function ($value, $key) {return !str_starts_with($value, 'u2d');})->map(function ($item, $key) {return ['name' => null, 'email' => $item];})->values()->all();
-        $u2dRecipients = $testRecipients->filter(function ($value, $key) {return str_starts_with($value, 'u2d');})->all();
-        $formatted_u2dRecipients = (new UserModelManager())->getUsersInField($u2dRecipients, 'matricula_dacfi')->pluck('array_name_and_email')->toArray();
+        $formatted_mailRecipients = $testRecipients->filter(function ($value, $key) {
+            return ! str_starts_with($value, 'u2d');
+        })->map(function ($item, $key) {
+            return ['name' => null, 'email' => $item];
+        })->values()->all();
+        $u2dRecipients            = $testRecipients->filter(function ($value, $key) {
+            return str_starts_with($value, 'u2d');
+        })->all();
+        $formatted_u2dRecipients  = (new UserModelManager())->getUsersInField($u2dRecipients, 'matricula_dacfi')->pluck('array_name_and_email')->toArray();
 
         return array_merge($formatted_u2dRecipients, $formatted_mailRecipients);
     }

@@ -12,17 +12,17 @@ use Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
 use ReflectionClass;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Attributes\CollectionOf;
+use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
+use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
+use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
-use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 use TypeError;
 
 abstract class AbstractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, ArrayConvertible, JsonSerializable
@@ -36,7 +36,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
     protected $items;
 
-    protected bool   $shouldSkipValidation;
+    protected bool    $shouldSkipValidation;
     protected ?string $resolvedItemType;
 
     public function __construct(...$args)
@@ -366,9 +366,9 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     /**
      * Determine if an item is not contained in the collection.
      *
-     * @param  mixed  $key
-     * @param  mixed  $operator
-     * @param  mixed  $value
+     * @param mixed $key
+     * @param mixed $operator
+     * @param mixed $value
      * @return bool
      */
     public function doesntContain($key, $operator = null, $value = null)
@@ -762,9 +762,9 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $relationName = $value;
 
-        $arr = $this->toArray();
+        $arr   = $this->toArray();
         $value = $this->normalizeDotPath($arr, $value);
-        if (!is_null($key)) {
+        if (! is_null($key)) {
             $key = $this->normalizeDotPath($arr, $key);
         }
 
@@ -780,7 +780,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
         $with = is_array($this->with) ? $this->with : [$this->with];
 
-        $newWith = null;
+        $newWith   = null;
         $newIsFull = null;
         foreach ($with as $key => $rel) {
 
@@ -788,18 +788,18 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 [$key, $isFull] = $this->getInfoFromRelationWithFlag($key);
 
                 if ($key === $relationName) {
-                    $newWith = $rel;
+                    $newWith   = $rel;
                     $newIsFull = $isFull;
                     break;
                 }
             } else {
                 $arrayRels = explode('.', $rel);
-                $firstRel = $arrayRels[0];
+                $firstRel  = $arrayRels[0];
                 [$firstRel, $isFull] = $this->getInfoFromRelationWithFlag($firstRel);
 
                 if ($firstRel === $relationName) {
                     unset($arrayRels[0]);
-                    $newWith = implode('.', $arrayRels);
+                    $newWith   = implode('.', $arrayRels);
                     $newIsFull = $isFull;
                     break;
                 }
@@ -816,19 +816,19 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             return $path;
         }
 
-        $segments = explode('.', $path);
-        $current = $data[0] ?? $data; // por si la colección no tiene índice numérico
+        $segments   = explode('.', $path);
+        $current    = $data[0] ?? $data; // por si la colección no tiene índice numérico
         $normalized = [];
 
         foreach ($segments as $segment) {
             // Si llegamos a un valor escalar, no podemos seguir profundizando
-            if (!is_array($current)) {
+            if (! is_array($current)) {
                 $normalized[] = $segment;
                 break;
             }
 
             // Si el segmento no existe en el nivel actual, intenta su versión snake_case
-            if (!array_key_exists($segment, $current)) {
+            if (! array_key_exists($segment, $current)) {
                 $snake = str_snake($segment);
 
                 if (array_key_exists($snake, $current)) {
@@ -1124,7 +1124,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $result = [];
         foreach ($this->items as $key => $item) {
-            $item = match (true) {
+            $item         = match (true) {
                 $item instanceof MakeArrayable && $forMakeArray => $item->toMakeArray(),
                 $item instanceof ArrayConvertible               => $item->toArray(),
                 $item instanceof AbstractValueObject            => $item->value(),

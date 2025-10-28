@@ -15,7 +15,7 @@ use Thehouseofel\Kalion\Infrastructure\Services\Broadcast;
 final class AjaxCheckProcessController extends Controller
 {
     public function __construct(
-        private readonly CheckProcessQueueUseCase $checkProcessQueueUseCase,
+        private readonly CheckProcessQueueUseCase  $checkProcessQueueUseCase,
         private readonly CheckProcessReverbUseCase $checkProcessReverbUseCase,
     )
     {
@@ -28,7 +28,7 @@ final class AjaxCheckProcessController extends Controller
 
     public function broadcastQueueStatus(): JsonResponse
     {
-        $response = $this->checkProcessQueueUseCase->__invoke();
+        $response  = $this->checkProcessQueueUseCase->__invoke();
         $broadcast = Broadcast::tryBroadcast(new ProcessStatusChecked(CheckableProcessVo::queue, $response));
         return Broadcast::annotateResponse($response, $broadcast);
     }
@@ -41,7 +41,7 @@ final class AjaxCheckProcessController extends Controller
 
     public function broadcastReverbStatus(): JsonResponse
     {
-        $response = $this->checkProcessReverbUseCase->__invoke();
+        $response  = $this->checkProcessReverbUseCase->__invoke();
         $broadcast = Broadcast::tryBroadcast(new ProcessStatusChecked(CheckableProcessVo::reverb, $response));
         return Broadcast::annotateResponse($response, $broadcast);
     }

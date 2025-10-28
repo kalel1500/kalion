@@ -12,5 +12,6 @@ interface ArrayConvertible
      * @return (T is null ? null : static)
      */
     public static function fromArray(?array $data): ?static;
+
     public function toArray(): array;
 }

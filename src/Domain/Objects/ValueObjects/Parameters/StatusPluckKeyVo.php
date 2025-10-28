@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Abstrac
 final class StatusPluckKeyVo extends AbstractEnumVo
 {
     const code = 'code';
-    const id = 'id';
+    const id   = 'id';
 
     protected ?array $permittedValues = [
         self::code,

@@ -13,7 +13,7 @@ use Throwable;
 final class AjaxJobsController extends Controller
 {
     public function __construct(
-        private readonly GetAllJobsUseCase $getAllJobsUseCase,
+        private readonly GetAllJobsUseCase       $getAllJobsUseCase,
         private readonly GetAllFailedJobsUseCase $getAllFailedJobsUseCase,
     )
     {

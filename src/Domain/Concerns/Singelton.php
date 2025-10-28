@@ -13,7 +13,7 @@ trait Singelton
 
     public static function instance()
     {
-        if (!static::$instance instanceof static) {
+        if (! static::$instance instanceof static) {
             static::$instance = new static();
         }
 

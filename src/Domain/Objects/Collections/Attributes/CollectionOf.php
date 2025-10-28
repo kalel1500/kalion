@@ -9,5 +9,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS)]
 final class CollectionOf
 {
-    public function __construct(public string $class) {}
+    public function __construct(public string $class)
+    {
+    }
 }

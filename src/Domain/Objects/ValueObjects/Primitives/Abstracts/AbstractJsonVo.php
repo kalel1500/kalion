@@ -11,13 +11,13 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
 
 abstract class AbstractJsonVo extends AbstractValueObject
 {
-    protected const CLASS_REQUIRED       = JsonVo::class;
-    protected const CLASS_NULLABLE       = JsonNullVo::class;
+    protected const CLASS_REQUIRED = JsonVo::class;
+    protected const CLASS_NULLABLE = JsonNullVo::class;
 
-    protected ?array            $valueArray   = null;
-    protected array|object|null $valueObject  = null;
-    protected ?string           $valueString  = null;
-    protected bool              $invalidJson  = false;
+    protected ?array            $valueArray  = null;
+    protected array|object|null $valueObject = null;
+    protected ?string           $valueString = null;
+    protected bool              $invalidJson = false;
 
     public function __construct($value, bool $try = false)
     {
@@ -30,7 +30,7 @@ abstract class AbstractJsonVo extends AbstractValueObject
     {
         $this->checkNullable($value);
 
-        if (!empty($value) && (!is_string($value) && !is_array($value) && !is_object($value))) {
+        if (! empty($value) && (! is_string($value) && ! is_array($value) && ! is_object($value))) {
             throw new InvalidValueException(sprintf('<%s> must have a value of type string object or array.', class_basename(static::class)));
         }
     }
@@ -46,7 +46,7 @@ abstract class AbstractJsonVo extends AbstractValueObject
         if (is_array($value) || is_object($value)) {
             $this->valueArray  = legacy_json_to_array($value);
             $this->valueObject = legacy_json_to_object($value);
-            $this->valueString = (!$decoded = json_encode($value)) ? null : $decoded;
+            $this->valueString = (! $decoded = json_encode($value)) ? null : $decoded;
         }
 
         if (json_last_error() !== JSON_ERROR_NONE) {

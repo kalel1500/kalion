@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
 
-use Thehouseofel\Kalion\Domain\Contracts\Enums\Translatable;
 use Thehouseofel\Kalion\Domain\Concerns\Enums\HasTranslations;
+use Thehouseofel\Kalion\Domain\Contracts\Enums\Translatable;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

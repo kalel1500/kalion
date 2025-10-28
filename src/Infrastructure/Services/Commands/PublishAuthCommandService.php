@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Thehouseofel\Kalion\Domain\Concerns\CountMethods;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
@@ -152,7 +151,7 @@ final class PublishAuthCommandService
             );
 
             // 2. Agregar el nuevo guard "api" sólo si no existe aún.
-            if (!preg_match("/'api'\s*=>\s*\[/", $updatedContent)) {
+            if (! preg_match("/'api'\s*=>\s*\[/", $updatedContent)) {
                 // Se inserta justo después del guard "web"
                 $updatedContent = preg_replace(
                     "/('web'\s*=>\s*\[\s*'driver'\s*=>\s*'session',\s*'provider'\s*=>\s*'users',\s*\],)/",
@@ -162,7 +161,7 @@ final class PublishAuthCommandService
             }
 
             // 3. Agregar el nuevo provider "api_users" sólo si no existe aún.
-            if (!preg_match("/'api_users'\s*=>\s*\[/", $updatedContent)) {
+            if (! preg_match("/'api_users'\s*=>\s*\[/", $updatedContent)) {
                 // Se inserta justo después del provider "users", forzando un salto de línea extra
                 $updatedContent = preg_replace(
                     "/('users'\s*=>\s*\[\s*'driver'\s*=>\s*'eloquent',\s*'model'\s*=>\s*env\(\'AUTH_MODEL\',\s*Src\\\\Shared\\\\Infrastructure\\\\Models\\\\User::class\),\s*\],)(\s*)/",

@@ -19,7 +19,7 @@ final class GetIconsUseCase
         // Ruta a la carpeta de iconos
         $iconPath = KALION_PATH . '/resources/views/components/icon';
 
-        if (!is_dir($iconPath)) {
+        if (! is_dir($iconPath)) {
             abort(404, "La carpeta de iconos no se encontró en: $iconPath");
         }
 
@@ -31,12 +31,12 @@ final class GetIconsUseCase
             ->map(function ($file) {
                 // Extraer el nombre del componente en kebab-case
                 $prefix = 'kal::icon.';
-                $name = Str::kebab($file->getBasename('.blade.php'));
+                $name   = Str::kebab($file->getBasename('.blade.php'));
                 return IconDto::fromArray(['name' => $prefix . $name, 'name_short' => $name]);
             });
 
         return ViewIconsDto::fromArray([
-            'icons' => $icons->toArray(),
+            'icons'           => $icons->toArray(),
             'show_name_short' => $showNameShort,
         ]);
     }

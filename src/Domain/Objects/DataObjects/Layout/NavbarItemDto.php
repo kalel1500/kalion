@@ -9,16 +9,16 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Abstracts\NavigationIt
 final class NavbarItemDto extends NavigationItem
 {
     public function __construct(
-        ?string           $code,
-        ?string           $icon,
-        ?string           $text,
-        public ?string    $time,
-        ?string           $tooltip,
-        ?string           $route_name,
-        ?bool             $is_post,
-        public ?bool      $is_theme_toggle,
-        public ?bool      $is_user,
-        public ?bool      $is_separator,
+        ?string            $code,
+        ?string            $icon,
+        ?string            $text,
+        public ?string     $time,
+        ?string            $tooltip,
+        ?string            $route_name,
+        ?bool              $is_post,
+        public ?bool       $is_theme_toggle,
+        public ?bool       $is_user,
+        public ?bool       $is_separator,
         ?NavbarDropdownDto $dropdown
     )
     {

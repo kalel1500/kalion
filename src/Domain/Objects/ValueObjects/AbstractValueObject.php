@@ -6,7 +6,6 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects;
 
 use JsonSerializable;
 use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractBoolVo;
 
 /**
  * @template T of AbstractValueObject
@@ -17,7 +16,7 @@ abstract class AbstractValueObject implements JsonSerializable
     protected const CLASS_NULLABLE = null;
 
     protected bool $nullable = true;
-    protected $value;
+    protected      $value;
 
     public static function from($value): static
     {
@@ -38,7 +37,7 @@ abstract class AbstractValueObject implements JsonSerializable
 
     public function isNotNull(): bool
     {
-        return !$this->isNull();
+        return ! $this->isNull();
     }
 
     public function toUppercase(): static
@@ -99,7 +98,7 @@ abstract class AbstractValueObject implements JsonSerializable
 
     protected function checkNullable($value): void
     {
-        if (!$this->nullable && is_null($value)) {
+        if (! $this->nullable && is_null($value)) {
             throw new InvalidValueException(sprintf('<%s> does not allow the value <%s>.', class_basename(static::class), 'null'));
         }
     }

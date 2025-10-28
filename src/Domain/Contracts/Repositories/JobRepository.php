@@ -10,6 +10,8 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\JobCollection;
 interface JobRepository
 {
     public function allExceptProcessing(): JobCollection;
+
     public function deleteAllExceptThoseNotInProcess(): void;
+
     public function allFailed(): FailedJobCollection;
 }

@@ -11,5 +11,7 @@ final class DisableReflection
 {
     public function __construct(
         public bool $useJsonSerialization = false,
-    ) {}
+    )
+    {
+    }
 }

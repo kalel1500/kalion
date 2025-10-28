@@ -13,7 +13,7 @@ final class Computed
 
     public function __construct(
         public readonly string|array $contexts = [],
-        public readonly bool $addOnFull = false,
+        public readonly bool         $addOnFull = false,
     )
     {
     }

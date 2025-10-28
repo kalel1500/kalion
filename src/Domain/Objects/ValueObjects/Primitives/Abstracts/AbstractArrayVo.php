@@ -54,7 +54,7 @@ abstract class AbstractArrayVo extends AbstractValueObject implements ArrayAcces
     {
 //        $pattern = "/^$key/";
 //        $keysToUnset = array_values(preg_grep($pattern, array_keys($this->value)));
-        $keysToUnset = array_keys(array_filter($this->value, fn ($item) => str_contains($item, $key), ARRAY_FILTER_USE_KEY));
+        $keysToUnset = array_keys(array_filter($this->value, fn($item) => str_contains($item, $key), ARRAY_FILTER_USE_KEY));
         foreach ($keysToUnset as $key) {
             unset($this->value[$key]);
         }
@@ -104,7 +104,7 @@ abstract class AbstractArrayVo extends AbstractValueObject implements ArrayAcces
 
     public function forget(string|array $keys): static
     {
-        foreach ((array) $keys as $key) {
+        foreach ((array)$keys as $key) {
             $this->offsetUnset($key);
         }
 
@@ -113,7 +113,7 @@ abstract class AbstractArrayVo extends AbstractValueObject implements ArrayAcces
 
     public function forgetLike(string|array $keys): static
     {
-        foreach ((array) $keys as $key) {
+        foreach ((array)$keys as $key) {
             $this->offsetUnsetLike($key);
         }
 

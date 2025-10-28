@@ -12,8 +12,8 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
 final class Cookie
 {
-    private string              $cookieName;
-    private int                 $cookieDuration;
+    private string               $cookieName;
+    private int                  $cookieDuration;
     private string               $cookieVersion;
     private CookiePreferencesDto $preferences;
     private ?HttpCookie          $cookie = null;
@@ -56,7 +56,7 @@ final class Cookie
     {
         $service     = static::new();
         $preferences = CookiePreferencesDto::fromJson(CookieFacade::get($service->cookieName));
-        if (!is_null($preferences)) {
+        if (! is_null($preferences)) {
             $service->setPreferences($preferences);
         }
         return $service;
@@ -80,7 +80,7 @@ final class Cookie
     public function createIfNotExist(Request $request): static
     {
         // Verificar que la cookie no exista
-        if (!$request->hasCookie($this->cookieName)) {
+        if (! $request->hasCookie($this->cookieName)) {
             // Crear la cookie usando CookieFacade::make
             return $this->create();
         }
@@ -90,7 +90,7 @@ final class Cookie
 
     public function queue(): static
     {
-        if (!is_null($this->cookie)) {
+        if (! is_null($this->cookie)) {
             // Poner la cookie en la cola
             CookieFacade::queue($this->cookie);
         }

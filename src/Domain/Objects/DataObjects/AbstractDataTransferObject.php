@@ -10,9 +10,9 @@ use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionUnionType;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
+use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
-use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
@@ -20,13 +20,13 @@ use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArrayable, Jsonable, JsonSerializable
 {
     private static array $reflectionDisabled = [];
-    private static array $reflectionCache = [];
+    private static array $reflectionCache    = [];
 
     private static function getParamType(\ReflectionParameter|\ReflectionProperty $param, bool $allowUnionTypes): array
     {
         $className = static::class;
-        $name = $param->getName();
-        $type = $param->getType();
+        $name      = $param->getName();
+        $type      = $param->getType();
 
         // Intersection type → no permitido
         if ($type instanceof ReflectionIntersectionType) {
@@ -35,7 +35,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
 
         // Union type → no permitido
         if ($type instanceof ReflectionUnionType) {
-            if (!$allowUnionTypes) {
+            if (! $allowUnionTypes) {
                 throw KalionReflectionException::unionTypeNotSupported($name, $className, '__construct');
             }
 
@@ -62,15 +62,15 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
     private static function getParamMeta(array $meta): array
     {
         $className = static::class;
-        $class = $meta['class'];
+        $class     = $meta['class'];
 
         $classIsNull = $class === null;
-        $isEnum      = !$classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
-        $isVo        = !$classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
-        $isArray     = !$classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
+        $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
+        $isVo        = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
+        $isArray     = ! $classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
 
         $makeMethod = match (true) {
-            $classIsNull => null,
+            $classIsNull     => null,
             $isEnum || $isVo => 'from',
             $isArray         => 'fromArray',
             default          => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
@@ -84,7 +84,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
 
         return [
             ...$meta,
-            'makeMethod' => $makeMethod,
+            'makeMethod'  => $makeMethod,
             'propsMethod' => $propsMethod,
             'propsIsEnum' => $isEnum,
         ];
@@ -95,15 +95,15 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         $className = static::class;
 
         // Cacheamos ya los parámetros procesados
-        if (!isset(self::$reflectionCache[$className])) {
+        if (! isset(self::$reflectionCache[$className])) {
             $reflection  = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $reflection->getConstructor();
 
-            if (!$constructor) {
+            if (! $constructor) {
                 throw KalionReflectionException::constructorMissing(static::class);
             }
 
-            $paramsMake = [];
+            $paramsMake  = [];
             $paramsProps = [];
 
             // Make
@@ -116,7 +116,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
                 $paramsProps[] = self::getParamType($param, true);
             }
 
-            $newParamsMake = [];
+            $newParamsMake  = [];
             $newParamsProps = [];
             foreach ($paramsMake as $meta) {
                 $newParamsMake[] = self::getParamMeta($meta);
@@ -126,7 +126,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             }
 
             self::$reflectionCache[$className] = [
-                'make' => $newParamsMake,
+                'make'  => $newParamsMake,
                 'props' => $newParamsProps,
             ];
         }
@@ -138,12 +138,12 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
     {
         $className = static::class;
 
-        if (!isset(self::$reflectionDisabled[$className])) {
+        if (! isset(self::$reflectionDisabled[$className])) {
             $reflection                           = new ReflectionClass($className); // REFLECTION - cached
             $attributes                           = $reflection->getAttributes(DisableReflection::class);
             self::$reflectionDisabled[$className] = [
-                'isDisabled' => !empty($attributes),
-                'useJsonSerialization' => !empty($attributes) && $attributes[0]->newInstance()->useJsonSerialization
+                'isDisabled'           => ! empty($attributes),
+                'useJsonSerialization' => ! empty($attributes) && $attributes[0]->newInstance()->useJsonSerialization
             ];
         }
 
@@ -169,9 +169,9 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $method = $meta['makeMethod'];
             try {
                 $value = match (true) {
-                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
-                    (!$allowsNull && $value === null && $isEnum)                                        => $class::$method(Kalion::ENUM_NULL_VALUE),
-                    default                                                                             => $class::$method($value),
+                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
+                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(Kalion::ENUM_NULL_VALUE),
+                    default                                                                            => $class::$method($value),
                 };
             } catch (\Throwable $th) {
                 throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, $value, $th->getMessage());
@@ -198,7 +198,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             return throw KalionReflectionException::disabledReflectionInDto(static::class);
         }
 
-        $props = [];
+        $props  = [];
         $params = self::resolveConstructorParams()['props'];
         foreach ($params as $meta) {
             $name   = $meta['name'];

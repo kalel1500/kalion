@@ -14,7 +14,7 @@ use Thehouseofel\Kalion\Infrastructure\Services\Date;
 final class ArrayTabulatorFiltersVo extends AbstractArrayVo
 {
     private const MAX_DAYS_TO_FILTER_RANGE = 50;
-    protected string $filterTimeName;
+    protected string  $filterTimeName;
     protected ?string $stringValue = null;
 
     public function __construct(
@@ -54,7 +54,7 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
 
     private function checkTypes(array|string|null $value): void
     {
-        if (!is_null($value) && !is_string($value) && !is_array($value)) {
+        if (! is_null($value) && ! is_string($value) && ! is_array($value)) {
             $type = gettype($value);
             throw new InvalidValueException(sprintf('<%s> espera un valor de tipo string, array o null. <%s> recibido', class_basename(static::class), $type));
         }
@@ -71,11 +71,11 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
 
         $isValid = true;
         foreach ($value as $item) {
-            if (!array_key_exists('field', $item)) $isValid = false;
-            if (!array_key_exists('type', $item)) $isValid = false;
-            if (!array_key_exists('value', $item)) $isValid = false;
+            if (! array_key_exists('field', $item)) $isValid = false;
+            if (! array_key_exists('type', $item)) $isValid = false;
+            if (! array_key_exists('value', $item)) $isValid = false;
         }
-        if (!$isValid) {
+        if (! $isValid) {
             throw new InvalidValueException(sprintf('<%s> espera que cada registro sea un array con los valores [field, type, value].', class_basename(static::class)));
         }
     }
@@ -129,10 +129,10 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
         $filterTime = collect($this->value)->where('field', $fieldName);
         if ($filterTime->isNotEmpty()) {
             $filterTime = $filterTime->first();
-            if (!array_key_exists('start', $filterTime['value'])) $isValid = false;
-            if (!array_key_exists('end', $filterTime['value'])) $isValid = false;
+            if (! array_key_exists('start', $filterTime['value'])) $isValid = false;
+            if (! array_key_exists('end', $filterTime['value'])) $isValid = false;
 
-            if (!$isValid) {
+            if (! $isValid) {
                 throw new InvalidValueException(sprintf('Si la clase <%s> contiene un filtro con fecha, se esperan los parámetros start y end.', class_basename(static::class)));
             }
             return $filterTime;
@@ -155,8 +155,8 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
             $monthNameStart = $dateStart?->getTranslatedMonthName();
             $monthNameEnd   = $dateEnd?->getTranslatedMonthName();
 
-            $partStart  = (!is_null($monthNameStart)) ? $monthNameStart : '';
-            $partEnd    = (!is_null($monthNameEnd)) ? "_$monthNameEnd" : '';
+            $partStart  = (! is_null($monthNameStart)) ? $monthNameStart : '';
+            $partEnd    = (! is_null($monthNameEnd)) ? "_$monthNameEnd" : '';
             $monthsName = ($monthNameStart === $monthNameEnd) ? $monthNameStart : $partStart . $partEnd;
 
             $name = "{$prefixExportName}_$monthsName.xlsx";

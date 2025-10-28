@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Abstrac
  */
 final class StatusPluckFieldVo extends AbstractEnumVo
 {
-    const id = 'id';
+    const id   = 'id';
     const name = 'name';
 
     protected ?array $permittedValues = [

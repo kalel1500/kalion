@@ -26,7 +26,7 @@ final class Date
         $isInValid = (is_null($date) || $date === '');
         $returnNow = $getNowIfNullRecived;
 
-        if ($isInValid && !$returnNow) {
+        if ($isInValid && ! $returnNow) {
             return null;
         }
 
@@ -124,7 +124,7 @@ final class Date
         dump($debugTitle);
         $init = Date::now();
         $callback();
-        $end = Date::now();
+        $end      = Date::now();
         $interval = $init->diff($end);
         dump($init->format('H:i:s'));
         dump($end->format('H:i:s'));

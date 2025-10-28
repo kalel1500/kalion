@@ -14,5 +14,6 @@ use Illuminate\Http\Request;
 interface Register
 {
     public function view(?Request $request = null): View;
+
     public function register(Request $request): RedirectResponse;
 }

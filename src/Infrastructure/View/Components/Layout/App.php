@@ -12,9 +12,9 @@ use Thehouseofel\Kalion\Infrastructure\Services\Cookie;
 class App extends Component
 {
     public string $title;
-    public bool $isFromPackage;
-    public bool $darkMode;
-    public bool $sidebarCollapsed;
+    public bool   $isFromPackage;
+    public bool   $darkMode;
+    public bool   $sidebarCollapsed;
     public string $dataTheme;
     public string $colorTheme;
 
@@ -23,10 +23,10 @@ class App extends Component
      */
     public function __construct(
         ?string $title = null,
-        bool $package = false
+        bool    $package = false
     )
     {
-        $this->title = $title ?? config('app.name');
+        $this->title         = $title ?? config('app.name');
         $this->isFromPackage = $package;
 
         $preferences            = Cookie::readOrNew()->preferences();

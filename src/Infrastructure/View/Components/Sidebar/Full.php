@@ -30,7 +30,7 @@ class Full extends Component
         $this->hasFooter    = $this->footer->countInt()->isBiggerThan(0);
 
         $this->items = $this->items->map(function (SidebarItemDto $item) {
-            if (!is_null($action = $item->counter_action)) {
+            if (! is_null($action = $item->counter_action)) {
                 $item->setCounter(LayoutData::$action());
             }
             return $item;

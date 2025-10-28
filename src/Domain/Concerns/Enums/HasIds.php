@@ -9,7 +9,8 @@ trait HasIds
     /**
      * Obtener el ID asociado a un valor del enum
      */
-    public function getId(): int {
+    public function getId(): int
+    {
         return static::ids()[$this->value];
     }
 
@@ -37,7 +38,8 @@ trait HasIds
     /**
      * Convertir todos los valores del enum en un array de strings
      */
-    public static function toArray(): array {
+    public static function toArray(): array
+    {
         return array_map(fn($case) => $case->value, static::cases());
     }
 }

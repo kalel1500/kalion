@@ -31,7 +31,7 @@ final class LogsClear extends Command
         $logPath = storage_path('logs');
 
         // Limpiar archivos de log
-        if (!File::exists($logPath)) {
+        if (! File::exists($logPath)) {
             $this->warn('La carpeta de logs no existe.');
             return;
         }

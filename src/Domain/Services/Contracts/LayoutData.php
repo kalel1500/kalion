@@ -10,6 +10,8 @@ use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
 interface LayoutData
 {
     public function getMessageCounter(): int;
+
     public function getNavbarNotifications(): NavbarItemCollection;
+
     public function getUserInfo(): ?UserInfoDto;
 }

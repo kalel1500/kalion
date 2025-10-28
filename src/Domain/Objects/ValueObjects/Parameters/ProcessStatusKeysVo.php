@@ -9,6 +9,6 @@ namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
  */
 enum ProcessStatusKeysVo: string
 {
-    case queueDisabled = 'queue_disabled';
+    case queueDisabled  = 'queue_disabled';
     case reverbDisabled = 'reverb_disabled';
 }

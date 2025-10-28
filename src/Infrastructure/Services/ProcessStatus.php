@@ -24,7 +24,7 @@ final class ProcessStatus
 
     private static function isDisabled(ProcessStatusKeysVo $key): bool
     {
-        return (bool) Cache::get($key->value, false);
+        return (bool)Cache::get($key->value, false);
     }
 
     public static function update(CheckableProcessVo $processName, bool $active): void

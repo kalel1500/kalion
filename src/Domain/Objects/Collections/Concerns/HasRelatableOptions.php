@@ -7,8 +7,8 @@ namespace Thehouseofel\Kalion\Domain\Objects\Collections\Concerns;
  */
 trait HasRelatableOptions
 {
-    protected string|array|null  $with   = null;
-    protected bool|string|null   $isFull = null;
+    protected string|array|null $with   = null;
+    protected bool|string|null  $isFull = null;
 
     public function setWith(string|array|null $with): static
     {

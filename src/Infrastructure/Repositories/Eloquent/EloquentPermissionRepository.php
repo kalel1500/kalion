@@ -15,7 +15,7 @@ class EloquentPermissionRepository implements PermissionRepository
 
     public function findByName(StringVo $permission): PermissionEntity
     {
-        $data =  $this->model::query()
+        $data = $this->model::query()
             ->with('roles')
             ->where('name', $permission->value())
             ->firstOrFail();

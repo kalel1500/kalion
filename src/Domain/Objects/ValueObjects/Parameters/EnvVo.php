@@ -17,13 +17,13 @@ final class EnvVo extends AbstractEnumVo
     const testing       = 'testing';
 
     protected ?array $permittedValues = [self::local, self::preproduction, self::production,];
-    private bool $isTesting = false;
+    private bool     $isTesting       = false;
 
     public function __construct(string $value)
     {
         if ($value === static::testing) {
             $this->isTesting = true;
-            $value = config('kalion.real_env_in_tests');
+            $value           = config('kalion.real_env_in_tests');
         }
         parent::__construct($value);
     }

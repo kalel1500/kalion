@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 
-use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\CurrentUser;
 use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\CurrentUser;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 /**
@@ -13,8 +13,8 @@ use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
  */
 class CurrentUserService implements CurrentUser
 {
-    private bool    $loadRoles;
-    private mixed   $userEntity = null;
+    private bool  $loadRoles;
+    private mixed $userEntity = null;
 
     public function __construct()
     {

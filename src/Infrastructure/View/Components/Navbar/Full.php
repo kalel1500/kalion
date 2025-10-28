@@ -34,7 +34,7 @@ class Full extends Component
         $this->items        = NavbarItemCollection::fromArray(config('kalion_links.navbar.items') ?? []);
 
         $this->items = $this->items->map(function (NavbarItemDto $item) {
-            if (!is_null($dropdown = $item->dropdown) && !is_null($action = $dropdown->get_data_action)) {
+            if (! is_null($dropdown = $item->dropdown) && ! is_null($action = $dropdown->get_data_action)) {
                 switch ($action) {
                     case 'getNavbarNotifications':
                         $dropdown->setItems(LayoutData::getNavbarNotifications());

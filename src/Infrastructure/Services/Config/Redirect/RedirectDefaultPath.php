@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect;
 
-use Illuminate\Http\Request;
-
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */

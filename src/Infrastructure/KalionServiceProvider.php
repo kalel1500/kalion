@@ -18,8 +18,8 @@ use Thehouseofel\Kalion\Infrastructure\Console\Commands\ClearAll;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\JobDispatch;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\LogsClear;
-use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
 use Thehouseofel\Kalion\Infrastructure\Console\Commands\ProcessCheck;
+use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
 use Thehouseofel\Kalion\Infrastructure\Http\Middleware\UserHasPermission;
 use Thehouseofel\Kalion\Infrastructure\Http\Middleware\UserHasRole;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
@@ -47,7 +47,7 @@ class KalionServiceProvider extends ServiceProvider
     public function register(): void
     {
         if (! defined('KALION_PATH')) {
-            define('KALION_PATH', realpath(__DIR__.'/../../'));
+            define('KALION_PATH', realpath(__DIR__ . '/../../'));
         }
 
         $this->registerSingletons();
@@ -70,9 +70,9 @@ class KalionServiceProvider extends ServiceProvider
     protected function mergeConfig(): void
     {
         // Configuración - Mergear la configuración del paquete con la configuración de la aplicación, solo hará falta publicar si queremos sobreescribir alguna configuración
-        if (!$this->app->configurationIsCached()) {
-            $this->mergeConfigFrom(KALION_PATH.'/config/kalion.php', 'kalion');
-            $this->mergeConfigFrom(KALION_PATH.'/config/kalion_links.php', 'kalion_links');
+        if (! $this->app->configurationIsCached()) {
+            $this->mergeConfigFrom(KALION_PATH . '/config/kalion.php', 'kalion');
+            $this->mergeConfigFrom(KALION_PATH . '/config/kalion_links.php', 'kalion_links');
         }
     }
 
@@ -113,7 +113,7 @@ class KalionServiceProvider extends ServiceProvider
 //                'prefix' => 'kalion',
                 'middleware' => 'web',
             ], function () {
-                $this->loadRoutesFrom(KALION_PATH.'/routes/web.php');
+                $this->loadRoutesFrom(KALION_PATH . '/routes/web.php');
             });
         }
     }
@@ -123,7 +123,7 @@ class KalionServiceProvider extends ServiceProvider
      */
     protected function registerResources(): void
     {
-        $this->loadViewsFrom(KALION_PATH.'/resources/views', 'kal');
+        $this->loadViewsFrom(KALION_PATH . '/resources/views', 'kal');
     }
 
     /**
@@ -131,7 +131,7 @@ class KalionServiceProvider extends ServiceProvider
      */
     protected function registerPublishing(): void
     {
-        if (!$this->app->runningInConsole()) return;
+        if (! $this->app->runningInConsole()) return;
 
         /*
          * -------------------
@@ -140,14 +140,14 @@ class KalionServiceProvider extends ServiceProvider
          */
 
         if (config('kalion.publish_migrations') && Version::laravelMin9()) {
-            $existNewMethod = method_exists($this, 'publishesMigrations');
+            $existNewMethod            = method_exists($this, 'publishesMigrations');
             $publishesMigrationsMethod = $existNewMethod
                 ? 'publishesMigrations'
                 : 'publishes';
 
             $this->{$publishesMigrationsMethod}([
-                KALION_PATH.'/database/migrations'                => database_path('migrations'),
-                KALION_PATH.'/stubs/generate/database/migrations' => database_path('migrations'),
+                KALION_PATH . '/database/migrations'                => database_path('migrations'),
+                KALION_PATH . '/stubs/generate/database/migrations' => database_path('migrations'),
             ], 'kalion-migrations');
 
             /*if (!$existNewMethod) {
@@ -175,12 +175,12 @@ class KalionServiceProvider extends ServiceProvider
 
         // Todas
         $this->publishes([
-            KALION_PATH.'/resources/views' => base_path('resources/views/vendor/kal'),
+            KALION_PATH . '/resources/views' => base_path('resources/views/vendor/kal'),
         ], 'kalion-views');
 
         // Publicar solo la vista "app.blade.php"
         $this->publishes([
-            KALION_PATH.'/resources/views/components/layout/app.blade.php' => base_path('resources/views/vendor/kal/components/layout/app.blade.php'),
+            KALION_PATH . '/resources/views/components/layout/app.blade.php' => base_path('resources/views/vendor/kal/components/layout/app.blade.php'),
         ], 'kalion-view-layout');
 
 
@@ -191,7 +191,7 @@ class KalionServiceProvider extends ServiceProvider
          */
 
         $this->publishes([
-            KALION_PATH.'/stubs/generate/components' => src_path('Shared/Infrastructure/View/Vendor/Kal/Components'),
+            KALION_PATH . '/stubs/generate/components' => src_path('Shared/Infrastructure/View/Vendor/Kal/Components'),
         ], 'kalion-components');
 
 
@@ -203,12 +203,12 @@ class KalionServiceProvider extends ServiceProvider
 
         // kalion.php
         $this->publishes([
-            KALION_PATH.'/config/kalion.php' => config_path('kalion.php'),
+            KALION_PATH . '/config/kalion.php' => config_path('kalion.php'),
         ], 'kalion-config');
 
         // kalion_links.php
         $this->publishes([
-            KALION_PATH.'/config/kalion_links.php' => config_path('kalion_links.php'),
+            KALION_PATH . '/config/kalion_links.php' => config_path('kalion_links.php'),
         ], 'kalion-config-links');
 
 
@@ -222,7 +222,7 @@ class KalionServiceProvider extends ServiceProvider
             ? $this->app->langPath('vendor/kalion')
             : $this->app->resourcePath('lang/vendor/kalion');
         $this->publishes([
-            KALION_PATH.'/lang' => $langPath,
+            KALION_PATH . '/lang' => $langPath,
         ], 'kalion-lang');
     }
 
@@ -251,8 +251,8 @@ class KalionServiceProvider extends ServiceProvider
             config('kalion.run_migrations') &&
             Version::laravelMin9()
         ) {
-            $this->loadMigrationsFrom(KALION_PATH.'/database/migrations');
-            $this->loadMigrationsFrom(KALION_PATH.'/stubs/generate/database/migrations');
+            $this->loadMigrationsFrom(KALION_PATH . '/database/migrations');
+            $this->loadMigrationsFrom(KALION_PATH . '/stubs/generate/database/migrations');
         }
     }
 
@@ -261,8 +261,8 @@ class KalionServiceProvider extends ServiceProvider
      */
     protected function registerTranslations(): void
     {
-        $this->loadTranslationsFrom(KALION_PATH.'/lang', 'k');
-        $this->loadJsonTranslationsFrom(KALION_PATH.'/lang');
+        $this->loadTranslationsFrom(KALION_PATH . '/lang', 'k');
+        $this->loadJsonTranslationsFrom(KALION_PATH . '/lang');
     }
 
     /**
@@ -270,14 +270,14 @@ class KalionServiceProvider extends ServiceProvider
      */
     protected function registerComponents(): void
     {
-        if (!Version::laravelMin9()) return;
+        if (! Version::laravelMin9()) return;
 
         // Registrar componentes con Clase
         Blade::componentNamespace('Thehouseofel\\Kalion\\Infrastructure\\View\\Components', 'kal');
         Blade::componentNamespace('Src\\Shared\\Infrastructure\\View\\Vendor\\Kal\\Components', 'kal2');
 
         // Registrar componentes anónimos
-        Blade::anonymousComponentPath(KALION_PATH.'/resources/views/components', 'kal');
+        Blade::anonymousComponentPath(KALION_PATH . '/resources/views/components', 'kal');
     }
 
     /**
@@ -327,7 +327,7 @@ class KalionServiceProvider extends ServiceProvider
             $router->pushMiddlewareToGroup('web', \Thehouseofel\Kalion\Infrastructure\Http\Middleware\AddPreferencesCookies::class);
 
             // Evitar el encriptado de las cookies de las preferencias del usuario
-            if (!empty(config('app.key'))) {
+            if (! empty(config('app.key'))) {
                 $this->app->afterResolving(EncryptCookies::class, function (EncryptCookies $middleware) {
                     $middleware->disableFor(config('kalion.cookie.name')); // laravel_kalion_user_preferences
                 });
@@ -362,10 +362,9 @@ class KalionServiceProvider extends ServiceProvider
     }
 
 
-
     private function updateNameOfMigrationsIfExist(): void
     {
-        $filesystem = new Filesystem();
+        $filesystem     = new Filesystem();
         $migrationsPath = database_path('migrations');
 
         // Lista de nombres de migraciones que quieres renombrar (sin timestamp)
@@ -383,7 +382,7 @@ class KalionServiceProvider extends ServiceProvider
         });
 
         // Salir si no hay migraciones publicadas
-        if (!$migrationsExist) return;
+        if (! $migrationsExist) return;
 
         $timestamp = now(); // Iniciar con el timestamp actual
 

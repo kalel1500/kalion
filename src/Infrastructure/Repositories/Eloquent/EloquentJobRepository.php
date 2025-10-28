@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Infrastructure\Models\Jobs;
 
 class EloquentJobRepository implements JobRepository
 {
-    protected string $model = Jobs::class;
+    protected string $model           = Jobs::class;
     protected string $modelFailedJobs = FailedJob::class;
 
     public function allExceptProcessing(): JobCollection

@@ -30,8 +30,8 @@ final class JobDispatch extends Command
     public function handle()
     {
         // Obtener parámetros
-        $jobName = $this->argument('job');
-        $params = $this->option('p');
+        $jobName    = $this->argument('job');
+        $params     = $this->option('p');
         $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
         $kalionPath = $vendorPath . 'kalel1500' . DIRECTORY_SEPARATOR . 'kalion';
 
@@ -39,7 +39,7 @@ final class JobDispatch extends Command
         $this->info('Escaneando Jobs...');
 
         // Obtener las rutas de todos los paquetes definidos en la configuración
-        if (!is_null($packages = config('kalion.packages_to_scan_for_jobs'))) {
+        if (! is_null($packages = config('kalion.packages_to_scan_for_jobs'))) {
             $packages = is_array($packages) ? $packages : explode(';', $packages);
             $packages = array_map(fn($item) => normalize_path($vendorPath . $item), $packages);
         }
@@ -50,15 +50,15 @@ final class JobDispatch extends Command
             $kalionPath, // Escanear el propio paquete "kalion"
             ...$packages, // Escanear los paquetes configurados en el ".env"
         ];
-        $pathsToScan_app = [
+        $pathsToScan_app      = [
             src_path(), // Escanear la carpeta "src" de la propia aplicación
             app_path(), // Escanear la carpeta "app" de la propia aplicación
         ];
 
         // Escanear todas las carpetas "Job" dentro las rutas definidas
         $paths = array_merge(
-            array_merge(...array_map(fn ($path) => $this->findJobDirsOnPath($path, true), $pathsToScan_packages)),
-            array_merge(...array_map(fn ($path) => $this->findJobDirsOnPath($path), $pathsToScan_app)),
+            array_merge(...array_map(fn($path) => $this->findJobDirsOnPath($path, true), $pathsToScan_packages)),
+            array_merge(...array_map(fn($path) => $this->findJobDirsOnPath($path), $pathsToScan_app)),
         );
 
         // Buscar todos los Jobs que coincidan con el Job recibido [$this->argument('job')] dentro de las carpetas "escaneadas"
@@ -67,7 +67,7 @@ final class JobDispatch extends Command
             $dirs = scandir($path);
             foreach ($dirs as $dir) {
                 // Saltar los primeros elementos que devuelve la función "scandir()"
-                if (in_array($dir, [".",".."])) continue;
+                if (in_array($dir, [".", ".."])) continue;
 
                 // Comprobar que el item actual no sea un archivo
                 $fullPathDir = $path . DIRECTORY_SEPARATOR . $dir;
@@ -77,7 +77,7 @@ final class JobDispatch extends Command
                 $relativePathDir = str_replace(base_path(), '', $fullPathDir);
 
                 // Guardar el Job si no está ya guardado y coincide con el job Recibido [$this->argument('job')]
-                if (!in_array($relativePathDir, $jobs) && str_contains($dir, $jobName)) {
+                if (! in_array($relativePathDir, $jobs) && str_contains($dir, $jobName)) {
                     $jobs[] = $relativePathDir;
                 }
             }
@@ -106,7 +106,7 @@ final class JobDispatch extends Command
             return;
         }
 
-        if (!class_exists($class)) {
+        if (! class_exists($class)) {
             $this->warn(sprintf("No se ha encontrado la clase %s", $class));
             return;
         }
@@ -134,7 +134,7 @@ final class JobDispatch extends Command
         foreach ($dirs as $item) {
 
             // Saltar los primeros elementos que devuelve la función "scandir()"
-            if (in_array($item, [".",".."])) continue;
+            if (in_array($item, [".", ".."])) continue;
 
             // Saltar las carpetas ocultas
             if (str_starts_with($item, '.')) continue;
@@ -150,7 +150,7 @@ final class JobDispatch extends Command
             }
 
             // Comprobar si existe la carpeta "Jobs" en la ruta actual. En ese caso guardamos la ruta en el array "$pathsWithJobs"
-            $fullPathJobs = $fullPathCurrent .DIRECTORY_SEPARATOR . 'Jobs';
+            $fullPathJobs = $fullPathCurrent . DIRECTORY_SEPARATOR . 'Jobs';
             if (is_dir($fullPathJobs)) {
                 $pathsWithJobs[] = normalize_path($fullPathJobs);
                 continue;

@@ -28,7 +28,7 @@ abstract class AbstractId extends AbstractIntVo
     {
         parent::ensureIsValidValue($value);
 
-        if (!is_null($value) && $value < $this->minimumValueForId) {
+        if (! is_null($value) && $value < $this->minimumValueForId) {
             throw new InvalidValueException(sprintf('<%s> does not allow the value <%s>.', class_basename(static::class), $value));
         }
     }

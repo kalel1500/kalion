@@ -33,7 +33,7 @@ abstract class AbstractCollectionDto extends AbstractCollectionBase implements M
 
         /** @var AbstractDataTransferObject $valueClass */
         $valueClass = static::resolveItemType();
-        $res = [];
+        $res        = [];
         foreach ($data as $key => $value) {
             $res[$key] = ($value instanceof $valueClass) ? $value : $valueClass::fromArray($value);
         }

@@ -13,6 +13,6 @@ class NeverCalledException extends KalionLogicException
 
     public function __construct(?string $message = null, ?Throwable $previous = null)
     {
-        parent::__construct('INTERNAL ERROR: '.$message, $previous);
+        parent::__construct('INTERNAL ERROR: ' . $message, $previous);
     }
 }

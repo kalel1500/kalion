@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Infrastructure\Services;
 
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\LoginFieldDto;
-use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath;
 use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin;
+use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath;
 
 final class Kalion
 {
@@ -35,14 +35,14 @@ final class Kalion
         if (! config()->has('auth.guards.api')) {
             config([
                 'auth.guards.api' => [
-                    'driver' => 'session',
+                    'driver'   => 'session',
                     'provider' => 'api_users',
                 ],
             ]);
         }
 
         $authConfigPath = config_path('auth.php');
-        $defaultLine = "'model' => env('AUTH_MODEL', App\\Models\\User::class),";
+        $defaultLine    = "'model' => env('AUTH_MODEL', App\\Models\\User::class),";
         if (file_exists($authConfigPath)) {
             $authConfigContents = file_get_contents($authConfigPath);
             if (str_contains($authConfigContents, $defaultLine)) {
@@ -56,7 +56,7 @@ final class Kalion
             config([
                 'auth.providers.api_users' => [
                     'driver' => 'eloquent',
-                    'model' => env('AUTH_MODEL_API', \Thehouseofel\Kalion\Infrastructure\Models\ApiUser::class),
+                    'model'  => env('AUTH_MODEL_API', \Thehouseofel\Kalion\Infrastructure\Models\ApiUser::class),
                 ],
             ]);
         }
@@ -71,9 +71,9 @@ final class Kalion
 
     public static function getLoginFieldData(string $guard = null): LoginFieldDto
     {
-        $defaultField = config('kalion.auth.fields.'.get_guard($guard));
-        $fields = config('kalion.auth.available_fields');
-        $field = $fields[$defaultField] ?? $fields['email'];
+        $defaultField = config('kalion.auth.fields.' . get_guard($guard));
+        $fields       = config('kalion.auth.available_fields');
+        $field        = $fields[$defaultField] ?? $fields['email'];
         return LoginFieldDto::fromArray([
             'name'        => $field['name'],
             'label'       => $field['label'],
@@ -89,23 +89,23 @@ final class Kalion
 
     public static function broadcastingDisabled(): bool
     {
-        return !Kalion::broadcastingEnabled();
+        return ! Kalion::broadcastingEnabled();
     }
 
     public static function getClassUserModel(string $guard = null): string // |\Illuminate\Foundation\Auth\User
     {
-        $provider = config('auth.guards.'.get_guard($guard).'.provider');
-        return config('auth.providers.'.$provider.'.model');
+        $provider = config('auth.guards.' . get_guard($guard) . '.provider');
+        return config('auth.providers.' . $provider . '.model');
     }
 
     public static function getClassUserEntity(string $guard = null): string
     {
-        return config('kalion.auth.entities.'.get_guard($guard));
+        return config('kalion.auth.entities.' . get_guard($guard));
     }
 
     public static function getClassUserRepository(string $guard = null): string
     {
-        return config('kalion.auth.repositories.'.get_guard($guard));
+        return config('kalion.auth.repositories.' . get_guard($guard));
     }
 
     public static function getDefaultAuthGuard(): string
@@ -145,13 +145,13 @@ final class Kalion
 
     public static function redirectAfterLoginTo(callable|string $redirect): void
     {
-        $redirect = is_string($redirect) ? fn () => $redirect : $redirect;
+        $redirect = is_string($redirect) ? fn() => $redirect : $redirect;
         RedirectAfterLogin::redirectUsing($redirect);
     }
 
     public static function redirectDefaultPathTo(callable|string $path): void
     {
-        $path = is_string($path) ? fn () => $path : $path;
+        $path = is_string($path) ? fn() => $path : $path;
         RedirectDefaultPath::redirectUsing($path);
     }
 }

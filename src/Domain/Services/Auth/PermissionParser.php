@@ -61,7 +61,7 @@ final class PermissionParser
 
     private function normalizeArrayParams($param): array
     {
-        if (is_null($param) || (is_array($param) && empty(array_filter($param, fn($p) => !is_null($p))))) {
+        if (is_null($param) || (is_array($param) && empty(array_filter($param, fn($p) => ! is_null($p))))) {
             return [];
         }
 

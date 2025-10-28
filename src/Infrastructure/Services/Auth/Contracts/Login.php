@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 interface Login
 {
     public function view(?Request $request = null): View;
+
     public function login(Request $request): RedirectResponse;
+
     public function logout(Request $request): RedirectResponse;
 }

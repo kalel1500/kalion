@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Login;
 use Thehouseofel\Kalion\Infrastructure\Facades\RedirectAfterLogin;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Login;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 /**

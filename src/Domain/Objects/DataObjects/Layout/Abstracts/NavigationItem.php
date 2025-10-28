@@ -23,7 +23,7 @@ abstract class NavigationItem extends AbstractDataTransferObject
         public NavbarDropdownDto|SidebarItemCollection|null $dropdown,
     )
     {
-        $this->hasDropdown = !is_null($dropdown);
+        $this->hasDropdown = ! is_null($dropdown);
     }
 
     public function getCode(): string

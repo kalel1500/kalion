@@ -27,7 +27,7 @@ final class ProcessChecker
             '-NonInteractive',
             '-Command',
             '"Get-CimInstance Win32_Process -Filter \\"Name=\'php.exe\'\\" |',
-            'Where-Object { $_.CommandLine -match \'(?i)artisan\' -and $_.CommandLine -match ([regex]::Escape(\''.$service->translate().'\')) } |',
+            'Where-Object { $_.CommandLine -match \'(?i)artisan\' -and $_.CommandLine -match ([regex]::Escape(\'' . $service->translate() . '\')) } |',
             'Select-Object -ExpandProperty ProcessId | Out-String"',
         ];
 
@@ -39,7 +39,7 @@ final class ProcessChecker
     {
         // Linux/macOS: ps -> grep php -> grep artisan -> grep servicio (literal, -F) -> solo PID
         // Nota: el encadenado evita que 'grep' se detecte a sí mismo.
-        $bash = 'ps -eo pid,args --no-headers | grep -i -- "php" | grep -i -- "artisan" | grep -F -i -- "'.$service->translate().'" | awk \'{print $1}\'';
+        $bash = 'ps -eo pid,args --no-headers | grep -i -- "php" | grep -i -- "artisan" | grep -F -i -- "' . $service->translate() . '" | awk \'{print $1}\'';
 
         // Ejecutamos en bash -lc para respetar tuberías y variables
         return 'bash -lc ' . escapeshellarg($bash);
@@ -78,14 +78,14 @@ final class ProcessChecker
 
     public function withCache(): static
     {
-        $clone = clone $this;
+        $clone              = clone $this;
         $clone->cacheStatus = true;
         return $clone;
     }
 
     public function withoutCache(): static
     {
-        $clone = clone $this;
+        $clone              = clone $this;
         $clone->cacheStatus = false;
         return $clone;
     }
@@ -118,7 +118,7 @@ final class ProcessChecker
      */
     public function assert(CheckableProcessVo $processName, string $errorMessage = null): void
     {
-        if(! $this->isRunning($processName)) {
+        if (! $this->isRunning($processName)) {
             throw ProcessException::isNotRunningWithOptionalMessage($processName->value, $errorMessage);
         }
     }

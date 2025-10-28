@@ -11,8 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
+use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
 use Throwable;
 
@@ -37,7 +37,7 @@ final class ExceptionHandler
                 }
 
                 $context = ExceptionContextDto::from($exception);
-                $isJson = self::shouldRenderJson($request);
+                $isJson  = self::shouldRenderJson($request);
                 $isDebug = debug_is_active();
 
                 // Si la respuesta esperada es JSON
@@ -55,7 +55,7 @@ final class ExceptionHandler
 
             // Renderizar nuestras excepciones de dominio
             $exceptions->render(function (KalionExceptionInterface $e, Request $request) {
-                $context = $e->getContext();
+                $context         = $e->getContext();
                 $isDebugInactive = ! debug_is_active();
 
                 // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
@@ -68,7 +68,7 @@ final class ExceptionHandler
                  *  - El debug está desactivado
                  *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "false"
                  */
-                if ($isDebugInactive || ($e instanceof KalionHttpException && !$e::SHOULD_RENDER_TRACE)) {
+                if ($isDebugInactive || ($e instanceof KalionHttpException && ! $e::SHOULD_RENDER_TRACE)) {
                     return self::renderHtmlCustom($context);
                 }
 

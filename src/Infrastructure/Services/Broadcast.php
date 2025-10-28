@@ -28,7 +28,7 @@ final class Broadcast
 
     public static function annotateResponse(JsonResponse $response, ResponseBroadcastDto $broadcast): JsonResponse
     {
-        $data = $response->getData(true);
+        $data                         = $response->getData(true);
         $data['data']['broadcasting'] = $broadcast->toArray();
         $response->setData($data);
         return $response;

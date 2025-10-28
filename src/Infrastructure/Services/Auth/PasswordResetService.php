@@ -7,8 +7,8 @@ namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\PasswordReset;
 use Thehouseofel\Kalion\Domain\Exceptions\FeatureUnavailableException;
+use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\PasswordReset;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

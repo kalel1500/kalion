@@ -14,19 +14,19 @@ final class TailwindClassFilter
     use Instantiable;
 
     protected array $specials = [
-        'position' => [
+        'position'        => [
             'static',
             'fixed',
             'absolute',
             'relative',
             'sticky',
         ],
-        'visibility' => [
+        'visibility'      => [
             'visible',
             'invisible',
             'collapse',
         ],
-        'display' => [
+        'display'         => [
             'inline',
             'block',
             'inline-block',
@@ -57,18 +57,18 @@ final class TailwindClassFilter
             'line-through',
             'no-underline',
         ],
-        'text_transform' => [
+        'text_transform'  => [
             'uppercase',
             'lowercase',
             'capitalize',
             'normal-case',
         ],
-        'text_overflow' => [
+        'text_overflow'   => [
             'truncate',
             'text-ellipsis',
             'text-clip',
         ],
-        'text_align' => [
+        'text_align'      => [
             'text-left',
             'text-center',
             'text-right',
@@ -91,7 +91,8 @@ final class TailwindClassFilter
         'text-white'       => 3,
     ];
 
-    public function __construct(array $specials = null, array $groups = null) {
+    public function __construct(array $specials = null, array $groups = null)
+    {
         if ($specials !== null) {
             $this->specials = $specials;
         }
@@ -135,21 +136,21 @@ final class TailwindClassFilter
     protected function shouldKeepClass(string $default_class, array $custom_array): bool
     {
         $defaultSpecial = $this->getSpecialGroup($default_class);
-        $parsed = $this->parseClass($default_class);
+        $parsed         = $this->parseClass($default_class);
 
         // Filtrar las clases custom relevantes según si la default tiene variante o no.
-        $filteredCustom = array_filter($custom_array, function($custom_class) use ($parsed) {
+        $filteredCustom = array_filter($custom_array, function ($custom_class) use ($parsed) {
             $customHasVariant = str_contains($custom_class, ':');
             if ($parsed['variant'] !== '') {
                 // Si la clase default tiene variante, consideramos solo las custom que tengan la misma variante.
                 return $customHasVariant && (str_starts_with($custom_class, $parsed['variant'] . ':'));
             }
             // Si no tiene variante, tomamos solo las custom sin variante.
-            return !$customHasVariant;
+            return ! $customHasVariant;
         });
 
         foreach ($filteredCustom as $custom_class) {
-            $customParsed = $this->parseClass($custom_class);
+            $customParsed  = $this->parseClass($custom_class);
             $customSpecial = $this->getSpecialGroup($custom_class);
             if ($defaultSpecial !== false) {
                 // Para clases especiales, se elimina si en custom aparece alguna clase del mismo grupo.
@@ -202,11 +203,11 @@ final class TailwindClassFilter
             list($variant, $base) = explode(':', $class, 2);
         } else {
             $variant = '';
-            $base = $class;
+            $base    = $class;
         }
 
         // Obtener el prefijo (lo que está antes del primer guión).
-        $parts = explode('-', $base);
+        $parts  = explode('-', $base);
         $prefix = $parts[0];
 
         // Si la base coincide exactamente con una key en $groups, se usa ese valor.

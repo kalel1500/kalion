@@ -14,5 +14,6 @@ use Illuminate\Http\Request;
 interface PasswordReset
 {
     public function view(?Request $request = null): View;
+
     public function reset(Request $request): RedirectResponse;
 }

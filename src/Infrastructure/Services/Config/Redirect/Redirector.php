@@ -61,7 +61,7 @@ abstract class Redirector
 
         foreach (['dashboard', 'home', 'welcome'] as $uri) {
             if (isset($routes[$uri])) {
-                return '/'.$uri;
+                return '/' . $uri;
             }
         }
 

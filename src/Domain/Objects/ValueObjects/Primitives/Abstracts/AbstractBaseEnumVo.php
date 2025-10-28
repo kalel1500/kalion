@@ -40,8 +40,8 @@ abstract class AbstractBaseEnumVo extends AbstractValueObject
 
         $permittedValues               = $this->getPermittedValues();
         $failPermittedValuesValidation = ($this->caseSensitive)
-            ? (!in_array($value, $permittedValues))
-            : (!in_array(strtolower($value), array_map('strtolower', $permittedValues)));
+            ? (! in_array($value, $permittedValues))
+            : (! in_array(strtolower($value), array_map('strtolower', $permittedValues)));
 
         if ($failPermittedValuesValidation) {
             $permittedValuesString = '[' . implode(', ', $permittedValues) . ']';
@@ -56,7 +56,7 @@ abstract class AbstractBaseEnumVo extends AbstractValueObject
 
     public function translatedValue(bool $ucfirst = false): ?string
     {
-        if (!is_array($this->translatedValues)) {
+        if (! is_array($this->translatedValues)) {
             throw new RequiredDefinitionException(sprintf('<%s> necesita definir la variable <$translatedValues>', class_basename(static::class)));
         }
         if ($this->isNull()) {

@@ -32,12 +32,12 @@ abstract class AbstractCollectionVo extends AbstractCollectionBase
         if (is_null($data)) return null;
 
         $valueClass = static::resolveItemType();
-        $res = [];
+        $res        = [];
         foreach ($data as $key => $value) {
             if ($value instanceof $valueClass) {
                 $res[$key] = $value;
             } else {
-                if (!is_null($valueModifierCallback)) {
+                if (! is_null($valueModifierCallback)) {
                     $value = $valueModifierCallback($value);
                 }
                 $res[$key] = new $valueClass($value);

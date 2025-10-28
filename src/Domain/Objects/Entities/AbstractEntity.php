@@ -6,14 +6,14 @@ namespace Thehouseofel\Kalion\Domain\Objects\Entities;
 
 use JsonSerializable;
 use ReflectionClass;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\Computed;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
+use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
-use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
+use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
-use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\Computed;
+use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractJsonVo;
@@ -30,21 +30,21 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
     protected static bool         $incrementing   = true;
     protected static JsonMethodVo $jsonMethod     = JsonMethodVo::encodedValue;
 
-    protected ?array           $with           = null;
+    protected ?array           $with      = null;
     protected bool|string|null $isFull;
     protected array            $originalArray;
-    protected array            $relations      = [];
-    protected array            $computed       = [];
+    protected array            $relations = [];
+    protected array            $computed  = [];
 
     private static function resolveConstructorParams(): array
     {
         $className = static::class;
 
-        if (!isset(self::$constructCache[$className])) {
-            $ref  = new ReflectionClass($className); // REFLECTION - cached
+        if (! isset(self::$constructCache[$className])) {
+            $ref         = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $ref->getConstructor();
 
-            if (!$constructor) {
+            if (! $constructor) {
                 throw KalionReflectionException::constructorMissing($className);
             }
 
@@ -65,13 +65,13 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                         callback: fn($t) => $t->getName(),
                         array   : array_filter(
                             array   : $type->getTypes(),
-                            callback: fn($t) => $t instanceof \ReflectionNamedType && !$t->isBuiltin()
+                            callback: fn($t) => $t instanceof \ReflectionNamedType && ! $t->isBuiltin()
                         )
                     );
 
                     $idClass = null;
                     foreach ($classNames as $class) {
-                        if (is_class_id($class) && !str_ends_with($class, 'NullVo')) {
+                        if (is_class_id($class) && ! str_ends_with($class, 'NullVo')) {
                             $idClass = $class;
                             break;
                         }
@@ -80,7 +80,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     $params[] = [
                         'name'       => $name,
                         'class'      => $idClass, // null si no aplica
-                        'isId'       => (bool) $idClass,
+                        'isId'       => (bool)$idClass,
                         'allowsNull' => $type->allowsNull(),
                     ];
                     continue;
@@ -91,7 +91,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     $params[] = [
                         'name'       => $name,
                         'class'      => $type->isBuiltin() ? null : $type->getName(),
-                        'isId'  => false, // para single class → usamos ::new || is_class_id($class)
+                        'isId'       => false, // para single class → usamos ::new || is_class_id($class)
                         'allowsNull' => $type->allowsNull(),
                     ];
                     continue;
@@ -112,8 +112,8 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $isId  = $meta['isId'];
 
                 $classIsNull = $class === null;
-                $isEnum      = !$classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
-                $isVo        = !$classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
+                $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
+                $isVo        = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
 
                 $makeMethod = match (true) {
                     $classIsNull     => null,
@@ -129,7 +129,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
                 $newParams[] = [
                     ...$meta,
-                    'makeMethod' => $makeMethod,
+                    'makeMethod'  => $makeMethod,
                     'propsMethod' => $propsMethod,
                     'propsIsEnum' => $isEnum,
                 ];
@@ -155,9 +155,9 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
             try {
                 $value = match (true) {
-                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class)  => $value,
-                    (!$allowsNull && $value === null && $isEnum)                                        => $class::$method(Kalion::ENUM_NULL_VALUE),
-                    default                                                                             => $class::$method($value),
+                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
+                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(Kalion::ENUM_NULL_VALUE),
+                    default                                                                            => $class::$method($value),
                 };
             } catch (\Throwable $th) {
                 throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, $value, $th->getMessage());
@@ -240,7 +240,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         $className = static::class;
 
         // Cachear los métodos con #[Computed]
-        if (!isset(self::$computedCache[$className])) {
+        if (! isset(self::$computedCache[$className])) {
             $ref    = new ReflectionClass($this); // REFLECTION - cached
             $cached = [];
 
@@ -253,15 +253,15 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
                 $returnType = $method->getReturnType();
 
-                if (!($returnType instanceof \ReflectionNamedType)) {
+                if (! ($returnType instanceof \ReflectionNamedType)) {
                     throw KalionReflectionException::wrongComputedReturnType();
                 }
 
                 $returnClass = $returnType->getName();
-                $propMethod = match (true) {
-                    is_a($returnClass, class: AbstractJsonVo::class,      allow_string: true) => static::$jsonMethod->value,
+                $propMethod  = match (true) {
+                    is_a($returnClass, class: AbstractJsonVo::class, allow_string: true)      => static::$jsonMethod->value,
                     is_a($returnClass, class: AbstractValueObject::class, allow_string: true) => 'value',
-                    is_a($returnClass, class: ArrayConvertible::class,    allow_string: true) => 'toArray',
+                    is_a($returnClass, class: ArrayConvertible::class, allow_string: true)    => 'toArray',
                     default                                                                   => null,
                 };
 
@@ -286,13 +286,13 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $contexts  = $meta['contexts'];
             $addOnFull = $meta['addOnFull'];
 
-            if (!$this->contextMatch($context, $contexts, $addOnFull)) {
+            if (! $this->contextMatch($context, $contexts, $addOnFull)) {
                 continue;
             }
 
-            $name = $meta['name'];
-            $method = $meta['method'];
-            $value = $this->{$name}();
+            $name          = $meta['name'];
+            $method        = $meta['method'];
+            $value         = $this->{$name}();
             $result[$name] = match (true) {
                 $meta['isEnum']  => $value->value,
                 $method !== null => $value->{$method}(),
@@ -321,7 +321,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         }
 
         // IS_CONTEXT: si el contexto está en contexts (independiente de addOnFull)
-        if (!$isFull && in_array($selectedContext, $attributeContexts)) {
+        if (! $isFull && in_array($selectedContext, $attributeContexts)) {
             return true;
         }
 
@@ -331,10 +331,10 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
     public function toArrayDb($keepId = false): array
     {
         $array = $this->props();
-        if (!is_null(static::$databaseFields)) {
+        if (! is_null(static::$databaseFields)) {
             return array_keep($array, static::$databaseFields);
         }
-        if (static::$incrementing && !$keepId) unset($array[static::$primaryKey]);
+        if (static::$incrementing && ! $keepId) unset($array[static::$primaryKey]);
         unset($array['created_at']);
         unset($array['updated_at']);
         return $array;
@@ -344,7 +344,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
     {
         $arrayValues = $fromArrayDb ? $this->toArrayDb() : $this->props();
         foreach ($arrayValues as $key => $value) {
-            if (!in_array($key, $fields)) unset($arrayValues[$key]);
+            if (! in_array($key, $fields)) unset($arrayValues[$key]);
         }
         return $arrayValues;
     }
@@ -366,9 +366,9 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
     public function with(string|array|null $relations): static
     {
-        if (!$relations) return $this;
+        if (! $relations) return $this;
 
-        $relations      = is_array($relations) ? $relations : [$relations];
+        $relations       = is_array($relations) ? $relations : [$relations];
         $entityRelations = [];
 
         foreach ($relations as $key => $segment) {
@@ -378,7 +378,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $currentSegment = ($isKey = is_string($key)) ? $key : $segment;
 
             $currentRels = explode('.', $currentSegment);
-            $entityRel       = $currentRels[0];
+            $entityRel   = $currentRels[0];
             unset($currentRels[0]);
             $hasRelsAfterPoint = ($relsAfterPoint = implode('.', $currentRels)) !== '';
 
@@ -400,7 +400,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
     private function setCurrentRelation(string $relation): void
     {
         $relationName = str_snake($relation);
-        if (!array_key_exists($relationName, $this->originalArray)) {
+        if (! array_key_exists($relationName, $this->originalArray)) {
             throw EntityRelationException::relationNotLoadedInEloquentResult($relationName, static::class);
         }
         $relationData = $this->originalArray[$relationName];
@@ -442,7 +442,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
     protected function getRelation()
     {
         $name = debug_backtrace()[1]['function'];
-        if (!array_key_exists($name, $this->relations)) {
+        if (! array_key_exists($name, $this->relations)) {
             throw EntityRelationException::relationNotSetInEntitySetup($name, static::class);
         }
         return $this->relations[$name];

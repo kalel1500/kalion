@@ -14,11 +14,18 @@ use Illuminate\Http\Request;
 interface Authentication
 {
     public function user(string $guard = null);
+
     public function viewLogin(Request $request = null): View;
+
     public function login(Request $request): RedirectResponse;
+
     public function logout(Request $request): RedirectResponse;
+
     public function viewRegister(Request $request = null): View;
+
     public function register(Request $request): RedirectResponse;
+
     public function viewPasswordReset(Request $request = null): View;
+
     public function reset(Request $request): RedirectResponse;
 }
