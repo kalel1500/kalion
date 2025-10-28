@@ -12,11 +12,6 @@ class BoolVo extends AbstractBoolVo
 
     public function value(): bool
     {
-        return (bool)$this->value;
-    }
-
-    public function valueInt(): int
-    {
-        return (int)$this->value();
+        return $this->value;
     }
 }

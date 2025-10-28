@@ -22,12 +22,7 @@ abstract class AbstractBoolVo extends AbstractValueObject
 
     public function value(): ?bool
     {
-        return $this->isNullReceived() ? null : (bool)$this->value;
-    }
-
-    public function valueInt(): ?int
-    {
-        return $this->isNull() ? null : (int)$this->value();
+        return $this->value;
     }
 
     public function isTrue(): bool
