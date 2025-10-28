@@ -1,6 +1,25 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.37.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.37.1-beta.0...master)
+
+## [v0.37.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.37.0-beta.0...v0.37.1-beta.0) - 2025-10-28
+
+### Changed
+
+* (refactor) Se han eliminado los tipos de retorno `T` de los métodos `toNull()` y `toNotNull()` de la clase `AbstractValueObject`
+* Se ha mejorado el método `doAssertItemType()` (antiguo `validateItem()`) de la clase `AbstractCollectionBase`:
+  * Se ha mejorado el mensaje de error que se lanza cuando el tipo no coincide (usando el `debug_backtrace()` para obtener de donde se llama el método).
+  * (refactor) Se ha mejorado el codigo usando el `get_debug_type()` para obtener la clase sin necesidad de comprobar si es un objeto.
+* Nueva funcionalidad para poder extender la validacion de tipos de las colecciones sobreescribiendo el método `assertResolvedItemType()`:
+  * Se ha renombrado el método `validateItems()` a `assertItemsTypeResolved()`.
+  * Se ha renombrado el método `validateItem()` a `assertItemTypeResolved()`.
+  * Se ha creado el nuevo `assertItemType()` que recibe `$expectedType` como segundo parametro.
+  * Se ha creado el nuevo `doAssertItemType()` que ahora es el que tiene la logica y los otros dos lo llaman a él.
+
+### Removed
+
+* (warn) Se ha eliminado la clase `MyExportStyles` que servía como helper para usar el paquete `maatwebsite/excel`
+* (warn) Se ha eliminado el método `toArrayExport()` de la clase `AbstractCollectionEntity`. También se ha eliminado la interfaz `Exportable`
 
 ## [v0.37.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.36.0-beta.0...v0.37.0-beta.0) - 2025-10-22
 
