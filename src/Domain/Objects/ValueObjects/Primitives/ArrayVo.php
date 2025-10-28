@@ -8,15 +8,15 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\Ab
 
 class ArrayVo extends AbstractArrayVo
 {
+    /**
+     * @var array
+     */
+    public $value;
+
     protected bool $nullable = false;
 
     public function __construct(array $value)
     {
         parent::__construct($value);
-    }
-
-    public function value(): array
-    {
-        return $this->value;
     }
 }

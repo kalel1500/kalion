@@ -8,15 +8,15 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\Ab
 
 class StringVo extends AbstractStringVo
 {
+    /**
+     * @var string
+     */
+    public $value;
+
     protected bool $nullable = false;
 
     public function __construct(string $value)
     {
         parent::__construct($value);
-    }
-
-    public function value(): string
-    {
-        return $this->value;
     }
 }

@@ -8,10 +8,10 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\Ab
 
 class BoolVo extends AbstractBoolVo
 {
-    protected bool $nullable = false;
+    /**
+     * @var bool
+     */
+    public $value;
 
-    public function value(): bool
-    {
-        return $this->value;
-    }
+    protected bool $nullable = false;
 }

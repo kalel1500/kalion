@@ -14,15 +14,15 @@ abstract class AbstractBoolVo extends AbstractValueObject
     protected const CLASS_REQUIRED = BoolVo::class;
     protected const CLASS_NULLABLE = BoolNullVo::class;
 
+    /**
+     * @var bool|null
+     */
+    public $value;
+
     public function __construct($value)
     {
         $this->ensureIsValidValue($value);
         $this->value = is_null($value) ? null : boolval($value);
-    }
-
-    public function value(): ?bool
-    {
-        return $this->value;
     }
 
     public function isTrue(): bool

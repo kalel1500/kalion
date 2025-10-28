@@ -13,15 +13,15 @@ abstract class AbstractIntVo extends AbstractValueObject
     protected const CLASS_REQUIRED = IntVo::class;
     protected const CLASS_NULLABLE = IntNullVo::class;
 
+    /**
+     * @var int|null
+     */
+    public $value;
+
     public function __construct(?int $value)
     {
         $this->ensureIsValidValue($value);
         $this->value = $value;
-    }
-
-    public function value(): ?int
-    {
-        return $this->value;
     }
 
     public function isBiggerThan(int $number): bool

@@ -8,10 +8,10 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\Ab
 
 class AbstractEnumVo extends AbstractBaseEnumVo
 {
-    protected bool $nullable = false;
+    /**
+     * @var string
+     */
+    public $value;
 
-    public function value(): string
-    {
-        return $this->value;
-    }
+    protected bool $nullable = false;
 }

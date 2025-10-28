@@ -15,15 +15,18 @@ abstract class AbstractValueObject implements JsonSerializable
     protected const CLASS_REQUIRED = null;
     protected const CLASS_NULLABLE = null;
 
+    public         $value;
     protected bool $nullable = true;
-    protected      $value;
 
     public static function from($value): static
     {
         return new static($value);
     }
 
-    abstract public function value(): mixed;
+    public function value(): mixed
+    {
+        return $this->value;
+    }
 
     public function isNull(): bool
     {

@@ -8,15 +8,15 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Abstrac
 
 class TimestampVo extends AbstractTimestampVo
 {
+    /**
+     * @var string
+     */
+    public $value;
+
     protected bool $nullable = false;
 
     public function __construct(string $value, ?array $formats = null)
     {
         parent::__construct($value, $formats);
-    }
-
-    public function value(): string
-    {
-        return $this->value;
     }
 }

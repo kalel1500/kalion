@@ -14,6 +14,11 @@ abstract class AbstractBaseEnumVo extends AbstractValueObject
     protected bool   $caseSensitive    = true;
     protected ?array $translatedValues = null;
 
+    /**
+     * @var string|null
+     */
+    public $value;
+
     public function __construct($value)
     {
         if (is_null($this->getPermittedValues())) {
@@ -21,11 +26,6 @@ abstract class AbstractBaseEnumVo extends AbstractValueObject
         }
         $this->ensureIsValidValue($value);
         $this->value = $value;
-    }
-
-    public function value(): ?string
-    {
-        return $this->value;
     }
 
     protected function ensureIsValidValue(?string $value): void

@@ -8,15 +8,15 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Abstrac
 
 final class IdVo extends AbstractId
 {
+    /**
+     * @var int
+     */
+    public $value;
+
     protected bool $nullable = false;
 
     public function __construct(int $value)
     {
         parent::__construct($value);
-    }
-
-    public function value(): int
-    {
-        return $this->value;
     }
 }

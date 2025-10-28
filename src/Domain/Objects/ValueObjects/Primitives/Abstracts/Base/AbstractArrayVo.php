@@ -16,6 +16,11 @@ abstract class AbstractArrayVo extends AbstractValueObject implements ArrayAcces
     protected const CLASS_REQUIRED = ArrayVo::class;
     protected const CLASS_NULLABLE = ArrayNullVo::class;
 
+    /**
+     * @var array|null
+     */
+    public $value;
+
     public function __construct(?array $value)
     {
         $this->value = $value;
@@ -58,11 +63,6 @@ abstract class AbstractArrayVo extends AbstractValueObject implements ArrayAcces
         foreach ($keysToUnset as $key) {
             unset($this->value[$key]);
         }
-    }
-
-    public function value(): ?array
-    {
-        return $this->value;
     }
 
     public function isEmpty(): bool

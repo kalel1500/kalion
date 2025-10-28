@@ -13,15 +13,15 @@ abstract class AbstractStringVo extends AbstractValueObject
     protected const CLASS_REQUIRED = StringVo::class;
     protected const CLASS_NULLABLE = StringNullVo::class;
 
+    /**
+     * @var string|null
+     */
+    public $value;
+
     public function __construct(?string $value)
     {
         $this->ensureIsValidValue($value);
         $this->value = $value; // $this->clearString($value);
-    }
-
-    public function value(): ?string
-    {
-        return $this->value;
     }
 
     protected function ensureIsValidValue(?string $value): void

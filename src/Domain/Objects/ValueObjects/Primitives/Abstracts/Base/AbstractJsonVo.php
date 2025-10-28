@@ -14,6 +14,11 @@ abstract class AbstractJsonVo extends AbstractValueObject
     protected const CLASS_REQUIRED = JsonVo::class;
     protected const CLASS_NULLABLE = JsonNullVo::class;
 
+    /**
+     * @var null|array|object|string
+     */
+    public $value;
+
     protected ?array            $valueArray  = null;
     protected array|object|null $valueObject = null;
     protected ?string           $valueString = null;
@@ -60,11 +65,6 @@ abstract class AbstractJsonVo extends AbstractValueObject
     public static function tryFrom($value): static
     {
         return new static($value, true);
-    }
-
-    public function value(): null|array|object|string
-    {
-        return $this->value;
     }
 
     public function decodeAssoc(): ?array

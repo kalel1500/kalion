@@ -8,15 +8,15 @@ use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\Ab
 
 class FloatVo extends AbstractFloatVo
 {
+    /**
+     * @var float
+     */
+    public $value;
+
     protected bool $nullable = false;
 
     public function __construct(float $value)
     {
         parent::__construct($value);
-    }
-
-    public function value(): float
-    {
-        return $this->value;
     }
 }

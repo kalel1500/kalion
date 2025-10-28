@@ -13,15 +13,15 @@ abstract class AbstractFloatVo extends AbstractValueObject
     protected const CLASS_REQUIRED = FloatVo::class;
     protected const CLASS_NULLABLE = FloatNullVo::class;
 
+    /**
+     * @var float|null
+     */
+    public $value;
+
     public function __construct(?float $value)
     {
         $this->ensureIsValidValue($value);
         $this->value = $value;
-    }
-
-    public function value(): ?float
-    {
-        return $this->value;
     }
 
     public function isBiggerThan(float $number): bool
