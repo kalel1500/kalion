@@ -2,7 +2,7 @@
 
 ## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.37.0-beta.0...master)
 
-## [v0.37.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.36.0-beta.0...v0.36.0-beta.0) - 2025-10-22
+## [v0.37.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.36.0-beta.0...v0.37.0-beta.0) - 2025-10-22
 
 ### Changed
 
