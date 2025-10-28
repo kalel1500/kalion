@@ -16,7 +16,7 @@ use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractJsonVo;
+use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
 use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
 
 abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
