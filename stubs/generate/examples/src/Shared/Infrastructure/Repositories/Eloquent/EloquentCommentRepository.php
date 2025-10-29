@@ -23,7 +23,7 @@ final class EloquentCommentRepository implements CommentRepository
     {
         $data = $this->model::query()
             ->with('post')
-            ->where('post_id', $post_id->value())
+            ->where('post_id', $post_id->value)
             ->get();
         return CommentCollection::fromArray($data->toArray(), ['post']);
     }
@@ -36,7 +36,7 @@ final class EloquentCommentRepository implements CommentRepository
     public function update(CommentEntity $comment): void
     {
         $this->model->newQuery()
-            ->findOrFail($comment->id->value())
+            ->findOrFail($comment->id->value)
             ->update($comment->toArrayDb());
     }
 }

@@ -27,7 +27,7 @@ final class EloquentTagTypeRepository implements TagTypeRepository
 
     public function findByCode(StringVo $code): TagTypeEntity
     {
-        $data = $this->model::query()->where('code', $code->value())->firstOrFail();
+        $data = $this->model::query()->where('code', $code->value)->firstOrFail();
         return TagTypeEntity::fromArray($data->toArray());
     }
 }

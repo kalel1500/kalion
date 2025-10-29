@@ -11,6 +11,6 @@ final class EloquentUserRepository extends BaseUserRepository
 {
     public function is_important_group(UserEntity $user): bool
     {
-        return $user->id->value() === 4;
+        return $user->id->value === 4;
     }
 }

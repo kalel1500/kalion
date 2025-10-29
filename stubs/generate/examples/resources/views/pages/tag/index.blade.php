@@ -12,7 +12,7 @@
             <x-kal::tab class="flex-1 mb-3 md:mb-0">
                 <x-kal::tab.item :active="is_null($data->currentTagType)" :href="route('tags')">Todos</x-kal::tab.item>
                 @foreach($data->tagTypes as $tagType)
-                    <x-kal::tab.item :active="$data->currentTagType?->id->value() === $tagType->id->value()" :href="route('tags', $tagType->code->value())">{{ $tagType->name }}</x-kal::tab.item>
+                    <x-kal::tab.item :active="$data->currentTagType?->id->value === $tagType->id->value" :href="route('tags', $tagType->code->value)">{{ $tagType->name }}</x-kal::tab.item>
                 @endforeach
             </x-kal::tab>
 

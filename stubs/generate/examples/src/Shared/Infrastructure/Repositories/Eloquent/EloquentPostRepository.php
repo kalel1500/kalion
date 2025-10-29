@@ -35,7 +35,7 @@ final class EloquentPostRepository implements PostRepository
             ->where(function (Builder $query) use ($tag_code) {
                 if ($tag_code->isNotNull()) {
                     $query->whereHas('tags', function (Builder $query) use ($tag_code) {
-                        $query->where('code', 'LIKE', "%{$tag_code->value()}%");
+                        $query->where('code', 'LIKE', "%{$tag_code->value}%");
                     });
                 }
             })
@@ -53,7 +53,7 @@ final class EloquentPostRepository implements PostRepository
     {
         $data = $this->model::query()
             ->with('comments')
-            ->where('slug', $slug->value())
+            ->where('slug', $slug->value)
             ->firstOrFail();
         return PostEntity::fromArray($data->toArray(), ['comments']);
     }

@@ -35,7 +35,7 @@ final class EloquentTagRepository implements TagRepository
             ->where(function (Builder $query) use ($typeCode) {
                 if ($typeCode->isNotNull()) {
                     $query->whereHas('tagType', function (Builder $query2) use ($typeCode) {
-                        $query2->where('code', $typeCode->value());
+                        $query2->where('code', $typeCode->value);
                     });
                 }
             })
@@ -51,14 +51,14 @@ final class EloquentTagRepository implements TagRepository
     public function update(TagEntity $tag): void
     {
         $this->model::query()
-            ->findOrFail($tag->id->value())
+            ->findOrFail($tag->id->value)
             ->update($tag->toArrayDb());
     }
 
     public function delete(IdVo $id): void
     {
         $this->model::query()
-            ->findOrFail($id->value())
+            ->findOrFail($id->value)
             ->delete();
     }
 
@@ -68,13 +68,13 @@ final class EloquentTagRepository implements TagRepository
             ->newQuery()
             ->where(function (Builder $query) use ($tag) {
                 if ($tag->id->isNotNull()) {
-                    $query->where('id', '!=', $tag->id->value());
+                    $query->where('id', '!=', $tag->id->value);
                 }
             })
             ->where(function (Builder $query) use ($tag) {
                 $query
-                    ->where('name', $tag->name->value())
-                    ->orWhere('code', $tag->code->value());
+                    ->where('name', $tag->name->value)
+                    ->orWhere('code', $tag->code->value);
             })
             ->exists();
 
@@ -87,7 +87,7 @@ final class EloquentTagRepository implements TagRepository
     public function throwIfIsUsedByRelation(IdVo $id): void
     {
         $hasRelation = $this->model::query()
-            ->findOrFail($id->value())
+            ->findOrFail($id->value)
             ->posts()
             ->exists();
         if ($hasRelation) {
