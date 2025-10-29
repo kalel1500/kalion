@@ -27,12 +27,12 @@ abstract class AbstractBoolVo extends AbstractValueObject
 
     public function isTrue(): bool
     {
-        return $this->value() === true;
+        return $this->value === true;
     }
 
     public function isFalse(): bool
     {
-        return $this->value() === false;
+        return $this->value === false;
     }
 
     private function ensureIsValidValue($value): void

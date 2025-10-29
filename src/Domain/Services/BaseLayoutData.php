@@ -50,9 +50,9 @@ class BaseLayoutData implements LayoutData
     {
         if (is_null(user())) return null;
         return UserInfoDto::fromArray([
-            'id'    => user()->id->value(), // 1
-            'name'  => user()->name->value(), // Neil Sims
-            'email' => user()->email->value() // name@flowbite.com
+            'id'    => user()->id->value, // 1
+            'name'  => user()->name->value, // Neil Sims
+            'email' => user()->email->value // name@flowbite.com
         ]);
     }
 }

@@ -217,6 +217,6 @@ class ObjectsTest extends TestCase
             'slug' => 'cc',
             'user_id' => 1,
         ]);
-        $this->assertEquals('aa', $test->title->value());
+        $this->assertEquals('aa', $test->title->value);
     }
 }

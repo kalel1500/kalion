@@ -16,7 +16,7 @@ class EloquentRoleRepository implements RoleRepository
     public function findByName(StringVo $name): RoleEntity
     {
         $data = $this->model::query()
-            ->where('name', $name->value())
+            ->where('name', $name->value)
             ->firstOrFail();
         return RoleEntity::fromArray($data->toArray());
     }

@@ -1127,7 +1127,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             $item         = match (true) {
                 $item instanceof MakeArrayable && $forMakeArray => $item->toMakeArray(),
                 $item instanceof ArrayConvertible               => $item->toArray(),
-                $item instanceof AbstractValueObject            => $item->value(),
+                $item instanceof AbstractValueObject            => $item->value,
                 default                                         => $item,
             };
             $result[$key] = $item;

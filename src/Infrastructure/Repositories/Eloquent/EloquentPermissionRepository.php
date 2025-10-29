@@ -17,7 +17,7 @@ class EloquentPermissionRepository implements PermissionRepository
     {
         $data = $this->model::query()
             ->with('roles')
-            ->where('name', $permission->value())
+            ->where('name', $permission->value)
             ->firstOrFail();
         return PermissionEntity::fromArray($data->toArray(), ['roles']);
     }

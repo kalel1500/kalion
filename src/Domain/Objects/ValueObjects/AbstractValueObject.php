@@ -108,6 +108,6 @@ abstract class AbstractValueObject implements JsonSerializable
 
     public function __toString()
     {
-        return (string)$this->value() ?? '';
+        return (string)$this->value ?? '';
     }
 }

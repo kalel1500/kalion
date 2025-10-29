@@ -50,8 +50,8 @@ final readonly class UserAccessChecker
 
             // Comprobar si el rol es query y lanzarla o comprobar si el usuario tiene ese rol
             return $role->is_query->isTrue()
-                ? $repositoryUser->{$role->name->value()}($user, ...$params)
-                : $user->roles()->contains('name', $role->name->value());
+                ? $repositoryUser->{$role->name->value}($user, ...$params)
+                : $user->roles()->contains('name', $role->name->value);
         });
     }
 
@@ -62,8 +62,8 @@ final readonly class UserAccessChecker
             // Set user repository
             $repositoryUser = new (Kalion::getClassUserRepository($user->getGuard()));
 
-            if ($userRole->name->value() !== $role->name->value()) return false;
-            if ($userRole->is_query->isTrue()) return $repositoryUser->{$role->name->value()}($user, ...$params);
+            if ($userRole->name->value !== $role->name->value) return false;
+            if ($userRole->is_query->isTrue()) return $repositoryUser->{$role->name->value}($user, ...$params);
             return true;
         });
     }

@@ -27,31 +27,31 @@ abstract class AbstractIntVo extends AbstractValueObject
     public function isBiggerThan(int $number): bool
     {
         $other = new IntVo($number);
-        return $this->value() > $other->value();
+        return $this->value > $other->value;
     }
 
     public function isLessThan(int $number): bool
     {
         $other = new IntVo($number);
-        return $this->value() < $other->value();
+        return $this->value < $other->value;
     }
 
     public function equals(int $number): bool
     {
         $other = new IntVo($number);
-        return $this->value() === $other->value();
+        return $this->value === $other->value;
     }
 
     public function isBiggerOrEqualThan(int $number): bool
     {
         $other = new IntVo($number);
-        return $this->value() >= $other->value();
+        return $this->value >= $other->value;
     }
 
     public function isLessOrEqualThan(int $number): bool
     {
         $other = new IntVo($number);
-        return $this->value() <= $other->value();
+        return $this->value <= $other->value;
     }
 
     protected function ensureIsValidValue(?int $value): void

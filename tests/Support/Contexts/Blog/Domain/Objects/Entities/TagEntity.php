@@ -26,7 +26,7 @@ final class TagEntity extends AbstractEntity
     #[Computed]
     public function type_name(): string
     {
-        return $this->computed(fn() => $this->tagType()->name->value());
+        return $this->computed(fn() => $this->tagType()->name->value);
     }
 
     #[Computed]

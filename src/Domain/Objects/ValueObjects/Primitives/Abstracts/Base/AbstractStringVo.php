@@ -36,6 +36,6 @@ abstract class AbstractStringVo extends AbstractValueObject
 
     public function contains(string $search): bool
     {
-        return str_contains($this->value(), $search);
+        return str_contains($this->value, $search);
     }
 }

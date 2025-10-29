@@ -62,7 +62,7 @@ abstract class AbstractBaseEnumVo extends AbstractValueObject
         if ($this->isNull()) {
             return null;
         }
-        $value = $this->translatedValues[$this->value()];
+        $value = $this->translatedValues[$this->value];
         return ($ucfirst) ? ucfirst($value) : $value;
     }
 

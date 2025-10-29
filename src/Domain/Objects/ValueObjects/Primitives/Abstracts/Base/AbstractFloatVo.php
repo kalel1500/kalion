@@ -26,27 +26,27 @@ abstract class AbstractFloatVo extends AbstractValueObject
 
     public function isBiggerThan(float $number): bool
     {
-        return $this->value() > $number;
+        return $this->value > $number;
     }
 
     public function isLessThan(float $number): bool
     {
-        return $this->value() < $number;
+        return $this->value < $number;
     }
 
     public function equals(float $number): bool
     {
-        return $this->value() === $number;
+        return $this->value === $number;
     }
 
     public function isBiggerOrEqualThan(float $number): bool
     {
-        return $this->value() >= $number;
+        return $this->value >= $number;
     }
 
     public function isLessOrEqualThan(float $number): bool
     {
-        return $this->value() <= $number;
+        return $this->value <= $number;
     }
 
     protected function ensureIsValidValue(?float $value): void

@@ -18,7 +18,7 @@ abstract class AbstractCollectionVo extends AbstractCollectionBase
 
     public function firstValue()
     {
-        return $this->first()?->value();
+        return $this->first()?->value;
     }
 
     /**
