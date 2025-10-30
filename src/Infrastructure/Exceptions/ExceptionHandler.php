@@ -68,7 +68,7 @@ final class ExceptionHandler
                  *  - El debug está desactivado
                  *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "false"
                  */
-                if ($notDebug || ($e instanceof KalionHttpException && ! $e::SHOULD_RENDER_TRACE)) {
+                if ($notDebug || (self::isKalionHttpExceptionAnd($e, shouldRenderTrace: false))) {
                     return self::renderHtmlCustom($context);
                 }
 
@@ -79,7 +79,7 @@ final class ExceptionHandler
                  *  - El debug está desactivado
                  *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "true"
                  */
-                if ($e instanceof KalionHttpException && $e::SHOULD_RENDER_TRACE) {
+                if (self::isKalionHttpExceptionAnd($e, shouldRenderTrace: true)) {
                     return self::renderHtmlDebug($e, $request);
                 }
 
@@ -129,5 +129,18 @@ final class ExceptionHandler
     private static function renderHtmlCustom(ExceptionContextDto $context): Response
     {
         return response()->view('kal::pages.exceptions.error', compact('context'), $context->statusCode);
+    }
+
+    private static function isKalionHttpExceptionAnd(\Throwable $e, bool $shouldRenderTrace): bool
+    {
+        if (!($e instanceof KalionHttpException)) {
+            return false;
+        }
+
+        if ($shouldRenderTrace) {
+            return $e::SHOULD_RENDER_TRACE;
+        } else {
+            return ! $e::SHOULD_RENDER_TRACE;
+        }
     }
 }
