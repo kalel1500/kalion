@@ -1,7 +1,7 @@
 @php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto $context */ @endphp
 @extends('kal::pages.exceptions.minimal')
 
-@section('title', $context->title)
+@section('title', __($context->title))
 @section('code', $context->statusCode)
 @section('message', $context->message)
 
