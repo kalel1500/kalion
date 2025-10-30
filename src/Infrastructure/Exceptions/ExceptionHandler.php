@@ -64,7 +64,7 @@ final class ExceptionHandler
                 }
 
                 /**
-                 * Devolver la vista de error personalizada solo si se cumple alguna de estas opciones:
+                 * Devolver la vista de error personalizada solo si se cumple alguna de estas opciones (or):
                  *  - El debug está desactivado
                  *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "false"
                  */
@@ -72,7 +72,24 @@ final class ExceptionHandler
                     return self::renderHtmlCustom($context);
                 }
 
-                // Para cualquier otro caso dejamos que laravel se encargue de renderizar el error.
+                /**
+                 * Para este punto el APP_DEBUG es siempre "true".
+                 *
+                 * Forzar el "debug_stack_trace" si se cumplen estas opciones (and):
+                 *  - El debug está desactivado
+                 *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "true"
+                 */
+                if ($e instanceof KalionHttpException && $e::SHOULD_RENDER_TRACE) {
+                    return self::renderHtmlDebug($e, $request);
+                }
+
+                /**
+                 * Para este punto el APP_DEBUG es siempre "true".
+                 *
+                 * Por lo que dejamos que laravel se encargue de renderizar el error.
+                 *
+                 * En teoria siempre deberia pintar el "renderHtmlDebug" pero me parece mejor dejar que lo haga laravel en vez de forzarlo manualmente.
+                 */
                 return null;
             });
 
