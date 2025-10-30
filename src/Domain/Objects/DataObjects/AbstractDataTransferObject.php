@@ -210,7 +210,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $value = match (true) {
                 $isEnum || $isVo => $value?->value,
                 $method === null => $value,
-                default          => $value?->{$method}($value),
+                default          => $value?->{$method}(),
             };
 
             if ($isEnum && $value === Kalion::ENUM_NULL_VALUE) {
