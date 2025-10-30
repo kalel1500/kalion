@@ -129,9 +129,9 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
                 $newParams[] = [
                     ...$meta,
+                    'isEnum'      => $isEnum,
                     'makeMethod'  => $makeMethod,
                     'propsMethod' => $propsMethod,
-                    'propsIsEnum' => $isEnum,
                 ];
             }
 
@@ -149,7 +149,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $paramName  = $meta['name'];
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
-            $isEnum     = $meta['propsIsEnum'];
+            $isEnum     = $meta['isEnum'];
             $method     = $meta['makeMethod'];
             $value      = $data[$paramName] ?? null;
 
@@ -176,8 +176,8 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         // Recorrer los nombres ya cacheados
         foreach (self::resolveConstructorParams() as $meta) {
             $name   = $meta['name'];
+            $isEnum = $meta['isEnum'];
             $method = $meta['propsMethod'];
-            $isEnum = $meta['propsIsEnum'];
             $value  = $this->{$name};
 
             $value = match (true) {

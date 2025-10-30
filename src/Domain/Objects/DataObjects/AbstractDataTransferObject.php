@@ -84,9 +84,9 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
 
         return [
             ...$meta,
+            'isEnum'      => $isEnum,
             'makeMethod'  => $makeMethod,
             'propsMethod' => $propsMethod,
-            'propsIsEnum' => $isEnum,
         ];
     }
 
@@ -163,7 +163,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $paramName  = arr_is_assoc($data) ? $meta['name'] : $key;
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
-            $isEnum     = $meta['propsIsEnum'];
+            $isEnum     = $meta['isEnum'];
             $value      = $data[$paramName] ?? null;
 
             $method = $meta['makeMethod'];
@@ -202,8 +202,8 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         $params = self::resolveConstructorParams()['props'];
         foreach ($params as $meta) {
             $name   = $meta['name'];
+            $isEnum = $meta['isEnum'];
             $method = $meta['propsMethod'];
-            $isEnum = $meta['propsIsEnum'];
             $value  = $this->{$name};
 
             $value = match (true) {
