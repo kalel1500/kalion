@@ -55,8 +55,8 @@ final class ExceptionHandler
 
             // Renderizar nuestras excepciones de dominio
             $exceptions->render(function (KalionExceptionInterface $e, Request $request) {
-                $context         = $e->getContext();
-                $isDebugInactive = ! debug_is_active();
+                $context  = $e->getContext();
+                $notDebug = ! debug_is_active();
 
                 // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
                 if (self::shouldRenderJson($request)) {
@@ -68,7 +68,7 @@ final class ExceptionHandler
                  *  - El debug está desactivado
                  *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "false"
                  */
-                if ($isDebugInactive || ($e instanceof KalionHttpException && ! $e::SHOULD_RENDER_TRACE)) {
+                if ($notDebug || ($e instanceof KalionHttpException && ! $e::SHOULD_RENDER_TRACE)) {
                     return self::renderHtmlCustom($context);
                 }
 
