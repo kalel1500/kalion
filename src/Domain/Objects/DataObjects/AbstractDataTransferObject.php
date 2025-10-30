@@ -77,7 +77,6 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         };
 
         $propsMethod = match (true) {
-            $isVo    => 'value',
             $isArray => 'toArray',
             default  => null,
         };
@@ -85,6 +84,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         return [
             ...$meta,
             'isEnum'      => $isEnum,
+            'isVo'        => $isVo,
             'makeMethod'  => $makeMethod,
             'propsMethod' => $propsMethod,
         ];
@@ -203,11 +203,12 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         foreach ($params as $meta) {
             $name   = $meta['name'];
             $isEnum = $meta['isEnum'];
+            $isVo   = $meta['isVo'];
             $method = $meta['propsMethod'];
             $value  = $this->{$name};
 
             $value = match (true) {
-                $isEnum          => $value?->value,
+                $isEnum || $isVo => $value?->value,
                 $method === null => $value,
                 default          => $value?->{$method}($value),
             };

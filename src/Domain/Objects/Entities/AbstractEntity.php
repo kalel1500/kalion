@@ -122,16 +122,11 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     default          => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
 
-                $propsMethod = match (true) {
-                    $isVo   => 'value',
-                    default => null,
-                };
-
                 $newParams[] = [
                     ...$meta,
-                    'isEnum'      => $isEnum,
-                    'makeMethod'  => $makeMethod,
-                    'propsMethod' => $propsMethod,
+                    'isEnum'     => $isEnum,
+                    'isVo'       => $isVo,
+                    'makeMethod' => $makeMethod,
                 ];
             }
 
@@ -177,13 +172,12 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         foreach (self::resolveConstructorParams() as $meta) {
             $name   = $meta['name'];
             $isEnum = $meta['isEnum'];
-            $method = $meta['propsMethod'];
+            $isVo   = $meta['isVo'];
             $value  = $this->{$name};
 
             $value = match (true) {
-                $isEnum          => $value?->value,
-                $method === null => $value,
-                default          => $value?->{$method}($value),
+                $isEnum || $isVo => $value?->value,
+                default          => $value,
             };
 
             if ($isEnum && $value === Kalion::ENUM_NULL_VALUE) {
@@ -259,10 +253,9 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
                 $returnClass = $returnType->getName();
                 $propMethod  = match (true) {
-                    is_a($returnClass, class: AbstractJsonVo::class, allow_string: true)      => static::$jsonMethod->value,
-                    is_a($returnClass, class: AbstractValueObject::class, allow_string: true) => 'value',
-                    is_a($returnClass, class: ArrayConvertible::class, allow_string: true)    => 'toArray',
-                    default                                                                   => null,
+                    is_a($returnClass, class: AbstractJsonVo::class, allow_string: true)   => static::$jsonMethod->value,
+                    is_a($returnClass, class: ArrayConvertible::class, allow_string: true) => 'toArray',
+                    default                                                                => null,
                 };
 
                 /** @var Computed $attr */
@@ -274,6 +267,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     'addOnFull' => $attr->addOnFull,
                     'method'    => $propMethod,
                     'isEnum'    => is_a($returnClass, class: \BackedEnum::class, allow_string: true),
+                    'isVo'      => is_a($returnClass, class: AbstractValueObject::class, allow_string: true),
                 ];
             }
 
@@ -294,9 +288,9 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $method        = $meta['method'];
             $value         = $this->{$name}();
             $result[$name] = match (true) {
-                $meta['isEnum']  => $value->value,
-                $method !== null => $value->{$method}(),
-                default          => $value,
+                $meta['isEnum'] || $meta['isVo'] => $value->value,
+                $method !== null                 => $value->{$method}(),
+                default                          => $value,
             };
 
             if ($meta['isEnum'] && $result[$name] === Kalion::ENUM_NULL_VALUE) {
