@@ -1,12 +1,42 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.37.1-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.38.0-beta.0...master)
+
+## [v0.38.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.37.1-beta.1...v0.38.0-beta.0) - 2025-10-30
+
+### Changed
+
+* Se ha modificado la gestión de las excepciones (del archivo `ExceptionHandler`):
+  * Usar la traduccion `__()` para el título en la blade `resources\views\pages\exceptions\error.blade.php`.
+  * Se ha añadido la traducción `Internal Server Error` al archivo `es.json`.
+  * (fix-noError) Se ha cambiado el tipo del parametro `$exception` del método privado `renderHtmlDebug()` de `\Exception` a `\Throwable`.
+  * (refactor) Renombrar variable `$isDebugInactive` a `$notDebug` para mejorar la lectura.
+  * (fix) <u>**!!!**</u> Recuperar el comportamiento del `ExceptionHandler` que se perdió al añadir la constante `SHOULD_RENDER_TRACE`. Ahora en las excepciones `KalionHttpException` con `SHOULD_RENDER_TRACE` a `true` se renderiza el `debug_stack_trace`, ya que si se deja que lo haga Laravel, mostrara su propia blade al ser una excepcion HTTP. También se han añadido varios comentarios a modo de documentacion para explicar cada paso claramente.
+  * (refactor) Extraer la lógica del `SHOULD_RENDER_TRACE` al nuevo método privado `isKalionHttpExceptionAnd()` para mejorar la lectura.
+* (breaking) stubs: Reemplazar llamadas al método `value()` por acceso directo a la propiedad `$value` en todas las implementaciones de los archivos de `sutbs`.
+* Se han realizado varios cambios en los Value Objects:
+    * (breaking) Se han movido todos los Value Objects que extienden directamente del `AbstractValueObject` dentro de la carpeta `Base`.
+    * (breaking) Se ha eliminado la funcionalidad de devolver el valor en formato `int` de los Value Objects de tipo `Boolean`. Se han eliminado los métodos `valueInt()`.
+    * (refactor) Se ha eliminado el método `isNullReceived()` de la clase `AbstractValueObject`, ya que todos los métodos `value()` devuelven el `$this->value` sin modificar. Ahora el método `isNull()` usa la propiedad `$value` en vez del método.
+    * <u>**!!!**</u> Se ha modificado la visibilidad de la propiedad `$value` de la clase `AbstractValueObject` de `protected` a `public` y se ha modificado el metodo `value()` para dejar de ser abstracto (asi no hay que definirlo en cada subclase). Se han eliminado los métodos `value()` de las subclases de `ValueObject` y en su lugar se ha añadido la propiedad `$value` con la documentacion indicando el tipo de retorno. De esta manera ahora se podra acceder al valor de los `VOs` sin llamar al metodo y estaran el IDE podra detectar el tipo. NOTA: Por ahora no se ha hecho la propiedad `readonly` porque en el `AbstractArrayVo` hay metodos que la modifican.
+    * (refactor) Reemplazar llamadas al método `value()` por acceso directo a la propiedad `$value` en todas las implementaciones y pruebas relevantes.
+    * (refactor) Se ha adaptado la reflexión de las clases `AbstractEntity` y `AbstractDataTransferObject` al cambio previo de hacer público la propiedad `$value` de los Value Objects:
+      * Se ha dejado de usar el método `value()` para acceder a los valores de los Value Objects en la reflexión (en los métodos `props()` y `computedProps()`).
+      * Ahora siempre se usa directamente la propiedad `$value`.
+      * Como en las entidades solo puede haber VOs o Enums, esto implica que ya no hace falta tener un `propsMethod` en la reflexión de las `props()` de la clase `AbstractEntity`.
+      * (fix-noError) Ahora ya no se le pasa el `$value` como argumento al llamar al `$method` en el método `props()` de la clase `AbstractDataTransferObject`.
+* (refactor) Renombrar y ordenar keys `propsIsEnum` a `isEnum` durante la reflexion de las clases `AbstractDataTransferObject` y `AbstractEntity`.
+
+### Fixed
+
+* (fix) <u>**!!!**</u> Recuperar el comportamiento del `ExceptionHandler` que se perdió al añadir la constante `SHOULD_RENDER_TRACE`.
+* (fix) tests: Se ha movido el test `test_create_entity_without_id()` a la nueva clase `BlogEntitiesTest` en la carpeta de `Feature`, ya que como el `AbstractId` accede a la configuración de Laravel, la necesita tener cargada por lo que no puede ser un test unitario.
 
 ## [v0.37.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.37.1-beta.0...v0.37.1-beta.1) - 2025-10-28
 
 ### Changed
 
-* (refactor-format) Se ha formateado el codigo de todos los archivos de la carpeta "src"
+* (refactor-format) Se ha formateado el codigo de todos los archivos de la carpeta `src`
 * (fix) Se ha eliminado el import de una clase que ya no existe.
 
 ## [v0.37.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.37.0-beta.0...v0.37.1-beta.0) - 2025-10-28
