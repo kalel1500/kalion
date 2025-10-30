@@ -104,7 +104,7 @@ final class ExceptionHandler
         return response()->json($context->toArray(), $context->statusCode);
     }
 
-    private static function renderHtmlDebug(\Exception $exception, Request $request): Response
+    private static function renderHtmlDebug(\Throwable $exception, Request $request): Response
     {
         return response(get_html_laravel_debug_stack_trace($request, $exception));
     }
