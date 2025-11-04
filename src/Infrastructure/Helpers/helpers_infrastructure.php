@@ -249,3 +249,10 @@ if (! function_exists('env_isProd')) {
         return get_environment()->isProd();
     }
 }
+
+if (! function_exists('current_route_name_is')) {
+    function current_route_name_is(string $name): bool
+    {
+        return Route::currentRouteName() === $name;
+    }
+}
