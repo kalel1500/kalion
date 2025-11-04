@@ -36,7 +36,7 @@ git pull origin master (git pull)     # Asegurar que está actualizada
 git merge --no-ff develop             # Fusionar develop en master (dejar mensaje "Merge brange 'develop'")
 git push origin master                # Subir los cambios a master
 
-git tag v1.0.1                        # Crear el tag de la nueva versión
+git tag -a v1.0.1 -m "Release v1.0.1" # Crear el tag de la nueva versión
 git push origin master --tags         # Subir el tag a GitHub
 ```
 
@@ -70,7 +70,7 @@ git push origin master                                # Subir los cambios a mast
 ## 2️⃣ Crear el tag en master
 
 ```shell
-git tag v1.0.2                        # Crear el tag de la nueva versión
+git tag -a v1.0.2 -m "Release v1.0.2" # Crear el tag de la nueva versión
 git push origin master --tags         # Subir el tag a GitHub
 ```
 
