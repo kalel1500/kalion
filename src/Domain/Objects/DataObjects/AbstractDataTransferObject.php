@@ -33,6 +33,9 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
         }
 
+        $class      = null;
+        $allowsNull = true;
+
         // Union type → no permitido
         if ($type instanceof ReflectionUnionType) {
             if (! $allowUnionTypes) {
@@ -44,18 +47,15 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
 
         // Named type (Class)
         if ($type instanceof \ReflectionNamedType) {
-            return [
-                'name'       => $name,
-                'class'      => $type->isBuiltin() ? null : $type->getName(),
-                'allowsNull' => $type->allowsNull(),
-            ];
+            $class      = $type->isBuiltin() ? null : $type->getName();
+            $allowsNull = $type->allowsNull();
         }
 
-        // Sin tipo
+        // Devolver el array con la información del parámetro
         return [
             'name'       => $name,
-            'class'      => null,
-            'allowsNull' => true,
+            'class'      => $class,
+            'allowsNull' => $allowsNull,
         ];
     }
 
