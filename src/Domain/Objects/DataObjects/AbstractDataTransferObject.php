@@ -164,9 +164,9 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
             $isEnum     = $meta['isEnum'];
+            $method     = $meta['makeMethod'];
             $value      = $data[$paramName] ?? null;
 
-            $method = $meta['makeMethod'];
             try {
                 $value = match (true) {
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
