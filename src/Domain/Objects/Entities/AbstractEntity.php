@@ -59,6 +59,10 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
                 }
 
+                $class      = null;
+                $isId       = false;
+                $allowsNull = true;
+
                 // Union type (ej. IdVo|IdNullVo)
                 if ($type instanceof \ReflectionUnionType) {
                     $typeNames = array_map(
@@ -76,33 +80,24 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                             break;
                         }
                     }
-
-                    $params[] = [
-                        'name'       => $name,
-                        'class'      => $idClass, // null si no aplica
-                        'isId'       => (bool)$idClass,
-                        'allowsNull' => $type->allowsNull(),
-                    ];
-                    continue;
+                    $class      = $idClass; // null si no aplica
+                    $isId       = (bool)$idClass;
+                    $allowsNull = $type->allowsNull();
                 }
 
                 // Named type (Class), tipo primitivo (int, string, bool, etc.)
                 if ($type instanceof \ReflectionNamedType) {
-                    $params[] = [
-                        'name'       => $name,
-                        'class'      => $type->isBuiltin() ? null : $type->getName(),
-                        'isId'       => false, // para single class → usamos ::new || is_class_id($class)
-                        'allowsNull' => $type->allowsNull(),
-                    ];
-                    continue;
+                    $class      = $type->isBuiltin() ? null : $type->getName();
+                    $isId       = false; // para single class → usamos ::new || is_class_id($class)
+                    $allowsNull = $type->allowsNull();
                 }
 
-                // Sin tipo
+                // Llenar array para cada parámetro
                 $params[] = [
                     'name'       => $name,
-                    'class'      => null,
-                    'isId'       => false,
-                    'allowsNull' => true,
+                    'class'      => $class,
+                    'isId'       => $isId,
+                    'allowsNull' => $allowsNull,
                 ];
             }
 
