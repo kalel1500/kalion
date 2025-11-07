@@ -61,7 +61,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
                 // Union type (ej. IdVo|IdNullVo)
                 if ($type instanceof \ReflectionUnionType) {
-                    $classNames = array_map(
+                    $typeNames = array_map(
                         callback: fn($t) => $t->getName(),
                         array   : array_filter(
                             array   : $type->getTypes(),
@@ -70,9 +70,9 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     );
 
                     $idClass = null;
-                    foreach ($classNames as $class) {
-                        if (is_class_id($class) && ! str_ends_with($class, 'NullVo')) {
-                            $idClass = $class;
+                    foreach ($typeNames as $typeName) {
+                        if (is_class_id($typeName) && ! str_ends_with($typeName, 'NullVo')) {
+                            $idClass = $typeName;
                             break;
                         }
                     }
