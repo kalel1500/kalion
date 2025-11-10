@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.38.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.38.1-beta.0...master)
+
+## [v0.38.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.38.0-beta.0...v0.38.1-beta.0) - 2025-11-10
+
+### Changed
+
+* (refactor) Se ha mejorado el código de la Reflexion de las clases `AbstractEntity`:
+  * Se ha renombrado la variable `$classNames` del método `resolveConstructorParams()` de la clase `AbstractEntity` a `$typeNames` (y el `$class` del foreach por `$typeName`) para evitar conflictos.
+  * Se han mejorado los métodos de la reflexion del constructor guardando los valores del array `$meta` en variables para poder definir el array solo una vez al final del bucle. De esta forma es más fácil añadir valores al array, ya que solo se define en un sitio.
+* Se ha modificado el `git-flow-commands.md` para añadir un mensaje al crear un tag.
+* Nuevo helper `current_route_name_is()`
 
 ## [v0.38.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.37.1-beta.1...v0.38.0-beta.0) - 2025-10-30
 
