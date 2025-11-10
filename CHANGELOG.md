@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.38.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.0...master)
+
+## [v0.38.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.38.1-beta.0...v0.38.2-beta.0) - 2025-11-10
+
+### Changed
+
+* Nueva funcionalidad `WithParams`. Se ha creado el nuevo atributo `WithParams` para poder definir argumentos adicionales con los que instanciar las clases de los parametros de los constructores de las `Entidades` y `DTOs`.
 
 ## [v0.38.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.38.0-beta.0...v0.38.1-beta.0) - 2025-11-10
 
