@@ -11,6 +11,7 @@ use ReflectionIntersectionType;
 use ReflectionUnionType;
 use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
+use Thehouseofel\Kalion\Domain\Objects\Attributes\WithParams;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
@@ -27,6 +28,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         $className = static::class;
         $name      = $param->getName();
         $type      = $param->getType();
+        $attrs     = $param->getAttributes(WithParams::class);
 
         // Intersection type → no permitido
         if ($type instanceof ReflectionIntersectionType) {
@@ -35,6 +37,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
 
         $class      = null;
         $allowsNull = true;
+        $makeParams = null;
 
         // Union type → no permitido
         if ($type instanceof ReflectionUnionType) {
@@ -51,11 +54,18 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $allowsNull = $type->allowsNull();
         }
 
+        if (! empty($attrs)) {
+            /** @var WithParams $attr */
+            $attr       = $attrs[0]->newInstance();
+            $makeParams = $attr->params;
+        }
+
         // Devolver el array con la información del parámetro
         return [
             'name'       => $name,
             'class'      => $class,
             'allowsNull' => $allowsNull,
+            'makeParams' => $makeParams,
         ];
     }
 
@@ -165,13 +175,14 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $allowsNull = $meta['allowsNull'];
             $isEnum     = $meta['isEnum'];
             $method     = $meta['makeMethod'];
+            $makeParams = $meta['makeParams'] ?? [];
             $value      = $data[$paramName] ?? null;
 
             try {
                 $value = match (true) {
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
                     (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(Kalion::ENUM_NULL_VALUE),
-                    default                                                                            => $class::$method($value),
+                    default                                                                            => $class::$method($value, ...$makeParams),
                 };
             } catch (\Throwable $th) {
                 throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, $value, $th->getMessage());

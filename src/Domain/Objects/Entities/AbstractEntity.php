@@ -11,6 +11,7 @@ use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
+use Thehouseofel\Kalion\Domain\Objects\Attributes\WithParams;
 use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
@@ -51,8 +52,9 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $params = [];
 
             foreach ($constructor->getParameters() as $param) {
-                $name = $param->getName();
-                $type = $param->getType();
+                $name  = $param->getName();
+                $type  = $param->getType();
+                $attrs = $param->getAttributes(WithParams::class);
 
                 // Intersection type → no permitido
                 if ($type instanceof \ReflectionIntersectionType) {
@@ -62,6 +64,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $class      = null;
                 $isId       = false;
                 $allowsNull = true;
+                $makeParams = null;
 
                 // Union type (ej. IdVo|IdNullVo)
                 if ($type instanceof \ReflectionUnionType) {
@@ -92,12 +95,19 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     $allowsNull = $type->allowsNull();
                 }
 
+                if (!empty($attrs)) {
+                    /** @var WithParams $attr */
+                    $attr       = $attrs[0]->newInstance();
+                    $makeParams = $attr->params;
+                }
+
                 // Llenar array para cada parámetro
                 $params[] = [
                     'name'       => $name,
                     'class'      => $class,
                     'isId'       => $isId,
                     'allowsNull' => $allowsNull,
+                    'makeParams' => $makeParams,
                 ];
             }
 
@@ -141,13 +151,14 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $allowsNull = $meta['allowsNull'];
             $isEnum     = $meta['isEnum'];
             $method     = $meta['makeMethod'];
+            $makeParams = $meta['makeParams'] ?? [];
             $value      = $data[$paramName] ?? null;
 
             try {
                 $value = match (true) {
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
                     (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(Kalion::ENUM_NULL_VALUE),
-                    default                                                                            => $class::$method($value),
+                    default                                                                            => $class::$method($value, ...$makeParams),
                 };
             } catch (\Throwable $th) {
                 throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, $value, $th->getMessage());
