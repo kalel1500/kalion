@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.39.0-beta.0...master)
+
+## [v0.39.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.1...v0.39.0-beta.0) - 2025-11-11
+
+* (breaking) Se ha movido el `KalionServiceProvider` de `src/Core/Infrastructure` a `src`. Ahora el namespace es `Thehouseofel\Kalion\KalionServiceProvider` en vez de `Thehouseofel\Kalion\Infrastructure\KalionServiceProvider`.
+* (breaking) Se ha modificado el `namespace` de todo el código de la carpeta `src` de `Thehouseofel\Kalion` a `Thehouseofel\Kalion\Core`.
 
 ## [v0.38.2-beta.1](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.0...v0.38.2-beta.1) - 2025-11-11
 
