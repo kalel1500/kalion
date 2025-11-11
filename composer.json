@@ -25,8 +25,8 @@
             "Thehouseofel\\Kalion\\Database\\Seeders\\": "database/seeders"
         },
         "files": [
-            "src/Domain/Helpers/helpers_domain.php",
-            "src/Infrastructure/Helpers/helpers_infrastructure.php"
+            "src/Core/Domain/Helpers/helpers_domain.php",
+            "src/Core/Infrastructure/Helpers/helpers_infrastructure.php"
         ]
     },
     "autoload-dev": {

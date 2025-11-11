@@ -47,7 +47,7 @@ class KalionServiceProvider extends ServiceProvider
     public function register(): void
     {
         if (! defined('KALION_PATH')) {
-            define('KALION_PATH', realpath(__DIR__ . '/../../'));
+            define('KALION_PATH', realpath(__DIR__ . '/../../../'));
         }
 
         $this->registerSingletons();
