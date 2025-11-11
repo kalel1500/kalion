@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.1...master)
+
+## [v0.38.2-beta.1](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.0...v0.38.2-beta.1) - 2025-11-11
+
+* Refactor interno sin impacto funcional: Se ha movido todo el código de la carpeta `src` a la carpeta `src/Core`.
 
 ## [v0.38.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.38.1-beta.0...v0.38.2-beta.0) - 2025-11-10
 
