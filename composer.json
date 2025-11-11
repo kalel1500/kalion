@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Thehouseofel\\Kalion\\": "src/",
+            "Thehouseofel\\Kalion\\": "src/Core",
             "Thehouseofel\\Kalion\\Database\\Factories\\": "database/factories",
             "Thehouseofel\\Kalion\\Database\\Seeders\\": "database/seeders"
         },
