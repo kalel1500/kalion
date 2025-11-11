@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Web;
+namespace Thehouseofel\Kalion\Features\Jobs\Infrastructure\Http\Controllers\Web;
 
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
 

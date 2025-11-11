@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Application;
+namespace Thehouseofel\Kalion\Features\Jobs\Application;
 
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Collections\FailedJobCollection;
