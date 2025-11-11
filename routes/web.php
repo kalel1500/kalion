@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Ajax\AjaxCheckProcessController;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Ajax\AjaxCookiesController;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Ajax\AjaxJobsController;
-use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Web\ExampleController;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Web\JobsController;
+use Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Web\ExampleController;
 
 Route::get('/', fn() => redirect(default_url()))->name('index');
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Web;
+namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Web;
 
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

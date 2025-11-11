@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Application;
+namespace Thehouseofel\Kalion\Features\Examples\Application;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Icons\IconDto;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Icons\ViewIconsDto;
+use Thehouseofel\Kalion\Features\Examples\Domain\Objects\DataObjects\Icons\IconDto;
+use Thehouseofel\Kalion\Features\Examples\Domain\Objects\DataObjects\Icons\ViewIconsDto;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

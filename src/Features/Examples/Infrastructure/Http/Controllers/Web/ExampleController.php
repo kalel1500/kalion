@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Web;
+namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Web;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Core\Application\GetIconsUseCase;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Features\Examples\Application\GetIconsUseCase;
 
 final class ExampleController extends Controller
 {
