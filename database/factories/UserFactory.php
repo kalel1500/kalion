@@ -5,7 +5,7 @@ namespace Thehouseofel\Kalion\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Core\Infrastructure\Models\User;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\User;
 
 /**
  * @extends Factory<User>

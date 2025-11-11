@@ -7,8 +7,8 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent;
 use Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\FailedJobCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\JobCollection;
-use Thehouseofel\Kalion\Core\Infrastructure\Models\FailedJob;
-use Thehouseofel\Kalion\Core\Infrastructure\Models\Jobs;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\FailedJob;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\Jobs;
 
 class EloquentJobRepository implements JobRepository
 {

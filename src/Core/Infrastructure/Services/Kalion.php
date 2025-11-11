@@ -47,7 +47,7 @@ final class Kalion
             $authConfigContents = file_get_contents($authConfigPath);
             if (str_contains($authConfigContents, $defaultLine)) {
                 config([
-                    'auth.providers.users.model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Core\Infrastructure\Models\User::class),
+                    'auth.providers.users.model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\User::class),
                 ]);
             }
         }
@@ -56,7 +56,7 @@ final class Kalion
             config([
                 'auth.providers.api_users' => [
                     'driver' => 'eloquent',
-                    'model'  => env('AUTH_MODEL_API', \Thehouseofel\Kalion\Core\Infrastructure\Models\ApiUser::class),
+                    'model'  => env('AUTH_MODEL_API', \Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\ApiUser::class),
                 ],
             ]);
         }

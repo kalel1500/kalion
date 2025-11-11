@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent;
 use Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\StatusRepository;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\StatusCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\StatusEntity;
-use Thehouseofel\Kalion\Core\Infrastructure\Models\Status;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\Status;
 
 class EloquentStatusRepository implements StatusRepository
 {
