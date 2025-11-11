@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent;
+namespace Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\TabulatorRepository;
+use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\TabulatorRepository;
 
 class EloquentTabulatorRepository implements TabulatorRepository
 {

@@ -209,8 +209,8 @@ return [
             'api' => env('KALION_AUTH_ENTITY_API', Thehouseofel\Kalion\Core\Domain\Objects\Entities\ApiUserEntity::class),
         ],
         'repositories' => [
-            'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent\EloquentUserRepository::class),
-            'api' => env('KALION_AUTH_REPOSITORY_API', Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository::class),
+            'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentUserRepository::class),
+            'api' => env('KALION_AUTH_REPOSITORY_API', Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository::class),
         ],
         'services' => [
             'current_user' => env('KALION_AUTH_SERVICE_CURRENT_USER', Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\CurrentUserService::class),

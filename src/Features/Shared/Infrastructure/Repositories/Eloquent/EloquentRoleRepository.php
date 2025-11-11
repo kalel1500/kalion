@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent;
+namespace Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\Role;
 
 class EloquentRoleRepository implements RoleRepository

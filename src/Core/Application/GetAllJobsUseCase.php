@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Application;
 
-use Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\JobCollection;
+use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
 
 final class GetAllJobsUseCase
 {
