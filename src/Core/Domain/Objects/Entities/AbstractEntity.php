@@ -95,7 +95,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     $allowsNull = $type->allowsNull();
                 }
 
-                if (!empty($attrs)) {
+                if (! empty($attrs)) {
                     /** @var WithParams $attr */
                     $attr       = $attrs[0]->newInstance();
                     $makeParams = $attr->params;

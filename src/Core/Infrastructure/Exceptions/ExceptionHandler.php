@@ -133,7 +133,7 @@ final class ExceptionHandler
 
     private static function isKalionHttpExceptionAnd(\Throwable $e, bool $shouldRenderTrace): bool
     {
-        if (!($e instanceof KalionHttpException)) {
+        if (! ($e instanceof KalionHttpException)) {
             return false;
         }
 
