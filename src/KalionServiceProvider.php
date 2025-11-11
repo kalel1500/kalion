@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure;
+namespace Thehouseofel\Kalion;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -47,7 +47,7 @@ class KalionServiceProvider extends ServiceProvider
     public function register(): void
     {
         if (! defined('KALION_PATH')) {
-            define('KALION_PATH', realpath(__DIR__ . '/../../../'));
+            define('KALION_PATH', realpath(__DIR__ . '/../'));
         }
 
         $this->registerSingletons();

@@ -3,7 +3,7 @@
 namespace Thehouseofel\Kalion\Tests;
 
 use Orchestra\Testbench\TestCase as Orchestra;
-use Thehouseofel\Kalion\Core\Infrastructure\KalionServiceProvider;
+use Thehouseofel\Kalion\KalionServiceProvider;
 
 abstract class TestCase extends Orchestra
 {

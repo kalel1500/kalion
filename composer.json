@@ -40,7 +40,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Thehouseofel\\Kalion\\Core\\Infrastructure\\KalionServiceProvider"
+                "Thehouseofel\\Kalion\\KalionServiceProvider"
             ]
         }
     },

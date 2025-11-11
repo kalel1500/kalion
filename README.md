@@ -22,7 +22,7 @@ composer require kalel1500/kalion:@beta
 To publish all the files in the package you can use the following command:
 
 ```bash
-php artisan vendor:publish --provider="Thehouseofel\Kalion\Core\Infrastructure\KalionServiceProvider"
+php artisan vendor:publish --provider="Thehouseofel\Kalion\KalionServiceProvider"
 ```
 
 Or else you have the following to publish the files independently
