@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Objects\Entities;
+namespace Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities;
 
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Collections\RoleCollection;
 
 class PermissionEntity extends AbstractEntity
 {

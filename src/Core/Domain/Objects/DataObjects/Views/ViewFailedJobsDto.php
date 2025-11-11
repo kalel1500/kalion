@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Views;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\FailedJobCollection;
+use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Collections\FailedJobCollection;
 
 final class ViewFailedJobsDto extends AbstractDataTransferObject
 {

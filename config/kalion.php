@@ -205,8 +205,8 @@ return [
             'password_reset' => env('KALION_AUTH_BLADE_PASSWORD_RESET', 'kal::pages.auth.password-reset'),
         ],
         'entities' => [
-            'web' => env('KALION_AUTH_ENTITY_WEB', Thehouseofel\Kalion\Core\Domain\Objects\Entities\UserEntity::class),
-            'api' => env('KALION_AUTH_ENTITY_API', Thehouseofel\Kalion\Core\Domain\Objects\Entities\ApiUserEntity::class),
+            'web' => env('KALION_AUTH_ENTITY_WEB', Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity::class),
+            'api' => env('KALION_AUTH_ENTITY_API', Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity::class),
         ],
         'repositories' => [
             'web' => env('KALION_AUTH_REPOSITORY_WEB', Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentUserRepository::class),

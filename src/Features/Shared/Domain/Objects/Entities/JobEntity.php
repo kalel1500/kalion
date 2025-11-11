@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Objects\Entities;
+namespace Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities;
 
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IntNullVo;

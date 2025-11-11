@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories;
 
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\StatusCollection;
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\StatusEntity;
+use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Collections\StatusCollection;
+use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\StatusEntity;
 
 interface StatusRepository
 {

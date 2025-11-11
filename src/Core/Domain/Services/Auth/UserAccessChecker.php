@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Services\Auth;
 
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\RoleEntity;
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;
+use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\RoleEntity;
+use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
