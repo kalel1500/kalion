@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Ajax;
+namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Ajax;
 
 use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\CookiePreferencesDto;
