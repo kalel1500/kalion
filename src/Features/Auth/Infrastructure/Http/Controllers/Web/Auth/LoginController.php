@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Web\Auth;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Controllers\Web\Auth;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
