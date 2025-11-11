@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
-use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractIntVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\UnsignedIntNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\UnsignedIntVo;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractIntVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\UnsignedIntNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\UnsignedIntVo;
 
 abstract class AbstractUnsignedIntVo extends AbstractIntVo
 {

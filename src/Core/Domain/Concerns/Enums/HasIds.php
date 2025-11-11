@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Concerns\Enums;
+namespace Thehouseofel\Kalion\Core\Domain\Concerns\Enums;
 
 trait HasIds
 {

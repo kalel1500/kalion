@@ -9,10 +9,10 @@ use Src\Shared\Domain\Contracts\Repositories\TagRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\TagCollection;
 use Src\Shared\Domain\Objects\Entities\TagEntity;
 use Src\Shared\Infrastructure\Models\Tag;
-use Thehouseofel\Kalion\Domain\Exceptions\Database\DuplicatedRecordException;
-use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Database\DuplicatedRecordException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Database\EntityRelationException;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 
 final class EloquentTagRepository implements TagRepository
 {

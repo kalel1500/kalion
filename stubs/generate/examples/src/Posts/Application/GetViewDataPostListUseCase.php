@@ -7,7 +7,7 @@ namespace Src\Posts\Application;
 use Src\Posts\Domain\Objects\DataObjects\ViewDataPostListDto;
 use Src\Shared\Domain\Contracts\Repositories\PostRepository;
 use Src\Shared\Domain\Contracts\Repositories\TagRepository;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 
 final readonly class GetViewDataPostListUseCase
 {

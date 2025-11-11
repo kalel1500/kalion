@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Abstracts\NavigationItem;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Abstracts\NavigationItem;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
 
 final class SidebarItemDto extends NavigationItem
 {

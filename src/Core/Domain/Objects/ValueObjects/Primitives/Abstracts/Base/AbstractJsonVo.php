@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base;
 
-use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\JsonNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\JsonVo;
 
 abstract class AbstractJsonVo extends AbstractValueObject
 {

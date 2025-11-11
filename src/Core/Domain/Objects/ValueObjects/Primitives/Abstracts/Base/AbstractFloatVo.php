@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\FloatNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\FloatVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\FloatNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\FloatVo;
 
 abstract class AbstractFloatVo extends AbstractValueObject
 {

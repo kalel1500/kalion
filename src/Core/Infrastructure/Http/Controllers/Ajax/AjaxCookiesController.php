@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Ajax;
 
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\CookiePreferencesDto;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
-use Thehouseofel\Kalion\Infrastructure\Services\Cookie;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\CookiePreferencesDto;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Cookie;
 
 final class AjaxCookiesController extends Controller
 {

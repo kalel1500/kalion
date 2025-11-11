@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services\Auth;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Auth;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Authentication;
-use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\CurrentUser;
-use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Login;
-use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\PasswordReset;
-use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Register;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\CurrentUser;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Login;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\PasswordReset;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register;
 
 class AuthenticationService implements Authentication
 {

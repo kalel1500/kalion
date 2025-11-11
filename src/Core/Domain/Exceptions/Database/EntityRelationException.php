@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Exceptions\Database;
+namespace Thehouseofel\Kalion\Core\Domain\Exceptions\Database;
 
-use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionLogicException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionLogicException;
 
 class EntityRelationException extends KalionLogicException
 {

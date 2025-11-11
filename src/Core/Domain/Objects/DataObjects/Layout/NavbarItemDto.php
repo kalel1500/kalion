@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Abstracts\NavigationItem;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Abstracts\NavigationItem;
 
 final class NavbarItemDto extends NavigationItem
 {

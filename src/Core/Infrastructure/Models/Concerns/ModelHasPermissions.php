@@ -1,9 +1,9 @@
 <?php
 
-namespace Thehouseofel\Kalion\Infrastructure\Models\Concerns;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Models\Concerns;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Thehouseofel\Kalion\Infrastructure\Models\Role;
+use Thehouseofel\Kalion\Core\Infrastructure\Models\Role;
 
 trait ModelHasPermissions
 {

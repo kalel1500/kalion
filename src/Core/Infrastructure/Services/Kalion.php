@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\LoginFieldDto;
-use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectAfterLogin;
-use Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\LoginFieldDto;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectAfterLogin;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectDefaultPath;
 
 final class Kalion
 {
@@ -47,7 +47,7 @@ final class Kalion
             $authConfigContents = file_get_contents($authConfigPath);
             if (str_contains($authConfigContents, $defaultLine)) {
                 config([
-                    'auth.providers.users.model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Infrastructure\Models\User::class),
+                    'auth.providers.users.model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Core\Infrastructure\Models\User::class),
                 ]);
             }
         }
@@ -56,7 +56,7 @@ final class Kalion
             config([
                 'auth.providers.api_users' => [
                     'driver' => 'eloquent',
-                    'model'  => env('AUTH_MODEL_API', \Thehouseofel\Kalion\Infrastructure\Models\ApiUser::class),
+                    'model'  => env('AUTH_MODEL_API', \Thehouseofel\Kalion\Core\Infrastructure\Models\ApiUser::class),
                 ],
             ]);
         }

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Services;
+namespace Thehouseofel\Kalion\Core\Domain\Services;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
-use Thehouseofel\Kalion\Domain\Services\Contracts\LayoutData;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\UserInfoDto;
+use Thehouseofel\Kalion\Core\Domain\Services\Contracts\LayoutData;
 
 class BaseLayoutData implements LayoutData
 {

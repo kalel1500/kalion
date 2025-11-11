@@ -1,4 +1,4 @@
-@use(Thehouseofel\Kalion\Infrastructure\Services\Kalion)
+@use(Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion)
 
 <footer class="my-4 rounded-lg bg-white dark:bg-gray-800 {{ Kalion::getShadowClasses('shadow') }}">
     <div class="mx-auto w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between">

@@ -1,6 +1,6 @@
 <?php
 
-namespace Thehouseofel\Kalion\Infrastructure\Console\Commands\Concerns;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\Concerns;
 
 use Symfony\Component\Process\Process;
 use function Illuminate\Support\php_binary;

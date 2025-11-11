@@ -9,9 +9,9 @@ use Src\Shared\Domain\Contracts\Repositories\PostRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\PostCollection;
 use Src\Shared\Domain\Objects\Entities\PostEntity;
 use Src\Shared\Infrastructure\Models\Post;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 
 final class EloquentPostRepository implements PostRepository
 {

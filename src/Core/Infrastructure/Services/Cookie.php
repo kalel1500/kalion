@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie as CookieFacade;
 use Symfony\Component\HttpFoundation\Cookie as HttpCookie;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\CookiePreferencesDto;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\ThemeVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\CookiePreferencesDto;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
 final class Cookie
 {

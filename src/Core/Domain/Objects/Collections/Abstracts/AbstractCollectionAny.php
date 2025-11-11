@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts;
 
-use Thehouseofel\Kalion\Domain\Objects\Collections\Concerns\HasRelatableOptions;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Concerns\HasRelatableOptions;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Contracts\Relatable;
 
 abstract class AbstractCollectionAny extends AbstractCollectionBase implements Relatable
 {

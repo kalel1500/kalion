@@ -6,7 +6,7 @@ namespace Src\Posts\Application;
 
 use Src\Shared\Domain\Contracts\Repositories\PostRepository;
 use Src\Shared\Domain\Objects\Entities\PostEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 
 final readonly class GetViewDataPostDetailUseCase
 {

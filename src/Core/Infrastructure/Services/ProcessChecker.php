@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
 
 use Symfony\Component\Process\Process;
-use Thehouseofel\Kalion\Domain\Exceptions\ProcessException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\ProcessException;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 
 final class ProcessChecker
 {

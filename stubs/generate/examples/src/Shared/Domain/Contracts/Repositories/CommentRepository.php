@@ -6,7 +6,7 @@ namespace Src\Shared\Domain\Contracts\Repositories;
 
 use Src\Shared\Domain\Objects\Entities\Collections\CommentCollection;
 use Src\Shared\Domain\Objects\Entities\CommentEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 
 interface CommentRepository
 {

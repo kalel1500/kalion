@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Exceptions\Base;
+namespace Thehouseofel\Kalion\Core\Domain\Exceptions\Base;
 
 use Exception;
-use Thehouseofel\Kalion\Domain\Exceptions\Concerns\KalionExceptionBehavior;
-use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Concerns\KalionExceptionBehavior;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Throwable;
 
 abstract class KalionException extends Exception implements KalionExceptionInterface

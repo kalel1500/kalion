@@ -1,8 +1,8 @@
 <?php
 
-namespace Thehouseofel\Kalion\Domain\Exceptions\Contracts;
+namespace Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 
 interface KalionExceptionInterface extends \Throwable
 {

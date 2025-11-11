@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Services\Auth;
+namespace Thehouseofel\Kalion\Core\Domain\Services\Auth;
 
 use Illuminate\Support\Collection;
 

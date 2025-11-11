@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
 use Carbon\CarbonImmutable;
-use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\DateVo;
-use Thehouseofel\Kalion\Infrastructure\Services\Date;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Date;
 
 abstract class AbstractDateVo extends AbstractStringVo
 {

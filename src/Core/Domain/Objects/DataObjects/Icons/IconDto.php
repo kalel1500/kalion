@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Icons;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Icons;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
 
 final class IconDto extends AbstractDataTransferObject
 {

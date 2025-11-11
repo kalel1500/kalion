@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Exceptions;
 
-use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionRuntimeException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionRuntimeException;
 
 class TestException extends KalionRuntimeException
 {

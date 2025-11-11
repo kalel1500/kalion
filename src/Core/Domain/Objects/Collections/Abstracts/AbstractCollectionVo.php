@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 
 abstract class AbstractCollectionVo extends AbstractCollectionBase
 {

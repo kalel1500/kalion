@@ -1,10 +1,10 @@
 <?php
 
-namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
-use Thehouseofel\Kalion\Infrastructure\Console\Commands\Concerns\InteractsWithComposerPackages;
-use Thehouseofel\Kalion\Infrastructure\Services\Commands\StartCommandService;
+use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\Concerns\InteractsWithComposerPackages;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Commands\StartCommandService;
 
 class KalionStart extends Command
 {

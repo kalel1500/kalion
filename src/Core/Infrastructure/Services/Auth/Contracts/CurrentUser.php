@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

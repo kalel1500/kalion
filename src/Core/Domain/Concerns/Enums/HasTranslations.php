@@ -1,6 +1,6 @@
 <?php
 
-namespace Thehouseofel\Kalion\Domain\Concerns\Enums;
+namespace Thehouseofel\Kalion\Core\Domain\Concerns\Enums;
 
 trait HasTranslations
 {

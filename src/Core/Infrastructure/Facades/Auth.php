@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Facades;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Facades;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
-use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Authentication as AuthenticationContract;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication as AuthenticationContract;
 
 /**
  * @method static user(string|null $guard = null)
@@ -23,7 +23,7 @@ use Thehouseofel\Kalion\Infrastructure\Services\Auth\Contracts\Authentication as
  * @method static View viewPasswordReset(Request $request = null)
  * @method static RedirectResponse reset(Request $request)
  *
- * @see \Thehouseofel\Kalion\Infrastructure\Services\Auth\AuthenticationService
+ * @see \Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\AuthenticationService
  */
 final class Auth extends Facade
 {

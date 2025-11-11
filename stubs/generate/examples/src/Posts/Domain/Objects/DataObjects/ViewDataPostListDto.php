@@ -6,7 +6,7 @@ namespace Src\Posts\Domain\Objects\DataObjects;
 
 use Src\Shared\Domain\Objects\Entities\Collections\PostCollection;
 use Src\Shared\Domain\Objects\Entities\Collections\TagCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
 
 final class ViewDataPostListDto extends AbstractDataTransferObject
 {

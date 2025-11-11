@@ -6,9 +6,9 @@ namespace Src\Shared\Domain\Contracts\Repositories;
 
 use Src\Shared\Domain\Objects\Entities\Collections\PostCollection;
 use Src\Shared\Domain\Objects\Entities\PostEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 
 interface PostRepository
 {

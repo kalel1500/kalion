@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
-use Thehouseofel\Kalion\Infrastructure\Services\Commands\PublishAuthCommandService;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Commands\PublishAuthCommandService;
 
 final class PublishAuth extends Command
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts;
 
 use Illuminate\Support\Arr;
-use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Concerns\HasRelatableOptions;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\PaginationDataDto;
-use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Concerns\HasRelatableOptions;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Contracts\Relatable;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\PaginationDataDto;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
 
 abstract class AbstractCollectionEntity extends AbstractCollectionBase implements Relatable
 {

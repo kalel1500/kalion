@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects;
 
 use JsonSerializable;
-use Thehouseofel\Kalion\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 
 /**
  * @template T of AbstractValueObject

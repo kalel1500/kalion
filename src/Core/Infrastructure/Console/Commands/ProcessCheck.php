@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
-use Thehouseofel\Kalion\Infrastructure\Facades\ProcessChecker;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Facades\ProcessChecker;
 
 final class ProcessCheck extends Command
 {

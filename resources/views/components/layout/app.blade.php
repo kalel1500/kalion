@@ -1,4 +1,4 @@
-@use('Thehouseofel\Kalion\Infrastructure\Services\Renderer')
+@use('Thehouseofel\Kalion\Core\Infrastructure\Services\Renderer')
 <!DOCTYPE html>
 <html
     lang="{{ str_replace('_', '-', app()->getLocale()) }}"

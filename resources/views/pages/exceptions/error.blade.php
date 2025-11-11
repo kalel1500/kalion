@@ -1,4 +1,4 @@
-@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto $context */ @endphp
+@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto $context */ @endphp
 @extends('kal::pages.exceptions.minimal')
 
 @section('title', __($context->title))

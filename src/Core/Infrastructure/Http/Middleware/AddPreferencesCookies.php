@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Http\Middleware;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Thehouseofel\Kalion\Infrastructure\Services\Cookie;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Cookie;
 
 final class AddPreferencesCookies
 {

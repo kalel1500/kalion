@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Src\Tags\Domain\Objects\DataObjects;
 
 use Src\Shared\Domain\Objects\Entities\TagTypeEntity;
-use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
 
 final class FrontTagsDto extends AbstractDataTransferObject
 {

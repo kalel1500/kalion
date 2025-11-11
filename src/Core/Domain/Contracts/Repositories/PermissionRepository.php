@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Contracts\Repositories;
+namespace Thehouseofel\Kalion\Core\Domain\Contracts\Repositories;
 
-use Thehouseofel\Kalion\Domain\Objects\Entities\PermissionEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\PermissionEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 
 interface PermissionRepository
 {

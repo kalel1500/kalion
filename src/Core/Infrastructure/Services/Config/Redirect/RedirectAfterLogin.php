@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

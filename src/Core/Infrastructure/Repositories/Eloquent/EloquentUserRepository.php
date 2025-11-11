@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
-use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
 
 class EloquentUserRepository
 {

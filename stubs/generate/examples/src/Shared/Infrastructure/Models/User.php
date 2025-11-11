@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Src\Shared\Infrastructure\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Thehouseofel\Kalion\Infrastructure\Models\User as KalionUser;
+use Thehouseofel\Kalion\Core\Infrastructure\Models\User as KalionUser;
 
 class User extends KalionUser
 {

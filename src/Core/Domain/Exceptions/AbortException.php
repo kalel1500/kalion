@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Exceptions;
+namespace Thehouseofel\Kalion\Core\Domain\Exceptions;
 
-use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
 
 class AbortException extends KalionHttpException
 {

@@ -7,7 +7,7 @@ namespace Src\Tags\Application;
 use Src\Shared\Domain\Contracts\Repositories\TagTypeRepository;
 use Src\Tags\Domain\Objects\DataObjects\FrontTagsDto;
 use Src\Tags\Domain\Objects\DataObjects\ViewTagsDto;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 
 final readonly class GetViewDataTagsUseCase
 {

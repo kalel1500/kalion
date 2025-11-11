@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Web;
 
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

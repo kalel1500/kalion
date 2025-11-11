@@ -1,8 +1,8 @@
 <?php
 
-namespace Thehouseofel\Kalion\Domain\Concerns\Enums;
+namespace Thehouseofel\Kalion\Core\Domain\Concerns\Enums;
 
-use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
 
 trait Nullable
 {

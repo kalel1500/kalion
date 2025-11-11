@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Facades;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\UserInfoDto;
-use Thehouseofel\Kalion\Domain\Services\Contracts\LayoutData as LayoutDataContract;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\UserInfoDto;
+use Thehouseofel\Kalion\Core\Domain\Services\Contracts\LayoutData as LayoutDataContract;
 
 /**
  * @method static int getMessageCounter()
  * @method static NavbarItemCollection getNavbarNotifications()
  * @method static UserInfoDto getUserInfo()
  *
- * @see \Thehouseofel\Kalion\Domain\Services\BaseLayoutData
+ * @see \Thehouseofel\Kalion\Core\Domain\Services\BaseLayoutData
  */
 final class LayoutData extends Facade
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractEnumVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractEnumVo;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

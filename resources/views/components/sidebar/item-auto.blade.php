@@ -1,4 +1,4 @@
-@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDto $item */ @endphp
+@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto $item */ @endphp
 @use(Illuminate\Support\Facades\Route)
 
 @props(['item', 'level'])

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Exceptions;
+namespace Thehouseofel\Kalion\Core\Domain\Exceptions;
 
-use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
-use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\UserEntity;
 
 class UnauthorizedException extends KalionHttpException
 {

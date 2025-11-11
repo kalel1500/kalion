@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Services;
+namespace Thehouseofel\Kalion\Core\Domain\Services;
 
-use Thehouseofel\Kalion\Domain\Concerns\Instantiable;
+use Thehouseofel\Kalion\Core\Domain\Concerns\Instantiable;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

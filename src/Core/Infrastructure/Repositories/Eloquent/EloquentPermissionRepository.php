@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\PermissionRepository;
-use Thehouseofel\Kalion\Domain\Objects\Entities\PermissionEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
-use Thehouseofel\Kalion\Infrastructure\Models\Permission;
+use Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\PermissionRepository;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\PermissionEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Models\Permission;
 
 class EloquentPermissionRepository implements PermissionRepository
 {

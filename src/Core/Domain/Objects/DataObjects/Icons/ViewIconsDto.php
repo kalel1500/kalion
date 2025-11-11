@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\DataObjects\Icons;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Icons;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\AbstractDataTransferObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\BoolVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\BoolVo;
 
 final class ViewIconsDto extends AbstractDataTransferObject
 {

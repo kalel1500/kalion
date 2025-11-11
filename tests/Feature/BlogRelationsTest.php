@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Tests\Feature;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use Thehouseofel\Kalion\Domain\Concerns\KalionAssertions;
+use Thehouseofel\Kalion\Core\Domain\Concerns\KalionAssertions;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\PostCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\TagCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\TagEntity;

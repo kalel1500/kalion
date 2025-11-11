@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepository;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\FailedJobCollection;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\JobCollection;
-use Thehouseofel\Kalion\Infrastructure\Models\FailedJob;
-use Thehouseofel\Kalion\Infrastructure\Models\Jobs;
+use Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\JobRepository;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\FailedJobCollection;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\JobCollection;
+use Thehouseofel\Kalion\Core\Infrastructure\Models\FailedJob;
+use Thehouseofel\Kalion\Core\Infrastructure\Models\Jobs;
 
 class EloquentJobRepository implements JobRepository
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Exceptions\Concerns;
+namespace Thehouseofel\Kalion\Core\Domain\Exceptions\Concerns;
 
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Throwable;
 use UnexpectedValueException;
 

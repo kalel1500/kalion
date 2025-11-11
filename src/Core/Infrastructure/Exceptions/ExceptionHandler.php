@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Exceptions;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Exceptions;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Thehouseofel\Kalion\Domain\Exceptions\Base\KalionHttpException;
-use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\ExceptionContextDto;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Throwable;
 
 final class ExceptionHandler

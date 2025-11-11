@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts;
 
 use ArrayAccess;
 use ArrayIterator;
@@ -12,17 +12,17 @@ use Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
 use ReflectionClass;
-use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
-use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
-use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Attributes\CollectionOf;
-use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Contracts\Relatable;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
-use Thehouseofel\Kalion\Domain\Objects\Entities\AbstractEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IntVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\JsonVo;
+use Thehouseofel\Kalion\Core\Domain\Concerns\Relations\ParsesRelationFlags;
+use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Attributes\CollectionOf;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Contracts\Relatable;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IntVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\JsonVo;
 use TypeError;
 
 abstract class AbstractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, ArrayConvertible, JsonSerializable

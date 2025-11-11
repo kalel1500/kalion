@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Src\Posts\Application\GetViewDataPostListUseCase;
 use Src\Posts\Application\GetViewDataPostDetailUseCase;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
 
 final class PostController extends Controller
 {

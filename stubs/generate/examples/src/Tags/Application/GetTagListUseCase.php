@@ -6,7 +6,7 @@ namespace Src\Tags\Application;
 
 use Src\Shared\Domain\Contracts\Repositories\TagRepository;
 use Src\Shared\Domain\Objects\Entities\Collections\TagCollection;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 
 final readonly class GetTagListUseCase
 {

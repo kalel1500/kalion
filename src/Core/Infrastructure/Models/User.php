@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Models;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Thehouseofel\Kalion\Database\Factories\UserFactory;
-use Thehouseofel\Kalion\Infrastructure\Models\Concerns\ModelHasPermissions;
+use Thehouseofel\Kalion\Core\Database\Factories\UserFactory;
+use Thehouseofel\Kalion\Core\Infrastructure\Models\Concerns\ModelHasPermissions;
 
 class User extends Authenticatable
 {

@@ -1,4 +1,4 @@
-@php($theme = \Thehouseofel\Kalion\Infrastructure\Services\Cookie::readOrNew()->preferences()->theme)
+@php($theme = \Thehouseofel\Kalion\Core\Infrastructure\Services\Cookie::readOrNew()->preferences()->theme)
 {{--<x-kal::navbar.item
     id="theme-toggle"
     text="Theme toggle"

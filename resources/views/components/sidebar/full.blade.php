@@ -1,5 +1,5 @@
-@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDto $item */ @endphp
-@php /** @var \Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDto $subItem */ @endphp
+@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto $item */ @endphp
+@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto $subItem */ @endphp
 
 <x-kal::sidebar>
     @if($showSearch)

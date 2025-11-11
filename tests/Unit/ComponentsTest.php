@@ -3,7 +3,7 @@
 namespace Thehouseofel\Kalion\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Thehouseofel\Kalion\Domain\Services\TailwindClassFilter;
+use Thehouseofel\Kalion\Core\Domain\Services\TailwindClassFilter;
 
 class ComponentsTest extends TestCase
 {

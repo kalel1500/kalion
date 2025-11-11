@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Thehouseofel\\Kalion\\": "src/Core",
+            "Thehouseofel\\Kalion\\": "src",
             "Thehouseofel\\Kalion\\Database\\Factories\\": "database/factories",
             "Thehouseofel\\Kalion\\Database\\Seeders\\": "database/seeders"
         },
@@ -40,7 +40,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Thehouseofel\\Kalion\\Infrastructure\\KalionServiceProvider"
+                "Thehouseofel\\Kalion\\Core\\Infrastructure\\KalionServiceProvider"
             ]
         }
     },

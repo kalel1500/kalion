@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Src\Home\Infrastructure\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
 
 final class HomeController extends Controller
 {

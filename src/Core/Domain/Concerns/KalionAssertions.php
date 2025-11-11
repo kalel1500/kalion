@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Concerns;
+namespace Thehouseofel\Kalion\Core\Domain\Concerns;
 
 use PHPUnit\Framework\Assert;
 

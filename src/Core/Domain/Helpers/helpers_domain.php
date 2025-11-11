@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Domain\Exceptions\AbortException;
-use Thehouseofel\Kalion\Domain\Exceptions\Contracts\KalionExceptionInterface;
-use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\Entities\ApiUserEntity;
-use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
-use Thehouseofel\Kalion\Infrastructure\Facades\Auth;
-use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\AbortException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\ApiUserEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
+use Thehouseofel\Kalion\Core\Infrastructure\Facades\Auth;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
 
 if (! function_exists('user')) {
     /**

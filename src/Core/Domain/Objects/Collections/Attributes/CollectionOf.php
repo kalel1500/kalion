@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections\Attributes;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Attributes;
 
 use Attribute;
 

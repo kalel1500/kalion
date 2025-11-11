@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Facades;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Facades;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static string|null redirectTo(Request $request = null)
  *
- * @see \Thehouseofel\Kalion\Infrastructure\Services\Config\Redirect\RedirectDefaultPath
+ * @see \Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectDefaultPath
  */
 final class RedirectDefaultPath extends Facade
 {

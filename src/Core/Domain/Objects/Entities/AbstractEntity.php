@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Entities;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\Entities;
 
 use JsonSerializable;
 use ReflectionClass;
-use Thehouseofel\Kalion\Domain\Concerns\Relations\ParsesRelationFlags;
-use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
-use Thehouseofel\Kalion\Domain\Exceptions\Database\EntityRelationException;
-use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
-use Thehouseofel\Kalion\Domain\Exceptions\RequiredDefinitionException;
-use Thehouseofel\Kalion\Domain\Objects\Attributes\WithParams;
-use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\Computed;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
-use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Core\Domain\Concerns\Relations\ParsesRelationFlags;
+use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Database\EntityRelationException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
+use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\WithParams;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
 
 abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 {

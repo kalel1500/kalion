@@ -15,7 +15,7 @@ require __DIR__ . '/../vendor/autoload.php';
 */
 $app = Application::create();
 
-$app->register(\Thehouseofel\Kalion\Infrastructure\KalionServiceProvider::class);
+$app->register(\Thehouseofel\Kalion\Core\Infrastructure\KalionServiceProvider::class);
 
 // Configuración BD
 $app['config']->set('database.default', 'testing');

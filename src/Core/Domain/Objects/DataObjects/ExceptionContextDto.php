@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Throwable;
 
 /**

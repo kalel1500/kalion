@@ -15,7 +15,7 @@ return [
     'invalid_permissions'           => 'No tienes permisos para acceder a esta página', // El usuario no tiene los permisos correctos
     'necessary_roles'               => 'Los roles necesarios son :roles',
     'necessary_permissions'         => 'Los permisos necesarios son :permissions',
-    'missing_trait_has_permissions' => 'La Entidad :class debe usar el trait Thehouseofel\Kalion\Domain\Traits\EntityHasPermissions',
+    'missing_trait_has_permissions' => 'La Entidad :class debe usar el trait Thehouseofel\Kalion\Core\Domain\Traits\EntityHasPermissions',
     'not_logged_in'                 => 'El usuario no esta logueado',
     'user_not_found'                => 'No existe ningún usuario con ese :field', // No encontramos ninguna cuenta con ese ":field"
     'register'         => [

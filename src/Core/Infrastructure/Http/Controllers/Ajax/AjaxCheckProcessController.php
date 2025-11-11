@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Ajax;
 
 use Illuminate\Http\JsonResponse;
-use Thehouseofel\Kalion\Application\CheckProcessQueueUseCase;
-use Thehouseofel\Kalion\Application\CheckProcessReverbUseCase;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
-use Thehouseofel\Kalion\Infrastructure\Events\ProcessStatusChecked;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Controller;
-use Thehouseofel\Kalion\Infrastructure\Services\Broadcast;
+use Thehouseofel\Kalion\Core\Application\CheckProcessQueueUseCase;
+use Thehouseofel\Kalion\Core\Application\CheckProcessReverbUseCase;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Events\ProcessStatusChecked;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Broadcast;
 
 final class AjaxCheckProcessController extends Controller
 {

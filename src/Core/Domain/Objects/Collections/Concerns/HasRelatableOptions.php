@@ -1,6 +1,6 @@
 <?php
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections\Concerns;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Concerns;
 
 /**
  * @internal This trait is not meant to be used or overwritten outside the package.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Helpers;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Helpers;
 
 use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Application;
+namespace Thehouseofel\Kalion\Core\Application;
 
 use Illuminate\Http\JsonResponse;
-use Thehouseofel\Kalion\Infrastructure\Facades\ProcessChecker;
+use Thehouseofel\Kalion\Core\Infrastructure\Facades\ProcessChecker;
 
 final readonly class CheckProcessReverbUseCase
 {

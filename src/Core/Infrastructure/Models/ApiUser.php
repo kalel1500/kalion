@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Models;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Thehouseofel\Kalion\Infrastructure\Models\Concerns\ModelHasPermissions;
+use Thehouseofel\Kalion\Core\Infrastructure\Models\Concerns\ModelHasPermissions;
 
 class ApiUser extends Authenticatable
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\TimestampNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\TimestampVo;
-use Thehouseofel\Kalion\Infrastructure\Services\Date;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimestampNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimestampVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Date;
 
 abstract class AbstractTimestampVo extends AbstractDateVo
 {

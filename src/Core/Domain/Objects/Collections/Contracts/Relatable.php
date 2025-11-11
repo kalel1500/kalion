@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections\Contracts;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Contracts;
 
-use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
+use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
 
 interface Relatable extends ArrayConvertible
 {

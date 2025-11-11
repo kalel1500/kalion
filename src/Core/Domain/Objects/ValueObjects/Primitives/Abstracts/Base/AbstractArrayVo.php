@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\Base;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base;
 
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\ArrayNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
 abstract class AbstractArrayVo extends AbstractValueObject implements ArrayAccess, IteratorAggregate
 {

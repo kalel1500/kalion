@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Thehouseofel\Kalion\Domain\Concerns\KalionAssertions;
+use Thehouseofel\Kalion\Core\Domain\Concerns\KalionAssertions;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\DataObjects\DetailDto;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\PostEntity;
 use Thehouseofel\Kalion\Tests\TestCase;

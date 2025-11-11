@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\Collections;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections;
 
-use Thehouseofel\Kalion\Domain\Objects\Collections\Abstracts\AbstractCollectionAny;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollectionAny;
 
 class CollectionAny extends AbstractCollectionAny
 {

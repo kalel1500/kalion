@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Concerns;
+namespace Thehouseofel\Kalion\Core\Domain\Concerns;
 
 /**
  * @internal This trait is not meant to be used or overwritten outside the package.

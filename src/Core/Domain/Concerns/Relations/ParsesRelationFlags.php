@@ -1,6 +1,6 @@
 <?php
 
-namespace Thehouseofel\Kalion\Domain\Concerns\Relations;
+namespace Thehouseofel\Kalion\Core\Domain\Concerns\Relations;
 
 trait ParsesRelationFlags
 {

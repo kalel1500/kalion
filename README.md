@@ -22,7 +22,7 @@ composer require kalel1500/kalion:@beta
 To publish all the files in the package you can use the following command:
 
 ```bash
-php artisan vendor:publish --provider="Thehouseofel\Kalion\Infrastructure\KalionServiceProvider"
+php artisan vendor:publish --provider="Thehouseofel\Kalion\Core\Infrastructure\KalionServiceProvider"
 ```
 
 Or else you have the following to publish the files independently
@@ -79,7 +79,7 @@ You can configure where the application will redirect (as long as no previous ro
    ```php
    public function register(): void
    {
-       \Thehouseofel\Kalion\Infrastructure\Services\Kalion::redirectAfterLoginTo('home');
+       \Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion::redirectAfterLoginTo('home');
    }
    ```
 
@@ -108,7 +108,7 @@ You can configure where the application will redirect to by default in three way
    ```php
    public function register(): void
    {
-       \Thehouseofel\Kalion\Infrastructure\Services\Kalion::redirectDefaultPathTo('home');
+       \Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion::redirectDefaultPathTo('home');
    }
    ```
 

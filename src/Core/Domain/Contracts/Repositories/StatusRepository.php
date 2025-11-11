@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Contracts\Repositories;
+namespace Thehouseofel\Kalion\Core\Domain\Contracts\Repositories;
 
-use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\StatusCollection;
-use Thehouseofel\Kalion\Domain\Objects\Entities\StatusEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\StatusCollection;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\StatusEntity;
 
 interface StatusRepository
 {

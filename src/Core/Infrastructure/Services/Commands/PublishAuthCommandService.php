@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Commands;
 
 use Illuminate\Support\Facades\File;
-use Thehouseofel\Kalion\Domain\Concerns\CountMethods;
-use Thehouseofel\Kalion\Infrastructure\Console\Commands\PublishAuth;
+use Thehouseofel\Kalion\Core\Domain\Concerns\CountMethods;
+use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\PublishAuth;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

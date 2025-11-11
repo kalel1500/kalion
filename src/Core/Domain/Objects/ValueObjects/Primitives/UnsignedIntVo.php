@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractUnsignedIntVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractUnsignedIntVo;
 
 class UnsignedIntVo extends AbstractUnsignedIntVo
 {

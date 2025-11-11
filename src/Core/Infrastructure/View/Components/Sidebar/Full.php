@@ -1,14 +1,14 @@
 <?php
 
-namespace Thehouseofel\Kalion\Infrastructure\View\Components\Sidebar;
+namespace Thehouseofel\Kalion\Core\Infrastructure\View\Components\Sidebar;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use Thehouseofel\Kalion\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Layout\SidebarItemDto;
-use Thehouseofel\Kalion\Infrastructure\Facades\LayoutData;
+use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto;
+use Thehouseofel\Kalion\Core\Infrastructure\Facades\LayoutData;
 
 class Full extends Component
 {

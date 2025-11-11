@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
 
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Responses\ResponseBroadcastDto;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Responses\ResponseBroadcastDto;
 use Throwable;
 
 final class Broadcast

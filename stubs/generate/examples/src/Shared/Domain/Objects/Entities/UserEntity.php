@@ -6,12 +6,12 @@ namespace Src\Shared\Domain\Objects\Entities;
 
 use Src\Shared\Domain\Objects\Entities\Collections\CommentCollection;
 use Src\Shared\Domain\Objects\Entities\Collections\PostCollection;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Attributes\RelationOf;
-use Thehouseofel\Kalion\Domain\Objects\Entities\UserEntity as BaseUserEntity;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\UserEntity as BaseUserEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 
 class UserEntity extends BaseUserEntity
 {

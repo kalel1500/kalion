@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxCheckProcessController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxCookiesController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Ajax\AjaxJobsController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\ExampleController;
-use Thehouseofel\Kalion\Infrastructure\Http\Controllers\Web\JobsController;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Ajax\AjaxCheckProcessController;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Ajax\AjaxCookiesController;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Ajax\AjaxJobsController;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Web\ExampleController;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Web\JobsController;
 
 Route::get('/', fn() => redirect(default_url()))->name('index');
 

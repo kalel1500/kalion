@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Repositories\Eloquent;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\StatusRepository;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\StatusCollection;
-use Thehouseofel\Kalion\Domain\Objects\Entities\StatusEntity;
-use Thehouseofel\Kalion\Infrastructure\Models\Status;
+use Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\StatusRepository;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\StatusCollection;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\StatusEntity;
+use Thehouseofel\Kalion\Core\Infrastructure\Models\Status;
 
 class EloquentStatusRepository implements StatusRepository
 {

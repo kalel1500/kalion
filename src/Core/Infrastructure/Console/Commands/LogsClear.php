@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Console\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;

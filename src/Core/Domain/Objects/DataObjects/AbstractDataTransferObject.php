@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\DataObjects;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects;
 
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionUnionType;
-use Thehouseofel\Kalion\Domain\Contracts\ArrayConvertible;
-use Thehouseofel\Kalion\Domain\Exceptions\KalionReflectionException;
-use Thehouseofel\Kalion\Domain\Objects\Attributes\WithParams;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Attributes\DisableReflection;
-use Thehouseofel\Kalion\Domain\Objects\DataObjects\Contracts\MakeArrayable;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\AbstractValueObject;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\ArrayVo;
-use Thehouseofel\Kalion\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
+use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\WithParams;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflection;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\ArrayVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
 
 abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArrayable, Jsonable, JsonSerializable
 {

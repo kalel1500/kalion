@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Infrastructure\Services\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Commands;
 
 use Composer\InstalledVersions;
 use Illuminate\Http\Client\ConnectionException;
@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\ServiceProvider;
 use RuntimeException;
-use Thehouseofel\Kalion\Domain\Concerns\CountMethods;
-use Thehouseofel\Kalion\Infrastructure\Console\Commands\KalionStart;
-use Thehouseofel\Kalion\Infrastructure\Services\Version;
+use Thehouseofel\Kalion\Core\Domain\Concerns\CountMethods;
+use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\KalionStart;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Version;
 use Throwable;
 use function Illuminate\Filesystem\join_paths;
 
@@ -884,7 +884,7 @@ EOD;
 EOD
             : <<<'EOD'
 ->withExceptions(function (Exceptions $exceptions)$1 {
-        $callback = \Thehouseofel\Kalion\Infrastructure\Exceptions\ExceptionHandler::getUsingCallback();
+        $callback = \Thehouseofel\Kalion\Core\Infrastructure\Exceptions\ExceptionHandler::getUsingCallback();
         $callback($exceptions);
     })
 EOD;

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\Abstracts;
+namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdZeroNullVo;
-use Thehouseofel\Kalion\Domain\Objects\ValueObjects\Primitives\IdZeroVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdZeroNullVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdZeroVo;
 
 abstract class AbstractIdZero extends AbstractId
 {

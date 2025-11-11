@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Application;
+namespace Thehouseofel\Kalion\Core\Application;
 
-use Thehouseofel\Kalion\Domain\Contracts\Repositories\JobRepository;
-use Thehouseofel\Kalion\Domain\Objects\Entities\Collections\FailedJobCollection;
+use Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\JobRepository;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Collections\FailedJobCollection;
 
 final class GetAllFailedJobsUseCase
 {
