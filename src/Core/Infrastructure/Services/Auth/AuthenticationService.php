@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Auth;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\CurrentUser;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class CurrentUserService implements CurrentUser
+class AuthenticationService implements Authentication
 {
     private bool  $loadRoles;
     private mixed $userEntity = null;
@@ -21,7 +21,7 @@ class CurrentUserService implements CurrentUser
         $this->loadRoles = config('kalion.auth.load_roles');
     }
 
-    public function userEntity(string $guard = null)
+    public function user(string $guard = null)
     {
         /** @var class-string<AbstractEntity> $entityClass */
         $entityClass = Kalion::getClassUserEntity($guard);

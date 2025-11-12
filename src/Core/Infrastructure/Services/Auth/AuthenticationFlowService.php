@@ -8,7 +8,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\AuthenticationFlow;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\CurrentUser;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Login;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\PasswordReset;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register;
@@ -16,19 +15,11 @@ use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register;
 class AuthenticationFlowService implements AuthenticationFlow
 {
     public function __construct(
-        protected CurrentUser   $currentUser,
         protected Login         $login,
         protected Register      $register,
         protected PasswordReset $passwordReset,
     )
     {
-    }
-
-    /*----- CurrentUserContract -----*/
-
-    public function user(string $guard = null)
-    {
-        return $this->currentUser->userEntity($guard);
     }
 
     /*----- LoginContract -----*/

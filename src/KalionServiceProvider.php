@@ -57,7 +57,7 @@ class KalionServiceProvider extends ServiceProvider
     protected function registerSingletons(): void
     {
         $this->app->singleton(\Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData::class, fn($app) => new (Kalion::getClassServiceLayout()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\CurrentUser::class, fn($app) => new (Kalion::getClassServiceCurrentUser()));
+        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication::class, fn($app) => new (Kalion::getClassServiceAuthentication()));
         $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
         $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
         $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));

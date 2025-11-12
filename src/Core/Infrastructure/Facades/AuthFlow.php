@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Facade;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\AuthenticationFlow as AuthenticationFlowContract;
 
 /**
- * @method static user(string|null $guard = null)
- *
  * @method static View viewLogin(Request $request = null)
  * @method static RedirectResponse login(Request $request)
  * @method static RedirectResponse logout(Request $request)

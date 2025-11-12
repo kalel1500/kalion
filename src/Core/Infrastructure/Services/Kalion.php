@@ -118,9 +118,9 @@ final class Kalion
         return config('kalion.layout.service');
     }
 
-    public static function getClassServiceCurrentUser()
+    public static function getClassServiceAuthentication()
     {
-        return config('kalion.auth.services.current_user');
+        return config('kalion.auth.services.authentication');
     }
 
     public static function getClassServiceLogin()

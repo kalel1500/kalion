@@ -213,7 +213,7 @@ return [
             'api' => env('KALION_AUTH_REPOSITORY_API', Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository::class),
         ],
         'services' => [
-            'current_user' => env('KALION_AUTH_SERVICE_CURRENT_USER', Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\CurrentUserService::class),
+            'authentication' => env('KALION_AUTH_SERVICE_AUTHENTICATION', Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\AuthenticationService::class),
             'login' => env('KALION_AUTH_SERVICE_LOGIN', Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\LoginService::class),
             'register' => env('KALION_AUTH_SERVICE_REGISTER', Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\RegisterService::class),
             'password_reset' => env('KALION_AUTH_SERVICE_PASSWORD_RESET', Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\PasswordResetService::class),

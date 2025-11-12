@@ -13,8 +13,6 @@ use Illuminate\Http\Request;
  */
 interface AuthenticationFlow
 {
-    public function user(string $guard = null);
-
     public function viewLogin(Request $request = null): View;
 
     public function login(Request $request): RedirectResponse;
