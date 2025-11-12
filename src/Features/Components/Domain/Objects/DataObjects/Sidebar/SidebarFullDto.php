@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sid
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\Collections\SidebarItemCollection;
 
 class SidebarFullDto extends AbstractDataTransferObject
 {

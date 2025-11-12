@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout;
+namespace Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout\UserInfoDto;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\Collections\NavbarItemCollection;
 
 final class NavbarDropdownDto extends AbstractDataTransferObject
 {

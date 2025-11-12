@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers;
 
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\NavbarItemDto;
-use Thehouseofel\Kalion\Core\Infrastructure\Facades\LayoutData;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\Collections\NavbarItemCollection;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\NavbarFullDto;
+use Thehouseofel\Kalion\Features\Components\Infrastructure\Facades\LayoutData;
 
 class NavbarFullAssembler
 {

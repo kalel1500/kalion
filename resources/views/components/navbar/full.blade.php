@@ -1,7 +1,7 @@
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\NavbarFullAssembler')
 
-@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\NavbarItemDto $item */ @endphp
-@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\NavbarItemDto $subItem */ @endphp
+@php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $item */ @endphp
+@php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $subItem */ @endphp
 
 @php($data = NavbarFullAssembler::fromProps())
 

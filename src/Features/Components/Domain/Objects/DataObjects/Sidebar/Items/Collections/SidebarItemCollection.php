@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections;
+namespace Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\Collections;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollectionDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Attributes\CollectionOf;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\SidebarItemDto;
 
 #[CollectionOf(SidebarItemDto::class)]
 final class SidebarItemCollection extends AbstractCollectionDto

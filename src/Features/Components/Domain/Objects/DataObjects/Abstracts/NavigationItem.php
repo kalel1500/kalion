@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Abstracts;
+namespace Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Abstracts;
 
 use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\NavbarDropdownDto;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarDropdownDto;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\Collections\SidebarItemCollection;
 
 abstract class NavigationItem extends AbstractDataTransferObject
 {

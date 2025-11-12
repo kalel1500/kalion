@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers;
 
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto;
-use Thehouseofel\Kalion\Core\Infrastructure\Facades\LayoutData;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\Collections\SidebarItemCollection;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\SidebarItemDto;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\SidebarFullDto;
+use Thehouseofel\Kalion\Features\Components\Infrastructure\Facades\LayoutData;
 
 class SidebarFullAssembler
 {
