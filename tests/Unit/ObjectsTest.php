@@ -207,4 +207,23 @@ class ObjectsTest extends TestCase
             '4' => ['product' => 'Door', 'price' => 100],
         ], $result);
     }
+
+    #[DataProvider('getCollection')]
+    public function test_collection_map($collection, $data)
+    {
+        /** @var CollectionAny $collection */
+        $data = new $collection($data['products']);
+        $result = $data
+            ->map(function (array $item, int $key) {
+                return $item['product'] . 2 . $key;
+            })
+            ->all();
+        $this->assertEquals([
+            'Desk20',
+            'Chair21',
+            'Bookcase22',
+            'Pencil23',
+            'Door24',
+        ], $result);
+    }
 }
