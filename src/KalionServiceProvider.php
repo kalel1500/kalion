@@ -185,17 +185,6 @@ class KalionServiceProvider extends ServiceProvider
 
 
         /*
-         * -------------------
-         * --- Componentes ---
-         * -------------------
-         */
-
-        $this->publishes([
-            KALION_PATH . '/stubs/generate/components' => src_path('Shared/Infrastructure/View/Vendor/Kal/Components'),
-        ], 'kalion-components');
-
-
-        /*
          * -----------------------
          * --- Configuraciones ---
          * -----------------------
