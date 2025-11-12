@@ -261,10 +261,6 @@ class KalionServiceProvider extends ServiceProvider
     {
         if (! Version::laravelMin9()) return;
 
-        // Registrar componentes con Clase
-        Blade::componentNamespace('Thehouseofel\\Kalion\\Core\\Infrastructure\\View\\Components', 'kal');
-        Blade::componentNamespace('Src\\Shared\\Infrastructure\\View\\Vendor\\Kal\\Components', 'kal2');
-
         // Registrar componentes anónimos
         Blade::anonymousComponentPath(KALION_PATH . '/resources/views/components', 'kal');
     }
