@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-interface Authentication
+interface AuthenticationFlow
 {
     public function user(string $guard = null);
 

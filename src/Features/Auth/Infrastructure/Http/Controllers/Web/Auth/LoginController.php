@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Controllers\Web\
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Core\Infrastructure\Facades\Auth;
+use Thehouseofel\Kalion\Core\Infrastructure\Facades\AuthFlow;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
 
 class LoginController extends Controller
@@ -17,7 +17,7 @@ class LoginController extends Controller
      */
     public function create(): View
     {
-        return Auth::viewLogin();
+        return AuthFlow::viewLogin();
     }
 
     /**
@@ -25,7 +25,7 @@ class LoginController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        return Auth::login($request);
+        return AuthFlow::login($request);
     }
 
     /**
@@ -33,6 +33,6 @@ class LoginController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        return Auth::logout($request);
+        return AuthFlow::logout($request);
     }
 }

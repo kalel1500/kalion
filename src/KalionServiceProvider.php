@@ -61,7 +61,7 @@ class KalionServiceProvider extends ServiceProvider
         $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
         $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
         $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication::class, \Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\AuthenticationService::class);
+        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\AuthenticationFlow::class, \Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\AuthenticationFlowService::class);
     }
 
     /**

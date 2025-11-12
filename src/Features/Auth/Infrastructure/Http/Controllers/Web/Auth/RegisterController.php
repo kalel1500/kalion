@@ -7,18 +7,18 @@ namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Controllers\Web\
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Core\Infrastructure\Facades\Auth;
+use Thehouseofel\Kalion\Core\Infrastructure\Facades\AuthFlow;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
 
 class RegisterController extends Controller
 {
     public function create(): View
     {
-        return Auth::viewRegister();
+        return AuthFlow::viewRegister();
     }
 
     public function store(Request $request): RedirectResponse
     {
-        return Auth::register($request);
+        return AuthFlow::register($request);
     }
 }
