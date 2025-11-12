@@ -649,9 +649,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function map(callable $callback)
     {
-        $keys        = array_keys($this->items);
-        $items       = array_map($callback, $this->items, $keys);
-        return $this->toAny(array_combine($keys, $items));
+        $collResult = collect($this->items)->map($callback);
+        return $this->toAny($collResult->toArray());
     }
 
 //    public function mapInto()
