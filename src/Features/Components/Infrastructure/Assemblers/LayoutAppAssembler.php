@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;

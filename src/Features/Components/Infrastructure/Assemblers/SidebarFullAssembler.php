@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto;

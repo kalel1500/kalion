@@ -1,4 +1,4 @@
-@use('Thehouseofel\Kalion\Features\Components\Infrastructure\Services\NavbarFullAssembler')
+@use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\NavbarFullAssembler')
 
 @php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\NavbarItemDto $item */ @endphp
 @php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\NavbarItemDto $subItem */ @endphp
