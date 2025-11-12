@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects;
+namespace Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
 

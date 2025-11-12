@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Services;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\NavbarItemDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Facades\LayoutData;
-use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\NavbarFullDto;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\NavbarFullDto;
 
 class NavbarFullAssembler
 {

@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Services;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\Collections\SidebarItemCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Facades\LayoutData;
-use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\SidebarFullDto;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\SidebarFullDto;
 
 class SidebarFullAssembler
 {
