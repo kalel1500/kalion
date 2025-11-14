@@ -16,8 +16,8 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected bool         $allowZeros = false;
     protected static array $formats    = ['Y-m-d H:i:s'];
+    protected bool         $allowZeros = false;
     protected              $valueCarbon;
 
     public function __construct(?string $value, ?array $formats = null)
@@ -31,11 +31,11 @@ abstract class AbstractDateVo extends AbstractStringVo
         return new static($value, $formats);
     }
 
-    public static function parse($value): static
+    public static function parse($value, $formatPosition = 0): static
     {
         $formatted = Date::parse($value)
             ->setTimezone(config('app.timezone'))
-            ->format(static::$formats[0]);
+            ->format(static::$formats[$formatPosition]);
         return static::from($formatted);
     }
 
