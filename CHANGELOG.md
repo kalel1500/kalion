@@ -1,6 +1,42 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.39.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.40.0-beta.0...master)
+
+## [v0.40.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.39.0-beta.0...v0.40.0-beta.0) - 2025-11-14
+
+* Se ha modificado el sistema de autenticacion (`Auth`):
+  * (refactor) Se ha renombrado la interfaz `Authentication` a `AuthenticationFlow`. También se han renombrado las clases de la implementacion y la Facade.
+  * (breaking) Auth: Se ha separado el método `user()` del servicio `AuthenticationFlowService` y de la Facade `AuthFlow`:
+    * Se ha renombrado la interfaz `CurrentUser` a `Authentication` y su método `userEntity()` a `user()`. Tambien se ha renombrado la variable de entorno `KALION_AUTH_SERVICE_CURRENT_USER` a `KALION_AUTH_SERVICE_AUTHENTICATION`.
+    * Ahora en vez de tener el metodo `user()` en el `AuthenticationFlow` se ha creado la Facade `Auth`, que llama directamente al `Authentication`.
+* Metodo `map()` de la clase `AbstractCollectionBase` modificado:
+  * (breaking) Se ha modificado la firma del método `map()`. Ahora siempre devuelve `CollectionAny` aunque contenga Entidades.
+  * Nuevos tests `test_collection_map()` y `test_collection_entity_map()` para probar el método `map()` de las colecciones.
+  * (refactor) Se ha modificado el método `map()` de la clase `AbstractCollectionBase` para usar el `map` de la `Collection` de Laravel. Asi se traslada la responsabilidad al framework y nos aseguramos de que se hace igual.
+* <u>**¡¡¡(breaking)!!!**</u> Componentes basados en clases convertidos a anonimos. De esta forma es más facil publicar y sobreescribir las blades desde la aplicacion:
+  * Se han eliminado las clases de los componentes `layout.app`, `navbar.full`, `sidebar.full` y se han convertido a componentes anonimos:
+    * `Infrastructure\View\Components\Layout\App.php`
+    * `Infrastructure\View\Components\Navbar\Full.php`
+    * `Infrastructure\View\Components\Sidebar\Full.php`
+  * Tambien se han eliminado de los stubs (comando `kalion:start`)
+  * La logica de las clases se ha movido a las nuevas clases `Assembler`:
+    * `LayoutAppAssembler.php`
+    * `NavbarFullAssembler.php`
+    * `SidebarFullAssembler.php`
+  * Ya no se registran las siguientes rutas de componentes basados en clase:
+    * `Thehouseofel\\Kalion\\Core\\Infrastructure\\View\\Components` -> `kal`
+    * `Src\\Shared\\Infrastructure\\View\\Vendor\\Kal\\Components` -> `kal2`
+* <u>**¡¡¡(breaking)!!!**</u> Se han movido TODAS las clases de funcionalidades concretas al namespace `Thehouseofel\Kalion\Features`:
+  * Se han movido los modelos a la carpeta `Feature`.
+  * Se han movido los repositorios a la carpeta `Feature`.
+  * Se han movido las entidades y sus colecciones a la carpeta `Feature`.
+  * Se han movido los ejemplos a la carpeta `Feature` (`ExampleController`, `TestController` y sus clases).
+  * Se han movido los jobs a la carpeta `Feature` (los controllers y sus clases).
+  * Se ha movido la clase `AjaxCookiesController` a la carpeta `Feature`.
+  * Se han movido los procesos a la carpeta `Feature`.
+  * Se han movido los controllers de `Auth` a la carpeta `Feature`.
+  * Se han movido los `DTOs` de los componentes (layout) a la carpeta `Feature`.
+* Se ha eliminado el tipo `UserEntity` en el método `missingTraitHasPermissions()` de la clase `UnauthorizedException`, ya que no siempre se recibe ese tipo.
 
 ## [v0.39.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.1...v0.39.0-beta.0) - 2025-11-11
 
@@ -832,7 +868,7 @@
   * Añadir mensaje en `developMode` para dar feedback aunque no se ejecute el método
   * Saltar las acciones largas (instalaciones y llamadas a la api) en `developMode`
   * Mover los mensajes al inicio de cada método (adaptar contenido indicando que está iniciando) y añadir uno o varios mensajes durante y al final (con más sangria y de color verde) para dar feedback de como está yendo el proceso
-* <u>**!!! (breaking) !!!**</u> Reestructurar las excepciones base para poder dividir las excepciones del paquete entre las `LogicException` y las `RuntimeException`:
+* <u>**¡¡¡(breaking)!!!**</u> Reestructurar las excepciones base para poder dividir las excepciones del paquete entre las `LogicException` y las `RuntimeException`:
     * Excepciones eliminadas:
       * `BasicException`
       * `BasicHttpException`
@@ -1014,13 +1050,13 @@
 * Hacer que el `LayoutService` (ahora `Layout`) de la aplicación extienda del `LayoutService` del paquete y mover la lógica del método `getUserInfo` al `LayoutService` del paquete
 * Hacer que el `LayoutService` (ahora `Layout`) se pueda configurar desde la configuración de Laravel para no tener que definirlo en el `DependencyServiceProvider` de la aplicación
 * Gran refactor de los nombres y ubicaciones de varias clases y métodos
-  * <u>**!!! (breaking) !!!**</u> Renombrar clase `WebsocketsService` a `Broadcast`
-  * <u>**!!! (breaking) !!!**</u> Renombrar clase `QueueService` a `Queue`
+  * <u>**¡¡¡(breaking)!!!**</u> Renombrar clase `WebsocketsService` a `Broadcast`
+  * <u>**¡¡¡(breaking)!!!**</u> Renombrar clase `QueueService` a `Queue`
   * Renombrar clase `CookieService` a `Cookie`
   * Renombrar clase `AuthService` a `CurrentUser` y moverla dentro de la carpeta `Auth`
   * Renombrar `AuthService::userEntity()` a `Auth::user()` y hacer que la fachada apunte al nuevo servicio `AuthManager` (de esta forma se podrán ir añadiendo más servicios de `auth` que serán publicados por el `AuthManager`)
   * Renombrar método `userEntity()` de la clase `CurrentUser` a `entity()`
-  * <u>**!!! (breaking) !!!**</u> Renombrar helper `userEntity()` a `user()`
+  * <u>**¡¡¡(breaking)!!!**</u> Renombrar helper `userEntity()` a `user()`
   * Renombrar `LayoutService` a `Layout` y mover de la carpeta `RepositoryServices` a la carpeta `Repository`
   * Mover `TagTypeService` de la carpeta `RepositoryServices` a la carpeta `Repository`
   * Renombrar `AuthorizationService` a `UserAccessChecker` y mover a la carpeta `Repository`
@@ -1058,7 +1094,7 @@
   * Inyectar `JobRepositoryContract` en el `AjaxJobsController` (añadir `singleton` en el `KalionServiceProvider`)
   * Inyectar los `UseCases` en el `AjaxJobsController` en vez de instanciarlos y pasarle el repository
   * Devolver directamente los `$jobs` en el parámetro `$data` del `response_json()` en el `AjaxJobsController`
-* <u>**!!! (breaking) !!!**</u> (refactor) Mover todos los Repositorios dentro de la carpeta `Eloquent` y renombrarlos para quitar el sufijo `Eloquent` del nombre
+* <u>**¡¡¡(breaking)!!!**</u> (refactor) Mover todos los Repositorios dentro de la carpeta `Eloquent` y renombrarlos para quitar el sufijo `Eloquent` del nombre
 * Comando `kalion:publish-auth` modificado
   * (refactor) Método `publishConfigKalionUser()` renombrado a `publishConfigKalionAndUpdateClasses()` en la clase `PublishAuthCommandService`
   * Añadir nuevo parámetro `--onlyUpdate` al comando `kalion:publish-auth` para no publicar la configuración `config/kalion.php`
@@ -1319,9 +1355,9 @@
   * Modificar la clase `EnumDynamicVo` para establecerla como `$nullable = false` y crear la nueva clase `EnumDynamicNullVo` para cuando pueda ser nullable
 * (breaking) Clase `EnvVo` renombrada a `Env`
 * (breaking) Añadir parámetro `active` al componente `x-kal::sidebar.item` en vez de usar el `isRouteActive()`
-* <u>**!!! (breaking) !!!**</u> Eliminar los helpers del `env` del archivo `InfrastructureHeplers.php` y mover toda la lógica a la clase `EnvVo`
-* <u>**!!! (breaking) !!!**</u> Clase `MyCarbon` renombrada a `Date` y movida de `Infrastructure\Helpers` a `Infrastructure\Services`
-* <u>**!!! (breaking) !!!**</u> Helpers renombrados en `DomainHeplers.php`:
+* <u>**¡¡¡(breaking)!!!**</u> Eliminar los helpers del `env` del archivo `InfrastructureHeplers.php` y mover toda la lógica a la clase `EnvVo`
+* <u>**¡¡¡(breaking)!!!**</u> Clase `MyCarbon` renombrada a `Date` y movida de `Infrastructure\Helpers` a `Infrastructure\Services`
+* <u>**¡¡¡(breaking)!!!**</u> Helpers renombrados en `DomainHeplers.php`:
     <details>
     <summary>Mostrar</summary>
     
@@ -1345,7 +1381,7 @@
     * `strContainsHtml`&rarr;`str_contains_html`
     
     </details>
-* <u>**!!! (breaking) !!!**</u> Helpers renombrados en `InfrastructureHeplers.php`:
+* <u>**¡¡¡(breaking)!!!**</u> Helpers renombrados en `InfrastructureHeplers.php`:
     <details>
     <summary>Mostrar</summary>
 
@@ -1384,8 +1420,8 @@
 
     </details>
 * (refactor) Quitar tryCatch al `firstOrFail()` del `StateEloquentRepository` ya que ahora se encarga el ExceptionHandler
-* <u>**!!! (breaking) !!!**</u> Migrar todo el código para usar las características de PHP 8.2 (promoted properties, static return type, type multiple, ...)
-* <u>**!!! (breaking) !!!**</u> Dejar de soportar las versiones de PHP `^7.4|^8.0|^8.1` y las versiones de laravel `^7.0|^8.0`
+* <u>**¡¡¡(breaking)!!!**</u> Migrar todo el código para usar las características de PHP 8.2 (promoted properties, static return type, type multiple, ...)
+* <u>**¡¡¡(breaking)!!!**</u> Dejar de soportar las versiones de PHP `^7.4|^8.0|^8.1` y las versiones de laravel `^7.0|^8.0`
 
 ### Removed
 
@@ -1393,7 +1429,7 @@
 * (breaking) Eliminar clase `MyLog` y mover el código de los métodos estáticos a los nuevos helpers `log_error()`, `log_error_on()`, `log_error_on_queues()`, `log_error_on_loads()`
 * (breaking) Eliminar clase `MyJob` y mover código `MyJob::launchSimple()` al nuevo helper `save_execute()`
 * (breaking) Eliminar clase `MyDebug`
-* <u>**!!! (breaking) !!!**</u> Helpers eliminados en `DomainHeplers.php`:
+* <u>**¡¡¡(breaking)!!!**</u> Helpers eliminados en `DomainHeplers.php`:
     <details>
     <summary>Mostrar</summary>
 
@@ -1424,7 +1460,7 @@
     * `arrFormatIsCollection`
 
     </details>
-* <u>**!!! (breaking) !!!**</u> Helpers eliminados en `InfrastructureHeplers.php`:
+* <u>**¡¡¡(breaking)!!!**</u> Helpers eliminados en `InfrastructureHeplers.php`:
     <details>
     <summary>Mostrar</summary>
 
@@ -1502,8 +1538,8 @@
 
 ### Changed
 
-* <u>**!!! (breaking) !!!**</u> Paquete de Js renombrado de `@kalel1500/laravel-ts-utils` a `@kalel1500/kalion-js`
-* <u>**!!! (breaking) !!!**</u> Repositorio renombrado de `laravel-hexagonal-and-ddd-architecture-utilities` a `kalion`
+* <u>**¡¡¡(breaking)!!!**</u> Paquete de Js renombrado de `@kalel1500/laravel-ts-utils` a `@kalel1500/kalion-js`
+* <u>**¡¡¡(breaking)!!!**</u> Repositorio renombrado de `laravel-hexagonal-and-ddd-architecture-utilities` a `kalion`
 
 ### Fixed
 
@@ -1550,13 +1586,13 @@
 * stubs: Dejar en el archivo de configuración de los stubs `kalion_auth.php` solo los valores que no se configuran con variables de entorno
 * Eliminar las variables de entorno `KALION_AUTH_ENTITY_CLASS` y `KALION_AUTH_ENTITY_CLASS`, ya que es mejor que se configuren en el propio archivo de configuración `kalion_auth.php`
 * Actualizar paquete `@kalel1500/laravel-ts-utils` a la version `^0.6.0-beta.0` (composer y config start command)
-* <u>**!!! (breaking) !!! Renombrar nombre corto del paquete de `Hexagonal` a `Kalion` (provider, service, command, constants, prefixes, paths, cookie, roues, config, exceptions, controller, env and namespaces)**</u>
+* <u>**¡¡¡ (breaking) !!! Renombrar nombre corto del paquete de `Hexagonal` a `Kalion` (provider, service, command, constants, prefixes, paths, cookie, roues, config, exceptions, controller, env and namespaces)**</u>
 * (breaking) layout: 
   * (refactor) Renombrar brakepoint `vsm` a `xs` (en el paquete de JS)
   * (refactor) Shadows personalizadas renombradas en el paquete de JS
   * Deprecar helpers `getIconClasses()`, `getOtherAttributes()` y `getIconFullAttributes()`
   * (refactor) Dejar de usar los helpers `getIconClasses()` y `getOtherAttributes()` para usar `{{ $attributes->mergeTailwind('size-6') }}` en los componentes de los iconos
-  * <u>**!!! (breaking) !!!**</u> Renombrar prefijo blades de `hexagonal` a `kal`
+  * <u>**¡¡¡(breaking)!!!**</u> Renombrar prefijo blades de `hexagonal` a `kal`
 * layout: Nuevos parámetros `tag` y `underline` en el componente `hexagonal::link` para hacer que por defecto este subrayado y poder cambiar el tag `a`
 * (breaking) darkTheme: Renombrar las variables `dark_theme` a `theme` y convertir de `null` a `string` (`cookie` y `config`)
 * Migrar proyecto a Laravel 12
@@ -2129,8 +2165,8 @@
 
 ### Changed
 
-* <u>**!!! (breaking) !!!**</u> Permitir que los ValueObjects que no son NULL, estén vacíos (`empty()`) para mantener la integridad de los datos
-* <u>**!!! (breaking) !!!**</u> Dejar de limpiar el value en la clase `ContractStringVo` para mantener la integridad de los datos
+* <u>**¡¡¡(breaking)!!!**</u> Permitir que los ValueObjects que no son NULL, estén vacíos (`empty()`) para mantener la integridad de los datos
+* <u>**¡¡¡(breaking)!!!**</u> Dejar de limpiar el value en la clase `ContractStringVo` para mantener la integridad de los datos
 * comentarios añadidos en el método `checkAllowNull()` de la clase `ContractValueObject`
 * (phpdoc) añadir tipos dinámicos en PhpDoc con `@template` en las clases de las colecciones
 * (refactor) eliminar condición innecesaria en `ContractCollectionEntity::fromData()`
@@ -2207,7 +2243,7 @@
 ### Changed
 
 * Establecer la variable de entorno `HEXAGONAL_BROADCASTING_ENABLED` por defecto a `false`
-* <u>**!!! (breaking) !!! Subir versiones mínimas de `PHP` y `Laravel` a `^8.2` y `^11.0` respectivamente**</u>
+* <u>**¡¡¡ (breaking) !!! Subir versiones mínimas de `PHP` y `Laravel` a `^8.2` y `^11.0` respectivamente**</u>
 * (refactor) Se utiliza el método `toArrayDynamic()` en los métodos `toArrayDb()` y `toArrayWith()` de la clase `ContractCollectionEntity`
 * Se ha añadido el método `toArrayDynamic()` en la clase `ContractCollectionBase` para facilitar la creación de otros métodos `toArray...()` en otras entidades y colecciones
 * Se han añadido las propiedades `$primaryKey` e `$incrementing` en la clase `ContractEntity` para controlar el `id` en el método `toArrayDb`
