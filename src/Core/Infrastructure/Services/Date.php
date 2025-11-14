@@ -10,19 +10,6 @@ use Throwable;
 
 final class Date
 {
-    public static string $date_startYear                         = 'Y-m-d';
-    public static string $date_startDay                          = 'd-m-Y';
-    public static string $date_startYear_slash                   = 'Y/m/d';
-    public static string $date_startDay_slash                    = 'd/m/Y';
-    public static string $date_startMonthWithoutDay_slash        = 'm/Y';
-    public static string $datetime_startYear                     = 'Y-m-d H:i:s';
-    public static string $datetime_startYear_withoutSeconds      = 'Y-m-d H:i';
-    public static string $datetime_startDay_slash                = 'd/m/Y H:i:s';
-    public static string $datetime_startDay_slash_withoutSeconds = 'd/m/Y H:i';
-    public static string $datetime_timestamp                     = 'Y-m-d H:i:s.u';
-    public static string $datetime_eloquent_timestamps           = 'Y-m-d\TH:i:s.u\Z';
-    public static string $time                                   = 'H:i:s';
-
     public static function stringToformat($date, $format, $getNowIfNullRecived = false): ?string
     {
         $isInValid = (is_null($date) || $date === '');
