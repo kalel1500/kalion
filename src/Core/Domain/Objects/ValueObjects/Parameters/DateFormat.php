@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters;
 
-enum DateFormat: string
+use Thehouseofel\Kalion\Core\Domain\Concerns\Enums\HasArray;
+use Thehouseofel\Kalion\Core\Domain\Contracts\Enums\ArrayableEnum;
+
+enum DateFormat: string implements ArrayableEnum
 {
+    use HasArray;
+
     case date_startYear                         = 'Y-m-d';
     case date_startDay                          = 'd-m-Y';
     case date_startYear_slash                   = 'Y/m/d';
