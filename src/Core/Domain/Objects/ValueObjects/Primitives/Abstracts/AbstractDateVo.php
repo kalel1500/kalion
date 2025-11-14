@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstra
 
 use Carbon\CarbonImmutable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateVo;
@@ -50,7 +51,7 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public function formatToSpainDatetime(): ?string
     {
-        return $this->isNull() ? null : Date::parse($this->value)->format(Date::$datetime_startDay_slash);
+        return $this->isNull() ? null : Date::parse($this->value)->format(DateFormat::datetime_startDay_slash->value);
     }
 
     public function carbon(): CarbonImmutable

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
 
 use Carbon\CarbonImmutable;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Throwable;
 
 final class Date
@@ -42,7 +43,7 @@ final class Date
 
     public static function formatInputDateToAudit($imputDate): ?string
     {
-        return Date::stringToformat($imputDate, Date::$datetime_startYear);
+        return Date::stringToformat($imputDate, DateFormat::datetime_startYear->value);
     }
 
     public static function parse($date): CarbonImmutable
@@ -70,8 +71,8 @@ final class Date
     {
         $date = ($date instanceof CarbonImmutable) ? $date : static::parse($date);
         $time = ($time instanceof CarbonImmutable) ? $time : static::parse($time);
-        $date = $date->format(static::$date_startYear);
-        $time = $time->format(static::$time);
+        $date = $date->format(DateFormat::date_startYear->value);
+        $time = $time->format(DateFormat::time->value);
         return static::parse($date . ' ' . $time);
     }
 
