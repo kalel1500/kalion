@@ -1,5 +1,9 @@
-@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\NavbarItemDto $item */ @endphp
-@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\NavbarItemDto $subItem */ @endphp
+@use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\NavbarFullAssembler')
+
+@php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $item */ @endphp
+@php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $subItem */ @endphp
+
+@php($data = NavbarFullAssembler::fromProps())
 
         <!-- New -->
 <x-kal::navbar>
@@ -8,18 +12,18 @@
 
         <x-kal::navbar.brand/>
 
-        @if($showSearch)
+        @if($data->showSearch)
             <x-kal::navbar.search-form/>
         @endif
     </x-slot:left-side>
 
     <x-slot:right-side>
-        @if($showSearch)
+        @if($data->showSearch)
             <!-- Toggle sidebar mobile search -->
             <x-kal::navbar.search-toggle-mobile/>
         @endif
 
-        @foreach($items as $item)
+        @foreach($data->items as $item)
             @if($item->is_theme_toggle)
                 <!-- Theme toggle -->
                 <x-kal::navbar.theme-toggle/>

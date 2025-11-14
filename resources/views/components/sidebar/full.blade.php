@@ -1,21 +1,25 @@
-@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto $item */ @endphp
-@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Layout\SidebarItemDto $subItem */ @endphp
+@use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\SidebarFullAssembler')
+
+@php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\SidebarItemDto $item */ @endphp
+@php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\SidebarItemDto $subItem */ @endphp
+
+@php($data = SidebarFullAssembler::fromProps())
 
 <x-kal::sidebar>
-    @if($showSearch)
+    @if($data->showSearch)
         <x-slot:header>
-            <x-kal::sidebar.search-from :action="$searchAction"/>
+            <x-kal::sidebar.search-from :action="$data->searchAction"/>
         </x-slot:header>
     @endif
 
-    @foreach($items as $item)
+    @foreach($data->items as $item)
         <x-kal::sidebar.item-auto :item="$item" level="0"/>
     @endforeach
 
-    @if($hasFooter)
+    @if($data->hasFooter)
         <x-slot:footer>
             <x-kal::sidebar.footer>
-                @foreach($footer as $item)
+                @foreach($data->footer as $item)
                     <x-kal::sidebar.footer.item
                             :href="$item->hasDropdown() ? null : $item->getHref()"
                             :id="$item->code ?? null"

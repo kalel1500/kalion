@@ -11,8 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Thehouseofel\Kalion\Core\Infrastructure\Models\User;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\User;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

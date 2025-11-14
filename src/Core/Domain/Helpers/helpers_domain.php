@@ -6,11 +6,11 @@ use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\ApiUserEntity;
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 use Thehouseofel\Kalion\Core\Infrastructure\Facades\Auth;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity;
+use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
 
 if (! function_exists('user')) {
     /**

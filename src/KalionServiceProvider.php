@@ -31,14 +31,14 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'thehouseofel.kalion.redirectAfterLogin'                                       => \Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
-        'thehouseofel.kalion.redirectDefaultPath'                                      => \Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
-        'thehouseofel.kalion.processChecker'                                           => \Thehouseofel\Kalion\Core\Infrastructure\Services\ProcessChecker::class,
-        \Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\TabulatorRepository::class  => \Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent\EloquentTabulatorRepository::class,
-        \Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\JobRepository::class        => \Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
-        \Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\RoleRepository::class       => \Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
-        \Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\PermissionRepository::class => \Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository::class,
-        \Thehouseofel\Kalion\Core\Domain\Contracts\Repositories\StatusRepository::class     => \Thehouseofel\Kalion\Core\Infrastructure\Repositories\Eloquent\EloquentStatusRepository::class,
+        'thehouseofel.kalion.redirectAfterLogin'                                                       => \Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
+        'thehouseofel.kalion.redirectDefaultPath'                                                      => \Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
+        'thehouseofel.kalion.processChecker'                                                           => \Thehouseofel\Kalion\Core\Infrastructure\Services\ProcessChecker::class,
+        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\TabulatorRepository::class  => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentTabulatorRepository::class,
+        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository::class        => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
+        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository::class       => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
+        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository::class => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository::class,
+        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\StatusRepository::class     => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentStatusRepository::class,
     ];
 
     /**
@@ -56,12 +56,12 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function registerSingletons(): void
     {
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Domain\Services\Contracts\LayoutData::class, fn($app) => new (Kalion::getClassServiceLayout()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\CurrentUser::class, fn($app) => new (Kalion::getClassServiceCurrentUser()));
+        $this->app->singleton(\Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData::class, fn($app) => new (Kalion::getClassServiceLayout()));
+        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication::class, fn($app) => new (Kalion::getClassServiceAuthentication()));
         $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
         $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
         $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication::class, \Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\AuthenticationService::class);
+        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\AuthenticationFlow::class, \Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\AuthenticationFlowService::class);
     }
 
     /**
@@ -185,17 +185,6 @@ class KalionServiceProvider extends ServiceProvider
 
 
         /*
-         * -------------------
-         * --- Componentes ---
-         * -------------------
-         */
-
-        $this->publishes([
-            KALION_PATH . '/stubs/generate/components' => src_path('Shared/Infrastructure/View/Vendor/Kal/Components'),
-        ], 'kalion-components');
-
-
-        /*
          * -----------------------
          * --- Configuraciones ---
          * -----------------------
@@ -271,10 +260,6 @@ class KalionServiceProvider extends ServiceProvider
     protected function registerComponents(): void
     {
         if (! Version::laravelMin9()) return;
-
-        // Registrar componentes con Clase
-        Blade::componentNamespace('Thehouseofel\\Kalion\\Core\\Infrastructure\\View\\Components', 'kal');
-        Blade::componentNamespace('Src\\Shared\\Infrastructure\\View\\Vendor\\Kal\\Components', 'kal2');
 
         // Registrar componentes anónimos
         Blade::anonymousComponentPath(KALION_PATH . '/resources/views/components', 'kal');

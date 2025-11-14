@@ -1,0 +1,47 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items;
+
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout\UserInfoDto;
+use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\Collections\NavbarItemCollection;
+
+final class NavbarDropdownDto extends AbstractDataTransferObject
+{
+    public ?UserInfoDto $userInfo;
+
+    public function __construct(
+        public readonly ?bool          $is_list,
+        public readonly ?bool          $is_square,
+        public readonly ?string        $get_data_action,
+        public readonly ?string        $header,
+        public readonly ?NavbarItemDto $footer,
+        public NavbarItemCollection    $items
+    )
+    {
+    }
+
+    protected static function make(array $data): static
+    {
+        return new static(
+            $data['is_list'] ?? null,
+            $data['is_square'] ?? null,
+            $data['get_data_action'] ?? null,
+            $data['header'] ?? null,
+            NavbarItemDto::fromArray($data['footer'] ?? null),
+            NavbarItemCollection::fromArray($data['items'] ?? [])
+        );
+    }
+
+    public function setItems(NavbarItemCollection $items): void
+    {
+        $this->items = $items;
+    }
+
+    public function setUserInfo(?UserInfoDto $userInfo): void
+    {
+        $this->userInfo = $userInfo;
+    }
+}

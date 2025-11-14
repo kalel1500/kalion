@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Exceptions;
 
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\UserEntity;
 
 class UnauthorizedException extends KalionHttpException
 {
@@ -33,7 +32,7 @@ class UnauthorizedException extends KalionHttpException
         return new static(static::STATUS_CODE, $message);
     }
 
-    public static function missingTraitHasPermissions(UserEntity $user): static
+    public static function missingTraitHasPermissions($user): static
     {
         $class = get_class($user);
 

@@ -1,5 +1,5 @@
-@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Icons\ViewIconsDto $data */ @endphp
-@php /** @var \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Icons\IconDto $icon */ @endphp
+@php /** @var \Thehouseofel\Kalion\Features\Examples\Domain\Objects\DataObjects\Icons\ViewIconsDto $data */ @endphp
+@php /** @var \Thehouseofel\Kalion\Features\Examples\Domain\Objects\DataObjects\Icons\IconDto $icon */ @endphp
 
 <x-kal::layout.app package title="Icons">
 

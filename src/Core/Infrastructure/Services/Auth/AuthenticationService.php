@@ -4,71 +4,44 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Auth;
 
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\CurrentUser;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Login;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\PasswordReset;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register;
+use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 class AuthenticationService implements Authentication
 {
-    public function __construct(
-        protected CurrentUser   $currentUser,
-        protected Login         $login,
-        protected Register      $register,
-        protected PasswordReset $passwordReset,
-    )
-    {
-    }
+    private bool  $loadRoles;
+    private mixed $userEntity = null;
 
-    /*----- CurrentUserContract -----*/
+    public function __construct()
+    {
+        $this->loadRoles = config('kalion.auth.load_roles');
+    }
 
     public function user(string $guard = null)
     {
-        return $this->currentUser->userEntity($guard);
-    }
+        /** @var class-string<AbstractEntity> $entityClass */
+        $entityClass = Kalion::getClassUserEntity($guard);
 
-    /*----- LoginContract -----*/
+        if ($this->userEntity && $this->userEntity->getGuard() === $guard) {
+            return $this->userEntity;
+        }
 
-    public function viewLogin(Request $request = null): View
-    {
-        return $this->login->view($request);
-    }
+        $user = auth($guard)->user();
+        if (is_null($user)) {
+            return null;
+        }
 
-    public function login(Request $request): RedirectResponse
-    {
-        return $this->login->login($request);
-    }
-
-    public function logout(Request $request): RedirectResponse
-    {
-        return $this->login->logout($request);
-    }
-
-    /*----- RegisterContract -----*/
-
-    public function viewRegister(Request $request = null): View
-    {
-        return $this->register->view($request);
-    }
-
-    public function register(Request $request): RedirectResponse
-    {
-        return $this->register->register($request);
-    }
-
-    /*----- RegisterContract -----*/
-
-    public function viewPasswordReset(Request $request = null): View
-    {
-        return $this->passwordReset->view($request);
-    }
-
-    public function reset(Request $request): RedirectResponse
-    {
-        return $this->passwordReset->reset($request);
+        $with = null;
+        if ($this->loadRoles) {
+            $user->load('roles');
+            $with = ['roles'];
+        }
+        $this->userEntity = $entityClass::fromArray($user->toArray(), $with);
+        $this->userEntity->setGuard($guard);
+        return $this->userEntity;
     }
 }

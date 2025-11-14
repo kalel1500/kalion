@@ -1,10 +1,16 @@
 @use('Thehouseofel\Kalion\Core\Infrastructure\Services\Renderer')
+@use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
+
+@props(['title' => null, 'package' => false])
+
+@php($data = LayoutAppAssembler::fromProps($title, $package))
+
 <!DOCTYPE html>
 <html
     lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    @class(['dark' => $darkMode, 'sc' => $sidebarCollapsed])
-    data-theme="{{ $dataTheme }}"
-    color-theme="{{ $colorTheme }}"
+    @class(['dark' => $data->darkMode, 'sc' => $data->sidebarCollapsed])
+    data-theme="{{ $data->dataTheme }}"
+    color-theme="{{ $data->colorTheme }}"
 >
     <head>
         <!-- Meta tags -->
@@ -15,7 +21,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- Title -->
-        <title>{{ $title }}</title>
+        <title>{{ $data->title }}</title>
 
         <!-- Icon -->
         <link rel="icon" type="image/x-icon" href="@viteAsset(config('kalion.layout.asset_path_favicon'))">
@@ -30,7 +36,7 @@
         @stack('css-variables')
         <!--/Fin CSS -->
 
-        @if($isFromPackage)
+        @if($data->isFromPackage)
             <!-- JavaScript y CSS del paquete -->
             {!! Renderer::css() !!}
             {!! Renderer::js() !!}
