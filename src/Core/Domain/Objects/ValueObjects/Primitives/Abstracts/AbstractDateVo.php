@@ -16,13 +16,13 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected bool  $allowZeros = false;
-    protected array $formats    = ['Y-m-d H:i:s'];
-    protected       $valueCarbon;
+    protected bool         $allowZeros = false;
+    protected static array $formats    = ['Y-m-d H:i:s'];
+    protected              $valueCarbon;
 
     public function __construct(?string $value, ?array $formats = null)
     {
-        $this->formats = is_null($formats) ? $this->formats : $formats;
+        static::$formats = is_null($formats) ? static::$formats : $formats;
         parent::__construct($value);
     }
 
@@ -35,7 +35,7 @@ abstract class AbstractDateVo extends AbstractStringVo
     {
         $formatted = Date::parse($value)
             ->setTimezone(config('app.timezone'))
-            ->format('Y-m-d H:i:s');
+            ->format(static::$formats[0]);
         return static::from($formatted);
     }
 
@@ -43,8 +43,8 @@ abstract class AbstractDateVo extends AbstractStringVo
     {
         parent::ensureIsValidValue($value);
 
-        if (! is_null($value) && ! Date::checkFormats($value, $this->formats, $this->allowZeros)) {
-            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $this->formats)));
+        if (! is_null($value) && ! Date::checkFormats($value, static::$formats, $this->allowZeros)) {
+            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', static::$formats)));
         }
     }
 
