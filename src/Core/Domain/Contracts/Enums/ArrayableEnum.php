@@ -6,5 +6,5 @@ namespace Thehouseofel\Kalion\Core\Domain\Contracts\Enums;
 
 interface ArrayableEnum
 {
-    public static function toArray(): array;
+    public static function toArray(bool $getKeys = false): array;
 }
