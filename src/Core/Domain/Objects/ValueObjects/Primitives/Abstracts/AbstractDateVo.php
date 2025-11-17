@@ -32,7 +32,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         return new static($value, $formats);
     }
 
-    public static function parse($value, DateFormat $toFormat = null): static
+    public static function parse($value, DateFormat $toFormat = null, ?array $formats = null): static
     {
         if (is_null($toFormat)) {
             $toFormat = static::$formats[0];
@@ -40,7 +40,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         $formatted = Date::parse($value)
             ->setTimezone(config('app.timezone'))
             ->format($toFormat->value);
-        return static::from($formatted);
+        return static::from($formatted, $formats);
     }
 
     protected function ensureIsValidValue(?string $value): void
