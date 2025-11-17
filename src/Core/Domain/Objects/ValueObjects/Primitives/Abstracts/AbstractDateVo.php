@@ -17,7 +17,7 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected static array $formats    = ['Y-m-d H:i:s'];
+    protected static array $formats    = [DateFormat::datetime_startYear];
     protected bool         $allowZeros = false;
     protected              $valueCarbon;
 
@@ -34,9 +34,10 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public static function parse($value, $formatPosition = 0): static
     {
+        $formats = array_map(fn(\BackedEnum $item) => $item->value, static::$formats);
         $formatted = Date::parse($value)
             ->setTimezone(config('app.timezone'))
-            ->format(static::$formats[$formatPosition]);
+            ->format($formats[$formatPosition]);
         return static::from($formatted);
     }
 
@@ -44,8 +45,9 @@ abstract class AbstractDateVo extends AbstractStringVo
     {
         parent::ensureIsValidValue($value);
 
-        if (! is_null($value) && ! Date::checkFormats($value, static::$formats, $this->allowZeros)) {
-            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', static::$formats)));
+        $formats = array_map(fn(\BackedEnum $item) => $item->value, static::$formats);
+        if (! is_null($value) && ! Date::checkFormats($value, $formats, $this->allowZeros)) {
+            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $formats)));
         }
     }
 
