@@ -37,9 +37,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         if (is_null($toFormat)) {
             $toFormat = static::$formats[0];
         }
-        $formatted = Date::parse($value)
-            ->setTimezone(config('app.timezone'))
-            ->format($toFormat->value);
+        $formatted = Date::parse($value)->format($toFormat->value);
         return static::from($formatted, $formats);
     }
 
@@ -60,6 +58,6 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public function carbon(): CarbonImmutable
     {
-        return $this->valueCarbon ?? Date::parse($this->value)->setTimezone(config('app.timezone'));
+        return $this->valueCarbon ?? Date::parse($this->value);
     }
 }
