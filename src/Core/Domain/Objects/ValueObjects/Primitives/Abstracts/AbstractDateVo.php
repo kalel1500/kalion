@@ -32,12 +32,14 @@ abstract class AbstractDateVo extends AbstractStringVo
         return new static($value, $formats);
     }
 
-    public static function parse($value, $formatPosition = 0): static
+    public static function parse($value, DateFormat $toFormat = null): static
     {
-        $formats = array_map(fn(\BackedEnum $item) => $item->value, static::$formats);
+        if (is_null($toFormat)) {
+            $toFormat = static::$formats[0];
+        }
         $formatted = Date::parse($value)
             ->setTimezone(config('app.timezone'))
-            ->format($formats[$formatPosition]);
+            ->format($toFormat->value);
         return static::from($formatted);
     }
 
