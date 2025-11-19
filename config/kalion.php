@@ -6,6 +6,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | App code
+    |--------------------------------------------------------------------------
+    |
+    | It is a short name that identifies the application.
+    |
+    */
+
+    'app_code' => env('KALION_APP_CODE', 'laravel'),
+
+    /*
+    |--------------------------------------------------------------------------
     | ServiceProvider Configurations
     |--------------------------------------------------------------------------
     |
@@ -251,6 +262,34 @@ return [
         'load_roles' => (bool) env('KALION_AUTH_LOAD_ROLES', true),
         'display_role_in_exception' => (bool) env('KALION_AUTH_DISPLAY_ROLE_IN_EXCEPTION', false),
         'display_permission_in_exception' => (bool) env('KALION_AUTH_DISPLAY_PERMISSION_IN_EXCEPTION', false),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Api
+    |--------------------------------------------------------------------------
+    |
+    | // Pending
+    |
+    */
+
+    'api' => [
+        'auth' => [
+            'disabled' => (bool) env('KALION_API_AUTH_DISABLED', false),
+            'basic_disabled' => (bool) env('KALION_API_AUTH_BASIC_DISABLED', false),
+            'passwords' => env('KALION_API_AUTH_PASSWORDS', null),
+        ],
+        'validate_headers' => (bool) env('KALION_API_VALIDATE_HEADERS', false),
+        'missing_good_headers' => (bool) env('KALION_API_MISSING_GOOD_HEADERS', false),
+        'headers' => [
+            'authorization' => env('KALION_API_HEADER_AUTHORIZATION', 'authorization'),
+            'certificate' => env('KALION_API_HEADER_CERTIFICATE', 'x-request-actor'),
+            'swagger' => 'x-is-from-swagger',
+            'private_endpoint' => 'x-private-endpoint-key',
+            'domain_host' => env('KALION_API_HEADER_DOMAIN_HOST', 'x-forwarded-host'),
+            'domain_uri' => env('KALION_API_HEADER_DOMAIN_URI', 'x-original-uri'),
+            'domain_for' => env('KALION_API_HEADER_DOMAIN_FOR', 'x-forwarded-for'),
+        ]
     ],
 
     /*
