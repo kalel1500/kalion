@@ -1,6 +1,41 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.40.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.41.0-beta.0...master)
+
+## [v0.41.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.40.0-beta.0...v0.41.0-beta.0) - 2025-11-14
+
+### Added
+
+* Se ha creado el nuevo enum `DateFormat` con todos los formatos que había en la clase `Date`. Implementa la interfaz `ArrayableEnum`.
+* Se ha creado la nueva interfaz `ArrayableEnum` para asegurar que los enums que lo necesiten usen el trait `HasArray`.
+* Se ha creado el nuevo trait `HasArray` con el método `toArray()` que había en el trait `HasIds` por si algún enum necesita tener solo el metodo.
+
+### Changed
+
+* Se ha añadido el parametro `$getKeys` al metodo `toArray()` de la interfaz ArrayableEnum (y del trait `HasArray`) para devolver un array con las keys en vez de con los valores.
+* (refactor) Se ha eliminado el método `toArray()` del trait `HasIds` y se ha añadido el trait `HasArray`.
+* Se han añadido en la interfaz `Identifiable` todos los metodos que hay en el trait HasIds (y que aún no estaba en la interfaz).
+* Se han mejorado los Value Objects de las fechas (clase `AbstractDateVo`):
+  * Nueva propiedad `$datetime_timestamp` en la clase `Date`.
+  * (fix) Ahora el método `parse()` funciona para todas las subclases (incluyendo las que tienen su propio formato). Para poder leerla desde el método estatico `parse()` se ha hecho estatica la propiedad `$formats`. Nota: En la clase `AbstractTimestampVo` se ha tenido que sacar la asignacion de `$formats` fuera del constructor, ya que si no al llamar al método `parse()` no se estaban teniendo en cuenta.
+  * Se ha reemplazado el uso de las propiedades estaticas de la clase `Date` para obtener los formatos de las fechas por el enum `DateFormat`.
+  * (breaking) Se han eliminado las propiedades estaticas con los formatos de las fechas de la clase `Date`.
+    * `$date_startYear`
+    * `$date_startDay`
+    * `$date_startYear_slash`
+    * `$date_startDay_slash`
+    * `$date_startMonthWithoutDay_slash`
+    * `$datetime_startYear`
+    * `$datetime_startYear_withoutSeconds`
+    * `$datetime_startDay_slash`
+    * `$datetime_startDay_slash_withoutSeconds`
+    * `$datetime_timestamp`
+    * `$datetime_eloquent_timestamps`
+    * `$time`
+  * (breaking) Se ha modificado el formato de los valores de la propiedad `$formats` de `strings` a instancias de `DateFormat`.
+  * Se ha añadido el parámetro `$toFormat` (instancia de `DateFormat`) en el método `parse()` para poder seleccionar el formato deseado.
+  * Se ha añadido el parametro `$formats` en el método `parse()` para poder sobreescribir los formatos permitidos en esa instancia de la clase.
+  * Se ha eliminado el `->setTimezone(config('app.timezone'))` al llamar al `Date::parse()` en los métodos `parse()` y `carbon()`, ya que por defecto laravel ya setea el timezone de carbon según la configuración.
 
 ## [v0.40.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.39.0-beta.0...v0.40.0-beta.0) - 2025-11-14
 
