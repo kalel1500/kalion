@@ -10,5 +10,9 @@ interface Identifiable
 
     public function getId(): int;
 
-    public static function fromId(int $id);
+    public static function fromId(int $id): static;
+
+    public static function tryFromId($id): ?static;
+
+    public static function toArray(): array;
 }

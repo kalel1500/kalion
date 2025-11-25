@@ -116,8 +116,8 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
 
     public function getEncodedWithDefaultDate(): string
     {
-        $dateStart          = Date::now()->startOfMonth()->format(Date::$date_startYear);
-        $dateEnd            = Date::now()->endOfMonth()->format(Date::$date_startYear);
+        $dateStart          = Date::now()->startOfMonth()->format(DateFormat::date_startYear->value);
+        $dateEnd            = Date::now()->endOfMonth()->format(DateFormat::date_startYear->value);
         $defaultDateFilters = [["field" => $this->filterTimeName, "type" => "like", "value" => ["start" => $dateStart, "end" => $dateEnd]]];
         $filters            = $this->isNull() ? $defaultDateFilters : array_merge($this->value, $defaultDateFilters);
         return $this->encodeFilters($filters);

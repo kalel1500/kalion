@@ -5,22 +5,11 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
 
 use Carbon\CarbonImmutable;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Throwable;
 
 final class Date
 {
-    public static string $date_startYear                         = 'Y-m-d';
-    public static string $date_startDay                          = 'd-m-Y';
-    public static string $date_startYear_slash                   = 'Y/m/d';
-    public static string $date_startDay_slash                    = 'd/m/Y';
-    public static string $date_startMonthWithoutDay_slash        = 'm/Y';
-    public static string $datetime_startYear                     = 'Y-m-d H:i:s';
-    public static string $datetime_startYear_withoutSeconds      = 'Y-m-d H:i';
-    public static string $datetime_startDay_slash                = 'd/m/Y H:i:s';
-    public static string $datetime_startDay_slash_withoutSeconds = 'd/m/Y H:i';
-    public static string $datetime_eloquent_timestamps           = 'Y-m-d\TH:i:s.u\Z';
-    public static string $time                                   = 'H:i:s';
-
     public static function stringToformat($date, $format, $getNowIfNullRecived = false): ?string
     {
         $isInValid = (is_null($date) || $date === '');
@@ -41,7 +30,7 @@ final class Date
 
     public static function formatInputDateToAudit($imputDate): ?string
     {
-        return Date::stringToformat($imputDate, Date::$datetime_startYear);
+        return Date::stringToformat($imputDate, DateFormat::datetime_startYear->value);
     }
 
     public static function parse($date): CarbonImmutable
@@ -69,8 +58,8 @@ final class Date
     {
         $date = ($date instanceof CarbonImmutable) ? $date : static::parse($date);
         $time = ($time instanceof CarbonImmutable) ? $time : static::parse($time);
-        $date = $date->format(static::$date_startYear);
-        $time = $time->format(static::$time);
+        $date = $date->format(DateFormat::date_startYear->value);
+        $time = $time->format(DateFormat::time->value);
         return static::parse($date . ' ' . $time);
     }
 

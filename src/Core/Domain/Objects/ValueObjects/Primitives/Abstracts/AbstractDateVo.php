@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstra
 
 use Carbon\CarbonImmutable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateVo;
@@ -16,13 +17,13 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected bool  $allowZeros = false;
-    protected array $formats    = ['Y-m-d H:i:s'];
-    protected       $valueCarbon;
+    protected static array $formats    = [DateFormat::datetime_startYear];
+    protected bool         $allowZeros = false;
+    protected              $valueCarbon;
 
     public function __construct(?string $value, ?array $formats = null)
     {
-        $this->formats = is_null($formats) ? $this->formats : $formats;
+        static::$formats = is_null($formats) ? static::$formats : $formats;
         parent::__construct($value);
     }
 
@@ -31,30 +32,32 @@ abstract class AbstractDateVo extends AbstractStringVo
         return new static($value, $formats);
     }
 
-    public static function parse($value): static
+    public static function parse($value, DateFormat $toFormat = null, ?array $formats = null): static
     {
-        $formatted = Date::parse($value)
-            ->setTimezone(config('app.timezone'))
-            ->format('Y-m-d H:i:s');
-        return static::from($formatted);
+        if (is_null($toFormat)) {
+            $toFormat = static::$formats[0];
+        }
+        $formatted = Date::parse($value)->format($toFormat->value);
+        return static::from($formatted, $formats);
     }
 
     protected function ensureIsValidValue(?string $value): void
     {
         parent::ensureIsValidValue($value);
 
-        if (! is_null($value) && ! Date::checkFormats($value, $this->formats, $this->allowZeros)) {
-            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $this->formats)));
+        $formats = array_map(fn(\BackedEnum $item) => $item->value, static::$formats);
+        if (! is_null($value) && ! Date::checkFormats($value, $formats, $this->allowZeros)) {
+            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $formats)));
         }
     }
 
     public function formatToSpainDatetime(): ?string
     {
-        return $this->isNull() ? null : Date::parse($this->value)->format(Date::$datetime_startDay_slash);
+        return $this->isNull() ? null : Date::parse($this->value)->format(DateFormat::datetime_startDay_slash->value);
     }
 
     public function carbon(): CarbonImmutable
     {
-        return $this->valueCarbon ?? Date::parse($this->value)->setTimezone(config('app.timezone'));
+        return $this->valueCarbon ?? Date::parse($this->value);
     }
 }

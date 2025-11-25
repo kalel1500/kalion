@@ -6,6 +6,8 @@ namespace Thehouseofel\Kalion\Core\Domain\Concerns\Enums;
 
 trait HasIds
 {
+    use HasArray;
+
     /**
      * Obtener el ID asociado a un valor del enum
      */
@@ -33,13 +35,5 @@ trait HasIds
         if ($value === false) return null;
 
         return static::from($value);
-    }
-
-    /**
-     * Convertir todos los valores del enum en un array de strings
-     */
-    public static function toArray(): array
-    {
-        return array_map(fn($case) => $case->value, static::cases());
     }
 }
