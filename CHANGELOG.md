@@ -4,6 +4,8 @@
 
 ## [v0.40.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.39.0-beta.0...v0.40.0-beta.0) - 2025-11-14
 
+### Changed
+
 * Se ha modificado el sistema de autenticacion (`Auth`):
   * (refactor) Se ha renombrado la interfaz `Authentication` a `AuthenticationFlow`. También se han renombrado las clases de la implementacion y la Facade.
   * (breaking) Auth: Se ha separado el método `user()` del servicio `AuthenticationFlowService` y de la Facade `AuthFlow`:
@@ -40,10 +42,14 @@
 
 ## [v0.39.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.1...v0.39.0-beta.0) - 2025-11-11
 
+### Changed
+
 * (breaking) Se ha movido el `KalionServiceProvider` de `src/Core/Infrastructure` a `src`. Ahora el namespace es `Thehouseofel\Kalion\KalionServiceProvider` en vez de `Thehouseofel\Kalion\Infrastructure\KalionServiceProvider`.
 * (breaking) Se ha modificado el `namespace` de todo el código de la carpeta `src` de `Thehouseofel\Kalion` a `Thehouseofel\Kalion\Core`.
 
 ## [v0.38.2-beta.1](https://github.com/kalel1500/kalion/compare/v0.38.2-beta.0...v0.38.2-beta.1) - 2025-11-11
+
+### Changed
 
 * Refactor interno sin impacto funcional: Se ha movido todo el código de la carpeta `src` a la carpeta `src/Core`.
 
