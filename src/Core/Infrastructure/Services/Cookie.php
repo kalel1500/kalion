@@ -66,13 +66,12 @@ final class Cookie
     {
         // Crear la cookie usando CookieFacade::make
         $this->cookie = CookieFacade::make(
-            $this->cookieName,
-            $this->preferences->__toString(),
-            $this->cookieDuration,
-            '/',
-            null,
-            config('session.secure'),
-            false
+            name    : $this->cookieName,
+            value   : $this->preferences->__toString(),
+            minutes : $this->cookieDuration,
+            path    : '/',
+            secure  : config('session.secure'),
+            httpOnly: false
         );
         return $this;
     }
