@@ -71,7 +71,7 @@ final class Cookie
             $this->cookieDuration,
             '/',
             null,
-            true,
+            config('session.secure'),
             false
         );
         return $this;
