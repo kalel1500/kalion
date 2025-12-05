@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.41.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.41.0-beta.1...master)
+
+## [v0.41.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.41.0-beta.0...v0.41.0-beta.1) - 2025-12-05
+
+### Fixed
+
+* Ahora se usa la configuracion de Laravel `session.secure` para establecer el valor parametro `$secure` al crear la Cookie de las preferencias del usuario.
 
 ## [v0.41.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.40.0-beta.0...v0.41.0-beta.0) - 2025-11-14
 
