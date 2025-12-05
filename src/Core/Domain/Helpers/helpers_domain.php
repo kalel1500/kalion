@@ -358,6 +358,17 @@ if (! function_exists('weighted_random_numbers')) {
     }
 }
 
+if (! function_exists('random_bool_by_rate')) {
+    function random_bool_by_rate(int $rate): bool
+    {
+        // Asegurar que el rate esté entre 0 y 100
+        $rate = max(0, min(100, $rate));
+
+        // Generar número aleatorio entre 1 y 100
+        return random_int(1, 100) <= $rate;
+    }
+}
+
 if (! function_exists('is_class_id')) {
     function is_class_id(string $class): bool
     {
