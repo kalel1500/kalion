@@ -602,10 +602,17 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return ! $this->isEmpty();
     }
 
-//    public function join()
-//    {
-//        //
-//    }
+    /**
+     * Join all items from the collection using a string. The final items can use a separate glue string.
+     *
+     * @param  string  $glue
+     * @param  string  $finalGlue
+     * @return string
+     */
+    public function join($glue, $finalGlue = '')
+    {
+        return collect($this->toArray())->join($glue, $finalGlue);
+    }
 
 //    public function keyBy()
 //    {
