@@ -1,6 +1,16 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.41.0-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.41.1-beta.0...master)
+
+## [v0.41.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.41.0-beta.1...v0.41.1-beta.0) - 2025-12-09
+
+### Added
+
+* Nuevo helper `random_bool_by_rate` para generar booleanos basados en un porcentaje.
+
+### Changed
+
+* Se ha añadido el método "join" en las colecciones ("AbstractCollectionBase") para unir elementos de la colección con un separador personalizado.
 
 ## [v0.41.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.41.0-beta.0...v0.41.0-beta.1) - 2025-12-05
 
