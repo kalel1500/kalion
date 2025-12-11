@@ -6,6 +6,6 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 
-final class IdNullVo extends AbstractId
+class IdNullVo extends AbstractId
 {
 }

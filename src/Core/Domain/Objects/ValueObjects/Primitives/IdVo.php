@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 
-final class IdVo extends AbstractId
+class IdVo extends AbstractId
 {
     /**
      * @var int
