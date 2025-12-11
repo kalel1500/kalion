@@ -1,6 +1,19 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.41.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.41.2-beta.0...master)
+
+## [v0.41.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.41.1-beta.0...v0.41.2-beta.00) - 2025-12-11
+
+### Added
+
+* Nueva funcionalidad para añadir la información de los permisos y roles del usuario al array (`toArray()`) de la entidad `UserEntity`:
+  * Se han añadido las propiedades `$is` y `$can` (arrays) en el trait `EntityHasPermissions` y se han creado los métodos `setIs()` y `setCan()` para llenarlas con la información de todos los roles y permisos de la aplicación y si el usuario pertenece o no.
+  * Además, se ha creado el método `toArray()` en el mismo trait (que sobreescribe el de la entidad), recibe los parámetros (`$addPermissions = false, $addRoles = false`) y si son `true` setea las respectivas propiedades y las añade al array final.
+* Se ha añadido las clases `AbstractDateZeroVo`, `DateZeroVo` y `DateZeroNullVo` para el manejo de Value Objects de fecha con valores con `0000-00-00 00:00:00`.
+
+### Changed
+
+* Eliminar el modificador final de las clases `IdNullVo`, `IdVo`, `IdZeroNullVo` e `IdZeroVo` para mejorar la extensibilidad.
 
 ## [v0.41.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.41.0-beta.1...v0.41.1-beta.0) - 2025-12-09
 
@@ -10,7 +23,7 @@
 
 ### Changed
 
-* Se ha añadido el método "join" en las colecciones ("AbstractCollectionBase") para unir elementos de la colección con un separador personalizado.
+* Se ha añadido el método `join` en las colecciones (`AbstractCollectionBase`) para unir elementos de la colección con un separador personalizado.
 
 ## [v0.41.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.41.0-beta.0...v0.41.0-beta.1) - 2025-12-05
 
