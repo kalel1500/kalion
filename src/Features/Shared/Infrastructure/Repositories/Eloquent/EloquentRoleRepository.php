@@ -6,12 +6,19 @@ namespace Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloque
 
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;
+use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\Role;
 
 class EloquentRoleRepository implements RoleRepository
 {
     protected string $model = Role::class;
+
+    public function all(): RoleCollection
+    {
+        $data = $this->model::all();
+        return RoleCollection::fromArray($data->toArray());
+    }
 
     public function findByName(StringVo $name): RoleEntity
     {
