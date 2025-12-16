@@ -18,7 +18,6 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_NULLABLE = DateNullVo::class;
 
     protected static array $formats    = [DateFormat::datetime_startYear]; // Debe ser estática para poder usarla en el metodo estático parse
-    protected bool         $allowZeros = false;
     protected              $valueCarbon;
 
     public function __construct(?string $value, ?array $formats = null)
@@ -46,7 +45,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         parent::ensureIsValidValue($value);
 
         $formats = array_map(fn(\BackedEnum $item) => $item->value, static::$formats);
-        if (! is_null($value) && ! Date::checkFormats($value, $formats, $this->allowZeros)) {
+        if (! is_null($value) && ! Date::checkFormats($value, $formats)) {
             throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $formats)));
         }
     }

@@ -63,13 +63,8 @@ final class Date
         return static::parse($date . ' ' . $time);
     }
 
-    public static function checkFormat(string $date, string $format, bool $allowZeros = false): bool
+    public static function checkFormat(string $date, string $format): bool
     {
-        // Verificar si el valor es cero según el formato y $allowZeros es true
-        if ($allowZeros && static::isZeroDate($date, $format)) {
-            return true;
-        }
-
         // Verificar el formato utilizando CarbonImmutable
         try {
             $formatted = CarbonImmutable::parse($date)->format($format);
@@ -80,32 +75,17 @@ final class Date
         }
     }
 
-    public static function checkFormats(string $date, array $formats, bool $allowZeros = false): bool
+    public static function checkFormats(string $date, array $formats): bool
     {
         // Iterar sobre cada formato y llamar a checkFormat
         foreach ($formats as $format) {
-            if (static::checkFormat($date, $format, $allowZeros)) {
+            if (static::checkFormat($date, $format)) {
                 return true;
             }
         }
 
         // Si ningún formato coincide, retornar false
         return false;
-    }
-
-    private static function isZeroDate(string $date, string $format): bool
-    {
-        // Crear una cadena de ceros basada en el formato
-        $zeroDate = strtr($format, [
-            'Y' => '0000',
-            'm' => '00',
-            'd' => '00',
-            'H' => '00',
-            'i' => '00',
-            's' => '00',
-        ]);
-
-        return $date === $zeroDate;
     }
 
     public static function debugTime(string $debugTitle, callable $callback)
