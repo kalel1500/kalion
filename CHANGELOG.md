@@ -1,8 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.41.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.43.0-beta.0...master)
 
-## [v0.41.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.41.1-beta.0...v0.41.2-beta.00) - 2025-12-11
+## [v0.43.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.41.2-beta.0...v0.43.0-beta.0) - 2025-12-16
+
+### Changed
+
+* (breaking) Se ha eliminado la funcionalidad `allowZeros` de los ValueObjects de tipo fecha:
+  * Se han eliminado las clases `AbstractDateZeroVo`, `DateZeroNullVo`, `DateZeroVo`.
+  * Se ha eliminado el parámetro `$allowZeros` de los métodos `checkFormat()` y `checkFormats()` de la clase `Date` (también se ha eliminado la el método privado `isZeroDate`).
+  * Se ha eliminado la propiedad `$allowZeros` de la clase `AbstractDateVo` (ya que ahora no sirve para el `checkFormats()`). Nota: si ahora se quiere permitir que una fecha tenga el valor `0000-00-00 00:00:00` se deberá pasar en el array de `$formats`.
+  * Se ha añadido el case `zeros` en el enum `DateFormat` con el valor `0000-00-00 00:00:00`.
+
+## [v0.41.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.41.1-beta.0...v0.41.2-beta.0) - 2025-12-11
 
 ### Added
 
