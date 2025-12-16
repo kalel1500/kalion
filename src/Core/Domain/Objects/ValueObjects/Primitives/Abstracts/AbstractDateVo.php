@@ -17,7 +17,7 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected static array $formats    = [DateFormat::datetime_startYear];
+    protected static array $formats    = [DateFormat::datetime_startYear]; // Debe ser estática para poder usarla en el metodo estático parse
     protected bool         $allowZeros = false;
     protected              $valueCarbon;
 
