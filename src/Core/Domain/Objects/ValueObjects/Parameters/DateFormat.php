@@ -23,4 +23,5 @@ enum DateFormat: string implements ArrayableEnum
     case datetime_timestamp                     = 'Y-m-d H:i:s.u';
     case datetime_eloquent_timestamps           = 'Y-m-d\TH:i:s.u\Z';
     case time                                   = 'H:i:s';
+    case zeros                                  = '0000-00-00 00:00:00';
 }
