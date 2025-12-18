@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.43.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.43.1-beta.0...master)
+
+## [v0.43.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.43.0-beta.0...v0.43.1-beta.0) - 2025-12-18
+
+### Changed
+
+* Se ha añadido la excepción `RecordAlreadyExistsException` para manejar conflictos de registro existentes.
 
 ## [v0.43.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.41.2-beta.0...v0.43.0-beta.0) - 2025-12-16
 
