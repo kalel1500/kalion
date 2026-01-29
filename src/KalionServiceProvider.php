@@ -147,7 +147,6 @@ class KalionServiceProvider extends ServiceProvider
 
             $this->{$publishesMigrationsMethod}([
                 KALION_PATH . '/database/migrations'                => database_path('migrations'),
-                KALION_PATH . '/stubs/generate/database/migrations' => database_path('migrations'),
             ], 'kalion-migrations');
 
             /*if (!$existNewMethod) {
