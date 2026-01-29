@@ -798,10 +798,6 @@ final class StartCommandService
 
         // bootstrap/providers.php
 
-        if (! Version::laravelMin11()) {
-            return $this;
-        }
-
         if ($this->reset) {
             // A partir de la version de Laravel 12.32.0 este metodo ya existe en el "ServiceProvider"
             self::removeProviderFromBootstrapFile('App\Providers\DependencyServiceProvider');
@@ -819,10 +815,6 @@ final class StartCommandService
         $this->number++;
 
         $this->line('Modificando archivo "bootstrap/app.php" para agregar redirectUsersTo en withMiddleware');
-
-        if (! Version::laravelMin11()) {
-            return $this;
-        }
 
         // Ruta del archivo a modificar
         $filePath = base_path('bootstrap/app.php');
@@ -861,10 +853,6 @@ EOD;
         $this->number++;
 
         $this->line('Modificando archivo "bootstrap/app.php" para agregar el "ExceptionHandler" en el "withExceptions()"');
-
-        if (! Version::laravelMin11()) {
-            return $this;
-        }
 
         // Ruta del archivo a modificar
         $filePath = base_path('bootstrap/app.php');

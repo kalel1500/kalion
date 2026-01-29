@@ -139,7 +139,7 @@ class KalionServiceProvider extends ServiceProvider
          * -------------------
          */
 
-        if (config('kalion.publish_migrations') && Version::laravelMin9()) {
+        if (config('kalion.publish_migrations')) {
             $existNewMethod            = method_exists($this, 'publishesMigrations');
             $publishesMigrationsMethod = $existNewMethod
                 ? 'publishesMigrations'
@@ -206,11 +206,8 @@ class KalionServiceProvider extends ServiceProvider
          * --------------------
          */
 
-        $langPath = Version::laravelMin9()
-            ? $this->app->langPath('vendor/kalion')
-            : $this->app->resourcePath('lang/vendor/kalion');
         $this->publishes([
-            KALION_PATH . '/lang' => $langPath,
+            KALION_PATH . '/lang' => $this->app->langPath('vendor/kalion'),
         ], 'kalion-lang');
     }
 
@@ -234,11 +231,7 @@ class KalionServiceProvider extends ServiceProvider
      */
     protected function registerMigrations(): void
     {
-        if (
-            $this->app->runningInConsole() &&
-            config('kalion.run_migrations') &&
-            Version::laravelMin9()
-        ) {
+        if ($this->app->runningInConsole() && config('kalion.run_migrations')) {
             $this->loadMigrationsFrom(KALION_PATH . '/database/migrations');
             $this->loadMigrationsFrom(KALION_PATH . '/stubs/generate/database/migrations');
         }
@@ -258,8 +251,6 @@ class KalionServiceProvider extends ServiceProvider
      */
     protected function registerComponents(): void
     {
-        if (! Version::laravelMin9()) return;
-
         // Registrar componentes anónimos
         Blade::anonymousComponentPath(KALION_PATH . '/resources/views/components', 'kal');
     }
