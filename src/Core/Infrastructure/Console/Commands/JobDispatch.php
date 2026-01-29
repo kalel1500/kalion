@@ -123,6 +123,9 @@ final class JobDispatch extends Command
 
         $pathsWithJobs = [];
 
+        // Comprobar que la ruta recibida exista
+        if (! is_dir($path)) return [];
+
         // Obtener y recorrer todos los archivos que hay en la ruta recibida
         $dirs = scandir($path);
 
