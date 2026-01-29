@@ -7,11 +7,11 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
 final class Version
 {
     /**
-     * Determinar si la version actual de PHP es igual o mayor a la 7.4
+     * Determinar si la version actual de PHP es igual o mayor a la 8.2
      */
-    public static function phpMin74(): bool
+    public static function phpMin82(): bool
     {
-        return version_compare(PHP_VERSION, '7.4', '>=');
+        return version_compare(PHP_VERSION, '8.2', '>=');
     }
 
     /**
