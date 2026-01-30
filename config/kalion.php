@@ -204,6 +204,10 @@ return [
             'register' => env('KALION_AUTH_BLADE_REGISTER', 'kal::pages.auth.register'),
             'password_reset' => env('KALION_AUTH_BLADE_PASSWORD_RESET', 'kal::pages.auth.password-reset'),
         ],
+        'models' => [
+            'web' => env('KALION_AUTH_MODEL_WEB', Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\User::class),
+            'api' => env('KALION_AUTH_MODEL_API', Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\ApiUser::class),
+        ],
         'entities' => [
             'web' => env('KALION_AUTH_ENTITY_WEB', Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity::class),
             'api' => env('KALION_AUTH_ENTITY_API', Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity::class),
@@ -282,5 +286,19 @@ return [
             'package_in_develop' => (bool) env('KALION_COMMAND_START_PACKAGE_IN_DEVELOP', false),
             'keep_migrations_date' => (bool) env('KALION_COMMAND_START_KEEP_MIGRATIONS_DATE', false),
         ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Logging
+    |--------------------------------------------------------------------------
+    |
+    | The following options allow you to configure custom logging levels
+    |
+    */
+
+    'logging' => [
+        'queues_level' => env('LOG_LEVEL', 'debug'),
+        'loads_level' => env('LOG_LEVEL', 'debug'),
     ],
 ];

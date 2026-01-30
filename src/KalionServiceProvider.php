@@ -94,49 +94,39 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function setConfig(): void
     {
+        // 1. Inyectar Logs (Sin que el usuario haga nada)
         config([
-            'logging.channels.queues' => [
+            'logging.channels.queues' => array_merge([
                 'driver'               => 'single',
                 'path'                 => storage_path('logs/queues.log'),
-                'level'                => env('LOG_LEVEL', 'debug'),
+                'level'                => config('kalion.logging.queues_level'),
                 'replace_placeholders' => true,
-            ],
-            'logging.channels.loads'  => [
+            ], config('logging.channels.queues', [])),
+
+            'logging.channels.loads' => array_merge([
                 'driver'               => 'single',
                 'path'                 => storage_path('logs/loads.log'),
-                'level'                => env('LOG_LEVEL', 'debug'),
+                'level'                => config('kalion.logging.queues_level'),
                 'replace_placeholders' => true,
-            ]
+            ], config('logging.channels.loads', [])),
         ]);
 
-        $authConfigPath = config_path('auth.php');
-        $defaultLine    = "'model' => env('AUTH_MODEL', App\\Models\\User::class),";
-        if (file_exists($authConfigPath)) {
-            $authConfigContents = file_get_contents($authConfigPath);
-            if (str_contains($authConfigContents, $defaultLine)) {
-                config([
-                    'auth.providers.users.model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\User::class),
-                ]);
-            }
-        }
 
-        if (! config()->has('auth.guards.api')) {
-            config([
-                'auth.guards.api' => [
-                    'driver'   => 'session',
-                    'provider' => 'api_users',
-                ],
-            ]);
-        }
+        // 2. Inyectar Auth Model
+        config(['auth.providers.users.model' => config('kalion.auth.models.web', config('auth.providers.users.model'))]);
 
-        if (! config()->has('auth.providers.api_users')) {
-            config([
-                'auth.providers.api_users' => [
-                    'driver' => 'eloquent',
-                    'model'  => env('AUTH_MODEL_API', \Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\ApiUser::class),
-                ],
-            ]);
-        }
+        // 3. Inyectar Guard y Provider para la api
+        config([
+            'auth.guards.api' => array_merge([
+                'driver'   => 'session',
+                'provider' => 'api_users',
+            ], config('auth.guards.api', [])),
+
+            'auth.providers.api_users' => array_merge([
+                'driver' => 'eloquent',
+                'model'  => config('kalion.auth.models.api'),
+            ], config('auth.providers.api_users', []))
+        ]);
     }
 
     /**
@@ -183,7 +173,7 @@ class KalionServiceProvider extends ServiceProvider
                 : 'publishes';
 
             $this->{$publishesMigrationsMethod}([
-                KALION_PATH . '/database/migrations'                => database_path('migrations'),
+                KALION_PATH . '/database/migrations' => database_path('migrations'),
             ], 'kalion-migrations');
 
             /*if (!$existNewMethod) {
