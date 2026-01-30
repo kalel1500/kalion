@@ -44,7 +44,7 @@ class KalionStart extends Command
         $reset        = $this->option('reset');
         $skipExamples = $this->option('skip-examples');
 
-        $developString = config('kalion.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';
+        $developString = config('kalion.command.start.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';
         $this->info("Inicio configuración: $developString");
 
         StartCommandService::configure($this, $reset, $skipExamples)

@@ -56,8 +56,8 @@ final class StartCommandService
         $this->originalStubsPath = $stubsBasePath . 'original';
 
         $this->steps                  = $this->countPublicMethods();
-        $this->developMode            = config('kalion.package_in_develop');
-        $this->keepMigrationsDate     = config('kalion.keep_migrations_date');
+        $this->developMode            = config('kalion.command.start.package_in_develop');
+        $this->keepMigrationsDate     = config('kalion.command.start.keep_migrations_date');
         $this->packageVersion         = InstalledVersions::getVersion('kalel1500/kalion') ?? 'dev';
         $this->lockFilePath           = base_path('kalion.lock');
         $this->stubFilesRelativePaths = $this->getStubFiles();
@@ -1041,7 +1041,7 @@ EOD;
 
         // Add script "ts-build" in "package.json"
         $this->modifyPackageJsonSection('engines', [
-            'node' => config('kalion.version_node'),
+            'node' => config('kalion.command.start.version_node'),
             // 'npm'  => config('kalion.version_npm'),
         ], $this->reset);
 

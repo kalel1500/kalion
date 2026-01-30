@@ -269,26 +269,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | NPM engines versions for the Start command
+    | Commands
     |--------------------------------------------------------------------------
     |
-    | With these options you can configure which versions of npm engines will
-    | be added to "package.json"
+    | The following options allow you to configure the "kalion:start" command.
     |
     */
 
-    'version_node' => env('KALION_VERSION_NODE', '>=20.11.1'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Package in develop
-    |--------------------------------------------------------------------------
-    |
-    | With this option you can configure if the package is in development to
-    | avoid executing unnecessary methods in the "kalion:start" command.
-    |
-    */
-
-    'package_in_develop' => (bool) env('KALION_PACKAGE_IN_DEVELOP', false),
-    'keep_migrations_date' => (bool) env('KALION_KEEP_MIGRATIONS_DATE', false),
+    'command' => [
+        'start' => [
+            'version_node' => env('KALION_VERSION_NODE', '>=20.11.1'),
+            'package_in_develop' => (bool) env('KALION_PACKAGE_IN_DEVELOP', false),
+            'keep_migrations_date' => (bool) env('KALION_KEEP_MIGRATIONS_DATE', false),
+        ],
+    ],
 ];

@@ -33,7 +33,7 @@ final class PublishAuth extends Command
         $reset      = $this->option('reset');
         $onlyUpdate = $this->option('onlyUpdate');
 
-        $developString = config('kalion.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';
+        $developString = config('kalion.command.start.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';
         $this->info("Inicio configuración: $developString");
 
         PublishAuthCommandService::configure($this, $reset, $onlyUpdate)
