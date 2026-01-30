@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts;
 
 interface Authentication
 {

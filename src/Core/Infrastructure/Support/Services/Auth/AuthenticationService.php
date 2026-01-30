@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Auth;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Authentication;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

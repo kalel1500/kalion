@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Facade;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 
 /**
- * @method static \Thehouseofel\Kalion\Core\Infrastructure\Services\ProcessChecker withCache()
- * @method static \Thehouseofel\Kalion\Core\Infrastructure\Services\ProcessChecker withoutCache()
+ * @method static \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\ProcessChecker withCache()
+ * @method static \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\ProcessChecker withoutCache()
  * @method static bool isRunning(CheckableProcessVo $processName)
  * @method static bool tryIsRunning(CheckableProcessVo $processName)
  * @method static void assert(string $processName, string $errorMessage = null)
@@ -20,7 +20,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckablePro
  * @method static bool tryIsRunningReverb()
  * @method static void assertReverb(string $errorMessage = null)
  *
- * @see \Thehouseofel\Kalion\Core\Infrastructure\Services\ProcessChecker
+ * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\ProcessChecker
  */
 final class ProcessChecker extends Facade
 {

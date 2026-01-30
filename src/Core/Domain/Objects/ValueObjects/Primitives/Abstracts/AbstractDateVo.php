@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Date;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Date;
 
 abstract class AbstractDateVo extends AbstractStringVo
 {

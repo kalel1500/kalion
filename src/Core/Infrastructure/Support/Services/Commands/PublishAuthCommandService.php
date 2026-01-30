@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Commands;
 
 use Illuminate\Support\Facades\File;
 use Thehouseofel\Kalion\Core\Domain\Concerns\CountMethods;

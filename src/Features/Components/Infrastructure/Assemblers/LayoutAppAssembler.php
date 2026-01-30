@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Cookie;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Cookie;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout\LayoutAppDto;
 
 class LayoutAppAssembler

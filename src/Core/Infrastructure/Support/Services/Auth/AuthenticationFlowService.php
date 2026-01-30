@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Auth;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\AuthenticationFlow;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Login;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\PasswordReset;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\AuthenticationFlow;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Login;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\PasswordReset;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Register;
 
 class AuthenticationFlowService implements AuthenticationFlow
 {

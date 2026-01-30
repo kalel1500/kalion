@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static string|null redirectTo(Request $request = null)
  *
- * @see \Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectAfterLogin
+ * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin
  */
 final class RedirectAfterLogin extends Facade
 {

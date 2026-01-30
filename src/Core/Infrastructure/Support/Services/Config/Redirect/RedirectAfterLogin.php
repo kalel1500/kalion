@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class RedirectDefaultPath extends Redirector
+class RedirectAfterLogin extends Redirector
 {
     protected static $redirectToCallback;
 
     protected function getConfigPath(): ?string
     {
-        return config('kalion.default_path');
+        return config('kalion.auth.redirect_after_login');
     }
 }

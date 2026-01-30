@@ -1,4 +1,4 @@
-@use(Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion)
+@use(Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion)
 @props(['header','footer'])
 
 <aside class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full border-r border-gray-200 bg-white pt-16 transition-transform dark:border-gray-700 dark:bg-gray-800 md:translate-x-0 md:sc:w-20 md:transition-all {{ Kalion::getShadowClasses('') }}" aria-label="Sidenav" id="drawer-navigation">

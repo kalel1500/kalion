@@ -2,7 +2,7 @@
 
 namespace Thehouseofel\Kalion\Core\Domain\Concerns\Enums;
 
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
 
 trait Nullable
 {

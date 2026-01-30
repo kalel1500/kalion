@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Features\Processes\Infrastructure\Http\Controllers
 use Illuminate\Http\JsonResponse;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Broadcast;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Broadcast;
 use Thehouseofel\Kalion\Features\Processes\Application\CheckProcessQueueUseCase;
 use Thehouseofel\Kalion\Features\Processes\Application\CheckProcessReverbUseCase;
 use Thehouseofel\Kalion\Features\Processes\Infrastructure\Events\ProcessStatusChecked;

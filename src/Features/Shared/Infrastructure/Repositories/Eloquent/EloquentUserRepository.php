@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent;
 
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
 
 class EloquentUserRepository

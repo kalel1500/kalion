@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services;
 
 final class Renderer
 {

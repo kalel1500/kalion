@@ -79,7 +79,7 @@ You can configure where the application will redirect (as long as no previous ro
    ```php
    public function register(): void
    {
-       \Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion::redirectAfterLoginTo('home');
+       \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion::redirectAfterLoginTo('home');
    }
    ```
 
@@ -108,7 +108,7 @@ You can configure where the application will redirect to by default in three way
    ```php
    public function register(): void
    {
-       \Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion::redirectDefaultPathTo('home');
+       \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion::redirectDefaultPathTo('home');
    }
    ```
 

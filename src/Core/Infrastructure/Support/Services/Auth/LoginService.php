@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Auth;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\View\View;
@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Thehouseofel\Kalion\Core\Infrastructure\Facades\RedirectAfterLogin;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Login;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Login;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

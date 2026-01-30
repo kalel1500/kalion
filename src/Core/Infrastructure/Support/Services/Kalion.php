@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\LoginFieldDto;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectAfterLogin;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectDefaultPath;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectDefaultPath;
 
 final class Kalion
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Commands;
 
 use Composer\InstalledVersions;
 use Illuminate\Http\Client\ConnectionException;
@@ -14,7 +14,7 @@ use Illuminate\Support\ServiceProvider;
 use RuntimeException;
 use Thehouseofel\Kalion\Core\Domain\Concerns\CountMethods;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\KalionStart;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Version;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Version;
 use Throwable;
 use function Illuminate\Filesystem\join_paths;
 

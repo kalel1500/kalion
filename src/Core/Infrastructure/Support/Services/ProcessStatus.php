@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;

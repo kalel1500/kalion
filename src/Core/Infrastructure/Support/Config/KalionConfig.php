@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\AuthenticationService;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\LoginService;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\PasswordResetService;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\RegisterService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\AuthenticationService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\LoginService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\PasswordResetService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\RegisterService;
 use Thehouseofel\Kalion\Features\Components\Domain\Services\BaseLayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;

@@ -22,8 +22,8 @@ use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\PublishAuth;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\UserHasPermission;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\UserHasRole;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Kalion;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Version;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Version;
 
 class KalionServiceProvider extends ServiceProvider
 {
@@ -31,9 +31,9 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'thehouseofel.kalion.redirectAfterLogin'                                                       => \Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectAfterLogin::class,
-        'thehouseofel.kalion.redirectDefaultPath'                                                      => \Thehouseofel\Kalion\Core\Infrastructure\Services\Config\Redirect\RedirectDefaultPath::class,
-        'thehouseofel.kalion.processChecker'                                                           => \Thehouseofel\Kalion\Core\Infrastructure\Services\ProcessChecker::class,
+        'thehouseofel.kalion.redirectAfterLogin'                                                       => \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin::class,
+        'thehouseofel.kalion.redirectDefaultPath'                                                      => \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectDefaultPath::class,
+        'thehouseofel.kalion.processChecker'                                                           => \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\ProcessChecker::class,
         \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\TabulatorRepository::class  => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentTabulatorRepository::class,
         \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository::class        => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
         \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository::class       => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
@@ -57,11 +57,11 @@ class KalionServiceProvider extends ServiceProvider
     protected function registerSingletons(): void
     {
         $this->app->singleton(\Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData::class, fn($app) => new (Kalion::getClassServiceLayout()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Authentication::class, fn($app) => new (Kalion::getClassServiceAuthentication()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\Contracts\AuthenticationFlow::class, \Thehouseofel\Kalion\Core\Infrastructure\Services\Auth\AuthenticationFlowService::class);
+        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Authentication::class, fn($app) => new (Kalion::getClassServiceAuthentication()));
+        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
+        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
+        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
+        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\AuthenticationFlow::class, \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\AuthenticationFlowService::class);
     }
 
     /**

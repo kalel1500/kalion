@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Thehouseofel\Kalion\Core\Infrastructure\Services\Cookie;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Cookie;
 
 final class AddPreferencesCookies
 {
