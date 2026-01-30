@@ -15,9 +15,6 @@ return [
     | - "run_migrations": Sets whether migrations should be run with
     |                     the "php artisan migrate" command.
     |
-    | - "publish_migrations": Sets whether migrations should be published
-    |                         with the "php artisan vendor:publish" command.
-    |
     | - "register_routes": Sets whether package routes should be registered.
     |
     | - "web_middlewares": Sets whether the following middlewares should be
@@ -26,8 +23,6 @@ return [
     */
 
     'run_migrations' => (bool) env('KALION_RUN_MIGRATIONS', false),
-
-    'publish_migrations' => (bool) env('KALION_PUBLISH_MIGRATIONS', false),
 
     'register_routes' => (bool) env('KALION_REGISTER_ROUTES', true),
 

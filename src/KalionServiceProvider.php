@@ -166,11 +166,9 @@ class KalionServiceProvider extends ServiceProvider
          * -------------------
          */
 
-        if (config('kalion.publish_migrations')) {
-            $this->publishesMigrations([
-                KALION_PATH . '/database/migrations' => database_path('migrations'),
-            ], 'kalion-migrations');
-        }
+        $this->publishesMigrations([
+            KALION_PATH . '/database/migrations' => database_path('migrations'),
+        ], 'kalion-migrations');
 
 
         /*
