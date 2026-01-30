@@ -70,10 +70,8 @@ class KalionServiceProvider extends ServiceProvider
     protected function mergeConfig(): void
     {
         // Configuración - Mergear la configuración del paquete con la configuración de la aplicación, solo hará falta publicar si queremos sobreescribir alguna configuración
-        if (! $this->app->configurationIsCached()) {
-            $this->mergeConfigFrom(KALION_PATH . '/config/kalion.php', 'kalion');
-            $this->mergeConfigFrom(KALION_PATH . '/config/kalion_links.php', 'kalion_links');
-        }
+        $this->mergeConfigFrom(KALION_PATH . '/config/kalion.php', 'kalion');
+        $this->mergeConfigFrom(KALION_PATH . '/config/kalion_links.php', 'kalion_links');
     }
 
     /**
@@ -96,10 +94,8 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function setConfig(): void
     {
-        if (! $this->app->configurationIsCached()) {
-            Kalion::setLogChannels();
-            Kalion::setAuthApiGuards();
-        }
+        Kalion::setLogChannels();
+        Kalion::setAuthApiGuards();
     }
 
     /**
