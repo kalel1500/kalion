@@ -167,29 +167,9 @@ class KalionServiceProvider extends ServiceProvider
          */
 
         if (config('kalion.publish_migrations')) {
-            $existNewMethod            = method_exists($this, 'publishesMigrations');
-            $publishesMigrationsMethod = $existNewMethod
-                ? 'publishesMigrations'
-                : 'publishes';
-
-            $this->{$publishesMigrationsMethod}([
+            $this->publishesMigrations([
                 KALION_PATH . '/database/migrations' => database_path('migrations'),
             ], 'kalion-migrations');
-
-            /*if (!$existNewMethod) {
-                Event::listen(function (VendorTagPublished $event) {
-                    // Definir que palabras identifican las migraciones del paquete
-                    $keywords = ['laravel-kalion-and-ddd-architecture-utilities', 'migrations'];
-
-                    // Buscar en las rutas publicadas si alguna contiene las 3 palabras
-                    $publishedKalionMigrations = Arr::first(array_keys($event->paths), fn($key) => collect($keywords)->every(fn($word) => Str::contains($key, $word)));
-
-                    // Actualizar nombres de las migraciones solo si se han ejecutado
-                    if ($publishedKalionMigrations) {
-                        $this->updateNameOfMigrationsIfExist();
-                    }
-                });
-            }*/
         }
 
 
@@ -361,48 +341,5 @@ class KalionServiceProvider extends ServiceProvider
             return $this->merge(['class' => $filteredDefault]);
         });
 
-    }
-
-
-    private function updateNameOfMigrationsIfExist(): void
-    {
-        $filesystem     = new Filesystem();
-        $migrationsPath = database_path('migrations');
-
-        // Lista de nombres de migraciones que quieres renombrar (sin timestamp)
-        $migrationFiles = [
-            'create_statuses_table',
-            'create_tags_table',
-            'create_posts_table',
-            'create_comments_table',
-            'create_post_tag_table',
-        ];
-
-        // Verificar si hay al menos una migración publicada usando coincidencia parcial
-        $migrationsExist = collect($filesystem->files($migrationsPath))->some(function ($file) use ($migrationFiles) {
-            return collect($migrationFiles)->contains(fn($migration) => Str::contains($file->getFilename(), $migration));
-        });
-
-        // Salir si no hay migraciones publicadas
-        if (! $migrationsExist) return;
-
-        $timestamp = now(); // Iniciar con el timestamp actual
-
-        foreach ($filesystem->files($migrationsPath) as $file) {
-            foreach ($migrationFiles as $migration) {
-                if (Str::contains($file->getFilename(), $migration)) {
-                    // Generar nuevo nombre con timestamp actual + nombre de la migración
-                    $newName = $timestamp->format('Y_m_d_His') . '_' . $migration . '.php';
-
-                    // Renombrar el archivo
-                    $filesystem->move($file->getPathname(), $migrationsPath . '/' . $newName);
-
-                    // Incrementar el timestamp en 1 segundo para la próxima migración
-                    $timestamp->addSecond();
-
-                    break; // Salimos del bucle interno tras encontrar la coincidencia
-                }
-            }
-        }
     }
 }
