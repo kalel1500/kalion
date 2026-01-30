@@ -94,8 +94,49 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function setConfig(): void
     {
-        Kalion::setLogChannels();
-        Kalion::setAuthApiGuards();
+        config([
+            'logging.channels.queues' => [
+                'driver'               => 'single',
+                'path'                 => storage_path('logs/queues.log'),
+                'level'                => env('LOG_LEVEL', 'debug'),
+                'replace_placeholders' => true,
+            ],
+            'logging.channels.loads'  => [
+                'driver'               => 'single',
+                'path'                 => storage_path('logs/loads.log'),
+                'level'                => env('LOG_LEVEL', 'debug'),
+                'replace_placeholders' => true,
+            ]
+        ]);
+
+        $authConfigPath = config_path('auth.php');
+        $defaultLine    = "'model' => env('AUTH_MODEL', App\\Models\\User::class),";
+        if (file_exists($authConfigPath)) {
+            $authConfigContents = file_get_contents($authConfigPath);
+            if (str_contains($authConfigContents, $defaultLine)) {
+                config([
+                    'auth.providers.users.model' => env('AUTH_MODEL', \Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\User::class),
+                ]);
+            }
+        }
+
+        if (! config()->has('auth.guards.api')) {
+            config([
+                'auth.guards.api' => [
+                    'driver'   => 'session',
+                    'provider' => 'api_users',
+                ],
+            ]);
+        }
+
+        if (! config()->has('auth.providers.api_users')) {
+            config([
+                'auth.providers.api_users' => [
+                    'driver' => 'eloquent',
+                    'model'  => env('AUTH_MODEL_API', \Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\ApiUser::class),
+                ],
+            ]);
+        }
     }
 
     /**
