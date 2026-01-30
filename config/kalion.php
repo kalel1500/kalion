@@ -278,9 +278,9 @@ return [
 
     'command' => [
         'start' => [
-            'version_node' => env('KALION_VERSION_NODE', '>=20.11.1'),
-            'package_in_develop' => (bool) env('KALION_PACKAGE_IN_DEVELOP', false),
-            'keep_migrations_date' => (bool) env('KALION_KEEP_MIGRATIONS_DATE', false),
+            'version_node' => env('KALION_COMMAND_START_VERSION_NODE', '>=20.11.1'),
+            'package_in_develop' => (bool) env('KALION_COMMAND_START_PACKAGE_IN_DEVELOP', false),
+            'keep_migrations_date' => (bool) env('KALION_COMMAND_START_KEEP_MIGRATIONS_DATE', false),
         ],
     ],
 ];
