@@ -77,9 +77,11 @@ You can configure where the application will redirect (as long as no previous ro
 3. Or using the `redirectAfterLoginTo()` method of the `Kalion` class in the `register` method of a ServiceProvider for a more complex configuration:
 
    ```php
+   use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
+   
    public function register(): void
    {
-       \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion::redirectAfterLoginTo('home');
+       Kalion::redirectAfterLoginTo('home');
    }
    ```
 
@@ -106,9 +108,11 @@ You can configure where the application will redirect to by default in three way
 3. Or using the `redirectAfterLoginTo()` method of the `Kalion` class in the `register` method of a ServiceProvider for a more complex configuration:
 
    ```php
+   use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
+   
    public function register(): void
    {
-       \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion::redirectDefaultPathTo('home');
+       Kalion::redirectDefaultPathTo('home');
    }
    ```
 
