@@ -1,6 +1,20 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.43.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.43.2-beta.0...master)
+
+## [v0.43.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.43.1-beta.0...v0.43.2-beta.0) - 2026-01-30
+
+### Changed
+
+* (refactor) Modificaciones en la clase Version:
+  * docs: Marcar clase como interna y restringir uso externo.
+  * Eliminar los métodos `laravelMin9()`, `laravelMin11()` y `phpMin74()`, ya que en el composer están definidas las versiones mínimas (PHP 8.2 y Laravel 11).
+* Actualizar la migración `create_cache_table` según la nueva instalación de Laravel.
+
+### Fixed
+
+* (fix) Comprobar que existan los directorios que se van a escanear en comando `JobDispatch`.
+* (fix) Quitar las migraciones de los ejemplos de la publicación (`vendor:publish`) ya que la ruta era errónea (se ha eliminado, ya que no es necesario que se publiquen los ejemplos).
 
 ## [v0.43.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.43.0-beta.0...v0.43.1-beta.0) - 2025-12-18
 
