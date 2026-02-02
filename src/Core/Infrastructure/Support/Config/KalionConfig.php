@@ -58,12 +58,26 @@ class KalionConfig
 
     public static function getOrderedIdentifiers(): array
     {
-        // Ordenamos el registro según el array de prioridad
-        $orderedIdentifiers = array_intersect(static::$priority, array_keys(static::$registry));
+        $keys = array_keys(static::$registry);
 
-        // Añadimos al final los que no estén en el array de prioridad (por si acaso)
-        $remainingIdentifiers = array_diff(array_keys(static::$registry), static::$priority);
-        return array_merge($orderedIdentifiers, $remainingIdentifiers);
+        // Si no hay prioridad definida, devolvemos las keys tal cual
+        if (empty(static::$priority)) {
+            return $keys;
+        }
+
+        // Mapeamos la prioridad a índices [nombre => orden] para búsqueda O(1)
+        $priorityOrder = array_flip(static::$priority);
+
+        usort($keys, function ($a, $b) use ($priorityOrder) {
+            // Obtenemos la posición o asignamos el final (PHP_INT_MAX)
+            $posA = $priorityOrder[$a] ?? PHP_INT_MAX;
+            $posB = $priorityOrder[$b] ?? PHP_INT_MAX;
+
+            // El operador <=> devuelve -1, 0 o 1
+            return $posA <=> $posB;
+        });
+
+        return $keys;
     }
 
     public static function apply(): void
