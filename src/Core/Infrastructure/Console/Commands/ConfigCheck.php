@@ -19,23 +19,16 @@ final class ConfigCheck extends Command
         $registry = KalionConfig::getRegistry();
         $orderedIdentifiers = KalionConfig::getOrderedIdentifiers();
 
-        // 1. Mostrar orden de prioridad
-        $this->info('1. Orden de prioridad:');
-        $this->line('   ' . implode(', ', $orderedIdentifiers));
-        $this->newLine();
-
-        // 1. Mostrar la tabla de las clases
-        $this->info('2. Detalle de clases registradas:');
-
+        $this->info('Overridden Kalion Configuration Classes (the ids are displayed in order of priority):');
         $rows = [];
         $lastId = null;
-        foreach ($registry as $id => $classes) {
+        foreach ($orderedIdentifiers as $id) {
             // Si no es el primer bloque, añadimos una línea separadora real
             if ($lastId !== null) {
                 $rows[] = new TableSeparator();
             }
 
-            foreach ($classes as $key => $class) {
+            foreach ($registry[$id] as $key => $class) {
                 $rows[] = [
                     // Solo mostramos el ID si es distinto al anterior, si no, celda vacía
                     ($id !== $lastId) ? "<fg=yellow>$id</>" : '',
