@@ -22,6 +22,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\PublishAuth;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\UserHasPermission;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\UserHasRole;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Version;
 
@@ -127,6 +128,11 @@ class KalionServiceProvider extends ServiceProvider
                 'model'  => config('kalion.auth.models.api'),
             ], config('auth.providers.api_users', []))
         ]);
+
+        // 4. Aplicar las posibles sobreescrituras de configuración hechas por otros paquetes o la propia app
+        $this->app->booted(function () {
+            KalionConfig::apply();
+        });
     }
 
     /**

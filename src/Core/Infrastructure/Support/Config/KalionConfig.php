@@ -18,10 +18,9 @@ use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\Elo
 
 class KalionConfig
 {
-    /**
-     * Estos son los namespaces "de fábrica".
-     * Si Kalion cambia de estructura, solo lo cambias aquí.
-     */
+    protected static array $registry = [];
+    protected static array $priority = []; // La app por defecto siempre va al final (gana)
+
     public static function classes(): array
     {
         return [
@@ -39,26 +38,47 @@ class KalionConfig
         ];
     }
 
-    /**
-     * Intenta sobrescribir configuraciones de Kalion solo si el usuario
-     * no ha definido un valor personalizado en su .env o config/kalion.php
-     */
-    public static function override(array $overrides, bool $force = false): void
+    public static function override(array $overrides, string $identifier): void
     {
-        $defaults     = self::classes();
-        $isAppCalling = self::isCallingFromApp();
-
-        foreach ($overrides as $key => $class) {
-            if (($force && $isAppCalling) || config($key) === $defaults[$key]) {
-                config([$key => $class]);
-            }
-        }
+        static::$registry[$identifier] = array_merge(
+            static::$registry[$identifier] ?? [],
+            $overrides
+        );
     }
 
-    protected static function isCallingFromApp(): bool
+    public static function getKeys(): array
     {
-        $backtrace  = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
-        $callerFile = $backtrace[1]['file'] ?? '';
-        return str_starts_with($callerFile, base_path('app'));
+        return array_keys(static::$registry);
+    }
+
+    public static function setPriority(array $priority): void
+    {
+        static::$priority = $priority;
+    }
+
+    public static function apply(): void
+    {
+        $defaults = self::classes();
+
+        // Ordenamos el registro según el array de prioridad
+        $orderedIdentifiers = array_intersect(static::$priority, array_keys(static::$registry));
+
+        // Añadimos al final los que no estén en el array de prioridad (por si acaso)
+        $remainingIdentifiers = array_diff(array_keys(static::$registry), static::$priority);
+        $finalOrder           = array_merge($orderedIdentifiers, $remainingIdentifiers);
+
+        foreach ($finalOrder as $id) {
+            foreach (static::$registry[$id] as $key => $class) {
+                if (config($key) === $defaults[$key]) {
+                    config([$key => $class]);
+                }
+            }
+        }
+
+        // Finalmente, nos aseguramos de que Laravel reciba la clase final
+        config([
+            'auth.providers.users.model'     => config('kalion.auth.models.web'),
+            'auth.providers.api_users.model' => config('kalion.auth.models.api'),
+        ]);
     }
 }
