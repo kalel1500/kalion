@@ -43,14 +43,22 @@ class KalionConfig
      * Intenta sobrescribir configuraciones de Kalion solo si el usuario
      * no ha definido un valor personalizado en su .env o config/kalion.php
      */
-    public static function override(array $overrides): void
+    public static function override(array $overrides, bool $force = false): void
     {
-        $defaults = self::classes();
+        $defaults     = self::classes();
+        $isAppCalling = self::isCallingFromApp();
 
         foreach ($overrides as $key => $class) {
-            if (config($key) === $defaults[$key]) {
+            if (($force && $isAppCalling) || config($key) === $defaults[$key]) {
                 config([$key => $class]);
             }
         }
+    }
+
+    protected static function isCallingFromApp(): bool
+    {
+        $backtrace  = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+        $callerFile = $backtrace[1]['file'] ?? '';
+        return str_starts_with($callerFile, base_path('app'));
     }
 }
