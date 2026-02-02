@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 
 final class ConfigCheck extends Command
@@ -18,27 +19,40 @@ final class ConfigCheck extends Command
         $registry = KalionConfig::getRegistry();
         $orderedIdentifiers = KalionConfig::getOrderedIdentifiers();
 
-        // 1. Mostrar Orden de Prioridad
+        // 1. Mostrar orden de prioridad
         $this->info('1. Orden de prioridad:');
         $this->line('   ' . implode(', ', $orderedIdentifiers));
         $this->newLine();
 
-        // 2. Mostrar Clases por Identificador
-        $this->info('2. Clases registradas por identificador:');
+        // 1. Mostrar la tabla de las clases
+        $this->info('2. Detalle de clases registradas:');
 
+        $rows = [];
+        $lastId = null;
         foreach ($registry as $id => $classes) {
-            $this->warn(" [$id]");
-
-            $rows = [];
-            foreach ($classes as $key => $class) {
-                $rows[] = [$key, $class];
+            // Si no es el primer bloque, añadimos una línea separadora real
+            if ($lastId !== null) {
+                $rows[] = new TableSeparator();
             }
 
+            foreach ($classes as $key => $class) {
+                $rows[] = [
+                    // Solo mostramos el ID si es distinto al anterior, si no, celda vacía
+                    ($id !== $lastId) ? "<fg=yellow>$id</>" : '',
+                    $key,
+                    $class
+                ];
+                $lastId = $id;
+            }
+        }
+
+        if (empty($rows)) {
+            $this->line('   No hay sobrescrituras registradas.');
+        } else {
             $this->table(
-                ['Config Key', 'Full Class Namespace'],
+                ['ID', 'Config Key', 'Full Class Namespace'],
                 $rows
             );
-            $this->newLine();
         }
 
         $this->info('Nota: Si una clave no aparece aquí, se está usando el default de Kalion.');
