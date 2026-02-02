@@ -1,6 +1,41 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.43.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.44.0-beta.0...master)
+
+## [v0.44.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.43.2-beta.0...v0.44.0-beta.0) - 2026-01-30
+
+### Changed
+
+* (breaking) Se mueven los servicios de infraestructura a la carpeta `Support` para desacoplar componentes propios de las extensiones del framework.
+* (breaking) Se implementa `KalionConfig` como fuente de verdad única para todas las clases configurables. Esto permite que otros paquetes sobrescriban clases (modelos, entidades, repositorios) de forma segura, respetando siempre las variables de entorno definidas por el usuario final.
+  * **Nueva clase KalionConfig:** Se ha centralizado la gestión de todas las clases configurables (modelos, entidades, repositorios y servicios) en un solo lugar. Esto garantiza una `fuente de verdad única` para el paquete y facilita su mantenimiento.
+  * **Soporte para sobrescritura inteligente:** Se introduce el método `KalionConfig::override()`, que permite a paquetes externos sustituir las clases por defecto del paquete de forma segura.
+  * **Prioridad del desarrollador:** El sistema de sobrescritura es inteligente: solo actúa si el desarrollador no ha personalizado ya esa clave mediante variables de entorno (`.env`) o el archivo `config/kalion.php`.
+  * **Desacoplamiento de namespaces:** El archivo de configuración ahora consume dinámicamente los valores de `KalionConfig`, eliminando la duplicidad de cadenas de texto y asegurando que cualquier cambio de estructura interna se refleje automáticamente en toda la aplicación.
+* (breaking) Se elimina la configuración `kalion.publish_migrations` y la condición en el `KalionServiceProvider` para simplificar la publicación de las migraciones del paquete. Ahora las migraciones están siempre disponibles para ser publicadas mediante el tag `kalion-migrations`.
+* (refactor) Se elimina la validación para ver si existe el método `publishesMigrations` al publicar las migraciones, ya que el composer establece la versión mínima de Laravel a la 11. También se ha eliminado el código comentado que actualizaba el nombre de las migraciones (cuando no existía el método `publishesMigrations`).
+* Se ha mejorado el sistema de inyección de configuración y soporte para overrides:
+  * **Logs personalizables:** Los canales de log (`queues` y `loads`) ahora utilizan `array_merge`. Esto significa que si defines estos mismos canales en tu `config/logging.php`, tus ajustes tendrán prioridad absoluta sobre los del paquete.
+  * **Control del nivel de Log:** El nivel de los logs ya no depende solo de la variable global `LOG_LEVEL`. Ahora puedes definir niveles específicos para el paquete en `config/kalion.php` (claves `queues_level` y `loads_level`), manteniendo `LOG_LEVEL` como valor por defecto.
+  * **Extensibilidad en Auth API:** El guard y el provider para la API ahora soportan extensión mediante `array_merge`. Puedes añadir o modificar propiedades de estos elementos en tu `config/auth.php` sin que el paquete sobrescriba toda la configuración.
+  * (breaking) **Nuevo flujo para el Modelo de Usuario:** Se ha eliminado la detección automática del modelo por defecto. Ahora, el modelo de autenticación se gestiona desde la clave `kalion.auth.models.web`.
+    * **Acción requerida:** Para cambiar el modelo de usuario, utiliza la nueva variable de entorno `KALION_AUTH_MODEL_WEB` o edita el valor en `config/kalion.php`.
+* Se eliminan las comprobaciones de `$this->app->configurationIsCached()` en los métodos `register()` y `boot()`, ya que Laravel gestiona internamente la carga de la configuración cacheada. 
+  * Al usar este condicional, el paquete omitía la inyección dinámica de valores (como canales de log y guards de auth) cuando la aplicación se ejecutaba con la configuración ya cacheada en entornos de producción.
+  * Este cambio asegura que el paquete sea 100% compatible con el comando `php artisan config:cache`.
+* (breaking) Unificar las configuraciones del comando `KalionStart` bajo el prefijo `kalion.command.start`:
+  * Keys de configuración:
+    * `kalion.version_node` => `kalion.command.start.version_node`
+    * `kalion.package_in_develop` => `kalion.command.start.package_in_develop`
+    * `kalion.keep_migrations_date` => `kalion.command.start.keep_migrations_date`
+  * Variables de entorno:
+    * `KALION_VERSION_NODE` => `KALION_COMMAND_START_VERSION_NODE`
+    * `KALION_PACKAGE_IN_DEVELOP` => `KALION_COMMAND_START_PACKAGE_IN_DEVELOP`
+    * `KALION_KEEP_MIGRATIONS_DATE` => `KALION_COMMAND_START_KEEP_MIGRATIONS_DATE`
+
+### Fixed
+
+* (fix) Se ha quitado de la carga automática de migraciones las de los ejemplos para que no se ejecuten con el comando `php artisan migrate`. Nota: Como tampoco se publican ya con el tag `kalion-migrations`, la unica opción es usar el comando `kalion:start`.
 
 ## [v0.43.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.43.1-beta.0...v0.43.2-beta.0) - 2026-01-30
 
