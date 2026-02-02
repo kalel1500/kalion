@@ -238,7 +238,6 @@ class KalionServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole() && config('kalion.run_migrations')) {
             $this->loadMigrationsFrom(KALION_PATH . '/database/migrations');
-            $this->loadMigrationsFrom(KALION_PATH . '/stubs/generate/database/migrations');
         }
     }
 
