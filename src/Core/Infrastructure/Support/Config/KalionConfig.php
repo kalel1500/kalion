@@ -56,18 +56,21 @@ class KalionConfig
         static::$priority = $priority;
     }
 
-    public static function apply(): void
+    public static function getOrderedIdentifiers(): array
     {
-        $defaults = self::classes();
-
         // Ordenamos el registro según el array de prioridad
         $orderedIdentifiers = array_intersect(static::$priority, array_keys(static::$registry));
 
         // Añadimos al final los que no estén en el array de prioridad (por si acaso)
         $remainingIdentifiers = array_diff(array_keys(static::$registry), static::$priority);
-        $finalOrder           = array_merge($orderedIdentifiers, $remainingIdentifiers);
+        return array_merge($orderedIdentifiers, $remainingIdentifiers);
+    }
 
-        foreach ($finalOrder as $id) {
+    public static function apply(): void
+    {
+        $defaults = self::classes();
+
+        foreach (self::getOrderedIdentifiers() as $id) {
             foreach (static::$registry[$id] as $key => $class) {
                 if (config($key) === $defaults[$key]) {
                     config([$key => $class]);
