@@ -46,9 +46,9 @@ class KalionConfig
         );
     }
 
-    public static function getKeys(): array
+    public static function getRegistry(): array
     {
-        return array_keys(static::$registry);
+        return static::$registry;
     }
 
     public static function setPriority(array $priority): void

@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\View\ComponentAttributeBag;
 use Thehouseofel\Kalion\Core\Domain\Services\TailwindClassFilter;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ClearAll;
+use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ConfigCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\JobDispatch;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\LogsClear;
@@ -229,6 +230,7 @@ class KalionServiceProvider extends ServiceProvider
     {
         $this->commands([
             ClearAll::class,
+            ConfigCheck::class,
             KalionStart::class,
             PublishAuth::class,
             JobDispatch::class,
