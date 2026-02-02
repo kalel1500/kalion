@@ -1,6 +1,17 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.44.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.44.1-beta.0...master)
+
+## [v0.44.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.44.0-beta.0...v0.44.1-beta.0) - 2026-02-02
+
+### Changed
+
+* Reestructuración completa de `KalionConfig` para soportar múltiples sobrescrituras desde diferentes paquetes o la aplicación final.
+  * **Registro Diferido:** El método `override()` ahora es no bloqueante; solo registra las clases en un `$registry` interno usando un `$identifier`.
+  * **Gestión de Prioridades:** Se introduce `setPriority()` para definir explícitamente el orden de ejecución, permitiendo que la aplicación (app) u otros paquetes tengan la última palabra.
+  * **Ciclo de Vida:** La lógica de aplicación de configuración se mueve al método `apply()`, invocado automáticamente en el hook `$this->app->booted()` del `KalionServiceProvider`.
+  * **Sincronización de Providers:** Se centraliza la configuración de los auth.providers de Laravel dentro del proceso de `apply()`. Esto garantiza que los modelos finales (sobrescritos o no) se asignen correctamente una vez resuelta toda la jerarquía de prioridades.
+  * **Herramientas de Debugging:** Se añade el comando `kalion:config-check` que muestra una tabla jerárquica con las sobrescrituras registradas, permitiendo auditar visualmente el estado final de las clases y su origen.
 
 ## [v0.44.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.43.2-beta.0...v0.44.0-beta.0) - 2026-01-30
 
