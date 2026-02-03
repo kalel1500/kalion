@@ -117,17 +117,4 @@ final class ExceptionContextDto extends AbstractDataTransferObject
     {
         return is_null($this->previous) ? null : ExceptionContextDto::from($this->previous);
     }
-
-    /*public function getLastPrevious(): ?Throwable
-    {
-        $exception = $this->previous; // Empieza desde la propiedad $previous
-
-        // Itera sobre las excepciones previas
-        while ($exception && $exception->getPrevious()) {
-            $exception = $exception->getPrevious();
-        }
-
-        // Retorna la excepción más interna o null si no hay más
-        return $exception;
-    }*/
 }
