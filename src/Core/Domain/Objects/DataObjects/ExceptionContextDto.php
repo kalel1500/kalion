@@ -39,8 +39,6 @@ final class ExceptionContextDto extends AbstractDataTransferObject
 
     public static function from(Throwable $e, ?array $data = null, bool $success = false, ?array $custom_response = null): ExceptionContextDto
     {
-        // if (is_null($e)) return null; // TODO Canals - pensar
-
         if (method_exists($e, 'getContext') && ! is_null($e->getContext())) return $e->getContext();
 
         return ExceptionContextDto::fromArray([
