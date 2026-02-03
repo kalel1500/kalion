@@ -85,22 +85,6 @@ final class ExceptionContextDto extends AbstractDataTransferObject
         ];
     }
 
-    public function toMakeArray(): array
-    {
-        return [
-            'statusCode' => $this->statusCode,
-            'message'    => $this->message,
-            'success'    => $this->success,
-            'data'       => $this->data,
-            'code'       => $this->code,
-            'exception'  => $this->exception,
-            'file'       => $this->file,
-            'line'       => $this->line,
-            'trace'      => $this->trace,
-            'previous'   => $this->previous,
-        ];
-    }
-
     public function toArray(bool $throwInDebugMode = true): array
     {
         $addDebugInfo = debug_is_active() && $throwInDebugMode;
