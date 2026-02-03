@@ -77,12 +77,13 @@ final class ExceptionContextDto extends AbstractDataTransferObject
 
     private function arrayDebugInfo(): array
     {
+        $previousData = is_null($this->previous) ? null : ExceptionContextDto::from($this->previous);
         return [
             'exception' => $this->exception,
             'file'      => $this->file,
             'line'      => $this->line,
             'trace'     => $this->trace,
-            'previous'  => $this->getPreviousData()?->toArray(),
+            'previous'  => $previousData?->toArray(),
         ];
     }
 
@@ -107,14 +108,5 @@ final class ExceptionContextDto extends AbstractDataTransferObject
         $addDebugInfo = debug_is_active() && $throwInDebugMode;
         $toArray      = $this->custom_response ?? $this->toArrayForProd();
         return $addDebugInfo ? array_merge($toArray, $this->arrayDebugInfo()) : $toArray;
-    }
-
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /*---------------------------------------------------- Properties -------------------------------------------------*/
-
-    public function getPreviousData(): ?ExceptionContextDto
-    {
-        return is_null($this->previous) ? null : ExceptionContextDto::from($this->previous);
     }
 }
