@@ -4,7 +4,14 @@
 @section('title', __($context->title))
 @section('code', $context->statusCode)
 @section('message', $context->message)
-
+@section('html')
+    @if($context->showLogout)
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button class="cursor-pointer hover:underline">Logout</button>
+        </form>
+    @endif
+@endsection
 
 {{--
 <div>

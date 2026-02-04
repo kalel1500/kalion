@@ -299,4 +299,20 @@ return [
         'queues_level' => env('LOG_LEVEL', 'debug'),
         'loads_level' => env('LOG_LEVEL', 'debug'),
     ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exceptions
+    |--------------------------------------------------------------------------
+    |
+    | The following options allow you to configure exception behaviors.
+    |
+    */
+
+    'exceptions' => [
+        'http' => [
+            'show_logout_form' => (bool) env('KALION_EXCEPTIONS_HTTP_SHOW_LOGOUT_FORM', false),
+        ],
+    ],
 ];

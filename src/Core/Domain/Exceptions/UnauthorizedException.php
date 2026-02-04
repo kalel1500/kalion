@@ -9,6 +9,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
 class UnauthorizedException extends KalionHttpException
 {
     const STATUS_CODE = 403;
+    const SHOW_LOGOUT_FORM = true;
 
     public static function forRoles(string $roles): static
     {

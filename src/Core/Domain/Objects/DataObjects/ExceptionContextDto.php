@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Throwable;
 
@@ -28,7 +29,8 @@ final class ExceptionContextDto extends AbstractDataTransferObject
         public readonly string     $file,
         public readonly int        $line,
         public readonly array      $trace,
-        public readonly ?Throwable $previous
+        public readonly ?Throwable $previous,
+        public readonly bool       $showLogout = false,
     )
     {
         $this->title = Response::$statusTexts[$this->statusCode];
@@ -52,13 +54,23 @@ final class ExceptionContextDto extends AbstractDataTransferObject
             'file'            => $e->getFile(),
             'line'            => $e->getLine(),
             'trace'           => collect($e->getTrace())->map(fn($trace) => Arr::except($trace, ['args']))->all(),
-            'previous'        => $e->getPrevious()
+            'previous'        => $e->getPrevious(),
+            'showLogout'      => ExceptionContextDto::showLogoutForm($e),
         ]);
     }
 
     public static function getMessage(Throwable $e): string
     {
         return (is_kalion_exception($e) || debug_is_active()) ? $e->getMessage() : __('Server Error');
+    }
+
+    protected static function showLogoutForm(Throwable $e): bool
+    {
+        if (! ($e instanceof KalionHttpException)) {
+            return false;
+        }
+
+        return config('kalion.exceptions.http.show_logout_form') && $e::SHOW_LOGOUT_FORM;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
