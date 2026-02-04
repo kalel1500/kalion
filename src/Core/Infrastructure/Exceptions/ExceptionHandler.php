@@ -29,27 +29,27 @@ final class ExceptionHandler
 
             // Renderizar manualmente los ModelNotFoundException para que todos los "findOrFail()" en local muestren la vista "trace" y en PRO muestren nuestra vita "custom-error" sin tener que envolverlos en un "tryCatch"
             $exceptions->render(function (NotFoundHttpException $e, Request $request) {
-                $exception = $e->getPrevious();
+                $modelException = $e->getPrevious();
 
-                // Solo intervenimos si la excepción original es un ModelNotFoundException
-                if (! ($exception instanceof ModelNotFoundException)) {
+                // Comprobar que la excepción previa sea ModelNotFoundException
+                if (! ($modelException instanceof ModelNotFoundException)) {
                     return null; // Que Laravel lo maneje como siempre
                 }
 
-                $context = ExceptionContextDto::from($exception);
+                $context = ExceptionContextDto::from($modelException);
                 $isJson  = self::shouldRenderJson($request);
                 $isDebug = debug_is_active();
 
                 // Si la respuesta esperada es JSON
                 if ($isJson) {
                     return $isDebug
-                        ? self::renderJson($context)
+                        ? self::renderJson($context) // Renderizarlo con el contexto de la excepción ModelNotFoundException
                         : null; // Deja que Laravel lo maneje con su JSON genérico
                 }
 
                 // Si la respuesta es HTML
                 return $isDebug
-                    ? self::renderHtmlDebug($exception, $request)
+                    ? self::renderHtmlDebug($modelException, $request)
                     : self::renderHtmlCustom($context);
             });
 
