@@ -18,97 +18,105 @@ use Throwable;
 
 final class ExceptionHandler
 {
+
+    /**
+     * @deprecated Use the static method "handle" directly. Will be removed in v0.45.0-beta.0
+     */
+    public static function getUsingCallback(): callable
+    {
+        return function (Exceptions $exceptions) {
+            static::handle($exceptions);
+        };
+    }
+
     /**
      * Internamente Laravel primero llama al render()
      *
      * Después llama al respond() y este modifica la respuesta
      */
-    public static function getUsingCallback(): callable
+    public static function handle(Exceptions $exceptions): void
     {
-        return function (Exceptions $exceptions) {
+        // Renderizar manualmente los ModelNotFoundException para que todos los "findOrFail()" en local muestren la vista "trace" y en PRO muestren nuestra vita "custom-error" sin tener que envolverlos en un "tryCatch"
+        $exceptions->render(function (NotFoundHttpException $e, Request $request) {
+            $modelException = $e->getPrevious();
 
-            // Renderizar manualmente los ModelNotFoundException para que todos los "findOrFail()" en local muestren la vista "trace" y en PRO muestren nuestra vita "custom-error" sin tener que envolverlos en un "tryCatch"
-            $exceptions->render(function (NotFoundHttpException $e, Request $request) {
-                $modelException = $e->getPrevious();
+            // Comprobar que la excepción previa sea ModelNotFoundException
+            if (! ($modelException instanceof ModelNotFoundException)) {
+                return null; // Que Laravel lo maneje como siempre
+            }
 
-                // Comprobar que la excepción previa sea ModelNotFoundException
-                if (! ($modelException instanceof ModelNotFoundException)) {
-                    return null; // Que Laravel lo maneje como siempre
-                }
+            $context = ExceptionContextDto::from($modelException);
+            $isJson  = self::shouldRenderJson($request);
+            $isDebug = debug_is_active();
 
-                $context = ExceptionContextDto::from($modelException);
-                $isJson  = self::shouldRenderJson($request);
-                $isDebug = debug_is_active();
-
-                // Si la respuesta esperada es JSON
-                if ($isJson) {
-                    return $isDebug
-                        ? self::renderJson($context) // Renderizarlo con el contexto de la excepción ModelNotFoundException
-                        : null; // Deja que Laravel lo maneje con su JSON genérico
-                }
-
-                // Si la respuesta es HTML
+            // Si la respuesta esperada es JSON
+            if ($isJson) {
                 return $isDebug
-                    ? self::renderHtmlDebug($modelException, $request)
-                    : self::renderHtmlCustom($context);
-            });
+                    ? self::renderJson($context) // Renderizarlo con el contexto de la excepción ModelNotFoundException
+                    : null; // Deja que Laravel lo maneje con su JSON genérico
+            }
 
-            // Renderizar nuestras excepciones de dominio
-            $exceptions->render(function (KalionExceptionInterface $e, Request $request) {
-                $context  = $e->getContext();
-                $notDebug = ! debug_is_active();
+            // Si la respuesta es HTML
+            return $isDebug
+                ? self::renderHtmlDebug($modelException, $request)
+                : self::renderHtmlCustom($context);
+        });
 
-                // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
-                if (self::shouldRenderJson($request)) {
-                    return self::renderJson($context);
-                }
+        // Renderizar nuestras excepciones de dominio
+        $exceptions->render(function (KalionExceptionInterface $e, Request $request) {
+            $context  = $e->getContext();
+            $notDebug = ! debug_is_active();
 
-                /**
-                 * Devolver la vista de error personalizada solo si se cumple alguna de estas opciones (or):
-                 *  - El debug está desactivado
-                 *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "false"
-                 */
-                if ($notDebug || (self::isKalionHttpExceptionAnd($e, shouldRenderTrace: false))) {
-                    return self::renderHtmlCustom($context);
-                }
+            // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
+            if (self::shouldRenderJson($request)) {
+                return self::renderJson($context);
+            }
 
-                /**
-                 * Para este punto el APP_DEBUG es siempre "true".
-                 *
-                 * Forzar el "debug_stack_trace" si se cumplen estas opciones (and):
-                 *  - El debug está desactivado
-                 *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "true"
-                 */
-                if (self::isKalionHttpExceptionAnd($e, shouldRenderTrace: true)) {
-                    return self::renderHtmlDebug($e, $request);
-                }
+            /**
+             * Devolver la vista de error personalizada solo si se cumple alguna de estas opciones (or):
+             *  - El debug está desactivado
+             *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "false"
+             */
+            if ($notDebug || (self::isKalionHttpExceptionAnd($e, shouldRenderTrace: false))) {
+                return self::renderHtmlCustom($context);
+            }
 
-                /**
-                 * Para este punto el APP_DEBUG es siempre "true".
-                 *
-                 * Por lo que dejamos que laravel se encargue de renderizar el error.
-                 *
-                 * En teoria siempre deberia pintar el "renderHtmlDebug" pero me parece mejor dejar que lo haga laravel en vez de forzarlo manualmente.
-                 */
-                return null;
-            });
+            /**
+             * Para este punto el APP_DEBUG es siempre "true".
+             *
+             * Forzar el "debug_stack_trace" si se cumplen estas opciones (and):
+             *  - El debug está desactivado
+             *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "true"
+             */
+            if (self::isKalionHttpExceptionAnd($e, shouldRenderTrace: true)) {
+                return self::renderHtmlDebug($e, $request);
+            }
 
-            // Indicar a Laravel cuando devolver un Json (mirar url "/ajax/")
-            $exceptions->shouldRenderJsonWhen(function (Request $request, Throwable $e) {
-                return self::shouldRenderJson($request);
-            });
+            /**
+             * Para este punto el APP_DEBUG es siempre "true".
+             *
+             * Por lo que dejamos que laravel se encargue de renderizar el error.
+             *
+             * En teoria siempre deberia pintar el "renderHtmlDebug" pero me parece mejor dejar que lo haga laravel en vez de forzarlo manualmente.
+             */
+            return null;
+        });
 
-            // Formatear todas las respuestas Json para añadir los parámetros [success, message, data] con un valor por defecto (No aplica en los "KalionException" porque ya tienen ese formato)
-            $exceptions->respond(function (SymfonyResponse $response, Throwable $e, Request $request) {
-                if ($response instanceof JsonResponse) {
-                    $data = json_decode($response->getContent(), true);
-                    $data = array_merge(['success' => false, 'message' => '', 'data' => null], $data);
-                    return response()->json($data, $response->getStatusCode());
-                }
-                return $response;
-            });
+        // Indicar a Laravel cuando devolver un Json (mirar url "/ajax/")
+        $exceptions->shouldRenderJsonWhen(function (Request $request, Throwable $e) {
+            return self::shouldRenderJson($request);
+        });
 
-        };
+        // Formatear todas las respuestas Json para añadir los parámetros [success, message, data] con un valor por defecto (No aplica en los "KalionException" porque ya tienen ese formato)
+        $exceptions->respond(function (SymfonyResponse $response, Throwable $e, Request $request) {
+            if ($response instanceof JsonResponse) {
+                $data = json_decode($response->getContent(), true);
+                $data = array_merge(['success' => false, 'message' => '', 'data' => null], $data);
+                return response()->json($data, $response->getStatusCode());
+            }
+            return $response;
+        });
+
     }
 
     private static function shouldRenderJson(Request $request): bool
