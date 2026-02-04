@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
@@ -34,7 +35,7 @@ final class ExceptionHandler
      *
      * Después llama al respond() y este modifica la respuesta
      */
-    public static function handle(Exceptions $exceptions, bool $overrideModelNotFound = true): void
+    public static function handle(Exceptions $exceptions, bool $overrideModelNotFound = true, bool $overrideHttp = true): void
     {
         // Renderizar manualmente los ModelNotFoundException para que todos los "findOrFail()" en local muestren la vista "trace" y en PRO muestren nuestra vita "custom-error" sin tener que envolverlos en un "tryCatch"
         if ($overrideModelNotFound) {
@@ -63,6 +64,22 @@ final class ExceptionHandler
                     : self::renderHtmlCustom($context);
             });
         }
+
+        // Renderizar manualmente las excepciones HttpException, ya que Laravel siempre muestra una vista sin el debug (trace) aunque el APP_DEBUG esté activo
+        if ($overrideHttp) {
+            $exceptions->render(function (HttpException $e, Request $request) {
+                $isJson  = self::shouldRenderJson($request);
+                $isDebug = debug_is_active();
+                if (! $isJson) {
+                    return $isDebug
+                        ? self::renderHtmlDebug($e, $request)
+                        : self::renderHtmlCustom(ExceptionContextDto::from($e));
+                }
+
+                return null; // Que Laravel lo maneje como siempre
+            });
+        }
+
 
         // Renderizar nuestras excepciones de dominio
         $exceptions->render(function (KalionExceptionInterface $e, Request $request) {
