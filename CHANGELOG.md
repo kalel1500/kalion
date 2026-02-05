@@ -1,6 +1,25 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.44.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.44.2-beta.0...master)
+
+## [v0.44.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.44.1-beta.0...v0.44.2-beta.0) - 2026-02-04
+
+### Changed
+
+* Se ha modificado la gestión de las excepciones en la clase `ExceptionHandler`:
+  * Implementar método `handle()` y marcar `getUsingCallback()` como obsoleto:
+    * Se añade `handle(Exceptions $exceptions)` para permitir una integración más directa y limpia en `bootstrap/app.php`. 
+    * Se marca `getUsingCallback()` como obsoleto (`deprecated`).
+  * Permitir desactivar el renderizado de `ModelNotFoundException` con un segundo parámetro en el `ExceptionHandler::handle($exceptions, overrideModelNotFound: false)`
+  * Sobreescribir el renderizado de `HttpException`:
+    * Se añade el parámetro `$overrideHttp` (`true` por defecto) para gestionar visualmente las excepciones HTTP.
+    * Se mejora la experiencia de debugging mostrando el `trace` en modo debug para `HttpExceptions`, algo que Laravel no hace de forma nativa.
+* Se ha modificado la gestión de las excepciones para poder mostrar el botón de `Logout` en la excepción `UnauthorizedException`
+  * Nueva constante `SHOW_LOGOUT_FORM` en la excepción base `KalionHttpException` con el valor a `false` (y en la clase `UnauthorizedException` con el valor a `true`).
+  * Nueva configuración `kalion.exceptions.http.show_logout_form` (`default: false`) y nueva variable de entorno `KALION_EXCEPTIONS_HTTP_SHOW_LOGOUT_FORM` para definir si se quiere activar el botón de logout cuando la constante `SHOW_LOGOUT_FORM` sea `true`.
+  * Nueva propiedad `$showLogout` en la clase `ExceptionContextDto` que se setea a `true` cuando la excepción tenga la constante `SHOW_LOGOUT_FORM` a `true` y la configuración esté activada.
+  * Se ha añadido el formulario de logout en la blade `error.blade.php` que se muestra cuando la propiedad `$showLogout` de la clase `ExceptionContextDto` es `true`.
+  * (refactor) Métodos internos de la clase `ExceptionContextDto` eliminados: `toMakeArray()` y `getPreviousData()`.
 
 ## [v0.44.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.44.0-beta.0...v0.44.1-beta.0) - 2026-02-02
 
