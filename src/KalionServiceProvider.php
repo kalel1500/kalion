@@ -6,12 +6,10 @@ namespace Thehouseofel\Kalion;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use Illuminate\View\ComponentAttributeBag;
 use Thehouseofel\Kalion\Core\Domain\Services\TailwindClassFilter;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ClearAll;
@@ -25,7 +23,6 @@ use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\UserHasPermission;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\UserHasRole;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Version;
 
 class KalionServiceProvider extends ServiceProvider
 {
