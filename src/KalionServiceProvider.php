@@ -19,10 +19,32 @@ use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\PublishAuth;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\AddPreferencesCookies;
+use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\ForceArraySessionInCloud;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\UserHasPermission;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\UserHasRole;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\AuthenticationFlowService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Authentication;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\AuthenticationFlow;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Login;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\PasswordReset;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Register;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectDefaultPath;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\ProcessChecker;
+use Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData;
+use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
+use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository;
+use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;
+use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\StatusRepository;
+use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\TabulatorRepository;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentJobRepository;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentRoleRepository;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentStatusRepository;
+use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentTabulatorRepository;
 
 class KalionServiceProvider extends ServiceProvider
 {
@@ -30,14 +52,14 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'thehouseofel.kalion.redirectAfterLogin'                                                       => \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin::class,
-        'thehouseofel.kalion.redirectDefaultPath'                                                      => \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectDefaultPath::class,
-        'thehouseofel.kalion.processChecker'                                                           => \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\ProcessChecker::class,
-        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\TabulatorRepository::class  => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentTabulatorRepository::class,
-        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository::class        => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentJobRepository::class,
-        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository::class       => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentRoleRepository::class,
-        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository::class => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository::class,
-        \Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\StatusRepository::class     => \Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentStatusRepository::class,
+        'thehouseofel.kalion.redirectAfterLogin'  => RedirectAfterLogin::class,
+        'thehouseofel.kalion.redirectDefaultPath' => RedirectDefaultPath::class,
+        'thehouseofel.kalion.processChecker'      => ProcessChecker::class,
+        TabulatorRepository::class                => EloquentTabulatorRepository::class,
+        JobRepository::class                      => EloquentJobRepository::class,
+        RoleRepository::class                     => EloquentRoleRepository::class,
+        PermissionRepository::class               => EloquentPermissionRepository::class,
+        StatusRepository::class                   => EloquentStatusRepository::class,
     ];
 
     /**
@@ -55,12 +77,12 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function registerSingletons(): void
     {
-        $this->app->singleton(\Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData::class, fn($app) => new (Kalion::getClassServiceLayout()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Authentication::class, fn($app) => new (Kalion::getClassServiceAuthentication()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
-        $this->app->singleton(\Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\AuthenticationFlow::class, \Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\AuthenticationFlowService::class);
+        $this->app->singleton(LayoutData::class, fn($app) => new (Kalion::getClassServiceLayout()));
+        $this->app->singleton(Authentication::class, fn($app) => new (Kalion::getClassServiceAuthentication()));
+        $this->app->singleton(Login::class, fn($app) => new (Kalion::getClassServiceLogin()));
+        $this->app->singleton(Register::class, fn($app) => new (Kalion::getClassServiceRegister()));
+        $this->app->singleton(PasswordReset::class, fn($app) => new (Kalion::getClassServicePasswordReset()));
+        $this->app->singleton(AuthenticationFlow::class, AuthenticationFlowService::class);
     }
 
     /**
@@ -308,7 +330,7 @@ class KalionServiceProvider extends ServiceProvider
         // Añadir el Middleware AddPreferencesCookies al grupo de rutas web
         if (config('kalion.web_middlewares.add_preferences_cookies.active')) {
             // Añadir middlewares al final de un grupo
-            $router->pushMiddlewareToGroup('web', \Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\AddPreferencesCookies::class);
+            $router->pushMiddlewareToGroup('web', AddPreferencesCookies::class);
 
             // Evitar el encriptado de las cookies de las preferencias del usuario
             if (! empty(config('app.key'))) {
@@ -321,7 +343,7 @@ class KalionServiceProvider extends ServiceProvider
         // Añadir el Middleware ForceArraySessionInCloud al grupo de rutas web
         if (config('kalion.web_middlewares.force_array_session_in_cloud.active')) {
             // Añadir middlewares al principio de un grupo
-            $router->prependMiddlewareToGroup('web', \Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\ForceArraySessionInCloud::class);
+            $router->prependMiddlewareToGroup('web', ForceArraySessionInCloud::class);
         }
     }
 
