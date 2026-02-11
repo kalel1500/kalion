@@ -44,3 +44,9 @@ KALION_KEEP_MIGRATIONS_DATE=true
 ```bash
 php -S localhost:8000 tests/server.php
 ```
+
+## Extraer lista de archivos y directorios del paquete
+
+```shell
+Get-ChildItem -Recurse -Exclude "vendor", ".git",  ".idea", "node_modules" | Select-Object FullName
+Get-ChildItem -Recurse -Exclude "*vendor*", "*.git*", "*.idea*", "*node_modules*" | Select-Object FullName
