@@ -32,24 +32,11 @@ final class JobDispatch extends Command
         // Obtener parámetros
         $jobName    = $this->argument('job');
         $params     = $this->option('p');
-        $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
-        $kalionPath = $vendorPath . 'kalel1500' . DIRECTORY_SEPARATOR . 'kalion';
 
         // Mensaje inicial
         $this->info('Escaneando Jobs...');
 
-        // Obtener las rutas de todos los paquetes definidos en la configuración
-        if (! is_null($packages = config('kalion.packages_to_scan_for_jobs'))) {
-            $packages = is_array($packages) ? $packages : explode(';', $packages);
-            $packages = array_map(fn($item) => normalize_path($vendorPath . $item), $packages);
-        }
-        if (is_null($packages)) $packages = [];
-
-        // Definir las rutas donde buscar los Jobs:
-        $pathsToScan_packages = [
-            $kalionPath, // Escanear el propio paquete "kalion"
-            ...$packages, // Escanear los paquetes configurados en el ".env"
-        ];
+        $pathsToScan_packages = $this->getPathsFromConfigPackages();
         $pathsToScan_app      = [
             src_path(), // Escanear la carpeta "src" de la propia aplicación
             app_path(), // Escanear la carpeta "app" de la propia aplicación
@@ -115,6 +102,23 @@ final class JobDispatch extends Command
         $this->info("Ejecutando Job $jobName");
         dispatch_sync(app()->makeWith($class, ['params' => $params]));
         $this->info("Job $jobName ejecutado");
+    }
+
+    private function getPathsFromConfigPackages(): array
+    {
+        $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
+        $kalionPath = $vendorPath . 'kalel1500' . DIRECTORY_SEPARATOR . 'kalion';
+
+        // Obtener las rutas de todos los paquetes definidos en la configuración
+        $packages = config('kalion.packages_to_scan_for_jobs');
+        $packages = is_array($packages) ? $packages : explode(';', $packages);
+        $otherPaths = array_map(fn($item) => normalize_path($vendorPath . $item), $packages);
+
+        // Definir las rutas donde buscar los Jobs:
+        return [
+            $kalionPath, // Escanear el propio paquete "kalion"
+            ...$otherPaths, // Escanear los paquetes configurados en el ".env"
+        ];
     }
 
     private function findJobDirsOnPath(?string $path, bool $isPackage = false): array
