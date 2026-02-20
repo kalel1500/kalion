@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\ComponentAttributeBag;
-use Thehouseofel\Kalion\Core\Domain\Services\TailwindClassFilter;
+use Thehouseofel\Kalion\Core\Domain\Support\Services\TailwindClassFilter;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ClearAll;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ConfigCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\JobDispatch;

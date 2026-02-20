@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Services\Auth;
+namespace Thehouseofel\Kalion\Core\Domain\Support\Services\Auth;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;

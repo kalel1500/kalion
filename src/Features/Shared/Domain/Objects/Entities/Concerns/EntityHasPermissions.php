@@ -3,7 +3,7 @@
 namespace Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Concerns;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
-use Thehouseofel\Kalion\Core\Domain\Services\Auth\UserAccessChecker;
+use Thehouseofel\Kalion\Core\Domain\Support\Services\Auth\UserAccessChecker;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Collections\RoleCollection;
