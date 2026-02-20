@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Authentication;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

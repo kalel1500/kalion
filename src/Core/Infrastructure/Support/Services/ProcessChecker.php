@@ -7,6 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services;
 use Symfony\Component\Process\Process;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\ProcessException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 
 final class ProcessChecker
 {

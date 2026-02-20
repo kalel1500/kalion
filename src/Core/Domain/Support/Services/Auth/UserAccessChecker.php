@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Support\Services\Auth;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\RoleEntity;

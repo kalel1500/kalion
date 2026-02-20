@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\LoginFieldDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin;

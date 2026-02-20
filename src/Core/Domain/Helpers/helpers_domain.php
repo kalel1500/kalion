@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterfac
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 use Thehouseofel\Kalion\Core\Infrastructure\Facades\Auth;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
 

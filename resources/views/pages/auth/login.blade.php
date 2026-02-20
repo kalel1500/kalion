@@ -1,4 +1,4 @@
-@use(Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion)
+@use(Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion)
 @php($field = Kalion::getLoginFieldData())
 
 <x-kal::layout.guest :title="__('k::auth.login.title')" :cardTitle="__('k::auth.login.card_title')">

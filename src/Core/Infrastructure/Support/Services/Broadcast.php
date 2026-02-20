@@ -9,6 +9,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Responses\ResponseBroadcastDto;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Throwable;
 
 final class Broadcast

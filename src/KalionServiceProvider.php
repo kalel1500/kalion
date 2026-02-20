@@ -32,7 +32,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Pass
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Register;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectDefaultPath;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\ProcessChecker;
 use Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;

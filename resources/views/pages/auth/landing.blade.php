@@ -1,4 +1,4 @@
-@use(Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion)
+@use(Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion)
 @php($field = Kalion::getLoginFieldData())
 
 <x-kal::layout.landing>
