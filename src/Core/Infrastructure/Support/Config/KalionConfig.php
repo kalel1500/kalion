@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 
+use Illuminate\Support\Arr;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\AuthenticationService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\LoginService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\PasswordResetService;
@@ -33,6 +34,7 @@ class KalionConfig
     ];
     protected static array $registry = [];
     protected static array $priority = [];
+    protected static array $scanPackages = [];
 
     public static function getClasses(): array
     {
@@ -68,6 +70,16 @@ class KalionConfig
         return $keys;
     }
 
+    public static function getScanPackages(): array
+    {
+        $packages = config('kalion.packages_to_scan_for_jobs');
+        $merged = array_merge(
+            is_array($packages) ? $packages : explode(';', $packages),
+            static::$scanPackages
+        );
+        return array_filter($merged); // Limpiar valores vacíos (por el explode)
+    }
+
     public static function setPriority(array $priority): void
     {
         static::$priority = $priority;
@@ -98,5 +110,13 @@ class KalionConfig
             'auth.providers.users.model'     => config('kalion.auth.models.web'),
             'auth.providers.api_users.model' => config('kalion.auth.models.api'),
         ]);
+    }
+
+    public static function registerPackagesToScanJobs(string|array $packages): void
+    {
+        static::$scanPackages = array_merge(
+            static::$scanPackages,
+            Arr::wrap($packages)
+        );
     }
 }

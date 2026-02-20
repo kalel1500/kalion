@@ -136,7 +136,7 @@ return [
     |
     */
 
-    'packages_to_scan_for_jobs' => env('KALION_PACKAGES_TO_SCAN_FOR_JOBS'),
+    'packages_to_scan_for_jobs' => env('KALION_PACKAGES_TO_SCAN_FOR_JOBS', ''),
 
     /*
     |--------------------------------------------------------------------------

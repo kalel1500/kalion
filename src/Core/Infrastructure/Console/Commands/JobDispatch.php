@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 
 final class JobDispatch extends Command
 {
@@ -110,15 +111,15 @@ final class JobDispatch extends Command
         $kalionPath = normalize_path($vendorPath . 'kalel1500/kalion');
 
         // Obtener las rutas de todos los paquetes definidos en la configuración
-        $packages = config('kalion.packages_to_scan_for_jobs');
-        $packages = is_array($packages) ? $packages : explode(';', $packages);
+        $packages = KalionConfig::getScanPackages();
         $otherPaths = array_map(fn($item) => normalize_path($vendorPath . $item), $packages);
 
         // Definir las rutas donde buscar los Jobs:
-        return [
+        $allPaths = [
             $kalionPath, // Escanear el propio paquete "kalion"
             ...$otherPaths, // Escanear los paquetes configurados en el ".env"
         ];
+        return array_unique($allPaths);
     }
 
     private function findJobDirsOnPath(?string $path, bool $isPackage = false): array
