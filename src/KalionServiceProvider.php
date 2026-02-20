@@ -52,8 +52,6 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'thehouseofel.kalion.redirectAfterLogin'  => RedirectAfterLogin::class,
-        'thehouseofel.kalion.redirectDefaultPath' => RedirectDefaultPath::class,
         'thehouseofel.kalion.processChecker'      => ProcessChecker::class,
         TabulatorRepository::class                => EloquentTabulatorRepository::class,
         JobRepository::class                      => EloquentJobRepository::class,

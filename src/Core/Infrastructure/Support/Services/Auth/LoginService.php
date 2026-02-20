@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Thehouseofel\Kalion\Core\Infrastructure\Facades\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Login;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion;
 
@@ -64,7 +63,7 @@ class LoginService implements Login
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RedirectAfterLogin::redirectTo($request));
+        return redirect()->intended(redirect_after_login_to($request));
     }
 
     public function logout(Request $request): RedirectResponse

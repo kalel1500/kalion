@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Facades\RedirectDefaultPath;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;
 
 if (! function_exists('dropdown_is_open')) {
@@ -145,6 +146,20 @@ if (! function_exists('get_html_laravel_debug_stack_trace')) {
     }
 }
 
+if (! function_exists('redirect_default_to')) {
+    function redirect_default_to(Request $request = null): ?string
+    {
+        return app(RedirectDefaultPath::class)->redirectTo($request);
+    }
+}
+
+if (! function_exists('redirect_after_login_to')) {
+    function redirect_after_login_to(Request $request = null): ?string
+    {
+        return app(RedirectAfterLogin::class)->redirectTo($request);
+    }
+}
+
 if (! function_exists('app_url')) {
     function app_url(): string
     {
@@ -155,7 +170,7 @@ if (! function_exists('app_url')) {
 if (! function_exists('default_url')) {
     function default_url(): string
     {
-        $defaultUrl = RedirectDefaultPath::redirectTo();
+        $defaultUrl = redirect_default_to();
 
         if ($defaultUrl === app_url()) {
             abort_d(500, __('k::error.default_url_equals_to_app_url'));
