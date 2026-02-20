@@ -106,8 +106,8 @@ final class JobDispatch extends Command
 
     private function getPathsFromConfigPackages(): array
     {
-        $vendorPath = base_path() . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
-        $kalionPath = $vendorPath . 'kalel1500' . DIRECTORY_SEPARATOR . 'kalion';
+        $vendorPath = base_path() . '/vendor/';
+        $kalionPath = normalize_path($vendorPath . 'kalel1500/kalion');
 
         // Obtener las rutas de todos los paquetes definidos en la configuración
         $packages = config('kalion.packages_to_scan_for_jobs');
