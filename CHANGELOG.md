@@ -2,6 +2,36 @@
 
 ## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.44.2-beta.1...master)
 
+## [v0.45.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.44.2-beta.0...v0.45.0-beta.0) - 2026-02-20
+
+### Changed
+
+* (breaking) Se han realizado varios refactors internos para mejorar la organización del código que pueden llegar tener afectación:
+  * Se ha renombrado el getter `KalionConfig::classes()` a `KalionConfig::getClasses()`.
+  * Se reemplazan las fachadas `RedirectAfterLogin` y `RedirectDefaultPath` por los nuevos helpers globales `redirect_after_login_to($request)` y `redirect_default_to($request)`.
+    * Eliminadas las clases de fachada `RedirectAfterLogin` y `RedirectDefaultPath`.
+    * Eliminados los bindings `thehouseofel.kalion.redirectAfterLogin` y `thehouseofel.kalion.redirectDefaultPath` del array `$singletons` del `ServiceProvider`.
+    * Ahora el parámetro request es obligatorio en los nuevos helpers, para que el `$redirectToCallback` siempre lo reciba y no solo a veces.
+  * Se ha renombrado el binding del singleton `ProcessChecker` en el `KalionServiceProvider` de `thehouseofel.kalion.processChecker` a `kalion.processChecker`.
+  * Se ha movido la clase `Kalion` de `Services` a `Config`.
+
+### Migration Notes
+
+* Renombrar el método `KalionConfig::classes()` a `KalionConfig::getClasses()`.
+* Si utilizabas las fachadas:
+  ```php
+  RedirectAfterLogin::redirectTo($request);
+  RedirectDefaultPath::redirectTo($request);
+  ```
+  Debes reemplazarlas por:
+  ```php
+  redirect_after_login_to($request);
+  redirect_default_to($request);
+  ```
+* Si resolvías manualmente los bindings desde el contenedor usando las keys string eliminadas (`thehouseofel.kalion.redirectAfterLogin` o `thehouseofel.kalion.redirectDefaultPath`), deberás inyectar directamente las clases correspondientes o usar los nuevos helpers.
+* Si resolvías el binding del `processChecker` usando la key `thehouseofel.kalion.processChecker`, deberás renombrarla a `kalion.processChecker`.
+* Si usas la clase `Kalion` debes cambiar su namespace de `Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Kalion` a `Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion`.
+
 ## [v0.44.2-beta.1](https://github.com/kalel1500/kalion/compare/v0.44.2-beta.0...v0.44.2-beta.1) - 2026-02-20
 
 ### Changed
