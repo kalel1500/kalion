@@ -147,14 +147,14 @@ if (! function_exists('get_html_laravel_debug_stack_trace')) {
 }
 
 if (! function_exists('redirect_default_to')) {
-    function redirect_default_to(Request $request = null): ?string
+    function redirect_default_to(Request $request): ?string
     {
         return app(RedirectDefaultPath::class)->redirectTo($request);
     }
 }
 
 if (! function_exists('redirect_after_login_to')) {
-    function redirect_after_login_to(Request $request = null): ?string
+    function redirect_after_login_to(Request $request): ?string
     {
         return app(RedirectAfterLogin::class)->redirectTo($request);
     }
@@ -170,7 +170,7 @@ if (! function_exists('app_url')) {
 if (! function_exists('default_url')) {
     function default_url(): string
     {
-        $defaultUrl = redirect_default_to();
+        $defaultUrl = redirect_default_to(request());
 
         if ($defaultUrl === app_url()) {
             abort_d(500, __('k::error.default_url_equals_to_app_url'));

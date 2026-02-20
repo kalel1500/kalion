@@ -30,7 +30,7 @@ abstract class Redirector
     /**
      * Get the path the user should be redirected to
      */
-    public function redirectTo(Request $request = null): ?string
+    public function redirectTo(Request $request): ?string
     {
         $to = static::$redirectToCallback
             ? call_user_func(static::$redirectToCallback, $request)
