@@ -107,7 +107,7 @@ if (! function_exists('abort_d_if')) {
 if (! function_exists('is_valid_bool')) {
     function is_valid_bool($value): bool
     {
-        return (is_bool($value) || (($value === 0 || $value === 1)));
+        return (is_bool($value) || (($value == 0 || $value == 1)));
     }
 }
 
