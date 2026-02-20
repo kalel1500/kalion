@@ -1,6 +1,22 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.44.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.44.2-beta.1...master)
+
+## [v0.44.2-beta.1](https://github.com/kalel1500/kalion/compare/v0.44.2-beta.0...v0.44.2-beta.1) - 2026-02-20
+
+### Changed
+
+* Se han reordenado los métodos de la clase `KalionConfig`
+* Se mueve la carpeta `Services` a `Support/Services` como parte de una reorganización interna de la estructura del dominio.
+
+### Migration Notes
+
+* Se han movido las siguientes clases:
+  * `Thehouseofel\Kalion\Core\Domain\Services\Auth\PermissionParser` -> `Thehouseofel\Kalion\Core\Domain\Support\Services\Auth\PermissionParser`
+  * `Thehouseofel\Kalion\Core\Domain\Services\Auth\UserAccessChecker` -> `Thehouseofel\Kalion\Core\Domain\Support\Services\Auth\UserAccessChecker`
+  * `Thehouseofel\Kalion\Core\Domain\Services\TailwindClassFilter` -> `Thehouseofel\Kalion\Core\Domain\Support\Services\TailwindClassFilter`
+
+  Estas clases están marcadas como `@internal` y no forman parte de la API pública del paquete. No obstante, si algún proyecto las estaba utilizando directamente, será necesario actualizar sus imports para reflejar el nuevo namespace.
 
 ## [v0.44.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.44.1-beta.0...v0.44.2-beta.0) - 2026-02-04
 
