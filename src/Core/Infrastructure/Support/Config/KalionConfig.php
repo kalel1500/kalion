@@ -18,42 +18,30 @@ use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\Elo
 
 class KalionConfig
 {
+    protected static array $classes  = [
+        'kalion.layout.service'               => BaseLayoutData::class,
+        'kalion.auth.models.web'              => User::class,
+        'kalion.auth.models.api'              => ApiUser::class,
+        'kalion.auth.entities.web'            => UserEntity::class,
+        'kalion.auth.entities.api'            => ApiUserEntity::class,
+        'kalion.auth.repositories.web'        => EloquentUserRepository::class,
+        'kalion.auth.repositories.api'        => EloquentApiUserRepository::class,
+        'kalion.auth.services.authentication' => AuthenticationService::class,
+        'kalion.auth.services.login'          => LoginService::class,
+        'kalion.auth.services.register'       => RegisterService::class,
+        'kalion.auth.services.password_reset' => PasswordResetService::class,
+    ];
     protected static array $registry = [];
-    protected static array $priority = []; // La app por defecto siempre va al final (gana)
+    protected static array $priority = [];
 
     public static function classes(): array
     {
-        return [
-            'kalion.layout.service'               => BaseLayoutData::class,
-            'kalion.auth.models.web'              => User::class,
-            'kalion.auth.models.api'              => ApiUser::class,
-            'kalion.auth.entities.web'            => UserEntity::class,
-            'kalion.auth.entities.api'            => ApiUserEntity::class,
-            'kalion.auth.repositories.web'        => EloquentUserRepository::class,
-            'kalion.auth.repositories.api'        => EloquentApiUserRepository::class,
-            'kalion.auth.services.authentication' => AuthenticationService::class,
-            'kalion.auth.services.login'          => LoginService::class,
-            'kalion.auth.services.register'       => RegisterService::class,
-            'kalion.auth.services.password_reset' => PasswordResetService::class,
-        ];
-    }
-
-    public static function override(array $overrides, string $identifier): void
-    {
-        static::$registry[$identifier] = array_merge(
-            static::$registry[$identifier] ?? [],
-            $overrides
-        );
+        return static::$classes;
     }
 
     public static function getRegistry(): array
     {
         return static::$registry;
-    }
-
-    public static function setPriority(array $priority): void
-    {
-        static::$priority = $priority;
     }
 
     public static function getOrderedIdentifiers(): array
@@ -78,6 +66,19 @@ class KalionConfig
         });
 
         return $keys;
+    }
+
+    public static function setPriority(array $priority): void
+    {
+        static::$priority = $priority;
+    }
+
+    public static function override(array $overrides, string $identifier): void
+    {
+        static::$registry[$identifier] = array_merge(
+            static::$registry[$identifier] ?? [],
+            $overrides
+        );
     }
 
     public static function apply(): void
