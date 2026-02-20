@@ -52,12 +52,12 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'thehouseofel.kalion.processChecker'      => ProcessChecker::class,
-        TabulatorRepository::class                => EloquentTabulatorRepository::class,
-        JobRepository::class                      => EloquentJobRepository::class,
-        RoleRepository::class                     => EloquentRoleRepository::class,
-        PermissionRepository::class               => EloquentPermissionRepository::class,
-        StatusRepository::class                   => EloquentStatusRepository::class,
+        'kalion.processChecker'     => ProcessChecker::class,
+        TabulatorRepository::class  => EloquentTabulatorRepository::class,
+        JobRepository::class        => EloquentJobRepository::class,
+        RoleRepository::class       => EloquentRoleRepository::class,
+        PermissionRepository::class => EloquentPermissionRepository::class,
+        StatusRepository::class     => EloquentStatusRepository::class,
     ];
 
     /**
@@ -75,11 +75,11 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function registerSingletons(): void
     {
-        $this->app->singleton(abstract: LayoutData::class,         concrete: fn($app) => new (Kalion::getClassServiceLayout()));
-        $this->app->singleton(abstract: Authentication::class,     concrete: fn($app) => new (Kalion::getClassServiceAuthentication()));
-        $this->app->singleton(abstract: Login::class,              concrete: fn($app) => new (Kalion::getClassServiceLogin()));
-        $this->app->singleton(abstract: Register::class,           concrete: fn($app) => new (Kalion::getClassServiceRegister()));
-        $this->app->singleton(abstract: PasswordReset::class,      concrete: fn($app) => new (Kalion::getClassServicePasswordReset()));
+        $this->app->singleton(abstract: LayoutData::class, concrete: fn($app) => new (Kalion::getClassServiceLayout()));
+        $this->app->singleton(abstract: Authentication::class, concrete: fn($app) => new (Kalion::getClassServiceAuthentication()));
+        $this->app->singleton(abstract: Login::class, concrete: fn($app) => new (Kalion::getClassServiceLogin()));
+        $this->app->singleton(abstract: Register::class, concrete: fn($app) => new (Kalion::getClassServiceRegister()));
+        $this->app->singleton(abstract: PasswordReset::class, concrete: fn($app) => new (Kalion::getClassServicePasswordReset()));
         $this->app->singleton(abstract: AuthenticationFlow::class, concrete: AuthenticationFlowService::class);
     }
 
