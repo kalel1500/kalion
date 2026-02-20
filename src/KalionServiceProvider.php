@@ -30,8 +30,6 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Auth
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Login;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\PasswordReset;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Register;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectDefaultPath;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\ProcessChecker;
 use Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData;
