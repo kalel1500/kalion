@@ -82,6 +82,11 @@ final class JobDispatch extends Command
             ? $this->choice('Se han encontrado varios Jobs con el mismo nombre. ¿Cual quieres ejecutar?', $jobs)
             : $jobs[0];
 
+        if (is_null($job)) {
+            $this->warn("No se ha seleccionado ningún Job");
+            return;
+        }
+
         // Rehacer la ruta absoluta
         $job = base_path() . $job;
 
