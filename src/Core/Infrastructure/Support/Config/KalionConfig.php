@@ -34,7 +34,7 @@ class KalionConfig
     protected static array $registry = [];
     protected static array $priority = [];
 
-    public static function classes(): array
+    public static function getClasses(): array
     {
         return static::$classes;
     }
@@ -83,7 +83,7 @@ class KalionConfig
 
     public static function apply(): void
     {
-        $defaults = self::classes();
+        $defaults = self::getClasses();
 
         foreach (self::getOrderedIdentifiers() as $id) {
             foreach (static::$registry[$id] as $key => $class) {

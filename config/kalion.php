@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 
-$defaults = KalionConfig::classes();
+$defaults = KalionConfig::getClasses();
 
 return [
 
