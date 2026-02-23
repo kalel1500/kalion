@@ -50,7 +50,7 @@ final class StartCommandService
             exit(1); // Terminar la ejecución con código de error
         }
 
-        $stubsBasePath           = KALION_PATH . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
+        $stubsBasePath           = KALION_PATH . DIRECTORY_SEPARATOR . 'install' . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR;
         $this->stubsPath         = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'base';
         $this->stubsPathExamples = $stubsBasePath . 'generate' . DIRECTORY_SEPARATOR . 'examples';
         $this->originalStubsPath = $stubsBasePath . 'original';
