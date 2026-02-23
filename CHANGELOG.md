@@ -1,6 +1,29 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.44.2-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.45.1-beta.0...master)
+
+## [v0.45.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.45.0-beta.0...v0.45.1-beta.0) - 2026-02-23
+
+### Changed
+
+* Nueva funcionalidad para que otros paquetes se autorregistren automáticamente y evitar tener que definir siempre una variable de entorno fija:
+  * (warn) Ahora la configuración `kalion.packages_to_scan_for_jobs` por defecto tiene el valor de `''` (vacío).
+  * Nuevos métodos en la clase `KalionConfig`
+    * `registerPackagesToScanJobs` para registrar los paquetes que se quieren escanear automáticamente para encontrar los jobs.
+    * `getScanPackages` para obtener tanto los paquetes registrados como los que están definidos en configuración `kalion.packages_to_scan_for_jobs`.
+  * Ahora el método `getPathsFromConfigPackages` del comando `JobDispatch` llama al `KalionConfig::getScanPackages()` y elimina los duplicados.
+* (refactor) Refactors internos en la clase `JobDispatch` para mejorar la legibilidad y mantenibilidad del código:
+  * Se ha extraído la lógica de obtención de rutas de paquetes a un nuevo método privado `getPathsFromConfigPackages()`, que se encarga exclusivamente de esta tarea.
+  * Usar `normalize_path()` en vez de `DIRECTORY_SEPARATOR` para simplificar el código al formar las rutas en el método `getPathsFromConfigPackages`
+
+### Fixed
+
+* (fix) Prevenir error en el comando `JobDispatch` si no se ha seleccionado ningún job (cuando se ejecuta el comando con el parámetro `--no-interaction`)
+* (fix) Quitar comparación estricta (`===`) en el helper `is_valid_bool()` para que funcione con bases de datos Oracle, ya que antes de la version 23 no existen booleans y se suele guardar el número en formato string.
+
+### Migration Notes
+
+* Si se tenía publicada la configuración del paquete, se debe volver a publicar.
 
 ## [v0.45.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.44.2-beta.0...v0.45.0-beta.0) - 2026-02-20
 
