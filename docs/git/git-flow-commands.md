@@ -22,7 +22,7 @@ git push origin feature-x (git push)  # Subir la rama feature-x (opcional)
 ```shell
 git checkout develop                  # Volver a develop
 git pull origin develop               # Asegurar que está actualizado
-git merge --no-ff feature-x           # Fusionar la rama feature en develop
+git merge feature-x                   # Fusionar la rama feature en develop (--no-ff)
 git push origin develop (git push)    # Subir develop actualizado
 git branch -d feature-x               # Eliminar la rama local feature-x
 git push origin --delete feature-x    # (Opcional) Eliminar la rama remota
@@ -33,7 +33,7 @@ git push origin --delete feature-x    # (Opcional) Eliminar la rama remota
 ```shell
 git checkout master                   # Ir a la rama master
 git pull origin master (git pull)     # Asegurar que está actualizada
-git merge --no-ff develop             # Fusionar develop en master (dejar mensaje "Merge brange 'develop'")
+git merge develop                     # Fusionar develop en master (dejar mensaje "Merge brange 'develop'") (--no-ff)
 git push origin master                # Subir los cambios a master
 
 git tag -a v1.0.1 -m "Release v1.0.1" # Crear el tag de la nueva versión
@@ -44,7 +44,7 @@ git push origin master --tags         # Subir el tag a GitHub
 
 ```shell
 git checkout develop                  # Volver a develop
-git merge --ff-only master            # Alinear develop con master
+git merge master                      # Alinear develop con master (--ff-only)
 git push origin develop               # Subir develop actualizado
 ```
 
@@ -78,7 +78,7 @@ git push origin master --tags         # Subir el tag a GitHub
 
 ```shell
 git checkout develop                  # Cambiar a develop
-git merge --ff-only master            # Alinear develop con master
+git merge master                      # Alinear develop con master (--ff-only)
 git push origin develop               # Subir develop actualizado
 ```
 
@@ -88,6 +88,44 @@ git push origin develop               # Subir develop actualizado
 
 ```shell
 git checkout develop                  # Cambiar a la rama develop
+git fetch origin                      # Descargar la rama remota
 git reset --hard master               # Hacer que develop sea igual que master
 git push origin develop --force       # Forzar la actualización en remoto
 ```
+
+-------------
+
+# Diferencias entre `--no-ff` y `--ff-only`
+
+## 🔷 `--no-ff` (No Fast Forward)
+
+Significa:
+Siempre crear un commit de merge, aunque podría hacerse fast-forward.
+
+### ➕ Ventajas:
+
+* Mantiene el “historial de ramas” para auditar cambios.
+* Queda claro qué commits pertenecen a cada feature.
+* Útil para equipos grandes y revisiones estrictas.
+
+### ➖ Desventajas:
+
+* Crea commits extra.
+* La historia se vuelve más “ramificada”.
+
+
+## 🔷 `--ff-only` (Fast Forward Only)
+
+Significa:
+Solo hace el merge si puede “avanzar” el puntero sin crear un merge commit.
+Si las ramas divergen → falla.
+
+### ➕ Ventajas:
+
+* Historial lineal y limpio.
+* No hay commits de merge innecesarios.
+
+### ➖ Desventajas:
+
+* No quedan rastros de las ramas de feature.
+* Si un hotfix o commit divergente aparece en master → ya no funciona.
