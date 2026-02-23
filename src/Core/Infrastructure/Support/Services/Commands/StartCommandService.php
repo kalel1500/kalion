@@ -407,7 +407,6 @@ final class StartCommandService
         $this->line(sprintf('%s configuración del paquete: "config/kalion_links.php"', ($isRollback ? 'Despublicando' : 'Publicando')));
 
         // Delete "config/kalion.php"
-        File::delete(config_path('kalion.php'));
         File::delete(config_path('kalion_links.php'));
 
         if (! $isRollback) {
@@ -448,10 +447,12 @@ final class StartCommandService
     {
         $this->number++;
 
-        $this->line(sprintf('%s archivos de configuración', ($this->reset ? 'Eliminando' : 'Creando')));
+        $isRollback = $this->reset || $this->skipExamples;
+
+        $this->line(sprintf('%s archivos de configuración', ($isRollback ? 'Eliminando' : 'Creando')));
 
         $folder          = 'config';
-        $sourcePath      = $this->stubsPath($folder);
+        $sourcePath      = $this->stubsPath($folder, true);
         $destinationPath = base_path($folder);
 
         $files = File::files($sourcePath);
@@ -460,7 +461,7 @@ final class StartCommandService
             $from = $file->getPathname();
             $to   = $destinationPath . DIRECTORY_SEPARATOR . $file->getFilename();
 
-            if ($this->reset) {
+            if ($isRollback) {
                 File::delete($to);
             } else {
                 File::copy($from, $to);
@@ -690,34 +691,15 @@ final class StartCommandService
 
         // Definir archivo origen (al generar)
         $file        = '.env.save.local';
-        $from        = $this->stubsPath($file, ! $this->skipExamples);
+        $from        = $this->stubsPath($file);
         $to_envLocal = base_path($file);
-
-        // Definir archivo destino
-        $to_env = base_path('.env');
 
         if ($this->reset) {
             // Eliminar archivo ".env.save.local"
             File::delete($to_envLocal);
-
-            // Definir archivo origen (reset)
-            $file        = '.env.example';
-            $from        = $this->originalStubsPath($file);
-            $to_envLocal = base_path($file);
-        }
-
-        // Copiar origen a ".env.save.local"
-        copy($from, $to_envLocal);
-
-        if (! $this->developMode) {
-            // Copiar origen a ".env" (si no es "developMode")
-            copy($from, $to_env);
-
-            // Borrar manualmente el valor de config('app.key') para que se regenere correctamente
-            config(['app.key' => '']);
-
-            // Regenerar Key
-            $this->command->call('key:generate');
+        } else {
+            // Copiar ".env.save.local"
+            copy($from, $to_envLocal);
         }
 
         $this->line('=> OK', false);
@@ -776,20 +758,6 @@ final class StartCommandService
         return $this;
     }
 
-    public function deleteFile_Changelog(): static
-    {
-        $this->number++;
-
-        $this->line('Eliminando archivo "CHANGELOG.md"');
-
-        // Delete file "CHANGELOG.md"
-        File::delete(base_path('CHANGELOG.md'));
-
-        $this->line('=> OK', false);
-
-        return $this;
-    }
-
     public function modifyFile_BootstrapProviders_toAddDependencyServiceProvider(): static
     {
         $this->number++;
@@ -798,50 +766,12 @@ final class StartCommandService
 
         // bootstrap/providers.php
 
-        if ($this->reset) {
+        if ($this->reset || $this->skipExamples) {
             // A partir de la version de Laravel 12.32.0 este metodo ya existe en el "ServiceProvider"
             self::removeProviderFromBootstrapFile('App\Providers\DependencyServiceProvider');
         } else {
             ServiceProvider::addProviderToBootstrapFile('App\Providers\DependencyServiceProvider');
         }
-
-        $this->line('=> OK', false);
-
-        return $this;
-    }
-
-    public function modifyFile_BootstrapApp_toAddMiddlewareRedirect(): static
-    {
-        $this->number++;
-
-        $this->line('Modificando archivo "bootstrap/app.php" para agregar redirectUsersTo en withMiddleware');
-
-        // Ruta del archivo a modificar
-        $filePath = base_path('bootstrap/app.php');
-
-        // Leer el contenido del archivo
-        $content = File::get($filePath);
-
-        // Usar una expresión regular para encontrar y modificar el bloque `withMiddleware`
-        $pattern = '/->withMiddleware\(function\s*\(Middleware\s+\$middleware\)(:\s*void)?\s*\{(.*?)\}\)/s';
-
-        // Reemplazar el contenido del bloque con la nueva línea
-        $replacement = ($this->reset)
-            ? <<<'EOD'
-->withMiddleware(function (Middleware $middleware)$1 {
-        //
-    })
-EOD
-            : <<<'EOD'
-->withMiddleware(function (Middleware $middleware)$1 {
-        $middleware->redirectUsersTo('home'); // Ruta a la que redirigir si entran en rutas con el middleware "guest" (RedirectIfAuthenticated)
-    })
-EOD;
-
-        $newContent = preg_replace($pattern, $replacement, $content);
-
-        // Guardar el archivo con el contenido actualizado
-        File::put($filePath, $newContent);
 
         $this->line('=> OK', false);
 
@@ -872,8 +802,7 @@ EOD;
 EOD
             : <<<'EOD'
 ->withExceptions(function (Exceptions $exceptions)$1 {
-        $callback = \Thehouseofel\Kalion\Core\Infrastructure\Exceptions\ExceptionHandler::getUsingCallback();
-        $callback($exceptions);
+        \Thehouseofel\Kalion\Core\Infrastructure\Exceptions\ExceptionHandler::handle($exceptions);
     })
 EOD;
 
@@ -881,41 +810,6 @@ EOD;
 
         // Guardar el archivo con el contenido actualizado
         File::put($filePath, $newContent);
-
-        $this->line('=> OK', false);
-
-        return $this;
-    }
-
-    public function modifyFile_ConfigApp_toUpdateTimezone(): static
-    {
-        $this->number++;
-
-        $this->line('Modificando archivo "config/app.php" para para actualizar el timezone');
-
-        // Ruta del archivo a modificar
-        $filePath = base_path('config/app.php');
-
-        // Leer el contenido del archivo
-        $content = File::get($filePath);
-
-        // Reemplazar la línea específica
-        if ($this->reset) {
-            $updatedContent = preg_replace(
-                '/\'timezone\'\s*=>\s*\'Europe\/Madrid\'/',
-                "'timezone' => 'UTC'",
-                $content
-            );
-        } else {
-            $updatedContent = preg_replace(
-                '/\'timezone\'\s*=>\s*\'UTC\'/',
-                "'timezone' => 'Europe/Madrid'",
-                $content
-            );
-        }
-
-        // Guardar el archivo con el contenido actualizado
-        File::put($filePath, $updatedContent);
 
         $this->line('=> OK', false);
 
@@ -996,20 +890,13 @@ EOD;
 
         // Install NPM packages...
         $this->modifyPackageJsonSection('devDependencies', [
-            'flowbite' => '^' . $versions['flowbite'],
-        ], $this->reset);
-
-        // Install NPM packages...
-        $this->modifyPackageJsonSection('devDependencies', [
+            '@kalel1500/kalion-js'        => '^' . $versions['@kalel1500/kalion-js'],
             '@types/node'                 => '^' . $versions['@types/node'],
+            'flowbite'                    => '^' . $versions['flowbite'],
             'prettier'                    => '^' . $versions['prettier'],
             'prettier-plugin-blade'       => '^' . $versions['prettier-plugin-blade'],
             'prettier-plugin-tailwindcss' => '^' . $versions['prettier-plugin-tailwindcss'],
             'typescript'                  => '^' . $versions['typescript'],
-        ], $this->reset);
-
-        $this->modifyPackageJsonSection('dependencies', [
-            '@kalel1500/kalion-js' => '^' . $versions['@kalel1500/kalion-js'],
         ], $this->reset);
 
         $this->line('=> OK', false);
