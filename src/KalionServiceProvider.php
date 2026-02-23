@@ -18,7 +18,6 @@ use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\JobDispatch;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\KalionStart;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ProcessCheck;
-use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\PublishAuth;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\AddPreferencesCookies;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\ForceArraySessionInCloud;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\UserHasPermission;
@@ -247,7 +246,6 @@ class KalionServiceProvider extends ServiceProvider
             ClearAll::class,
             ConfigCheck::class,
             KalionStart::class,
-            PublishAuth::class,
             JobDispatch::class,
             LogsClear::class,
             ProcessCheck::class,
