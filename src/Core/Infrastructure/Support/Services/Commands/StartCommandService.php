@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Process;
 use Illuminate\Support\ServiceProvider;
 use RuntimeException;
 use Thehouseofel\Kalion\Core\Domain\Concerns\CountMethods;
-use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\KalionStart;
+use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\Install;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Version;
 use Throwable;
 use function Illuminate\Filesystem\join_paths;
@@ -40,9 +40,9 @@ final class StartCommandService
     private Carbon $migrationsTimestamp;
 
     public function __construct(
-        private readonly KalionStart $command,
-        private readonly bool        $reset,
-        private readonly bool        $skipExamples,
+        private readonly Install $command,
+        private readonly bool    $reset,
+        private readonly bool    $skipExamples,
     )
     {
         if (! Version::laravelMin12()) {
@@ -393,7 +393,7 @@ final class StartCommandService
     }
 
 
-    public static function configure(KalionStart $command, bool $reset, bool $skipExamples): static
+    public static function configure(Install $command, bool $reset, bool $skipExamples): static
     {
         return new static($command, $reset, $skipExamples);
     }

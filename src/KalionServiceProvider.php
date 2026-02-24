@@ -15,7 +15,7 @@ use Thehouseofel\Kalion\Core\Domain\Support\Services\TailwindClassFilter;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ClearAll;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ConfigCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\JobDispatch;
-use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\KalionStart;
+use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\Install;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware\AddPreferencesCookies;
@@ -245,7 +245,7 @@ class KalionServiceProvider extends ServiceProvider
         $this->commands([
             ClearAll::class,
             ConfigCheck::class,
-            KalionStart::class,
+            Install::class,
             JobDispatch::class,
             LogsClear::class,
             ProcessCheck::class,

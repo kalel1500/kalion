@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\Concerns\InteractsWithComposerPackages;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Commands\StartCommandService;
 
-class KalionStart extends Command
+class Install extends Command
 {
     use InteractsWithComposerPackages;
 
@@ -15,7 +15,7 @@ class KalionStart extends Command
      *
      * @var string
      */
-    protected $signature = 'kalion:start
+    protected $signature = 'kalion:install
                     {--composer=global : Absolute path to the Composer binary which should be used to install packages}
                     {--reset : Reset all changes made by the command to the original state}
                     {--skip-examples : Don\'t generate the example files}';
