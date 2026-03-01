@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 
+use Composer\InstalledVersions;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\LoginFieldDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectDefaultPath;
@@ -91,6 +92,11 @@ final class Kalion
     public static function shouldCacheProcessStatus(): bool
     {
         return config('kalion.process.status_should_use_cache');
+    }
+
+    public static function getInstalledVersion(): string
+    {
+        return InstalledVersions::getVersion('kalel1500/kalion') ?? 'dev';
     }
 
     public static function redirectAfterLoginTo(callable|string $redirect): void
