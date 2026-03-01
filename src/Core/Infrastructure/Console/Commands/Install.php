@@ -4,7 +4,8 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Console\Commands;
 
 use Illuminate\Console\Command;
 use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\Concerns\InteractsWithComposerPackages;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Commands\StartCommandService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Install\Objects\InstallDto;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Install\ProcessorBuilder;
 
 class Install extends Command
 {
@@ -17,8 +18,9 @@ class Install extends Command
      */
     protected $signature = 'kalion:install
                     {--composer=global : Absolute path to the Composer binary which should be used to install packages}
+                    {--step= : Select a specific step to execute}
                     {--reset : Reset all changes made by the command to the original state}
-                    {--skip-examples : Don\'t generate the example files}';
+                    {--with-examples : Generate the example files}';
 
     /**
      * The console command description.
@@ -41,41 +43,63 @@ class Install extends Command
      */
     public function handle()
     {
-        $reset        = $this->option('reset');
-        $skipExamples = $this->option('skip-examples');
+        $stepsPath          = normalize_path(KALION_PATH . '/install/steps/');
+        $stepsPattern       = $stepsPath . '*.php';
 
-        $developString = config('kalion.command.start.package_in_develop') ? '<fg=yellow>[DEVELOP]</>' : '';
-        $this->info("Inicio configuración: $developString");
+        $data = new InstallDto(
+            reset             : $this->option('reset'),
+            withExamples      : $this->option('with-examples'),
+            developMode       : config('kalion.command.start.package_in_develop'),
+            keepMigrationsDate: config('kalion.command.start.keep_migrations_date'),
+            pattern           : $stepsPattern,
+            pathGenBase       : KALION_PATH . '/install/stubs/generate/base',
+            pathGenExamples   : KALION_PATH . '/install/stubs/generate/examples',
+            pathOriginal      : KALION_PATH . '/install/stubs/original',
+            selectedStep      : $this->getSelectedStep($this->option('step'), $stepsPattern, $stepsPath),
+        );
 
-        StartCommandService::configure($this, $reset, $skipExamples)
-            ->publishKalionConfig()
-            ->stubsCopyFile_DependencyServiceProvider()
-            ->stubsCopyFiles_Config()
-            ->stubsCopyFiles_Migrations()
-            ->stubsCopyFiles_Js()
-            ->stubsCopyFolder_Factories()
-            ->stubsCopyFolder_Seeders()
-            ->stubsCopyFolder_Lang()
-            ->stubsCopyFolder_Resources()
-            ->stubsCopyFolder_Src()
-            ->stubsCopyFile_RoutesWeb()
-            ->createEnvFiles()
-            ->deleteDirectory_Http()
-            ->deleteDirectory_Models()
-            ->modifyFile_BootstrapProviders_toAddDependencyServiceProvider()
-            ->modifyFile_BootstrapApp_toAddExceptionHandler()
-            ->modifyFile_Gitignore_toDeleteLockFileLines()
-            ->modifyFile_PackageJson_toAddNpmDependencies()
-            ->modifyFile_PackageJson_toAddScriptTsBuild()
-            ->modifyFile_PackageJson_toAddEngines()
-            ->modifyFile_ComposerJson_toAddSrcNamespace()
-            ->modifyFile_ComposerJson_toAddHelperFilePath()
-            ->execute_ComposerRequire_toInstallComposerDependencies()
-            ->execute_ComposerDumpAutoload()
-            ->execute_gitAdd()
-            ->execute_NpmInstall()
-            ->execute_NpmRunBuild();
+        $this->info('Inicio configuración: ' . ($data->developMode ? '<fg=yellow>[DEVELOP]</>' : ''));
+
+        (new ProcessorBuilder())
+            ->withCommand($this)
+            ->withData($data)
+            ->build()
+            ->execute();
 
         $this->info('Configuración finalizada');
+    }
+
+    protected function getSelectedStep(?string $stepName, string $stepsPattern, string $stepsPath): ?string
+    {
+        if (!$stepName) {
+            return null;
+        }
+
+        $steps       = [];
+        $stepsPretty = [];
+        $files       = glob($stepsPattern);
+        foreach ($files as $file) {
+            $name = str_replace($stepsPath, '', $file);
+            if (str_contains($name, $stepName)) {
+                $steps[$name]  = $file;
+                $stepsPretty[] = $name;
+            }
+        }
+
+        if (empty($steps)) {
+            $this->warn(__('k::error.step_not_found_$name', ['name' => $stepName]));
+            return null;
+        };
+
+        $selected = (count($steps) > 1)
+            ? $this->choice(__('k::error.multiple_steps_found_$name', ['name' => $stepName]), $stepsPretty)
+            : $stepsPretty[0];
+
+        if (is_null($selected)) {
+            $this->warn(__('no_step_selected'));
+            return null;
+        }
+
+        return $steps[$selected];
     }
 }

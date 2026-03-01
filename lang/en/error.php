@@ -18,4 +18,9 @@ return [
     'amount_must_be_greater_than_number'            => 'The amount must be greater than :number',
     'sum_of_probabilities_cant_be_greater_than_100' => 'The sum of custom probabilities cannot be greater than 100%',
     'generated_distribution_empty'                  => 'The generated distribution is empty. Check your probabilities.',
+    'failed_processing_$step'                       => 'Error processing step [:step]',
+    'failed_executing_$step'                        => 'Error executing step [:step]',
+    'step_not_found_$name'                          => 'No step was found with the name :name',
+    'multiple_steps_found_$name'                    => 'Multiple steps were found with the same name ":name". Which one do you want to execute?',
+    'no_step_selected'                              => 'No step has been selected',
 ];

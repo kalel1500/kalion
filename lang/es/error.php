@@ -18,4 +18,9 @@ return [
     'amount_must_be_greater_than_number'            => 'La cantidad debe ser mayor a :number',
     'sum_of_probabilities_cant_be_greater_than_100' => 'La suma de probabilidades personalizadas no puede ser mayor a 100%',
     'generated_distribution_empty'                  => 'La distribución generada está vacía. Verifica tus probabilidades',
+    'failed_processing_$step'                       => 'Error al procesar el paso [:step]',
+    'failed_executing_$step'                        => 'Error al ejecutar el paso [:step]',
+    'step_not_found_$name'                          => 'No se ha encontrado ningún paso con el nombre :name',
+    'multiple_steps_found_$name'                    => 'Se han encontrado varios pasos con el mismo nombre ":name". ¿Cuál quieres ejecutar?',
+    'no_step_selected'                              => 'No se ha seleccionado ningún paso',
 ];
