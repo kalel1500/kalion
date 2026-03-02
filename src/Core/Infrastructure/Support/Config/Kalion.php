@@ -6,8 +6,8 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 
 use Composer\InstalledVersions;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\LoginFieldDto;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectAfterLogin;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect\RedirectDefaultPath;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectAfterLogin;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectDefaultPath;
 
 final class Kalion
 {

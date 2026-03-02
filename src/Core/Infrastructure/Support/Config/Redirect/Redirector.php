@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
