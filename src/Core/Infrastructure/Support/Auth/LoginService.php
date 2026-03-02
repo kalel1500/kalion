@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Auth;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\View\View;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth\Contracts\Login;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Login;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 
 /**
