@@ -1,6 +1,99 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.45.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.46.0-beta.0...master)
+
+## [v0.46.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.45.1-beta.0...v0.46.0-beta.0) - 2026-03-02
+
+> Esta versión introduce cambios estructurales profundos en el comando de instalación y elimina componentes previos. Incluye breaking changes que requieren revisión antes de actualizar.
+
+### Added
+
+* Nuevo comando `kalion:install` (renombrado desde `kalion:start`).
+  * Nuevo parámetro `--step=` que permite ejecutar un único paso específico del proceso de instalación.
+  * Nueva arquitectura interna basada en:
+    * Procesador de pasos independiente (`InstallStepProcessor`).
+    * Construcción mediante `ProcessorBuilder`.
+    * DTOs (`InstallDto`, `StepDto`) para desacoplar datos del flujo de ejecución.
+    * Sistema de pasos desacoplados en archivos individuales dentro de `install/steps`.
+  * Uso de atributos (`#[Step]`, `#[Title]`) para definir metadatos de cada paso.
+  * Validación explícita de versión mínima requerida: Laravel `12.32.0` o superior.
+
+### Changed
+
+* (breaking) Se he reestructurado completamente el comando de instalación para mejorar su mantenibilidad, claridad y flexibilidad:
+  * Renombrado el comando:
+    * `kalion:start` → `kalion:install`
+  * Renombrados parámetros del comando:
+    * `--reset` → `--rollback`
+    * `--skip-examples` → `--with-examples` (cambia la semántica: ahora el flag activa la generación de ejemplos en lugar de desactivarla)
+  * Refactorización completa del sistema de ejecución del comando:
+    * Antes: múltiples métodos encadenados en una clase monolítica.
+    * Ahora: pasos independientes procesados dinámicamente mediante reflexión.
+    * Mejora significativa en mantenibilidad, extensibilidad y claridad del flujo.
+  * El comando ya no modifica:
+    * `.env`
+    * `.env.example`
+    Ahora únicamente publica/elimina `env.save.local`.
+  * `config/kalion_links.php`:
+    * Se mueve a la carpeta de ejemplos.
+    * Solo se publica si `--with-examples` está presente.
+  * Ya no se elimina `config/kalion.php` durante la instalación.
+  * Eliminados pasos automáticos que antes modificaban:
+    * `bootstrap/app.php` (middleware redirect)
+    * `config/app.php` (timezone)
+    * `Changelog`
+    * Algunos procesos de modificación adicionales simplificados.
+  * `modifyFile_BootstrapProviders_toAddDependencyServiceProvider` ahora solo se ejecuta cuando `--with-examples` está activo.
+  * Unificación y simplificación de la modificación de dependencias NPM en `package.json`.
+  * Actualización de todos los stubs para alinearlos con la última versión de Laravel.
+
+### Removed
+
+* (breaking) Eliminado el comando `kalion:publish-auth`.
+* (breaking) Eliminada la clase `Version`.
+  * Aunque estaba marcada como `@internal`, si algún proyecto la utilizaba directamente deberá eliminar esa dependencia.
+* Comando de instalación:
+  * Eliminados los siguientes archivos de stubs:
+    * `.env.example` en `stubs/original`
+    * `.env.save.local` en `stubs/generate/examples`
+  * Eliminados pasos del antiguo flujo:
+    * `deleteFile_Changelog`
+    * `modifyFile_BootstrapApp_toAddMiddlewareRedirect`
+    * `modifyFile_ConfigApp_toUpdateTimezone`
+  * Eliminada la arquitectura basada en `StartCommandService`.
+
+### Migration Notes
+
+#### ⚠️ Cambios obligatorios
+
+1. Sustituir llamadas al comando:
+  ```bash
+  php artisan kalion:start
+  ```
+  Por:
+  ```bash
+  php artisan kalion:install
+  ```
+
+2. Actualizar parámetros:
+
+  | Antes             | Ahora                       |
+  |-------------------|-----------------------------|
+  | `--reset`         | `--rollback`                |
+  | `--skip-examples` | `--with-examples` (inverso) |
+
+3. Si utilizabas la clase `Version` directamente, debes eliminar esa dependencia.
+4. Asegúrate de estar usando **Laravel 12.32.0** o superior antes de ejecutar el nuevo comando.
+
+
+#### ⚙️ Nuevo comportamiento relevante
+
+* El comando ya no modifica automáticamente `.env` ni `.env.example`.
+* La generación de ejemplos ahora es **opt-in** mediante `--with-examples`.
+* Puedes ejecutar un paso específico:
+  ```bash
+  php artisan kalion:install --step=nombre_del_paso
+  ```
 
 ## [v0.45.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.45.0-beta.0...v0.45.1-beta.0) - 2026-02-23
 
