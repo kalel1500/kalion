@@ -1,6 +1,42 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.46.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.47.0-beta.0...master)
+
+## [v0.47.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.46.0-beta.0...v0.47.0-beta.0) - 2026-03-02
+
+### Changed
+
+* (breaking) Reorganización general del namespace **Support**, eliminando el uso de carpetas `Helpers` y `Services` cuando no aportaban valor estructural.
+  * La clase `TailwindClassFilter` se mueve de:
+      * `Thehouseofel\Kalion\Core\Domain\Support\Services` → `Thehouseofel\Kalion\Core\Domain\Support`
+  * Se eliminan carpetas intermedias `Services` en:
+      * `Thehouseofel\Kalion\Core\Infrastructure\Support\Services\*` → `Thehouseofel\Kalion\Core\Infrastructure\Support\*`
+  * La carpeta `Auth` se mueve de:
+      * `Thehouseofel\Kalion\Core\Domain\Support\Services\Auth` → `Thehouseofel\Kalion\Features\Shared\Domain\Support\Auth`
+  * La carpeta `Redirect` se mueve de:
+      * `Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Config\Redirect` → `Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect`
+  * La carpeta `Auth` de infraestructura se mueve de:
+      * `Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Auth` → `Thehouseofel\Kalion\Core\Infrastructure\Support\Auth`
+  * Reestructuración de componentes específicos de Laravel:
+      * `Thehouseofel\Kalion\Core\Infrastructure\Console\` → `Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\`
+      * `Thehouseofel\Kalion\Core\Infrastructure\Exceptions\` → `Thehouseofel\Kalion\Core\Infrastructure\Laravel\Exceptions\`
+      * `Thehouseofel\Kalion\Core\Infrastructure\Facades\` → `Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\`
+      * `Thehouseofel\Kalion\Core\Infrastructure\Http\` → `Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\`
+* (refactor) Se han movido los helpers de la carpeta `Helpers` a la carpeta `Support`. No tiene afectación funcional, ya que son helpers globales.
+
+### Fixed
+
+* Evitar depend dependencias incorrectas desde `Core` hacia una clase de `Feature`.
+  * Se ha movido el helper `user()` a un nuevo archivo de helpers en la carpeta `Feature`.
+  * Corrección en `RegisterService`: el modelo de usuario ahora se resuelve dinámicamente.
+
+### Removed
+
+* (breaking) Clase `MyMailDM` eliminada/comentada.
+    * La clase estaba incompleta y nunca fue funcional ni utilizada en producción.
+    * Se encontraba originalmente en `Thehouseofel\Kalion\Core\Infrastructure\Helpers` y posteriormente en `Thehouseofel\Kalion\Core\Infrastructure\Support`.
+
+---
 
 ## [v0.46.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.45.1-beta.0...v0.46.0-beta.0) - 2026-03-02
 
