@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters;
 
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Date;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Date;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

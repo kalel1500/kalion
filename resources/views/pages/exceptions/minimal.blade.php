@@ -1,5 +1,5 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Renderer')
-<!DOCTYPE html>
+@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Renderer')
+    <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">

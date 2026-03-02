@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support;
 
 use Symfony\Component\Process\Process;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\ProcessException;

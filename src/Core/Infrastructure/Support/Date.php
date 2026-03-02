@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Services;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support;
 
 use Carbon\CarbonImmutable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;

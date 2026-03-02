@@ -1,4 +1,4 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Renderer')
+@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Renderer')
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
 
 @props(['title' => null, 'package' => false])

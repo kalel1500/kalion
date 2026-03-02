@@ -30,7 +30,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\PasswordReset
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Register;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\ProcessChecker;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\ProcessChecker;
 use Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository;
