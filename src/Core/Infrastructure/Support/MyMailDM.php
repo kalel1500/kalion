@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support;
 use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 
-final class MyMailDM
+/*final class MyMailDM
 {
     public function __construct(protected Mailable $mailable, $keepOriginalRecipientsEvenInTests = false)
     {
@@ -78,4 +78,4 @@ final class MyMailDM
         return array_merge($formatted_u2dRecipients, $formatted_mailRecipients);
     }
 
-}
+}*/
