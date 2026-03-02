@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Support\Services;
+namespace Thehouseofel\Kalion\Core\Domain\Support;
 
 use Thehouseofel\Kalion\Core\Domain\Concerns\Instantiable;
 

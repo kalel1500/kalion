@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\ComponentAttributeBag;
-use Thehouseofel\Kalion\Core\Domain\Support\Services\TailwindClassFilter;
+use Thehouseofel\Kalion\Core\Domain\Support\TailwindClassFilter;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\ClearAll;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\ConfigCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\Install;
