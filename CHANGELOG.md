@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.47.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.47.0-beta.1...master)
+
+## [v0.47.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.47.0-beta.0...v0.47.0-beta.1) - 2026-03-02
+
+### Fixed
+
+* Se corrige la lógica de validación de errores JSON en el método `setValues()` de la clase `AbstractJsonVo` para evitar falsos positivos provocados por el estado global de `json_last_error()`. Anteriormente, el método comprobaba siempre el resultado de `json_last_error()`, incluso cuando no se había ejecutado ninguna operación `json_decode()` o `json_encode()` en esa llamada, lo que podía provocar que se lanzara una `InvalidValueException` debido a un error JSON residual de una ejecución previa. Ahora se introduce una bandera interna (`$executed`) que garantiza que la comprobación del error solo se realice cuando realmente se haya procesado un valor `string`, `array` u `object`, asegurando que la excepción refleje exclusivamente errores producidos durante la ejecución actual del método.
 
 ## [v0.47.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.46.0-beta.0...v0.47.0-beta.0) - 2026-03-02
 
