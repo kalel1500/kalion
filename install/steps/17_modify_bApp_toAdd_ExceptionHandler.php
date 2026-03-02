@@ -20,7 +20,7 @@ class ModifyBAppToAddExceptionHandler extends StepBase
     {
         $this->modify(<<<'EOD'
 ->withExceptions(function (Exceptions $exceptions)$1 {
-        \Thehouseofel\Kalion\Core\Infrastructure\Exceptions\ExceptionHandler::handle($exceptions);
+        \Thehouseofel\Kalion\Core\Infrastructure\Laravel\Exceptions\ExceptionHandler::handle($exceptions);
     })
 EOD);
     }

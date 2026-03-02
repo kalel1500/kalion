@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Http\Middleware;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;

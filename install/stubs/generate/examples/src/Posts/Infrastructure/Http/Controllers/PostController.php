@@ -6,9 +6,9 @@ namespace Src\Posts\Infrastructure\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Src\Posts\Application\GetViewDataPostListUseCase;
 use Src\Posts\Application\GetViewDataPostDetailUseCase;
-use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Src\Posts\Application\GetViewDataPostListUseCase;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
 
 final class PostController extends Controller
 {

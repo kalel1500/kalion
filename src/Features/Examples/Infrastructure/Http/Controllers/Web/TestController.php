@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\
 
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

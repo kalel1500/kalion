@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
 use Thehouseofel\Kalion\Features\Examples\Application\GetIconsUseCase;
 
 final class ExampleController extends Controller

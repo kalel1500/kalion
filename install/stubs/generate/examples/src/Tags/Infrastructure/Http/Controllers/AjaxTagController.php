@@ -6,10 +6,10 @@ namespace Src\Tags\Infrastructure\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Src\Tags\Application\UpdateOrCreateTagUseCase;
 use Src\Tags\Application\DeleteTagUseCase;
 use Src\Tags\Application\GetTagListUseCase;
-use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Src\Tags\Application\UpdateOrCreateTagUseCase;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
 
 final class AjaxTagController extends Controller
 {

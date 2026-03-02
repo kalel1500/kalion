@@ -1,9 +1,9 @@
 <?php
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Console\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands;
 
 use Illuminate\Console\Command;
-use Thehouseofel\Kalion\Core\Infrastructure\Console\Commands\Concerns\InteractsWithComposerPackages;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\Concerns\InteractsWithComposerPackages;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Install\Objects\InstallDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Install\ProcessorBuilder;
 

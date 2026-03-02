@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Jobs\Infrastructure\Http\Controllers\Web;
 
-use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
 
 final class JobsController extends Controller
 {

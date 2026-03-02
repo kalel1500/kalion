@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\
 
 use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\CookiePreferencesDto;
-use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Services\Cookie;
 
 final class AjaxCookiesController extends Controller

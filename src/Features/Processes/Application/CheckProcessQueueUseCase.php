@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Features\Processes\Application;
 
 use Illuminate\Http\JsonResponse;
-use Thehouseofel\Kalion\Core\Infrastructure\Facades\ProcessChecker;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\ProcessChecker;
 
 final readonly class CheckProcessQueueUseCase
 {

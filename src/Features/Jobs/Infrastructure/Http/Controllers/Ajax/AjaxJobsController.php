@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Features\Jobs\Infrastructure\Http\Controllers\Ajax;
 
 use Illuminate\Http\JsonResponse;
-use Thehouseofel\Kalion\Core\Infrastructure\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
 use Thehouseofel\Kalion\Features\Jobs\Application\GetAllFailedJobsUseCase;
 use Thehouseofel\Kalion\Features\Jobs\Application\GetAllJobsUseCase;
 use Throwable;
