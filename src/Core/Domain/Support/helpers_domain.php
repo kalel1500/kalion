@@ -7,23 +7,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\Auth;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
-
-if (! function_exists('user')) {
-    /**
-     * Get the currently authenticated user entity.
-     *
-     * @param string|null $guard
-     * @return UserEntity|ApiUserEntity|null
-     */
-    function user(string $guard = null)
-    {
-        return Auth::user($guard);
-    }
-}
 
 if (! function_exists('str_camel')) {
     function str_camel(?string $string): ?string

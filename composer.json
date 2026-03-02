@@ -25,6 +25,7 @@
             "Thehouseofel\\Kalion\\Database\\Seeders\\": "database/seeders"
         },
         "files": [
+            "src/Features/Shared/Infrastructure/Support/helpers_domain.php",
             "src/Core/Domain/Support/helpers_domain.php",
             "src/Core/Infrastructure/Support/helpers_infrastructure.php"
         ]
