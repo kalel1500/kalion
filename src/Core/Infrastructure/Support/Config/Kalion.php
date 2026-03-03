@@ -64,9 +64,9 @@ final class Kalion
         return config('auth.defaults.guard');
     }
 
-    public static function getClassServiceLayout(): string
+    public static function getClassLayoutDataProvider(): string
     {
-        return config('kalion.layout.service');
+        return config('kalion.layout.data_provider');
     }
 
     public static function getClassServiceAuthentication()

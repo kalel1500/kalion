@@ -20,7 +20,7 @@ use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\Elo
 class KalionConfig
 {
     protected static array $classes  = [
-        'kalion.layout.service'               => BaseLayoutData::class,
+        'kalion.layout.data_provider'         => BaseLayoutData::class,
         'kalion.auth.models.web'              => User::class,
         'kalion.auth.models.api'              => ApiUser::class,
         'kalion.auth.entities.web'            => UserEntity::class,

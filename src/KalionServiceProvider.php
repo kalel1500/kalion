@@ -72,7 +72,7 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function registerSingletons(): void
     {
-        $this->app->singleton(abstract: LayoutData::class, concrete: fn($app) => new (Kalion::getClassServiceLayout()));
+        $this->app->singleton(abstract: LayoutData::class, concrete: fn($app) => new (Kalion::getClassLayoutDataProvider()));
         $this->app->singleton(abstract: Authentication::class, concrete: fn($app) => new (Kalion::getClassServiceAuthentication()));
         $this->app->singleton(abstract: Login::class, concrete: fn($app) => new (Kalion::getClassServiceLogin()));
         $this->app->singleton(abstract: Register::class, concrete: fn($app) => new (Kalion::getClassServiceRegister()));
