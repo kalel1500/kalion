@@ -82,7 +82,9 @@
             </main>
 
             <!-- Footer -->
-            <x-kal::footer/>
+            @if(config('kalion.layout.active.footer'))
+                <x-kal::footer/>
+            @endif
         </div>
 
     </body>

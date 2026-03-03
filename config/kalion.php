@@ -172,6 +172,7 @@ return [
         'data_provider' => env('KALION_LAYOUT_DATA_PROVIDER', $defaults['kalion.layout.data_provider']),
         'logo_path' => env('KALION_LAYOUT_LOGO_PATH', 'resources/images/logo.svg'),
         'favicon_path' => env('KALION_LAYOUT_FAVICON_PATH', 'resources/images/favicon.ico'),
+        'show_footer' => (bool) env('KALION_LAYOUT_SHOW_FOOTER', true),
     ],
 
 
