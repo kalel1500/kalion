@@ -170,8 +170,8 @@ return [
         'sidebar_state_per_page' => (bool) env('KALION_LAYOUT_SIDEBAR_STATE_PER_PAGE', false),
         'show_debug_main_border' => (bool) env('KALION_LAYOUT_SHOW_DEBUG_MAIN_BORDER', false),
         'data_provider' => env('KALION_LAYOUT_DATA_PROVIDER', $defaults['kalion.layout.data_provider']),
-        'asset_path_logo' => env('KALION_LAYOUT_ASSET_PATH_LOGO', 'resources/images/logo.svg'),
-        'asset_path_favicon' => env('KALION_LAYOUT_ASSET_PATH_FAVICON', 'resources/images/favicon.ico'),
+        'logo_path' => env('KALION_LAYOUT_LOGO_PATH', 'resources/images/logo.svg'),
+        'favicon_path' => env('KALION_LAYOUT_FAVICON_PATH', 'resources/images/favicon.ico'),
     ],
 
 
