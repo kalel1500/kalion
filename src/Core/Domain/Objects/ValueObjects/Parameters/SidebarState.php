@@ -21,4 +21,9 @@ enum SidebarState: string
     {
         return ($this === self::collapsed);
     }
+
+    public static function getDefault(): SidebarState
+    {
+        return self::expanded;
+    }
 }
