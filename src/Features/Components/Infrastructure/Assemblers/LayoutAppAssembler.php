@@ -25,14 +25,14 @@ class LayoutAppAssembler
         $dataTheme        = $preferences->theme->getDataTheme();
         $colorTheme       = $preferences->theme->value;
 
-        return LayoutAppDto::fromArray([
-            'title'            => $title,
-            'isFromPackage'    => $isFromPackage,
-            'darkMode'         => $darkMode,
-            'sidebarCollapsed' => $sidebarCollapsed,
-            'dataTheme'        => $dataTheme,
-            'colorTheme'       => $colorTheme,
-        ]);
+        return new LayoutAppDto(
+            title           : $title,
+            isFromPackage   : $isFromPackage,
+            darkMode        : $darkMode,
+            sidebarCollapsed: $sidebarCollapsed,
+            dataTheme       : $dataTheme,
+            colorTheme      : $colorTheme,
+        );
     }
 
     private static function calculateSidebarCollapsedFromItems(): bool
