@@ -16,22 +16,15 @@ class LayoutAppAssembler
         bool    $package = false
     ): LayoutAppDto
     {
-        $headTitle     = $headTitle ?? config('app.name');
-        $isFromPackage = $package;
-
-        $preferences      = Cookie::readOrNew()->preferences();
-        $darkMode         = $preferences->theme->isDark();
-        $sidebarCollapsed = $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_state->isCollapsed();
-        $dataTheme        = $preferences->theme->getDataTheme();
-        $colorTheme       = $preferences->theme->value;
+        $preferences = Cookie::readOrNew()->preferences();
 
         return new LayoutAppDto(
-            headTitle       : $headTitle,
-            isFromPackage   : $isFromPackage,
-            darkMode        : $darkMode,
-            sidebarCollapsed: $sidebarCollapsed,
-            dataTheme       : $dataTheme,
-            colorTheme      : $colorTheme,
+            headTitle       : $headTitle ?? config('app.name'),
+            isFromPackage   : $package,
+            darkMode        : $preferences->theme->isDark(),
+            sidebarCollapsed: $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_state->isCollapsed(),
+            dataTheme       : $preferences->theme->getDataTheme(),
+            colorTheme      : $preferences->theme->value,
         );
     }
 
