@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie as CookieFacade;
 use Symfony\Component\HttpFoundation\Cookie as HttpCookie;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\CookiePreferencesDto;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\SidebarState;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
 final class Cookie
@@ -23,12 +24,12 @@ final class Cookie
         $this->cookieName     = config('kalion.cookie.name');
         $this->cookieDuration = config('kalion.cookie.duration');
         $this->cookieVersion  = config('kalion.cookie.version');
-        $this->preferences    = CookiePreferencesDto::fromArray([
-            'version'                => config('kalion.cookie.version'),
-            'theme'                  => config('kalion.layout.theme') ?? ThemeVo::getDefault()->value,
-            'sidebar_state'          => config('kalion.layout.sidebar_initial_state'),
-            'sidebar_state_per_page' => config('kalion.layout.sidebar_state_per_page'),
-        ]);
+        $this->preferences    = new CookiePreferencesDto(
+            version               : config('kalion.cookie.version'),
+            theme                 : ThemeVo::fromOr(config('kalion.layout.theme'), ThemeVo::getDefault()),
+            sidebar_state         : SidebarState::fromOr(config('kalion.layout.sidebar_initial_state'), SidebarState::getDefault()),
+            sidebar_state_per_page: config('kalion.layout.sidebar_state_per_page'),
+        );
     }
 
     public function cookie(): HttpCookie
