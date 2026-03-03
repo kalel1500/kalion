@@ -26,7 +26,7 @@ final class Cookie
         $this->preferences    = CookiePreferencesDto::fromArray([
             'version'                => config('kalion.cookie.version'),
             'theme'                  => config('kalion.layout.theme') ?? ThemeVo::getDefault()->value,
-            'sidebar_collapsed'      => config('kalion.layout.sidebar_collapsed'),
+            'sidebar_state'          => config('kalion.layout.sidebar_initial_state'),
             'sidebar_state_per_page' => config('kalion.layout.sidebar_state_per_page'),
         ]);
     }

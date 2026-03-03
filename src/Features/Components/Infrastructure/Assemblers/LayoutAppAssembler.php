@@ -21,7 +21,7 @@ class LayoutAppAssembler
 
         $preferences      = Cookie::readOrNew()->preferences();
         $darkMode         = $preferences->theme->isDark();
-        $sidebarCollapsed = $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_collapsed;
+        $sidebarCollapsed = $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_state->isCollapsed();
         $dataTheme        = $preferences->theme->getDataTheme();
         $colorTheme       = $preferences->theme->value;
 
