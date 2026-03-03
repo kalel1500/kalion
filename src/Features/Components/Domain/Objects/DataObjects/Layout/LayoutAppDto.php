@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObje
 class LayoutAppDto extends AbstractDataTransferObject
 {
     public function __construct(
-        public readonly string $title,
+        public readonly string $headTitle,
         public readonly bool   $isFromPackage,
         public readonly bool   $darkMode,
         public readonly bool   $sidebarCollapsed,

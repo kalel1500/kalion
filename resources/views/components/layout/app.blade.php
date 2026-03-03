@@ -1,9 +1,9 @@
 @use('Thehouseofel\Kalion\Core\Infrastructure\Support\Renderer')
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
 
-@props(['title' => null, 'package' => false])
+@props(['headTitle' => null, 'package' => false])
 
-@php($data = LayoutAppAssembler::fromProps($title, $package))
+@php($data = LayoutAppAssembler::fromProps($headTitle, $package))
 
 <!DOCTYPE html>
 <html
@@ -21,7 +21,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- Title -->
-        <title>{{ $data->title }}</title>
+        <title>{{ $data->headTitle }}</title>
 
         <!-- Icon -->
         <link rel="icon" type="image/x-icon" href="@viteAsset(config('kalion.layout.asset_path_favicon'))">

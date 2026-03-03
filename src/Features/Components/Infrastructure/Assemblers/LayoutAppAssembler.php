@@ -12,11 +12,11 @@ use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout\La
 class LayoutAppAssembler
 {
     public static function fromProps(
-        ?string $title = null,
+        ?string $headTitle = null,
         bool    $package = false
     ): LayoutAppDto
     {
-        $title         = $title ?? config('app.name');
+        $headTitle     = $headTitle ?? config('app.name');
         $isFromPackage = $package;
 
         $preferences      = Cookie::readOrNew()->preferences();
@@ -26,7 +26,7 @@ class LayoutAppAssembler
         $colorTheme       = $preferences->theme->value;
 
         return new LayoutAppDto(
-            title           : $title,
+            headTitle       : $headTitle,
             isFromPackage   : $isFromPackage,
             darkMode        : $darkMode,
             sidebarCollapsed: $sidebarCollapsed,
