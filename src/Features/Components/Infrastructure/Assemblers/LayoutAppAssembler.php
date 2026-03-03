@@ -33,8 +33,8 @@ class LayoutAppAssembler
         $links = collect(config('kalion_links.sidebar.items'));
 
         $firstCollapsed = $links->flatMap(function ($item) {
-            // Combinar el array con sus sub_links (si existen)
-            return array_merge([$item], $item['sub_links'] ?? []);
+            // Combinar el array con sus dropdown (si existen)
+            return array_merge([$item], $item['dropdown'] ?? []);
         })->first(function ($item) {
             return Arr::get($item, 'route_name') === Route::currentRouteName(); // Puedes ajustar el filtro aquí
         });
