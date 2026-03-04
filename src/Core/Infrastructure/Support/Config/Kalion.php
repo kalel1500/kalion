@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\LoginFieldDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectDefaultPath;
 
-final class Kalion
+class Kalion
 {
     public const ENUM_NULL_VALUE = 'k_null';
 

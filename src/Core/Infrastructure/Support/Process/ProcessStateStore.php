@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ProcessStatusKeysVo;
 
-final class ProcessStateStore
+class ProcessStateStore
 {
     /** --- GENERAL --- */
 

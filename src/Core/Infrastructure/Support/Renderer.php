@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support;
 
-final class Renderer
+class Renderer
 {
     protected const DIST = KALION_PATH . '/public/build/';
 

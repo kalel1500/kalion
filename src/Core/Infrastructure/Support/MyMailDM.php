@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support;
 use Illuminate\Contracts\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 
-/*final class MyMailDM
+/*class MyMailDM
 {
     public function __construct(protected Mailable $mailable, $keepOriginalRecipientsEvenInTests = false)
     {

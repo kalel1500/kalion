@@ -8,7 +8,7 @@ use Carbon\CarbonImmutable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Throwable;
 
-final class Date
+class Date
 {
     public static function stringToformat($date, $format, $getNowIfNullRecived = false): ?string
     {

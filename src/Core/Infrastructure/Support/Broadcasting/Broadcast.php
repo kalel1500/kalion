@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Responses\ResponseBroadc
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Throwable;
 
-final class Broadcast
+class Broadcast
 {
     public static function tryBroadcast(ShouldBroadcast $event): ResponseBroadcastDto
     {
