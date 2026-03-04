@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Date;
 
 use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Throwable;
 
@@ -28,10 +29,10 @@ class DateHelper
         };
     }
 
-    public static function mergeDateAndTime(string|CarbonImmutable $date, string|CarbonImmutable $time): ?CarbonImmutable
+    public static function mergeDateAndTime(string|CarbonInterface $date, string|CarbonInterface $time): ?CarbonImmutable
     {
-        $date = ($date instanceof CarbonImmutable) ? $date : CarbonImmutable::parse($date);
-        $time = ($time instanceof CarbonImmutable) ? $time : CarbonImmutable::parse($time);
+        $date = ($date instanceof CarbonInterface) ? $date : CarbonImmutable::parse($date);
+        $time = ($time instanceof CarbonInterface) ? $time : CarbonImmutable::parse($time);
         $date = $date->format(DateFormat::date_startYear->value);
         $time = $time->format(DateFormat::time->value);
         return CarbonImmutable::parse($date . ' ' . $time);
