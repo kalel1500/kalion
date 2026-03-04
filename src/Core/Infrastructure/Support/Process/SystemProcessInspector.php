@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Process;
 
 use Symfony\Component\Process\Process;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\ProcessException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 
-final class ProcessChecker
+final class SystemProcessInspector
 {
     private bool $cacheStatus;
 
@@ -99,7 +99,7 @@ final class ProcessChecker
         $active = $this->checkSystemFor($processName);
 
         if ($this->cacheStatus) {
-            ProcessStatus::update($processName, $active);
+            ProcessStateStore::update($processName, $active);
         }
 
         return $active;

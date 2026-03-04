@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Process;
 
 use Illuminate\Support\Facades\Cache;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ProcessStatusKeysVo;
 
-final class ProcessStatus
+final class ProcessStateStore
 {
     /** --- GENERAL --- */
 

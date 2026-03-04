@@ -30,7 +30,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\PasswordReset
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Register;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\ProcessChecker;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspector;
 use Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository;
@@ -49,12 +49,12 @@ class KalionServiceProvider extends ServiceProvider
      * All of the container singletons that should be registered.
      */
     public array $singletons = [
-        'kalion.processChecker'     => ProcessChecker::class,
-        TabulatorRepository::class  => EloquentTabulatorRepository::class,
-        JobRepository::class        => EloquentJobRepository::class,
-        RoleRepository::class       => EloquentRoleRepository::class,
-        PermissionRepository::class => EloquentPermissionRepository::class,
-        StatusRepository::class     => EloquentStatusRepository::class,
+        'kalion.systemProcessInspector' => SystemProcessInspector::class,
+        TabulatorRepository::class      => EloquentTabulatorRepository::class,
+        JobRepository::class            => EloquentJobRepository::class,
+        RoleRepository::class           => EloquentRoleRepository::class,
+        PermissionRepository::class     => EloquentPermissionRepository::class,
+        StatusRepository::class         => EloquentStatusRepository::class,
     ];
 
     /**

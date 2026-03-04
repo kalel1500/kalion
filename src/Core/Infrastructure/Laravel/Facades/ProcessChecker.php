@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Facade;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 
 /**
- * @method static \Thehouseofel\Kalion\Core\Infrastructure\Support\ProcessChecker withCache()
- * @method static \Thehouseofel\Kalion\Core\Infrastructure\Support\ProcessChecker withoutCache()
+ * @method static \Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspector withCache()
+ * @method static \Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspector withoutCache()
  * @method static bool isRunning(CheckableProcessVo $processName)
  * @method static bool tryIsRunning(CheckableProcessVo $processName)
  * @method static void assert(string $processName, string $errorMessage = null)
@@ -20,7 +20,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckablePro
  * @method static bool tryIsRunningReverb()
  * @method static void assertReverb(string $errorMessage = null)
  *
- * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\ProcessChecker
+ * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspector
  */
 final class ProcessChecker extends Facade
 {
@@ -29,6 +29,6 @@ final class ProcessChecker extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return 'kalion.processChecker';
+        return 'kalion.systemProcessInspector';
     }
 }
