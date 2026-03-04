@@ -21,6 +21,7 @@ class LayoutAppAssembler
         return new LayoutAppDto(
             headTitle       : $headTitle ?? config('app.name'),
             isFromPackage   : $package,
+            sidebarEnabled  : ! config('kalion.layout.sidebar_disabled'),
             darkMode        : $preferences->theme->isDark(),
             sidebarCollapsed: $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_state->isCollapsed(),
             dataTheme       : $preferences->theme->getDataTheme(),

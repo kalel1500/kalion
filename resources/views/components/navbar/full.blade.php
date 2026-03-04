@@ -8,7 +8,11 @@
         <!-- New -->
 <x-kal::navbar>
     <x-slot:left-side>
-        <x-kal::navbar.hamburger-icon/>
+
+        @if(! config('kalion.layout.sidebar_disabled'))
+            <x-kal::navbar.hamburger-icon/>
+        @endif
+
 
         <x-kal::navbar.brand/>
 

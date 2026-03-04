@@ -11,6 +11,7 @@ class LayoutAppDto extends AbstractDataTransferObject
     public function __construct(
         public readonly string $headTitle,
         public readonly bool   $isFromPackage,
+        public readonly bool   $sidebarEnabled,
         public readonly bool   $darkMode,
         public readonly bool   $sidebarCollapsed,
         public readonly string $dataTheme,
