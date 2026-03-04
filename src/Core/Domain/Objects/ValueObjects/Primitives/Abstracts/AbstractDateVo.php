@@ -45,7 +45,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         parent::ensureIsValidValue($value);
 
         $formats = array_map(fn(\BackedEnum $item) => $item->value, static::$formats);
-        if (! is_null($value) && ! DateHelper::checkFormats($value, $formats)) {
+        if (! is_null($value) && ! DateHelper::matchesAnyFormat($value, $formats)) {
             throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $formats)));
         }
     }

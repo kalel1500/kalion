@@ -42,7 +42,7 @@ class DateHelper
         return CarbonImmutable::parse($date . ' ' . $time);
     }
 
-    public static function checkFormat(string $date, string $format): bool
+    public static function matchesFormat(string $date, string $format): bool
     {
         try {
             $dt = CarbonImmutable::createFromFormat($format, $date);
@@ -52,11 +52,11 @@ class DateHelper
         }
     }
 
-    public static function checkFormats(string $date, array $formats): bool
+    public static function matchesAnyFormat(string $date, array $formats): bool
     {
         // Iterar sobre cada formato y llamar a checkFormat
         foreach ($formats as $format) {
-            if (static::checkFormat($date, $format)) {
+            if (static::matchesFormat($date, $format)) {
                 return true;
             }
         }
