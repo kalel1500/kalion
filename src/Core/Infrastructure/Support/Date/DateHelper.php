@@ -44,12 +44,10 @@ class DateHelper
 
     public static function checkFormat(string $date, string $format): bool
     {
-        // Verificar el formato utilizando CarbonImmutable
         try {
-            $formatted = CarbonImmutable::parse($date)->format($format);
-            return ($date === $formatted);
+            $dt = CarbonImmutable::createFromFormat($format, $date);
+            return $dt !== false && $dt->format($format) === $date;
         } catch (Throwable $e) {
-            // Si el parseo falla, retornar false
             return false;
         }
     }
