@@ -33,7 +33,7 @@ class DateHelper
         };
     }
 
-    public static function mergeDateAndTime(string|CarbonInterface $date, string|CarbonInterface $time): ?CarbonImmutable
+    public static function mergeDateAndTime(string|CarbonInterface $date, string|CarbonInterface $time): CarbonImmutable
     {
         $date = ($date instanceof CarbonInterface) ? $date : CarbonImmutable::parse($date);
         $time = ($time instanceof CarbonInterface) ? $time : CarbonImmutable::parse($time);
