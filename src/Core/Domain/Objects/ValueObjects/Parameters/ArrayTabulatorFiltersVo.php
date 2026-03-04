@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters;
 
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Date;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Date\DateHelper;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
@@ -87,8 +87,8 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
         }
         $filterTime = $this->getFilterTime($this->filterTimeName);
         if ($isRequiredFilterTime && $filterTime) {
-            $start = Date::parse($filterTime['value']['start']);
-            $end   = Date::parse($filterTime['value']['end']) ?? Date::now();
+            $start = DateHelper::parse($filterTime['value']['start']);
+            $end   = DateHelper::parse($filterTime['value']['end']) ?? DateHelper::now();
             if (is_null($start)) {
                 throw new InvalidValueException('Para realizar esta acción es necesario indicar la fecha de inicio');
             }
@@ -116,8 +116,8 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
 
     public function getEncodedWithDefaultDate(): string
     {
-        $dateStart          = Date::now()->startOfMonth()->format(DateFormat::date_startYear->value);
-        $dateEnd            = Date::now()->endOfMonth()->format(DateFormat::date_startYear->value);
+        $dateStart          = DateHelper::now()->startOfMonth()->format(DateFormat::date_startYear->value);
+        $dateEnd            = DateHelper::now()->endOfMonth()->format(DateFormat::date_startYear->value);
         $defaultDateFilters = [["field" => $this->filterTimeName, "type" => "like", "value" => ["start" => $dateStart, "end" => $dateEnd]]];
         $filters            = $this->isNull() ? $defaultDateFilters : array_merge($this->value, $defaultDateFilters);
         return $this->encodeFilters($filters);
@@ -150,8 +150,8 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
         $filterTime = $this->getFilterTime($this->filterTimeName);
         $name       = "$prefixExportName.xlsx";
         if ($filterTime && $filterTime['value']['start']) {
-            $dateStart      = Date::parse($filterTime['value']['start']);
-            $dateEnd        = Date::parse($filterTime['value']['end']);
+            $dateStart      = DateHelper::parse($filterTime['value']['start']);
+            $dateEnd        = DateHelper::parse($filterTime['value']['end']);
             $monthNameStart = $dateStart?->getTranslatedMonthName();
             $monthNameEnd   = $dateEnd?->getTranslatedMonthName();
 

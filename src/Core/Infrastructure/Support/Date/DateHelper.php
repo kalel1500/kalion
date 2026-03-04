@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Date;
 
 use Carbon\CarbonImmutable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Throwable;
 
-class Date
+class DateHelper
 {
     public static function stringToformat($date, $format, $getNowIfNullRecived = false): ?string
     {
@@ -30,7 +30,7 @@ class Date
 
     public static function formatInputDateToAudit($imputDate): ?string
     {
-        return Date::stringToformat($imputDate, DateFormat::datetime_startYear->value);
+        return DateHelper::stringToformat($imputDate, DateFormat::datetime_startYear->value);
     }
 
     public static function parse($date): CarbonImmutable
@@ -91,9 +91,9 @@ class Date
     public static function debugTime(string $debugTitle, callable $callback)
     {
         dump($debugTitle);
-        $init = Date::now();
+        $init = DateHelper::now();
         $callback();
-        $end      = Date::now();
+        $end      = DateHelper::now();
         $interval = $init->diff($end);
         dump($init->format('H:i:s'));
         dump($end->format('H:i:s'));

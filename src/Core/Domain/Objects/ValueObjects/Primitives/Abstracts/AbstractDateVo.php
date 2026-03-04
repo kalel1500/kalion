@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Date;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Date\DateHelper;
 
 abstract class AbstractDateVo extends AbstractStringVo
 {
@@ -36,7 +36,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         if (is_null($toFormat)) {
             $toFormat = static::$formats[0];
         }
-        $formatted = Date::parse($value)->format($toFormat->value);
+        $formatted = DateHelper::parse($value)->format($toFormat->value);
         return static::from($formatted, $formats);
     }
 
@@ -45,18 +45,18 @@ abstract class AbstractDateVo extends AbstractStringVo
         parent::ensureIsValidValue($value);
 
         $formats = array_map(fn(\BackedEnum $item) => $item->value, static::$formats);
-        if (! is_null($value) && ! Date::checkFormats($value, $formats)) {
+        if (! is_null($value) && ! DateHelper::checkFormats($value, $formats)) {
             throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $formats)));
         }
     }
 
     public function formatToSpainDatetime(): ?string
     {
-        return $this->isNull() ? null : Date::parse($this->value)->format(DateFormat::datetime_startDay_slash->value);
+        return $this->isNull() ? null : DateHelper::parse($this->value)->format(DateFormat::datetime_startDay_slash->value);
     }
 
     public function carbon(): CarbonImmutable
     {
-        return $this->valueCarbon ?? Date::parse($this->value);
+        return $this->valueCarbon ?? DateHelper::parse($this->value);
     }
 }
