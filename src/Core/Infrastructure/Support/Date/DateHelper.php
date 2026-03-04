@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Date;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterface;
+use Carbon\CarbonInterval;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Throwable;
 
@@ -65,16 +66,18 @@ class DateHelper
         return false;
     }
 
-    public static function debugTime(string $debugTitle, callable $callback)
+    /**
+     * Measures the execution time of a callback and returns it as a CarbonInterval.
+     * You can format the result using CarbonInterval's formatting methods, for example: ->format("%I min %S sec, %f ms")
+     *
+     * @param callable $callback
+     * @return CarbonInterval
+     */
+    public static function measure(callable $callback): CarbonInterval
     {
-        dump($debugTitle);
         $init = CarbonImmutable::now();
         $callback();
         $end      = CarbonImmutable::now();
-        $interval = $init->diff($end);
-        dump($init->format('H:i:s'));
-        dump($end->format('H:i:s'));
-        dump($interval->format("%I min %S sec, %f ms"));
-        dd('fin');
+        return $init->diff($end);
     }
 }
