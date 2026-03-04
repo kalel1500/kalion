@@ -10,15 +10,22 @@ use Throwable;
 
 class DateHelper
 {
-    public static function compare($date1, $operator, $date2)
+    public static function compare($date1, $operator, $date2): ?bool
     {
         if (is_null($date1) || is_null($date2)) {
             return null;
         }
         $timestamp_date1 = CarbonImmutable::parse($date1)->timestamp;
         $timestamp_date2 = CarbonImmutable::parse($date2)->timestamp;
-        $operation       = $timestamp_date1 . $operator . $timestamp_date2;
-        return (eval('return ' . $operation . ';'));
+        return match ($operator) {
+            '>'  => $timestamp_date1 >  $timestamp_date2,
+            '<'  => $timestamp_date1 <  $timestamp_date2,
+            '>=' => $timestamp_date1 >= $timestamp_date2,
+            '<=' => $timestamp_date1 <= $timestamp_date2,
+            '==' => $timestamp_date1 == $timestamp_date2,
+            '!=' => $timestamp_date1 != $timestamp_date2,
+            default => throw new \InvalidArgumentException('Invalid operator: ' . $operator),
+        };
     }
 
     public static function mergeDateAndTime(string|CarbonImmutable $date, string|CarbonImmutable $time): ?CarbonImmutable
