@@ -7,24 +7,24 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie as CookieFacade;
 use Symfony\Component\HttpFoundation\Cookie as HttpCookie;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\CookiePreferencesDto;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\UserPreferencesDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\SidebarState;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
 final class Cookie
 {
-    private string               $cookieName;
-    private int                  $cookieDuration;
-    private string               $cookieVersion;
-    private CookiePreferencesDto $preferences;
-    private ?HttpCookie          $cookie = null;
+    private string             $cookieName;
+    private int                $cookieDuration;
+    private string             $cookieVersion;
+    private UserPreferencesDto $preferences;
+    private ?HttpCookie        $cookie = null;
 
     public function __construct()
     {
         $this->cookieName     = config('kalion.cookie.name');
         $this->cookieDuration = config('kalion.cookie.duration');
         $this->cookieVersion  = config('kalion.cookie.version');
-        $this->preferences    = new CookiePreferencesDto(
+        $this->preferences    = new UserPreferencesDto(
             version               : config('kalion.cookie.version'),
             theme                 : ThemeVo::fromOr(config('kalion.layout.default_theme'), ThemeVo::getDefault()),
             sidebar_state         : SidebarState::fromOr(config('kalion.layout.default_sidebar_state'), SidebarState::getDefault()),
@@ -37,12 +37,12 @@ final class Cookie
         return $this->cookie;
     }
 
-    public function preferences(): CookiePreferencesDto
+    public function preferences(): UserPreferencesDto
     {
         return $this->preferences;
     }
 
-    public function setPreferences(CookiePreferencesDto $preferences): static
+    public function setPreferences(UserPreferencesDto $preferences): static
     {
         $this->preferences = $preferences;
         return $this;
@@ -56,7 +56,7 @@ final class Cookie
     public static function readOrNew(): static
     {
         $service     = static::new();
-        $preferences = CookiePreferencesDto::fromJson(CookieFacade::get($service->cookieName));
+        $preferences = UserPreferencesDto::fromJson(CookieFacade::get($service->cookieName));
         if (! is_null($preferences)) {
             $service->setPreferences($preferences);
         }
