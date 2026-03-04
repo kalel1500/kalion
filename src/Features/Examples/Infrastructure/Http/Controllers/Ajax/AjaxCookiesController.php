@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\
 use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\UserPreferencesDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\LayoutPreferencesCookieStore;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;
 
 final class AjaxCookiesController extends Controller
 {

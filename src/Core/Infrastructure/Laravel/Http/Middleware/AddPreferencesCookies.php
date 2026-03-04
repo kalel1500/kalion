@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\LayoutPreferencesCookieStore;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;
 
 final class AddPreferencesCookies
 {
