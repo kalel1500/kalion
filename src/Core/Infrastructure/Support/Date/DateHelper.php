@@ -20,15 +20,15 @@ class DateHelper
         if (is_null($date1) || is_null($date2)) {
             return null;
         }
-        $timestamp_date1 = CarbonImmutable::parse($date1)->timestamp;
-        $timestamp_date2 = CarbonImmutable::parse($date2)->timestamp;
+        $date1 = $date1 instanceof CarbonInterface ? $date1 : CarbonImmutable::parse($date1);
+        $date2 = $date2 instanceof CarbonInterface ? $date2 : CarbonImmutable::parse($date2);
         return match ($operator) {
-            '>'  => $timestamp_date1 >  $timestamp_date2,
-            '<'  => $timestamp_date1 <  $timestamp_date2,
-            '>=' => $timestamp_date1 >= $timestamp_date2,
-            '<=' => $timestamp_date1 <= $timestamp_date2,
-            '==' => $timestamp_date1 == $timestamp_date2,
-            '!=' => $timestamp_date1 != $timestamp_date2,
+            '>'  => $date1 >  $date2,
+            '<'  => $date1 <  $date2,
+            '>=' => $date1 >= $date2,
+            '<=' => $date1 <= $date2,
+            '==' => $date1 == $date2,
+            '!=' => $date1 != $date2,
             default => throw new \InvalidArgumentException('Invalid operator: ' . $operator),
         };
     }
