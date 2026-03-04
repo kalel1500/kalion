@@ -11,6 +11,9 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\UserPreferencesDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\SidebarState;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
+/**
+ * @internal This class is not meant to be used or overwritten outside the package.
+ */
 final class LayoutPreferencesCookieStore
 {
     private string             $cookieName;
