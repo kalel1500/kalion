@@ -11,7 +11,11 @@ use Throwable;
 
 class DateHelper
 {
-    public static function compare($date1, $operator, $date2): ?bool
+    public static function compare(
+        string|CarbonInterface|null $date1,
+        string $operator,
+        string|CarbonInterface|null $date2
+    ): ?bool
     {
         if (is_null($date1) || is_null($date2)) {
             return null;
