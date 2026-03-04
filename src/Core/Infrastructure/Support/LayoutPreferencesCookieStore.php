@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\UserPreferencesDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\SidebarState;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
-final class Cookie
+final class LayoutPreferencesCookieStore
 {
     private string             $cookieName;
     private int                $cookieDuration;

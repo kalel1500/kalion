@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Cookie;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\LayoutPreferencesCookieStore;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout\LayoutAppDto;
 
 class LayoutAppAssembler
@@ -16,7 +16,7 @@ class LayoutAppAssembler
         bool    $package = false
     ): LayoutAppDto
     {
-        $preferences = Cookie::readOrNew()->preferences();
+        $preferences = LayoutPreferencesCookieStore::readOrNew()->preferences();
 
         return new LayoutAppDto(
             headTitle       : $headTitle ?? config('app.name'),

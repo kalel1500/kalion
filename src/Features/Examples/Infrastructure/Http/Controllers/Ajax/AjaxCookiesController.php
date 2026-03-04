@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\
 use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\UserPreferencesDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Cookie;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\LayoutPreferencesCookieStore;
 
 final class AjaxCookiesController extends Controller
 {
@@ -15,7 +15,7 @@ final class AjaxCookiesController extends Controller
     {
         $preferences = UserPreferencesDto::fromJson(urldecode($request->input('preferences')));
 
-        Cookie::new()
+        LayoutPreferencesCookieStore::new()
             ->setPreferences($preferences)
             ->create()
             ->queue();
