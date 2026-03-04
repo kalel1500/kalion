@@ -1,4 +1,4 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Renderer')
+@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
     <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +16,7 @@
     </script>
 
     <!-- JavaScript y CSS del paquete -->
-    {!! Renderer::css() !!}
+    {!! PackageAssets::css() !!}
 </head>
 <body class="antialiased">
 <div class="relative flex items-top justify-center min-h-screen bg-[#f7fafc] dark:bg-gray-900 sm:items-center sm:pt-0">

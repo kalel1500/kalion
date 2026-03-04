@@ -1,4 +1,4 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Renderer')
+@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -23,7 +23,7 @@
         </style>
 
         <!-- CSS del paquete -->
-        {!! Renderer::css() !!}
+        {!! PackageAssets::css() !!}
     </head>
 
     <body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url(@viteAsset('resources/images/login/header.png'));">

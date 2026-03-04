@@ -1,4 +1,4 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Renderer')
+@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
 
 @props(['headTitle' => null, 'package' => false])
@@ -38,8 +38,8 @@
 
         @if($data->isFromPackage)
             <!-- JavaScript y CSS del paquete -->
-            {!! Renderer::css() !!}
-            {!! Renderer::js() !!}
+            {!! PackageAssets::css() !!}
+            {!! PackageAssets::js() !!}
         @else
             <!-- JavaScript y CSS compilados -->
             @if(file_exists(resource_path('js/app.ts')))
