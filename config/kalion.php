@@ -164,7 +164,7 @@ return [
     */
 
     'layout' => [
-        'theme' => env('KALION_LAYOUT_THEME'),
+        'default_theme' => env('KALION_LAYOUT_DEFAULT_THEME'),
         'use_elevated_shadows' => (bool) env('KALION_LAYOUT_USE_ELEVATED_SHADOWS', false), // por si crece: 'shadow_style' => 'default', // default | elevated | none
         'sidebar_initial_state' => env('KALION_LAYOUT_SIDEBAR_INITIAL_STATE', SidebarState::expanded->value),  // expanded | collapsed
         'sidebar_state_per_page' => (bool) env('KALION_LAYOUT_SIDEBAR_STATE_PER_PAGE', false),
