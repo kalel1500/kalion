@@ -36,7 +36,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         if (is_null($toFormat)) {
             $toFormat = static::$formats[0];
         }
-        $formatted = DateHelper::parse($value)->format($toFormat->value);
+        $formatted = CarbonImmutable::parse($value)->format($toFormat->value);
         return static::from($formatted, $formats);
     }
 
@@ -52,11 +52,11 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public function formatToSpainDatetime(): ?string
     {
-        return $this->isNull() ? null : DateHelper::parse($this->value)->format(DateFormat::datetime_startDay_slash->value);
+        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_startDay_slash->value);
     }
 
     public function carbon(): CarbonImmutable
     {
-        return $this->valueCarbon ?? DateHelper::parse($this->value);
+        return $this->valueCarbon ?? CarbonImmutable::parse($this->value);
     }
 }

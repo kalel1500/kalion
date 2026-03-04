@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters;
 
+use Carbon\CarbonImmutable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Date\DateHelper;
@@ -87,8 +88,8 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
         }
         $filterTime = $this->getFilterTime($this->filterTimeName);
         if ($isRequiredFilterTime && $filterTime) {
-            $start = DateHelper::parse($filterTime['value']['start']);
-            $end   = DateHelper::parse($filterTime['value']['end']) ?? DateHelper::now();
+            $start = CarbonImmutable::parse($filterTime['value']['start']);
+            $end   = CarbonImmutable::parse($filterTime['value']['end']) ?? CarbonImmutable::now();
             if (is_null($start)) {
                 throw new InvalidValueException('Para realizar esta acción es necesario indicar la fecha de inicio');
             }
@@ -116,8 +117,8 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
 
     public function getEncodedWithDefaultDate(): string
     {
-        $dateStart          = DateHelper::now()->startOfMonth()->format(DateFormat::date_startYear->value);
-        $dateEnd            = DateHelper::now()->endOfMonth()->format(DateFormat::date_startYear->value);
+        $dateStart          = CarbonImmutable::now()->startOfMonth()->format(DateFormat::date_startYear->value);
+        $dateEnd            = CarbonImmutable::now()->endOfMonth()->format(DateFormat::date_startYear->value);
         $defaultDateFilters = [["field" => $this->filterTimeName, "type" => "like", "value" => ["start" => $dateStart, "end" => $dateEnd]]];
         $filters            = $this->isNull() ? $defaultDateFilters : array_merge($this->value, $defaultDateFilters);
         return $this->encodeFilters($filters);
@@ -150,8 +151,8 @@ final class ArrayTabulatorFiltersVo extends AbstractArrayVo
         $filterTime = $this->getFilterTime($this->filterTimeName);
         $name       = "$prefixExportName.xlsx";
         if ($filterTime && $filterTime['value']['start']) {
-            $dateStart      = DateHelper::parse($filterTime['value']['start']);
-            $dateEnd        = DateHelper::parse($filterTime['value']['end']);
+            $dateStart      = CarbonImmutable::parse($filterTime['value']['start']);
+            $dateEnd        = CarbonImmutable::parse($filterTime['value']['end']);
             $monthNameStart = $dateStart?->getTranslatedMonthName();
             $monthNameEnd   = $dateEnd?->getTranslatedMonthName();
 
