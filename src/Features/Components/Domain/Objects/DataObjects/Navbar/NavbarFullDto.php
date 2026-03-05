@@ -10,6 +10,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObje
 class NavbarFullDto extends AbstractDataTransferObject
 {
     public function __construct(
+        public readonly ?string       $navbarTitle,
         public readonly bool          $showSearch,
         public readonly string        $searchAction,
         public readonly CollectionAny $items,

@@ -3,7 +3,9 @@
 @php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $item */ @endphp
 @php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $subItem */ @endphp
 
-@php($data = NavbarFullAssembler::fromProps())
+@props(['navbarTitle' => null])
+
+@php($data = NavbarFullAssembler::fromProps($navbarTitle))
 
         <!-- New -->
 <x-kal::navbar>
@@ -15,6 +17,10 @@
 
 
         <x-kal::navbar.brand/>
+
+        <div class="dark:text-white">
+            {{ $data->navbarTitle ?? '' }}
+        </div>
 
         @if($data->showSearch)
             <x-kal::navbar.search-form/>

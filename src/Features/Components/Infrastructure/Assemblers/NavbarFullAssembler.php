@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Features\Components\Infrastructure\Facades\LayoutData;
 
 class NavbarFullAssembler
 {
-    public static function fromProps(): NavbarFullDto
+    public static function fromProps(?string $navbarTitle): NavbarFullDto
     {
         $items = NavbarItemCollection::fromArray(config('kalion_links.navbar.items') ?? []);
         $items = $items->map(function (NavbarItemDto $item) {
@@ -29,6 +29,7 @@ class NavbarFullAssembler
         });
 
         return new NavbarFullDto(
+            navbarTitle : $navbarTitle,
             showSearch  : config('kalion_links.navbar.search.show'),
             searchAction: safe_route(config('kalion_links.navbar.search.route'), '#'),
             items       : $items,

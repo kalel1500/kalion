@@ -1,9 +1,9 @@
 @use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
 
-@props(['package' => false, 'headTitle' => null, 'flush' => false])
+@props(['package' => false, 'headTitle' => null, 'navbarTitle' => null, 'flush' => false])
 
-@php($data = LayoutAppAssembler::fromProps($package, $headTitle, $flush))
+@php($data = LayoutAppAssembler::fromProps($package, $headTitle, $navbarTitle, $flush))
 
 <!DOCTYPE html>
 <html
@@ -57,7 +57,7 @@
     <body class="bg-gray-50 antialiased dark:bg-gray-900">
 
         <!-- Navbar -->
-        <x-kal::navbar.full/>
+        <x-kal::navbar.full :navbar-title="$data->navbarTitle" />
 {{--        <x-kal::navbar.full-old/>--}}
 
         <!-- Sidebar -->

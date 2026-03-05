@@ -14,6 +14,7 @@ class LayoutAppAssembler
     public static function fromProps(
         bool    $package,
         ?string $headTitle,
+        ?string $navbarTitle,
         bool    $flush,
     ): LayoutAppDto
     {
@@ -22,6 +23,7 @@ class LayoutAppAssembler
         return new LayoutAppDto(
             isFromPackage   : $package,
             headTitle       : $headTitle ?? config('app.name'),
+            navbarTitle     : $navbarTitle,
             flush           : $flush,
             sidebarEnabled  : ! config('kalion.layout.sidebar_disabled'),
             sidebarCollapsed: $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_state->isCollapsed(),
