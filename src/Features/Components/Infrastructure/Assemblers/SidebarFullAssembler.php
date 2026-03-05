@@ -13,24 +13,22 @@ class SidebarFullAssembler
 {
     public static function fromProps(): SidebarFullDto
     {
-        $showSearch   = config('kalion_links.sidebar.search.show');
-        $searchAction = safe_route(config('kalion_links.sidebar.search.route'), '#');
-        $items        = SidebarItemCollection::fromArray(config('kalion_links.sidebar.items') ?? []);
-        $footer       = SidebarItemCollection::fromArray(config('kalion_links.sidebar.footer') ?? []);
-        $hasFooter    = $footer->countInt()->isBiggerThan(0);
-
-        $items = $items->map(function (SidebarItemDto $item) {
+        $footer    = SidebarItemCollection::fromArray(config('kalion_links.sidebar.footer') ?? []);
+        $hasFooter = $footer->countInt()->isBiggerThan(0);
+        $items     = SidebarItemCollection::fromArray(config('kalion_links.sidebar.items') ?? []);
+        $items     = $items->map(function (SidebarItemDto $item) {
             if (! is_null($action = $item->counter_action)) {
                 $item->setCounter(LayoutData::$action());
             }
             return $item;
         });
-        return SidebarFullDto::fromArray([
-            'showSearch'   => $showSearch,
-            'searchAction' => $searchAction,
-            'items'        => $items,
-            'hasFooter'    => $hasFooter,
-            'footer'       => $footer,
-        ]);
+
+        return new SidebarFullDto (
+            showSearch  : config('kalion_links.sidebar.search.show'),
+            searchAction: safe_route(config('kalion_links.sidebar.search.route'), '#'),
+            items       : $items,
+            hasFooter   : $hasFooter,
+            footer      : $footer,
+        );
     }
 }
