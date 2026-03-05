@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Layout;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie as CookieFacade;
 use Symfony\Component\HttpFoundation\Cookie as HttpCookie;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\UserPreferencesDto;
@@ -14,20 +13,55 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class LayoutPreferencesCookieStore
+class LayoutPreferencesCookieStore implements PreferencesCookieStore
 {
     private string             $cookieName;
     private int                $cookieDuration;
     private string             $cookieVersion;
     private UserPreferencesDto $preferences;
-    private ?HttpCookie        $cookie = null;
 
     public function __construct()
     {
         $this->cookieName     = config('kalion.cookie.name');
         $this->cookieDuration = config('kalion.cookie.duration');
         $this->cookieVersion  = config('kalion.cookie.version');
-        $this->preferences    = new UserPreferencesDto(
+        $this->preferences    = $this->getPreferences();
+    }
+
+    public function get(): UserPreferencesDto
+    {
+        return $this->preferences;
+    }
+
+    public function set(string|UserPreferencesDto $preferences): void
+    {
+        $preferences = ($preferences instanceof UserPreferencesDto)
+            ? $preferences
+            : UserPreferencesDto::fromJson($preferences);
+
+        if (!$preferences) {
+            throw new \InvalidArgumentException('Invalid preferences payload');
+        }
+
+        $this->preferences = $preferences;
+        $this->writeCookie();
+    }
+
+    public function ensureValidCookie(): void
+    {
+        if (
+            ! request()->hasCookie($this->cookieName) ||
+            $this->cookieVersion !== $this->preferences->version
+        ) {
+            $this->preferences = $this->defaultPreferences();
+            $this->writeCookie();
+        }
+    }
+
+
+    protected function defaultPreferences(): UserPreferencesDto
+    {
+        return new UserPreferencesDto(
             version               : config('kalion.cookie.version'),
             theme                 : ThemeVo::fromOr(config('kalion.layout.default_theme'), ThemeVo::getDefault()),
             sidebar_state         : SidebarState::fromOr(config('kalion.layout.default_sidebar_state'), SidebarState::getDefault()),
@@ -35,76 +69,24 @@ class LayoutPreferencesCookieStore
         );
     }
 
-    public function cookie(): HttpCookie
+    protected function getPreferences(): UserPreferencesDto
     {
-        return $this->cookie;
+        $cookie = CookieFacade::get($this->cookieName);
+
+        return ! is_null($cookie)
+            ? UserPreferencesDto::fromJson($cookie)
+            : $this->defaultPreferences();
     }
 
-    public function preferences(): UserPreferencesDto
+    protected function writeCookie(): void
     {
-        return $this->preferences;
-    }
-
-    public function setPreferences(UserPreferencesDto $preferences): static
-    {
-        $this->preferences = $preferences;
-        return $this;
-    }
-
-    public static function new(): static
-    {
-        return new static();
-    }
-
-    public static function readOrNew(): static
-    {
-        $service     = static::new();
-        $preferences = UserPreferencesDto::fromJson(CookieFacade::get($service->cookieName));
-        if (! is_null($preferences)) {
-            $service->setPreferences($preferences);
-        }
-        return $service;
-    }
-
-    public function create(): static
-    {
-        // Crear la cookie usando CookieFacade::make
-        $this->cookie = CookieFacade::make(
+        CookieFacade::queue(CookieFacade::make(
             name    : $this->cookieName,
             value   : $this->preferences->__toString(),
             minutes : $this->cookieDuration,
             path    : '/',
             secure  : config('session.secure'),
             httpOnly: false
-        );
-        return $this;
-    }
-
-    public function createIfNotExist(Request $request): static
-    {
-        // Verificar que la cookie no exista
-        if (! $request->hasCookie($this->cookieName)) {
-            // Crear la cookie usando CookieFacade::make
-            return $this->create();
-        }
-
-        return $this;
-    }
-
-    public function queue(): static
-    {
-        if (! is_null($this->cookie)) {
-            // Poner la cookie en la cola
-            CookieFacade::queue($this->cookie);
-        }
-        return $this;
-    }
-
-    public function resetAndQueueIfExistInvalid(): ?self
-    {
-        if ($this->cookieVersion !== static::readOrNew()->preferences->version) {
-            return static::new()->create()->queue();
-        }
-        return null;
+        ));
     }
 }

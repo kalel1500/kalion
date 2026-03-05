@@ -30,6 +30,8 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\PasswordReset
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Register;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PreferencesCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspector;
 use Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
@@ -50,6 +52,7 @@ class KalionServiceProvider extends ServiceProvider
      */
     public array $singletons = [
         'kalion.systemProcessInspector' => SystemProcessInspector::class,
+        PreferencesCookieStore::class   => LayoutPreferencesCookieStore::class,
         TabulatorRepository::class      => EloquentTabulatorRepository::class,
         JobRepository::class            => EloquentJobRepository::class,
         RoleRepository::class           => EloquentRoleRepository::class,

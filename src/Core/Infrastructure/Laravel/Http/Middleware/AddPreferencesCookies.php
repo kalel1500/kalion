@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\LayoutPreferences;
 
 final class AddPreferencesCookies
 {
@@ -18,10 +18,7 @@ final class AddPreferencesCookies
      */
     public function handle(Request $request, Closure $next): Response
     {
-        LayoutPreferencesCookieStore::new()
-            ->createIfNotExist($request)
-            ->queue()
-            ->resetAndQueueIfExistInvalid();
+        LayoutPreferences::ensureValidCookie();
 
         return $next($request);
     }
