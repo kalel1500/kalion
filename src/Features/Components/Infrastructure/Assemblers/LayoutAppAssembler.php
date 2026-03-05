@@ -14,6 +14,7 @@ class LayoutAppAssembler
     public static function fromProps(
         bool    $package,
         ?string $headTitle,
+        bool    $flush,
     ): LayoutAppDto
     {
         $preferences = LayoutPreferencesCookieStore::readOrNew()->preferences();
@@ -21,6 +22,7 @@ class LayoutAppAssembler
         return new LayoutAppDto(
             isFromPackage   : $package,
             headTitle       : $headTitle ?? config('app.name'),
+            flush           : $flush,
             sidebarEnabled  : ! config('kalion.layout.sidebar_disabled'),
             sidebarCollapsed: $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_state->isCollapsed(),
             darkMode        : $preferences->theme->isDark(),

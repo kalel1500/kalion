@@ -1,9 +1,9 @@
 @use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
 
-@props(['package' => false, 'headTitle' => null])
+@props(['package' => false, 'headTitle' => null, 'flush' => false])
 
-@php($data = LayoutAppAssembler::fromProps($package, $headTitle))
+@php($data = LayoutAppAssembler::fromProps($package, $headTitle, $flush))
 
 <!DOCTYPE html>
 <html
@@ -67,7 +67,8 @@
 
         <!-- Wrapper -->
         @php($sidebarClasses = $data->sidebarEnabled ? 'md:ml-64 md:sc:ml-20 md:transition-all' : '')
-        <div class="h-auto p-4 pt-20  {{ $sidebarClasses }}">
+        @php($paddingClasses = $data->flush ? 'pt-14' : 'pt-20')
+        <div class="h-auto p-4 {{ $paddingClasses }}  {{ $sidebarClasses }}">
 
             <!-- Main -->
             @php($mainClass = config('kalion.layout.show_debug_main_border') ? 'border-2 border-dashed border-gray-300 p-2 dark:border-gray-600' : null)
