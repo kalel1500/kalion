@@ -1,9 +1,9 @@
 @use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
 
-@props(['headTitle' => null, 'package' => false])
+@props(['package' => false, 'headTitle' => null])
 
-@php($data = LayoutAppAssembler::fromProps($headTitle, $package))
+@php($data = LayoutAppAssembler::fromProps($package, $headTitle))
 
 <!DOCTYPE html>
 <html

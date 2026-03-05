@@ -12,8 +12,8 @@ use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout\La
 class LayoutAppAssembler
 {
     public static function fromProps(
-        ?string $headTitle = null,
-        bool    $package = false
+        bool    $package,
+        ?string $headTitle,
     ): LayoutAppDto
     {
         $preferences = LayoutPreferencesCookieStore::readOrNew()->preferences();
