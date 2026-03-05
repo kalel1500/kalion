@@ -19,11 +19,11 @@ class LayoutAppAssembler
         $preferences = LayoutPreferencesCookieStore::readOrNew()->preferences();
 
         return new LayoutAppDto(
-            headTitle       : $headTitle ?? config('app.name'),
             isFromPackage   : $package,
+            headTitle       : $headTitle ?? config('app.name'),
             sidebarEnabled  : ! config('kalion.layout.sidebar_disabled'),
-            darkMode        : $preferences->theme->isDark(),
             sidebarCollapsed: $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_state->isCollapsed(),
+            darkMode        : $preferences->theme->isDark(),
             dataTheme       : $preferences->theme->getDataTheme(),
             colorTheme      : $preferences->theme->value,
         );
