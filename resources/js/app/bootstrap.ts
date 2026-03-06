@@ -8,7 +8,7 @@ import { defineRoutes } from './routes';
 declare global {
     interface ImportMeta {
         readonly env: EnvVariables & {
-            VITE_OTHER?: string
+            readonly VITE_OTHER?: string
         };
     }
 }
