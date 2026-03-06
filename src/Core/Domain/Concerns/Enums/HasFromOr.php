@@ -13,12 +13,21 @@ trait HasFromOr
 {
     public static function fromOr($value, $default): ?static
     {
-        return static::tryFrom($value) ?? static::convertDefault($default, false);
+        return static::resolveEnum($value, $default, false);
     }
 
     public static function tryFromOr($value, $default): ?static
     {
-        return static::tryFrom($value) ?? static::convertDefault($default, true);
+        return static::resolveEnum($value, $default, true);
+    }
+
+    private static function resolveEnum($value, $default, bool $useTry): ?static
+    {
+        if ($value !== null && ($enum = static::tryFrom($value))) {
+            return $enum;
+        }
+
+        return static::convertDefault($default, $useTry);
     }
 
     private static function convertDefault($default, bool $useTry): ?static
