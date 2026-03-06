@@ -9,13 +9,13 @@
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.15",
     "@types/node": "^22.13.9",
-    "flowbite": "^3.1.2",
+    "flowbite": "^4.0.1",
     "laravel-vite-plugin": "^2.0.0",
     "tailwindcss": "^4.1.15",
     "typescript": "^5.9.3",
     "vite": "^7.0.4"
   },
   "dependencies": {
-    "@kalel1500/kalion-js": "^0.10.0-beta.0"
+    "@kalel1500/kalion-js": "^0.11.0-beta.1"
   }
 }
