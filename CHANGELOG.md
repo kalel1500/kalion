@@ -1,6 +1,90 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.47.0-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.48.0-beta.0...master)
+
+## [v0.48.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.47.0-beta.1...v0.48.0-beta.0) - 2026-03-05
+
+### Added
+
+* Nuevos componentes de iconos
+  * `icon/arrows-pointing-in`
+  * `icon/arrows-pointing-out`
+  * `icon/arrows-up-down`
+* Nuevas configuraciónes
+  * `kalion.layout.sidebar_disabled` | `KALION_LAYOUT_SIDEBAR_DISABLED` => Permite desactivar completamente el sidebar.
+  * `kalion.layout.show_footer` | `KALION_LAYOUT_SHOW_FOOTER` => Permite activar o desactivar el footer del layout.
+* Nuevo trait para enums `HasFromOr`
+  * `fromOr($value, $default)`
+  * `tryFromOr($value, $default)`
+  * Permite crear enums devolviendo un valor por defecto si el valor recibido no es válido.
+* Nueva fachada `LayoutPreferences` para gestionar las preferencias del layout de forma sencilla.
+
+### Changed
+
+* Cambios en los componentes de layout:
+  * Nueva prop `flush` en `layout/app` para eliminar el padding del wrapper y pegar el contenido al navbar.
+  * (breaking) `layout/app`: prop `title` renombrada a `headTitle`.
+  * Nueva prop `navbarTitle` en `layout/app` y `navbar/full` para mostrar un título adicional junto al brand.
+  * Reducido el padding del `navbar/index`.
+  * Eliminado el margen del nombre de la aplicación en `navbar/brand`.
+* (breaking) Se modifica el orden de parámetros del método `LayoutAppAssembler::fromProps($package, $headTitle, $navbarTitle, $flush)`.
+* (breaking) Configuraciones y variables de entorno Renombradas
+  * `kalion.layout.theme` → `kalion.layout.default_theme` | `KALION_LAYOUT_THEME` → `KALION_LAYOUT_DEFAULT_THEME`
+  * `kalion.layout.sidebar_collapsed` → `kalion.layout.default_sidebar_state` | `KALION_LAYOUT_SIDEBAR_COLLAPSED` → `KALION_LAYOUT_DEFAULT_SIDEBAR_STATE`
+  * `kalion.layout.active_shadows` → `kalion.layout.use_elevated_shadows` | `KALION_LAYOUT_ACTIVE_SHADOWS` → `KALION_LAYOUT_USE_ELEVATED_SHADOWS`
+  * `kalion.layout.asset_path_logo` → `kalion.layout.logo_path` | `KALION_LAYOUT_ASSET_PATH_LOGO` → `KALION_LAYOUT_LOGO_PATH`
+  * `kalion.layout.asset_path_favicon` → `kalion.layout.favicon_path` | `KALION_LAYOUT_ASSET_PATH_FAVICON` → `KALION_LAYOUT_FAVICON_PATH`
+    * Nota: Hay que actualizar esto en los componentes del paquete o volver a publicarlos
+  * `kalion.layout.service` → `kalion.layout.data_provider` | `KALION_LAYOUT_SERVICE` → `KALION_LAYOUT_DATA_PROVIDER`
+  * `kalion.layout.blade_show_main_border` → `kalion.layout.show_debug_main_border` | `KALION_LAYOUT_BLADE_SHOW_MAIN_BORDER` → `KALION_LAYOUT_SHOW_DEBUG_MAIN_BORDER`
+    * También se ha renombrado el método `Kalion::getClassServiceLayout()` a `Kalion::getClassLayoutDataProvider()`.
+* (breaking) Cambios en la clase `CookiePreferencesDto`
+  * Clase renombrada a `UserPreferencesDto`
+  * Propiedad `$sidebar_collapsed` renombrada a `$sidebar_state`
+  * El tipo de `sidebar_state` cambia de `bool` a `SidebarState` (nuevo enum).
+  * Al guardarse la cookie se parsea el objeto `UserPreferencesDto` por lo que al renombrar una propiedad también cambia en la cookie por lo que se requiere actualizar `kalion-js` a la versión `0.11.0-beta.1` o superior.
+  * El paquete `kalion-js` ahora ya no define las keys de la cookie manualmente, sino que las define en variables de entorno, por lo que se actualiza el archivo de instalación (`install/stubs/generate/base/resources/js/config/constants.ts`) con esas variables.
+* (breaking) Clases de la carpeta Support renombradas y reorganizadas (se ha eliminado el modificador `final`).
+  * `Renderer` → `PackageAssets` (`Thehouseofel\Kalion\Core\Infrastructure\Support\Layout`)
+  * `Date` → `DateHelper` (`Thehouseofel\Kalion\Core\Infrastructure\Support\Date`)
+  * `ProcessChecker` → `SystemProcessInspector` (`Thehouseofel\Kalion\Core\Infrastructure\Support\Process`)
+  * `ProcessStatus` → `ProcessStateStore` (`Thehouseofel\Kalion\Core\Infrastructure\Support\Process`)
+  * `Broadcast` (`Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting`)
+  * `Cookie` → `LayoutPreferencesCookieStore` (`Thehouseofel\Kalion\Core\Infrastructure\Support\Layout`). Nota: se ha marcado como `@internal` porque ahora la cookie de las preferencias del usuario se gestiona desde la nueva fachada `LayoutPreferences` y no es necesario acceder a esta clase directamente.
+* (breaking) Facade `ProcessChecker`
+  * Renombrada a `Process`.
+  * El accessor del contenedor cambia de `kalion.processChecker` a `kalion.systemProcessInspector`
+* (breaking) Rediseño de la clase `LayoutPreferencesCookieStore`
+  * Se simplifica completamente la API pública.
+  * Se eliminan los métodos estáticos, getters/setters y llamadas encadenadas, ya que había que llamarlos de una forma concreta, la gestion era caótica y había posibles fallos en el estado de la cookie..
+  * Se crean tres métodos principales `get`, `set` y `ensureValidCookie` para gestionar la cookie de forma clara y centralizada.
+  * Nueva fachada `LayoutPreferences` para acceder a los métodos de forma simple.
+* (breaking) Se ha rehecho la clase `DateHelper`:
+  * Eliminado método `stringToformat`
+  * Eliminado método `formatInputDateToAudit`
+  * Eliminado método `parse`
+  * Eliminado método `now`
+  * Método `debugTime()` renombrado a `measure()` y ahora devuelve `CarbonInterval`.
+  * `checkFormat()` → `matchesFormat()`.
+  * `checkFormats()` → `matchesAnyFormat()`.
+  * `compare()` ahora usa `match`, añade tipos estrictos y tipo de retorno.
+  * `mergeDateAndTime()` ahora acepta `CarbonInterface`.
+* Se han actualizado los paquetes de flowbite y `kalion-js` y se han compilados los assets.
+
+### Fixed
+
+* Correcciones en `DateHelper`
+  * `matchesFormat()` ahora usa `createFromFormat()` en lugar de `parse()` para evitar aceptar fechas inválidas.
+  * `mergeDateAndTime()` ahora siempre devuelve `CarbonImmutable`.
+* Corrección en el cálculo del estado del sidebar:
+  * El método `LayoutAppAssembler::calculateSidebarCollapsedFromItems()` buscaba la clave incorrecta `sub_links` en lugar de `dropdown`.
+
+### Migration notes
+
+* Si tienes publicados los componentes `layout/app` o `navbar/full`, debes actualizarlos.
+* Si publicaste la configuración del paquete, debes actualizar las nuevas claves o volver a publicarla.
+* Debes actualizar los imports de las clases que se han movido o renombrado dentro de Support.
+* Se requiere actualizar `kalion-js` a la versión `0.11.0-beta.1` o superior.
 
 ## [v0.47.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.47.0-beta.0...v0.47.0-beta.1) - 2026-03-02
 
