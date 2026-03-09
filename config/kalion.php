@@ -170,7 +170,7 @@ return [
 
         'navbar_density' => env('KALION_LAYOUT_NAVBAR_DENSITY', 'normal'), // tight | compact | normal | comfortable
 
-        'default_sidebar_state' => env('KALION_LAYOUT_DEFAULT_SIDEBAR_STATE', SidebarState::expanded->value),  // expanded | collapsed
+        'default_sidebar_state' => env('KALION_LAYOUT_DEFAULT_SIDEBAR_STATE'),  // expanded | collapsed
 
         'sidebar_state_per_page' => (bool) env('KALION_LAYOUT_SIDEBAR_STATE_PER_PAGE', false),
 
