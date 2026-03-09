@@ -19,7 +19,7 @@ use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\Elo
 
 class KalionConfig
 {
-    protected static array $classes  = [
+    protected static array $defaults = [
         'kalion.layout.data_provider'         => BaseLayoutData::class,
         'kalion.auth.models.web'              => User::class,
         'kalion.auth.models.api'              => ApiUser::class,
@@ -36,9 +36,9 @@ class KalionConfig
     protected static array $priority = [];
     protected static array $scanPackages = [];
 
-    public static function getClasses(): array
+    public static function getDefaults(): array
     {
-        return static::$classes;
+        return static::$defaults;
     }
 
     public static function getRegistry(): array
@@ -95,7 +95,7 @@ class KalionConfig
 
     public static function apply(): void
     {
-        $defaults = self::getClasses();
+        $defaults = self::getDefaults();
 
         foreach (self::getOrderedIdentifiers() as $id) {
             foreach (static::$registry[$id] as $key => $class) {

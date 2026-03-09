@@ -4,7 +4,7 @@ use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\SidebarState;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 
-$defaults = KalionConfig::getClasses();
+$defaults = KalionConfig::getDefaults();
 
 return [
 
