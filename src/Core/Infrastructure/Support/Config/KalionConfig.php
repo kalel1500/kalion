@@ -20,17 +20,27 @@ use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\Elo
 class KalionConfig
 {
     protected static array $defaults = [
-        'kalion.layout.data_provider'         => BaseLayoutData::class,
-        'kalion.auth.models.web'              => User::class,
-        'kalion.auth.models.api'              => ApiUser::class,
-        'kalion.auth.entities.web'            => UserEntity::class,
-        'kalion.auth.entities.api'            => ApiUserEntity::class,
-        'kalion.auth.repositories.web'        => EloquentUserRepository::class,
-        'kalion.auth.repositories.api'        => EloquentApiUserRepository::class,
-        'kalion.auth.services.authentication' => AuthenticationService::class,
-        'kalion.auth.services.login'          => LoginService::class,
-        'kalion.auth.services.register'       => RegisterService::class,
-        'kalion.auth.services.password_reset' => PasswordResetService::class,
+        'kalion.layout.default_theme'          => null,
+        'kalion.layout.use_elevated_shadows'   => false,
+        'kalion.layout.navbar_density'         => 'normal',
+        'kalion.layout.default_sidebar_state'  => null,
+        'kalion.layout.sidebar_state_per_page' => false,
+        'kalion.layout.sidebar_disabled'       => false,
+        'kalion.layout.show_footer'            => true,
+        'kalion.layout.show_debug_main_border' => false,
+        'kalion.layout.data_provider'          => BaseLayoutData::class,
+        'kalion.layout.logo_path'              => 'resources/images/logo.svg',
+        'kalion.layout.favicon_path'           => 'resources/images/favicon.ico',
+        'kalion.auth.models.web'               => User::class,
+        'kalion.auth.models.api'               => ApiUser::class,
+        'kalion.auth.entities.web'             => UserEntity::class,
+        'kalion.auth.entities.api'             => ApiUserEntity::class,
+        'kalion.auth.repositories.web'         => EloquentUserRepository::class,
+        'kalion.auth.repositories.api'         => EloquentApiUserRepository::class,
+        'kalion.auth.services.authentication'  => AuthenticationService::class,
+        'kalion.auth.services.login'           => LoginService::class,
+        'kalion.auth.services.register'        => RegisterService::class,
+        'kalion.auth.services.password_reset'  => PasswordResetService::class,
     ];
     protected static array $registry = [];
     protected static array $priority = [];

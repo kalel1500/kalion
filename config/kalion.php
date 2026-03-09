@@ -164,27 +164,27 @@ return [
     */
 
     'layout' => [
-        'default_theme' => env('KALION_LAYOUT_DEFAULT_THEME'),
+        'default_theme' => env('KALION_LAYOUT_DEFAULT_THEME', $defaults['kalion.layout.default_theme']),
 
-        'use_elevated_shadows' => (bool) env('KALION_LAYOUT_USE_ELEVATED_SHADOWS', false), // por si crece: 'shadow_style' => 'default', // default | elevated | none
+        'use_elevated_shadows' => (bool) env('KALION_LAYOUT_USE_ELEVATED_SHADOWS', $defaults['kalion.layout.use_elevated_shadows']), // por si crece: 'shadow_style' => 'default', // default | elevated | none
 
-        'navbar_density' => env('KALION_LAYOUT_NAVBAR_DENSITY', 'normal'), // tight | compact | normal | comfortable
+        'navbar_density' => env('KALION_LAYOUT_NAVBAR_DENSITY', $defaults['kalion.layout.navbar_density']), // tight | compact | normal | comfortable
 
-        'default_sidebar_state' => env('KALION_LAYOUT_DEFAULT_SIDEBAR_STATE'),  // expanded | collapsed
+        'default_sidebar_state' => env('KALION_LAYOUT_DEFAULT_SIDEBAR_STATE', $defaults['kalion.layout.default_sidebar_state']),  // expanded | collapsed
 
-        'sidebar_state_per_page' => (bool) env('KALION_LAYOUT_SIDEBAR_STATE_PER_PAGE', false),
+        'sidebar_state_per_page' => (bool) env('KALION_LAYOUT_SIDEBAR_STATE_PER_PAGE', $defaults['kalion.layout.sidebar_state_per_page']),
 
-        'sidebar_disabled' => (bool) env('KALION_LAYOUT_SIDEBAR_DISABLED', false),
+        'sidebar_disabled' => (bool) env('KALION_LAYOUT_SIDEBAR_DISABLED', $defaults['kalion.layout.sidebar_disabled']),
 
-        'show_footer' => (bool) env('KALION_LAYOUT_SHOW_FOOTER', true),
+        'show_footer' => (bool) env('KALION_LAYOUT_SHOW_FOOTER', $defaults['kalion.layout.show_footer']),
 
-        'show_debug_main_border' => (bool) env('KALION_LAYOUT_SHOW_DEBUG_MAIN_BORDER', false),
+        'show_debug_main_border' => (bool) env('KALION_LAYOUT_SHOW_DEBUG_MAIN_BORDER', $defaults['kalion.layout.show_debug_main_border']),
 
         'data_provider' => env('KALION_LAYOUT_DATA_PROVIDER', $defaults['kalion.layout.data_provider']),
 
-        'logo_path' => env('KALION_LAYOUT_LOGO_PATH', 'resources/images/logo.svg'),
+        'logo_path' => env('KALION_LAYOUT_LOGO_PATH', $defaults['kalion.layout.logo_path']),
 
-        'favicon_path' => env('KALION_LAYOUT_FAVICON_PATH', 'resources/images/favicon.ico'),
+        'favicon_path' => env('KALION_LAYOUT_FAVICON_PATH', $defaults['kalion.layout.favicon_path']),
     ],
 
 
