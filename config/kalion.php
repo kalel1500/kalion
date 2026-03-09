@@ -168,6 +168,8 @@ return [
 
         'use_elevated_shadows' => (bool) env('KALION_LAYOUT_USE_ELEVATED_SHADOWS', false), // por si crece: 'shadow_style' => 'default', // default | elevated | none
 
+        'navbar_density' => env('KALION_LAYOUT_NAVBAR_DENSITY', 'normal'), // tight | compact | normal | comfortable
+
         'sidebar_disabled' => (bool) env('KALION_LAYOUT_SIDEBAR_DISABLED', false),
 
         'default_sidebar_state' => env('KALION_LAYOUT_DEFAULT_SIDEBAR_STATE', SidebarState::expanded->value),  // expanded | collapsed
@@ -183,8 +185,6 @@ return [
         'favicon_path' => env('KALION_LAYOUT_FAVICON_PATH', 'resources/images/favicon.ico'),
 
         'show_footer' => (bool) env('KALION_LAYOUT_SHOW_FOOTER', true),
-
-        'navbar_density' => env('KALION_LAYOUT_NAVBAR_DENSITY', 'normal'), // tight | compact | normal | comfortable
     ],
 
 
