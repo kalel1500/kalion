@@ -9,6 +9,8 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\AuthenticationService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\LoginService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\PasswordResetService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\RegisterService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectAfterLogin;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectDefaultPath;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
@@ -128,5 +130,20 @@ class KalionConfig
             static::$scanPackages,
             Arr::wrap($packages)
         );
+    }
+
+    public static function redirectTo(callable|string|null $defaultPath = null, callable|string|null $afterLogin = null): void
+    {
+        $defaultPath = is_string($defaultPath) ? fn () => $defaultPath : $defaultPath;
+        $afterLogin = is_string($afterLogin) ? fn () => $afterLogin : $afterLogin;
+
+        if ($defaultPath) {
+            RedirectDefaultPath::redirectUsing($defaultPath);
+        }
+
+        if ($afterLogin) {
+            RedirectAfterLogin::redirectUsing($afterLogin);
+        }
+
     }
 }

@@ -58,16 +58,4 @@ class Kalion
     {
         return InstalledVersions::getVersion('kalel1500/kalion') ?? 'dev';
     }
-
-    public static function redirectAfterLoginTo(callable|string $redirect): void
-    {
-        $redirect = is_string($redirect) ? fn() => $redirect : $redirect;
-        RedirectAfterLogin::redirectUsing($redirect);
-    }
-
-    public static function redirectDefaultPathTo(callable|string $path): void
-    {
-        $path = is_string($path) ? fn() => $path : $path;
-        RedirectDefaultPath::redirectUsing($path);
-    }
 }
