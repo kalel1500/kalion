@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Responses;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
 
-class ResponseCommonDto extends AbstractDataTransferObject
+class HttpResponseDto extends AbstractDataTransferObject
 {
     public function __construct(
         public readonly ?int    $statusCode,
