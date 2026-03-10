@@ -16,7 +16,7 @@ class BroadcastDispatcher
     public function dispatch(ShouldBroadcast $event): ResultDto
     {
         try {
-            if (Kalion::broadcastingDisabled()) {
+            if (! config('kalion.broadcasting_enabled')) {
                 throw new BroadcastException(__('k::process.reverb.inactive'), Response::HTTP_PARTIAL_CONTENT);
             }
 

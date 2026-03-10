@@ -15,7 +15,7 @@ class SystemProcessInspector
 
     public function __construct()
     {
-        $this->cacheStatus = Kalion::shouldCacheProcessStatus();
+        $this->cacheStatus = config('kalion.process.status_should_use_cache');
     }
 
     private function getWindowsCommand(CheckableProcessVo $service): string

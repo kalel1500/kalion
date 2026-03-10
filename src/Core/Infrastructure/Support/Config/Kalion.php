@@ -33,16 +33,6 @@ class Kalion
         ]);
     }
 
-    public static function broadcastingEnabled(): bool
-    {
-        return config('kalion.broadcasting_enabled');
-    }
-
-    public static function broadcastingDisabled(): bool
-    {
-        return ! Kalion::broadcastingEnabled();
-    }
-
     public static function getClassUserModel(string $guard = null): string // |\Illuminate\Foundation\Auth\User
     {
         $provider = config('auth.guards.' . get_guard($guard) . '.provider');
@@ -62,36 +52,6 @@ class Kalion
     public static function getDefaultAuthGuard(): string
     {
         return config('auth.defaults.guard');
-    }
-
-    public static function getClassLayoutDataProvider(): string
-    {
-        return config('kalion.layout.data_provider');
-    }
-
-    public static function getClassServiceAuthentication()
-    {
-        return config('kalion.auth.services.authentication');
-    }
-
-    public static function getClassServiceLogin()
-    {
-        return config('kalion.auth.services.login');
-    }
-
-    public static function getClassServiceRegister()
-    {
-        return config('kalion.auth.services.register');
-    }
-
-    public static function getClassServicePasswordReset()
-    {
-        return config('kalion.auth.services.password_reset');
-    }
-
-    public static function shouldCacheProcessStatus(): bool
-    {
-        return config('kalion.process.status_should_use_cache');
     }
 
     public static function getInstalledVersion(): string

@@ -31,7 +31,6 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Login;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\PasswordReset;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Register;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting\BroadcastDispatcher;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PreferencesCookieStore;
@@ -79,12 +78,12 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function registerSingletons(): void
     {
-        $this->app->singleton(abstract: LayoutData::class, concrete: fn($app) => new (Kalion::getClassLayoutDataProvider()));
-        $this->app->singleton(abstract: Authentication::class, concrete: fn($app) => new (Kalion::getClassServiceAuthentication()));
-        $this->app->singleton(abstract: Login::class, concrete: fn($app) => new (Kalion::getClassServiceLogin()));
-        $this->app->singleton(abstract: Register::class, concrete: fn($app) => new (Kalion::getClassServiceRegister()));
-        $this->app->singleton(abstract: PasswordReset::class, concrete: fn($app) => new (Kalion::getClassServicePasswordReset()));
-        $this->app->singleton(abstract: AuthenticationFlow::class, concrete: AuthenticationFlowService::class);
+        $this->app->singleton(abstract: LayoutData::class,          concrete: fn($app) => new (config('kalion.layout.data_provider')));
+        $this->app->singleton(abstract: Authentication::class,      concrete: fn($app) => new (config('kalion.auth.services.authentication')));
+        $this->app->singleton(abstract: Login::class,               concrete: fn($app) => new (config('kalion.auth.services.login')));
+        $this->app->singleton(abstract: Register::class,            concrete: fn($app) => new (config('kalion.auth.services.register')));
+        $this->app->singleton(abstract: PasswordReset::class,       concrete: fn($app) => new (config('kalion.auth.services.password_reset')));
+        $this->app->singleton(abstract: AuthenticationFlow::class,  concrete: AuthenticationFlowService::class);
     }
 
     /**
