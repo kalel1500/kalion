@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Src\Shared\Domain\Services;
+namespace Src\Shared\Domain\Support;
 
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
