@@ -21,31 +21,48 @@ use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\Elo
 
 class KalionConfig
 {
-    protected static array $defaults = [
-        'kalion.layout.default_theme'          => null,
-        'kalion.layout.use_elevated_shadows'   => false,
-        'kalion.layout.navbar_density'         => 'normal',
-        'kalion.layout.default_sidebar_state'  => null,
-        'kalion.layout.sidebar_state_per_page' => false,
-        'kalion.layout.sidebar_disabled'       => false,
-        'kalion.layout.show_footer'            => true,
-        'kalion.layout.show_debug_main_border' => false,
-        'kalion.layout.data_provider'          => BaseLayoutData::class,
-        'kalion.layout.logo_path'              => 'resources/images/logo.svg',
-        'kalion.layout.favicon_path'           => 'resources/images/favicon.ico',
-        'kalion.auth.models.web'               => User::class,
-        'kalion.auth.models.api'               => ApiUser::class,
-        'kalion.auth.entities.web'             => UserEntity::class,
-        'kalion.auth.entities.api'             => ApiUserEntity::class,
-        'kalion.auth.repositories.web'         => EloquentUserRepository::class,
-        'kalion.auth.repositories.api'         => EloquentApiUserRepository::class,
-        'kalion.auth.services.authentication'  => AuthenticationService::class,
-        'kalion.auth.services.login'           => LoginService::class,
-        'kalion.auth.services.register'        => RegisterService::class,
-        'kalion.auth.services.password_reset'  => PasswordResetService::class,
+    protected static array $defaults     = [
+        'kalion.layout.default_theme'                     => null,
+        'kalion.layout.use_elevated_shadows'              => false,
+        'kalion.layout.navbar_density'                    => 'normal',
+        'kalion.layout.default_sidebar_state'             => null,
+        'kalion.layout.sidebar_state_per_page'            => false,
+        'kalion.layout.sidebar_disabled'                  => false,
+        'kalion.layout.show_footer'                       => true,
+        'kalion.layout.show_debug_main_border'            => false,
+        'kalion.layout.data_provider'                     => BaseLayoutData::class,
+        'kalion.layout.logo_path'                         => 'resources/images/logo.svg',
+        'kalion.layout.favicon_path'                      => 'resources/images/favicon.ico',
+        'kalion.auth.fake'                                => false,
+        'kalion.auth.disable_register'                    => false,
+        'kalion.auth.disable_password_reset'              => false,
+        'kalion.auth.redirect_after_login'                => null,
+        'kalion.auth.blades.fake'                         => 'kal::pages.auth.landing',
+        'kalion.auth.blades.login'                        => 'kal::pages.auth.login',
+        'kalion.auth.blades.register'                     => 'kal::pages.auth.register',
+        'kalion.auth.blades.password_reset'               => 'kal::pages.auth.password-reset',
+        'kalion.auth.models.web'                          => User::class,
+        'kalion.auth.models.api'                          => ApiUser::class,
+        'kalion.auth.entities.web'                        => UserEntity::class,
+        'kalion.auth.entities.api'                        => ApiUserEntity::class,
+        'kalion.auth.repositories.web'                    => EloquentUserRepository::class,
+        'kalion.auth.repositories.api'                    => EloquentApiUserRepository::class,
+        'kalion.auth.services.authentication'             => AuthenticationService::class,
+        'kalion.auth.services.login'                      => LoginService::class,
+        'kalion.auth.services.register'                   => RegisterService::class,
+        'kalion.auth.services.password_reset'             => PasswordResetService::class,
+        'kalion.auth.fields.web'                          => 'email',
+        'kalion.auth.fields.api'                          => 'name',
+        'kalion.auth.available_fields.custom.name'        => 'email',
+        'kalion.auth.available_fields.custom.label'       => 'k::text.input.email',
+        'kalion.auth.available_fields.custom.type'        => 'email',
+        'kalion.auth.available_fields.custom.placeholder' => 'name@company.com',
+        'kalion.auth.load_roles'                          => true,
+        'kalion.auth.display_role_in_exception'           => false,
+        'kalion.auth.display_permission_in_exception'     => false,
     ];
-    protected static array $registry = [];
-    protected static array $priority = [];
+    protected static array $registry     = [];
+    protected static array $priority     = [];
     protected static array $scanPackages = [];
 
     public static function getDefaults(): array
@@ -85,7 +102,7 @@ class KalionConfig
     public static function getScanPackages(): array
     {
         $packages = config('kalion.packages_to_scan_for_jobs');
-        $merged = array_merge(
+        $merged   = array_merge(
             is_array($packages) ? $packages : explode(';', $packages),
             static::$scanPackages
         );
@@ -134,8 +151,8 @@ class KalionConfig
 
     public static function redirectTo(callable|string|null $defaultPath = null, callable|string|null $afterLogin = null): void
     {
-        $defaultPath = is_string($defaultPath) ? fn () => $defaultPath : $defaultPath;
-        $afterLogin = is_string($afterLogin) ? fn () => $afterLogin : $afterLogin;
+        $defaultPath = is_string($defaultPath) ? fn() => $defaultPath : $defaultPath;
+        $afterLogin  = is_string($afterLogin) ? fn() => $afterLogin : $afterLogin;
 
         if ($defaultPath) {
             RedirectDefaultPath::redirectUsing($defaultPath);
