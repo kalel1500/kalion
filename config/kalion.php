@@ -26,18 +26,18 @@ return [
     |
     */
 
-    'run_migrations' => (bool) env('KALION_RUN_MIGRATIONS', false),
+    'run_migrations' => (bool) env('KALION_RUN_MIGRATIONS', $defaults['kalion.run_migrations']),
 
-    'register_routes' => (bool) env('KALION_REGISTER_ROUTES', true),
+    'register_routes' => (bool) env('KALION_REGISTER_ROUTES', $defaults['kalion.register_routes']),
 
     'web_middlewares' => [
         'add_preferences_cookies' => [
-            'active' => (bool) env('KALION_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE', true),
+            'active' => (bool) env('KALION_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE', $defaults['kalion.web_middlewares.add_preferences_cookies.active']),
         ],
 
         'force_array_session_in_cloud' => [
-            'active' => (bool) env('KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE', true),
-            'cloud_user_agent_value' => env('KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_CLOUD_USER_AGENT_VALUE', 'kube-probe'),
+            'active' => (bool) env('KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE', $defaults['kalion.web_middlewares.force_array_session_in_cloud.active']),
+            'cloud_user_agent_value' => env('KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_CLOUD_USER_AGENT_VALUE', $defaults['kalion.web_middlewares.force_array_session_in_cloud.cloud_user_agent_value']),
         ],
     ],
 
@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'default_path' => env('KALION_DEFAULT_PATH'),
+    'default_path' => env('KALION_DEFAULT_PATH', $defaults['kalion.default_path']),
 
     /*
     |--------------------------------------------------------------------------
@@ -90,7 +90,7 @@ return [
     |
     */
 
-    'broadcasting_enabled' => (bool) env('KALION_BROADCASTING_ENABLED', false),
+    'broadcasting_enabled' => (bool) env('KALION_BROADCASTING_ENABLED', $defaults['kalion.broadcasting_enabled']),
 
     /*
     |--------------------------------------------------------------------------
@@ -110,7 +110,7 @@ return [
     |
     */
 
-    'entity_calculated_props_mode' => env('KALION_ENTITY_CALCULATED_PROPS_MODE', 's'),
+    'entity_calculated_props_mode' => env('KALION_ENTITY_CALCULATED_PROPS_MODE', $defaults['kalion.entity_calculated_props_mode']),
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +122,7 @@ return [
     |
     */
 
-    'minimum_value_for_id' => (int) env('KALION_MINIMUM_VALUE_FOR_ID', 1),
+    'minimum_value_for_id' => (int) env('KALION_MINIMUM_VALUE_FOR_ID', $defaults['kalion.minimum_value_for_id']),
 
     /*
     |--------------------------------------------------------------------------
@@ -150,8 +150,8 @@ return [
 
     'cookie' => [
         'name' => Str::slug(env('APP_NAME', 'laravel'), '_').'_kalion_user_preferences',
-        'duration' => (int) env('KALION_COOKIE_DURATION', (60 * 24 * 364)),
-        'version' => env('KALION_COOKIE_VERSION', "0"),
+        'duration' => (int) env('KALION_COOKIE_DURATION', $defaults['kalion.cookie.duration']),
+        'version' => env('KALION_COOKIE_VERSION', $defaults['kalion.cookie.version']),
     ],
 
     /*
@@ -280,7 +280,7 @@ return [
     */
 
     'process' => [
-        'status_should_use_cache' => (bool) env('KALION_PROCESS_STATUS_SHOULD_USE_CACHE', true),
+        'status_should_use_cache' => (bool) env('KALION_PROCESS_STATUS_SHOULD_USE_CACHE', $defaults['kalion.process.status_should_use_cache']),
     ],
 
     /*
@@ -294,9 +294,9 @@ return [
 
     'command' => [
         'start' => [
-            'version_node' => env('KALION_COMMAND_START_VERSION_NODE', '>=20.11.1'),
-            'package_in_develop' => (bool) env('KALION_COMMAND_START_PACKAGE_IN_DEVELOP', false),
-            'keep_migrations_date' => (bool) env('KALION_COMMAND_START_KEEP_MIGRATIONS_DATE', false),
+            'version_node' => env('KALION_COMMAND_START_VERSION_NODE', $defaults['kalion.command.start.version_node']),
+            'package_in_develop' => (bool) env('KALION_COMMAND_START_PACKAGE_IN_DEVELOP', $defaults['kalion.command.start.package_in_develop']),
+            'keep_migrations_date' => (bool) env('KALION_COMMAND_START_KEEP_MIGRATIONS_DATE', $defaults['kalion.command.start.keep_migrations_date']),
         ],
     ],
 
@@ -326,7 +326,7 @@ return [
 
     'exceptions' => [
         'http' => [
-            'show_logout_form' => (bool) env('KALION_EXCEPTIONS_HTTP_SHOW_LOGOUT_FORM', false),
+            'show_logout_form' => (bool) env('KALION_EXCEPTIONS_HTTP_SHOW_LOGOUT_FORM', $defaults['kalion.exceptions.http.show_logout_form']),
         ],
     ],
 ];
