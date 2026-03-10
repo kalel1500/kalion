@@ -1,5 +1,6 @@
 @use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
+@use('Thehouseofel\Kalion\Features\Components\Domain\Support\LayoutMetrics')
 
 @props(['package' => false, 'headTitle' => null, 'navbarTitle' => null, 'flush' => false])
 
@@ -11,6 +12,7 @@
     @class(['dark' => $data->darkMode, 'sc' => $data->sidebarCollapsed])
     data-theme="{{ $data->dataTheme }}"
     color-theme="{{ $data->colorTheme }}"
+    style="--kal-navbar-height: {{ LayoutMetrics::navbarHeight() }}; --kal-main-gap: {{ $data->flush ? '0px' : '20px' }};"
 >
     <head>
         <!-- Meta tags -->
@@ -67,8 +69,7 @@
 
         <!-- Wrapper -->
         @php($sidebarClasses = $data->sidebarEnabled ? 'md:ml-64 md:sc:ml-20 md:transition-all' : '')
-        @php($paddingClasses = $data->flush ? 'pt-14' : 'pt-20')
-        <div class="h-auto p-4 {{ $paddingClasses }}  {{ $sidebarClasses }}">
+        <div class="h-auto p-4 pt-[calc(var(--kal-navbar-height)+var(--kal-main-gap))]  {{ $sidebarClasses }}">
 
             <!-- Main -->
             @php($mainClass = config('kalion.layout.show_debug_main_border') ? 'border-2 border-dashed border-gray-300 p-2 dark:border-gray-600' : null)

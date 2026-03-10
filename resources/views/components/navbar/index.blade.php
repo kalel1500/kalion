@@ -2,17 +2,9 @@
 
 @props(['leftSide', 'rightSide'])
 
-@php
-    $padding = match(config('kalion.layout.navbar_density')) {
-        'tight' => 'py-1',
-        'compact' => 'py-1.5',
-        'normal' => 'py-2',
-        'comfortable' => 'py-2.5',
-    };
-@endphp
+<nav class="fixed left-0 right-0 top-0 z-50 border-b border-gray-200 bg-white px-4 h-(--kal-navbar-height) dark:border-gray-700 dark:bg-gray-800 {{ Kalion::getShadowClasses('') }}">
 
-<nav class="fixed left-0 right-0 top-0 z-50 border-b border-gray-200 bg-white px-4 {{ $padding }} dark:border-gray-700 dark:bg-gray-800 {{ Kalion::getShadowClasses('') }}">
-    <div class="flex flex-wrap items-center justify-between">
+    <div class="flex h-full flex-wrap items-center justify-between">
         <!-- Left side -->
         <div class="flex items-center justify-start">
             {{ $leftSide }}
