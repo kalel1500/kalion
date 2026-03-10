@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion;
 
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +30,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Authenticatio
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Login;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\PasswordReset;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Register;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting\BroadcastDispatcher;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;
@@ -52,6 +55,7 @@ class KalionServiceProvider extends ServiceProvider
      */
     public array $singletons = [
         'kalion.systemProcessInspector' => SystemProcessInspector::class,
+        'kalion.broadcast'              => BroadcastDispatcher::class,
         PreferencesCookieStore::class   => LayoutPreferencesCookieStore::class,
         TabulatorRepository::class      => EloquentTabulatorRepository::class,
         JobRepository::class            => EloquentJobRepository::class,
@@ -362,5 +366,18 @@ class KalionServiceProvider extends ServiceProvider
             return $this->merge(['class' => $filteredDefault]);
         });
 
+        JsonResponse::macro('broadcast', function (ShouldBroadcast $event) {
+
+            $broadcastResponse = safe_broadcast($event);
+
+            $data = $this->getData(true);
+
+            $data['data']                 ??= [];
+            $data['data']['broadcasting'] = $broadcastResponse;
+
+            $this->setData($data);
+
+            return $this;
+        });
     }
 }

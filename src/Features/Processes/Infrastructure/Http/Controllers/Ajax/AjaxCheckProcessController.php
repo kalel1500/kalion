@@ -7,7 +7,6 @@ namespace Thehouseofel\Kalion\Features\Processes\Infrastructure\Http\Controllers
 use Illuminate\Http\JsonResponse;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting\Broadcast;
 use Thehouseofel\Kalion\Features\Processes\Application\CheckProcessQueueUseCase;
 use Thehouseofel\Kalion\Features\Processes\Application\CheckProcessReverbUseCase;
 use Thehouseofel\Kalion\Features\Processes\Infrastructure\Events\ProcessStatusChecked;
@@ -29,8 +28,7 @@ final class AjaxCheckProcessController extends Controller
     public function broadcastQueueStatus(): JsonResponse
     {
         $response  = $this->checkProcessQueueUseCase->__invoke();
-        $broadcast = Broadcast::tryBroadcast(new ProcessStatusChecked(CheckableProcessVo::queue, $response));
-        return Broadcast::annotateResponse($response, $broadcast);
+        return $response->broadcast(new ProcessStatusChecked(CheckableProcessVo::queue, $response));
     }
 
 
@@ -42,7 +40,6 @@ final class AjaxCheckProcessController extends Controller
     public function broadcastReverbStatus(): JsonResponse
     {
         $response  = $this->checkProcessReverbUseCase->__invoke();
-        $broadcast = Broadcast::tryBroadcast(new ProcessStatusChecked(CheckableProcessVo::reverb, $response));
-        return Broadcast::annotateResponse($response, $broadcast);
+        return $response->broadcast(new ProcessStatusChecked(CheckableProcessVo::reverb, $response));
     }
 }

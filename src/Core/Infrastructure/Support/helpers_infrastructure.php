@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,7 +12,9 @@ use Illuminate\Support\Facades\Request as RequestF;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\Broadcast;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;
@@ -269,5 +272,12 @@ if (! function_exists('current_route_name_is')) {
     function current_route_name_is(string $name): bool
     {
         return Route::currentRouteName() === $name;
+    }
+}
+
+if (! function_exists('safe_broadcast')) {
+    function safe_broadcast(ShouldBroadcast $event): ResultDto
+    {
+        return Broadcast::dispatch($event);
     }
 }

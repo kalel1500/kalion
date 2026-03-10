@@ -6,32 +6,25 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting;
 
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Throwable;
 
-class Broadcast
+class BroadcastDispatcher
 {
-    public static function tryBroadcast(ShouldBroadcast $event): ResultDto
+    public function dispatch(ShouldBroadcast $event): ResultDto
     {
         try {
             if (Kalion::broadcastingDisabled()) {
                 throw new BroadcastException(__('k::process.reverb.inactive'), Response::HTTP_PARTIAL_CONTENT);
             }
+
             broadcast($event);
+
             return new ResultDto(success: true, message: __('k::process.reverb.active'));
         } catch (Throwable $e) {
             return new ResultDto(success: false, message: $e->getMessage());
         }
-    }
-
-    public static function annotateResponse(JsonResponse $response, ResultDto $broadcast): JsonResponse
-    {
-        $data                         = $response->getData(true);
-        $data['data']['broadcasting'] = $broadcast->toArray();
-        $response->setData($data);
-        return $response;
     }
 }
