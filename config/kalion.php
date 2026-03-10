@@ -258,10 +258,10 @@ return [
                 'placeholder' => 'Matricula',
             ],
             'custom' => [
-                'name' => env('KALION_AUTH_FIELD_NAME', 'email'),
-                'label' => env('KALION_AUTH_FIELD_LABEL', 'k::text.input.email'),
-                'type' => env('KALION_AUTH_FIELD_TYPE', 'email'),
-                'placeholder' => env('KALION_AUTH_FIELD_PLACEHOLDER', 'name@company.com'), // you@somewhere.com
+                'name' => env('KALION_AUTH_FIELD_CUSTOM_NAME', 'email'),
+                'label' => env('KALION_AUTH_FIELD_CUSTOM_LABEL', 'k::text.input.email'),
+                'type' => env('KALION_AUTH_FIELD_CUSTOM_TYPE', 'email'),
+                'placeholder' => env('KALION_AUTH_FIELD_CUSTOM_PLACEHOLDER', 'name@company.com'), // you@somewhere.com
             ]
         ],
         'load_roles' => (bool) env('KALION_AUTH_LOAD_ROLES', true),
