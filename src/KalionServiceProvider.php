@@ -36,7 +36,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PreferencesCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspector;
-use Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData;
+use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;

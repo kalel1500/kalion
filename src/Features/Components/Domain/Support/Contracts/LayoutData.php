@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts;
+namespace Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts;
 
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout\UserInfoDto;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\Collections\NavbarItemCollection;

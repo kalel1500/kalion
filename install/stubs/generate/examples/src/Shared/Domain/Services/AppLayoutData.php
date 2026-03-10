@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Src\Shared\Domain\Services;
 
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\Collections\NavbarItemCollection;
-use Thehouseofel\Kalion\Features\Components\Domain\Services\BaseLayoutData;
-use Thehouseofel\Kalion\Features\Components\Domain\Services\Contracts\LayoutData;
+use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
+use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
 
 final class AppLayoutData extends BaseLayoutData implements LayoutData
 {

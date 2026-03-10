@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\AuthenticationService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\LoginService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\PasswordResetService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\RegisterService;
-use Thehouseofel\Kalion\Features\Components\Domain\Services\BaseLayoutData;
+use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\ApiUser;
