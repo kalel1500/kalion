@@ -25,12 +25,12 @@ class Kalion
         $defaultField = config('kalion.auth.fields.' . get_guard($guard));
         $fields       = config('kalion.auth.available_fields');
         $field        = $fields[$defaultField] ?? $fields['email'];
-        return LoginFieldDto::fromArray([
-            'name'        => $field['name'],
-            'label'       => $field['label'],
-            'type'        => $field['type'],
-            'placeholder' => $field['placeholder'],
-        ]);
+        return new LoginFieldDto(
+            name       : $field['name'],
+            label      : $field['label'],
+            type       : $field['type'],
+            placeholder: $field['placeholder'],
+        );
     }
 
     public static function getClassUserModel(string $guard = null): string // |\Illuminate\Foundation\Auth\User

@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Features\Examples\Application;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\BoolVo;
 use Thehouseofel\Kalion\Features\Examples\Domain\Objects\DataObjects\Icons\IconDto;
 use Thehouseofel\Kalion\Features\Examples\Domain\Objects\DataObjects\Icons\ViewIconsDto;
 
@@ -32,12 +33,12 @@ final class GetIconsUseCase
                 // Extraer el nombre del componente en kebab-case
                 $prefix = 'kal::icon.';
                 $name   = Str::kebab($file->getBasename('.blade.php'));
-                return IconDto::fromArray(['name' => $prefix . $name, 'name_short' => $name]);
+                return new IconDto(name: $prefix . $name, name_short: $name);
             });
 
-        return ViewIconsDto::fromArray([
-            'icons'           => $icons->toArray(),
-            'show_name_short' => $showNameShort,
-        ]);
+        return new ViewIconsDto(
+            icons          : $icons->toArray(),
+            show_name_short: BoolVo::from($showNameShort),
+        );
     }
 }

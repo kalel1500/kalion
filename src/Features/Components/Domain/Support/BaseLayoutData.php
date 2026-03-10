@@ -49,10 +49,10 @@ class BaseLayoutData implements LayoutData
     public function getUserInfo(): ?UserInfoDto
     {
         if (is_null(user())) return null;
-        return UserInfoDto::fromArray([
-            'id'    => user()->id->value, // 1
-            'name'  => user()->name->value, // Neil Sims
-            'email' => user()->email->value // name@flowbite.com
-        ]);
+        return new UserInfoDto(
+            id    : user()->id->value, // 1
+            name  : user()->name->value, // Neil Sims
+            email : user()->email->value // name@flowbite.com
+        );
     }
 }

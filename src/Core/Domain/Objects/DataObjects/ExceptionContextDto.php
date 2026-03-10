@@ -43,20 +43,20 @@ final class ExceptionContextDto extends AbstractDataTransferObject
     {
         if (method_exists($e, 'getContext') && ! is_null($e->getContext())) return $e->getContext();
 
-        return ExceptionContextDto::fromArray([
-            'statusCode'      => (method_exists($e, 'getStatusCode')) ? $e->getStatusCode() : 500,
-            'message'         => ExceptionContextDto::getMessage($e),
-            'success'         => $success,
-            'data'            => $data,
-            'custom_response' => $custom_response,
-            'code'            => $e->getCode(),
-            'exception'       => get_class($e),
-            'file'            => $e->getFile(),
-            'line'            => $e->getLine(),
-            'trace'           => collect($e->getTrace())->map(fn($trace) => Arr::except($trace, ['args']))->all(),
-            'previous'        => $e->getPrevious(),
-            'showLogout'      => ExceptionContextDto::showLogoutForm($e),
-        ]);
+        return new ExceptionContextDto(
+            statusCode      : (method_exists($e, 'getStatusCode')) ? $e->getStatusCode() : 500,
+            message         : ExceptionContextDto::getMessage($e),
+            success         : $success,
+            data            : $data,
+            custom_response : $custom_response,
+            code            : $e->getCode(),
+            exception       : get_class($e),
+            file            : $e->getFile(),
+            line            : $e->getLine(),
+            trace           : collect($e->getTrace())->map(fn($trace) => Arr::except($trace, ['args']))->all(),
+            previous        : $e->getPrevious(),
+            showLogout      : ExceptionContextDto::showLogoutForm($e),
+        );
     }
 
     public static function getMessage(Throwable $e): string
