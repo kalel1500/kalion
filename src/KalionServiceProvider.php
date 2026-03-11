@@ -24,12 +24,12 @@ use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\AddPreferenc
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\ForceArraySessionInCloud;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\UserHasPermission;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\UserHasRole;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\AuthenticationFlowService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\AuthenticationFlowService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Authentication;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\AuthenticationFlow;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Login;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\PasswordReset;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Register;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\Contracts\AuthenticationFlow;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\Contracts\Login;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\Contracts\PasswordReset;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\Contracts\Register;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting\BroadcastDispatcher;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;

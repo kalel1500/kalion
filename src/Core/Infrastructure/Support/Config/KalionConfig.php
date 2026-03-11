@@ -6,9 +6,9 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 
 use Illuminate\Support\Arr;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\AuthenticationService;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\LoginService;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\PasswordResetService;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\RegisterService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\LoginService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\PasswordResetService;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\RegisterService;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectDefaultPath;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;

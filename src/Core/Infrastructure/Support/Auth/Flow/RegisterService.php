@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Auth;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Register;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\Contracts\Register;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 
 /**
