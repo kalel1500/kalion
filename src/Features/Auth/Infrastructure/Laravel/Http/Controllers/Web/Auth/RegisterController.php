@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Http\Controll
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\AuthFlow;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Facades\AuthFlow;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
 
 class RegisterController extends Controller

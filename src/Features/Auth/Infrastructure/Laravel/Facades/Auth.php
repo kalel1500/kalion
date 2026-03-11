@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Authentication as AuthenticationContract;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Authentication as AuthenticationContract;
 
 /**
  * @method static user(string|null $guard = null)
  *
- * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\AuthenticationService
+ * @see \Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\AuthenticationService
  */
 final class Auth extends Facade
 {

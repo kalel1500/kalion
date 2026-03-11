@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\Contracts;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\Contracts;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-interface Register
+interface PasswordReset
 {
     public function view(?Request $request = null): View;
 
-    public function register(Request $request): RedirectResponse;
+    public function reset(Request $request): RedirectResponse;
 }
