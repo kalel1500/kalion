@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Login;
 
 /**
@@ -46,8 +45,8 @@ class LoginService implements Login
     {
         $this->request    = $request;
         $this->requestIp  = $request->ip();
-        $this->model      = Kalion::getClassUserModel();
-        $this->fieldName  = Kalion::getLoginFieldData()->name;
+        $this->model      = kauth()->getClassUserModel();
+        $this->fieldName  = kauth()->getLoginFieldData()->name;
         $this->fieldValue = $request->string($this->fieldName)->toString();
         $this->remember   = $request->boolean('remember');
 

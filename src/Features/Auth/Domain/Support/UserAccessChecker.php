@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Features\Auth\Domain\Support;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\RoleEntity;
@@ -47,7 +46,7 @@ final readonly class UserAccessChecker
         // Recorrer los roles del permiso
         return $permission->roles()->contains(function (RoleEntity $role) use ($user, $permission, $params) {
             // Set user repository
-            $repositoryUser = new (Kalion::getClassUserRepository($user->getGuard()));
+            $repositoryUser = new (kauth($user->getGuard())->getClassUserRepository());
 
             // Comprobar si el rol es query y lanzarla o comprobar si el usuario tiene ese rol
             return $role->is_query->isTrue()
@@ -61,7 +60,7 @@ final readonly class UserAccessChecker
         $role = $this->repositoryRole->findByName(StringVo::from($role));
         return $user->roles()->contains(function (RoleEntity $userRole) use ($user, $role, $params) {
             // Set user repository
-            $repositoryUser = new (Kalion::getClassUserRepository($user->getGuard()));
+            $repositoryUser = new (kauth($user->getGuard())->getClassUserRepository());
 
             if ($userRole->name->value !== $role->name->value) return false;
             if ($userRole->is_query->isTrue()) return $repositoryUser->{$role->name->value}($user, ...$params);

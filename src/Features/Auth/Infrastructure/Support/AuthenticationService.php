@@ -4,43 +4,87 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support;
 
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Authentication;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\DataObjects\LoginFieldDto;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
 class AuthenticationService implements Authentication
 {
-    private bool  $loadRoles;
-    private mixed $userEntity = null;
+    protected mixed $userEntity = null;
 
-    public function __construct()
+    public function __construct(
+        protected string $guard
+    )
     {
-        $this->loadRoles = config('kalion.auth.load_roles');
     }
 
-    public function user(string $guard = null)
+    /**
+     * Get the currently authenticated user.
+     *
+     * @return \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthEntity|null
+     */
+    public function user()
     {
-        /** @var class-string<AbstractEntity> $entityClass */
-        $entityClass = Kalion::getClassUserEntity($guard);
-
-        if ($this->userEntity && $this->userEntity->getGuard() === $guard) {
+        if ($this->userEntity) {
             return $this->userEntity;
         }
 
-        $user = auth($guard)->user();
-        if (is_null($user)) {
+        $user = auth($this->guard)->user();
+
+        if (! $user) {
             return null;
         }
 
         $with = null;
-        if ($this->loadRoles) {
+        if (config('kalion.auth.load_roles')) {
             $user->load('roles');
             $with = ['roles'];
         }
-        $this->userEntity = $entityClass::fromArray($user->toArray(), $with);
-        $this->userEntity->setGuard($guard);
+
+        $this->userEntity = $this->getClassUserEntity()::fromArray($user->toArray(), $with);
+        $this->userEntity->setGuard($this->guard);
+
         return $this->userEntity;
+    }
+
+
+    public function getLoginFieldData(): LoginFieldDto
+    {
+        $defaultField = config('kalion.auth.fields.' . $this->guard);
+        $fields       = config('kalion.auth.available_fields');
+        $field        = $fields[$defaultField] ?? $fields['email'];
+        return new LoginFieldDto(
+            name       : $field['name'],
+            label      : $field['label'],
+            type       : $field['type'],
+            placeholder: $field['placeholder'],
+        );
+    }
+
+    /**
+     * @return class-string
+     */
+    public function getClassUserModel(): string // |\Illuminate\Foundation\Auth\User
+    {
+        $provider = config('auth.guards.' . $this->guard . '.provider');
+        return config('auth.providers.' . $provider . '.model');
+    }
+
+    /**
+     * @return class-string<\Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthEntity>
+     */
+    public function getClassUserEntity(): string
+    {
+        return config('kalion.auth.entities.' . $this->guard);
+    }
+
+    /**
+     * @return class-string
+     */
+    public function getClassUserRepository(): string
+    {
+        return config('kalion.auth.repositories.' . $this->guard);
     }
 }

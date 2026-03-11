@@ -261,17 +261,6 @@ if (! function_exists('get_class_from_file')) {
     }
 }
 
-if (! function_exists('get_guard')) {
-    function get_guard(?string $guard = null): string
-    {
-        if (! is_null($guard)) {
-            return $guard;
-        }
-
-        return Kalion::getDefaultAuthGuard();
-    }
-}
-
 if (! function_exists('weighted_random_numbers')) {
     function weighted_random_numbers(
         int   $quantity,

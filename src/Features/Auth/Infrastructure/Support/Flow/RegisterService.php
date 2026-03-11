@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Register;
 
 /**
@@ -26,8 +25,7 @@ class RegisterService implements Register
 
     public function register(Request $request): RedirectResponse
     {
-        /** @var \Illuminate\Foundation\Auth\User $model */
-        $model = Kalion::getClassUserModel();
+        $model = kauth()->getClassUserModel();
 
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
