@@ -7,7 +7,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRe
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\RoleEntity;
-use Thehouseofel\Kalion\Features\Auth\Domain\Support\Auth\UserAccessChecker;
+use Thehouseofel\Kalion\Features\Auth\Domain\Support\UserAccessChecker;
 
 trait EntityHasPermissions
 {
