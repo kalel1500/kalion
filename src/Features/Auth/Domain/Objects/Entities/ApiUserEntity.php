@@ -9,11 +9,11 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Concerns\HasGuard;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
-use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns\EntityHasPermissions;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns\HasPermissions;
 
 class ApiUserEntity extends AbstractEntity
 {
-    use EntityHasPermissions, HasGuard;
+    use HasPermissions, HasGuard;
 
     public function __construct(
         public readonly IdVo|IdNullVo $id,

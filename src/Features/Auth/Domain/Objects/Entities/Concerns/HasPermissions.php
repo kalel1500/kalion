@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\RoleCo
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Support\UserAccessChecker;
 
-trait EntityHasPermissions
+trait HasPermissions
 {
     protected UserAccessChecker $accessChecker;
     protected RoleRepository $repositoryRole;
