@@ -43,34 +43,20 @@ trait EntityHasPermissions
         return $this->accessChecker()->is($this, $role, $params);
     }
 
-    public function setIs(): void
-    {
-        $is = [];
-        foreach ($this->repositoryRole()->all() as $role) {
-            $roleName = $role->name->value;
-            $is[$roleName] = $this->is($roleName);
-        }
-        $this->is = $is;
-    }
-
-    public function setCan(): void
-    {
-        $can = [];
-        foreach ($this->repositoryPermission()->all() as $permission) {
-            $permissionName = $permission->name->value;
-            $can[$permissionName] = $this->can($permissionName);
-        }
-        $this->can = $can;
-    }
-
     public function toArray($addPermissions = false, $addRoles = false): array
     {
         if ($addPermissions) {
-            $this->setCan();
+            foreach ($this->repositoryPermission()->all() as $permission) {
+                $permissionName = $permission->name->value;
+                $this->can[$permissionName] = $this->can($permissionName);
+            }
         }
 
         if ($addRoles) {
-            $this->setIs();
+            foreach ($this->repositoryRole()->all() as $role) {
+                $roleName = $role->name->value;
+                $this->is[$roleName] = $this->is($roleName);
+            }
         }
 
         $base = parent::toArray();
