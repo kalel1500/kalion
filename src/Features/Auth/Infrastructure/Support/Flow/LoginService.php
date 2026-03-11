@@ -14,9 +14,6 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Login;
 
-/**
- * @internal This class is not meant to be used or overwritten outside the package.
- */
 class LoginService implements Login
 {
     protected Request $request;

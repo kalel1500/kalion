@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Register;
 
-/**
- * @internal This class is not meant to be used or overwritten outside the package.
- */
 class RegisterService implements Register
 {
     public function view(?Request $request = null): View

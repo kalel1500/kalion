@@ -10,9 +10,6 @@ use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\FeatureUnavailableException;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\PasswordReset;
 
-/**
- * @internal This class is not meant to be used or overwritten outside the package.
- */
 class PasswordResetService implements PasswordReset
 {
     public function view(?Request $request = null): View
