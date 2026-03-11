@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects;
+namespace Thehouseofel\Kalion\Features\Auth\Domain\Objects\DataObjects;
+
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 
 use Composer\InstalledVersions;
-use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\LoginFieldDto;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\DataObjects\LoginFieldDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectDefaultPath;
 
