@@ -37,13 +37,13 @@ use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\Contracts
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\Contracts\Register;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
-use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository;
-use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\StatusRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\TabulatorRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentJobRepository;
-use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository;
-use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentRoleRepository;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent\EloquentPermissionRepository;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent\EloquentRoleRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentStatusRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentTabulatorRepository;
 

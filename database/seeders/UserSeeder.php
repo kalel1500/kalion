@@ -4,7 +4,7 @@ namespace Thehouseofel\Kalion\Database\Seeders;
 
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
-use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\User;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\User;
 
 class UserSeeder extends Seeder
 {

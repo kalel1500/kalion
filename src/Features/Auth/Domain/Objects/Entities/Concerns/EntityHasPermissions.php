@@ -1,13 +1,13 @@
 <?php
 
-namespace Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Concerns;
+namespace Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
-use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\PermissionRepository;
-use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Collections\RoleCollection;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\RoleEntity;
-use Thehouseofel\Kalion\Features\Shared\Domain\Support\Auth\UserAccessChecker;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\RoleCollection;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\RoleEntity;
+use Thehouseofel\Kalion\Features\Auth\Domain\Support\Auth\UserAccessChecker;
 
 trait EntityHasPermissions
 {

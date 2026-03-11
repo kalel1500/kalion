@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity as BaseUserEntity;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity as BaseUserEntity;
 
 class UserEntity extends BaseUserEntity
 {

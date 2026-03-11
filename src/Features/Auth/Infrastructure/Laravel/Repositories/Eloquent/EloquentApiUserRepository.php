@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent;
 
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
 
 class EloquentApiUserRepository
 {

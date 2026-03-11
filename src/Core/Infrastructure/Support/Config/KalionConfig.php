@@ -12,12 +12,12 @@ use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\LoginServ
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\PasswordResetService;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\RegisterService;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
-use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\ApiUser;
-use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\User;
-use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository;
-use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentUserRepository;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\ApiUserEntity;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\ApiUser;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\User;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent\EloquentApiUserRepository;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent\EloquentUserRepository;
 
 class KalionConfig
 {

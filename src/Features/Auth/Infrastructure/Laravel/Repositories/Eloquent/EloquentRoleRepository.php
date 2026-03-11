@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
-use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\RoleRepository;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\Collections\RoleCollection;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\RoleEntity;
-use Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\Role;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\RoleCollection;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\RoleEntity;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\Role;
 
 class EloquentRoleRepository implements RoleRepository
 {

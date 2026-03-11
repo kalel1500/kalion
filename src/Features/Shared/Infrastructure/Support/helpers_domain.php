@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Facades\Auth;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\ApiUserEntity;
-use Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\ApiUserEntity;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
 
 if (! function_exists('user')) {
     /**
