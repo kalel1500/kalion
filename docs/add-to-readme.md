@@ -30,7 +30,7 @@ if (! function_exists('user')) {
      */
     function user(string $guard = null)
     {
-        return \Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\Auth::user($guard);
+        return \Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Facades\Auth::user($guard);
     }
 }
 
