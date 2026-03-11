@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Auth;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Authentication;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 
 /**

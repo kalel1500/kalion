@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Authentication as AuthenticationContract;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Authentication as AuthenticationContract;
 
 /**
  * @method static user(string|null $guard = null)

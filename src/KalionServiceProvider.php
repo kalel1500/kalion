@@ -25,7 +25,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\ForceArraySe
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\UserHasPermission;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\UserHasRole;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\AuthenticationFlowService;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Authentication;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Authentication;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\Contracts\AuthenticationFlow;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\Contracts\Login;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Flow\Contracts\PasswordReset;
