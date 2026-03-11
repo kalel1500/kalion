@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\View\View;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\Contracts\Login;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Login;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

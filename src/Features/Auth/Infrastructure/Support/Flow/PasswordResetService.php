@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\FeatureUnavailableException;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\Contracts\PasswordReset;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\PasswordReset;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

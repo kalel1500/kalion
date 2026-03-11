@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\Contracts\Register;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Register;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

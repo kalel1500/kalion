@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\Contracts\AuthenticationFlow as AuthenticationFlowContract;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\AuthenticationFlow as AuthenticationFlowContract;
 
 /**
  * @method static View viewLogin(Request $request = null)
@@ -21,7 +21,7 @@ use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\Contracts
  * @method static View viewPasswordReset(Request $request = null)
  * @method static RedirectResponse reset(Request $request)
  *
- * @see \Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Auth\Flow\AuthenticationFlowService
+ * @see \Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\AuthenticationFlowService
  */
 final class AuthFlow extends Facade
 {
