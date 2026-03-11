@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Features\Auth\Domain\Contracts;
 
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\DataObjects\LoginFieldDto;
 
-interface Authentication
+interface Guard
 {
     /**
      * Get the currently authenticated user.

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support;
 
-use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Authentication;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\DataObjects\LoginFieldDto;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-class AuthenticationService implements Authentication
+class EntityGuard implements Guard
 {
     protected mixed $userEntity = null;
 

@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 use Illuminate\Support\Arr;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectDefaultPath;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\AuthenticationService;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\EntityGuard;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\LoginService;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\PasswordResetService;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\RegisterService;
@@ -58,7 +58,7 @@ class KalionConfig
         'kalion.auth.entities.api'                                                   => ApiUserEntity::class,
         'kalion.auth.repositories.web'                                               => EloquentUserRepository::class,
         'kalion.auth.repositories.api'                                               => EloquentApiUserRepository::class,
-        'kalion.auth.services.authentication'                                        => AuthenticationService::class,
+        'kalion.auth.services.authentication'                                        => EntityGuard::class,
         'kalion.auth.services.login'                                                 => LoginService::class,
         'kalion.auth.services.register'                                              => RegisterService::class,
         'kalion.auth.services.password_reset'                                        => PasswordResetService::class,
