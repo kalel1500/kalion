@@ -11,11 +11,6 @@ use Illuminate\Support\Collection;
  */
 final class PermissionParser
 {
-    public static function new(): static
-    {
-        return new static();
-    }
-
     public function getArrayPermissions(string|array $permissions, array $params): Collection
     {
         $permissions = collect(is_array($permissions) ? $permissions : explode('|', $permissions));

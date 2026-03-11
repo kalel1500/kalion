@@ -17,6 +17,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
 final readonly class UserAccessChecker
 {
     public function __construct(
+        private PermissionParser     $permissionParser,
         private RoleRepository       $repositoryRole,
         private PermissionRepository $repositoryPermission
     )
@@ -25,13 +26,13 @@ final readonly class UserAccessChecker
 
     public function can(UserEntity $user, string|array $permissions, array $params): bool
     {
-        $array_permissions = PermissionParser::new()->getArrayPermissions($permissions, $params);
+        $array_permissions = $this->permissionParser->getArrayPermissions($permissions, $params);
         return $array_permissions->contains(fn($params, $permission) => $this->userHasPermission($user, $permission, $params));
     }
 
     public function is(UserEntity $user, string|array $roles, array $params): bool
     {
-        $array_roles = PermissionParser::new()->getArrayPermissions($roles, $params);
+        $array_roles = $this->permissionParser->getArrayPermissions($roles, $params);
         return $array_roles->contains(fn($params, $role) => $this->userHasRole($user, $role, $params));
     }
 
