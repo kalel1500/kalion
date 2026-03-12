@@ -7,17 +7,17 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 use Illuminate\Support\Arr;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectDefaultPath;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\EntityGuard;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\LoginService;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\PasswordResetService;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\RegisterService;
-use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\EntityGuard;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\ApiUser;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\User;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentUserRepository;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\LoginService;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\PasswordResetService;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\RegisterService;
+use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
 
 class KalionConfig
 {

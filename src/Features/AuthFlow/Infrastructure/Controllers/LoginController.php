@@ -7,8 +7,8 @@ namespace Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Controllers;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Facades\AuthFlow;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Facades\AuthFlow;
 
 class LoginController extends Controller
 {

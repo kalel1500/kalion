@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use \Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PreferencesCookieStore as PreferencesCookieStoreContract;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PreferencesCookieStore as PreferencesCookieStoreContract;
 
 /**
  * @method static \Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\UserPreferencesDto get()

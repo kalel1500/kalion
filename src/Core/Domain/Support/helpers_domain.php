@@ -7,7 +7,6 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 
 if (! function_exists('str_camel')) {
     function str_camel(?string $string): ?string

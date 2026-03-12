@@ -8,7 +8,6 @@ use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Symfony\Component\HttpFoundation\Response;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Throwable;
 
 class BroadcastDispatcher

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 
 if (! function_exists('kauth')) {
     /**

@@ -7,7 +7,6 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters;
 use Carbon\CarbonImmutable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Date\DateHelper;
 
 /**
  * @internal This class is not meant to be used or overwritten outside the package.

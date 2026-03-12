@@ -29,9 +29,13 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PreferencesCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspector;
-use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\AuthManager;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentRoleRepository;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\AuthenticationFlowService;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\AuthenticationFlow;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Login;
@@ -39,13 +43,9 @@ use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Passw
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Register;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
-use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
-use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\StatusRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\TabulatorRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentJobRepository;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentRoleRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentStatusRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentTabulatorRepository;
 

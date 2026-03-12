@@ -19,7 +19,6 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\JsonVo;
