@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent;
 
 class EloquentApiUserRepository
 {

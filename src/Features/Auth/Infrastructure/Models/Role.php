@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Permission extends Model
+class Role extends Model
 {
     protected $guarded = [];
 
     public $timestamps = false;
 
-    public function roles(): BelongsToMany
+    public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Permission::class);
     }
 }

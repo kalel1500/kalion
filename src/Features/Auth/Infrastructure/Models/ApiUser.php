@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\Concerns\HasPermissions;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Concerns\HasPermissions;
 
 class ApiUser extends Authenticatable
 {

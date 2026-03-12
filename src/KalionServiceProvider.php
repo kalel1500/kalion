@@ -44,8 +44,8 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleReposito
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\StatusRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\TabulatorRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentJobRepository;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent\EloquentPermissionRepository;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent\EloquentRoleRepository;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentRoleRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentStatusRepository;
 use Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\EloquentTabulatorRepository;
 

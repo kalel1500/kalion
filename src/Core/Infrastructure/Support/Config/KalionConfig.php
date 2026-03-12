@@ -14,10 +14,10 @@ use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\RegisterService
 use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\ApiUser;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\User;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent\EloquentApiUserRepository;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Repositories\Eloquent\EloquentUserRepository;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\ApiUser;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\User;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentUserRepository;
 
 class KalionConfig
 {

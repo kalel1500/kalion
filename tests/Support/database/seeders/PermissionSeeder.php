@@ -4,8 +4,8 @@ namespace Thehouseofel\Kalion\Tests\Support\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\Permission;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\Role;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Permission;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Role;
 
 class PermissionSeeder extends Seeder
 {
