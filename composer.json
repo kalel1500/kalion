@@ -27,7 +27,7 @@
         "files": [
             "src/Core/Domain/Support/helpers_domain.php",
             "src/Core/Infrastructure/Support/helpers_infrastructure.php",
-            "src/Features/Shared/Infrastructure/Support/helpers_infrastructure.php"
+            "src/Features/Auth/Infrastructure/Support/auth_helpers.php"
         ]
     },
     "autoload-dev": {
