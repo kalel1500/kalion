@@ -15,7 +15,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
  * @method static string getClassUserEntity()
  * @method static string getClassUserRepository()
  *
- * @see \Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\AuthManager
+ * @see \Thehouseofel\Kalion\Features\Auth\Infrastructure\AuthManager
  */
 class Auth extends Facade
 {

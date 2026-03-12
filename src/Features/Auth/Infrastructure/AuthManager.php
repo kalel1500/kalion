@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure;
 
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard as GuardContract;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
