@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow;
+namespace Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\View\View;
@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Register;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Register;
 
 class RegisterService implements Register
 {

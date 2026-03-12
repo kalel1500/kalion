@@ -32,11 +32,11 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspect
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\AuthenticationFactory;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\AuthenticationFlowService;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\AuthenticationFlow;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Login;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\PasswordReset;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Register;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\AuthenticationFlowService;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\AuthenticationFlow;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Login;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\PasswordReset;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Register;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;

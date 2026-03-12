@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Facades;
+namespace Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Facades;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\AuthenticationFlow as AuthenticationFlowContract;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\AuthenticationFlow as AuthenticationFlowContract;
 
 /**
  * @method static View viewLogin(Request $request = null)
@@ -21,7 +21,7 @@ use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Auth
  * @method static View viewPasswordReset(Request $request = null)
  * @method static RedirectResponse reset(Request $request)
  *
- * @see \Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\AuthenticationFlowService
+ * @see \Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\AuthenticationFlowService
  */
 final class AuthFlow extends Facade
 {

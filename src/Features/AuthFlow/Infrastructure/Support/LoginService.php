@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow;
+namespace Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support;
 
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\View\View;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\Flow\Contracts\Login;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Login;
 
 class LoginService implements Login
 {
