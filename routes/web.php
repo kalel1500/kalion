@@ -7,7 +7,7 @@ use Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Ajax\A
 use Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Web\ExampleController;
 use Thehouseofel\Kalion\Features\Jobs\Infrastructure\Http\Controllers\Ajax\AjaxJobsController;
 use Thehouseofel\Kalion\Features\Jobs\Infrastructure\Http\Controllers\Web\JobsController;
-use Thehouseofel\Kalion\Features\Processes\Infrastructure\Http\Controllers\Ajax\AjaxCheckProcessController;
+use Thehouseofel\Kalion\Features\Processes\Infrastructure\Controllers\AjaxCheckProcessController;
 
 Route::get('/', fn() => redirect(default_url()))->name('index');
 

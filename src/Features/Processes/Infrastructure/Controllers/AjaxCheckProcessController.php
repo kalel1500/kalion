@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Processes\Infrastructure\Http\Controllers\Ajax;
+namespace Thehouseofel\Kalion\Features\Processes\Infrastructure\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
