@@ -20,7 +20,7 @@ class AuthenticationFactory implements AuthFactory
      * @param  string|null  $name
      * @return \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard
      */
-    public function guard(?string $name = null)
+    public function guard($name = null)
     {
         $name = $name ?? config('auth.defaults.guard');
 
