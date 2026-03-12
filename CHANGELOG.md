@@ -1,6 +1,233 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.48.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.49.0-beta.0...master)
+
+## [v0.49.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.48.0-beta.0...v0.49.0-beta.0) - 2026-03-12
+
+> ⚠️ Esta versión introduce un rediseño del sistema de autenticación.
+> Revisa la sección _Migration notes_ antes de actualizar.
+
+### Added
+
+* Nuevo sistema de autenticación:
+  * Nuevo helper `kauth()` para acceder al sistema de autenticación de `Kalion`.
+  * Nuevo sistema basado en **guards**, similar al de Laravel.
+  * Introducida la interfaz `AuthenticatableEntity`, que define el contrato que deben cumplir las entidades de usuario.
+  * Nueva clase `AuthManager`, responsable de gestionar y cachear instancias de autenticación por guard.
+  * Los métodos relacionados con autenticación ahora se ejecutan en el guard activo, evitando tener que pasar el guard manualmente en cada llamada.
+  * Ejemplos de uso:
+    ```php
+    kauth()->user();
+    kauth()->guard('admin')->user();
+    kauth()->guard('api')->getClassUserModel();
+    ```
+* Nuevos componentes:
+  * `icon.flow.annotation.blade.php`
+  * `icon.hero.bolt-slash.blade.php`
+
+### Changed
+
+* (breaking) Rediseñado completamente el sistema de autenticación para alinearlo con el funcionamiento de Laravel (`AuthManager` + `Guards`).
+  * El guard ahora pertenece a la instancia de autenticación y ya no se pasa como parámetro a cada método.
+  * El sistema de autenticación ya no depende de métodos estáticos de la clase `Kalion`.
+  * Los siguientes métodos han sido movidos al guard activo:
+    * `getLoginFieldData()`
+    * `getClassUserModel()`
+    * `getClassUserEntity()`
+    * `getClassUserRepository()`
+  * Los métodos de configuración de autenticación ahora dependen del guard activo.
+    ```php
+    // Antes:
+    Kalion::getClassUserEntity($guard);
+    // Ahora:
+    kauth($guard)->getClassUserEntity();
+    ```
+  * Las entidades de usuario `UserEntity` y `ApiUserEntity` ahora deben implementar la nueva interfaz `AuthenticatableEntity`
+* (refactor) Eliminar el método estático `new` de la clase `PermissionParser` e inyectarla en el `UserAccessChecker`
+* (refactor) Eliminar los métodos `setIs` y `setCan` del trait `EntityHasPermissions` y mover la lógica dentro del toArray
+* (breaking) Se han movido, renombrado, añadido y eliminado varias clases y métodos:
+  * `ResponseCommonDto` → `HttpResponseDto`
+  * (new) `ResultDto` para representar resultados de operaciones genéricas.
+  * (del) `ResponseBroadcastDto` ahora se usa el `ResultDto` en su lugar.
+  * `Thehouseofel\Kalion\Features\Components\Domain\Services\...` → `Thehouseofel\Kalion\Features\Components\Domain\Support\...`
+  * (stubs) `Src\Shared\Domain\Services\AppLayoutData` → `Src\Shared\Domain\Support\AppLayoutData`
+  * `Thehouseofel\Kalion\Features\Processes\Infrastructure\Http\Controllers\Ajax\AjaxCheckProcessController` → `Thehouseofel\Kalion\Features\Processes\Infrastructure\Controllers\AjaxCheckProcessController`
+  * AuthFlow:
+    * `Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Controllers\Web\Auth\*` → `Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Controllers\*`
+    * `Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\*` → `Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\*`
+    * `Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\AuthFlow` → `Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Facades\AuthFlow`
+  * Auth:
+    * `Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\Auth` → `Thehouseofel\Kalion\Features\Auth\Infrastructure\Facades\Auth`
+    * `Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\Contracts\Authentication` → `Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard`
+    * `Thehouseofel\Kalion\Core\Infrastructure\Support\Auth\AuthenticationService` → `Thehouseofel\Kalion\Features\Auth\Infrastructure\EntityGuard`
+    * (new) `Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity`
+    * (new) `Thehouseofel\Kalion\Features\Auth\Infrastructure\AuthManager`
+    * `Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\*` → `Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\*`
+    * `Thehouseofel\Kalion\Features\Shared\Domain\Objects\Entities\*` → `Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\*`
+    * `Thehouseofel\Kalion\Features\Shared\Domain\Support\Auth\*` → `Thehouseofel\Kalion\Features\Auth\Domain\Support\*`
+    * `Thehouseofel\Kalion\Features\Shared\Infrastructure\Models\*` → `Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\*`
+    * `Thehouseofel\Kalion\Features\Shared\Infrastructure\Repositories\Eloquent\*` → `Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\*`
+    * `Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns\EntityHasPermissions` → `Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns\HasPermissions`
+    * `Thehouseofel\Kalion\Features\Auth\Infrastructure\Laravel\Models\Concerns\ModelHasPermissions` → `Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Concerns\HasPermissions`
+    * `Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\LoginFieldDto` → `Thehouseofel\Kalion\Features\Auth\Domain\Objects\DataObjects\LoginFieldDto`
+    * `src/Features/Shared/Infrastructure/Support/helpers_domain.php` → `src/Features/Auth/Infrastructure/Support/auth_helpers.php`
+* (breaking) Se ha reestructurado el sistema de broadcasting separando responsabilidades:
+  * Renombrada la clase `Broadcast` a `BroadcastDispatcher` y el método `tryBroadcast()` a `dispatch()`.
+  * Se ha eliminado el método `annotateResponse()` de la clase, separando la lógica de broadcasting de la manipulación de respuestas HTTP.
+  * Añadir la nueva fachada `Broadcast` para acceder al dispatcher mediante `Broadcast::dispatch()`.
+  * Añadir el helper `safe_broadcast()` como wrapper del dispatcher para un uso más simple fuera de HTTP.
+  * Añadir una macro `broadcast()` a `JsonResponse` para anotar automáticamente la respuesta con el resultado del broadcasting en `data.broadcasting`.
+* (breaking) Cambios en la configuración (`config/kalion.php`):
+  * Nueva config `kalion.layout.navbar_density` (`KALION_LAYOUT_NAVBAR_DENSITY`) para poder configurar la altura del navbar. Permite los valores: `tight`, `compact`, `normal`, `comfortable`
+  * (refactor) Keys ordenadas.
+  * Método `KalionConfig::getClasses()` renombrado a `KalionConfig::getDefaults()`.
+  * Se ha eliminado el valor por defecto de la configuración `kalion.layout.default_sidebar_state`.
+  * Se ha añadido un valor por defecto a la mayoría de keys de configuración. Nuevas keys disponibles en `KalionConfig`:
+    <details>
+    <summary>Mostrar</summary>
+    
+    * `kalion.run_migrations`
+    * `kalion.register_routes`
+    * `kalion.web_middlewares.add_preferences_cookies.active`
+    * `kalion.web_middlewares.force_array_session_in_cloud.active`
+    * `kalion.web_middlewares.force_array_session_in_cloud.cloud_user_agent_value`
+    * `kalion.default_path`
+    * `kalion.broadcasting_enabled`
+    * `kalion.entity_calculated_props_mode`
+    * `kalion.minimum_value_for_id`
+    * `kalion.cookie.duration`
+    * `kalion.cookie.version`
+    * `kalion.layout.default_theme`
+    * `kalion.layout.use_elevated_shadows`
+    * `kalion.layout.navbar_density`
+    * `kalion.layout.default_sidebar_state`
+    * `kalion.layout.sidebar_state_per_page`
+    * `kalion.layout.sidebar_disabled`
+    * `kalion.layout.show_footer`
+    * `kalion.layout.show_debug_main_border`
+    * `kalion.layout.logo_path`
+    * `kalion.layout.favicon_path`
+    * `kalion.auth.fake`
+    * `kalion.auth.disable_register`
+    * `kalion.auth.disable_password_reset`
+    * `kalion.auth.redirect_after_login`
+    * `kalion.auth.blades.fake`
+    * `kalion.auth.blades.login`
+    * `kalion.auth.blades.register`
+    * `kalion.auth.blades.password_reset`
+    * `kalion.auth.fields.web`
+    * `kalion.auth.fields.api`
+    * `kalion.auth.available_fields.custom.name`
+    * `kalion.auth.available_fields.custom.label`
+    * `kalion.auth.available_fields.custom.type`
+    * `kalion.auth.available_fields.custom.placeholder`
+    * `kalion.auth.load_roles`
+    * `kalion.auth.display_role_in_exception`
+    * `kalion.auth.display_permission_in_exception`
+    * `kalion.process.status_should_use_cache`
+    * `kalion.command.start.version_node`
+    * `kalion.command.start.package_in_develop`
+    * `kalion.command.start.keep_migrations_date`
+    * `kalion.exceptions.http.show_logout_form`
+    
+    </details>
+  * Se han eliminado varios métodos de la clase `Kalion`. Ahora se llama directamente a la configuración:
+    * `broadcastingEnabled()`
+    * `broadcastingDisabled()`
+    * `shouldCacheProcessStatus()`
+  * Se unifican configuración de redirecciones en `KalionConfig::redirectTo()`
+    * Se han eliminado los métodos `Kalion::redirectAfterLoginTo()` y `Kalion::redirectDefaultPathTo()`
+    * Añadido el método `KalionConfig::redirectTo()` para centralizar la configuración de redirecciones
+  * Variables de entorno renombradas:
+    * `KALION_AUTH_FIELD_NAME` → `KALION_AUTH_FIELD_CUSTOM_NAME`
+    * `KALION_AUTH_FIELD_LABEL` → `KALION_AUTH_FIELD_CUSTOM_LABEL`
+    * `KALION_AUTH_FIELD_TYPE` → `KALION_AUTH_FIELD_CUSTOM_TYPE`
+    * `KALION_AUTH_FIELD_PLACEHOLDER` → `KALION_AUTH_FIELD_CUSTOM_PLACEHOLDER`
+* Cambios en el layout:
+  * (breaking) Modificar la gestion de la altura del navbar:
+    * Ahora la altura del navbar depende de la configuración (config `navbar_density` que equivale a una altura en pixeles).
+    * Los márgenes del `sidebar` y el `main` se adaptan a la altura del navbar.
+    * Se usa la nueva clase `LayoutMetrics` donde se definen las alturas de manera centralizada.
+    * NOTA: Ahora tanto el navbar como el sidebar dependen de una variable css que se configura en el componente `layout.app`.
+  * Se ha reducido el padding del buscador del navbar para que sea más compacto.
+
+### Removed
+
+* Autenticación:
+  * Helper `get_guard()`.
+  * Métodos estáticos de autenticación en `Kalion`:
+    * `getLoginFieldData()`
+    * `getClassUserModel()`
+    * `getClassUserEntity()`
+    * `getClassUserRepository()`
+    * `getDefaultAuthGuard()`
+
+### Fixed
+
+* Layout:
+  * No pasar los atributos al renderizar los componentes de los iconos en el layout (`<x-dynamic-component :component='$icon' :class='$class' />`), ya que es innecesario y termina añadiendo el atributo `:icon=''`.
+
+### Migration notes
+
+* Si tienes publicada la configuración del paquete, debes actualizarla para que se añadan los nuevos valores por defecto.
+* Si tienes publicados los componentes del paquete, debes actualizarlos.
+* Broadcasting: 
+  * Si usabas los métodos `tryBroadcast` y `annotateResponse` de forma conjunta como por ejemplo:
+    ```php
+    use Thehouseofel\Kalion\Infrastructure\Services\Broadcast;
+    
+    $response  = response()->json(200, [...]);
+    $broadcast = Broadcast::tryBroadcast(new EventClass(...));
+    return Broadcast::annotateResponse($response, $broadcast);
+    ```
+    Debes cambiarlo por:
+    ```php
+    $response = response()->json(200, [...]);
+    return $response->broadcast(new EventClass(...));
+    ```
+  * Si solo usabas el `tryBroadcast` asi:
+    ```php
+    use Thehouseofel\Kalion\Infrastructure\Services\Broadcast;
+    
+    Broadcast::tryBroadcast(new EventClass(...));
+    ```
+    Debes cambiarlo por:
+    ```php
+    use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\Broadcast;
+    
+    Broadcast::dispatch(new EventClass(...));
+    ```
+    O también puedes usar:
+    ```php
+    safe_broadcast(new EventClass(...));
+    ```
+* Layout: Si usas el componente `navbar` o `sidebar` fuera del componente `layout/app` debes definir las variables css `--kal-navbar-height` y `--kal-main-gap`
+* Autenticación: 
+  * El método `user()` de la interfaz `Guard` (antes `Authentication`) ya no acepta el parámetro `$guard`.
+    ```php
+    // Antes:
+    Auth::user('admin');
+    // Ahora:
+    Auth::guard('admin')->user();
+    // o
+    kauth('admin')->user();
+    ```
+  * Las implementaciones personalizadas de `Guard` deben actualizarse para recibir el guard en el constructor:
+    ```php
+    // Antes:
+    public function user(string $guard = null)
+    // Ahora:
+    public function __construct(string $guard)
+    ```
+  * Las entidades de usuario deben implementar la nueva interfaz: `Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity`
+  * Compatibilidad:
+    * El helper `user()` sigue existiendo para mantener compatibilidad con versiones anteriores:
+      ```php
+      user();
+      user('admin');
+      ```
+      Internamente, ahora utiliza el nuevo sistema basado en `kauth()`.
+  * Si tienes definidas las entidades de usuario `UserEntity` y `ApiUserEntity` ahora deben implementar la nueva interfaz `AuthenticatableEntity`
 
 ## [v0.48.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.47.0-beta.1...v0.48.0-beta.0) - 2026-03-05
 
