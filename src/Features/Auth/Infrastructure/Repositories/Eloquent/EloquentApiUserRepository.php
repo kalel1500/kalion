@@ -17,7 +17,7 @@ class EloquentApiUserRepository
     }
 
     /**
-     * @return class-string<\Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthEntity>
+     * @return class-string<\Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity>
      */
     public function find(int $id)
     {

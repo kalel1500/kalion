@@ -10,10 +10,10 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
-use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthEntity;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns\HasPermissions;
 
-class UserEntity extends AbstractEntity implements AuthEntity
+class UserEntity extends AbstractEntity implements AuthenticatableEntity
 {
     use HasPermissions, HasGuard;
 

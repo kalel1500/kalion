@@ -11,7 +11,7 @@ interface Guard
     /**
      * Get the currently authenticated user.
      *
-     * @return \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthEntity|null
+     * @return \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity|null
      */
     public function user();
 
@@ -23,7 +23,7 @@ interface Guard
     public function getClassUserModel(): string;
 
     /**
-     * @return class-string<\Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthEntity>
+     * @return class-string<\Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity>
      */
     public function getClassUserEntity(): string;
 

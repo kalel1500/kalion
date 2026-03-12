@@ -20,7 +20,7 @@ class EntityGuard implements Guard
     /**
      * Get the currently authenticated user.
      *
-     * @return \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthEntity|null
+     * @return \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity|null
      */
     public function user()
     {
@@ -70,7 +70,7 @@ class EntityGuard implements Guard
     }
 
     /**
-     * @return class-string<\Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthEntity>
+     * @return class-string<\Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity>
      */
     public function getClassUserEntity(): string
     {

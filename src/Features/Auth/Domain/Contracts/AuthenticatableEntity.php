@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Auth\Domain\Contracts;
 
-interface AuthEntity
+interface AuthenticatableEntity
 {
     public function can(string|array $permission, ...$params): bool;
 

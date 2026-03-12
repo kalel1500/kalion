@@ -27,7 +27,7 @@ if (! function_exists('user')) {
      * Get the currently authenticated user entity.
      *
      * @param string|null $guard
-     * @return \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthEntity|null
+     * @return \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity|null
      */
     function user(string $guard = null)
     {
