@@ -82,7 +82,7 @@ class KalionServiceProvider extends ServiceProvider
     protected function registerSingletons(): void
     {
         $this->app->singleton(abstract: LayoutData::class,          concrete: fn($app) => new (config('kalion.layout.data_provider')));
-        $this->app->singleton(abstract: Guard::class,               concrete: fn($app) => new (config('kalion.auth.services.authentication')));
+        $this->app->singleton(abstract: Guard::class,               concrete: fn($app, $params) => new (config('kalion.auth.services.authentication'))(...$params) );
         $this->app->singleton(abstract: Login::class,               concrete: fn($app) => new (config('kalion.auth.services.login')));
         $this->app->singleton(abstract: Register::class,            concrete: fn($app) => new (config('kalion.auth.services.register')));
         $this->app->singleton(abstract: PasswordReset::class,       concrete: fn($app) => new (config('kalion.auth.services.password_reset')));
