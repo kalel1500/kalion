@@ -31,7 +31,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PreferencesCookieStor
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspector;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\AuthenticationFactory;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Support\AuthManager;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\AuthenticationFlowService;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\AuthenticationFlow;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Login;
@@ -57,7 +57,7 @@ class KalionServiceProvider extends ServiceProvider
     public array $singletons = [
         'kalion.systemProcessInspector' => SystemProcessInspector::class,
         'kalion.broadcast'              => BroadcastDispatcher::class,
-        AuthFactory::class              => AuthenticationFactory::class,
+        AuthFactory::class              => AuthManager::class,
         PreferencesCookieStore::class   => LayoutPreferencesCookieStore::class,
         TabulatorRepository::class      => EloquentTabulatorRepository::class,
         JobRepository::class            => EloquentJobRepository::class,

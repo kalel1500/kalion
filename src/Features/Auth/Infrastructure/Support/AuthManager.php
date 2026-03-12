@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
 /**
  * @mixin \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard
  */
-class AuthenticationFactory implements AuthFactory
+class AuthManager implements AuthFactory
 {
     protected array $guards = [];
 
