@@ -10,12 +10,12 @@
         <x-kal::badge color="blue">{{ $data->count_posts }}</x-kal::badge>
 
         <div class="w-auto">
-            <x-kal::input.select id="selectTags">
+            <x-kal::form.input type="select" id="selectTags">
                 <option value="">Filtrar por tags</option>
                 @foreach($data->tags as $tag)
                     <option value="{{ $tag->code->value }}" @selected($tag->name->value === $data->selected_tag)>{{ $tag->name->value }}</option>
                 @endforeach
-            </x-kal::input.select>
+            </x-kal::form.input>
         </div>
     </div>
 

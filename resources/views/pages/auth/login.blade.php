@@ -6,20 +6,20 @@
     <x-kal::form method="POST" action="{{ route('login') }}">
         <!-- Email Address -->
         <div>
-            <x-kal::input.label :for="$field->name" :value="__($field->label)"/>
-            <x-kal::input :type="$field->type" :id="$field->name" class="text-base" :value="old($field->name)" required autofocus autocomplete="username" />
-            <x-kal::input.error :for="$field->name" />
+            <x-kal::form.label :for="$field->name" :value="__($field->label)"/>
+            <x-kal::form.input :type="$field->type" :id="$field->name" class="text-base" :value="old($field->name)" required autofocus autocomplete="username" />
+            <x-kal::form.error :for="$field->name" />
         </div>
 
         <!-- Password -->
         <div>
-            <x-kal::input.label for="password" :value="__('k::text.input.password')" />
-            <x-kal::input type="password" id="password" class="text-base" required autocomplete="current-password" />
+            <x-kal::form.label for="password" :value="__('k::text.input.password')" />
+            <x-kal::form.input type="password" id="password" class="text-base" required autocomplete="current-password" />
         </div>
 
         <!-- Remember Me -->
         <div class="flex items-center justify-between">
-            <x-kal::input.full.checkbox id="remember" :labelText="__('k::text.input.remember_me')" />
+            <x-kal::form.checkbox id="remember" :labelText="__('k::text.input.remember_me')" />
             @if(! config('kalion.auth.disable_password_reset'))
                 <x-kal::link href="{{ route('password.reset') }}" class="text-sm" :value="__('k::auth.login.password_reset')" />
             @endif
