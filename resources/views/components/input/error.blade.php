@@ -3,7 +3,7 @@
 @php($messages = $errors->get($for))
 
 @if ($messages)
-    <ul {{ $attributes->merge(['class' => 'mt-1 text-sm text-red-600 dark:text-red-500 space-y-1']) }}>
+    <ul {{ $attributes->merge(['class' => 'mt-2.5 text-sm text-fg-danger-strong']) }}>
         @foreach ((array) $messages as $message)
             <li>{{ $message }}</li>
         @endforeach
