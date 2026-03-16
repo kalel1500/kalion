@@ -13,7 +13,7 @@ class Kalion
     public static function getShadowClasses(string $normalShadow = ''): string
     {
         return config('kalion.layout.use_elevated_shadows')
-            ? 'kal:shadow-xl dark:kal:shadow-black-xl'
+            ? 'shadow-glow-2'
             : $normalShadow;
     }
 
