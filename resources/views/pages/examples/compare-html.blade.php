@@ -5,12 +5,12 @@
 
             <div class="w-2/5">
                 <x-kal::input.label for="textarea-a" value="Html A"/>
-                <x-kal::input.textarea id="textarea-a" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
+                <x-kal::input type="textarea" id="textarea-a" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
             </div>
 
             <div class="w-2/5">
                 <x-kal::input.label for="textarea-b" value="Html B"/>
-                <x-kal::input.textarea id="textarea-b" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
+                <x-kal::input type="textarea" id="textarea-b" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
             </div>
 
             <div>
