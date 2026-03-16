@@ -1,5 +1,5 @@
 @use(Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion)
 
-<section {{ $attributes->mergeTailwind('bg-white dark:bg-gray-800 p-5 rounded-sm dark:text-gray-400 ' . Kalion::getShadowClasses('border border-gray-200 dark:border-gray-700')) }}>
+<section {{ $attributes->mergeTailwind('bg-neutral-primary-medium block p-6 border border-default-medium rounded-base text-body ' . Kalion::getShadowClasses('shadow-xs')) }}>
     {{ $slot }}
 </section>
