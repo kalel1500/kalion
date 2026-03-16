@@ -56,7 +56,7 @@
         <!--/Fin CSS -->
     </head>
 
-    <body class="bg-gray-50 antialiased dark:bg-gray-900">
+    <body class="bg-neutral-secondary-soft antialiased">
 
         <!-- Navbar -->
         <x-kal::navbar.full :navbar-title="$data->navbarTitle" />
