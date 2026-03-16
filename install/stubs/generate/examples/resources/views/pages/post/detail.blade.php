@@ -5,7 +5,7 @@
     <x-kal::section class="w-1/2 justify-self-center">
         <x-kal::heading type="h2">{{ $post->title }}</x-kal::heading>
 
-        <x-kal::text>{{ $post->content }}</x-kal::text>
+        <x-kal::p>{{ $post->content }}</x-kal::p>
 
     </x-kal::section>
 

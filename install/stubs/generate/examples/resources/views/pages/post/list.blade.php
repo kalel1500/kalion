@@ -28,7 +28,7 @@
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300">{{ $post->title->value }}</h5>
                 </a>
 
-                <x-kal::text class="mb-3">{{ $post->content->value }}</x-kal::text>
+                <x-kal::p class="mb-3">{{ $post->content->value }}</x-kal::p>
 
                 <a href="{{ route('post.detail', $post->slug->value) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     Read more
@@ -38,7 +38,7 @@
                 </a>
 
                 <div>
-                    <x-kal::text class="mt-3">{{ $post->created_at->formatToSpainDatetime() }}</x-kal::text>
+                    <x-kal::p class="mt-3">{{ $post->created_at->formatToSpainDatetime() }}</x-kal::p>
 
                     @foreach($post->tags() as $tag)
                         <x-kal::link href="{{ route('post.list', ['tag' => $tag->code->value]) }}">
