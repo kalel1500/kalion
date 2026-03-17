@@ -2,11 +2,9 @@
 
 namespace Thehouseofel\Kalion\Core\Domain\Concerns\Enums;
 
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
-
 trait Nullable
 {
-    const NULL_VALUE = Kalion::ENUM_NULL_VALUE;
+    const NULL_VALUE = KALION_ENUM_NULL_VALUE;
 
     public function isNull(): bool
     {

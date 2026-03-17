@@ -73,6 +73,10 @@ class KalionServiceProvider extends ServiceProvider
             define('KALION_PATH', realpath(__DIR__ . '/../'));
         }
 
+        if (! defined('KALION_ENUM_NULL_VALUE')) {
+            define('KALION_ENUM_NULL_VALUE', 'k_null');
+        }
+
         $this->registerSingletons();
         $this->mergeConfig();
     }

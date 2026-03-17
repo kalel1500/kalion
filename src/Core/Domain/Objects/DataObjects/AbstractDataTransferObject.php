@@ -16,7 +16,6 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflec
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\ArrayVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 
 abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArrayable, Jsonable, JsonSerializable
 {
@@ -181,7 +180,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             try {
                 $value = match (true) {
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
-                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(Kalion::ENUM_NULL_VALUE),
+                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(KALION_ENUM_NULL_VALUE),
                     default                                                                            => $class::$method($value, ...$makeParams),
                 };
             } catch (\Throwable $th) {
@@ -224,7 +223,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
                 default          => $value?->{$method}(),
             };
 
-            if ($isEnum && $value === Kalion::ENUM_NULL_VALUE) {
+            if ($isEnum && $value === KALION_ENUM_NULL_VALUE) {
                 $value = null;
             }
 

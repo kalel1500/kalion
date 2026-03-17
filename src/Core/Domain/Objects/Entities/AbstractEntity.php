@@ -18,7 +18,6 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 
 abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 {
@@ -157,7 +156,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             try {
                 $value = match (true) {
                     ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
-                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(Kalion::ENUM_NULL_VALUE),
+                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(KALION_ENUM_NULL_VALUE),
                     default                                                                            => $class::$method($value, ...$makeParams),
                 };
             } catch (\Throwable $th) {
@@ -186,7 +185,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 default          => $value,
             };
 
-            if ($isEnum && $value === Kalion::ENUM_NULL_VALUE) {
+            if ($isEnum && $value === KALION_ENUM_NULL_VALUE) {
                 $value = null;
             }
 
@@ -299,7 +298,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 default                          => $value,
             };
 
-            if ($meta['isEnum'] && $result[$name] === Kalion::ENUM_NULL_VALUE) {
+            if ($meta['isEnum'] && $result[$name] === KALION_ENUM_NULL_VALUE) {
                 $result[$name] = null;
             }
         }
