@@ -1,8 +1,8 @@
-@use(Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion)
+@use('Thehouseofel\Kalion\Features\Components\Domain\Support\LayoutMetrics')
 
 @props(['leftSide', 'rightSide'])
 
-<nav class="fixed left-0 right-0 top-0 z-50 border-b border-gray-200 bg-white px-4 h-(--kal-navbar-height) dark:border-gray-700 dark:bg-gray-800 {{ Kalion::getShadowClasses('') }}">
+<nav class="fixed left-0 right-0 top-0 z-50 border-b border-gray-200 bg-white px-4 h-(--kal-navbar-height) dark:border-gray-700 dark:bg-gray-800 {{ LayoutMetrics::getShadowClasses('') }}">
 
     <div class="flex h-full flex-wrap items-center justify-between">
         <!-- Left side -->

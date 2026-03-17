@@ -13,6 +13,13 @@ class LayoutMetrics
         'comfortable' => '61px',
     ];
 
+    public static function getShadowClasses(string $normalShadow = ''): string
+    {
+        return config('kalion.layout.use_elevated_shadows')
+            ? 'shadow-glow-2'
+            : $normalShadow;
+    }
+
     public static function navbarHeight(): string
     {
         $density = config('kalion.layout.navbar_density', 'normal');

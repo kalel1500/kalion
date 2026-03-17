@@ -10,13 +10,6 @@ class Kalion
 {
     public const ENUM_NULL_VALUE = 'k_null';
 
-    public static function getShadowClasses(string $normalShadow = ''): string
-    {
-        return config('kalion.layout.use_elevated_shadows')
-            ? 'shadow-glow-2'
-            : $normalShadow;
-    }
-
     public static function getInstalledVersion(): string
     {
         return InstalledVersions::getVersion('kalel1500/kalion') ?? 'dev';
