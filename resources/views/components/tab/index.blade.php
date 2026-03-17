@@ -1,5 +1,5 @@
-<div {{ $attributes->mergeTailwind('border-b border-gray-200 text-center text-sm font-medium text-gray-500 dark:border-gray-700 dark:text-gray-400') }}>
-    <ul class="-mb-px flex flex-wrap">
+<div {{ $attributes->mergeTailwind('text-sm font-medium text-center text-body border-b border-default-medium') }}>
+    <ul class="flex flex-wrap -mb-px">
         {{ $slot }}
     </ul>
 </div>
