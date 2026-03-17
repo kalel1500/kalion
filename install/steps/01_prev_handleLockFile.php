@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
+use Composer\InstalledVersions;
 use Illuminate\Support\Facades\File;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Install\Attributes\Step;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Install\StepBase;
 
@@ -20,7 +20,7 @@ class PrevHandleLockFile extends StepBase
 
     public function prepare(): void
     {
-        $this->packageVersion    = Kalion::getInstalledVersion();
+        $this->packageVersion    = InstalledVersions::getVersion('kalel1500/kalion') ?? 'dev';
         $this->filesRelativePath = $this->getFilesRelativePath();
     }
 
