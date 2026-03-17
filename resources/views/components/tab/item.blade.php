@@ -10,5 +10,5 @@
 @endphp
 
 <li class="me-2">
-    <a href="{{ $href }}" {{ $attributes->mergeTailwind($classes) }} @if($active) aria-current="page" @endif>{{ $slot }}</a> {{--cambiar a @twMerge--}}
+    <a href="{{ $href }}" class="@twMerge($classes)" @if($active) aria-current="page" @endif>{{ $slot }}</a>
 </li>

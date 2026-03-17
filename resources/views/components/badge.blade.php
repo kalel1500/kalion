@@ -16,4 +16,4 @@
     $color_classes = $array_color_classes[$color];
 @endphp
 
-<span {{ $attributes->mergeTailwind($default_classes.' '.$color_classes) }}>{{ $slot }}</span>
+<span {{ $attributes->twMerge($default_classes.' '.$color_classes) }}>{{ $slot }}</span>

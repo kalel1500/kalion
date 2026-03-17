@@ -1,1 +1,1 @@
-<span {{ $attributes->mergeTailwind('font-semibold text-heading') }}>{{ $slot }}</span>
+<span {{ $attributes->twMerge('font-semibold text-heading') }}>{{ $slot }}</span>

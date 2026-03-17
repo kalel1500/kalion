@@ -13,4 +13,4 @@
     $btnClasses = $arrayBtnClasses[$type];
 @endphp
 
-<h1 {{ $attributes->mergeTailwind($classes.' '.$btnClasses) }}>{{ $slot }}</h1>
+<h1 {{ $attributes->twMerge($classes.' '.$btnClasses) }}>{{ $slot }}</h1>

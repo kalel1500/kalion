@@ -12,8 +12,6 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\View\ComponentAttributeBag;
-use Thehouseofel\Kalion\Core\Domain\Support\TailwindClassFilter;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\ClearAll;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\ConfigCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\Install;
@@ -355,19 +353,6 @@ class KalionServiceProvider extends ServiceProvider
      */
     protected function registerMacros(): void
     {
-        ComponentAttributeBag::macro('mergeTailwind', function ($defaultClasses) {
-            /** @var ComponentAttributeBag $this */
-
-            // Obtiene las clases personalizadas
-            $customClasses = $this->get('class', '');
-
-            // Eliminar las clases de $defaultClasses que ya vienen en $customClasses
-            $filteredDefault = TailwindClassFilter::new()->filter($defaultClasses, $customClasses);
-
-            // Llama al método `merge` de la clase original
-            return $this->merge(['class' => $filteredDefault]);
-        });
-
         JsonResponse::macro('broadcast', function (ShouldBroadcast $event) {
 
             $broadcastResponse = safe_broadcast($event);

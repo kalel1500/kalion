@@ -8,7 +8,7 @@
 <form
     method="{{ $realMethod }}"
     action="{{ $action }}"
-    {{ $attributes->only('class')->mergeTailwind('space-y-4 md:space-y-6') }}
+    {{ $attributes->only('class')->twMerge('space-y-4 md:space-y-6') }}
 >
     @csrf
     @if(!$isRealMethod)

@@ -1,1 +1,1 @@
-<p {{ $attributes->mergeTailwind('text-body') }}>{{ $slot }}</p>
+<p {{ $attributes->twMerge('text-body') }}>{{ $slot }}</p>

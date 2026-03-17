@@ -23,4 +23,4 @@
     $finalClasses = $classes.' '.$sizeClasses[$size].' '.$colorClasses[$color];
 @endphp
 
-<button type="{{ $type }}" {{ $attributes->mergeTailwind($finalClasses) }}>{{ $slot }}</button>
+<button type="{{ $type }}" {{ $attributes->twMerge($finalClasses) }}>{{ $slot }}</button>

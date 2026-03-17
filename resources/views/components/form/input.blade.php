@@ -16,7 +16,7 @@
         <select
             id="{{ $identifier }}"
             name="{{ $identifier }}"
-            {{ $attributes->mergeTailwind($classes) }}
+            {{ $attributes->twMerge($classes) }}
             @disabled($disabled)
             @required($required)
         >
@@ -29,7 +29,7 @@
             id="{{ $identifier }}"
             name="{{ $identifier }}"
             rows="{{ $rows }}"
-            {{ $attributes->mergeTailwind($classes . ' p-3.5') }}
+            {{ $attributes->twMerge($classes . ' p-3.5') }}
             @disabled($disabled)
             @required($required)
         >
@@ -43,7 +43,7 @@
             id="{{ $identifier }}"
             name="{{ $identifier }}"
             value="{{ $value }}"
-            {{ $attributes->mergeTailwind($classes) }}
+            {{ $attributes->twMerge($classes) }}
             @disabled($disabled)
             @required($required)
         />

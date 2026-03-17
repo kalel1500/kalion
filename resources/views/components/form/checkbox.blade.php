@@ -10,7 +10,7 @@
         type="checkbox"
         id="{{ $identifier }}"
         name="{{ $identifier }}"
-        {{ $attributes->mergeTailwind('w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft') }}
+        {{ $attributes->twMerge('w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft') }}
         @disabled($disabled)
         @required($required)
     >
