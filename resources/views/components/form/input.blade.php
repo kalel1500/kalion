@@ -48,3 +48,4 @@
             @required($required)
         />
 @endswitch
+<x-kal::form.error for="{{ $identifier }}" />

@@ -6,7 +6,6 @@
         <div>
             <x-kal::form.label for="email" :value="__('k::text.input.email')" />
             <x-kal::form.input type="email" id="email" :value="old('email')" required autofocus autocomplete="email" />
-            <x-kal::form.error for="email" />
         </div>
         <x-kal::form.checkbox-terms />
         <x-kal::form.button>{{ __('k::auth.password_reset.btn') }}</x-kal::form.button>

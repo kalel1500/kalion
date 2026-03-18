@@ -7,7 +7,6 @@
         <div>
             <x-kal::form.label :for="$field->name" :value="__($field->label)"/>
             <x-kal::form.input :type="$field->type" :id="$field->name" class="text-base" :value="old($field->name)" required autofocus autocomplete="username" />
-            <x-kal::form.error :for="$field->name" />
         </div>
 
         <!-- Password -->
