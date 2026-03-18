@@ -1,3 +1,4 @@
+@php /** @var \Illuminate\View\ComponentSlot $slot */ @endphp
 @php /** @var \Illuminate\View\ComponentAttributeBag $attributes */ @endphp
 @php /** @var \Illuminate\Support\ViewErrorBag $errors */ @endphp
 
