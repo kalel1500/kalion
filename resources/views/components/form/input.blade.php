@@ -8,7 +8,7 @@
     $common     = 'border text-sm rounded-base block w-full px-3 py-2.5 shadow-xs';
     $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
     $error      = 'bg-danger-soft border-danger-subtle text-fg-danger-strong focus:ring-danger focus:border-danger placeholder:text-fg-danger-strong';
-    $classes    = $common.' '.($errors->has($name) ? $error : $normal);
+    $classes    = $common.' '.($errors->has($identifier) ? $error : $normal);
 @endphp
 
 @switch($type)

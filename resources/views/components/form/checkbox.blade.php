@@ -15,7 +15,7 @@
         @required($required)
     >
 
-    <label for="{{ $name }}" class="ms-2 text-sm font-medium text-heading select-none">
+    <label for="{{ $identifier }}" class="ms-2 text-sm font-medium text-heading select-none">
         {{ $labelText ?? $slot }}
         {{ $error ?? '' }}
     </label>
