@@ -4,7 +4,8 @@
 @props(['type', 'id' => null, 'name' => null, 'value' => '', 'size' => 'base', 'required' => false, 'disabled' => false])
 
 @php
-    $identifier = $id ?? $name ?? '';
+    $id          = $id   ?? $name ?? '';
+    $name        = $name ?? $id   ?? '';
     $sizeClasses = [
         'small' => 'text-sm   px-2.5 py-2',
         'base'  => 'text-sm   px-3   py-2.5',
@@ -14,14 +15,14 @@
     $common     = 'border rounded-base block w-full shadow-xs' . ' ' . $sizeClasses[$size];
     $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
     $error      = 'bg-danger-soft border-danger-subtle text-fg-danger-strong focus:ring-danger focus:border-danger placeholder:text-fg-danger-strong';
-    $classes    = $common.' '.($errors->has($identifier) ? $error : $normal);
+    $classes    = $common.' '.($errors->has($name) ? $error : $normal);
 @endphp
 
 @switch($type)
     @case('select')
         <select
-            id="{{ $identifier }}"
-            name="{{ $identifier }}"
+            id="{{ $id }}"
+            name="{{ $name }}"
             {{ $attributes->twMerge($classes) }}
             @disabled($disabled)
             @required($required)
@@ -32,8 +33,8 @@
 
     @case('textarea')
         <textarea
-            id="{{ $identifier }}"
-            name="{{ $identifier }}"
+            id="{{ $id }}"
+            name="{{ $name }}"
             rows="{{ $rows }}"
             {{ $attributes->twMerge($classes . ' p-3.5') }}
             @disabled($disabled)
@@ -46,12 +47,12 @@
     @default
         <input
             type="{{ $type }}"
-            id="{{ $identifier }}"
-            name="{{ $identifier }}"
+            id="{{ $id }}"
+            name="{{ $name }}"
             value="{{ $value }}"
             {{ $attributes->twMerge($classes) }}
             @disabled($disabled)
             @required($required)
         />
 @endswitch
-<x-kal::form.error for="{{ $identifier }}" />
+<x-kal::form.error for="{{ $name }}" />

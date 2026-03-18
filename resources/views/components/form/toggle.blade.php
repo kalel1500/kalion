@@ -3,14 +3,17 @@
 
 @props(['label', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])
 
-@php($identifier = $id ?? $name ?? '')
+@php
+    $id   = $id   ?? $name ?? '';
+    $name = $name ?? $id   ?? '';
+@endphp
 
 <div>
     <label class="inline-flex items-center cursor-pointer">
         <input
             type="checkbox"
-            id="{{ $identifier }}"
-            name="{{ $identifier }}"
+            id="{{ $id }}"
+            name="{{ $name }}"
             value=""
             class="sr-only peer"
             @disabled($disabled)
@@ -21,5 +24,5 @@
             {{ $label ?? $slot }}
         </span>
     </label>
-    <x-kal::form.error for="{{ $identifier }}" />
+    <x-kal::form.error for="{{ $name }}" />
 </div>
