@@ -2,7 +2,7 @@
 @php /** @var \Illuminate\View\ComponentAttributeBag $attributes */ @endphp
 @php /** @var \Illuminate\Support\ViewErrorBag $errors */ @endphp
 
-@props(['type', 'label' => null, 'id' => null, 'name' => null, 'value' => '', 'size' => 'base', 'required' => false, 'disabled' => false])
+@props(['type', 'label' => null, 'id' => null, 'name' => null, 'value' => '', 'size' => 'base', 'containerClass' => null, 'required' => false, 'disabled' => false])
 
 @php
     $id          = $id   ?? $name ?? '';
@@ -19,42 +19,44 @@
     $classes    = $common.' '.($errors->has($name) ? $error : $normal);
 @endphp
 
-<x-kal::form.label for="{{ $id }}" :value="$label" />
-@switch($type)
-    @case('select')
-        <select
-            id="{{ $id }}"
-            name="{{ $name }}"
-            {{ $attributes->twMerge($classes) }}
-            @disabled($disabled)
-            @required($required)
-        >
-            {{ $slot }}
-        </select>
-        @break
+<div @if($containerClass) class="{{ $containerClass }}" @endif>
+    <x-kal::form.label for="{{ $id }}" :value="$label" />
+    @switch($type)
+        @case('select')
+            <select
+                id="{{ $id }}"
+                name="{{ $name }}"
+                {{ $attributes->twMerge($classes) }}
+                @disabled($disabled)
+                @required($required)
+            >
+                {{ $slot }}
+            </select>
+            @break
 
-    @case('textarea')
-        <textarea
-            id="{{ $id }}"
-            name="{{ $name }}"
-            rows="{{ $rows }}"
+        @case('textarea')
+            <textarea
+                id="{{ $id }}"
+                name="{{ $name }}"
+                rows="{{ $rows }}"
             {{ $attributes->twMerge($classes . ' p-3.5') }}
-            @disabled($disabled)
-            @required($required)
+                @disabled($disabled)
+                @required($required)
         >
             {{ $value }}
         </textarea>
-        @break
+            @break
 
-    @default
-        <input
-            type="{{ $type }}"
-            id="{{ $id }}"
-            name="{{ $name }}"
-            value="{{ $value }}"
-            {{ $attributes->twMerge($classes) }}
-            @disabled($disabled)
-            @required($required)
-        />
-@endswitch
-<x-kal::form.error for="{{ $name }}" />
+        @default
+            <input
+                type="{{ $type }}"
+                id="{{ $id }}"
+                name="{{ $name }}"
+                value="{{ $value }}"
+                {{ $attributes->twMerge($classes) }}
+                @disabled($disabled)
+                @required($required)
+            />
+    @endswitch
+    <x-kal::form.error for="{{ $name }}" />
+</div>

@@ -4,14 +4,10 @@
 
     <x-kal::form method="POST" action="{{ route('login') }}">
         <!-- Email Address -->
-        <div>
-            <x-kal::form.input :type="$field->type" :label="__($field->label)" :id="$field->name" class="text-base" :value="old($field->name)" required autofocus autocomplete="username" />
-        </div>
+        <x-kal::form.input :type="$field->type" :label="__($field->label)" :id="$field->name" class="text-base" :value="old($field->name)" required autofocus autocomplete="username" />
 
         <!-- Password -->
-        <div>
-            <x-kal::form.input type="password" :label="__('k::text.input.password')" id="password" class="text-base" required autocomplete="current-password" />
-        </div>
+        <x-kal::form.input type="password" :label="__('k::text.input.password')" id="password" class="text-base" required autocomplete="current-password" />
 
         <!-- Remember Me -->
         <div class="flex items-center justify-between">

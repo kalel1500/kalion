@@ -3,13 +3,9 @@
         <h1 class="mb-5 text-3xl font-bold dark:text-white">{{ __('Compare') }} HTML</h1>
         <div class="flex items-center justify-center gap-10">
 
-            <div class="w-2/5">
-                <x-kal::form.input type="textarea" label="Html A" id="textarea-a" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
-            </div>
+            <x-kal::form.input type="textarea" label="Html A" id="textarea-a" container-class="w-2/5" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
 
-            <div class="w-2/5">
-                <x-kal::form.input type="textarea" label="Html B" id="textarea-b" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
-            </div>
+            <x-kal::form.input type="textarea" label="Html B" id="textarea-b" container-class="w-2/5" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
 
             <div>
                 <x-kal::button id="compareHtml">{{ __('Compare') }}</x-kal::button>

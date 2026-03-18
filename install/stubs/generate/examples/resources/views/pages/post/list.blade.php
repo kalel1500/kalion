@@ -9,14 +9,12 @@
 
         <x-kal::badge color="blue">{{ $data->count_posts }}</x-kal::badge>
 
-        <div class="w-auto">
-            <x-kal::form.input type="select" id="selectTags">
-                <option value="">Filtrar por tags</option>
-                @foreach($data->tags as $tag)
-                    <option value="{{ $tag->code->value }}" @selected($tag->name->value === $data->selected_tag)>{{ $tag->name->value }}</option>
-                @endforeach
-            </x-kal::form.input>
-        </div>
+        <x-kal::form.input type="select" id="selectTags" container-class="w-auto">
+            <option value="">Filtrar por tags</option>
+            @foreach($data->tags as $tag)
+                <option value="{{ $tag->code->value }}" @selected($tag->name->value === $data->selected_tag)>{{ $tag->name->value }}</option>
+            @endforeach
+        </x-kal::form.input>
     </div>
 
     <div class="flex flex-wrap justify-around xs:grid xs:grid-cols-[repeat(auto-fit,minmax(24rem,1fr))] gap-6">

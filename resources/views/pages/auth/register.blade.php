@@ -3,24 +3,16 @@
     <x-kal::form method="POST" action="{{ route('register') }}">
 
         <!-- Name -->
-        <div>
-            <x-kal::form.input type="text" :label="__('k::text.input.name')" id="name" :value="old('name')" required autofocus autocomplete="name" />
-        </div>
+        <x-kal::form.input type="text" :label="__('k::text.input.name')" id="name" :value="old('name')" required autofocus autocomplete="name" />
 
         <!-- Email Address -->
-        <div>
-            <x-kal::form.input type="email" :label="__('k::text.input.email')" id="email" :value="old('email')" required autocomplete="email" />
-        </div>
+        <x-kal::form.input type="email" :label="__('k::text.input.email')" id="email" :value="old('email')" required autocomplete="email" />
 
         <!-- Password -->
-        <div>
-            <x-kal::form.input type="password" :label="__('k::text.input.password')" id="password" required autocomplete="new-password" />
-        </div>
+        <x-kal::form.input type="password" :label="__('k::text.input.password')" id="password" required autocomplete="new-password" />
 
         <!-- Confirm Password -->
-        <div>
-            <x-kal::form.input type="password" :label="__('k::text.input.password_confirmation')" id="password_confirmation" required autocomplete="new-password" />
-        </div>
+        <x-kal::form.input type="password" :label="__('k::text.input.password_confirmation')" id="password_confirmation" required autocomplete="new-password" />
 
         <!-- Terms -->
         <x-kal::form.checkbox-terms />
