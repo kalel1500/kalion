@@ -1,1 +1,1 @@
-<x-kal::button type="submit" color="blue-form" class="w-full text-center mb-inherit">{{ $slot }}</x-kal::button>
+<x-kal::button type="submit" {{ $attributes->twMerge('w-full text-center') }}>{{ $slot }}</x-kal::button>
