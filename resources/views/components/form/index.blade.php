@@ -1,3 +1,6 @@
+@php /** @var \Illuminate\View\ComponentAttributeBag $attributes */ @endphp
+@php /** @var \Illuminate\Support\ViewErrorBag $errors */ @endphp
+
 @props(['method', 'action'])
 
 @php
