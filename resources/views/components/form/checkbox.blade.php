@@ -1,7 +1,7 @@
 @php /** @var \Illuminate\View\ComponentAttributeBag $attributes */ @endphp
 @php /** @var \Illuminate\Support\ViewErrorBag $errors */ @endphp
 
-@props(['labelText', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])
+@props(['label', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])
 
 @php($identifier = $id ?? $name ?? '')
 
@@ -16,7 +16,7 @@
     >
 
     <label for="{{ $identifier }}" class="ms-2 text-sm font-medium text-heading select-none">
-        {{ $labelText ?? $slot }}
+        {{ $label ?? $slot }}
         {{ $error ?? '' }}
     </label>
 </div>

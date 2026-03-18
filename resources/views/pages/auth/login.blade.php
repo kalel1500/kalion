@@ -18,7 +18,7 @@
 
         <!-- Remember Me -->
         <div class="flex items-center justify-between">
-            <x-kal::form.checkbox id="remember" :labelText="__('k::text.input.remember_me')" />
+            <x-kal::form.checkbox id="remember" :label="__('k::text.input.remember_me')" />
             @if(! config('kalion.auth.disable_password_reset'))
                 <x-kal::link href="{{ route('password.reset') }}" class="text-sm" :value="__('k::auth.login.password_reset')" />
             @endif
