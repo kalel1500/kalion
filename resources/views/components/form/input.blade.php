@@ -24,7 +24,7 @@
         </select>
         @break
 
-    @case(2)
+    @case('textarea')
         <textarea
             id="{{ $identifier }}"
             name="{{ $identifier }}"
