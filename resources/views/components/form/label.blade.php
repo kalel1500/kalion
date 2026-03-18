@@ -3,6 +3,10 @@
 
 @props(['value', 'for' => null])
 
-<label for="{{ $for }}" class="block mb-2.5 text-sm font-medium text-heading">
-    {{ $value ?? $slot }}
-</label>
+@php($label = $value ?? $slot->toHtml())
+
+@if(!empty(trim($label)))
+    <label for="{{ $for }}" class="block mb-2.5 text-sm font-medium text-heading">
+        {{ $label }}
+    </label>
+@endif

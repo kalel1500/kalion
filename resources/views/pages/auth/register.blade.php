@@ -4,26 +4,22 @@
 
         <!-- Name -->
         <div>
-            <x-kal::form.label for="name" :value="__('k::text.input.name')" />
-            <x-kal::form.input type="text" id="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-kal::form.input type="text" :label="__('k::text.input.name')" id="name" :value="old('name')" required autofocus autocomplete="name" />
         </div>
 
         <!-- Email Address -->
         <div>
-            <x-kal::form.label for="email" :value="__('k::text.input.email')" />
-            <x-kal::form.input type="email" id="email" :value="old('email')" required autocomplete="email" />
+            <x-kal::form.input type="email" :label="__('k::text.input.email')" id="email" :value="old('email')" required autocomplete="email" />
         </div>
 
         <!-- Password -->
         <div>
-            <x-kal::form.label for="password" :value="__('k::text.input.password')" />
-            <x-kal::form.input type="password" id="password" required autocomplete="new-password" />
+            <x-kal::form.input type="password" :label="__('k::text.input.password')" id="password" required autocomplete="new-password" />
         </div>
 
         <!-- Confirm Password -->
         <div>
-            <x-kal::form.label for="password_confirmation" :value="__('k::text.input.password_confirmation')" />
-            <x-kal::form.input type="password" id="password_confirmation" required autocomplete="new-password" />
+            <x-kal::form.input type="password" :label="__('k::text.input.password_confirmation')" id="password_confirmation" required autocomplete="new-password" />
         </div>
 
         <!-- Terms -->

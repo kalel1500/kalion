@@ -1,7 +1,7 @@
 @php /** @var \Illuminate\View\ComponentAttributeBag $attributes */ @endphp
 @php /** @var \Illuminate\Support\ViewErrorBag $errors */ @endphp
 
-@props(['type', 'id' => null, 'name' => null, 'value' => '', 'size' => 'base', 'required' => false, 'disabled' => false])
+@props(['type', 'label' => null, 'id' => null, 'name' => null, 'value' => '', 'size' => 'base', 'required' => false, 'disabled' => false])
 
 @php
     $id          = $id   ?? $name ?? '';
@@ -18,6 +18,7 @@
     $classes    = $common.' '.($errors->has($name) ? $error : $normal);
 @endphp
 
+<x-kal::form.label for="{{ $id }}" :value="$label" />
 @switch($type)
     @case('select')
         <select

@@ -4,13 +4,11 @@
         <div class="flex items-center justify-center gap-10">
 
             <div class="w-2/5">
-                <x-kal::form.label for="textarea-a" value="Html A"/>
-                <x-kal::form.input type="textarea" id="textarea-a" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
+                <x-kal::form.input type="textarea" label="Html A" id="textarea-a" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
             </div>
 
             <div class="w-2/5">
-                <x-kal::form.label for="textarea-b" value="Html B"/>
-                <x-kal::form.input type="textarea" id="textarea-b" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
+                <x-kal::form.input type="textarea" label="Html B" id="textarea-b" class="whitespace-nowrap scroller text-gray-500!" spellcheck="false" rows="8" placeholder="Text..."/>
             </div>
 
             <div>
