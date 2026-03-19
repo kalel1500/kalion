@@ -31,6 +31,28 @@
         </div>
         @break
 
+    @case('radio')
+        {{--@props(['label', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])--}}
+        <div>
+            <div class="flex items-center">
+                <input
+                    type="radio"
+                    id="{{ $id }}"
+                    name="{{ $name }}"
+                    value=""
+                    {{ $attributes->twMerge('w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none') }}
+                    @disabled($disabled)
+                    @required($required)
+                >
+
+                <label for="{{ $id }}" class="select-none ms-2 text-sm font-medium text-heading">
+                    {{ $label ?? $slot }}
+                </label>
+            </div>
+            <x-kal::form.error for="{{ $name }}" />
+        </div>
+        @break
+
     @case('toggle')
         {{--@props(['label', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])--}}
         <div>
