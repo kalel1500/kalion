@@ -2,7 +2,18 @@
 @php /** @var \Illuminate\View\ComponentAttributeBag $attributes */ @endphp
 @php /** @var \Illuminate\Support\ViewErrorBag $errors */ @endphp
 
-@props(['type', 'label' => null, 'id' => null, 'name' => null, 'value' => '', 'size' => 'base', 'containerClass' => null, 'required' => false, 'disabled' => false])
+@props([
+     'type',
+     'label'          => null,
+     'id'             => null,
+     'name'           => null,
+     'value'          => '',
+     'size'           => 'base',
+     'containerClass' => null,
+     'rows'           => 4, // only for textarea
+     'required'       => false,
+     'disabled'       => false
+])
 
 @php
     $id   = $id   ?? $name ?? '';
