@@ -11,8 +11,8 @@
 
 @switch($type)
     @case('checkbox')
-        {{--@props(['label', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])--}}
-        <div>
+        {{--@props(['label', 'id' => null, 'name' => null, 'containerClass' => null, 'required' => false, 'disabled' => false])--}}
+        <div @if($containerClass) class="{{ $containerClass }}" @endif>
             <div class="flex items-center">
                 <input
                     type="checkbox"
@@ -32,8 +32,8 @@
         @break
 
     @case('radio')
-        {{--@props(['label', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])--}}
-        <div>
+        {{--@props(['label', 'id' => null, 'name' => null, 'containerClass' => null, 'required' => false, 'disabled' => false])--}}
+        <div @if($containerClass) class="{{ $containerClass }}" @endif>
             <div class="flex items-center">
                 <input
                     type="radio"
@@ -55,7 +55,7 @@
 
     @case('toggle')
         {{--@props(['label', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])--}}
-        <div>
+        <div @if($containerClass) class="{{ $containerClass }}" @endif>
             <label class="inline-flex items-center cursor-pointer">
                 <input
                     type="checkbox"
