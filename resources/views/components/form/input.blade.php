@@ -124,9 +124,7 @@
                         {{ $attributes->twMerge($classes . ' p-3.5') }}
                         @disabled($disabled)
                         @required($required)
-                    >
-                        {{ $value }}
-                    </textarea>
+                    >{{ $value }}</textarea>
                     @break
 
                 @default
