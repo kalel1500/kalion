@@ -1,6 +1,6 @@
 <x-kal::sidebar>
     <x-slot:header>
-        <x-kal::sidebar.search-from/>
+        <x-kal::sidebar.search-form/>
     </x-slot:header>
 
     <x-kal::sidebar.item href="{{ route('shared.testJs') }}">

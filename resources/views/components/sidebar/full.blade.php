@@ -8,7 +8,7 @@
 <x-kal::sidebar>
     @if($data->showSearch)
         <x-slot:header>
-            <x-kal::sidebar.search-from :action="$data->searchAction"/>
+            <x-kal::sidebar.search-form :action="$data->searchAction"/>
         </x-slot:header>
     @endif
 
