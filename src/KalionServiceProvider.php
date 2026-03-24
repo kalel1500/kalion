@@ -121,7 +121,7 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function setConfig(): void
     {
-        // 1. Inyectar Logs (Sin que el usuario haga nada)
+        // Logs
         config([
             'logging.channels.queues' => array_merge([
                 'driver'               => 'single',
@@ -138,11 +138,10 @@ class KalionServiceProvider extends ServiceProvider
             ], config('logging.channels.loads', [])),
         ]);
 
-
-        // 2. Inyectar Auth Model
+        // Auth Model
         config(['auth.providers.users.model' => config('kalion.auth.models.web', config('auth.providers.users.model'))]);
 
-        // 3. Inyectar Guard y Provider para la api
+        // Api (Guard and Provider)
         config([
             'auth.guards.api' => array_merge([
                 'driver'   => 'session',
@@ -155,7 +154,7 @@ class KalionServiceProvider extends ServiceProvider
             ], config('auth.providers.api_users', []))
         ]);
 
-        // 4. Aplicar las posibles sobreescrituras de configuración hechas por otros paquetes o la propia app
+        // Aplicar las posibles sobreescrituras de configuración hechas por otros paquetes o la propia app
         $this->app->booted(function () {
             KalionConfig::apply();
         });
