@@ -1,4 +1,4 @@
-@props(['type' => 'button', 'color' => 'default', 'size' => 'base'])
+@props(['type' => 'button', 'color' => 'brand', 'size' => 'base'])
 
 @php
     $classes = 'border focus:ring-4 font-medium leading-5 rounded-base focus:outline-none';
@@ -10,7 +10,7 @@
         'lx'    => 'px-6 py-3.5 text-base',
     ];
     $colorClasses = [
-        'default'   => 'text-white      bg-brand                    box-border  border-transparent      hover:bg-brand-strong                                   focus:ring-brand-medium             shadow-xs',
+        'brand'     => 'text-white      bg-brand                    box-border  border-transparent      hover:bg-brand-strong                                   focus:ring-brand-medium             shadow-xs',
         'secondary' => 'text-body       bg-neutral-secondary-medium box-border  border-default-medium   hover:bg-neutral-tertiary-medium    hover:text-heading  focus:ring-neutral-tertiary         shadow-xs',
         'tertiary'  => 'text-body       bg-neutral-primary-soft                 border-default          hover:bg-neutral-secondary-medium   hover:text-heading  focus:ring-neutral-tertiary-soft    shadow-xs',
         'success'   => 'text-white      bg-success                  box-border  border-transparent      hover:bg-success-strong                                 focus:ring-success-medium           shadow-xs',
