@@ -1,4 +1,4 @@
-@props(['type' => 'button', 'color' => 'brand', 'size' => 'base'])
+@props(['type' => 'button', 'variant' => 'brand', 'size' => 'base'])
 
 @php
     $classes = 'border focus:ring-4 font-medium leading-5 rounded-base focus:outline-none';
@@ -19,7 +19,7 @@
         'dark'      => 'text-white      bg-dark                     box-border  border-transparent      hover:bg-dark-strong                                    focus:ring-neutral-tertiary         shadow-xs',
         'ghost'     => 'text-heading    bg-transparent              box-border  border-transparent      hover:bg-neutral-secondary-medium                       focus:ring-neutral-tertiary                  ',
     ];
-    $finalClasses = $classes.' '.$sizeClasses[$size].' '.$colorClasses[$color];
+    $finalClasses = $classes.' '.$sizeClasses[$size].' '.$colorClasses[$variant];
 @endphp
 
 <button type="{{ $type }}" {{ $attributes->twMerge($finalClasses) }}>{{ $slot }}</button>
