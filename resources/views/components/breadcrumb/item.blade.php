@@ -1,29 +1,24 @@
-@props(['icon'])
+@props(['href' => null, 'active' => false])
 
-@isset($icon)
-    <li class="inline-flex items-center">
-        @if($attributes->has('href'))
-            <a href="{{ $attributes->get('href') }}" class="inline-flex items-center text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                {{ $icon }}
+<li class="group">
+    {{-- El separador SVG como pseudo-elemento o elemento condicional --}}
+    <div class="flex items-center">
+        {{--
+           Este SVG solo se muestra si NO es el primer <li> de la lista.
+           Usamos "group-first:hidden" para que el primer item lo oculte.
+        --}}
+        <svg class="w-3.5 h-3.5 rtl:rotate-180 text-body group-first:hidden me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+        </svg>
+
+        @if($href && !$active)
+            <a href="{{ $href }}" class="inline-flex items-center text-sm font-medium text-body hover:text-fg-brand">
                 {{ $slot }}
             </a>
         @else
-            <span class="inline-flex items-center text-gray-500 dark:text-gray-500">
-                {{ $icon }}
+            <span class="inline-flex items-center text-sm font-medium text-body-subtle">
                 {{ $slot }}
             </span>
         @endif
-    </li>
-@else
-    <li>
-        <div class="flex items-center">
-            {{--<svg class="h-6 w-6 text-gray-400 rtl:rotate-180" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>--}}
-            <x-kal::icon.chevron-right outline class="size-4 text-gray-400 rtl:rotate-180" stroke-width="3.5" />
-            @if($attributes->has('href'))
-                <a href="{{ $attributes->get('href') }}" class="ms-1 text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white md:ms-2">{{ $slot }}</a>
-            @else
-                <span class="ms-1 text-gray-500 dark:text-gray-500 md:ms-2">{{ $slot }}</span>
-            @endif
-        </div>
-    </li>
-@endisset
+    </div>
+</li>
