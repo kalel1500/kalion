@@ -19,7 +19,7 @@ return [
         'items' => [
             [
                 'code'              => 'notifications',
-                'icon'              => 'kal::icon.bell',
+                'icon'              => 'heroicon-s-bell',
                 'text'              => 'View notifications',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -31,7 +31,7 @@ return [
                     'get_data_action'   => 'getNavbarNotifications',
                     'header'            => 'Notifications',
                     'footer'            => [
-                        'icon'       => 'kal::icon.eye',
+                        'icon'       => 'heroicon-s-eye',
                         'text'       => 'View all',
                         'route_name' => null,
                     ],
@@ -39,7 +39,7 @@ return [
             ],
             [
                 'code'              => 'apps',
-                'icon'              => 'kal::icon.squares-2x2',
+                'icon'              => 'heroicon-s-squares-2x2',
                 'text'              => 'View other links of the application',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -53,63 +53,63 @@ return [
                     'footer'            => null,
                     'items'             => [
                         [
-                            'icon'          => 'kal::icon.shopping-bag',
+                            'icon'          => 'heroicon-s-shopping-bag',
                             'text'          => 'Sales',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.user-group',
+                            'icon'          => 'heroicon-s-user-group',
                             'text'          => 'Users',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.inbox',
+                            'icon'          => 'heroicon-s-inbox',
                             'text'          => 'Inbox',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.user-circle',
+                            'icon'          => 'heroicon-s-user-circle',
                             'text'          => 'Profile',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.cog-8-tooth',
+                            'icon'          => 'heroicon-s-cog-8-tooth',
                             'text'          => 'Settings',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.archive-box',
+                            'icon'          => 'heroicon-s-archive-box',
                             'text'          => 'Products',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.currency-dollar',
+                            'icon'          => 'heroicon-s-currency-dollar',
                             'text'          => 'Pricing',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.receipt-percent',
+                            'icon'          => 'heroicon-s-receipt-percent',
                             'text'          => 'Billing',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.arrow-left-end-on-rectangle',
+                            'icon'          => 'heroicon-s-arrow-left-end-on-rectangle',
                             'text'          => 'Logout',
                             'tooltip'       => null,
                             'route_name'    => null,
@@ -154,21 +154,21 @@ return [
                             'is_separator'  => true,
                         ],
                         [
-                            'icon'          => 'kal::icon.heart',
+                            'icon'          => 'heroicon-s-heart',
                             'text'          => 'My likes',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.rectangle-stack',
+                            'icon'          => 'heroicon-s-rectangle-stack',
                             'text'          => 'Collections',
                             'tooltip'       => null,
                             'route_name'    => null,
                             'is_separator'  => false,
                         ],
                         [
-                            'icon'          => 'kal::icon.fire;text-blue-600 dark:text-blue-500',
+                            'icon'          => 'heroicon-s-fire;text-blue-600 dark:text-blue-500',
                             'text'          => 'Pro version',
                             'tooltip'       => null,
                             'route_name'    => null,
@@ -178,7 +178,7 @@ return [
                             'is_separator'  => true,
                         ],
                         [
-                            'icon'          => 'kal::icon.arrow-left-end-on-rectangle',
+                            'icon'          => 'heroicon-s-arrow-left-end-on-rectangle',
                             'text'          => 'Log Out',
                             'tooltip'       => null,
                             'route_name'    => 'logout',
@@ -199,7 +199,7 @@ return [
         'items' => [
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.chart-pie',
+                'icon'              => 'heroicon-s-chart-pie',
                 'text'              => 'Overview',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -210,7 +210,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.document-text',
+                'icon'              => 'heroicon-s-document-text',
                 'text'              => 'Pages',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -246,7 +246,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.shopping-bag',
+                'icon'              => 'heroicon-s-shopping-bag',
                 'text'              => 'Sales',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -282,7 +282,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.inbox-arrow-down',
+                'icon'              => 'heroicon-s-inbox-arrow-down',
                 'text'              => 'Messages',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -293,7 +293,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.lock-closed',
+                'icon'              => 'heroicon-s-lock-closed',
                 'text'              => 'Authentication',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -334,7 +334,7 @@ return [
             //----- end is_separator -----------------------------
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.clipboard-document-list',
+                'icon'              => 'heroicon-s-clipboard-document-list',
                 'text'              => 'Docs',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -345,7 +345,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.rectangle-stack',
+                'icon'              => 'heroicon-s-rectangle-stack',
                 'text'              => 'Components',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -356,7 +356,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.lifebuoy',
+                'icon'              => 'heroicon-s-lifebuoy',
                 'text'              => 'Help',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -367,7 +367,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.document-text',
+                'icon'              => 'heroicon-s-document-text',
                 'text'              => 'Kalion',
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -489,7 +489,7 @@ return [
         'footer' => [
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.adjustments-vertical',
+                'icon'              => 'heroicon-s-adjustments-vertical',
                 'text'              => null,
                 'tooltip'           => null,
                 'route_name'        => null,
@@ -500,7 +500,7 @@ return [
             ],
             [
                 'code'              => 'settings',
-                'icon'              => 'kal::icon.cog-8-tooth',
+                'icon'              => 'heroicon-s-cog-8-tooth',
                 'text'              => null,
                 'tooltip'           => 'Settings page',
                 'route_name'        => null,

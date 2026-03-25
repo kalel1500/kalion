@@ -36,7 +36,7 @@ return [
                     'footer'            => null,
                     'items'             => [
                         [
-                            'icon'          => 'kal::icon.arrow-left-end-on-rectangle',
+                            'icon'          => 'heroicon-s-arrow-left-end-on-rectangle',
                             'text'          => 'Log Out',
                             'tooltip'       => null,
                             'route_name'    => 'logout',
@@ -57,7 +57,7 @@ return [
         'items' => [
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.home',
+                'icon'              => 'heroicon-s-home',
                 'text'              => 'Home',
                 'tooltip'           => null,
                 'route_name'        => 'home',
@@ -68,7 +68,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.document-text',
+                'icon'              => 'heroicon-s-document-text',
                 'text'              => 'Posts',
                 'tooltip'           => null,
                 'route_name'        => 'post.list',
@@ -79,7 +79,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.tag',
+                'icon'              => 'heroicon-s-tag',
                 'text'              => 'Tags',
                 'tooltip'           => null,
                 'route_name'        => 'tags',
@@ -93,7 +93,7 @@ return [
             ],
             [
                 'code'              => null,
-                'icon'              => 'kal::icon.computer-desktop',
+                'icon'              => 'heroicon-s-computer-desktop',
                 'text'              => 'Laravel welcome',
                 'tooltip'           => null,
                 'route_name'        => 'welcome',

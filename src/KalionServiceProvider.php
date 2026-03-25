@@ -121,6 +121,12 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function setConfig(): void
     {
+        // Blade Icons
+        config([
+            'blade-icons.attributes.width' => 24,
+            'blade-icons.attributes.height' => 24,
+        ]);
+
         // Logs
         config([
             'logging.channels.queues' => array_merge([

@@ -19,7 +19,7 @@
 
                     <div id="copied-{{ $key }}" class="flex items-center text-xs invisible">
                         <span>{{ __('Copied') }}</span>
-                        <span><x-kal::icon.check class="size-2 text-green-600"></x-kal::icon.check></span>
+                        <span><x-heroicon-s-check class="size-2 text-green-600" /></span>
                     </div>
                 </div>
             @endforeach
