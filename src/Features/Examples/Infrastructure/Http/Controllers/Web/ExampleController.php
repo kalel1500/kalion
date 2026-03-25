@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Web;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
-use Thehouseofel\Kalion\Features\Examples\Application\GetIconsUseCase;
 
 final class ExampleController extends Controller
 {
@@ -39,15 +37,5 @@ final class ExampleController extends Controller
     public function modifyCookie(): View
     {
         return view('kal::pages.examples.modify-cookie');
-    }
-
-    public function icons(Request $request, GetIconsUseCase $useCase): View
-    {
-        $isShort = $request->input('name') === 'short';
-
-        $data = $useCase->__invoke($isShort);
-
-        // Retornar los nombres a la vista
-        return view('kal::pages.examples.icons', compact('data'));
     }
 }
