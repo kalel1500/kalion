@@ -9,7 +9,7 @@
 <!-- Dropdown {{ $id }} -->
 <div id="dropdown-{{ $id }}"
     @class([
-        'z-50 my-4 hidden list-none rounded-sm bg-white text-base dark:bg-gray-700',
+        'z-50 my-4 hidden list-none rounded-sm bg-neutral-primary-strong text-base',
         'max-w-sm overflow-hidden shadow-lg divide-y divide-gray-100 dark:divide-gray-600' => $isBig,
         'w-56 shadow-sm' => !$isBig,
     ])
