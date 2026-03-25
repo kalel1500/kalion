@@ -12,7 +12,8 @@
      'containerClass' => null,
      'rows'           => 4, // only for textarea
      'required'       => false,
-     'disabled'       => false
+     'disabled'       => false,
+     'readonly'       => false,
 ])
 
 @php
@@ -31,6 +32,7 @@
                     name="{{ $name }}"
                     {{ $attributes->twMerge('w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft') }}
                     @disabled($disabled)
+                    @readonly($readonly)
                     @required($required)
                 >
 
@@ -53,6 +55,7 @@
                     value=""
                     {{ $attributes->twMerge('w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none') }}
                     @disabled($disabled)
+                    @readonly($readonly)
                     @required($required)
                 >
 
@@ -75,6 +78,7 @@
                     value=""
                     class="sr-only peer"
                     @disabled($disabled)
+                    @readonly($readonly)
                     @required($required)
                 >
                 <div class="relative w-9 h-5 bg-neutral-quaternary peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-soft dark:peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand"></div>
@@ -97,6 +101,9 @@
             ];
             $common     = 'border rounded-base block w-full shadow-xs' . ' ' . $sizeClasses[$size];
             $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
+            if ($disabled && !$readonly) {
+                $normal = twMerge($normal, 'text-fg-disabled');
+            }
             $error      = 'bg-danger-soft border-danger-subtle text-fg-danger-strong focus:ring-danger focus:border-danger placeholder:text-fg-danger-strong';
             $classes    = $common.' '.($errors->has($name) ? $error : $normal);
         @endphp
@@ -110,6 +117,7 @@
                         name="{{ $name }}"
                         {{ $attributes->twMerge($classes) }}
                         @disabled($disabled)
+                        @readonly($readonly)
                         @required($required)
                     >
                         {{ $slot }}
@@ -123,6 +131,7 @@
                         rows="{{ $rows }}"
                         {{ $attributes->twMerge($classes . ' p-3.5') }}
                         @disabled($disabled)
+                        @readonly($readonly)
                         @required($required)
                     >{{ $value }}</textarea>
                     @break
@@ -135,6 +144,7 @@
                         value="{{ $value }}"
                         {{ $attributes->twMerge($classes) }}
                         @disabled($disabled)
+                        @readonly($readonly)
                         @required($required)
                     />
             @endswitch
