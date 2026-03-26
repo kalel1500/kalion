@@ -22,7 +22,7 @@
         {{ $slot }}
     </button>
     <!-- Dropdown -->
-    <div class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded-sm bg-white text-base shadow-sm dark:bg-gray-700" id="dropdown-{{ $id }}">
+    <div class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded-sm bg-neutral-primary-strong text-base shadow-sm" id="dropdown-{{ $id }}">
         <ul class="py-1" role="none">
             {{ $dropdown }}
         </ul>
