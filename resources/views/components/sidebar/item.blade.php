@@ -5,7 +5,7 @@
     $hasIcon = isset($icon);
     $isSubitem = $attributes->has('subitem');
     $centerClass = !$hasIcon ? 'sc:items-start' : '';
-    $linkClasses = 'group flex w-full items-center '.$centerClass.' rounded-lg p-2 text-base font-medium text-heading transition duration-75 hover:bg-neutral-tertiary-medium md:sc:p-1 md:sc:flex-col md:sc:text-xs md:sc:font-normal md:transition-all ';
+    $linkClasses = 'group flex w-full items-center '.$centerClass.' rounded-lg p-2 text-base font-medium text-heading transition duration-75 hover:bg-neutral-tertiary-medium md:sc:p-1 md:sc:flex-col md:sc:text-xs md:sc:font-normal ';
     $iconHtml = !$hasIcon ? '' : '<div class="h-6 w-6 shrink-0 text-body transition duration-75 group-hover:text-heading">' . $icon . '</div>';
     $spanClasses = !$hasIcon ? '' : 'ml-3 md:sc:ml-0 truncate md:sc:w-full';
     $dropdownId = $isDropdown ? $dropdown->attributes->get('id') : '';

@@ -68,7 +68,7 @@
         @endif
 
         <!-- Wrapper -->
-        @php($sidebarClasses = $data->sidebarEnabled ? 'md:ml-64 md:sc:ml-20 md:transition-all' : '')
+        @php($sidebarClasses = $data->sidebarEnabled ? 'md:ml-64 md:sc:ml-20 md:transition-[margin] md:duration-300' : '')
         <div class="h-auto p-4 pt-[calc(var(--kal-navbar-height)+var(--kal-main-gap))]  {{ $sidebarClasses }}">
 
             <!-- Main -->
