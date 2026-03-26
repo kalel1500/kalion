@@ -18,7 +18,7 @@
         <!-- CSS del paquete -->
         {!! PackageAssets::css() !!}
     </head>
-    <body class="bg-neutral-secondary-soft">
+    <body class="bg-neutral-secondary">
 
         <section >
             <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -27,7 +27,7 @@
                     {{ config('app.name', 'Laravel 12') }}
                 </a>
 
-                <div class="w-full sm:max-w-md md:mt-0 xl:p-0 bg-neutral-primary-medium rounded-base shadow border border-default-medium">
+                <div class="w-full sm:max-w-md md:mt-0 xl:p-0 bg-neutral-primary-soft rounded-base shadow border border-default">
                     <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                         <div>
                             <h1 class="text-xl font-bold leading-tight tracking-tight text-heading md:text-2xl">

@@ -1,4 +1,4 @@
-<div {{ $attributes->twMerge('text-sm font-medium text-center text-body border-b border-default-medium') }}>
+<div {{ $attributes->twMerge('text-sm font-medium text-center text-body border-b border-default') }}>
     <ul class="flex flex-wrap -mb-px">
         {{ $slot }}
     </ul>
