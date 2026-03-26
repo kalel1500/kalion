@@ -18,7 +18,7 @@
         <div class="mx-auto mb-1 h-7 w-7 text-gray-400 group-hover:text-gray-500 dark:text-gray-400 dark:group-hover:text-gray-400">
             {{ $slot }}
         </div>
-        <div class="text-sm text-gray-900 dark:text-white">{{ $text }}</div>
+        <div class="text-sm text-heading">{{ $text }}</div>
     </a>
 @else
     <li>

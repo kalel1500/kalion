@@ -16,7 +16,7 @@
 >
     @if(isset($header))
         <div @class([
-                'block bg-gray-50 px-4 py-2 text-center text-base font-medium text-gray-700 dark:bg-gray-600 dark:text-gray-300' => $isBig,
+                'block bg-neutral-secondary-strongest px-4 py-2 text-center text-base font-medium text-gray-700 dark:text-gray-300' => $isBig,
                 'px-4 py-3 border-b border-gray-100 dark:border-gray-600' => !$isBig,
             ])>
             {{ $header }}
@@ -35,7 +35,7 @@
 
 
     @if($isBig && isset($footer))
-        <a href="{{ $footer->attributes->get('href') ?? '#' }}" class="text-md block bg-gray-50 py-2 text-center font-medium text-gray-900 hover:bg-gray-100 dark:bg-gray-600 dark:text-white dark:hover:underline">
+        <a href="{{ $footer->attributes->get('href') ?? '#' }}" class="text-md block bg-neutral-secondary-strongest py-2 text-center font-medium text-heading hover:bg-gray-100 dark:hover:underline">
             <div class="inline-flex items-center">
                 {{ $footer }}
             </div>

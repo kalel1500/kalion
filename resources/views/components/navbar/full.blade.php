@@ -18,7 +18,7 @@
 
         <x-kal::navbar.brand/>
 
-        <div class="dark:text-white">
+        <div class="text-heading hidden md:block">
             {{ $data->navbarTitle ?? '' }}
         </div>
 
