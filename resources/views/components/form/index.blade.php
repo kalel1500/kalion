@@ -12,7 +12,7 @@
 <form
     method="{{ $realMethod }}"
     action="{{ $action }}"
-    {{ $attributes->only('class')->twMerge('space-y-4 md:space-y-6') }}
+    {{ $attributes->twMerge('space-y-4 md:space-y-6') }}
 >
     @csrf
     @if(!$isRealMethod)
