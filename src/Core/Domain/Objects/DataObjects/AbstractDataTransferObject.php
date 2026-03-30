@@ -255,6 +255,25 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         return static::fromArray(json_decode($data, true));
     }
 
+    public static function tryFromArray($data): ?static
+    {
+        try {
+            return static::fromArray($data);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    public static function tryFromJson($data): ?static
+    {
+        try {
+            return static::fromJson($data);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+
     public function toArray(): array
     {
         return $this->props();
