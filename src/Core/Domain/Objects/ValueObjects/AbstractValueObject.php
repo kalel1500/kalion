@@ -23,6 +23,15 @@ abstract class AbstractValueObject implements JsonSerializable
         return new static($value);
     }
 
+    public static function tryFrom($value): ?static
+    {
+        try {
+            return static::from($value);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
     public function value(): mixed
     {
         return $this->value;
