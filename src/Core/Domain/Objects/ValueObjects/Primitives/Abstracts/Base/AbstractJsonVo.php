@@ -66,7 +66,7 @@ abstract class AbstractJsonVo extends AbstractValueObject
         }
     }
 
-    public static function tryFrom($value): static
+    public static function tryFromJson($value): static
     {
         return new static($value, true);
     }
