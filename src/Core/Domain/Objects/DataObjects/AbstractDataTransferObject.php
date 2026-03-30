@@ -244,6 +244,11 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         return static::make($data);
     }
 
+    /**
+     * @template T of string|null
+     * @param T $data
+     * @return (T is null ? null : static)
+     */
     public static function fromJson(?string $data): static|null
     {
         if (is_null($data)) return null;
