@@ -86,7 +86,6 @@ class InstallStepProcessor
             } catch (SkippedStep $e) {
                 $this->command?->line("      <fg=yellow>=> SKIPPED: {$e->getMessage()}</>");
             } catch (\Throwable $th) {
-                dd($th);
                 $this->handleError($th, 'k::error.failed_executing_$step', $item['className']);
             }
         }
