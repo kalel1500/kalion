@@ -19,6 +19,7 @@ class LayoutPreferencesCookieStore implements PreferencesCookieStore
     private int                $cookieDuration;
     private string             $cookieVersion;
     private UserPreferencesDto $preferences;
+    private bool               $invalidCookie = false;
 
     public function __construct()
     {
@@ -51,6 +52,7 @@ class LayoutPreferencesCookieStore implements PreferencesCookieStore
     {
         if (
             ! request()->hasCookie($this->cookieName) ||
+            $this->invalidCookie ||
             $this->cookieVersion !== $this->preferences->version
         ) {
             $this->preferences = $this->defaultPreferences();
@@ -73,9 +75,14 @@ class LayoutPreferencesCookieStore implements PreferencesCookieStore
     {
         $cookie = CookieFacade::get($this->cookieName);
 
-        return ! is_null($cookie)
-            ? UserPreferencesDto::fromJson($cookie)
-            : $this->defaultPreferences();
+        try {
+            $preferences = is_null($cookie) ? null : UserPreferencesDto::fromJson($cookie);
+        } catch (\Throwable) {
+            $this->invalidCookie = true;
+            $preferences = null;
+        }
+
+        return $preferences ?? $this->defaultPreferences();
     }
 
     protected function writeCookie(): void
