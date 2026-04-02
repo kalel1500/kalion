@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware;
+namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\UnauthorizedException;
 
-final class UserHasRole
+final class UserHasPermission
 {
     /**
      * Handle an incoming request.
      *
      * @param Closure(Request): (Response) $next
      */
-    public function handle(Request $request, Closure $next, $roles): Response
+    public function handle(Request $request, Closure $next, $permissions): Response
     {
         if (! auth()->check()) {
             throw UnauthorizedException::notLoggedIn();
@@ -24,12 +24,12 @@ final class UserHasRole
 
         $user = user();
 
-        if (! method_exists($user, 'is')) {
+        if (! method_exists($user, 'can')) {
             throw UnauthorizedException::missingTraitHasPermissions($user);
         }
 
-        if (! user()->is($roles)) {
-            throw UnauthorizedException::forRoles($roles);
+        if (! user()->can($permissions)) {
+            throw UnauthorizedException::forPermissions($permissions);
         }
 
         return $next($request);
