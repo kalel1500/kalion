@@ -2,14 +2,17 @@
 
 namespace Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns;
 
+use Thehouseofel\Kalion\Core\Domain\Exceptions\NeverCalledException;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AccessEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\PermissionCollection;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\RoleEntity;
-use Thehouseofel\Kalion\Features\Auth\Domain\Support\UserAccessChecker;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
+use Thehouseofel\Kalion\Features\Auth\Domain\Support\PermissionParser;
 
 trait HasRoles
 {
@@ -18,12 +21,33 @@ trait HasRoles
 
     public function can(string|array $permission, ...$params): bool
     {
-        return app(UserAccessChecker::class)->can($this, $permission, $params);
+        return $this->check('can', $this, $permission, $params);
     }
 
     public function is(string|array $role, ...$params): bool
     {
-        return app(UserAccessChecker::class)->is($this, $role, $params);
+        return $this->check('is', $this, $role, $params);
+    }
+
+    protected function check(string $method, UserEntity $user, string|array $value, array $params): bool
+    {
+        $values = (new PermissionParser)->getArrayPermissions($value, $params);
+        return $values->contains(fn($params, $value) => $this->userHas($method, $user, $value, $params));
+    }
+
+    protected function userHas(string $item, UserEntity $user, string $value, array $params = []): bool
+    {
+        if (! in_array($item, ['permissions', 'roles'])) {
+            throw new NeverCalledException(sprintf('The method %s is not meant to be called with the item "%s".', __METHOD__, $item));
+        }
+
+        return $user->$item()->contains(function (AccessEntity $item) use ($user, $value, $params) {
+            $repositoryUser = new (kauth($user->getGuard())->getClassUserRepository());
+
+            if ($item->name->value !== $value) return false;
+            if ($item->getIsQuery()) return $repositoryUser->{$value}($user, ...$params);
+            return true;
+        });
     }
 
     public function toArray($addPermissions = false, $addRoles = false): array
