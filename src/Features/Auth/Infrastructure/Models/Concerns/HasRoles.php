@@ -5,7 +5,7 @@ namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Concerns;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Role;
 
-trait HasPermissions
+trait HasRoles
 {
     public function roles(): BelongsToMany
     {

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Concerns\HasPermissions;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Concerns\HasRoles;
 
 class ApiUser extends Authenticatable
 {
-    use HasPermissions;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
