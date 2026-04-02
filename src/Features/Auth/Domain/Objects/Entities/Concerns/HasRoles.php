@@ -78,8 +78,9 @@ trait HasRoles
     /*----------------------------------------------------------------------------------------------------------------*/
     /*--------------------------------------------------- Properties -------------------------------------------------*/
 
+    #[Computed(Computed::AS_ATTRIBUTE)]
     public function all_permissions(): bool
     {
-        return $this->roles()->contains(fn(RoleEntity $role) => $role->all_permissions->isTrue());
+        return $this->computed(fn() => $this->roles()->contains(fn(RoleEntity $role) => $role->all_permissions->isTrue()));
     }
 }
