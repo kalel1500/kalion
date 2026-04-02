@@ -13,49 +13,32 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Support\UserAccessChecker;
 
 trait HasRoles
 {
-    protected UserAccessChecker $accessChecker;
-    protected RoleRepository $repositoryRole;
-    protected PermissionRepository $repositoryPermission;
-
     protected array $is  = [];
     protected array $can = [];
 
-    protected function accessChecker(): UserAccessChecker
-    {
-        return $this->accessChecker ??= app(UserAccessChecker::class);
-    }
-
-    protected function repositoryRole(): RoleRepository
-    {
-        return $this->repositoryRole ??= app(RoleRepository::class);
-    }
-
-    protected function repositoryPermission(): PermissionRepository
-    {
-        return $this->repositoryPermission ??= app(PermissionRepository::class);
-    }
-
     public function can(string|array $permission, ...$params): bool
     {
-        return $this->accessChecker()->can($this, $permission, $params);
+        return app(UserAccessChecker::class)->can($this, $permission, $params);
     }
 
     public function is(string|array $role, ...$params): bool
     {
-        return $this->accessChecker()->is($this, $role, $params);
+        return app(UserAccessChecker::class)->is($this, $role, $params);
     }
 
     public function toArray($addPermissions = false, $addRoles = false): array
     {
         if ($addPermissions) {
-            foreach ($this->repositoryPermission()->all() as $permission) {
+            $repositoryPermission = app(PermissionRepository::class);
+            foreach ($repositoryPermission->all() as $permission) {
                 $permissionName = $permission->name->value;
                 $this->can[$permissionName] = $this->can($permissionName);
             }
         }
 
         if ($addRoles) {
-            foreach ($this->repositoryRole()->all() as $role) {
+            $repositoryRole = app(RoleRepository::class);
+            foreach ($repositoryRole->all() as $role) {
                 $roleName = $role->name->value;
                 $this->is[$roleName] = $this->is($roleName);
             }
