@@ -21,12 +21,12 @@ trait HasRoles
 
     public function can(string|array $permission, ...$params): bool
     {
-        return $this->check('can', $this, $permission, $params);
+        return $this->check('permissions', $this, $permission, $params);
     }
 
     public function is(string|array $role, ...$params): bool
     {
-        return $this->check('is', $this, $role, $params);
+        return $this->check('roles', $this, $role, $params);
     }
 
     protected function check(string $method, UserEntity $user, string|array $value, array $params): bool
