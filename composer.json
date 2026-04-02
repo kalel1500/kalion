@@ -16,7 +16,8 @@
         "kalel1500/laravel-tailwind-merge": "@beta",
         "blade-ui-kit/blade-heroicons": "^2.7",
         "themesberg/flowbite-blade-icons": "^1.4",
-        "davidhsianturi/blade-bootstrap-icons": "^2.1"
+        "davidhsianturi/blade-bootstrap-icons": "^2.1",
+        "staudenmeir/eloquent-has-many-deep": "^1.21"
     },
     "require-dev": {
         "phpunit/phpunit": "^11.5",

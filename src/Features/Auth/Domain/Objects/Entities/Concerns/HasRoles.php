@@ -2,9 +2,11 @@
 
 namespace Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns;
 
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\PermissionCollection;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Support\UserAccessChecker;
@@ -74,6 +76,11 @@ trait HasRoles
         return $this->getRelation();
     }
 
+    #[RelationOf(PermissionCollection::class)]
+    public function permissions(): PermissionCollection
+    {
+        return $this->getRelation();
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /*--------------------------------------------------- Properties -------------------------------------------------*/
