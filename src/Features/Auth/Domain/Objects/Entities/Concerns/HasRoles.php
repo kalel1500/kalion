@@ -20,18 +20,24 @@ trait HasRoles
 
     public function can(string|array $permission, ...$params): bool
     {
-        return $this->check('permissions', $permission, $params);
+        return $this->checkAll('permissions', $permission, $params);
     }
 
     public function is(string|array $role, ...$params): bool
     {
-        return $this->check('roles', $role, $params);
+        return $this->checkAll('roles', $role, $params);
     }
 
-    protected function check(string $method, string|array $value, array $params): bool
+    protected function checkAny(string $method, string|array $value, array $params): bool
     {
         $values = (new AbilityParser)->parse($value, $params);
         return $values->contains(fn($params, $value) => $this->userHas($method, $value, $params));
+    }
+
+    protected function checkAll(string $method, string|array $value, array $params): bool
+    {
+        $values = (new AbilityParser)->parse($value, $params);
+        return $values->every(fn($params, $value) => $this->userHas($method, $value, $params));
     }
 
     protected function userHas(string $item, string $value, array $params = []): bool
