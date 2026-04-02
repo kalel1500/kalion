@@ -5,7 +5,7 @@ namespace Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\NeverCalledException;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
-use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AccessEntity;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AbilityEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\PermissionCollection;
@@ -41,7 +41,7 @@ trait HasRoles
             throw new NeverCalledException(sprintf('The method %s is not meant to be called with the item "%s".', __METHOD__, $item));
         }
 
-        return $user->$item()->contains(function (AccessEntity $item) use ($user, $value, $params) {
+        return $user->$item()->contains(function (AbilityEntity $item) use ($user, $value, $params) {
             $repositoryUser = new (kauth($user->getGuard())->getClassUserRepository());
 
             if ($item->name->value !== $value) return false;

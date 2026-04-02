@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
  * @property IdVo|IdNullVo $id
  * @property StringVo $name
  */
-interface AccessEntity
+interface AbilityEntity
 {
     public function getIsQuery(): bool;
 }
