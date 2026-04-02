@@ -1,0 +1,540 @@
+Soy desarrollador de Laravel y hace un tiempo empecé a aprender a implementar la arquitectura limpia / hexagonal y el DDD dentro de proyectos Laravel.
+
+Los conceptos que aprendí a implementar fueron:
+- Separar el código en capas (Domain, Application, Infrastructure)
+- Utilizar interfaces para definir contratos entre capas
+- Implementar casos de uso para encapsular la lógica de negocio
+- Utilizar repositorios para acceder a los datos
+- Aplicar principios SOLID para mantener el código limpio y mantenible
+
+Ahora al organizar mis proyectos siempre creo las carpetas Application, Domain e Infrastructure dentro de "src" para dejar la carpeta "app" de Laravel con los archivos mínimos (el AppServiceProvider que viene por defecto en la instalación, ya que incluso los que se crean con después con los comandos meto en "src").
+
+Pero no solo tengo esas 3 carpetas directamente en "src" sino que además las separo por contextos para estructurar mejor el código. Al final siempre tengo una carpeta "Shared" para las clases más transversales.
+
+Este sería un ejemplo de la estructura de carpetas que tengo en mis proyectos:
+- src
+    - Posts
+        - Application
+            - GetViewDataPostDetailUseCase.php
+            - GetViewDataPostListUseCase.php
+        - Domain
+            - Objects
+                - DataTransferObjects
+                    - ViewDataPostListDto.php
+        - Infrastructure
+            - Http
+                - Controllers
+                    - PostController.php
+    - Tags
+        - Application
+            - DeleteTagUseCase.php
+            - GetTagListUseCase.php
+            - GetViewDataTagsUseCase.php
+            - UpdateOrCreateTagUseCase.php
+        - Domain
+            - Objects
+                - DataTransferObjects
+                    - FrontTagsDto.php
+                    - ViewTagsDto.php
+        - Infrastructure
+            - Http
+                - Controllers
+                    - AjaxTagController.php
+                    - TagController.php
+    - Shared
+        - Domain
+            - Contracts
+                - Repositories
+                    - CommentRepository.php
+                    - PostRepository.php
+                    - TagRepository.php
+                    - TagTypeRepository.php
+            - Exceptions
+            - Helpers
+            - Objects
+                - Entities
+                    - Collections
+                        - CommentCollection.php
+                        - PostCollection.php
+                        - TagCollection.php
+                        - TagTypeCollection.php
+                    - CommentEntity.php
+                    - PostEntity.php
+                    - TagEntity.php
+                    - TagTypeEntity.php
+                    - UserEntity.php
+                - ValueObjects
+                    - PostIdVo.php
+                    - PostTitleVo.php
+                    - PostContentVo.php
+                    - CommentIdVo.php
+                    ...
+            - Services
+        - Infrastructure (como ves a parte de mis repositorios y servicios, tengo las carpetas de Laravel que irían en "app" como "Http", "Imports", "Jobs", "Models"...)
+            - Http
+                - Controllers
+                    - HealthController.php
+                    - TestController.php
+            - Imports
+            - Jobs
+            - Models
+                - Comment.php
+                - Post.php
+                - Tag.php
+                - TagType.php
+                - User.php
+            - Repositories
+                - Eloquent
+                    - EloquentCommentRepository.php
+                    - EloquentPostRepository.php
+                    - EloquentTagRepository.php
+                    - EloquentTagTypeRepository.php
+                    - EloquentUserRepository.php
+            - Services
+
+
+
+Como ves lo que es común en toda la aplicación (como modelos y repositorios) lo pongo en Shared y lo que es especifico de cada contexto lo pongo dentro de su carpeta correspondiente. De esta forma tengo una estructura de carpetas bastante ordenada y fácil de entender.
+
+Siguiendo esta estructura dejo la lógica de negocio dentro del dominio (en las validaciones de los VOs y los DTOs), los casos de uso concretos dentro de la capa de aplicación y lo que es parte de Laravel dentro de infraestructura (como los controladores, modelos y repositorios).
+
+Al final en "app" siempre me creo un "DependencyServiceProvider" donde doy de alta los "singletons" de la aplicación para que Laravel sepa como resolver las dependencias de cada clase (como los repositorios). De esta forma, por ejemplo, si en un caso de uso necesito el repositorio de posts, lo que hago es inyectar la interfaz del repositorio y Laravel se encargará de resolver la implementación concreta que tengo en infraestructura (en este caso el EloquentPostRepository).
+
+
+De esta forma un controller me puede quedar asi de limpio:
+    final class PostController extends Controller
+    {
+        public function __construct(
+            public readonly GetViewDataPostListUseCase   $getViewDataPostListUseCase,
+            public readonly GetViewDataPostDetailUseCase $getViewDataPostDetailUseCase,
+        )
+        {
+        }
+
+        public function list(Request $request): View
+        {
+            $data = $this->getViewDataPostListUseCase->__invoke($request->input('tag'));
+            return view('pages.post.list', compact('data'));
+        }
+
+        public function detail(string $slug): View
+        {
+            $post = $this->getViewDataPostDetailUseCase->__invoke($slug);
+            return view('pages.post.detail', compact('post'));
+        }
+    }
+
+
+Y asi quedaría un controlador de Crud en Ajax (por ejemplo si uso Tabulator):
+    final class AjaxTagController extends Controller
+    {
+        public function __construct(
+            public readonly GetTagListUseCase        $getTagsListUseCase,
+            public readonly UpdateOrCreateTagUseCase $updateOrCreateTagUseCase,
+            public readonly DeleteTagUseCase         $deleteTagUseCase,
+        )
+        {
+        }
+
+        public function tags(string $type = null): JsonResponse
+        {
+            $data = $this->getTagsListUseCase->__invoke($type);
+            return response_json(true, 'success', $data->toArray());
+        }
+
+        public function create(Request $request): JsonResponse
+        {
+            $params = $request->validate([
+                'name'        => 'required',
+                'code'        => 'required',
+                'tag_type_id' => 'required',
+            ]);
+            try {
+                $this->updateOrCreateTagUseCase->__invoke($params);
+                return response_json(true, __('k::database.model_created_successfully', ['model' => 'Tag']));
+            } catch (\Throwable $th) {
+                return response_json_error($th);
+            }
+        }
+
+        public function update(Request $request, int $id): JsonResponse
+        {
+            $params = $request->validate([
+                'name'        => 'required',
+                'code'        => 'required',
+                'tag_type_id' => 'required',
+            ]);
+            $params = ['id' => $id, ...$params];
+
+            try {
+                $this->updateOrCreateTagUseCase->__invoke($params);
+                return response_json(true, __('k::database.model_updated_successfully', ['model' => 'Tag']));
+            } catch (\Throwable $th) {
+                return response_json_error($th);
+            }
+        }
+
+        public function delete(int $id): JsonResponse
+        {
+            try {
+                $this->deleteTagUseCase->__invoke($id);
+                return response_json(true, __('k::database.model_deleted_successfully', ['model' => 'Tag']));
+            } catch (\Throwable $th) {
+                return response_json_error($th);
+            }
+        }
+    }
+
+Una de las cosas que más me gusta de esta arquitectura es "desacoplarme" de eloquent y que muera en el repositorio, asi lo uso para hacer consultas fácilmente, pero no lo devuelvo a ningún sitio para que en nigun caso se haga un bucle que acceda a una relación y me haga "n" querys (que es algo que me ha pasado varias veces y tengo una app antigua donde la home tiene más de 40 querys aunque use el eager loading que no siempre soluciona las cosas en apps grandes y es complicado acordarse siempre). De esta forma, en el repositorio hago la consulta con eloquent, pero luego transformo el resultado a una entidad del dominio (en este caso a un PostEntity) y devuelvo esa entidad al caso de uso. De esta forma tengo el control total sobre lo que se devuelve y evito problemas de rendimiento.
+
+-----------
+
+Al aprender todo esto que vi que tenía mucho código repetido e ineficiente sobre todo para construir los resultados de un repositorio:
+    class EloquentPostRepository implements PostRepository
+    {
+        private string $model;
+
+        public function __construct()
+        {
+            $this->model = Post::class;
+        }
+
+        public function all(): PostCollection
+        {
+            $data = $this->model::query()->with('comments')->get();
+            return new PostCollection(...$data->map(fn($item) => new PostEntity(
+                id: new PostIdVo($item->id),
+                title: new PostTitleVo($item->title),
+                content: new PostContentVo($item->content),
+                comments: new CommentCollection(...$item->comments->map(fn($comment) => new CommentEntity(
+                    id: new CommentIdVo($comment->id),
+                    content: new CommentContentVo($comment->content),
+                ))),
+            )));
+        }
+
+        public function find(IdVo $id): PostEntity
+        {
+            $data = $this->model::query()->with('comments')->findOrFail($id);
+            return PostEntity(
+                id: new PostIdVo($item->id),
+                title: new PostTitleVo($item->title),
+                content: new PostContentVo($item->content),
+                comments: new CommentCollection(...$item->comments->map(fn($comment) => new CommentEntity(
+                    id: new CommentIdVo($comment->id),
+                    content: new CommentContentVo($comment->content),
+                ))),
+            );
+        }
+
+    }
+
+    class PostCollection
+    {
+        public function __construct(PostEntity ...$items)
+        {
+            $this->items = $items;
+        }
+    }
+
+    class PostEntity
+    {
+        public function __construct(
+            public readonly PostIdVo $id,
+            public readonly PostTitleVo $title,
+            public readonly PostContentVo $content,
+            public readonly CommentCollection $comments,
+        )
+        {
+        }
+    }
+
+
+Este ejemplo es relativamente fácil, pero a la minima que una entidad tenga muchas relaciones y esas relaciones tengas más relaciones y si tengo que hacer esto en cada return (porque cada query necesitara ciertas relaciones) se me hace un mundo y tengo mucho código repetido. Además de que he tenido que crear un Value Object por cada campo de cada entidad cuando la mayoría son iguales (PostIdVo y CommentIdVo o PostContentVo y CommentContentVo)
+
+Para arreglar esto me cree ciertas clases generics que las vi tan útiles que me cree un paquete de Laravel llamado Kalion.
+
+Esta es la estructura de archivos de mi paquete Kalion:
+-config
+-database
+-lang
+-resources
+-routes
+-src
+    -Core
+        -Domain
+            -Concerns
+            -Contracts
+            -Exceptions
+            -Objects
+                -Attributes
+                -Collections
+                    -Abstracts
+                        -AbstractCollectionAny.php
+                        -AbstractCollectionBase.php
+                        -AbstractCollectionDto.php
+                        -AbstractCollectionEntity.php
+                        -AbstractCollectionVo.php
+                    -Attributes
+                    -Concerns
+                    -Contracts
+                    -CollectionAny.php
+                -DataObjects
+                    -Attributes
+                    -Contracts
+                    -Responses
+                    -AbstractDataTransferObject.php
+                    -ExceptionContextDto.php
+                    -PaginationDataDto.php
+                    -ResultDto.php
+                    -UserPreferencesDto.php
+                -Entities
+                    -Attributes
+                    -Concerns
+                    -AbstractEntity.php
+                -ValueObjects
+                    -Parameters
+                        -ArrayTabulatorFiltersVo.php
+                        -CheckableProcessVo.php
+                        -DateFormat.php
+                        -EnvVo.php
+                        -JsonMethodVo.php
+                        -ProcessStatusKeysVo.php
+                        -SidebarState.php
+                        -StatusPluckFieldVo.php
+                        -StatusPluckKeyVo.php
+                        -ThemeVo.php
+                    -Primitives
+                        -Abstracts
+                            -Base
+                                -AbstractArrayVo.php
+                                -AbstractBaseEnumVo.php
+                                -AbstractBoolVo.php
+                                -AbstractFloatVo.php
+                                -AbstractIntVo.php
+                                -AbstractJsonVo.php
+                                -AbstractStringVo.php
+                            -AbstractDateVo.php
+                            -AbstractEnumNullVo.php
+                            -AbstractEnumVo.php
+                            -AbstractId.php
+                            -AbstractIdZero.php
+                            -AbstractTimestampVo.php
+                            -AbstractUnsignedIntVo.php
+                        -Collections
+                            -CollectionIds.php
+                            -CollectionInts.php
+                            -CollectionStrings.php
+                        -ArrayNullVo.php
+                        -ArrayVo.php
+                        -BoolNullVo.php
+                        -BoolVo.php
+                        -DateNullVo.php
+                        -DateVo.php
+                        -FloatNullVo.php
+                        -FloatVo.php
+                        -IdNullVo.php
+                        -IdVo.php
+                        -IdZeroNullVo.php
+                        -IdZeroVo.php
+                        -IntNullVo.php
+                        -IntVo.php
+                        -JsonNullVo.php
+                        -JsonVo.php
+                        -StringNullVo.php
+                        -StringVo.php
+                        -TimestampNullVo.php
+                        -TimestampVo.php
+                        -UnsignedIntNullVo.php
+                        -UnsignedIntVo.php
+                    -AbstractValueObject.php
+            -Support
+                -helpers_domain.php
+        -Infrastructure
+            -Laravel
+                -Console
+                    -Commands
+                        -ClearAll.php
+                        -ConfigCheck.php
+                        -Install.php
+                        -JobDispatch.php
+                        -LogsClear.php
+                        -ProcessCheck.php
+                -Exceptions
+                    -ExceptionHandler.php
+                -Facades
+                    -Broadcast.php
+                    -LayoutPreferences.php
+                    -Process.php
+                -Http
+                    -Controllers
+                        -Controller.php
+                    -Middleware
+                        -AddPreferencesCookies.php
+                        -ForceArraySessionInCloud.php
+                        -UserHasPermission.php
+                        -UserHasRole.php
+            -Support
+                -Broadcasting
+                    BroadcastDispatcher.php
+                -Config
+                    -KalionConfig.php
+                -Date
+                    -DateHelper.php
+                -Install
+                    -Attributes
+                    -Exceptions
+                    -Objects
+                    -InstallStepProcessor.php
+                    -ProcessorBuilder.php
+                    -StepBase.php
+                -Layout
+                    -LayoutPreferencesCookieStore.php
+                    -PackageAssets.php
+                    -PreferencesCookieStore.php
+                -Process
+                    -ProcessStateStore.php
+                    -SystemProcessInspector.php
+                -helpers_infrastructure.php
+    -Features
+        -Auth
+        -AuthFlow
+        -Components
+        -Examples
+        -Jobs
+        -Processes
+        -Shared
+    -KalionServiceProvider.php
+
+
+
+Después fue creciendo y le fui añadiendo más funcionalidades (por eso la carpeta "Features" o "Core/Support") pero el origen y lo util para la clean arquitecture y el ddd son las clases genéricas:
+- AbstractCollectionBase.php (y las hijas directas como AbstractCollectionEntity)
+- AbstractDataTransferObject.php
+- AbstractEntity.php
+- AbstractValueObject.php
+
+
+Con este sistema el ejemplo de antes se puede reducir a esto:
+
+    class EloquentPostRepository implements PostRepository
+    {
+        private string $model;
+
+        public function __construct()
+        {
+            $this->model = Post::class;
+        }
+
+        public function all(): PostCollection
+        {
+            $data = $this->model::query()->with('comments')->get();
+            return PostCollection::fromArray($data->toArray(), ['comments']);
+        }
+
+        public function find(IdVo $id): PostEntity
+        {
+            $data = $this->model::query()->with('comments')->findOrFail($id);
+            return PostEntity::fromArray($data->toArray(), ['comments']);
+        }
+
+    }
+
+    #[CollectionOf(PostEntity::class)]
+    class PostCollection extends AbstractCollectionEntity
+    {
+    }
+
+    class PostEntity extends AbstractEntity
+    {
+        public function __construct(
+            public readonly IdVo|IdNullVo   $id,
+            public readonly StringVo        $title,
+            public readonly StringVo        $content,
+            public readonly StringVo        $slug,
+            public readonly IdVo            $user_id,
+            public readonly TimestampNullVo $created_at,
+        )
+        {
+        }
+
+        #[RelationOf(UserEntity::class)]
+        public function user(): ?UserEntity
+        {
+            return $this->getRelation();
+        }
+
+        #[RelationOf(CommentCollection::class)]
+        public function comments(): CommentCollection
+        {
+            return $this->getRelation();
+        }
+
+        #[RelationOf(TagCollection::class)]
+        public function tags(): TagCollection
+        {
+            return $this->getRelation();
+        }
+    }
+
+
+Como ves al extender la entidad y la colección de las clases abstractas se pueden instanciar automáticamente con el "fromArray" y se pueden añadir las relaciones creadas en la entidad siempre que vengan en los datos de la query.
+
+
+
+Y esto solo fue el principio, ya que después le fui añadiendo mas funcionalidades al paquete como:
+
+- Clase BroadcastDispatcher -> una clase con un método dispatch que lanza "broadcast($event)" dentro de un tryCatch y que siempre devuelve ResultDto
+- Clase KalionConfig.php -> para permitir sobreescribir configuración del paquete desde la app
+- Helper DateHelper -> con métodos útiles como "compare", "mergeDateAndTime", "matchesFormat", "matchesAnyFormat", "measure"
+- Comando Install -> que se puede ejecutar en una aplicación limpia de Laravel y te crea ya una estructura de archivos configurados y ejemplos de como usar el paquete:
+    01_prev_handleLockFile.php
+    02_publish_config.php
+    03_copy_dependencyServiceProvider.php
+    04_copy_config.php
+    05_copy_migrations.php
+    06_copy_js_config.php
+    07_copy_factories.php
+    08_copy_seeders.php
+    09_copy_lang.php
+    10_copy_resources.php
+    11_copy_src.php
+    12_copy_routes.php
+    13_copy_env.php
+    14_delete_http.php
+    15_delete_models.php
+    16_add_providers_toBootstrapFile.php
+    17_modify_bApp_toAdd_ExceptionHandler.php
+    18_modify_gitignore_toDeleteLockFileLines.php
+    19_modify_package_toAdd_dependencies.php
+    20_modify_package_toAdd_scriptTsBuild.php
+    21_modify_package_toAdd_engines.php
+    22_modify_composer_toAdd_namespaces.php
+    23_modify_composer_toAdd_files.php
+    24_exec_composer_require.php
+    25_exec_composer_dump_autoload.php
+    26_exec_git_add.php
+    27_exec_npm_install.php
+    28_exec_npm_runBuild.php
+- Clase LayoutPreferencesCookieStore -> clase que permite gestionar la cookie de las preferencias del usuario fácilmente
+- Clase SystemProcessInspector.php -> permite detectar si hay procesos como "php artisan queue:work" en la maquina
+- Clase ProcessStateStore.php.php -> permite guardar en cache si los procesos están activos o no
+
+
+Ademas de esas clases "support" el paquete tiene Features como:
+- Auth:
+    sistema de autenticación como en Laravel "kauth()->user()" que devielve la entidad del usuario autenticado con los roles cargados.
+    Esto ya trae un sistema de roles y permisos que se pueden consultar asi "kauth()->user()->is('role_name')" o "kauth()->user()->can('permission_name')"
+    Admas trae
+- AuthFlow
+- Components
+- Examples
+- Jobs
+- Processes
+- Shared
+
+
+
+Después fue creciendo y le fui añadiendo más funcionalidades (por eso la carpeta "Features" o "Core/Support") pero el origen y lo util para la clean arquitecture y el ddd son las clases genéricas:
+
+.
