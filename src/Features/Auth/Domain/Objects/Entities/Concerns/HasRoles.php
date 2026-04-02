@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleReposito
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\PermissionCollection;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\RoleCollection;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\RoleEntity;
-use Thehouseofel\Kalion\Features\Auth\Domain\Support\PermissionParser;
+use Thehouseofel\Kalion\Features\Auth\Domain\Support\AbilityParser;
 
 trait HasRoles
 {
@@ -30,7 +30,7 @@ trait HasRoles
 
     protected function check(string $method, string|array $value, array $params): bool
     {
-        $values = (new PermissionParser)->getArrayPermissions($value, $params);
+        $values = (new AbilityParser)->parse($value, $params);
         return $values->contains(fn($params, $value) => $this->userHas($method, $value, $params));
     }
 

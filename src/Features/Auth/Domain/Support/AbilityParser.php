@@ -9,20 +9,20 @@ use Illuminate\Support\Collection;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class PermissionParser
+final class AbilityParser
 {
-    public function getArrayPermissions(string|array $permissions, array $params): Collection
+    public function parse(string|array $abilities, array $params): Collection
     {
-        $permissions = collect(is_array($permissions) ? $permissions : explode('|', $permissions));
+        $abilities = collect(is_array($abilities) ? $abilities : explode('|', $abilities));
 
         return empty($params)
-            ? $this->parseStringPermissions($permissions)
-            : $this->parseArrayPermissions($permissions, $params);
+            ? $this->parseStringPermissions($abilities)
+            : $this->parseArrayPermissions($abilities, $params);
     }
 
-    private function parseStringPermissions(Collection $permissions): Collection
+    private function parseStringPermissions(Collection $abilities): Collection
     {
-        return $permissions->mapWithKeys(function ($permission) {
+        return $abilities->mapWithKeys(function ($permission) {
             [$permission_name, $permission_params] = array_pad(explode(':', $permission, 2), 2, null);
 
             return [$permission_name => $this->parseParamsFromString($permission_params)];
