@@ -38,7 +38,7 @@
                 {{ $slot }}
             @else
                 {!! $iconHtml !!}
-                <span @class([$spanClasses, 'flex-1 whitespace-nowrap' => isset($counter), 'text-center' => (!isset($counter) && $level === '0')])>{{ $slot }}</span>
+                <span @class([$spanClasses, 'sc:text-center', 'flex-1 whitespace-nowrap' => isset($counter), 'text-center' => (!isset($counter) && $level === '0')])>{{ $slot }}</span>
                 @isset($counter)
                     <span class="text-blue-800 bg-blue-100 dark:bg-blue-200 dark:text-blue-800 inline-flex h-5 w-5 items-center justify-center rounded-full text-xs font-semibold md:sc:absolute md:sc:right-2">{{ $counter }}</span>
                 @endisset
