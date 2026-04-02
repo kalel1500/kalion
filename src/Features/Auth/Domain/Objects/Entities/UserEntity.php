@@ -11,11 +11,11 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity;
-use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns\HasPermissions;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns\HasRoles;
 
 class UserEntity extends AbstractEntity implements AuthenticatableEntity
 {
-    use HasPermissions, HasGuard;
+    use HasRoles, HasGuard;
 
     public function __construct(
         public readonly IdVo|IdNullVo $id,
