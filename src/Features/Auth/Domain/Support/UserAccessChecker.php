@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Auth\Domain\Support;
 
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
-use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
-use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\PermissionEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\RoleEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
 
@@ -16,9 +14,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
 final readonly class UserAccessChecker
 {
     public function __construct(
-        private PermissionParser     $permissionParser,
-        private RoleRepository       $repositoryRole,
-        private PermissionRepository $repositoryPermission
+        private PermissionParser     $permissionParser
     )
     {
     }
@@ -37,33 +33,22 @@ final readonly class UserAccessChecker
 
     protected function userHasPermission(UserEntity $user, string $permission, array $params = []): bool
     {
-        // Comprobar si el usuario tiene un rol con todos los permisos
-        if ($user->all_permissions()) return true;
-
-        // Obtener la Entidad Permission con todos los roles
-        $permission = $this->repositoryPermission->findByName(StringVo::from($permission));
-
-        // Recorrer los roles del permiso
-        return $permission->roles()->contains(function (RoleEntity $role) use ($user, $permission, $params) {
-            // Set user repository
+        return $user->permissions()->contains(function (PermissionEntity $userPermission) use ($user, $permission, $params) {
             $repositoryUser = new (kauth($user->getGuard())->getClassUserRepository());
 
-            // Comprobar si el rol es query y lanzarla o comprobar si el usuario tiene ese rol
-            return $role->is_query->isTrue()
-                ? $repositoryUser->{$role->name->value}($user, ...$params)
-                : $user->roles()->contains('name', $role->name->value);
+            if ($userPermission->name->value !== $permission) return false;
+            if ($userPermission->getIsQuery()) return $repositoryUser->{$permission}($user, ...$params);
+            return true;
         });
     }
 
     protected function userHasRole(UserEntity $user, string $role, array $params = []): bool
     {
-        $role = $this->repositoryRole->findByName(StringVo::from($role));
         return $user->roles()->contains(function (RoleEntity $userRole) use ($user, $role, $params) {
-            // Set user repository
             $repositoryUser = new (kauth($user->getGuard())->getClassUserRepository());
 
-            if ($userRole->name->value !== $role->name->value) return false;
-            if ($userRole->is_query->isTrue()) return $repositoryUser->{$role->name->value}($user, ...$params);
+            if ($userRole->name->value !== $role) return false;
+            if ($userRole->getIsQuery()) return $repositoryUser->{$role}($user, ...$params);
             return true;
         });
     }

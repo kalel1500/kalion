@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
@@ -24,5 +25,11 @@ class PermissionEntity extends AbstractEntity
     public function roles(): RoleCollection
     {
         return $this->getRelation();
+    }
+
+    #[Computed(Computed::AS_ATTRIBUTE)]
+    public function getIsQuery(): bool
+    {
+        return $this->computed(fn() => $this->roles()->contains(fn(RoleEntity $role) => $role->getIsQuery()));
     }
 }
