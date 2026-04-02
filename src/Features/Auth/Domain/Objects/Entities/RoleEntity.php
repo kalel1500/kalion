@@ -11,9 +11,10 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\BoolVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AccessEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Collections\PermissionCollection;
 
-class RoleEntity extends AbstractEntity
+class RoleEntity extends AbstractEntity implements AccessEntity
 {
     public function __construct(
         public readonly IdVo|IdNullVo $id,
