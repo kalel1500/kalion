@@ -28,6 +28,16 @@ trait HasRoles
         return $this->checkAll('roles', $role, $params);
     }
 
+    public function canAny(string|array $permission, ...$params): bool
+    {
+        return $this->checkAny('permissions', $permission, $params);
+    }
+
+    public function isAny(string|array $role, ...$params): bool
+    {
+        return $this->checkAny('roles', $role, $params);
+    }
+
     protected function checkAny(string $method, string|array $value, array $params): bool
     {
         $values = (new AbilityParser)->parse($value, $params);

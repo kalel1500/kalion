@@ -10,5 +10,9 @@ interface AuthenticatableEntity
 
     public function is(string|array $role, ...$params): bool;
 
+    public function canAny(string|array $permission, ...$params): bool;
+
+    public function isAny(string|array $role, ...$params): bool;
+
     public function toArray($addPermissions = false, $addRoles = false): array;
 }
