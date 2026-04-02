@@ -36,8 +36,8 @@ class EntityGuard implements Guard
 
         $with = null;
         if (config('kalion.auth.load_roles')) {
-            $user->load('roles');
-            $with = ['roles'];
+            $with = ['roles', 'permissions'];
+            $user->load($with);
         }
 
         $this->userEntity = $this->getClassUserEntity()::fromArray($user->toArray(), $with);
