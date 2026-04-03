@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Install\Attributes;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-class Title
+final class Title
 {
     public array $values;
 

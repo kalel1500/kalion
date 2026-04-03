@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Install\Attributes;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class Step
+final class Step
 {
     public const BASE     = 'base';
     public const EXAMPLES = 'examples';
