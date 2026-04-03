@@ -9,6 +9,6 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Attributes\CollectionOf;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IntVo;
 
 #[CollectionOf(IntVo::class)]
-final class CollectionInts extends AbstractCollectionVo
+class CollectionInts extends AbstractCollectionVo
 {
 }

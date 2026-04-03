@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands;
 use Illuminate\Console\Command;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 
-final class JobDispatch extends Command
+class JobDispatch extends Command
 {
     /**
      * The name and signature of the console command.

@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Ab
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class EnvVo extends AbstractEnumVo
+class EnvVo extends AbstractEnumVo
 {
     const local         = 'local';
     const preproduction = 'preproduction';

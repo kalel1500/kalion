@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\UnauthorizedException;
 
-final class UserHasRole
+class UserHasRole
 {
     /**
      * Handle an incoming request.

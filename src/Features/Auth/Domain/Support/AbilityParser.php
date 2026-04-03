@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class AbilityParser
+class AbilityParser
 {
     public function parse(string|array $abilities, array $params): Collection
     {

@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Ab
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class StatusPluckFieldVo extends AbstractEnumVo
+class StatusPluckFieldVo extends AbstractEnumVo
 {
     const id   = 'id';
     const name = 'name';

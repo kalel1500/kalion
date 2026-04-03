@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
-final class LogsClear extends Command
+class LogsClear extends Command
 {
     /**
      * The name and signature of the console command.

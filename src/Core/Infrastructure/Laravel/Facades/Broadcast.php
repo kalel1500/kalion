@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Facade;
  *
  * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting\BroadcastDispatcher
  */
-final class Broadcast extends Facade
+class Broadcast extends Facade
 {
     /**
      * Get the registered name of the component.

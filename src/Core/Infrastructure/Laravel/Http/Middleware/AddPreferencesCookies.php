@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\LayoutPreferences;
 
-final class AddPreferencesCookies
+class AddPreferencesCookies
 {
     /**
      * Handle an incoming request.

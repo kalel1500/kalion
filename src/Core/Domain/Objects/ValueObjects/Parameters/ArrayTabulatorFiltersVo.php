@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Ba
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class ArrayTabulatorFiltersVo extends AbstractArrayVo
+class ArrayTabulatorFiltersVo extends AbstractArrayVo
 {
     private const MAX_DAYS_TO_FILTER_RANGE = 50;
     protected string  $filterTimeName;

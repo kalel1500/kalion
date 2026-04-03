@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 
-final class ConfigCheck extends Command
+class ConfigCheck extends Command
 {
     protected $signature = 'kalion:config-check';
 

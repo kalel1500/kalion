@@ -14,7 +14,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PreferencesCookieStor
  *
  * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore
  */
-final class LayoutPreferences extends Facade
+class LayoutPreferences extends Facade
 {
     /**
      * Get the registered name of the component.

@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ForceArraySessionInCloud
+class ForceArraySessionInCloud
 {
     /**
      * Handle an incoming request.

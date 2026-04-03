@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
-final class ClearAll extends Command
+class ClearAll extends Command
 {
     /**
      * The name and signature of the console command.

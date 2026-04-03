@@ -17,7 +17,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterfac
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Throwable;
 
-final class ExceptionHandler
+class ExceptionHandler
 {
 
     /**

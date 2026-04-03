@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\Process;
 
-final class ProcessCheck extends Command
+class ProcessCheck extends Command
 {
     /**
      * The name and signature of the console command.

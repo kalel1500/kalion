@@ -14,7 +14,7 @@ use Throwable;
  * @internal This class is not meant to be used or overwritten outside the package.
  */
 #[DisableReflection]
-final class ExceptionContextDto extends AbstractDataTransferObject
+class ExceptionContextDto extends AbstractDataTransferObject
 {
     public readonly string $title;
 

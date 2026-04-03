@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 /**
  * @internal This class is not meant to be used or overwritten outside the package.
  */
-final class UserPreferencesDto extends AbstractDataTransferObject
+class UserPreferencesDto extends AbstractDataTransferObject
 {
     public function __construct(
         public string       $version,

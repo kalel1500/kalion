@@ -22,7 +22,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckablePro
  *
  * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Process\SystemProcessInspector
  */
-final class Process extends Facade
+class Process extends Facade
 {
     /**
      * Get the registered name of the component.
