@@ -17,7 +17,7 @@ class CheckAbility
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $method, $values): Response
+    public function handle(Request $request, Closure $next, string $method, string $values): Response
     {
         if (! in_array($method, ['is', 'can'])) {
             throw new InvalidValueException(sprintf('The ability "%s" is not supported in %s middleware. Only "is" and "can" are allowed.', $method, __CLASS__));
@@ -33,6 +33,7 @@ class CheckAbility
             throw UnauthorizedException::missingTraitHasPermissions($user);
         }
 
+        $values = str_replace('+', ',', $values);
         if (! $user->$method($values)) {
             throw $this->getException($method, $values);
         }
