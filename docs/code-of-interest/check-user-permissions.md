@@ -98,6 +98,9 @@
         user()->can("admin_tags:$imp_systems;$imp_groups;aaaa;1|see_post_detail:$imp_centers|filter_posts");
         user()->can('admin_tags|see_post_detail|filter_posts', [$systems, $groups, 'aaaa', 1], $centers);
         user()->can(['admin_tags', 'see_post_detail', 'filter_posts'], [$systems, $groups, 'aaaa', 1], $centers);
+        
+        user()->can("admin_tags:1,2,3;4,5,6;aaaa;1|see_post_detail:7,8,9|filter_posts");
+        user()->can("admin_tags|see_post_detail|filter_posts", [[1,2,3],[4,5,6],'aaaa',1], [7,8,9]);
 
         user()->is("admin:$imp_systems;$imp_groups;aaaa;1|writer:$imp_centers|reader");
         user()->is('admin|writer|reader', [$systems, $groups, 'aaaa', 1], $centers);
