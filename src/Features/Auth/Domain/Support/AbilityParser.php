@@ -16,11 +16,11 @@ class AbilityParser
         $abilities = collect(is_array($abilities) ? $abilities : explode('|', $abilities));
 
         return empty($params)
-            ? $this->parseStringPermissions($abilities)
-            : $this->parseArrayPermissions($abilities, $params);
+            ? $this->parseFromStrings($abilities)
+            : $this->parseFromArrays($abilities, $params);
     }
 
-    private function parseStringPermissions(Collection $abilities): Collection
+    private function parseFromStrings(Collection $abilities): Collection
     {
         return $abilities->mapWithKeys(function ($permission) {
             [$permission_name, $permission_params] = array_pad(explode(':', $permission, 2), 2, null);
@@ -47,7 +47,7 @@ class AbilityParser
             : array_map(fn($val) => is_numeric($val) ? intval($val) : $val, $paramValues);
     }
 
-    private function parseArrayPermissions(Collection $permissions, array $params): Collection
+    private function parseFromArrays(Collection $permissions, array $params): Collection
     {
         return $permissions->mapWithKeys(function ($permission, $key) use ($params) {
             return [$permission => $this->normalizeArrayParams($params[$key] ?? null)];
