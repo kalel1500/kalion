@@ -20,8 +20,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\AddPreferencesCookies;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\ForceArraySessionInCloud;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Middleware\UserHasPermission;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Middleware\UserHasRole;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Middleware\CheckAbility;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting\BroadcastDispatcher;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\LayoutPreferencesCookieStore;
@@ -323,8 +322,7 @@ class KalionServiceProvider extends ServiceProvider
         $router = $this->app->make(Router::class);
 
         // Registrar middlewares solo para rutas específicas
-        $router->aliasMiddleware('userCan', UserHasPermission::class);
-        $router->aliasMiddleware('userIs', UserHasRole::class);
+        $router->aliasMiddleware('ability', CheckAbility::class);
 
         if ($this->app->runningInConsole()) return;
 
