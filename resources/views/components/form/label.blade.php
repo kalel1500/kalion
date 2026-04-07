@@ -7,7 +7,7 @@
 @php($label = $value ?? $slot->toHtml())
 
 @if(!empty(trim($label)))
-    <label for="{{ $for }}" class="block mb-2.5 text-sm font-medium text-heading">
+    <label for="{{ $for }}" {{ $attributes->twMerge('block mb-2.5 text-sm font-medium text-heading') }}>
         {{ $label }}
     </label>
 @endif
