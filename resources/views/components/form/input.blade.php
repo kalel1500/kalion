@@ -10,6 +10,8 @@
      'value'          => '',
      'size'           => 'base',
      'containerClass' => null,
+     'labelClass'     => null,
+     'class'          => null,
      'rows'           => 4, // only for textarea
      'checked'        => false,
      'required'       => false,
@@ -38,7 +40,7 @@
                     @required($required)
                 >
 
-                <label for="{{ $id }}" class="ms-2 text-sm font-medium text-heading select-none">
+                <label for="{{ $id }}" class="@twMerge('ms-2 text-sm font-medium text-heading select-none', $labelClass)">
                     {{ $label ?? $slot }}
                 </label>
             </div>
@@ -62,7 +64,7 @@
                     @required($required)
                 >
 
-                <label for="{{ $id }}" class="select-none ms-2 text-sm font-medium text-heading">
+                <label for="{{ $id }}" class="@twMerge('select-none ms-2 text-sm font-medium text-heading', $labelCalss)">
                     {{ $label ?? $slot }}
                 </label>
             </div>
@@ -86,7 +88,7 @@
                     @required($required)
                 >
                 <div class="relative w-9 h-5 bg-neutral-quaternary peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-soft dark:peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand"></div>
-                <span class="select-none ms-3 text-sm font-medium text-heading">
+                <span class="@twMerge('select-none ms-3 text-sm font-medium text-heading', $labelClass)">
                     {{ $label ?? $slot }}
                 </span>
             </label>
@@ -108,18 +110,22 @@
             if ($disabled && !$readonly) {
                 $normal = twMerge($normal, 'text-fg-disabled');
             }
+            if ($type === 'textarea') {
+                $normal = twMerge($normal, 'p-3.5');
+            }
             $error      = 'bg-danger-soft border-danger-subtle text-fg-danger-strong focus:ring-danger focus:border-danger placeholder:text-fg-danger-strong';
-            $classes    = $common.' '.($errors->has($name) ? $error : $normal);
+            $classes    = $errors->has($name) ? twMerge($common, $class, $error) : twMerge($common, $normal, $class);
         @endphp
 
         <div @if($containerClass) class="{{ $containerClass }}" @endif>
-            <x-kal::form.label for="{{ $id }}" :value="$label" />
+            <x-kal::form.label for="{{ $id }}" :value="$label" :class="$labelClass" />
             @switch($type)
                 @case('select')
                     <select
                         id="{{ $id }}"
                         name="{{ $name }}"
-                        {{ $attributes->twMerge($classes) }}
+                        class="{{ $classes }}"
+                        {{ $attributes }}
                         @disabled($disabled)
                         @readonly($readonly)
                         @required($required)
@@ -133,7 +139,8 @@
                         id="{{ $id }}"
                         name="{{ $name }}"
                         rows="{{ $rows }}"
-                        {{ $attributes->twMerge($classes . ' p-3.5') }}
+                        class="{{ $classes }}"
+                        {{ $attributes }}
                         @disabled($disabled)
                         @readonly($readonly)
                         @required($required)
@@ -146,7 +153,8 @@
                         id="{{ $id }}"
                         name="{{ $name }}"
                         value="{{ $value }}"
-                        {{ $attributes->twMerge($classes) }}
+                        class="{{ $classes }}"
+                        {{ $attributes }}
                         @disabled($disabled)
                         @readonly($readonly)
                         @required($required)
