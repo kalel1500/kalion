@@ -11,6 +11,7 @@
      'size'           => 'base',
      'containerClass' => null,
      'rows'           => 4, // only for textarea
+     'checked'        => false,
      'required'       => false,
      'disabled'       => false,
      'readonly'       => false,
@@ -31,6 +32,7 @@
                     id="{{ $id }}"
                     name="{{ $name }}"
                     {{ $attributes->twMerge('w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft') }}
+                    @checked($checked)
                     @disabled($disabled)
                     @readonly($readonly)
                     @required($required)
@@ -54,6 +56,7 @@
                     name="{{ $name }}"
                     value=""
                     {{ $attributes->twMerge('w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none') }}
+                    @checked($checked)
                     @disabled($disabled)
                     @readonly($readonly)
                     @required($required)
@@ -77,6 +80,7 @@
                     name="{{ $name }}"
                     value=""
                     class="sr-only peer"
+                    @checked($checked)
                     @disabled($disabled)
                     @readonly($readonly)
                     @required($required)
