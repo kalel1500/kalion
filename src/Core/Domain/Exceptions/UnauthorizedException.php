@@ -33,7 +33,7 @@ class UnauthorizedException extends KalionHttpException
         return new static(static::STATUS_CODE, $message);
     }
 
-    public static function missingTraitHasPermissions($user): static
+    public static function missingTraitHasRoles($user): static
     {
         $class = get_class($user);
 
