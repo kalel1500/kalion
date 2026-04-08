@@ -16,24 +16,40 @@ use Throwable;
 #[DisableReflection]
 class ExceptionContextDto extends AbstractDataTransferObject
 {
-    public readonly string $title;
+    public readonly int        $statusCode;
+    public readonly string     $title;
+    public readonly string     $message;
+    public readonly bool       $success;
+    public readonly ?array     $data;
+    public readonly ?array     $custom_response;
+    public readonly int|string $code;
+    public readonly string     $exception;
+    public readonly string     $file;
+    public readonly int        $line;
+    public readonly array      $trace;
+    public readonly ?Throwable $previous;
+    public readonly bool       $showLogout;
 
     public function __construct(
-        public readonly int        $statusCode,
-        public readonly string     $message,
-        public readonly bool       $success,
-        public readonly ?array     $data,
-        public readonly ?array     $custom_response,
-        public readonly int|string $code,
-        public readonly string     $exception,
-        public readonly string     $file,
-        public readonly int        $line,
-        public readonly array      $trace,
-        public readonly ?Throwable $previous,
-        public readonly bool       $showLogout = false,
+        Throwable $e,
+        ?array    $data = null,
+        bool      $success = false,
+        ?array    $custom_response = null,
     )
     {
-        $this->title = Response::$statusTexts[$this->statusCode];
+        $this->statusCode      = (method_exists($e, 'getStatusCode')) ? $e->getStatusCode() : 500;
+        $this->title           = Response::$statusTexts[$this->statusCode];
+        $this->message         = (is_kalion_exception($e) || debug_is_active()) ? $e->getMessage() : __('Server Error');
+        $this->success         = $success;
+        $this->data            = $data;
+        $this->custom_response = $custom_response;
+        $this->code            = $e->getCode();
+        $this->exception       = get_class($e);
+        $this->file            = $e->getFile();
+        $this->line            = $e->getLine();
+        $this->trace           = collect($e->getTrace())->map(fn($trace) => Arr::except($trace, ['args']))->all();
+        $this->previous        = $e->getPrevious();
+        $this->showLogout      = $e instanceof KalionHttpException && config('kalion.exceptions.http.show_logout_form') && $e::SHOW_LOGOUT_FORM;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -44,33 +60,11 @@ class ExceptionContextDto extends AbstractDataTransferObject
         if (method_exists($e, 'getContext') && ! is_null($e->getContext())) return $e->getContext();
 
         return new ExceptionContextDto(
-            statusCode      : (method_exists($e, 'getStatusCode')) ? $e->getStatusCode() : 500,
-            message         : ExceptionContextDto::getMessage($e),
-            success         : $success,
-            data            : $data,
-            custom_response : $custom_response,
-            code            : $e->getCode(),
-            exception       : get_class($e),
-            file            : $e->getFile(),
-            line            : $e->getLine(),
-            trace           : collect($e->getTrace())->map(fn($trace) => Arr::except($trace, ['args']))->all(),
-            previous        : $e->getPrevious(),
-            showLogout      : ExceptionContextDto::showLogoutForm($e),
+            e              : $e,
+            data           : $data,
+            success        : $success,
+            custom_response: $custom_response,
         );
-    }
-
-    public static function getMessage(Throwable $e): string
-    {
-        return (is_kalion_exception($e) || debug_is_active()) ? $e->getMessage() : __('Server Error');
-    }
-
-    protected static function showLogoutForm(Throwable $e): bool
-    {
-        if (! ($e instanceof KalionHttpException)) {
-            return false;
-        }
-
-        return config('kalion.exceptions.http.show_logout_form') && $e::SHOW_LOGOUT_FORM;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
