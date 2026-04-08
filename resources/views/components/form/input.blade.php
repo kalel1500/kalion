@@ -33,7 +33,8 @@
                     type="checkbox"
                     id="{{ $id }}"
                     name="{{ $name }}"
-                    {{ $attributes->twMerge('w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft') }}
+                    class="@twMerge('w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft', $class)"
+                    {{ $attributes }}
                     @checked($checked)
                     @disabled($disabled)
                     @readonly($readonly)
@@ -57,7 +58,8 @@
                     id="{{ $id }}"
                     name="{{ $name }}"
                     value=""
-                    {{ $attributes->twMerge('w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none') }}
+                    class="@twMerge('w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none', $class)"
+                    {{ $attributes }}
                     @checked($checked)
                     @disabled($disabled)
                     @readonly($readonly)
@@ -81,7 +83,8 @@
                     id="{{ $id }}"
                     name="{{ $name }}"
                     value=""
-                    class="sr-only peer"
+                    class="@twMerge('sr-only peer', $class)"
+                    {{ $attributes }}
                     @checked($checked)
                     @disabled($disabled)
                     @readonly($readonly)
