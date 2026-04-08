@@ -1,11 +1,14 @@
 @use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
+
+@props(['title', 'code', 'message'])
+
     <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title')</title>
+    <title>{{ $title }}</title>
 
     {{-- Js para cargar el DarkMode --}}
     <script>
@@ -24,18 +27,20 @@
 
         <div class="flex items-center pt-8 sm:justify-center sm:pt-0">
             <div class="px-4 text-lg text-[#a0aec0] border-r border-[#cbd5e0] tracking-wider">
-                @yield('code')
+                {{ $code }}
             </div>
 
             <div class="ml-4 text-lg text-[#a0aec0] uppercase tracking-wider">
-                @yield('title')
+                {{ $title }}
             </div>
         </div>
 
         <div class="p-4 sm:text-center">
             <div class="text-md text-[#a0aec0] tracking-wider">
-                @yield('message')
-                @yield('html')
+                @if($message !== $title)
+                    {{ $message }}
+                @endif
+                {{ $slot }}
             </div>
         </div>
 
