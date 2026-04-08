@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Throwable;
@@ -72,7 +73,7 @@ class ExceptionContextDto extends AbstractDataTransferObject
     public function getMessage(Throwable $e): string
     {
         $message = $this->texts[$this->statusCode]['message'] ?? __('Unknown Error');
-        return (is_kalion_exception($e) || debug_is_active()) ? $e->getMessage() : $message;
+        return (is_kalion_exception($e) || ($e instanceof HttpException) || debug_is_active()) ? $e->getMessage() : $message;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
