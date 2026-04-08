@@ -12,5 +12,7 @@ interface RoleRepository
 {
     public function all(): RoleCollection;
 
+    public function searchStatic(): RoleCollection;
+
     public function findByName(StringVo $name): RoleEntity;
 }

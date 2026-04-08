@@ -20,6 +20,12 @@ class EloquentRoleRepository implements RoleRepository
         return RoleCollection::fromArray($data->toArray());
     }
 
+    public function searchStatic(): RoleCollection
+    {
+        $data = $this->model::query()->where('is_query', false)->get();
+        return RoleCollection::fromArray($data->toArray());
+    }
+
     public function findByName(StringVo $name): RoleEntity
     {
         $data = $this->model::query()

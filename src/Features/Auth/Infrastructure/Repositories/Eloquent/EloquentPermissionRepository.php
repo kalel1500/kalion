@@ -20,6 +20,12 @@ class EloquentPermissionRepository implements PermissionRepository
         return PermissionCollection::fromArray($data->toArray());
     }
 
+    public function searchStatic(): PermissionCollection
+    {
+        $data = $this->model::query()->whereHas('roles', fn($q) => $q->where('is_query', false))->get();
+        return PermissionCollection::fromArray($data->toArray());
+    }
+
     public function findByName(StringVo $permission): PermissionEntity
     {
         $data = $this->model::query()

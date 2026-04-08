@@ -69,7 +69,7 @@ trait HasRoles
     {
         if ($addPermissions) {
             $repositoryPermission = app(PermissionRepository::class);
-            foreach ($repositoryPermission->all() as $permission) {
+            foreach ($repositoryPermission->searchStatic() as $permission) {
                 $permissionName = $permission->name->value;
                 $this->can[$permissionName] = $this->can($permissionName);
             }
@@ -77,7 +77,7 @@ trait HasRoles
 
         if ($addRoles) {
             $repositoryRole = app(RoleRepository::class);
-            foreach ($repositoryRole->all() as $role) {
+            foreach ($repositoryRole->searchStatic() as $role) {
                 $roleName = $role->name->value;
                 $this->is[$roleName] = $this->is($roleName);
             }

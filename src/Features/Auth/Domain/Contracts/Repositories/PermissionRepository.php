@@ -12,5 +12,7 @@ interface PermissionRepository
 {
     public function all(): PermissionCollection;
 
+    public function searchStatic(): PermissionCollection;
+
     public function findByName(StringVo $permission): PermissionEntity;
 }
