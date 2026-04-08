@@ -18,6 +18,22 @@ trait HasRoles
     protected array $is  = [];
     protected array $can = [];
 
+    public function fillStaticAbilities(): void
+    {
+        $repositoryRole       = app(RoleRepository::class);
+        $repositoryPermission = app(PermissionRepository::class);
+
+        foreach ($repositoryRole->searchStatic() as $role) {
+            $roleName = $role->name->value;
+            $this->is[$roleName] = $this->is($roleName);
+        }
+
+        foreach ($repositoryPermission->searchStatic() as $permission) {
+            $permissionName = $permission->name->value;
+            $this->can[$permissionName] = $this->can($permissionName);
+        }
+    }
+
     public function can(string|array $permission, ...$params): bool
     {
         return $this->checkAll('permissions', $permission, $params);
@@ -67,25 +83,9 @@ trait HasRoles
 
     public function toArray($addPermissions = false, $addRoles = false): array
     {
-        if ($addPermissions) {
-            $repositoryPermission = app(PermissionRepository::class);
-            foreach ($repositoryPermission->searchStatic() as $permission) {
-                $permissionName = $permission->name->value;
-                $this->can[$permissionName] = $this->can($permissionName);
-            }
-        }
-
-        if ($addRoles) {
-            $repositoryRole = app(RoleRepository::class);
-            foreach ($repositoryRole->searchStatic() as $role) {
-                $roleName = $role->name->value;
-                $this->is[$roleName] = $this->is($roleName);
-            }
-        }
-
         $base = parent::toArray();
-        $base['is'] = $this->is;
-        $base['can'] = $this->can;
+        $base['is'] = $addRoles ? $this->is : [];
+        $base['can'] = $addPermissions ? $this->can : [];
         return $base;
     }
 

@@ -6,6 +6,8 @@ namespace Thehouseofel\Kalion\Features\Auth\Domain\Contracts;
 
 interface AuthenticatableEntity
 {
+    public function fillStaticAbilities(): void;
+
     public function can(string|array $permission, ...$params): bool;
 
     public function is(string|array $role, ...$params): bool;

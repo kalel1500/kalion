@@ -42,6 +42,7 @@ class EntityGuard implements Guard
 
         $this->userEntity = $this->getClassUserEntity()::fromArray($user->toArray(), $with);
         $this->userEntity->setGuard($this->guard);
+        $this->userEntity->fillStaticAbilities();
 
         return $this->userEntity;
     }
