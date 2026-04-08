@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Auth\Infrastructure;
 
+use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\DataObjects\LoginFieldDto;
 
 class EntityGuard implements Guard
 {
-    protected mixed $userEntity = null;
+    protected ?AuthenticatableEntity $userEntity = null;
 
     public function __construct(
         protected string $guard
