@@ -55,11 +55,11 @@ class ExceptionContextDto extends AbstractDataTransferObject
     /*----------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------- Create Functions -----------------------------------------------*/
 
-    public static function from(Throwable $e, ?array $data = null, bool $success = false, ?array $customResponse = null): ExceptionContextDto
+    public static function from(Throwable $e, ?array $data = null, bool $success = false, ?array $customResponse = null): static
     {
         if (method_exists($e, 'getContext') && ! is_null($e->getContext())) return $e->getContext();
 
-        return new ExceptionContextDto(
+        return new static(
             e             : $e,
             data          : $data,
             success       : $success,
@@ -81,7 +81,7 @@ class ExceptionContextDto extends AbstractDataTransferObject
 
     private function arrayDebugInfo(): array
     {
-        $previousData = is_null($this->previous) ? null : ExceptionContextDto::from($this->previous);
+        $previousData = is_null($this->previous) ? null : static::from($this->previous);
         return [
             'exception' => $this->exception,
             'file'      => $this->file,
