@@ -16,6 +16,7 @@ use Throwable;
 #[DisableReflection]
 class ExceptionContextDto extends AbstractDataTransferObject
 {
+    protected readonly array   $texts;
     public readonly int        $statusCode;
     public readonly string     $title;
     public readonly string     $message;
@@ -37,9 +38,20 @@ class ExceptionContextDto extends AbstractDataTransferObject
         ?array    $customResponse = null,
     )
     {
+        $this->texts = [
+            401 => ['title' => __('Unauthorized'),          'message' => __('Unauthorized')                     ],
+            402 => ['title' => __('Payment Required'),      'message' => __('Payment Required')                 ],
+            403 => ['title' => __('Forbidden'),             'message' => __($e->getMessage() ?: 'Forbidden')    ],
+            404 => ['title' => __('Not Found'),             'message' => __('Not Found')                        ],
+            419 => ['title' => __('Page Expired'),          'message' => __('Page Expired')                     ],
+            429 => ['title' => __('Too Many Requests'),     'message' => __('Too Many Requests')                ],
+            500 => ['title' => __('Server Error'),          'message' => __('Server Error')                     ],
+            503 => ['title' => __('Service Unavailable'),   'message' => __('Service Unavailable')              ],
+        ];
+
         $this->statusCode     = (method_exists($e, 'getStatusCode')) ? $e->getStatusCode() : 500;
-        $this->title          = Response::$statusTexts[$this->statusCode];
-        $this->message        = (is_kalion_exception($e) || debug_is_active()) ? $e->getMessage() : __('Server Error');
+        $this->title          = $this->getTitle();
+        $this->message        = $this->getMessage($e);
         $this->success        = $success;
         $this->data           = $data;
         $this->customResponse = $customResponse;
@@ -50,6 +62,17 @@ class ExceptionContextDto extends AbstractDataTransferObject
         $this->trace          = collect($e->getTrace())->map(fn($trace) => Arr::except($trace, ['args']))->all();
         $this->previous       = $e->getPrevious();
         $this->showLogout     = $e instanceof KalionHttpException && config('kalion.exceptions.http.show_logout_form') && $e::SHOW_LOGOUT_FORM;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->texts[$this->statusCode]['title'] ?? __(Response::$statusTexts[$this->statusCode]);
+    }
+
+    public function getMessage(Throwable $e): string
+    {
+        $message = $this->texts[$this->statusCode]['message'] ?? __('Unknown Error');
+        return (is_kalion_exception($e) || debug_is_active()) ? $e->getMessage() : $message;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
