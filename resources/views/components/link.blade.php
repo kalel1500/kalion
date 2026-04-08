@@ -1,9 +1,10 @@
 @props([
+    'tag'       => 'a',
     'underline' => false,
-    'text' => null,
-    'title' => null,
-    'type' => 'default', // default, button, card
-    'icon' => null,      // arrow, external
+    'text'      => null,
+    'title'     => null,
+    'type'      => 'default', // default, button, card
+    'icon'      => null,      // arrow, external
 ])
 
 @php
@@ -30,7 +31,7 @@
         : "w-4 h-4 ms-2 $externalRotation";
 @endphp
 
-<a {{ $attributes->twMerge($finalClasses) }}>
+<{{ $tag }} {{ $attributes->twMerge($finalClasses) }}>
     @if($type === 'card')
         @if($title)
             <h5 class="mb-3 text-2xl font-semibold tracking-tight text-heading leading-8">{{ $title }}</h5>
@@ -49,4 +50,4 @@
             </svg>
         @endif
     @endif
-</a>
+</{{ $tag }}>
