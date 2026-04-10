@@ -17,6 +17,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractDateVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
 
 abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
@@ -116,12 +117,14 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $isId  = $meta['isId'];
 
                 $classIsNull = $class === null;
+                $idDateVo    = ! $classIsNull && is_a($class, class: AbstractDateVo::class, allow_string: true);
                 $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
                 $isVo        = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
 
                 $makeMethod = match (true) {
                     $classIsNull     => null,
                     $isId            => 'resolve',
+                    $idDateVo        => 'parse',
                     $isEnum || $isVo => 'from',
                     default          => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
