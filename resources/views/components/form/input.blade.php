@@ -110,6 +110,9 @@
             ];
             $common     = 'border rounded-base block w-full shadow-xs' . ' ' . $sizeClasses[$size];
             $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
+            if (str_contains($type, 'date')) {
+                $common .= ' dark:scheme-dark';
+            }
             if ($disabled && !$readonly) {
                 $normal = twMerge($normal, 'text-fg-disabled');
             }
