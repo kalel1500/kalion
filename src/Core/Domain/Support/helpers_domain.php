@@ -365,3 +365,13 @@ if (! function_exists('arr_is_assoc')) {
         return ! array_is_list($array);
     }
 }
+
+if (! function_exists('array_rename_keys')) {
+    function array_rename_keys(array $data, string $search, string $replace): array
+    {
+        return array_combine(
+            str_replace($search, $replace, array_keys($data)),
+            array_values($data)
+        );
+    }
+}
