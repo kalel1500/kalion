@@ -75,14 +75,12 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         $class     = $meta['class'];
 
         $classIsNull = $class === null;
-        $idDateVo    = ! $classIsNull && is_a($class, class: AbstractDateVo::class, allow_string: true);
         $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
         $isVo        = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
         $isArray     = ! $classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
 
         $makeMethod = match (true) {
             $classIsNull     => null,
-            $idDateVo        => 'parse',
             $isEnum || $isVo => 'from',
             $isArray         => 'fromArray',
             default          => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),

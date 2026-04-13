@@ -17,7 +17,8 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected static array $formats    = [DateFormat::datetime_startYear]; // Debe ser estática para poder usarla en el metodo estático parse
+    protected static array $formats      = [DateFormat::datetime_startYear]; // Debe ser estática para poder usarla en el metodo estático parse
+    protected static array $inputFormats = [DateFormat::html_datetime_local];
     protected              $valueCarbon;
 
     public function __construct(?string $value, ?array $formats = null)
@@ -28,6 +29,14 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public static function from($value, ?array $formats = null): static
     {
+        if (is_null($value)) return new static($value, $formats);
+
+        // Normalize from inputFormats
+        $inputFormats = array_map(fn($f) => $f->value, static::$inputFormats);
+        if (DateHelper::matchesAnyFormat($value, $inputFormats)) {
+            return static::parse($value);
+        }
+
         return new static($value, $formats);
     }
 

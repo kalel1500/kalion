@@ -117,14 +117,12 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                 $isId  = $meta['isId'];
 
                 $classIsNull = $class === null;
-                $idDateVo    = ! $classIsNull && is_a($class, class: AbstractDateVo::class, allow_string: true);
                 $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
                 $isVo        = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
 
                 $makeMethod = match (true) {
                     $classIsNull     => null,
                     $isId            => 'resolve',
-                    $idDateVo        => 'parse',
                     $isEnum || $isVo => 'from',
                     default          => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
