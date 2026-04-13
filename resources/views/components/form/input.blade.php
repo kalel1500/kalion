@@ -26,10 +26,10 @@
     $checked = session()->hasOldInput() ? old($name) : $checked;
 @endphp
 
-@switch($type)
-    @case('checkbox')
-        {{--@props(['label', 'id' => null, 'name' => null, 'containerClass' => null, 'required' => false, 'disabled' => false])--}}
-        <div @if($containerClass) class="{{ $containerClass }}" @endif>
+<div @if($containerClass) class="{{ $containerClass }}" @endif>
+    @switch($type)
+        @case('checkbox')
+            {{--@props(['label', 'id' => null, 'name' => null, 'containerClass' => null, 'required' => false, 'disabled' => false])--}}
             <div class="flex items-center">
                 <input
                     type="checkbox"
@@ -47,13 +47,10 @@
                     {{ $label ?? $slot }}
                 </label>
             </div>
-            <x-kal::form.error for="{{ $name }}" />
-        </div>
-        @break
+            @break
 
-    @case('radio')
-        {{--@props(['label', 'id' => null, 'name' => null, 'containerClass' => null, 'required' => false, 'disabled' => false])--}}
-        <div @if($containerClass) class="{{ $containerClass }}" @endif>
+        @case('radio')
+            {{--@props(['label', 'id' => null, 'name' => null, 'containerClass' => null, 'required' => false, 'disabled' => false])--}}
             <div class="flex items-center">
                 <input
                     type="radio"
@@ -71,13 +68,10 @@
                     {{ $label ?? $slot }}
                 </label>
             </div>
-            <x-kal::form.error for="{{ $name }}" />
-        </div>
-        @break
+            @break
 
-    @case('toggle')
-        {{--@props(['label', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])--}}
-        <div @if($containerClass) class="{{ $containerClass }}" @endif>
+        @case('toggle')
+            {{--@props(['label', 'id' => null, 'name' => null, 'required' => false, 'disabled' => false])--}}
             <label class="inline-flex items-center cursor-pointer">
                 <input
                     type="checkbox"
@@ -95,37 +89,34 @@
                     {{ $label ?? $slot }}
                 </span>
             </label>
-            <x-kal::form.error for="{{ $name }}" />
-        </div>
-        @break
+            @break
 
-    @default
+        @default
 
-        @php
-            $sizeClasses = [
-                'small' => 'text-sm   px-2.5 py-2',
-                'base'  => 'text-sm   px-3   py-2.5',
-                'large' => 'text-base px-3.5 py-3',
-                'extra' => 'text-base px-4   py-3.5',
-            ];
-            $common     = 'border rounded-base block w-full shadow-xs' . ' ' . $sizeClasses[$size];
-            $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
-            if (str_contains($type, 'date')) {
-                $common .= ' dark:scheme-dark';
-            }
-            if ($disabled && !$readonly) {
-                $normal = twMerge($normal, 'text-fg-disabled');
-            }
-            if ($type === 'textarea') {
-                $normal = twMerge($normal, 'p-3.5');
-            }
-            $error      = 'bg-danger-soft border-danger-subtle text-fg-danger-strong focus:ring-danger focus:border-danger placeholder:text-fg-danger-strong';
-            $classes    = $errors->has($name) ? twMerge($common, $class, $error) : twMerge($common, $normal, $class);
+            @php
+                $sizeClasses = [
+                    'small' => 'text-sm   px-2.5 py-2',
+                    'base'  => 'text-sm   px-3   py-2.5',
+                    'large' => 'text-base px-3.5 py-3',
+                    'extra' => 'text-base px-4   py-3.5',
+                ];
+                $common     = 'border rounded-base block w-full shadow-xs' . ' ' . $sizeClasses[$size];
+                $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
+                if (str_contains($type, 'date')) {
+                    $common .= ' dark:scheme-dark';
+                }
+                if ($disabled && !$readonly) {
+                    $normal = twMerge($normal, 'text-fg-disabled');
+                }
+                if ($type === 'textarea') {
+                    $normal = twMerge($normal, 'p-3.5');
+                }
+                $error      = 'bg-danger-soft border-danger-subtle text-fg-danger-strong focus:ring-danger focus:border-danger placeholder:text-fg-danger-strong';
+                $classes    = $errors->has($name) ? twMerge($common, $class, $error) : twMerge($common, $normal, $class);
 
-            $value = old($name, $value);
-        @endphp
+                $value = old($name, $value);
+            @endphp
 
-        <div @if($containerClass) class="{{ $containerClass }}" @endif>
             <x-kal::form.label for="{{ $id }}" :value="$label" :class="$labelClass" />
             @switch($type)
                 @case('select')
@@ -168,7 +159,7 @@
                         @required($required)
                     />
             @endswitch
-            <x-kal::form.error for="{{ $name }}" />
-        </div>
+    @endswitch
 
-@endswitch
+    <x-kal::form.error for="{{ $name }}" />
+</div>
