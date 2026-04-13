@@ -17,6 +17,7 @@
      'required'       => false,
      'disabled'       => false,
      'readonly'       => false,
+     'helper'         => null,
 ])
 
 @php
@@ -160,6 +161,16 @@
                     />
             @endswitch
     @endswitch
+
+    @if($helper)
+        @if($helper instanceof \Illuminate\View\ComponentSlot)
+            <div {{ $helper->attributes->twMerge(['text-xs text-body']) }} >
+                {{ $helper }}
+            </div>
+        @else
+            <p class="text-xs text-body">{{ $helper }}</p>
+        @endif
+    @endif
 
     <x-kal::form.error for="{{ $name }}" />
 </div>
