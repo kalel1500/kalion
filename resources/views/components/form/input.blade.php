@@ -22,6 +22,8 @@
 @php
     $id   = $id   ?? $name ?? '';
     $name = $name ?? $id   ?? '';
+
+    $checked = session()->hasOldInput() ? old($name) : $checked;
 @endphp
 
 @switch($type)
@@ -57,7 +59,6 @@
                     type="radio"
                     id="{{ $id }}"
                     name="{{ $name }}"
-                    value=""
                     class="@twMerge('w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none', $class)"
                     {{ $attributes }}
                     @checked($checked)
@@ -82,7 +83,6 @@
                     type="checkbox"
                     id="{{ $id }}"
                     name="{{ $name }}"
-                    value=""
                     class="@twMerge('sr-only peer', $class)"
                     {{ $attributes }}
                     @checked($checked)
@@ -121,6 +121,8 @@
             }
             $error      = 'bg-danger-soft border-danger-subtle text-fg-danger-strong focus:ring-danger focus:border-danger placeholder:text-fg-danger-strong';
             $classes    = $errors->has($name) ? twMerge($common, $class, $error) : twMerge($common, $normal, $class);
+
+            $value = old($name, $value);
         @endphp
 
         <div @if($containerClass) class="{{ $containerClass }}" @endif>
