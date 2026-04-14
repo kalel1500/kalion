@@ -18,7 +18,7 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_NULLABLE = DateNullVo::class;
 
     protected static array $formats      = [DateFormat::datetime_startYear]; // Debe ser estática para poder usarla en el metodo estático parse
-    protected static array $inputFormats = [DateFormat::html_datetime_local];
+    protected static array $inputFormats = [DateFormat::html_datetime_local, DateFormat::html_datetime_local_withoutSeconds];
     protected              $valueCarbon;
 
     public function __construct(?string $value, ?array $formats = null)

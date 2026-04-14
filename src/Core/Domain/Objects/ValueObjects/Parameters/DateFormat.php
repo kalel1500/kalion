@@ -25,4 +25,5 @@ enum DateFormat: string implements ArrayableEnum
     case time                                   = 'H:i:s';
     case zeros                                  = '0000-00-00 00:00:00';
     case html_datetime_local                    = 'Y-m-d\TH:i:s';
+    case html_datetime_local_withoutSeconds     = 'Y-m-d\TH:i';
 }
