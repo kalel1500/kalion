@@ -1,4 +1,9 @@
-@props(['type' => 'button', 'variant' => 'brand', 'size' => 'base'])
+@props([
+    'type'      => 'button',
+    'variant'   => 'brand',
+    'size'      => 'base',
+    'text'      => null,
+])
 
 @php
     $classes = 'border focus:ring-4 font-medium leading-5 rounded-base focus:outline-none';
@@ -22,4 +27,4 @@
     $finalClasses = $classes.' '.$sizeClasses[$size].' '.$colorClasses[$variant];
 @endphp
 
-<button type="{{ $type }}" {{ $attributes->twMerge($finalClasses) }}>{{ $slot }}</button>
+<button type="{{ $type }}" {{ $attributes->twMerge($finalClasses) }}>{{ $text ?? $slot }}</button>
