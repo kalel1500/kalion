@@ -1,4 +1,5 @@
 @props([
+    'tag'       => 'button', // @internal prop to determine if we render <button> or <a>
     'type'      => 'button',
     'variant'   => 'brand',
     'size'      => 'base',
@@ -25,6 +26,8 @@
         'ghost'     => 'text-heading    bg-transparent              box-border  border-transparent      hover:bg-neutral-secondary-medium                       focus:ring-neutral-tertiary                  ',
     ];
     $finalClasses = $classes.' '.$sizeClasses[$size].' '.$colorClasses[$variant];
+
+    $isButton = $type === 'button';
 @endphp
 
-<button type="{{ $type }}" {{ $attributes->twMerge($finalClasses) }}>{{ $text ?? $slot }}</button>
+<{{ $tag }} {{ $isButton ? "type=$type" : '' }} {{ $attributes->twMerge($finalClasses) }}>{{ $text ?? $slot }}</{{ $tag }}>
