@@ -201,6 +201,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-chart-pie',
                 'text'              => 'Overview',
+                'short_text'        => 'Overview',
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -212,6 +213,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-document-text',
                 'text'              => 'Pages',
+                'short_text'        => 'Pages',
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -221,6 +223,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Settings',
+                        'short_text'        => 'Settings',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -229,6 +232,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Kanban',
+                        'short_text'        => 'Kanban',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -237,6 +241,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Calendar',
+                        'short_text'        => 'Calendar',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -248,6 +253,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-shopping-bag',
                 'text'              => 'Sales',
+                'short_text'        => 'Sales',
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -257,6 +263,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Products',
+                        'short_text'        => 'Products',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -265,6 +272,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Billing',
+                        'short_text'        => 'Billing',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -273,6 +281,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Invoice',
+                        'short_text'        => 'Invoice',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -284,6 +293,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-inbox-arrow-down',
                 'text'              => 'Messages',
+                'short_text'        => 'Messages',
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => 'getMessageCounter',
@@ -295,6 +305,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-lock-closed',
                 'text'              => 'Authentication',
+                'short_text'        => 'Auth',
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -304,6 +315,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Sign In',
+                        'short_text'        => 'Sign In',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -312,6 +324,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Sign Up',
+                        'short_text'        => 'Sign Up',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -320,6 +333,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Forgot Password',
+                        'short_text'        => 'Forgot Pass',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -336,6 +350,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-clipboard-document-list',
                 'text'              => 'Docs',
+                'short_text'        => 'Docs',
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -347,6 +362,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-rectangle-stack',
                 'text'              => 'Components',
+                'short_text'        => 'Components',
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -358,6 +374,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-lifebuoy',
                 'text'              => 'Help',
+                'short_text'        => 'Help',
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -369,6 +386,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-document-text',
                 'text'              => 'Kalion',
+                'short_text'        => 'Kalion',
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -378,6 +396,7 @@ return [
                     [
                         'code'              => 'h-pages',
                         'text'              => 'Pages',
+                        'short_text'        => 'Pages',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -386,6 +405,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Laravel Welcome',
+                                'short_text'        => 'Welcome',
                                 'tooltip'           => null,
                                 'route_name'        => 'welcome',
                                 'counter_action'    => null,
@@ -394,6 +414,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Root',
+                                'short_text'        => 'Root',
                                 'tooltip'           => null,
                                 'route_name'        => 'index',
                                 'counter_action'    => null,
@@ -402,6 +423,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Queued Jobs (Pending)',
+                                'short_text'        => 'Queued Jobs',
                                 'tooltip'           => null,
                                 'route_name'        => 'kalion.queues.queuedJobs',
                                 'counter_action'    => null,
@@ -410,6 +432,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Failed Jobs (Pending)',
+                                'short_text'        => 'Failed Jobs',
                                 'tooltip'           => null,
                                 'route_name'        => 'kalion.queues.failedJobs',
                                 'counter_action'    => null,
@@ -418,6 +441,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Compare Html',
+                                'short_text'        => 'Compare Html',
                                 'tooltip'           => null,
                                 'route_name'        => 'kalion.compareHtml',
                                 'counter_action'    => null,
@@ -426,6 +450,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Update Cookie',
+                                'short_text'        => 'Update Cookie',
                                 'tooltip'           => null,
                                 'route_name'        => 'kalion.modifyCookie',
                                 'counter_action'    => null,
@@ -434,6 +459,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Icons',
+                                'short_text'        => 'Icons',
                                 'tooltip'           => null,
                                 'route_name'        => 'kalion.icons',
                                 'counter_action'    => null,
@@ -444,6 +470,7 @@ return [
                     [
                         'code'              => null,
                         'text'              => 'Examples',
+                        'short_text'        => 'Examples',
                         'tooltip'           => null,
                         'route_name'        => null,
                         'counter_action'    => null,
@@ -452,6 +479,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Example 1',
+                                'short_text'        => 'Example 1',
                                 'tooltip'           => null,
                                 'route_name'        => 'kalion.example1',
                                 'counter_action'    => null,
@@ -460,6 +488,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Example 2',
+                                'short_text'        => 'Example 2',
                                 'tooltip'           => null,
                                 'route_name'        => 'kalion.example2',
                                 'counter_action'    => null,
@@ -468,6 +497,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Example 3',
+                                'short_text'        => 'Example 3',
                                 'tooltip'           => null,
                                 'route_name'        => 'kalion.example3',
                                 'counter_action'    => null,
@@ -476,6 +506,7 @@ return [
                             [
                                 'code'              => null,
                                 'text'              => 'Example 4',
+                                'short_text'        => 'Example 4',
                                 'tooltip'           => null,
                                 'route_name'        => 'kalion.example4',
                                 'counter_action'    => null,
@@ -491,6 +522,7 @@ return [
                 'code'              => null,
                 'icon'              => 'heroicon-s-adjustments-vertical',
                 'text'              => null,
+                'short_text'        => null,
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -502,6 +534,7 @@ return [
                 'code'              => 'settings',
                 'icon'              => 'heroicon-s-cog-8-tooth',
                 'text'              => null,
+                'short_text'        => null,
                 'tooltip'           => 'Settings page',
                 'route_name'        => null,
                 'counter_action'    => null,
@@ -513,6 +546,7 @@ return [
                 'code'              => 'language',
                 'icon'              => 'kal::icon.flag.us-1',
                 'text'              => null,
+                'short_text'        => null,
                 'tooltip'           => null,
                 'route_name'        => null,
                 'counter_action'    => null,

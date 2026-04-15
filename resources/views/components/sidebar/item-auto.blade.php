@@ -17,7 +17,8 @@
                 <x-kal::render-icon :icon="$item->icon"/>
             </x-slot:icon>
         @endif
-        {{ $item->text }}
+        <span class="inline sc:hidden">{{ $item->text }}</span>
+        <span class="hidden sc:inline">{{ $item->short_text }}</span>
         @if($item->hasDropdown())
             @php($level++)
             <x-slot:dropdown :id="$item->getCode()">

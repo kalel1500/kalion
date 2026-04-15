@@ -16,6 +16,7 @@ final class SidebarItemDto extends NavigationItem
         ?string                $code,
         ?string                $icon,
         ?string                $text,
+        public ?string         $short_text,
         ?string                $tooltip,
         ?string                $route_name,
         ?bool                  $is_post,
