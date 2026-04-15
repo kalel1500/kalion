@@ -4,10 +4,13 @@
     'variant'   => 'brand',
     'size'      => 'base',
     'text'      => null,
+    'icon'      => false,
 ])
 
 @php
-    $classes = 'border focus:ring-4 font-medium leading-5 rounded-base focus:outline-none';
+    $commonClasses = 'border focus:ring-4 focus:outline-none';
+    $btnClasses    = 'font-medium leading-5 rounded-base';
+    $iconClasses   = 'rounded-full p-0';
     $sizeClasses = [
         'xs'    => 'px-3 py-2   text-xs  ',
         'sm'    => 'px-3 py-2   text-sm  ',
@@ -25,7 +28,9 @@
         'dark'      => 'text-white      bg-dark                     box-border  border-transparent      hover:bg-dark-strong                                    focus:ring-neutral-tertiary         shadow-xs',
         'ghost'     => 'text-heading    bg-transparent              box-border  border-transparent      hover:bg-neutral-secondary-medium                       focus:ring-neutral-tertiary                  ',
     ];
-    $finalClasses = $classes.' '.$sizeClasses[$size].' '.$colorClasses[$variant];
+    $finalClasses = $icon
+        ? $commonClasses.' '.$iconClasses.' '.$colorClasses[$variant]
+        : $commonClasses.' '.$btnClasses.' '.$sizeClasses[$size].' '.$colorClasses[$variant];
 
     $isButton = $type === 'button';
 @endphp
