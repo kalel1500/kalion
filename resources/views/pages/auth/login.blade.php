@@ -18,7 +18,7 @@
         </div>
 
         <!-- Submit btn -->
-        <x-kal::form.button>{{ __('k::auth.login.btn') }}</x-kal::form.button>
+        <x-kal::partials.form-btn>{{ __('k::auth.login.btn') }}</x-kal::partials.form-btn>
 
         <!-- Register link -->
         @if(! config('kalion.auth.disable_register'))

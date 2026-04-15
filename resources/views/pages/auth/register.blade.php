@@ -18,7 +18,7 @@
         <x-kal::form.checkbox-terms />
 
         <!-- Submit btn -->
-        <x-kal::form.button>{{ __('k::auth.register.btn') }}</x-kal::form.button>
+        <x-kal::partials.form-btn>{{ __('k::auth.register.btn') }}</x-kal::partials.form-btn>
 
         <!-- Login link -->
         <x-kal::form.question-link :value="__('k::auth.register.question')" :link="__('k::auth.register.question_link')" href="{{ route('login') }}" />
