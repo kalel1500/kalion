@@ -65,7 +65,7 @@
                     @required($required)
                 >
 
-                <label for="{{ $id }}" class="@twMerge('select-none ms-2 text-sm font-medium text-heading', $labelCalss)">
+                <label for="{{ $id }}" class="@twMerge('select-none ms-2 text-sm font-medium text-heading', $labelClass)">
                     {{ $label ?? $slot }}
                 </label>
             </div>
