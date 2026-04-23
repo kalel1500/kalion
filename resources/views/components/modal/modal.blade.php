@@ -15,6 +15,7 @@
     'footer'        => null,
     'confirmText'   => null,
     'cancelText'    => null,
+    'declarative'   => false,
 ])
 
 @php
@@ -69,7 +70,7 @@
                 {{-- ═══════════════════════════════════════════ --}}
                 {{-- POPUP                                       --}}
                 {{-- ═══════════════════════════════════════════ --}}
-                <x-kal::modal.close :modalId="$id" :text="$closeText" :forPopup="true"/>
+                <x-kal::modal.close :modalId="$id" :text="$closeText" :forPopup="true" :declarative="$declarative"/>
                 <div class="p-4 md:p-5 text-center">
                     @if($icon)
                         <span class="mx-auto mb-4 text-fg-disabled w-12 h-12 flex items-center justify-center [&>svg]:w-12 [&>svg]:h-12">
@@ -79,8 +80,16 @@
                     <div class="mb-6 text-body">{{ $slot }}</div>
                     @if(! $footerIsSlot)
                         <div class="flex items-center space-x-4 justify-center">
-                            <x-kal::button data-modal-hide="{{ $id }}" variant="{{ $confirmVariant }}">{{ $confirmText }}</x-kal::button>
-                            <x-kal::button data-modal-hide="{{ $id }}" variant="secondary">{{ $cancelText }}</x-kal::button>
+                            <x-kal::button
+                                :data-modal-hide="$declarative ? $id : null"
+                                :data-fmodal-confirm="!$declarative ? $id : null"
+                                variant="{{ $confirmVariant }}"
+                            >{{ $confirmText }}</x-kal::button>
+                            <x-kal::button
+                                :data-modal-hide="$declarative ? $id : null"
+                                :data-fmodal-cancel="!$declarative ? $id : null"
+                                variant="secondary"
+                            >{{ $cancelText }}</x-kal::button>
                         </div>
                     @else
                         {{ $footer }}
@@ -97,7 +106,7 @@
                 @else
                     <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
                         <h3 class="text-lg font-medium text-heading">{{ $header }}</h3>
-                        <x-kal::modal.close :modalId="$id" :text="$closeText"/>
+                        <x-kal::modal.close :modalId="$id" :text="$closeText" :declarative="$declarative"/>
                     </div>
                 @endif
 
@@ -116,7 +125,7 @@
                 @else
                     <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
                         <h3 class="text-lg font-medium text-heading">{{ $header }}</h3>
-                        <x-kal::modal.close :modalId="$id" :text="$closeText"/>
+                        <x-kal::modal.close :modalId="$id" :text="$closeText" :declarative="$declarative"/>
                     </div>
                 @endif
 
@@ -130,8 +139,16 @@
                     {{ $footer }}
                 @else
                     <div class="flex items-center border-t border-default space-x-4 pt-4 md:pt-5">
-                        <x-kal::button data-modal-hide="{{ $id }}" variant="{{ $confirmVariant }}">{{ $confirmText }}</x-kal::button>
-                        <x-kal::button data-modal-hide="{{ $id }}" variant="secondary">{{ $cancelText }}</x-kal::button>
+                        <x-kal::button
+                            :data-modal-hide="$declarative ? $id : null"
+                            :data-fmodal-confirm="!$declarative ? $id : null"
+                            variant="{{ $confirmVariant }}"
+                        >{{ $confirmText }}</x-kal::button>
+                        <x-kal::button
+                            :data-modal-hide="$declarative ? $id : null"
+                            :data-fmodal-cancel="!$declarative ? $id : null"
+                            variant="secondary"
+                        >{{ $cancelText }}</x-kal::button>
                     </div>
                 @endif
             @endif
