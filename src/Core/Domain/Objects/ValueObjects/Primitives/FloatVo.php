@@ -14,9 +14,4 @@ class FloatVo extends AbstractFloatVo
     public $value;
 
     protected bool $nullable = false;
-
-    public function __construct(float $value)
-    {
-        parent::__construct($value);
-    }
 }

@@ -14,9 +14,4 @@ class IdVo extends AbstractId
     public $value;
 
     protected bool $nullable = false;
-
-    public function __construct(int $value)
-    {
-        parent::__construct($value);
-    }
 }

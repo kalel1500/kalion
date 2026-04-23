@@ -14,9 +14,4 @@ class DateVo extends AbstractDateVo
     public $value;
 
     protected bool $nullable = false;
-
-    public function __construct(string $value, ?array $formats = null)
-    {
-        parent::__construct($value, $formats);
-    }
 }

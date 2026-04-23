@@ -14,9 +14,4 @@ class ArrayVo extends AbstractArrayVo
     public $value;
 
     protected bool $nullable = false;
-
-    public function __construct(array $value)
-    {
-        parent::__construct($value);
-    }
 }

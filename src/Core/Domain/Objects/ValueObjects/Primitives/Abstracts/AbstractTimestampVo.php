@@ -14,9 +14,4 @@ abstract class AbstractTimestampVo extends AbstractDateVo
     protected const CLASS_NULLABLE = TimestampNullVo::class;
 
     protected static array $formats = [DateFormat::datetime_timestamp, DateFormat::datetime_eloquent_timestamps];
-
-    public function __construct(?string $value, ?array $formats = null)
-    {
-        parent::__construct($value, $formats);
-    }
 }
