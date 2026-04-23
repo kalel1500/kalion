@@ -6,51 +6,134 @@
     'id',
     'class'         => null,
     'static'        => false,
+    'type'          => 'default',   // default | popup | form
+    'icon'          => null,        // info | success | warn | error (solo popup)
+    'size'          => 'medium',    // small | medium | large | extralarge
+    'placement'     => null,        // top-left | top-right | bottom-left | bottom-right
     'header'        => null,
     'closeText'     => __('Close modal'),
     'footer'        => null,
-    'confirmText'   => __('Accept'),
-    'cancelText'    => __('Decline'),
+    'confirmText'   => null,
+    'cancelText'    => null,
 ])
 
 @php
     $headerIsSlot = $header instanceof \Illuminate\View\ComponentSlot;
     $footerIsSlot = $footer instanceof \Illuminate\View\ComponentSlot;
+
+    // Textos por defecto según tipo
+    $confirmText ??= $type === 'popup' ? __("Yes, I'm sure") : __('Accept');
+    $cancelText  ??= $type === 'popup' ? __('No, cancel')    : __('Decline');
+
+    // Tamaños (ignorados en popup y form, que usan max-w-md fijo)
+    $sizeClasses = [
+        'small'      => 'max-w-md',
+        'medium'     => 'max-w-2xl',
+        'large'      => 'max-w-4xl',
+        'extralarge' => 'max-w-7xl',
+    ];
+    $maxW = match($type) {
+        'popup', 'form' => 'max-w-md',
+        default         => $sizeClasses[$size] ?? 'max-w-2xl',
+    };
+
+    // Placement
+    $placementAttr = match($placement) {
+        'top-left', 'top-right', 'bottom-left', 'bottom-right' => $placement,
+        default => null,
+    };
+
+    // Icono popup
+    $iconName = match($icon) {
+        'success' => 'ri-checkbox-circle-line', // fwb-o-check-circle
+        'warn'    => 'ri-error-warning-line', // fwb-o-exclamation-circle
+        'error'   => 'ri-close-circle-line', // fwb-o-x-circle
+        default   => 'ri-information-line', // fwb-o-info-circle
+    };
+
+    $confirmVariant = $type === 'popup' ? 'danger' : 'brand';
 @endphp
 
-<!-- Main modal -->
-<div id="{{ $id }}" @if($static) data-modal-backdrop="static" @endif tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-2xl max-h-full">
+<div
+    id="{{ $id }}"
+    @if($static) data-modal-backdrop="static" @endif
+    @if($placementAttr) data-modal-placement="{{ $placementAttr }}" @endif
+    tabindex="-1"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+>
+    <div class="relative p-4 w-full {{ $maxW }} max-h-full">
         <!-- Modal content -->
-        <div class="{{ twMerge('relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6', $class) }}">
-            <!-- Modal header -->
-            @if($headerIsSlot)
-                {{ $header }}
-            @else
-                <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
-                    <h3 class="text-lg font-medium text-heading">
-                        {{ $header }}
-                    </h3>
-                    <button type="button" class="text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center" data-modal-hide="static-modal">
-                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/></svg>
-                        <span class="sr-only">{{ $closeText }}</span>
-                    </button>
-                </div>
-            @endif
+        <div {{ $attributes->except('role')->twMerge('relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6 ' . $class) }}>
 
-            <!-- Modal body -->
-            <div class="space-y-4 md:space-y-6 py-4 md:py-6">
+            @if($type === 'popup')
+                {{-- ═══════════════════════════════════════════ --}}
+                {{-- POPUP                                       --}}
+                {{-- ═══════════════════════════════════════════ --}}
+                <x-kal::modal.close :modalId="$id" :text="$closeText" :forPopup="true"/>
+                <div class="p-4 md:p-5 text-center">
+                    @if($icon)
+                        <span class="mx-auto mb-4 text-fg-disabled w-12 h-12 flex items-center justify-center [&>svg]:w-12 [&>svg]:h-12">
+                            @svg($iconName)
+                        </span>
+                    @endif
+                    <div class="mb-6 text-body">{{ $slot }}</div>
+                    @if(! $footerIsSlot)
+                        <div class="flex items-center space-x-4 justify-center">
+                            <x-kal::button data-modal-hide="{{ $id }}" variant="{{ $confirmVariant }}">{{ $confirmText }}</x-kal::button>
+                            <x-kal::button data-modal-hide="{{ $id }}" variant="secondary">{{ $cancelText }}</x-kal::button>
+                        </div>
+                    @else
+                        {{ $footer }}
+                    @endif
+                </div>
+
+            @elseif($type === 'form')
+                {{-- ═══════════════════════════════════════════ --}}
+                {{-- FORM                                        --}}
+                {{-- ═══════════════════════════════════════════ --}}
+                <!-- Modal header -->
+                @if($headerIsSlot)
+                    {{ $header }}
+                @else
+                    <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
+                        <h3 class="text-lg font-medium text-heading">{{ $header }}</h3>
+                        <x-kal::modal.close :modalId="$id" :text="$closeText"/>
+                    </div>
+                @endif
+
+                {{-- El slot es el <form> completo con body + footer propios --}}
+                <!-- Modal body -->
                 {{ $slot }}
-            </div>
 
-            <!-- Modal footer -->
-            @if($footerIsSlot)
-                {{ $footer }}
             @else
-                <div class="flex items-center border-t border-default space-x-4 pt-4 md:pt-5">
-                    <x-kal::button data-modal-hide="{{ $id }}" variant="brand">{{ $confirmText }}</x-kal::button>
-                    <x-kal::button data-modal-hide="{{ $id }}" variant="secondary">{{ $cancelText }}</x-kal::button>
+                {{-- ═══════════════════════════════════════════ --}}
+                {{-- DEFAULT (+ static, sizes, placement)        --}}
+                {{-- ═══════════════════════════════════════════ --}}
+
+                <!-- Modal header -->
+                @if($headerIsSlot)
+                    {{ $header }}
+                @else
+                    <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
+                        <h3 class="text-lg font-medium text-heading">{{ $header }}</h3>
+                        <x-kal::modal.close :modalId="$id" :text="$closeText"/>
+                    </div>
+                @endif
+
+                <!-- Modal body -->
+                <div class="space-y-4 md:space-y-6 py-4 md:py-6">
+                    {{ $slot }}
                 </div>
+
+                <!-- Modal footer -->
+                @if($footerIsSlot)
+                    {{ $footer }}
+                @else
+                    <div class="flex items-center border-t border-default space-x-4 pt-4 md:pt-5">
+                        <x-kal::button data-modal-hide="{{ $id }}" variant="{{ $confirmVariant }}">{{ $confirmText }}</x-kal::button>
+                        <x-kal::button data-modal-hide="{{ $id }}" variant="secondary">{{ $cancelText }}</x-kal::button>
+                    </div>
+                @endif
             @endif
 
         </div>

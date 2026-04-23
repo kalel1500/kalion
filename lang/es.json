@@ -11,5 +11,7 @@
     "Switch to system mode": "Usar el tema del dispositivo",
     "Close modal" : "Cerrar modal",
     "Accept" : "Aceptar",
-    "Decline" :  "Rechazar"
+    "Decline" :  "Rechazar",
+    "Yes, I'm sure" : "Sí, estoy seguro",
+    "No, cancel" :  "No, cancelar"
 }
