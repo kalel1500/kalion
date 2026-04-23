@@ -106,7 +106,7 @@ abstract class AbstractValueObject implements JsonSerializable
     protected function checkNullable($value): void
     {
         if (! $this->nullable && is_null($value)) {
-            throw new InvalidValueException(sprintf('<%s> does not allow the value <%s>.', class_basename(static::class), 'null'));
+            throw new InvalidValueException(sprintf('<%s> does not allow the value <%s>.', static::class, 'null'));
         }
     }
 
