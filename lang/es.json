@@ -8,5 +8,8 @@
     "Several errors have been detected": "Se han detectado varios errores",
     "Switch to dark mode": "Cambiar a modo oscuro",
     "Switch to light mode": "Cambiar a modo claro",
-    "Switch to system mode": "Usar el tema del dispositivo"
+    "Switch to system mode": "Usar el tema del dispositivo",
+    "Close modal" : "Cerrar modal",
+    "Accept" : "Aceptar",
+    "Decline" :  "Rechazar"
 }
