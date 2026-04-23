@@ -140,7 +140,7 @@ class ExceptionHandler
 
     private static function shouldRenderJson(Request $request): bool
     {
-        return $request->expectsJson() || url_contains_ajax();
+        return $request->expectsJson() || url_contains_ajax() || url_contains_fetch();
     }
 
     private static function renderJson(ExceptionContextDto $context): JsonResponse
