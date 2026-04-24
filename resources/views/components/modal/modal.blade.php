@@ -66,6 +66,9 @@
         <!-- Modal content -->
         <div {{ $attributes->except('role')->twMerge('relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6 ' . $class) }}>
 
+            <!-- Spinner -->
+            <x-kal::spinner overlay class="hidden" backdrop-class="hidden"/>
+
             @if($type === 'popup')
                 {{-- ═══════════════════════════════════════════ --}}
                 {{-- POPUP                                       --}}
