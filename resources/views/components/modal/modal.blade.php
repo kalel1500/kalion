@@ -80,16 +80,13 @@
                     <div class="mb-6 text-body">{{ $slot }}</div>
                     @if(! $footerIsSlot)
                         <div class="flex items-center space-x-4 justify-center">
-                            <x-kal::button
-                                :data-modal-hide="$declarative ? $id : null"
-                                :data-fmodal-confirm="!$declarative ? $id : null"
-                                variant="{{ $confirmVariant }}"
-                            >{{ $confirmText }}</x-kal::button>
-                            <x-kal::button
-                                :data-modal-hide="$declarative ? $id : null"
-                                :data-fmodal-cancel="!$declarative ? $id : null"
-                                variant="secondary"
-                            >{{ $cancelText }}</x-kal::button>
+                            <x-kal::modal.buttons
+                                :modal-id="$id"
+                                :declarative="$declarative"
+                                :confirm-variant="$confirmVariant"
+                                :confirm-text="$confirmText"
+                                :cancel-text="$cancelText"
+                            />
                         </div>
                     @else
                         {{ $footer }}
@@ -139,16 +136,13 @@
                     {{ $footer }}
                 @else
                     <div class="flex items-center border-t border-default space-x-4 pt-4 md:pt-5">
-                        <x-kal::button
-                            :data-modal-hide="$declarative ? $id : null"
-                            :data-fmodal-confirm="!$declarative ? $id : null"
-                            variant="{{ $confirmVariant }}"
-                        >{{ $confirmText }}</x-kal::button>
-                        <x-kal::button
-                            :data-modal-hide="$declarative ? $id : null"
-                            :data-fmodal-cancel="!$declarative ? $id : null"
-                            variant="secondary"
-                        >{{ $cancelText }}</x-kal::button>
+                        <x-kal::modal.buttons
+                            :modal-id="$id"
+                            :declarative="$declarative"
+                            :confirm-variant="$confirmVariant"
+                            :confirm-text="$confirmText"
+                            :cancel-text="$cancelText"
+                        />
                     </div>
                 @endif
             @endif
