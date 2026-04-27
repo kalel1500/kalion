@@ -96,29 +96,7 @@
                     @endif
                 </div>
 
-            @elseif($type === 'form')
-                {{-- ═══════════════════════════════════════════ --}}
-                {{-- FORM                                        --}}
-                {{-- ═══════════════════════════════════════════ --}}
-                <!-- Modal header -->
-                @if($headerIsSlot)
-                    {{ $header }}
-                @else
-                    <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
-                        <h3 class="text-lg font-medium text-heading">{{ $header }}</h3>
-                        <x-kal::modal.close :modalId="$id" :text="$closeText" :declarative="$declarative"/>
-                    </div>
-                @endif
-
-                {{-- El slot es el <form> completo con body + footer propios --}}
-                <!-- Modal body -->
-                {{ $slot }}
-
             @else
-                {{-- ═══════════════════════════════════════════ --}}
-                {{-- DEFAULT (+ static, sizes, placement)        --}}
-                {{-- ═══════════════════════════════════════════ --}}
-
                 <!-- Modal header -->
                 @if($headerIsSlot)
                     {{ $header }}
@@ -130,23 +108,36 @@
                 @endif
 
                 <!-- Modal body -->
-                <div class="space-y-4 md:space-y-6 py-4 md:py-6">
-                    {{ $slot }}
-                </div>
+                @if($type === 'form')
+                    {{-- ═══════════════════════════════════════════ --}}
+                    {{-- FORM                                        --}}
+                    {{-- ═══════════════════════════════════════════ --}}
 
-                <!-- Modal footer -->
-                @if($footerIsSlot)
-                    {{ $footer }}
+                    {{-- El slot es el <form> completo con body + footer propios --}}
+                    {{ $slot }}
+
                 @else
-                    <div class="flex items-center border-t border-default space-x-4 pt-4 md:pt-5">
-                        <x-kal::modal.buttons
-                            :modal-id="$id"
-                            :declarative="$declarative"
-                            :confirm-variant="$confirmVariant"
-                            :confirm-text="$confirmText"
-                            :cancel-text="$cancelText"
-                        />
+                    {{-- ═══════════════════════════════════════════ --}}
+                    {{-- DEFAULT (+ static, sizes, placement)        --}}
+                    {{-- ═══════════════════════════════════════════ --}}
+                    <div class="space-y-4 md:space-y-6 py-4 md:py-6">
+                        {{ $slot }}
                     </div>
+
+                    <!-- Modal footer -->
+                    @if($footerIsSlot)
+                        {{ $footer }}
+                    @else
+                        <div class="flex items-center border-t border-default space-x-4 pt-4 md:pt-5">
+                            <x-kal::modal.buttons
+                                :modal-id="$id"
+                                :declarative="$declarative"
+                                :confirm-variant="$confirmVariant"
+                                :confirm-text="$confirmText"
+                                :cancel-text="$cancelText"
+                            />
+                        </div>
+                    @endif
                 @endif
             @endif
 
