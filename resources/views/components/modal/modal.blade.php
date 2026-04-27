@@ -101,9 +101,12 @@
                 @if($headerIsSlot)
                     {{ $header }}
                 @else
-                    <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
-                        <h3 class="text-lg font-medium text-heading">{{ $header }}</h3>
-                        <x-kal::modal.close :modalId="$id" :text="$closeText" :declarative="$declarative"/>
+                    <div class="border-b border-default pb-4 md:pb-5">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-medium text-heading">{{ $header }}</h3>
+                            <x-kal::modal.close :modalId="$id" :text="$closeText" :declarative="$declarative"/>
+                        </div>
+                        <div class="fmodal-message hidden"></div>
                     </div>
                 @endif
 
