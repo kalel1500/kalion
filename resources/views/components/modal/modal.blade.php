@@ -16,6 +16,7 @@
     'confirmText'   => null,
     'cancelText'    => null,
     'declarative'   => false,
+    'showSpinner'   => false,
 ])
 
 @php
@@ -67,7 +68,8 @@
         <div {{ $attributes->except('role')->twMerge('relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6 ' . $class) }}>
 
             <!-- Spinner -->
-            <x-kal::spinner overlay class="hidden" backdrop-class="hidden"/>
+            @php($spinnerClass = $showSpinner ? 'block' : 'hidden')
+            <x-kal::spinner overlay :class="$spinnerClass" :backdrop-class="$spinnerClass"/>
 
             @if($type === 'popup')
                 {{-- ═══════════════════════════════════════════ --}}
