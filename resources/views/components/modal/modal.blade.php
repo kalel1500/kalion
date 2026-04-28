@@ -68,7 +68,7 @@
         <div {{ $attributes->except('role')->twMerge('relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6 ' . $class) }}>
 
             <!-- Spinner -->
-            @php($spinnerClass = $showSpinner ? 'block' : 'hidden')
+            @php($spinnerClass = 'fmodal-spinner ' . ($showSpinner ? 'block' : 'hidden'))
             <x-kal::spinner overlay :class="$spinnerClass" :backdrop-class="$spinnerClass"/>
 
             @if($type === 'popup')
@@ -125,7 +125,7 @@
                     {{-- ═══════════════════════════════════════════ --}}
                     {{-- DEFAULT (+ static, sizes, placement)        --}}
                     {{-- ═══════════════════════════════════════════ --}}
-                    <div class="space-y-4 md:space-y-6 py-4 md:py-6">
+                    <div class="fmodal-body space-y-4 md:space-y-6 py-4 md:py-6">
                         {{ $slot }}
                     </div>
 
