@@ -4,19 +4,26 @@
 
 @props([
     'id',
-    'class'         => null,
-    'static'        => false,
-    'type'          => 'default',   // default | popup | form
-    'icon'          => null,        // info | success | warn | error (solo popup)
-    'size'          => 'medium',    // small | medium | large | extralarge
-    'placement'     => null,        // top-left | top-right | bottom-left | bottom-right
-    'header'        => null,
-    'closeText'     => __('Close modal'),
-    'footer'        => null,
-    'confirmText'   => null,
-    'cancelText'    => null,
-    'declarative'   => false,
-    'showSpinner'   => false,
+    'class'             => null,
+    'static'            => false,
+    'type'              => 'default',   // default | popup | form
+    'icon'              => null,        // info | success | warn | error (solo popup)
+    'size'              => 'medium',    // small | medium | large | extralarge
+    'placement'         => null,        // top-left | top-right | bottom-left | bottom-right
+    'header'            => null,
+    'closeText'         => __('Close modal'),
+    'footer'            => null,
+    'showConfirmButton' => true,
+    'showCancelButton'  => true,
+    'showDenyButton'    => false,
+    'confirmText'       => null,
+    'cancelText'        => null,
+    'denyText'          => null,
+    'confirmVariant'    => 'brand',     // brand | secondary | tertiary | success | danger | warning | dark | ghost
+    'cancelVariant'     => 'secondary', // brand | secondary | tertiary | success | danger | warning | dark | ghost
+    'denyVariant'       => 'danger',    // brand | secondary | tertiary | success | danger | warning | dark | ghost
+    'declarative'       => false,
+    'showSpinner'       => false,
 ])
 
 @php
@@ -25,7 +32,8 @@
 
     // Textos por defecto según tipo
     $confirmText ??= $type === 'popup' ? __("Yes, I'm sure") : __('Accept');
-    $cancelText  ??= $type === 'popup' ? __('No, cancel')    : __('Decline');
+    $cancelText  ??= $type === 'popup' ? __('No, cancel')    : __('Cancel');
+    $denyText    ??= __('Decline');
 
     // Tamaños (ignorados en popup y form, que usan max-w-md fijo)
     $sizeClasses = [
@@ -88,9 +96,15 @@
                             <x-kal::modal.buttons
                                 :modal-id="$id"
                                 :declarative="$declarative"
-                                :confirm-variant="$confirmVariant"
+                                :show-confirm-button="$showConfirmButton"
+                                :show-cancel-button="$showCancelButton"
+                                :show-deny-button="$showDenyButton"
                                 :confirm-text="$confirmText"
                                 :cancel-text="$cancelText"
+                                :deny-text="$denyText"
+                                :confirm-variant="$confirmVariant"
+                                :cancel-variant="$cancelVariant"
+                                :deny-variant="$denyVariant"
                             />
                         </div>
                     @else
@@ -137,9 +151,15 @@
                             <x-kal::modal.buttons
                                 :modal-id="$id"
                                 :declarative="$declarative"
-                                :confirm-variant="$confirmVariant"
+                                :show-confirm-button="$showConfirmButton"
+                                :show-cancel-button="$showCancelButton"
+                                :show-deny-button="$showDenyButton"
                                 :confirm-text="$confirmText"
                                 :cancel-text="$cancelText"
+                                :deny-text="$denyText"
+                                :confirm-variant="$confirmVariant"
+                                :cancel-variant="$cancelVariant"
+                                :deny-variant="$denyVariant"
                             />
                         </div>
                     @endif

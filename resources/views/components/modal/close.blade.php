@@ -4,7 +4,7 @@
 
 @props([
     'modalId',
-    'text'          => 'Close modal',
+    'text'          => __('Close modal'),
     'forPopup'      => false,
     'declarative'   => false,
 ])
