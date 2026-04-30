@@ -49,14 +49,14 @@
     @endif
 
     @if($list)
-        <div>
+        <div class="slot">
             <span class="font-medium">{{ $title }}</span>
             <ul class="mt-2 list-disc list-outside space-y-1 ps-2.5">
                 {{ $slot }}
             </ul>
         </div>
     @else
-        <div>{{ $slot }}</div>
+        <div class="slot">{{ $slot }}</div>
     @endif
 
     @if($dismiss)
