@@ -536,7 +536,6 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function groupBy($groupBy, $preserveKeys = false)
     {
         $collResult = collect($this->toArrayMake())->groupBy($groupBy, $preserveKeys);
-        if ($collResult->keys()->some('')) throw new RequiredDefinitionException('La key que has indicado no se encuentra en el array del objeto');
         $new = $collResult->map(fn($group) => $this->toStatic($group->toArray()));
         return $this->toAny($new->toArray());
     }
