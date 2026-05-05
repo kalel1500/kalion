@@ -151,7 +151,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         if (is_array($items)) {
             return $items;
         } elseif ($items instanceof AbstractCollectionBase) {
-            return $items->toArray();
+            return $items->toArrayMake();
         }
 
         return (array)$items;
