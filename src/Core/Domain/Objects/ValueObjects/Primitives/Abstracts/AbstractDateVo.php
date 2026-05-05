@@ -69,6 +69,11 @@ abstract class AbstractDateVo extends AbstractStringVo
         return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_startYear->value);
     }
 
+    public function formatDatetimeInput(): ?string
+    {
+        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_startYear_withoutSeconds->value);
+    }
+
     public function format(string $format): ?string
     {
         return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format($format);
