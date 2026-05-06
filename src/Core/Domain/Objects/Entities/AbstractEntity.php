@@ -26,7 +26,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
 
     private static array          $constructCache = [];
     private static array          $computedCache  = [];
-    protected static ?array       $databaseFields = null;
+    protected static ?array       $fillable       = null;
     protected static string       $primaryKey     = 'id';
     protected static bool         $incrementing   = true;
     protected static JsonMethodVo $jsonMethod     = JsonMethodVo::encodedValue;
@@ -331,8 +331,8 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
     public function toArrayDb($keepId = false): array
     {
         $array = $this->props();
-        if (! is_null(static::$databaseFields)) {
-            return array_keep($array, static::$databaseFields);
+        if (! is_null(static::$fillable)) {
+            return array_keep($array, static::$fillable);
         }
         if (static::$incrementing && ! $keepId) unset($array[static::$primaryKey]);
         unset($array['created_at']);
