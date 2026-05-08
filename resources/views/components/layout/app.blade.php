@@ -2,9 +2,15 @@
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
 @use('Thehouseofel\Kalion\Features\Components\Domain\Support\LayoutMetrics')
 
-@props(['package' => false, 'headTitle' => null, 'navbarTitle' => null, 'flush' => false])
+@props([
+    'package'       => false,
+    'headTitle'     => null,
+    'navbarTitle'   => null,
+    'flush'         => false,
+    'pageData'      => null,
+])
 
-@php($data = LayoutAppAssembler::fromProps($package, $headTitle, $navbarTitle, $flush))
+@php($data = LayoutAppAssembler::fromProps($package, $headTitle, $navbarTitle, $flush, $pageData))
 
 <!DOCTYPE html>
 <html
@@ -73,7 +79,7 @@
 
             <!-- Main -->
             @php($mainClass = config('kalion.layout.show_debug_main_border') ? 'border-2 border-dashed border-gray-300 p-2 dark:border-gray-600' : null)
-            <main class="{{ $mainClass }}">
+            <main class="{{ $mainClass }}" id="app" data-page-data="{!! $data->pageData !!}">
 
                 <!-- Page breadcrumb -->
                 {{ $breadcrumb ?? '' }}

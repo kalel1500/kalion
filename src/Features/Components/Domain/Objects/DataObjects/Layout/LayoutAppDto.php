@@ -13,6 +13,7 @@ class LayoutAppDto extends AbstractDataTransferObject
         public readonly string  $headTitle,
         public readonly ?string $navbarTitle,
         public readonly bool    $flush,
+        public readonly ?string $pageData,
         public readonly bool    $sidebarEnabled,
         public readonly bool    $sidebarCollapsed,
         public readonly bool    $darkMode,

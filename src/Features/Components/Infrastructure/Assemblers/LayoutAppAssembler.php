@@ -16,6 +16,7 @@ class LayoutAppAssembler
         ?string $headTitle,
         ?string $navbarTitle,
         bool    $flush,
+        ?string $pageData,
     ): LayoutAppDto
     {
         $preferences = LayoutPreferences::get();
@@ -25,6 +26,7 @@ class LayoutAppAssembler
             headTitle       : $headTitle ?? config('app.name'),
             navbarTitle     : $navbarTitle,
             flush           : $flush,
+            pageData        : $pageData,
             sidebarEnabled  : ! config('kalion.layout.sidebar_disabled'),
             sidebarCollapsed: $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_state->isCollapsed(),
             darkMode        : $preferences->theme->isDark(),
