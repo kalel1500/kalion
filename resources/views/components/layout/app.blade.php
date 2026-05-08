@@ -79,7 +79,7 @@
 
             <!-- Main -->
             @php($mainClass = config('kalion.layout.show_debug_main_border') ? 'border-2 border-dashed border-gray-300 p-2 dark:border-gray-600' : null)
-            <main class="{{ $mainClass }}" id="app" data-page-data="{!! $data->pageData !!}">
+            <main class="{{ $mainClass }}">
 
                 <!-- Page breadcrumb -->
                 {{ $breadcrumb ?? '' }}
@@ -97,6 +97,11 @@
                 <x-kal::footer/>
             @endif
         </div>
+
+        @if($data->pageData)
+            <!-- Page data -->
+            <div id="page-data" data-page-data="{!! $data->pageData !!}"></div>
+        @endif
 
     </body>
 </html>
