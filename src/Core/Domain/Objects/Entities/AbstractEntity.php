@@ -11,6 +11,7 @@ use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
+use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\UseMethod;
 use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\WithParams;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
@@ -95,6 +96,10 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     $allowsNull = $type->allowsNull();
                 }
 
+                // Attr: UseMethod
+                $useMethodAttr = $param->getAttributes(UseMethod::class);
+                $useMethod     = ! empty($useMethodAttr) ? $useMethodAttr[0]->newInstance()->method : null;
+
                 if (! empty($attrs)) {
                     /** @var WithParams $attr */
                     $attr       = $attrs[0]->newInstance();
@@ -107,24 +112,27 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     'class'      => $class,
                     'isId'       => $isId,
                     'allowsNull' => $allowsNull,
+                    'useMethod'  => $useMethod,
                     'makeParams' => $makeParams,
                 ];
             }
 
             $newParams = [];
             foreach ($params as $meta) {
-                $class = $meta['class'];
-                $isId  = $meta['isId'];
+                $class     = $meta['class'];
+                $isId      = $meta['isId'];
+                $useMethod = $meta['useMethod'];
 
                 $classIsNull = $class === null;
                 $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
                 $isVo        = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
 
                 $makeMethod = match (true) {
-                    $classIsNull     => null,
-                    $isId            => 'resolve',
-                    $isEnum || $isVo => 'from',
-                    default          => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
+                    $classIsNull        => null,
+                    $useMethod !== null => $useMethod,
+                    $isId               => 'resolve',
+                    $isEnum || $isVo    => 'from',
+                    default             => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
 
                 $newParams[] = [

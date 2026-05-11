@@ -11,6 +11,7 @@ use ReflectionIntersectionType;
 use ReflectionUnionType;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
+use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\UseMethod;
 use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\WithParams;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
@@ -54,6 +55,10 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $allowsNull = $type->allowsNull();
         }
 
+        // Attr: UseMethod
+        $useMethodAttr = $param->getAttributes(UseMethod::class);
+        $useMethod     = ! empty($useMethodAttr) ? $useMethodAttr[0]->newInstance()->method : null;
+
         if (! empty($attrs)) {
             /** @var WithParams $attr */
             $attr       = $attrs[0]->newInstance();
@@ -65,6 +70,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             'name'       => $name,
             'class'      => $class,
             'allowsNull' => $allowsNull,
+            'useMethod'  => $useMethod,
             'makeParams' => $makeParams,
         ];
     }
@@ -73,6 +79,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
     {
         $className = static::class;
         $class     = $meta['class'];
+        $useMethod = $meta['useMethod'];
 
         $classIsNull = $class === null;
         $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
@@ -80,10 +87,11 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         $isArray     = ! $classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
 
         $makeMethod = match (true) {
-            $classIsNull     => null,
-            $isEnum || $isVo => 'from',
-            $isArray         => 'fromArray',
-            default          => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
+            $classIsNull        => null,
+            $useMethod !== null => $useMethod,
+            $isEnum || $isVo    => 'from',
+            $isArray            => 'fromArray',
+            default             => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
         };
 
         $propsMethod = match (true) {
