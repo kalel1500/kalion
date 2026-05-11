@@ -43,12 +43,20 @@ abstract class AbstractJsonVo extends AbstractValueObject
     protected function setValues($value, bool $try): void
     {
         $executed = false;
+        $isInvalid = false;
 
         if (is_string($value)) {
-            $this->valueArray  = json_decode($value, true);
-            $this->valueObject = json_decode($value);
+            $valueArray  = json_decode($value, true);
+            $valueObject = json_decode($value);
             $this->valueString = $value;
             $executed          = true;
+
+            if (!is_string($valueArray)) {
+                $this->valueArray  = $valueArray;
+                $this->valueObject = $valueObject;
+            } else {
+                $isInvalid = true;
+            }
         }
 
         if (is_array($value) || is_object($value)) {
@@ -58,7 +66,7 @@ abstract class AbstractJsonVo extends AbstractValueObject
             $executed          = true;
         }
 
-        if ($executed && json_last_error() !== JSON_ERROR_NONE) {
+        if ($executed && ($isInvalid || json_last_error() !== JSON_ERROR_NONE)) {
             if (! $try) {
                 throw new InvalidValueException(sprintf('Invalid JSON passed to constructor of class <%s>.', class_basename(static::class)));
             }
