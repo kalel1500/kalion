@@ -375,3 +375,10 @@ if (! function_exists('array_rename_keys')) {
         );
     }
 }
+
+if (! function_exists('is_generic_object')) {
+    function is_generic_object(mixed $variable): bool
+    {
+        return is_object($variable) && get_class($variable) === 'stdClass';
+    }
+}
