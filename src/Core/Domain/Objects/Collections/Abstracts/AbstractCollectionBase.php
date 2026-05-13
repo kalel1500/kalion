@@ -535,9 +535,38 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function groupBy($groupBy, $preserveKeys = false)
     {
-        $collResult = collect($this->toArrayMake())->groupBy($groupBy, $preserveKeys);
-        $new = $collResult->map(fn($group) => $this->toStatic($group->toArray()));
-        return $this->toAny($new->toArray());
+        // --- 1. Separar el primer nivel del resto (igual que Laravel) ---
+        $nextGroups = [];
+        if (!is_callable($groupBy) && is_array($groupBy)) {
+            $nextGroups = $groupBy;
+            $groupBy    = array_shift($nextGroups);
+        }
+
+        // --- 2. Agrupar este nivel usando la colección de Laravel ---
+        $grouped = collect($this->all())->groupBy($groupBy, $preserveKeys);
+
+        // --- 3. Convertir cada grupo en tu colección tipada ---
+        $mapped = $grouped->map(function ($group) {
+            // $group es una Illuminate\Support\Collection de entidades (arrays)
+            return $this->toStatic($group->toArray());
+        });
+
+        // --- 4. Envolver todo en una CollectionAny ---
+        $result = $this->toAny($mapped->toArray());
+
+        // --- 5. Si quedan niveles, aplicar groupBy recursivamente en cada grupo ---
+        if (!empty($nextGroups)) {
+            // $result es una CollectionAny cuyos items son colecciones tipadas.
+            // Llamamos groupBy sobre cada una de ellas.
+            $reGrouped = collect($result->all())->map(function ($subCollection) use ($nextGroups, $preserveKeys) {
+                // Cada $subCollection es ya una instancia de tu colección tipada
+                return $subCollection->groupBy($nextGroups, $preserveKeys);
+            });
+
+            return $this->toAny($reGrouped->toArray());
+        }
+
+        return $result;
     }
 
 //    public function has()
