@@ -1283,7 +1283,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function values()
     {
-        return $this->toStatic(array_values($this->toArrayMake()));
+        return $this->toStatic(array_values($this->items));
     }
 
 //    public function when()
