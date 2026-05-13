@@ -78,7 +78,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
             $data           = $data['data'];
         }
 
-        if (is_object(Arr::first($data))) {
+        if (is_generic_object(Arr::first($data))) {
             $data = legacy_json_to_array($data);
         }
 
