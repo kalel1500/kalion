@@ -1,0 +1,190 @@
+He creado un paquete de Laravel llamado Kalion para facilitar el uso de la "Clean architecture" y el "DDD" en Laravel.
+
+Además, también le puse componentes con los etilos de los componentes de Flowbite.
+
+Esta es la estructura de archivos de mi paquete Kalion:
+-config
+-database
+-lang
+-resources
+    -views
+        -components
+            ...
+-routes
+-src
+    -Core
+        -Domain
+            -Concerns
+            -Contracts
+            -Exceptions
+            -Objects
+                -Attributes
+                -Collections
+                    -Abstracts
+                        -AbstractCollectionAny.php
+                        -AbstractCollectionBase.php
+                        -AbstractCollectionDto.php
+                        -AbstractCollectionEntity.php
+                        -AbstractCollectionVo.php
+                    -Attributes
+                    -Concerns
+                    -Contracts
+                    -CollectionAny.php
+                -DataObjects
+                    -Attributes
+                    -Contracts
+                    -Responses
+                    -AbstractDataTransferObject.php
+                    -ExceptionContextDto.php
+                    -PaginationDataDto.php
+                    -ResultDto.php
+                    -UserPreferencesDto.php
+                -Entities
+                    -Attributes
+                    -Concerns
+                    -AbstractEntity.php
+                -ValueObjects
+                    -Parameters
+                        -ArrayTabulatorFiltersVo.php
+                        -CheckableProcessVo.php
+                        -DateFormat.php
+                        -EnvVo.php
+                        -JsonMethodVo.php
+                        -ProcessStatusKeysVo.php
+                        -SidebarState.php
+                        -StatusPluckFieldVo.php
+                        -StatusPluckKeyVo.php
+                        -ThemeVo.php
+                    -Primitives
+                        -Abstracts
+                            -Base
+                                -AbstractArrayVo.php
+                                -AbstractBaseEnumVo.php
+                                -AbstractBoolVo.php
+                                -AbstractFloatVo.php
+                                -AbstractIntVo.php
+                                -AbstractJsonVo.php
+                                -AbstractStringVo.php
+                            -AbstractDateVo.php
+                            -AbstractEnumNullVo.php
+                            -AbstractEnumVo.php
+                            -AbstractId.php
+                            -AbstractIdZero.php
+                            -AbstractTimestampVo.php
+                            -AbstractUnsignedIntVo.php
+                        -Collections
+                            -CollectionIds.php
+                            -CollectionInts.php
+                            -CollectionStrings.php
+                        -ArrayNullVo.php
+                        -ArrayVo.php
+                        -BoolNullVo.php
+                        -BoolVo.php
+                        -DateNullVo.php
+                        -DateVo.php
+                        -FloatNullVo.php
+                        -FloatVo.php
+                        -IdNullVo.php
+                        -IdVo.php
+                        -IdZeroNullVo.php
+                        -IdZeroVo.php
+                        -IntNullVo.php
+                        -IntVo.php
+                        -JsonNullVo.php
+                        -JsonVo.php
+                        -StringNullVo.php
+                        -StringVo.php
+                        -TimestampNullVo.php
+                        -TimestampVo.php
+                        -UnsignedIntNullVo.php
+                        -UnsignedIntVo.php
+                    -AbstractValueObject.php
+            -Support
+                -helpers_domain.php
+        -Infrastructure
+            -Laravel
+                -Console
+                    -Commands
+                        -ClearAll.php
+                        -ConfigCheck.php
+                        -Install.php
+                        -JobDispatch.php
+                        -LogsClear.php
+                        -ProcessCheck.php
+                -Exceptions
+                    -ExceptionHandler.php
+                -Facades
+                    -Broadcast.php
+                    -LayoutPreferences.php
+                    -Process.php
+                -Http
+                    -Controllers
+                        -Controller.php
+                    -Middleware
+                        -AddPreferencesCookies.php
+                        -ForceArraySessionInCloud.php
+                        -UserHasPermission.php
+                        -UserHasRole.php
+            -Support
+                -Broadcasting
+                    BroadcastDispatcher.php
+                -Config
+                    -KalionConfig.php
+                -Date
+                    -DateHelper.php
+                -Install
+                    -Attributes
+                    -Exceptions
+                    -Objects
+                    -InstallStepProcessor.php
+                    -ProcessorBuilder.php
+                    -StepBase.php
+                -Layout
+                    -LayoutPreferencesCookieStore.php
+                    -PackageAssets.php
+                    -PreferencesCookieStore.php
+                -Process
+                    -ProcessStateStore.php
+                    -SystemProcessInspector.php
+                -helpers_infrastructure.php
+    -Features
+        -Auth
+        -AuthFlow
+        -Components
+        -Examples
+        -Jobs
+        -Processes
+        -Shared
+    -KalionServiceProvider.php
+
+
+Ahora he hecho un gran cambio y voy a subir de version mayor de "v0.49.0-beta.0" a "v0.49.0-beta.0" (uso el segundo número para indicar cambios que rompen compatibilidad, ya que estoy en beta y no quiero subir e primer número) y quiero que me ayudes a crear el changelog.
+
+Te voy a pasar la lista de commits que he hecho en esta version y unas reglas para que sigas.
+
+Siempre suelo usar los apartados:
+-Added
+-Changed
+-Removed
+-Fixed
+-Migration notes
+
+REGLAS:
+-Manten el prefijo (breaking) en los cambios que rompan compatibilidad para que un usuario pueda detectar fácilmente lo que debe leer.
+-No repitas dos explicaciones. Si ves que hay dos commits que tocan el mismo archivo. Por ejemplo si un commit crea un archivo y en otro se modifica, la modificación no hay que explicarla. O si hay dos commits que modifican la misma función con explicar una vez como queda ya está bien.
+-Tampoco repitas la explicación si encaja en diferentes apartados. Si algo lo pones en Added no lo expliques en otro apartado. UN CAMBIO EXPLICADO SOLO UNA VEZ. Esta regla solo cambia en el apartado "Migration notes", ya que es especial. Todos los cambios deben explicarse en los 4 apartados principales (usando el prefijo breaking en las que rompan compatibilidad) y después el apartado "Migration notes" es un adicional donde se explica de forma mas resumida y con ejemplos lo que debe cambiar el usuario.
+-No tienes que explicar todos los cambios de la lista de commits solo los que veas mas relevantes para el usuario del paquete.
+-El formato es markdown simple (sin muchos títulos ni apartados). Solo los 5 apartados que te he pasado y debajo de cada uno una lista con los cambios (usando *) y cada item puede tener subitems.
+-Agrupa los commits relacionados en sublistas. Por ejemplo con las excepciones puedes poner un item "* Varias modificaciones en las excepciones" y después ese item puede tener subitems anidados detallando los cambios relacionados. Puede haver varios niveles de anidacion si lo ves necesario.
+-Verás qué hay muchisimos commits de componentes. No hace falta que los expiques todos. Con que digas que se han adaptado todos los estilos a la version 4 de Flowbite y que muchos de llos se han rehecho (con props nuevas y nuevos valores) y ya esta bien. Como mucho poner la lista de los componentes que han cambiado su estructura y decir que leean la docu de como funciona ahora pero no explicar el cambio.
+
+En resumen:
+Lees todos los commits que te paso (están en orden descendente por lo que al final está el más antiguo).
+Seleccionas los que consideres importantes para los usuarios del paquete (por ejemplo quizás un refactor no interesa o hay cambios internos que no necesitan saber y solo explicas lo que afecta al funcionamiento, pero como mejor consideres).
+Los agrupas por apartado (Added, Changed, Removed, Fixed) dentro de cada apartado puedes agrupar varios cambios por tipo si quieres (autenticacion, excepciones, componentes, helpers, ddd...), en cada item puedes poner subitems para dar más info si hace falta.
+Y al final en el apartado "Migration notes" explicas los cambios que debe hacer el usuario y puedes poner ejemplos de código (exceptuando el uso de los componentes, ya que como son muchos mejor di que se lean la docu de nuevo porque el nuevo funcionamiento no esta explicado en los commits. Incluso puedes decir algo como revisar en la docu el uso de estos componentes...).
+
+Todo debe estar en español menos los apartados que te he puesto (lo digo porque hay un commit en inglés).
+
+
+Lista de commits:
