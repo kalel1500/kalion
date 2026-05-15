@@ -1,6 +1,202 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.49.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.50.0-beta.1...master)
+
+## [v0.50.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.49.0-beta.0...v0.50.0-beta.1) - 2026-05-14
+
+### Added
+
+* **DDD – Colecciones:**
+    * Nuevo método `mapWithKeys` en `AbstractCollectionBase`
+
+* **DDD – Value Objects:**
+    * Nuevo VO `Time`
+    * Nuevos métodos `formatDatetime()`, `format($format)`, `formatToSpainDatetimeWithoutSeconds()` y `formatDatetimeWithoutSeconds()` en `AbstractDateVo`
+    * Nuevo case `html_datetime_local_withoutSeconds` en el enum `DateFormat`
+    * La clase `AbstractDateVo` ahora acepta formatos de entrada definidos en `$inputFormats` (por defecto `DateFormat::html_datetime_local` y `DateFormat::html_datetime_local_withoutSeconds`); si el valor de entrada coincide con alguno, se parsea automáticamente sin almacenarse en ese formato
+    * Nuevo método `tryFrom` en `AbstractValueObject` y nuevos métodos `tryFromArray` y `tryFromJson` en `AbstractDataTransferObject`
+    * Nuevo atributo `UseMethod` para propiedades de entidades y DTOs, para indicar qué método usar al resolver la instancia por reflexión
+
+* **DDD – Helpers:**
+    * Nuevo helper `is_generic_object`: comprueba si una variable es un objeto pero no una clase concreta
+    * Nuevo helper `url_contains_fetch`
+    * Nuevo helper `array_rename_keys`
+
+* **Auth:**
+    * Nuevo middleware unificado `CheckAbility` (ver *Migration notes*)
+    * Nuevos métodos `isAny` y `canAny` en el trait `HasRoles` para comprobar si el usuario tiene *alguna* de las habilidades recibidas
+    * Nuevo método `fillStaticAbilities` en el trait `HasRoles` (y en la interfaz `AuthenticatableEntity`); se llama automáticamente en `EntityGuard::user()` para cargar siempre los roles y permisos estáticos del usuario autenticado
+    * Nueva query `searchStatic` en `RoleRepository` y `PermissionRepository` para buscar solo roles/permisos estáticos (`is_query = false`)
+    * Nueva dependencia `staudenmeir/eloquent-has-many-deep`; la relación `permissions` ya está disponible en ambos traits `HasRoles` (modelo y entidad)
+    * El middleware `CheckAbility` ya permite pasar parámetros usando `+` como separador (ya que Laravel usa la coma para separar parámetros de middleware). Ej: `ability:can,events_edit+param1`
+
+* **Componentes:**
+    * Nuevo componente `modal` (incluye subcomponentes `modal.close`, `modal.toggle`, `modal.buttons` y `modal.spinner`) con estilos de Flowbite 4
+    * Nuevo componente `hr`
+    * Nuevo componente `form.delete-btn`
+    * Nuevo tipo `radio` en el componente `form.input`
+    * Propiedad `icon` en el componente `button` (los estilos se adaptan cuando solo hay icono)
+    * Propiedad `text` en el componente `button`
+    * Propiedad `$containerClass` en todos los tipos de input
+    * Parámetro `size` en `form.input`
+    * Slot `helper` en `form.input`
+    * Prop `pageData` en `layout.app` para pasar datos del backend al JS mediante un `div` al final del `body`
+    * Iconos `andreiio/blade-remix-icon` instalados
+    * Instalado el paquete `kalel1500/laravel-tailwind-merge`; se usa el helper `twMerge` en todas las blades
+
+### Changed
+
+* **DDD – Colecciones:**
+    * **(breaking)** El método `groupBy` de `AbstractCollectionBase` ha sido rehecho para soportar agrupación multinivel (pasando un array como en Laravel) y regenerar correctamente las entidades del último nivel.
+
+* **DDD – Entidades:**
+    * **(breaking)** La propiedad `$databaseFields` de `AbstractEntity` ha sido renombrada a `$fillable`
+
+* **DDD – Value Objects:**
+    * **(breaking)** El método `tryFrom` del `AbstractJsonVo` ha sido renombrado a `tryFromJson`
+    * Los constructores de los VOs not-null han sido eliminados; la validación se delega completamente en `checkNullable`
+
+* **Excepciones:**
+    * **(breaking)** La propiedad `$custom_response` del `ExceptionContextDto` ha sido renombrada a `$customResponse` (también el parámetro en el constructor y en `from`)
+    * El `ExceptionHandler` ahora también responde en JSON cuando la URL contiene el indicador de fetch (usando el nuevo helper `url_contains_fetch`)
+    * Las páginas de error ahora muestran títulos y mensajes localizados por código HTTP (alineados con los textos por defecto de Laravel); en entornos de producción, los errores `HttpException` ya muestran su mensaje real
+    * Las páginas de error usan ahora el componente `layout.minimal` en lugar de la vista heredada `pages.exceptions.minimal`
+
+* **Auth:**
+    * **(breaking)** Los traits `HasPermissions` (modelo y entidad) han sido renombrados a `HasRoles`
+    * **(breaking)** Los métodos `is` y `can` del trait `HasRoles` ahora comprueban que el usuario tiene **todos** los valores recibidos (antes comprobaban si tenía alguno); para el comportamiento anterior usa los nuevos `isAny` / `canAny`
+    * **(breaking)** El método `toArray($addPermissions, $addRoles)` del trait `HasRoles` ya no lanza queries para buscar roles y permisos dinámicos; ahora lee directamente `$this->is` y `$this->can`. Los roles y permisos con `is_query = true` no estarán disponibles en el array
+    * **(breaking)** La migración `..._create_permissions_tables` ha sido renombrada a `..._create_roles_tables`
+
+* **Infraestructura / Config:**
+    * **(breaking)** La constante `ENUM_NULL_VALUE` ya no se define en la clase `Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion`; ahora se define globalmente en `KalionServiceProvider` mediante `define`
+    * **(breaking)** El método `Kalion::getInstalledVersion()` ha sido eliminado; la lógica se mueve directamente al paso `01_prev_handleLockFile.php` del comando `Install`
+    * **(breaking)** El método `getShadowClasses` se ha movido de la clase `Kalion` a `Features\Components\Domain\Support\LayoutMetrics`
+
+* **Componentes:**
+    * Ya no se utiliza la macro `mergeTailwind` de la clase `ComponentAttributeBag` en su lugar se usa `twMerge` ya que es de un paquete dedicado que va mucho mejor que la antigua clase clase `TailwindClassFilter`
+    * Todos los estilos de los componentes han sido adaptados a **Flowbite 4**; muchos han sido rehechos con nuevas props y nuevos valores
+    * **(breaking)** Los siguientes componentes han cambiado su estructura, props o comportamiento de forma significativa — **revisar la documentación**:
+        * `alert` — unifica `alert.list` y `alert.simple`; la prop `color` pasa a ser `variant`
+        * `badge` — rehecho completamente con todas las opciones de Flowbite 4
+        * `breadcrumb` — rehecho; ya no acepta el slot `icon`
+        * `button` / `form.button` — prop `color` renombrada a `variant`; el valor `default` pasa a ser `brand`; acepta el tag `<a>`
+        * `tab` / `tab.item`
+        * `form.input` — ahora incluye `form.label` y `form.error` internamente; envuelto en un `div`
+        * `form.checkbox` y `form.toggle` — unificados dentro de `form.input`; prop `labelText` renombrada a `label`
+        * `layout`, `navbar`, `sidebar`, `card`, `section`
+    * **(breaking)** Componentes renombrados o movidos:
+        * `text.bold` → `span.bold` / `text.semibold` → `span.semibold`
+        * `text` → `p`
+        * `input` → `form.input` / `input.label` → `form.label` / `input.error` → `form.error`
+        * `input.full.checkbox` → `form.checkbox` / `input.toggle` → `form.toggle`
+        * `form.button` → `partials.form-btn`
+        * `select` y `textarea` eliminados y unificados en `form.input` mediante la prop `type`
+    * **(breaking)** Las clases de sombra personalizadas han sido rediseñadas: `kal:shadow-xl dark:kal:shadow-black-xl` → `shadow-glow-2`
+    * **(breaking)** El campo `short_text` es ahora **obligatorio** en los enlaces del sidebar para definir el texto cuando está colapsado
+    * **(breaking)** Eliminados todos los componentes `icon.*` de heroicons y flowbite; se usan ahora los de paquetes externos basados en `blade-ui-kit`
+
+### Removed
+
+* **(breaking)** Componentes eliminados: `alert.list`, `alert.simple`, `select`, `textarea`, `form.checkbox` (autónomo), `form.toggle` (autónomo), `test-merge`, y la vista con el listado de iconos del paquete
+* **(breaking)** Middlewares `UserHasPermission` y `UserHasRole` eliminados como entidades independientes (unificados en `CheckAbility`)
+  * Los antiguos se ubicaban en `Core\Infrastructure\Laravel\Http\Middleware` y el nuevo esta en `Features\Auth\Infrastructure\Http\Middleware`
+* **(breaking)** Clase `TailwindClassFilter` eliminada. Ahora se delega el merge de las clases en el paquete `kalel1500/laravel-tailwind-merge`
+* **(breaking)** Eliminada la clase `Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Kalion` ya que sus constantes y métodos se han ido moviendo y se ha quedado vacia
+
+### Fixed
+
+* **DDD:**
+    * Corregido error en `AbstractJsonVo::setValues` cuando recibía un string con comillas dobles (ahora lanza el mismo error que un JSON inválido)
+    * Mejorado el mensaje de error del método `checkNullable` de `AbstractValueObject`
+
+* **Auth:**
+    * El atributo `#[Computed(Computed::AS_ATTRIBUTE)]` añadido a `all_permissions()` en el trait `HasRoles` para que siempre aparezca en el `toArray()`
+
+* **Componentes:**
+    * Arregladas las transiciones de apertura/cierre del sidebar
+    * Corregidos los componentes `user-profile` y `render-icon`
+    * Arreglado el error en el nombre al llamar a `sidebar.search-form` dentro de `sidebar.full`
+    * El texto de los enlaces del sidebar ya se corta correctamente cuando está colapsado; el contador de notificaciones se muestra correctamente en modo colapsado
+
+* **Preferencias:**
+    * Arreglado error cuando no existe una cookie válida; ahora se regenera con los valores por defecto
+
+* **Install:**
+    * Eliminado `dd()` accidental en `InstallStepProcessor`
+
+### Migration notes
+
+> Los cambios marcados como **(breaking)** requieren intervención manual. A continuación se resumen los más relevantes:
+
+* **Trait `HasPermissions` → `HasRoles`**
+  Renombrar en modelo y entidad:
+  ```php
+  // Antes
+  use HasPermissions;
+  // Ahora
+  use HasRoles;
+  ```
+
+* **Propiedad `$databaseFields` → `$fillable` en entidades**
+  ```php
+  // Antes
+  protected array $databaseFields = ['name', 'email'];
+  // Ahora
+  protected array $fillable = ['name', 'email'];
+  ```
+
+* **Middlewares `userCan` / `userIs` → `ability`**
+  ```php
+  // Antes
+  'userCan:see_posts'
+  'userIs:admin'
+  // Ahora
+  'ability:can,see_posts'
+  'ability:is,admin'
+  ```
+
+* **Comportamiento de `is()` y `can()` cambiado (ahora comprueban TODOS)**
+  Si necesitas el comportamiento anterior (cualquiera de los valores), usar `isAny()` / `canAny()`.
+
+* **`$custom_response` → `$customResponse` en `ExceptionContextDto`**
+  Actualizar cualquier llamada directa al constructor o al método `from` que use este parámetro por nombre.
+
+* **`AbstractJsonVo::tryFrom` → `tryFromJson`**
+  ```php
+  // Antes
+  JsonVo::tryFrom($value);
+  // Ahora
+  JsonVo::tryFromJson($value);
+  ```
+
+* **Migración renombrada**
+  La migración `..._create_permissions_tables` se llama ahora `..._create_roles_tables`. Verificar que no haya conflictos si se publican de nuevo.
+
+* **Constante `ENUM_NULL_VALUE`**
+  Ya no se obtiene de la clase `Kalion`; está definida globalmente. Si se usaba como `Kalion::ENUM_NULL_VALUE`, sustituir por la constante directamente: `ENUM_NULL_VALUE`.
+
+* **Clases de sombra personalizadas**
+  ```html
+  <!-- Antes -->
+  <div class="kal:shadow-xl dark:kal:shadow-black-xl">
+  <!-- Ahora -->
+  <div class="shadow-glow-2">
+  ```
+
+* **Enlace del sidebar: campo `short_text` ahora requerido**
+  Añadir `short_text` a todos los enlaces del sidebar en la configuración.
+
+* **Macro `mergeTailwind` eliminada y modificada por `twMerge`**
+  ```bladehtml
+  <!-- Antes -->
+  <div {{ $attributes->mergeTailwind('...') }}></div>
+  <!-- Ahora -->
+  <div {{ $attributes->twMerge('...') }}></div>
+  ```
+
+* **Componentes de formulario e iconos**
+  Los componentes de input han sido reorganizados y muchos rehechos con nuevas props. Los iconos ya no se sirven desde el paquete. **Revisar la documentación para ver el nuevo uso de todos los componentes afectados.**
 
 ## [v0.49.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.48.0-beta.0...v0.49.0-beta.0) - 2026-03-12
 
@@ -2283,7 +2479,7 @@
   * Ejecutar `npx @tailwindcss/upgrade`
   * Utilizar las nuevas configuraciones de tailwind (imports del paquete `laravel-ts-utils`)
   * Archivo `postcss.config.js` eliminado y cambiado por el plugin `tailwindcss()` en vite.config.js
-  * (stubs) Modificar los archivos de stubs para la migración a Tailwind 4
+  * (stubs) Modificar los archivos de stubs para la migración a Flowbite 4
   * hexagonalStart: eliminar `copy` y `delete` del archivo `tailwind.config.ts` en el comando `hexagonal:start`
 
 ### Fixed
