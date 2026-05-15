@@ -543,7 +543,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         }
 
         // --- 2. Agrupar este nivel usando la colección de Laravel ---
-        $grouped = collect($this->all())->groupBy($groupBy, $preserveKeys);
+        $grouped = collect($this->toArrayMake())->groupBy($groupBy, $preserveKeys);
 
         // --- 3. Convertir cada grupo en tu colección tipada ---
         $mapped = $grouped->map(function ($group) {
