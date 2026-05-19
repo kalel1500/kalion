@@ -10,6 +10,7 @@ use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionUnionType;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
+use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\UseMethod;
 use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\WithParams;
@@ -17,9 +18,15 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflec
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractDateVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractBoolVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractFloatVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractIntVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
-abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArrayable, Jsonable, JsonSerializable
+abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayResolvable, MakeArrayable, Jsonable, JsonSerializable
 {
     private static array $reflectionDisabled = [];
     private static array $reflectionCache    = [];
@@ -75,28 +82,41 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         ];
     }
 
-    private static function getParamMeta(array $meta): array
+    private static function getParamMeta(array $meta, bool $resolve): array
     {
         $className = static::class;
         $class     = $meta['class'];
         $useMethod = $meta['useMethod'];
 
-        $classIsNull = $class === null;
-        $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
-        $isVo        = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
-        $isArray     = ! $classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
+        $classIsNull       = $class === null;
+        $isEnum            = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
+        $isVo              = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
+        $isArray           = ! $classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
+        $isArrayResolvable = ! $classIsNull && is_a($class, class: ArrayResolvable::class, allow_string: true);
 
         $makeMethod = match (true) {
-            $classIsNull        => null,
-            $useMethod !== null => $useMethod,
-            $isEnum || $isVo    => 'from',
-            $isArray            => 'fromArray',
-            default             => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
+            $classIsNull                      => null,
+            $useMethod !== null               => $useMethod,
+            $isEnum || $isVo                  => 'from',
+            $isArrayResolvable && $resolve    => 'resolveFromArray',
+            $isArray                          => 'fromArray',
+            default                           => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
         };
 
         $propsMethod = match (true) {
             $isArray => 'toArray',
             default  => null,
+        };
+
+        $castType = match (true) {
+            $classIsNull                                                     => null,
+            is_a($class, class: AbstractArrayVo::class, allow_string: true)  => 'array',
+            is_a($class, class: AbstractBoolVo::class, allow_string: true)   => 'bool',
+            is_a($class, class: AbstractFloatVo::class, allow_string: true)  => 'float',
+            is_a($class, class: AbstractIntVo::class, allow_string: true)    => 'int',
+            is_a($class, class: AbstractJsonVo::class, allow_string: true)   => 'string',
+            is_a($class, class: AbstractStringVo::class, allow_string: true) => 'string',
+            default                                                          => null,
         };
 
         return [
@@ -105,15 +125,18 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             'isVo'        => $isVo,
             'makeMethod'  => $makeMethod,
             'propsMethod' => $propsMethod,
+            'castType'    => $castType,
         ];
     }
 
-    private static function resolveConstructorParams(): array
+    private static function resolveConstructorParams(bool $resolve): array
     {
         $className = static::class;
 
+        $cacheKey = $className . ($resolve ? ':resolve' : '');
+
         // Cacheamos ya los parámetros procesados
-        if (! isset(self::$reflectionCache[$className])) {
+        if (! isset(self::$reflectionCache[$cacheKey])) {
             $reflection  = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $reflection->getConstructor();
 
@@ -137,19 +160,19 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $newParamsMake  = [];
             $newParamsProps = [];
             foreach ($paramsMake as $meta) {
-                $newParamsMake[] = self::getParamMeta($meta);
+                $newParamsMake[] = self::getParamMeta($meta, $resolve);
             }
             foreach ($paramsProps as $meta) {
-                $newParamsProps[] = self::getParamMeta($meta);
+                $newParamsProps[] = self::getParamMeta($meta, $resolve);
             }
 
-            self::$reflectionCache[$className] = [
+            self::$reflectionCache[$cacheKey] = [
                 'make'  => $newParamsMake,
                 'props' => $newParamsProps,
             ];
         }
 
-        return self::$reflectionCache[$className];
+        return self::$reflectionCache[$cacheKey];
     }
 
     private static function reflectionDisabledData(): array
@@ -168,7 +191,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         return self::$reflectionDisabled[$className];
     }
 
-    protected static function make(array $data): static
+    protected static function make(array $data, bool $resolve = false): static
     {
         if (self::reflectionDisabledData()['isDisabled']) {
             return new static(...array_values($data));
@@ -176,7 +199,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
 
         $args = [];
 
-        $params = self::resolveConstructorParams()['make'];
+        $params = self::resolveConstructorParams($resolve)['make'];
         foreach ($params as $key => $meta) {
             $paramName  = arr_is_assoc($data) ? $meta['name'] : $key;
             $class      = $meta['class'];
@@ -184,7 +207,18 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
             $isEnum     = $meta['isEnum'];
             $method     = $meta['makeMethod'];
             $makeParams = $meta['makeParams'] ?? [];
+            $castType   = $meta['castType'];
             $value      = $data[$paramName] ?? null;
+
+            if ($resolve && $value !== null && $castType !== null) {
+                $value = match ($castType) {
+                    'array'  => (array)$value,
+                    'bool'   => (bool)$value,
+                    'float'  => (float)$value,
+                    'int'    => (int)$value,
+                    'string' => (string)$value,
+                };
+            }
 
             try {
                 $value = match (true) {
@@ -218,7 +252,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
         }
 
         $props  = [];
-        $params = self::resolveConstructorParams()['props'];
+        $params = self::resolveConstructorParams(false)['props'];
         foreach ($params as $meta) {
             $name   = $meta['name'];
             $isEnum = $meta['isEnum'];
@@ -251,6 +285,17 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, MakeArray
     {
         if (empty($data)) return null;
         return static::make($data);
+    }
+
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @return (T is null ? null : static)
+     */
+    public static function resolveFromArray(?array $data): ?static
+    {
+        if (empty($data)) return null;
+        return static::make($data, true);
     }
 
     /**

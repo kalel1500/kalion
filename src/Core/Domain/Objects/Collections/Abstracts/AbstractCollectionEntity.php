@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts;
 
 use Illuminate\Support\Arr;
+use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Concerns\HasRelatableOptions;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\PaginationDataDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
 
-abstract class AbstractCollectionEntity extends AbstractCollectionBase implements Relatable
+abstract class AbstractCollectionEntity extends AbstractCollectionBase implements Relatable, ArrayResolvable
 {
     use HasRelatableOptions;
 
@@ -53,9 +54,10 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
      * @param T $data
      * @param string|array|null $with
      * @param bool|string $isFull
+     * @param bool $resolve
      * @return (T is null ? null : static)
      */
-    public static function fromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
+    protected static function fromArrayBase(?array $data, string|array|null $with, bool|string|null $isFull, bool $resolve): ?static
     {
         if (is_null($data)) return null;
 
@@ -89,7 +91,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
             if ($item instanceof $entity) {
                 $array[$key] = $item;
             } else {
-                $createdEntity = $entity::fromArray($item, $with, $isFull);
+                $createdEntity = $resolve ? $entity::resolveFromArray($item, $with, $isFull) : $entity::fromArray($item, $with, $isFull);
                 $array[$key]   = $createdEntity;
             }
         }
@@ -99,6 +101,30 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         $collection->with           = $with;
         $collection->isFull         = $isFull;
         return $collection;
+    }
+
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @param string|array|null $with
+     * @param bool|string $isFull
+     * @return (T is null ? null : static)
+     */
+    public static function fromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
+    {
+        return static::fromArrayBase($data, $with, $isFull, false);
+    }
+
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @param string|array|null $with
+     * @param bool|string $isFull
+     * @return (T is null ? null : static)
+     */
+    public static function resolveFromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
+    {
+        return static::fromArrayBase($data, $with, $isFull, true);
     }
 
     public function isPaginate(): bool

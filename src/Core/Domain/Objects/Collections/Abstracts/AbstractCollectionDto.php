@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts;
 
+use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 
-abstract class AbstractCollectionDto extends AbstractCollectionBase implements MakeArrayable
+abstract class AbstractCollectionDto extends AbstractCollectionBase implements MakeArrayable, ArrayResolvable
 {
     /**
      * @return AbstractDataTransferObject|null
@@ -36,6 +37,24 @@ abstract class AbstractCollectionDto extends AbstractCollectionBase implements M
         $res        = [];
         foreach ($data as $key => $value) {
             $res[$key] = ($value instanceof $valueClass) ? $value : $valueClass::fromArray($value);
+        }
+        return new static($res);
+    }
+
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @return (T is null ? null : static)
+     */
+    public static function resolveFromArray(?array $data): ?static
+    {
+        if (is_null($data)) return null;
+
+        /** @var AbstractDataTransferObject $valueClass */
+        $valueClass = static::resolveItemType();
+        $res        = [];
+        foreach ($data as $key => $value) {
+            $res[$key] = ($value instanceof $valueClass) ? $value : $valueClass::resolveFromArray($value);
         }
         return new static($res);
     }

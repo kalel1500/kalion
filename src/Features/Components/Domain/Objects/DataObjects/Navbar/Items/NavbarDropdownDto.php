@@ -23,7 +23,7 @@ final class NavbarDropdownDto extends AbstractDataTransferObject
     {
     }
 
-    protected static function make(array $data): static
+    public static function fromArray(?array $data): static
     {
         return new static(
             $data['is_list'] ?? null,

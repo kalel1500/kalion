@@ -8,6 +8,7 @@ use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Core\Domain\Concerns\Relations\ParsesRelationFlags;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
+use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
@@ -19,9 +20,14 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractDateVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractBoolVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractFloatVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractIntVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 
-abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
+abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, JsonSerializable
 {
     use ParsesRelationFlags;
 
@@ -135,11 +141,23 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
                     default             => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
 
+                $castType = match (true) {
+                    $classIsNull => null,
+                    is_a($class, AbstractArrayVo::class,  allow_string: true) => 'array',
+                    is_a($class, AbstractBoolVo::class,   allow_string: true) => 'bool',
+                    is_a($class, AbstractFloatVo::class,  allow_string: true) => 'float',
+                    is_a($class, AbstractIntVo::class,    allow_string: true) => 'int',
+                    is_a($class, AbstractJsonVo::class,   allow_string: true) => 'string',
+                    is_a($class, AbstractStringVo::class, allow_string: true) => 'string',
+                    default => null,
+                };
+
                 $newParams[] = [
                     ...$meta,
                     'isEnum'     => $isEnum,
                     'isVo'       => $isVo,
                     'makeMethod' => $makeMethod,
+                    'castType'   => $castType,
                 ];
             }
 
@@ -149,7 +167,7 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         return self::$constructCache[$className];
     }
 
-    protected static function make(array $data): static
+    protected static function make(array $data, bool $resolve = false): static
     {
         $args = [];
 
@@ -160,7 +178,18 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
             $isEnum     = $meta['isEnum'];
             $method     = $meta['makeMethod'];
             $makeParams = $meta['makeParams'] ?? [];
+            $castType   = $meta['castType'];
             $value      = $data[$paramName] ?? null;
+
+            if ($resolve && $value !== null && $castType !== null) {
+                $value = match ($castType) {
+                    'array'  => (array)$value,
+                    'bool'   => (bool)$value,
+                    'float'  => (float)$value,
+                    'int'    => (int)$value,
+                    'string' => (string)$value,
+                };
+            }
 
             try {
                 $value = match (true) {
@@ -216,6 +245,24 @@ abstract class AbstractEntity implements ArrayConvertible, JsonSerializable
         if (empty($data)) return null;
 
         $self                = static::make($data);
+        $self->originalArray = $data;
+        $self->isFull        = $isFull;
+        $self->with($with);
+        return $self;
+    }
+
+    /**
+     * @template T of array|null
+     * @param T $data
+     * @param array|string|null $with
+     * @param bool|string $isFull
+     * @return (T is null ? null : static)
+     */
+    public static function resolveFromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
+    {
+        if (empty($data)) return null;
+
+        $self                = static::make($data, true);
         $self->originalArray = $data;
         $self->isFull        = $isFull;
         $self->with($with);
