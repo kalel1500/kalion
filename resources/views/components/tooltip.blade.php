@@ -1,6 +1,6 @@
 @props([
     'id'        => 'tooltip-' . uniqid(),
-    'content'   => '',
+    'content'   => null,
     'style'     => 'dark', // dark | light
     'placement' => null,   // top | right | bottom | left
     'trigger'   => null,   // hover | click
@@ -20,7 +20,7 @@
     $finalClasses = $baseClasses . $animClasses . ' ' . $styleClasses;
 @endphp
 
-@if($slot)
+@if($slot->isNotEmpty())
     <span
         data-tooltip-target="{{ $id }}"
         @if($style === 'light') data-tooltip-style="light" @endif
@@ -31,9 +31,11 @@
     </span>
 @endif
 
-<div id="{{ $id }}" role="tooltip" class="{{ $finalClasses }}">
-    {{ $content }}
-    @if($arrow)
-        <div class="tooltip-arrow" data-popper-arrow></div>
-    @endif
-</div>
+@if($content)
+    <div id="{{ $id }}" role="tooltip" class="{{ $finalClasses }}">
+        {{ $content }}
+        @if($arrow)
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        @endif
+    </div>
+@endif

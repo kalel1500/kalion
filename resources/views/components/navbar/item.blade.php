@@ -21,9 +21,7 @@
 </button>
 
 @if($hasTooltip)
-    <x-kal::tooltip id="tooltip-{{ $attributes->get('id') }}">
-        {{ $tooltip }}
-    </x-kal::tooltip>
+    <x-kal::tooltip id="tooltip-{{ $attributes->get('id') }}" :content="$tooltip"/>
 @endif
 
 @if($hasDropdown)
