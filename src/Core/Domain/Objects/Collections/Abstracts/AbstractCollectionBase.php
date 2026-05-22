@@ -996,10 +996,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function select($keys)
     {
         $keys       = is_array($keys) ? $keys : func_get_args();
-        $collResult = collect($this->toArrayMake())
-            ->map(fn($item) => collect($item)->only($keys)->toArray())
+        $collResult = collect($this->toArray())
+            ->select($keys)
             ->values();
-        return $this->toStatic($collResult->toArray());
+        return $this->toAny($collResult->toArray());
     }
 
 //    public function shift()
