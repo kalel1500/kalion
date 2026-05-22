@@ -1,6 +1,31 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.50.0-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.51.0-beta.1...master)
+
+## [v0.51.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.50.0-beta.1...v0.51.0-beta.1) - 2026-05-14
+
+### Added
+
+* Nueva funcionalidad `ConsoleOutput` (fachada) para poder mostrar mensajes por consola sin saber si se está en consola y sin tener acceso a la clase.
+* Nuevo método `resolveFromArray` y nueva interfaz `ArrayResolvable`
+  * Se ha introducido la interfaz `ArrayResolvable` que define el contrato del nuevo método `resolveFromArray`, implementado en `AbstractEntity`, `AbstractDataTransferObject`, `AbstractCollectionEntity` y `AbstractCollectionDto`. 
+  * Este método funciona igual que `fromArray` pero con hidratación permisiva: antes de construir cada Value Object, castea automáticamente el valor al tipo primitivo esperado(`string`, `int`, `bool`, `float`, `array`), evitando errores cuando los datos de entrada provienen de fuentes externas con tipos inconsistentes (APIs, CSVs, formularios, etc.). 
+  * En el caso de los DTOs, el casteo se propaga en cascada: los objetos anidados que implementen `ArrayResolvable` también usarán `resolveFromArray` internamente.
+
+### Changed
+
+* **(breaking)** El componente `tooltip` se ha reecho por completo:
+  * Se ha adaptado a Flowbite 4
+  * Se han añadido añadir todas las versiones que hay en Flowbite mediante nuevas props.
+  * Ahora el componente tiene el trigger como `slot` y el contenido como `content`.
+
+### Removed
+
+* **(breaking)** Se ha eliminado el componente: `tooltip.wrapper`, ya que no es muy seguro usar el "preg_replace"
+
+### Fixed
+
+* Se ha añadido la clase `sc:w-full` en el componente `sidebar.item` para que se centren bien los items que no tienen saltos de línea
 
 ## [v0.50.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.49.0-beta.0...v0.50.0-beta.1) - 2026-05-14
 
