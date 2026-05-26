@@ -329,4 +329,20 @@ return [
             'show_logout_form' => (bool) env('KALION_EXCEPTIONS_HTTP_SHOW_LOGOUT_FORM', $defaults['kalion.exceptions.http.show_logout_form']),
         ],
     ],
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tabulator filter
+    |--------------------------------------------------------------------------
+    |
+    | The following options allow you to configure tabulator filter.
+    |
+    */
+
+    'filters' => [
+        'tabulator' => [
+            'driver' => env('KALION_FILTER_TABULATOR_DRIVER', 'eloquent'),
+        ],
+    ],
 ];
