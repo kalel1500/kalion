@@ -19,6 +19,7 @@ abstract class NavigationItem extends AbstractDataTransferObject
         public ?string                                      $text,
         public ?string                                      $tooltip,
         public ?string                                      $route_name,
+        public ?array                                       $route_params,
         public ?bool                                        $is_post,
         public NavbarDropdownDto|SidebarItemCollection|null $dropdown,
     )
@@ -33,7 +34,7 @@ abstract class NavigationItem extends AbstractDataTransferObject
 
     public function getHref(): string
     {
-        return safe_route($this->route_name, '#');
+        return safe_route($this->route_name, '#', $this->route_params ?? []);
     }
 
     public function hasDropdown(): bool

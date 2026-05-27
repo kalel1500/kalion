@@ -124,7 +124,7 @@ if (! function_exists('array_has_only_arrays')) {
 }
 
 if (! function_exists('safe_route')) {
-    function safe_route(?string $name, string $default = null): ?string
+    function safe_route(?string $name, string $default = null, array $params = []): ?string
     {
         $fallback = match ($default) {
             null    => null,
@@ -133,7 +133,7 @@ if (! function_exists('safe_route')) {
         };
 
         try {
-            return is_null($name) ? $fallback : route($name);
+            return is_null($name) ? $fallback : route($name, $params);
         } catch (\Symfony\Component\Routing\Exception\RouteNotFoundException $exception) {
             return $fallback;
         }

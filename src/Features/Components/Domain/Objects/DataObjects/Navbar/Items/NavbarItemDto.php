@@ -15,6 +15,7 @@ final class NavbarItemDto extends NavigationItem
         public ?string     $time,
         ?string            $tooltip,
         ?string            $route_name,
+        ?array             $route_params,
         ?bool              $is_post,
         public ?bool       $is_theme_toggle,
         public ?bool       $is_user,
@@ -28,6 +29,7 @@ final class NavbarItemDto extends NavigationItem
             $text,
             $tooltip,
             $route_name,
+            $route_params,
             $is_post,
             $dropdown,
         );

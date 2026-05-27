@@ -19,6 +19,7 @@ final class SidebarItemDto extends NavigationItem
         public ?string         $short_text,
         ?string                $tooltip,
         ?string                $route_name,
+        ?array                 $route_params,
         ?bool                  $is_post,
         public ?string         $counter_action,
         public ?bool           $collapsed,
@@ -32,6 +33,7 @@ final class SidebarItemDto extends NavigationItem
             $text,
             $tooltip,
             $route_name,
+            $route_params,
             $is_post,
             $dropdown,
         );
