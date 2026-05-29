@@ -1,6 +1,24 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.51.0-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.51.1-beta.1...master)
+
+## [v0.51.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.51.0-beta.1...v0.51.1-beta.1) - 2026-05-29
+
+* Nueva colección para poder tipar y validar los filtros de tabulator:
+  * Nueva colección `TabulatorFilterCollection` de la clase `TabulatorFilterDto` con los campos `$field`, `$type` y `$value`.
+  * Se ha marcado como `@deprecated` la clase `ArrayTabulatorFiltersVo` que se eliminara en la version `v0.52.0-beta.1`.
+
+* Nueva funcionalidad para filtrar datos en tabulator (eloquent):
+  * Nueva fachada `TabulatorFilter` con el método `filter(mixed $query, ?array $filters, ?array $sorters = null)` que aplica los filtros y sorters recibidos a la query recibida (acepta relaciones). Por ahora solo existe el driver de eloquent `EloquentTabulatorFilter`.
+  * Nueva config `filters.tabulator.driver` (`KALION_FILTER_TABULATOR_DRIVER`) para poder añadir configurar el driver aunque por ahora solo existe el de eloquent.
+
+* Nueva funcionalidad para añadir parámetros a las rutas de los links:
+  * Nuevo parámetro `$params` en el helper `safe_route()`.
+  * Nuevo parámetro `$route_params` en los DTOs que extienden de `NavigationItem`. Y ahora el método `getHref()` le pasa el `$this->route_params` al `safe_route()`
+
+### Fixed
+
+* Se ha arreglado el método `select` de `AbstractCollectionBase` ya que al hacer `toStatic` no se podia recrear bien la instancia porque no tenía todos los campos. Ahora usa el `toAny` para devolver una `CollectionAny`.
 
 ## [v0.51.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.50.0-beta.1...v0.51.0-beta.1) - 2026-05-14
 
