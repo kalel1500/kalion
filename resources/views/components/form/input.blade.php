@@ -9,6 +9,7 @@
      'name'           => null,
      'value'          => '',
      'size'           => 'md', // xs | sm | md | lg | xl
+     'rounded'        => 'base', // none | 2xs | xs | sm | md | rounded | base | lg
      'containerClass' => null,
      'labelClass'     => null,
      'class'          => null,
@@ -102,7 +103,7 @@
                     'lg' => 'text-base px-3.5 py-3',
                     'xl' => 'text-base px-4   py-3.5',
                 ];
-                $common     = 'border rounded-base block w-full shadow-xs' . ' ' . $sizeClasses[$size];
+                $common     = 'border block w-full shadow-xs' . ' ' . get_rounded_class($rounded) . ' ' . $sizeClasses[$size];
                 $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
                 if (str_contains($type, 'date')) {
                     $common .= ' dark:scheme-dark';

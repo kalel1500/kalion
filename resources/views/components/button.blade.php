@@ -3,13 +3,14 @@
     'type'      => 'button',
     'variant'   => 'brand',
     'size'      => 'md', // xs | sm | md | lg | xl
+    'rounded'   => 'base',
     'text'      => null,
     'icon'      => false,
 ])
 
 @php
     $commonClasses = 'border focus:ring-4 focus:outline-none';
-    $btnClasses    = 'font-medium leading-5 rounded-base';
+    $btnClasses    = 'font-medium leading-5';
     $iconClasses   = 'rounded-full p-0';
     $sizeClasses = [
         'xs' => 'px-2 py-1.5 text-xs  ',
@@ -30,7 +31,7 @@
     ];
     $finalClasses = $icon
         ? $commonClasses.' '.$iconClasses.' '.$colorClasses[$variant]
-        : $commonClasses.' '.$btnClasses.' '.$sizeClasses[$size].' '.$colorClasses[$variant];
+        : $commonClasses.' '.$btnClasses.' '.get_rounded_class($rounded).' '.$sizeClasses[$size].' '.$colorClasses[$variant];
 
     $isButton = $type === 'button';
 @endphp
