@@ -33,7 +33,8 @@
         "files": [
             "src/Core/Domain/Support/helpers_domain.php",
             "src/Core/Infrastructure/Support/helpers_infrastructure.php",
-            "src/Features/Auth/Infrastructure/Support/auth_helpers.php"
+            "src/Features/Auth/Infrastructure/Support/auth_helpers.php",
+            "src/Features/Components/Domain/Support/helpers_comp_dom.php"
         ]
     },
     "autoload-dev": {

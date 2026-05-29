@@ -1,1 +1,9 @@
 <div class="shadow-glow-2"></div>
+<div class="rounded-none"></div>
+<div class="rounded-xxs"></div>
+<div class="rounded-xs"></div>
+<div class="rounded-sm"></div>
+<div class="rounded-md"></div>
+<div class="rounded"></div>
+<div class="rounded-base"></div>
+<div class="rounded-lg"></div>

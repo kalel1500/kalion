@@ -13,6 +13,17 @@ class LayoutMetrics
         'comfortable' => '61px',
     ];
 
+    public const ROUNDED_VARIANTS = [
+        'none'    => 'rounded-none',
+        '2xs'     => 'rounded-xxs',     /* --   -> 2px  = 2px */
+        'xs'      => 'rounded-xs',      /* 2px  -> 4px  = 4px */
+        'sm'      => 'rounded-sm',      /* 4px  -> 6px  = 6px */
+        'md'      => 'rounded-md',      /* 6px  -> ??   = 6px */
+        'rounded' => 'rounded',         /* --   -> 8px  = 8px */
+        'base'    => 'rounded-base',    /* --   -> 12px = 12px */
+        'lg'      => 'rounded-lg',      /* 8px  -> 16px = 16px */
+    ];
+
     public static function getShadowClasses(string $normalShadow = ''): string
     {
         return config('kalion.layout.use_elevated_shadows')
