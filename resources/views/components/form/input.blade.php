@@ -19,6 +19,7 @@
      'disabled'       => false,
      'readonly'       => false,
      'helper'         => null,
+     'tag'            => null,
 ])
 
 @php
@@ -150,17 +151,25 @@
                     @break
 
                 @default
-                    <input
-                        type="{{ $type }}"
-                        id="{{ $id }}"
-                        name="{{ $name }}"
-                        value="{{ $value }}"
-                        class="{{ $classes }}"
-                        {{ $attributes }}
-                        @disabled($disabled)
-                        @readonly($readonly)
-                        @required($required)
-                    />
+                    @if($tag)
+                        <{{ $tag }}
+                            id="{{ $id }}"
+                            class="{{ $classes }}"
+                            {{ $attributes }}
+                        >{{ $value }}</{{ $tag }}>
+                    @else
+                        <input
+                            type="{{ $type }}"
+                            id="{{ $id }}"
+                            name="{{ $name }}"
+                            value="{{ $value }}"
+                            class="{{ $classes }}"
+                            {{ $attributes }}
+                            @disabled($disabled)
+                            @readonly($readonly)
+                            @required($required)
+                        />
+                    @endif
             @endswitch
     @endswitch
 
