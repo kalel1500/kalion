@@ -337,6 +337,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | The following options allow you to configure tabulator filter.
+    | For now, it only accepts "eloquent".
     |
     */
 
