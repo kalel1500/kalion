@@ -10,7 +10,7 @@
 
 @php
     $commonClasses = 'border focus:ring-4 focus:outline-none';
-    $btnClasses    = 'font-medium leading-5';
+    $btnClasses    = 'font-medium leading-5 transition-colors';
     $iconClasses   = 'rounded-full p-0';
     $sizeClasses = [
         'xs' => 'px-2 py-1.5 text-xs  ',
