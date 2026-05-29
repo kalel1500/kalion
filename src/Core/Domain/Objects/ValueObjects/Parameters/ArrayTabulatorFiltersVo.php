@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
 
 /**
- * @internal This class is not meant to be used or overwritten outside the package.
+ * @deprecated This method will be removed in a future Laravel version. Use `TabulatorFilterCollection` class instead.
  */
 class ArrayTabulatorFiltersVo extends AbstractArrayVo
 {
