@@ -8,7 +8,7 @@
      'id'             => null,
      'name'           => null,
      'value'          => '',
-     'size'           => 'md', // sm | md | lg | xl
+     'size'           => 'md', // xs | sm | md | lg | xl
      'containerClass' => null,
      'labelClass'     => null,
      'class'          => null,
@@ -96,6 +96,7 @@
 
             @php
                 $sizeClasses = [
+                    'xs' => 'text-xs   px-2   py-1.5',
                     'sm' => 'text-sm   px-2.5 py-2',
                     'md' => 'text-sm   px-3   py-2.5',
                     'lg' => 'text-base px-3.5 py-3',
