@@ -8,7 +8,7 @@
     'static'            => false,
     'type'              => 'default',   // default | popup | form
     'icon'              => null,        // info | success | warn | error (solo popup)
-    'size'              => 'medium',    // small | medium | large | extralarge
+    'size'              => 'md',        // sm | md | lg | xl
     'placement'         => null,        // top-left | top-right | bottom-left | bottom-right
     'header'            => null,
     'closeText'         => __('Close modal'),
@@ -37,10 +37,10 @@
 
     // Tamaños (ignorados en popup y form, que usan max-w-md fijo)
     $sizeClasses = [
-        'small'      => 'max-w-md',
-        'medium'     => 'max-w-2xl',
-        'large'      => 'max-w-4xl',
-        'extralarge' => 'max-w-7xl',
+        'sm' => 'max-w-md',
+        'md' => 'max-w-2xl',
+        'lg' => 'max-w-4xl',
+        'xl' => 'max-w-7xl',
     ];
     $maxW = match($type) {
         'popup', 'form' => 'max-w-md',

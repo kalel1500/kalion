@@ -8,7 +8,7 @@
      'id'             => null,
      'name'           => null,
      'value'          => '',
-     'size'           => 'base',
+     'size'           => 'md', // sm | md | lg | xl
      'containerClass' => null,
      'labelClass'     => null,
      'class'          => null,
@@ -96,10 +96,10 @@
 
             @php
                 $sizeClasses = [
-                    'small' => 'text-sm   px-2.5 py-2',
-                    'base'  => 'text-sm   px-3   py-2.5',
-                    'large' => 'text-base px-3.5 py-3',
-                    'extra' => 'text-base px-4   py-3.5',
+                    'sm' => 'text-sm   px-2.5 py-2',
+                    'md' => 'text-sm   px-3   py-2.5',
+                    'lg' => 'text-base px-3.5 py-3',
+                    'xl' => 'text-base px-4   py-3.5',
                 ];
                 $common     = 'border rounded-base block w-full shadow-xs' . ' ' . $sizeClasses[$size];
                 $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';

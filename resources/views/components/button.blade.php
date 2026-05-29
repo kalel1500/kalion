@@ -2,7 +2,7 @@
     'tag'       => 'button', // @internal prop to determine if we render <button> or <a>
     'type'      => 'button',
     'variant'   => 'brand',
-    'size'      => 'base',
+    'size'      => 'md', // xs | sm | md | lg | xl
     'text'      => null,
     'icon'      => false,
 ])
@@ -12,11 +12,11 @@
     $btnClasses    = 'font-medium leading-5 rounded-base';
     $iconClasses   = 'rounded-full p-0';
     $sizeClasses = [
-        'xs'    => 'px-3 py-2   text-xs  ',
-        'sm'    => 'px-3 py-2   text-sm  ',
-        'base'  => 'px-4 py-2.5 text-sm  ',
-        'lg'    => 'px-5 py-3   text-base',
-        'lx'    => 'px-6 py-3.5 text-base',
+        'xs' => 'px-3 py-2   text-xs  ',
+        'sm' => 'px-3 py-2   text-sm  ',
+        'md' => 'px-4 py-2.5 text-sm  ',
+        'lg' => 'px-5 py-3   text-base',
+        'lx' => 'px-6 py-3.5 text-base',
     ];
     $colorClasses = [
         'brand'     => 'text-white      bg-brand                    box-border  border-transparent      hover:bg-brand-strong                                   focus:ring-brand-medium             shadow-xs',
