@@ -4,7 +4,7 @@
 
 @props([
     'variant'       => 'brand',
-    'size'          => 'base',
+    'size'          => 'md',    // xs | sm | md | lg
     'align'         => null,    // left | center | right
     'overlay'       => false,   // true → posicionado absoluto para flotar sobre el padre
     'backdropClass' => null,
@@ -14,7 +14,7 @@
     $sizeClasses = [
         'xs'    => 'w-4 h-4',
         'sm'    => 'w-6 h-6',
-        'base'  => 'w-8 h-8',
+        'md'    => 'w-8 h-8',
         'lg'    => 'w-10 h-10',
     ];
     $colorClasses = [
