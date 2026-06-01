@@ -1,12 +1,50 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.51.1-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.52.0-beta.1...master)
+
+## [v0.52.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.51.1-beta.1...v0.52.0-beta.1) - 2026-06-01
+
+### Added
+
+* Se ha añadido el nuevo método `merge` en la clase `AbstractCollectionBase`.
+* Nuevo parámetro `tag` en el componente `form.input` para poder reutilizar las clases de los inputs en otros elementos como `div` o `span`
+* Se ha añadido el nuevo parametro rounded en varios componentes y se han centralizado los valores:
+  * Nueva constante `ROUNDED_VARIANTS` en `LayoutMetrics`.
+  * Nuevo helper `get_rounded_class` (en el nuevo archivo `src/Features/Components/Domain/Support/helpers_comp_dom.php`).
+  * Se ha añadido el nuevo parámetro `rounded` en los componentes `button` y `form.input` para poder configurar el `border-radious`
+
+### Changed
+
+* Se han modificado varios componentes:
+  * (breaking) Se han renombado y unificado todos los valores de las props de tamaño (`size`) de los componentes:
+    * `form.input`:
+      * `small` ahora es `sm`
+      * `base` ahora es `md`
+      * `large` ahora es `lg`
+      * `extra` ahora es `xl`
+    * `modal`:
+      * `small` ahora es `sm`
+      * `medium` ahora es `md`
+      * `large` ahora es `lg`
+      * `extralarge` ahora es `xl`
+    * `button`:
+      * `base` ahora es `md`
+    * `spinner`:
+      * `base` ahora es `md`
+  * Nuevo tamaño `xs` en el componente `form.input`.
+  * Se ha reducido el padding del tamaño `xs` en el componente `button`.
+
+### Fixed
+
+ * Se ha corregido un error al llamar al componente `link` en varios forms reemplazando la prop `value` por `text`.
 
 ## [v0.51.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.51.0-beta.1...v0.51.1-beta.1) - 2026-05-29
 
+### Added
+
 * Nueva colección para poder tipar y validar los filtros de tabulator:
   * Nueva colección `TabulatorFilterCollection` de la clase `TabulatorFilterDto` con los campos `$field`, `$type` y `$value`.
-  * Se ha marcado como `@deprecated` la clase `ArrayTabulatorFiltersVo` que se eliminara en la version `v0.52.0-beta.1`.
+  * Se ha marcado como `@deprecated` la clase `ArrayTabulatorFiltersVo` que se eliminara una futura version.
 
 * Nueva funcionalidad para filtrar datos en tabulator (eloquent):
   * Nueva fachada `TabulatorFilter` con el método `filter(mixed $query, ?array $filters, ?array $sorters = null)` que aplica los filtros y sorters recibidos a la query recibida (acepta relaciones). Por ahora solo existe el driver de eloquent `EloquentTabulatorFilter`.
@@ -39,7 +77,7 @@
 
 ### Removed
 
-* **(breaking)** Se ha eliminado el componente: `tooltip.wrapper`, ya que no es muy seguro usar el "preg_replace"
+* **(breaking)** Se ha eliminado el componente: `tooltip.wrapper`, ya que no es muy seguro usar el `preg_replace`
 
 ### Fixed
 
@@ -222,9 +260,9 @@
 * **Clases de sombra personalizadas**
   ```html
   <!-- Antes -->
-  <div class="kal:shadow-xl dark:kal:shadow-black-xl">
+  <div class='kal:shadow-xl dark:kal:shadow-black-xl'>
   <!-- Ahora -->
-  <div class="shadow-glow-2">
+  <div class='shadow-glow-2'>
   ```
 
 * **Enlace del sidebar: campo `short_text` ahora requerido**
