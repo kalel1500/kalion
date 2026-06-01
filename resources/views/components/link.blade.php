@@ -8,7 +8,7 @@
 
     // Default btn props
     'variant'   => 'brand',
-    'size'      => 'base',
+    'size'      => 'md', // xs | sm | md | lg | xl
 ])
 
 @php
