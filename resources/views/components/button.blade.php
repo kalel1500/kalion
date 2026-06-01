@@ -3,7 +3,7 @@
     'type'      => 'button',
     'variant'   => 'brand',
     'size'      => 'md', // xs | sm | md | lg | xl
-    'rounded'   => 'base',
+    'rounded'   => 'base', // none | 2xs | xs | sm | md | rounded | base | lg
     'text'      => null,
     'icon'      => false,
 ])
