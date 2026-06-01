@@ -722,10 +722,11 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function merge()
-//    {
-//        //
-//    }
+    public function merge($items)
+    {
+        $collResult = collect($this->toArray())->merge($items);
+        return $this->toAny($collResult->toArray());
+    }
 
 //    public function mergeRecursive()
 //    {
