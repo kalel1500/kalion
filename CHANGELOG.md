@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.52.0-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.52.1-beta.1...master)
+
+## [v0.52.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.52.0-beta.1...v0.52.1-beta.1) - 2026-06-02
+
+### Added
+
+* Nuevos métodos añadidos en los value objects para poder crear instancias de `null`, `true` y `false` de forma estática:
+  * `AbstractValueObject::null()`
+  * `AbstractBoolVo::true()`
+  * `AbstractBoolVo::false()`
 
 ## [v0.52.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.51.1-beta.1...v0.52.0-beta.1) - 2026-06-01
 
