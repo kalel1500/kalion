@@ -43,4 +43,14 @@ abstract class AbstractBoolVo extends AbstractValueObject
             throw new InvalidValueException(sprintf('<%s> does not allow the value <%s> as valid boolean.', class_basename(static::class), $value));
         }
     }
+
+    public static function true(): static
+    {
+        return new static(true);
+    }
+
+    public static function false(): static
+    {
+        return new static(false);
+    }
 }
