@@ -32,6 +32,11 @@ abstract class AbstractValueObject implements JsonSerializable
         }
     }
 
+    public static function null(): static
+    {
+        return new static(null);
+    }
+
     public function value(): mixed
     {
         return $this->value;
