@@ -6,10 +6,11 @@
     <x-kal::sidebar.separator/>
 @else
     <x-kal::sidebar.item
-            :href="$item->hasDropdown() ? null : $item->getHref()"
-            :counter="$item->hasCounter() ? $item->getCounter() : null"
-            :level="$level"
-            :active="current_route_matches($item->route_name, $item->route_params ?? [])"
+        :href="$item->hasDropdown() ? null : $item->getHref()"
+        :counter="$item->hasCounter() ? $item->getCounter() : null"
+        :level="$level"
+        :active="current_route_matches($item->route_name, $item->route_params ?? [])"
+        :open="$item->isOpenDropdown()"
     >
         @if(!is_null($item->icon))
             <x-slot:icon>

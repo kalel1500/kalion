@@ -1,4 +1,4 @@
-@props(['href' => '#', 'icon', 'dropdown', 'counter', 'level' => 0, 'active' => false])
+@props(['href' => '#', 'icon', 'dropdown', 'counter', 'level' => 0, 'active' => false, 'open' => null])
 
 @php
     $isDropdown = isset($dropdown);
@@ -9,7 +9,7 @@
     $iconHtml = !$hasIcon ? '' : '<div class="h-6 w-6 shrink-0 text-body transition duration-75 group-hover:text-heading">' . $icon . '</div>';
     $spanClasses = !$hasIcon ? '' : 'ml-3 md:sc:ml-0 truncate md:sc:w-full';
     $dropdownId = $isDropdown ? $dropdown->attributes->get('id') : '';
-    $dropdownIsOpen = $isDropdown && dropdown_is_open($dropdown->toHtml());
+    $dropdownIsOpen = $isDropdown && ($open ?? dropdown_is_open($dropdown->toHtml()));
     $isDeepLevel = (int)$level > 0;
 
     /*

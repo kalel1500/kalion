@@ -54,4 +54,9 @@ final class SidebarItemDto extends NavigationItem
     {
         $this->counter = $counter;
     }
+
+    public function isOpenDropdown(): bool
+    {
+        return $this->dropdown?->contains(fn(SidebarItemDto $subItem) => current_route_matches($subItem->route_name, $subItem->route_params ?? [])) ?? false;
+    }
 }
