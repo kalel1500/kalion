@@ -23,10 +23,10 @@ use function Illuminate\Filesystem\join_paths;
 if (! function_exists('dropdown_is_open')) {
     function dropdown_is_open(string $htmlLinks): bool
     {
-        $currentUrl = RequestF::fullUrl();
+        $currentUrl = strtok(RequestF::fullUrl(), '?');
         // Expresión regular para encontrar todos los href en los enlaces
         preg_match_all('/<a\s+href=["\']([^"\']+)["\']/', $htmlLinks, $matches);
-        $hrefs = $matches[1]; // $matches[1] contiene todos los href encontrados
+        $hrefs = array_map(fn(string $href) => strtok($href, '?'), $matches[1]);
         return in_array($currentUrl, $hrefs); // Comprueba si la URL actual está en la lista
     }
 }
