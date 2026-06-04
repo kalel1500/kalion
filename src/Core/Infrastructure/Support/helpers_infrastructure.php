@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request as RequestF;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
@@ -279,6 +280,52 @@ if (! function_exists('current_route_name_is')) {
     function current_route_name_is(string $name): bool
     {
         return Route::currentRouteName() === $name;
+    }
+}
+
+if (! function_exists('current_route_matches')) {
+    function current_route_matches(?string $routeName, array $routeParams = []): bool
+    {
+        if (is_null($routeName)) {
+            return false;
+        }
+
+        if (!Route::currentRouteNamed($routeName)) {
+            return false;
+        }
+
+        if (empty($routeParams)) {
+            return true;
+        }
+
+        $currentParams = request()->route()?->parameters() ?? [];
+
+        foreach ($routeParams as $key => $expected) {
+            if (!array_key_exists($key, $currentParams)) {
+                return false;
+            }
+
+            $actual = $currentParams[$key];
+
+            // Normalize enum instances to their scalar value
+            if ($actual instanceof \BackedEnum) {
+                $actual = $actual->value;
+            } elseif ($actual instanceof \UnitEnum) {
+                $actual = $actual->name;
+            }
+
+            if ($expected instanceof \BackedEnum) {
+                $expected = $expected->value;
+            } elseif ($expected instanceof \UnitEnum) {
+                $expected = $expected->name;
+            }
+
+            if ((string) $actual !== (string) $expected) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
