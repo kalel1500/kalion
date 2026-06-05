@@ -45,17 +45,6 @@ class FortifyServiceProvider extends ServiceProvider
      */
     protected function configureFortify(): void
     {
-        $features = [];
-
-        if (!config('kalion.auth.disable_register')) {
-            $features[] = \Laravel\Fortify\Features::registration();
-        }
-
-        if (!config('kalion.auth.disable_password_reset')) {
-            $features[] = \Laravel\Fortify\Features::resetPasswords();
-        }
-
-        config(['fortify.features' => $features]);
 
         // Set the username field from kalion config
         config(['fortify.username' => kauth()->getLoginFieldData()->name]);
