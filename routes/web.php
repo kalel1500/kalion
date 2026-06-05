@@ -36,5 +36,4 @@ Route::middleware('auth')->group(function () {
     Route::put('/kalion/ajax/cookie/update', [AjaxCookiesController::class, 'update'])->name('kalion.ajax.cookie.update');
 });
 
-require __DIR__.'/auth.php';
 //require __DIR__.'/test.php';

@@ -35,11 +35,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleReposito
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\AuthManager;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentRoleRepository;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\AuthenticationFlowService;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\AuthenticationFlow;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Login;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\PasswordReset;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\Contracts\Register;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\FortifyServiceProvider;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\StatusRepository;
@@ -88,10 +84,9 @@ class KalionServiceProvider extends ServiceProvider
     {
         $this->app->singleton(abstract: LayoutData::class,          concrete: fn($app) => app(config('kalion.layout.data_provider')));
         $this->app->singleton(abstract: Guard::class,               concrete: fn($app, $params) => new (config('kalion.auth.services.authentication'))(...$params) );
-        $this->app->singleton(abstract: Login::class,               concrete: fn($app) => new (config('kalion.auth.services.login')));
-        $this->app->singleton(abstract: Register::class,            concrete: fn($app) => new (config('kalion.auth.services.register')));
-        $this->app->singleton(abstract: PasswordReset::class,       concrete: fn($app) => new (config('kalion.auth.services.password_reset')));
-        $this->app->singleton(abstract: AuthenticationFlow::class,  concrete: AuthenticationFlowService::class);
+
+        // Register the Fortify-based authentication flow
+        $this->app->register(FortifyServiceProvider::class);
     }
 
     /**

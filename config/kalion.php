@@ -230,9 +230,8 @@ return [
         ],
         'services' => [
             'authentication' => env('KALION_AUTH_SERVICE_AUTHENTICATION', $defaults['kalion.auth.services.authentication']),
-            'login' => env('KALION_AUTH_SERVICE_LOGIN', $defaults['kalion.auth.services.login']),
-            'register' => env('KALION_AUTH_SERVICE_REGISTER', $defaults['kalion.auth.services.register']),
-            'password_reset' => env('KALION_AUTH_SERVICE_PASSWORD_RESET', $defaults['kalion.auth.services.password_reset']),
+            'authenticate_user' => env('KALION_AUTH_SERVICE_AUTHENTICATE_USER', $defaults['kalion.auth.services.authenticate_user']),
+            'create_new_user' => env('KALION_AUTH_SERVICE_CREATE_NEW_USER', $defaults['kalion.auth.services.create_new_user']),
         ],
         'fields' => [
             'web' => env('KALION_AUTH_FIELD', $defaults['kalion.auth.fields.web']),

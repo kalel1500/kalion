@@ -14,9 +14,8 @@ use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\ApiUser;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\User;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentUserRepository;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\LoginService;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\PasswordResetService;
-use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Support\RegisterService;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\AuthenticateUser;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\CreateNewUser;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
 
 class KalionConfig
@@ -59,9 +58,8 @@ class KalionConfig
         'kalion.auth.repositories.web'                                               => EloquentUserRepository::class,
         'kalion.auth.repositories.api'                                               => EloquentApiUserRepository::class,
         'kalion.auth.services.authentication'                                        => EntityGuard::class,
-        'kalion.auth.services.login'                                                 => LoginService::class,
-        'kalion.auth.services.register'                                              => RegisterService::class,
-        'kalion.auth.services.password_reset'                                        => PasswordResetService::class,
+        'kalion.auth.services.authenticate_user'                                     => AuthenticateUser::class,
+        'kalion.auth.services.create_new_user'                                       => CreateNewUser::class,
         'kalion.auth.fields.web'                                                     => 'email',
         'kalion.auth.fields.api'                                                     => 'name',
         'kalion.auth.available_fields.custom.name'                                   => 'email',
