@@ -37,10 +37,12 @@
 
     // Tamaños (ignorados en popup y form, que usan max-w-md fijo)
     $sizeClasses = [
-        'sm' => 'max-w-md',
-        'md' => 'max-w-2xl',
-        'lg' => 'max-w-4xl',
-        'xl' => 'max-w-7xl',
+        'sm'   => 'max-w-md',   /* 28rem (448px)                 equal                               */
+        'md'   => 'max-w-1/3',  /* (634.984px)                   prev: max-w-2xl -> 42rem (672px)    */
+        'lg'   => 'max-w-1/2',  /* (952.5px)                     prev: max-w-4xl -> 56rem (896px)    */
+        'xl'   => 'max-w-3/4',  /* (1428.75px)                   prev: max-w-7xl -> 80rem (1280px)   */
+        '2xl'  => 'max-w-9/10', /* (1714.5px)                    new                                 */
+        'full' => 'max-w-full', /* 100%                          new                                 */
     ];
     $maxW = match($type) {
         'popup', 'form' => 'max-w-md',
