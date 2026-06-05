@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.52.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.52.3-beta.0...master)
+
+## [v0.52.3-beta.0](https://github.com/kalel1500/kalion/compare/v0.52.2-beta.0...v0.52.3-beta.0) - 2026-06-05
+
+### Changed
+
+* (warn) Tamaños del componente modal mejorados:
+  * `sm   => max-w-md,   /* 28rem (448px)                 equal                               */`
+  * `md   => max-w-1/3,  /* (634.984px)                   prev: max-w-2xl -> 42rem (672px)    */`
+  * `lg   => max-w-1/2,  /* (952.5px)                     prev: max-w-4xl -> 56rem (896px)    */`
+  * `xl   => max-w-3/4,  /* (1428.75px)                   prev: max-w-7xl -> 80rem (1280px)   */`
+  * `2xl  => max-w-9/10, /* (1714.5px)                    new                                 */`
+  * `full => max-w-full, /* 100%                          new                                 */`
 
 ## [v0.52.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.52.1-beta.1...v0.52.2-beta.0) - 2026-06-05
 
