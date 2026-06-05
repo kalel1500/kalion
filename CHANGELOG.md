@@ -1,6 +1,23 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.52.1-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.52.2-beta.0...master)
+
+## [v0.52.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.52.1-beta.1...v0.52.2-beta.0) - 2026-06-05
+
+### Added
+
+* Nuevo método `isOpenDropdown` en la clase `SidebarItemDto` para calcular si el item debe estar abierto según los subItems.
+* Nuevo atributo `open` en el componente `item.blade.php` para que el `dropdown_is_open` (que usa regex) sea solo un fallback.
+* Nuevo helper `current_route_matches` para comprobar si una ruta coincide con la actual pero teniendo en cuenta los parámetros.
+
+### Changed
+
+* (refactor) Componentes sidebar: Calcular si el dropdown debe estar abierto en base a los subitems (usando los nuevos métodos) en vez de usar el `dropdown_is_open` que aplica regex al html y es menos fiable aunque en este caso funcionaba igual.
+
+### Fixed
+
+* (fix) Arreglar helper `dropdown_is_open` ya que no se tenía en cuanta si la url tenia parámetros o query params.
+* (fix) Componente `sidebar.item-auto`: Tener en cuenta los parámetros de la url para calcular el `active` del item. Ahora se usa el nuevo helper `current_route_matches` ya que con el `Route::currentRouteNamed()` no se tenían en cuenta los parámetros.
 
 ## [v0.52.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.52.0-beta.1...v0.52.1-beta.1) - 2026-06-02
 
