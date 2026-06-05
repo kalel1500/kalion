@@ -1,0 +1,22 @@
+He creado este paquete de Laravel llamado "kalion" con muchas funcionalidades y una de ellas es el flujo de autenticación con blades (dentro de "src/Features/AuthFlow").
+
+Cuando lo cree me copie el flujo del antiguo "Laravel breeze" para las acciones de "login", "logout" y "register", ya que en las nuevas versiones de Laravel se usan los nuevos "Starter Kits" de "React", "Vue", "Livewire" y "Svelte" y no hay ningún starter para blade en las nuevas versiones de Laravel (12 y 13).
+
+Lo el único que cambie un poco fue el "login" para permitir el "fake" sin comprobar la pass para que en el modo desarrollo se pueda entrar como cualquier usuario y ver lo que él ve con sus permisos. Y también el tema de la redirección que uso un helper propio "redirect_after_login_to" que permite configurar la redirección de varias maneras.
+
+El primer problema es que solo desarrolle esas tres acciones, y todo lo demás lo deje para el futuro, pero veo que no lo voy a acabar haciendo porque me parece un rollo tener que copiarlo todo de breeze y tener que mantener algo que no entiendo bien.
+
+Y el segundo problema es que el flujo que cree es bastante lioso y difícil de extender.
+
+Lo bueno es que he visto existe el paquete de "Fortify" que usan los nuevos "Starter Kits" y me gustaría implementarlo para que mi paquete tenga todas las acciones de autenticación y no tener que mantener yo las tres acciones que tengo ahora. Aunque sí quiero mantener la parte del "fake" y el "redirect".
+
+Lo que pasa es que por más que leo la documentación de "Fortify" no entiendo como funciona el flujo de autenticación y como puedo extenderlo para añadir la parte del "fake" sin tener que copiar todo el flujo de "Fortify" y mantenerlo yo.
+
+Me podrías ayudar a rehacer la estructura de la autenticación de mi paquete "kalion" usando "Fortify":
+-quitar mis propias rutas, ya que se definen dentro de "Fortify"
+-eliminar la estructura de la Fachada "AuthFlow" y los controllers
+-hacer que "Fortify" se encargue de casi todo el flujo, pero dejando mi lógica del fake y la redirección
+-mantener el hecho de que saco los datos del modelo del helper "user"
+ - kauth()->getClassUserModel(); (se usa en el login y en el register)
+ - kauth()->getLoginFieldData()->name; (se usa en el login)
+-En general rehacer la estructura de archivos y carpetas dentro de "src/Features/AuthFlow" pero usando todo lo que hay en "src/Features/Auth"
