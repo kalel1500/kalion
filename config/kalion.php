@@ -207,8 +207,8 @@ return [
 
     'auth' => [
         'fake' => (bool) env('KALION_AUTH_FAKE', $defaults['kalion.auth.fake']),
-        'disable_register' => (bool) env('KALION_AUTH_DISABLE_REGISTER', $defaults['kalion.auth.disable_register']),
-        'disable_password_reset' => (bool) env('KALION_AUTH_DISABLE_PASSWORD_RESET', $defaults['kalion.auth.disable_password_reset']),
+        'show_register_link' => (bool) env('KALION_AUTH_SHOW_REGISTER_LINK', $defaults['kalion.auth.show_register_link']),
+        'show_password_reset_link' => (bool) env('KALION_AUTH_SHOW_PASSWORD_RESET_LINK', $defaults['kalion.auth.show_password_reset_link']),
         'redirect_after_login' => env('KALION_AUTH_REDIRECT_AFTER_LOGIN', $defaults['kalion.auth.redirect_after_login']),
         'blades' => [
             'fake' => env('KALION_AUTH_BLADE_FAKE', $defaults['kalion.auth.blades.fake']),
@@ -228,8 +228,8 @@ return [
             'web' => env('KALION_AUTH_REPOSITORY_WEB', $defaults['kalion.auth.repositories.web']),
             'api' => env('KALION_AUTH_REPOSITORY_API', $defaults['kalion.auth.repositories.api']),
         ],
+        'guard' => env('KALION_AUTH_GUARD', $defaults['kalion.auth.guard']),
         'services' => [
-            'authentication' => env('KALION_AUTH_SERVICE_AUTHENTICATION', $defaults['kalion.auth.services.authentication']),
             'authenticate_user' => env('KALION_AUTH_SERVICE_AUTHENTICATE_USER', $defaults['kalion.auth.services.authenticate_user']),
             'create_new_user' => env('KALION_AUTH_SERVICE_CREATE_NEW_USER', $defaults['kalion.auth.services.create_new_user']),
         ],

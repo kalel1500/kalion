@@ -83,7 +83,7 @@ class KalionServiceProvider extends ServiceProvider
     protected function registerSingletons(): void
     {
         $this->app->singleton(abstract: LayoutData::class,          concrete: fn($app) => app(config('kalion.layout.data_provider')));
-        $this->app->singleton(abstract: Guard::class,               concrete: fn($app, $params) => new (config('kalion.auth.services.authentication'))(...$params) );
+        $this->app->singleton(abstract: Guard::class,               concrete: fn($app, $params) => new (config('kalion.auth.guard'))(...$params) );
 
         // Register the Fortify-based authentication flow
         $this->app->register(FortifyServiceProvider::class);

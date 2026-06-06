@@ -12,8 +12,8 @@
         <!-- Remember Me -->
         <div class="flex items-center justify-between">
             <x-kal::form.input type="checkbox" id="remember" :label="__('k::text.input.remember_me')" />
-            @if(! config('kalion.auth.disable_password_reset'))
-                <x-kal::link href="{{ route('password.reset') }}" class="text-sm" :text="__('k::auth.login.password_reset')" />
+            @if(config('kalion.auth.show_password_reset_link'))
+                <x-kal::link href="{{ route('password.request') }}" class="text-sm" :text="__('k::auth.login.password_reset')" />
             @endif
         </div>
 
@@ -21,7 +21,7 @@
         <x-kal::partials.form-btn>{{ __('k::auth.login.btn') }}</x-kal::partials.form-btn>
 
         <!-- Register link -->
-        @if(! config('kalion.auth.disable_register'))
+        @if(config('kalion.auth.show_register_link'))
             <x-kal::form.question-link :value="__('k::auth.login.question')" :link="__('k::auth.login.question_link')" href="{{ route('register') }}" />
         @endif
     </x-kal::form>
