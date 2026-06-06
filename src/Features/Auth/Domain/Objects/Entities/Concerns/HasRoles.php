@@ -72,9 +72,11 @@ trait HasRoles
             throw new NeverCalledException(sprintf('The method %s is not meant to be called with the item "%s".', __METHOD__, $method));
         }
 
-        return $this->$method()->contains(function (AbilityEntity $item) use ($value, $params) {
-            $repositoryUser = new (kauth($this->getGuard())->getClassUserRepository());
+        // Comprobar si el usuario tiene un rol con todos los permisos
+        if ($method === 'permissions' && $this->all_permissions()) return true;
 
+        return $this->$method()->contains(function (AbilityEntity $item) use ($method, $value, $params) {
+            $repositoryUser = new (kauth($this->getGuard())->getClassUserRepository());
             if ($item->name->value !== $value) return false;
             if ($item->getIsQuery()) return $repositoryUser->{$value}($this, ...$params);
             return true;
