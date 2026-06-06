@@ -66,13 +66,13 @@ trait HasRoles
         return $values->every(fn($params, $value) => $this->userHas($method, $value, $params));
     }
 
-    protected function userHas(string $item, string $value, array $params = []): bool
+    protected function userHas(string $method, string $value, array $params = []): bool
     {
-        if (! in_array($item, ['permissions', 'roles'])) {
-            throw new NeverCalledException(sprintf('The method %s is not meant to be called with the item "%s".', __METHOD__, $item));
+        if (! in_array($method, ['permissions', 'roles'])) {
+            throw new NeverCalledException(sprintf('The method %s is not meant to be called with the item "%s".', __METHOD__, $method));
         }
 
-        return $this->$item()->contains(function (AbilityEntity $item) use ($value, $params) {
+        return $this->$method()->contains(function (AbilityEntity $item) use ($value, $params) {
             $repositoryUser = new (kauth($this->getGuard())->getClassUserRepository());
 
             if ($item->name->value !== $value) return false;
