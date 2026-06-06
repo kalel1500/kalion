@@ -229,9 +229,9 @@ return [
             'api' => env('KALION_AUTH_REPOSITORY_API', $defaults['kalion.auth.repositories.api']),
         ],
         'guard' => env('KALION_AUTH_GUARD', $defaults['kalion.auth.guard']),
-        'services' => [
-            'authenticate_user' => env('KALION_AUTH_SERVICE_AUTHENTICATE_USER', $defaults['kalion.auth.services.authenticate_user']),
-            'create_new_user' => env('KALION_AUTH_SERVICE_CREATE_NEW_USER', $defaults['kalion.auth.services.create_new_user']),
+        'actions' => [
+            'authenticate_user' => env('KALION_AUTH_ACTION_AUTHENTICATE_USER', $defaults['kalion.auth.actions.authenticate_user']),
+            'create_new_user' => env('KALION_AUTH_ACTION_CREATE_NEW_USER', $defaults['kalion.auth.actions.create_new_user']),
         ],
         'fields' => [
             'web' => env('KALION_AUTH_FIELD', $defaults['kalion.auth.fields.web']),

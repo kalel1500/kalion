@@ -84,7 +84,7 @@ class FortifyServiceProvider extends ServiceProvider
     protected function configureAuthentication(): void
     {
         Fortify::authenticateUsing(function ($request) {
-            $authenticateClass = config('kalion.auth.services.authenticate_user');
+            $authenticateClass = config('kalion.auth.actions.authenticate_user');
             return app($authenticateClass)->authenticate($request);
         });
     }
@@ -94,7 +94,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     protected function configureUserCreation(): void
     {
-        $createUserClass = config('kalion.auth.services.create_new_user');
+        $createUserClass = config('kalion.auth.actions.create_new_user');
         Fortify::createUsersUsing($createUserClass);
     }
 }
