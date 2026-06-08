@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\AuthFlow\Infrastructure;
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
@@ -39,6 +43,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         $this->configureViews();
         $this->configureActions();
+        $this->configureRateLimiter();
     }
 
     /**
@@ -78,5 +83,29 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::createUsersUsing(config('kalion.auth.actions.create_new_user'));
 
         Fortify::resetUserPasswordsUsing(config('kalion.auth.actions.reset_user_password'));
+    }
+
+    /**
+     * Configure the rate limiter.
+     */
+    protected function configureRateLimiter(): void
+    {
+        RateLimiter::for('login', function (Request $request) {
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+
+            return Limit::perMinute(5)->by($throttleKey);
+        });
+
+        RateLimiter::for('two-factor', function (Request $request) {
+            return Limit::perMinute(5)->by($request->session()->get('login.id'));
+        });
+
+        RateLimiter::for('passkeys', function (Request $request) {
+            $credentialId = $request->input('credential.id');
+
+            return Limit::perMinute(10)->by(
+                ($credentialId ?: $request->session()->getId()).'|'.$request->ip()
+            );
+        });
     }
 }
