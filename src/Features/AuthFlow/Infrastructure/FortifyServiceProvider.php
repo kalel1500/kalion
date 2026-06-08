@@ -45,12 +45,8 @@ class FortifyServiceProvider extends ServiceProvider
      */
     protected function configureFortify(): void
     {
-
         // Set the username field from kalion config
         config(['fortify.username' => kauth()->getLoginFieldData()->name]);
-
-        // Ensure Fortify uses the correct guard
-        config(['fortify.guard' => 'web']);
     }
 
     /**
