@@ -6,11 +6,14 @@ namespace Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Traits\PasswordValidationRules;
 
 class CreateNewUser implements CreatesNewUsers
 {
+    use PasswordValidationRules;
+
     /**
      * Validate and create a newly registered user.
      *
@@ -23,8 +26,8 @@ class CreateNewUser implements CreatesNewUsers
 
         Validator::make($input, [
             'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . (new $model)->getTable()],
-            'password' => ['required', 'confirmed', Password::defaults()],
+            'email'    => ['required', 'string', 'email', 'max:255', Rule::unique($model)],
+            'password' => $this->passwordRules(),
             'terms'    => ['required'],
         ])->validate();
 
