@@ -70,11 +70,11 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::requestPasswordResetLinkView(function () {
-            return view(config('kalion.auth.blades.password_reset'));
+            return view(config('kalion.auth.blades.forgot_password'));
         });
 
         Fortify::resetPasswordView(function ($request) {
-            return view(config('kalion.auth.blades.password_reset'), ['request' => $request]);
+            return view(config('kalion.auth.blades.reset_password'), ['request' => $request]);
         });
     }
 

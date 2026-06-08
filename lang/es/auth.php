@@ -33,10 +33,15 @@ return [
         'question_link'  => 'Registrate',
         'password_reset' => '¿Has olvidado tu contraseña?',
     ],
-    'password_reset'   => [
+    'forgot_password'  => [
         'title'      => 'Contraseña olvidada',
         'card_title' => '¿Olvidaste tu contraseña?',
         'card_text'  => '¡No te preocupes! Solo escribe tu correo electrónico y te enviaremos un código para restablecer tu contraseña.',
+        'btn'        => 'Enviar enlace',
+    ],
+    'reset_password'   => [
+        'title'      => 'Restablecer contraseña',
+        'card_title' => 'Establece tu nueva contraseña',
         'btn'        => 'Restablecer contraseña',
     ],
 

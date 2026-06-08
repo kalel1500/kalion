@@ -214,7 +214,8 @@ return [
             'fake' => env('KALION_AUTH_BLADE_FAKE', $defaults['kalion.auth.blades.fake']),
             'login' => env('KALION_AUTH_BLADE_LOGIN', $defaults['kalion.auth.blades.login']),
             'register' => env('KALION_AUTH_BLADE_REGISTER', $defaults['kalion.auth.blades.register']),
-            'password_reset' => env('KALION_AUTH_BLADE_PASSWORD_RESET', $defaults['kalion.auth.blades.password_reset']),
+            'forgot_password' => env('KALION_AUTH_BLADE_FORGOT_PASSWORD', $defaults['kalion.auth.blades.forgot_password']),
+            'reset_password' => env('KALION_AUTH_BLADE_RESET_PASSWORD', $defaults['kalion.auth.blades.reset_password']),
         ],
         'models' => [
             'web' => env('KALION_AUTH_MODEL_WEB', $defaults['kalion.auth.models.web']),

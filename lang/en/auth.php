@@ -33,10 +33,15 @@ return [
         'question_link'  => 'Sign up',
         'password_reset' => 'Forgot password?',
     ],
-    'password_reset'   => [
+    'forgot_password'  => [
         'title'      => 'Forgot password',
         'card_title' => 'Forgot your password?',
         'card_text'  => 'Don\'t fret! Just type in your email and we will send you a code to reset your password!',
+        'btn'        => 'Send reset link',
+    ],
+    'reset_password'   => [
+        'title'      => 'Reset password',
+        'card_title' => 'Set your new password',
         'btn'        => 'Reset password',
     ],
 
