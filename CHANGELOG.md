@@ -1,6 +1,63 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.52.3-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.53.0-beta.0...master)
+
+## [v0.53.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.52.3-beta.0...v0.53.0-beta.0) - 2026-06-08
+
+### Added
+
+* Se ha añadido la funcionalidad para restaurar la `password` de un usuario a través del correo electrónico.
+  * Nueva blade `pages.auth.reset-password` para el formulario de restablecimiento de contraseña (con token, email, password y confirmación).
+  * Nuevas traducciones `k::auth.reset_password.*` (en/es) para la nueva blade.
+  * La blade `pages.auth.password-reset` se ha renombrado a `pages.auth.forgot-password` y se ha terminado el flujo que estaba a medias.
+
+### Changed
+
+* (breaking) Refactorización completa del flujo de autenticación (`src/Features/AuthFlow`) para usar **Laravel Fortify** en lugar de la implementación propia:
+  * Eliminados los controllers (`LoginController`, `RegisterController`, `PasswordResetController`).
+  * Eliminada la fachada `AuthFlow` y su servicio `AuthenticationFlowService`.
+  * Eliminados los servicios `LoginService`, `RegisterService`, `PasswordResetService` y sus contratos.
+  * Eliminado el archivo `routes/auth.php` — ahora las rutas las define Fortify automáticamente.
+  * Nuevo `FortifyServiceProvider` que configura las vistas, la autenticación custom (con soporte para fake login) y la creación de usuarios.
+  * Nuevas clases `Actions\AuthenticateUser`, `Actions\CreateNewUser` y `Actions\ResetUserPassword` que encapsulan la lógica usando `kauth()`.
+  * Nuevas clases `Responses\KalionLoginResponse`, `KalionLogoutResponse` y `KalionRegisterResponse` que mantienen la redirección con `redirect_after_login_to()`.
+  * Nuevo trait `PasswordValidationRules` para centralizar las reglas de validación de contraseñas.
+  * Configurado `RateLimiter` para `login`, `two-factor` y `passkeys` (requerido por Fortify).
+* (breaking) Renombradas configuraciones de autenticación:
+  * `kalion.auth.disable_register` → `kalion.auth.show_register_link` (lógica invertida, ahora `true` = mostrar).
+  * `kalion.auth.disable_password_reset` → `kalion.auth.show_password_reset_link` (lógica invertida, ahora `true` = mostrar).
+  * `kalion.auth.services.authentication` → `kalion.auth.guard`.
+  * `kalion.auth.services.login` / `register` / `password_reset` → `kalion.auth.actions.authenticate_user`, `kalion.auth.actions.create_new_user` y `kalion.auth.actions.reset_user_password`.
+  * `kalion.auth.blades.password_reset` → `kalion.auth.blades.forgot_password`
+  * \+ nueva `kalion.auth.blades.reset_password`.
+* La blade `login.blade.php` ahora usa `route('password.request')` en lugar de `route('password.reset')` (nombre de ruta de Fortify).
+
+### Removed
+
+* Eliminadas las variables de entorno:
+  * `KALION_AUTH_DISABLE_REGISTER`
+  * `KALION_AUTH_DISABLE_PASSWORD_RESET`
+  * `KALION_AUTH_BLADE_PASSWORD_RESET` (reemplazada por `KALION_AUTH_BLADE_FORGOT_PASSWORD` y `KALION_AUTH_BLADE_RESET_PASSWORD`)
+  * `KALION_AUTH_SERVICE_LOGIN`
+  * `KALION_AUTH_SERVICE_REGISTER`
+  * `KALION_AUTH_SERVICE_PASSWORD_RESET`
+  * `KALION_AUTH_SERVICE_AUTHENTICATION`
+
+### Fixed
+
+* auth: Recuperar la funcionalidad `all_permissions` que se perdió en el refactor de la version `v0.50.0-beta.1`
+
+### Migration notes
+
+* **Configuración**: Reemplazar en `config/kalion.php` (si está publicado):
+  * `'disable_register' => ...` → `'show_register_link' => (bool) env('KALION_AUTH_SHOW_REGISTER_LINK', true),`
+  * `'disable_password_reset' => ...` → `'show_password_reset_link' => (bool) env('KALION_AUTH_SHOW_PASSWORD_RESET_LINK', true),`
+  * `'services' => [...]` → `'guard' => env('KALION_AUTH_GUARD', ...),` + `'actions' => ['authenticate_user' => ..., 'create_new_user' => ..., 'reset_user_password' => ...],`
+  * `'blades' => ['password_reset' => ...]` → `'blades' => ['forgot_password' => env('KALION_AUTH_BLADE_FORGOT_PASSWORD', ...), 'reset_password' => env('KALION_AUTH_BLADE_RESET_PASSWORD', ...)]`
+* **Variables de entorno**: Si usabas `KALION_AUTH_DISABLE_REGISTER=true` en tu `.env`, cámbialo por `KALION_AUTH_SHOW_REGISTER_LINK=false`. Si usabas `KALION_AUTH_BLADE_PASSWORD_RESET`, cámbialo por `KALION_AUTH_BLADE_FORGOT_PASSWORD`.
+* **Traducciones**: La key `k::auth.password_reset.*` se ha renombrado a `k::auth.forgot_password.*`. Nueva key `k::auth.reset_password.*`.
+* **Rutas**: La ruta `password.reset` ya no existe. Si la referenciabas, usa `password.request` (forgot password) o `password.reset` de Fortify (formulario de nueva contraseña con token).
+* **Extensibilidad**: Si habías sobreescrito los servicios `login`, `register` o `password_reset` en la config, ahora debes crear clases que implementen la interfaz esperada por Fortify y registrarlas en `kalion.auth.actions.*`.
 
 ## [v0.52.3-beta.0](https://github.com/kalel1500/kalion/compare/v0.52.2-beta.0...v0.52.3-beta.0) - 2026-06-05
 
