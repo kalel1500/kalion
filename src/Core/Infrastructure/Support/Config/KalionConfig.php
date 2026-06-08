@@ -16,6 +16,7 @@ use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\Eloqu
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentUserRepository;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\AuthenticateUser;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\CreateNewUser;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\ResetUserPassword;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
 
 class KalionConfig
@@ -61,6 +62,7 @@ class KalionConfig
         'kalion.auth.guard'                                                          => EntityGuard::class,
         'kalion.auth.actions.authenticate_user'                                      => AuthenticateUser::class,
         'kalion.auth.actions.create_new_user'                                        => CreateNewUser::class,
+        'kalion.auth.actions.reset_user_password'                                    => ResetUserPassword::class,
         'kalion.auth.fields.web'                                                     => 'email',
         'kalion.auth.fields.api'                                                     => 'name',
         'kalion.auth.available_fields.custom.name'                                   => 'email',
