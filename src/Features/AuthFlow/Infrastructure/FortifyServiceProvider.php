@@ -34,19 +34,11 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->configureFortify();
-        $this->configureViews();
-        $this->configureAuthentication();
-        $this->configureUserCreation();
-    }
-
-    /**
-     * Configure Fortify settings dynamically based on kalion config.
-     */
-    protected function configureFortify(): void
-    {
         // Set the username field from kalion config
         config(['fortify.username' => kauth()->getLoginFieldData()->name]);
+
+        $this->configureViews();
+        $this->configureActions();
     }
 
     /**
@@ -75,22 +67,14 @@ class FortifyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure the custom authentication logic (supports fake login).
+     * Configure the actions that Fortify will use.
      */
-    protected function configureAuthentication(): void
+    protected function configureActions(): void
     {
         Fortify::authenticateUsing(function ($request) {
-            $authenticateClass = config('kalion.auth.actions.authenticate_user');
-            return app($authenticateClass)->authenticate($request);
+            return app(config('kalion.auth.actions.authenticate_user'))->authenticate($request);
         });
-    }
 
-    /**
-     * Configure the user creation action.
-     */
-    protected function configureUserCreation(): void
-    {
-        $createUserClass = config('kalion.auth.actions.create_new_user');
-        Fortify::createUsersUsing($createUserClass);
+        Fortify::createUsersUsing(config('kalion.auth.actions.create_new_user'));
     }
 }
