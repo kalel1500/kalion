@@ -2,6 +2,12 @@
 
     <x-slot:cardText>{{ __('k::auth.forgot_password.card_text') }}</x-slot:cardText>
 
+    @session('status')
+        <div class="mt-4 text-sm font-medium text-fg-success">
+            {{ session('status') }}
+        </div>
+    @endsession
+
     <x-kal::form method="POST" action="{{ route('password.email') }}" class="mt-4 lg:mt-5">
         <x-kal::form.input type="email" :label="__('k::text.input.email')" id="email" :value="old('email')" required autofocus autocomplete="email" />
         <x-kal::partials.form-btn>{{ __('k::auth.forgot_password.btn') }}</x-kal::partials.form-btn>
