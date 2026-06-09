@@ -28,7 +28,7 @@ class PermissionEntity extends AbstractEntity implements AbilityEntity
         return $this->getRelation();
     }
 
-    #[Computed(Computed::AS_ATTRIBUTE)]
+    #[Computed]
     public function getIsQuery(): bool
     {
         return $this->computed(fn() => $this->roles()->contains(fn(RoleEntity $role) => $role->getIsQuery()));
