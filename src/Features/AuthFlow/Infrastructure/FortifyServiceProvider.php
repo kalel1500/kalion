@@ -83,6 +83,12 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::createUsersUsing(config('kalion.auth.actions.create_new_user'));
 
         Fortify::resetUserPasswordsUsing(config('kalion.auth.actions.reset_user_password'));
+
+        Fortify::updateUserProfileInformationUsing(config('kalion.auth.actions.update_user_password'));
+
+        Fortify::updateUserPasswordsUsing(config('kalion.auth.actions.update_user_profile_information'));
+
+        Fortify::redirectUserForTwoFactorAuthenticationUsing(config('kalion.auth.actions.redirect_if_two_factor_authenticatable'));
     }
 
     /**

@@ -234,6 +234,9 @@ return [
             'authenticate_user' => env('KALION_AUTH_ACTION_AUTHENTICATE_USER', $defaults['kalion.auth.actions.authenticate_user']),
             'create_new_user' => env('KALION_AUTH_ACTION_CREATE_NEW_USER', $defaults['kalion.auth.actions.create_new_user']),
             'reset_user_password' => env('KALION_AUTH_ACTION_RESET_USER_PASSWORD', $defaults['kalion.auth.actions.reset_user_password']),
+            'update_user_password' => env('KALION_AUTH_ACTION_UPDATE_USER_PASSWORD', $defaults['kalion.auth.actions.update_user_password']),
+            'update_user_profile_information' => env('KALION_AUTH_ACTION_UPDATE_USER_PROFILE_INFORMATION', $defaults['kalion.auth.actions.update_user_profile_information']),
+            'redirect_if_two_factor_authenticatable' => env('KALION_AUTH_ACTION_REDIRECT_IF_TWO_FACTOR_AUTHENTICATABLE', $defaults['kalion.auth.actions.redirect_if_two_factor_authenticatable']),
         ],
         'fields' => [
             'web' => env('KALION_AUTH_FIELD', $defaults['kalion.auth.fields.web']),

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Config;
 
 use Illuminate\Support\Arr;
+use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\Redirect\RedirectDefaultPath;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\ApiUserEntity;
@@ -17,6 +18,8 @@ use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\Eloqu
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\AuthenticateUser;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\CreateNewUser;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\ResetUserPassword;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\UpdateUserPassword;
+use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\UpdateUserProfileInformation;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
 
 class KalionConfig
@@ -63,6 +66,9 @@ class KalionConfig
         'kalion.auth.actions.authenticate_user'                                      => AuthenticateUser::class,
         'kalion.auth.actions.create_new_user'                                        => CreateNewUser::class,
         'kalion.auth.actions.reset_user_password'                                    => ResetUserPassword::class,
+        'kalion.auth.actions.update_user_password'                                   => UpdateUserPassword::class,
+        'kalion.auth.actions.update_user_profile_information'                        => UpdateUserProfileInformation::class,
+        'kalion.auth.actions.redirect_if_two_factor_authenticatable'                 => RedirectIfTwoFactorAuthenticatable::class,
         'kalion.auth.fields.web'                                                     => 'email',
         'kalion.auth.fields.api'                                                     => 'name',
         'kalion.auth.available_fields.custom.name'                                   => 'email',
