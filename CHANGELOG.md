@@ -1,6 +1,25 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.53.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.53.1-beta.0...master)
+
+## [v0.53.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.0-beta.0...v0.53.1-beta.0) - 2026-06-10
+
+### Added
+
+* Nuevo componente `button-subtle` con estilos más suaves para acciones secundarias.:
+  * Nuevos componentes que llaman al anterior añadiendo iconos y estilos específicos:
+    * `btn.add`
+    * `btn.cancel`
+    * `btn.delete`
+    * `btn.edit`
+    * `btn.save`
+    * `btn.reload`
+* Nueva dependencia `owenvoke/blade-fontawesome` para poder usar iconos de FontAwesome.
+
+### Fixed
+
+* No añadir siempre las propiedades computadas que tienen relaciones.
+  * Si un modelo de la app tenía una relación con estas entidades no se podía convertir a toArray sin añadir siempre la relación
 
 ## [v0.53.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.52.3-beta.0...v0.53.0-beta.0) - 2026-06-08
 
