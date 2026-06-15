@@ -382,3 +382,15 @@ if (! function_exists('is_generic_object')) {
         return is_object($variable) && get_class($variable) === 'stdClass';
     }
 }
+
+if (! function_exists('enum_values')) {
+    /**
+     * @param class-string<\BackedEnum|\UnitEnum> $class
+     * @return array
+     */
+    function enum_values(string $class): array
+    {
+        return array_map(fn($case) => $case->value, $class::cases());
+    }
+}
+
