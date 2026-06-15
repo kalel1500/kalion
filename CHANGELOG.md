@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.53.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.53.2-beta.0...master)
+
+## [v0.53.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.1-beta.0...v0.53.2-beta.0) - 2026-06-15
+
+### Added
+
+* Nuevo helper `enum_values` que devuelve los valores de un enum.
 
 ## [v0.53.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.0-beta.0...v0.53.1-beta.0) - 2026-06-10
 
