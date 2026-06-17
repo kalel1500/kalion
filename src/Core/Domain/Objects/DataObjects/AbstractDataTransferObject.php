@@ -43,6 +43,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
             throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
         }
 
+        $typeName   = null;
         $class      = null;
         $allowsNull = true;
         $makeParams = null;
@@ -58,7 +59,8 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
 
         // Named type (Class)
         if ($type instanceof \ReflectionNamedType) {
-            $class      = $type->isBuiltin() ? null : $type->getName();
+            $typeName   = $type->getName();
+            $class      = $type->isBuiltin() ? null : $typeName;
             $allowsNull = $type->allowsNull();
         }
 
@@ -75,6 +77,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
         // Devolver el array con la información del parámetro
         return [
             'name'       => $name,
+            'typeName'   => $typeName,
             'class'      => $class,
             'allowsNull' => $allowsNull,
             'useMethod'  => $useMethod,
@@ -85,6 +88,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
     private static function getParamMeta(array $meta, bool $resolve): array
     {
         $className = static::class;
+        $typeName  = $meta['typeName'];
         $class     = $meta['class'];
         $useMethod = $meta['useMethod'];
 
@@ -109,7 +113,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
         };
 
         $castType = match (true) {
-            $classIsNull                                                     => null,
+            $classIsNull                                                     => $typeName,
             is_a($class, class: AbstractArrayVo::class, allow_string: true)  => 'array',
             is_a($class, class: AbstractBoolVo::class, allow_string: true)   => 'bool',
             is_a($class, class: AbstractFloatVo::class, allow_string: true)  => 'float',

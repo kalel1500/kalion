@@ -68,6 +68,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                     throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
                 }
 
+                $typeName   = null;
                 $class      = null;
                 $isId       = false;
                 $allowsNull = true;
@@ -97,7 +98,8 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
 
                 // Named type (Class), tipo primitivo (int, string, bool, etc.)
                 if ($type instanceof \ReflectionNamedType) {
-                    $class      = $type->isBuiltin() ? null : $type->getName();
+                    $typeName   = $type->getName();
+                    $class      = $type->isBuiltin() ? null : $typeName;
                     $isId       = false; // para single class → usamos ::new || is_class_id($class)
                     $allowsNull = $type->allowsNull();
                 }
@@ -115,6 +117,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                 // Llenar array para cada parámetro
                 $params[] = [
                     'name'       => $name,
+                    'typeName'   => $typeName,
                     'class'      => $class,
                     'isId'       => $isId,
                     'allowsNull' => $allowsNull,
@@ -125,6 +128,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
 
             $newParams = [];
             foreach ($params as $meta) {
+                $typeName  = $meta['typeName'];
                 $class     = $meta['class'];
                 $isId      = $meta['isId'];
                 $useMethod = $meta['useMethod'];
@@ -142,14 +146,14 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                 };
 
                 $castType = match (true) {
-                    $classIsNull => null,
-                    is_a($class, AbstractArrayVo::class,  allow_string: true) => 'array',
-                    is_a($class, AbstractBoolVo::class,   allow_string: true) => 'bool',
-                    is_a($class, AbstractFloatVo::class,  allow_string: true) => 'float',
-                    is_a($class, AbstractIntVo::class,    allow_string: true) => 'int',
-                    is_a($class, AbstractJsonVo::class,   allow_string: true) => 'string',
-                    is_a($class, AbstractStringVo::class, allow_string: true) => 'string',
-                    default => null,
+                    $classIsNull                                                     => $typeName,
+                    is_a($class, class: AbstractArrayVo::class, allow_string: true)  => 'array',
+                    is_a($class, class: AbstractBoolVo::class, allow_string: true)   => 'bool',
+                    is_a($class, class: AbstractFloatVo::class, allow_string: true)  => 'float',
+                    is_a($class, class: AbstractIntVo::class, allow_string: true)    => 'int',
+                    is_a($class, class: AbstractJsonVo::class, allow_string: true)   => 'string',
+                    is_a($class, class: AbstractStringVo::class, allow_string: true) => 'string',
+                    default                                                          => null,
                 };
 
                 $newParams[] = [
