@@ -965,10 +965,17 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function reject()
-//    {
-//        //
-//    }
+    /**
+     * Create a collection of all elements that do not pass a given truth test.
+     *
+     * @param  $callback
+     * @return static
+     */
+    public function reject($callback = true)
+    {
+        $collResult = collect($this->toArrayMake())->reject($callback);
+        return $this->toStatic($collResult->toArray());
+    }
 
 //    public function replace()
 //    {
