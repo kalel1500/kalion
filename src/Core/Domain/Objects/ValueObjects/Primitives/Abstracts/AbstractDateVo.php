@@ -43,7 +43,7 @@ abstract class AbstractDateVo extends AbstractStringVo
     public static function parse($value, DateFormat $toFormat = null, ?array $formats = null): static
     {
         if (is_null($toFormat)) {
-            $toFormat = static::$formats[0];
+            $toFormat = $formats[0] ?? static::$formats[0];
         }
         $formatted = CarbonImmutable::parse($value)->format($toFormat->value);
         return static::from($formatted, $formats);
