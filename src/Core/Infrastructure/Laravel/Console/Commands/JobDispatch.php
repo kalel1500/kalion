@@ -87,11 +87,17 @@ class JobDispatch extends Command
             return;
         }
 
+        // INFO: En este punto $job es la ruta relativa dentro del proyecto (/app/Jobs/TestJob.php)
+
         // Rehacer la ruta absoluta
         $job = base_path() . $job;
 
+        // INFO: En este punto $job es la ruta absoluta del archivo (/var/www/html/app/Jobs/TestJob.php)
+
         // Obtener la clase del Job (namespace + classname)
         $class = get_class_from_file($job);
+
+        // INFO: En este punto $class es el nombre de la clase con su namespace (App\Jobs\TestJob)
 
         // Comprobar que la clase no sea null y exista
         if (is_null($class)) {
