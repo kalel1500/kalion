@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
 use Carbon\CarbonImmutable;
+use Carbon\CarbonInterface;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
@@ -29,19 +30,40 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public static function from($value, ?array $formats = null): static
     {
+        if ($value instanceof CarbonInterface) {
+            return static::fromCarbon($value, null, $formats);
+        }
+
         if (is_null($value)) return new static($value, $formats);
 
         // Normalize from inputFormats
         $inputFormats = array_map(fn($f) => $f->value, static::$inputFormats);
         if (DateHelper::matchesAnyFormat($value, $inputFormats)) {
-            return static::parse($value);
+            return static::parse($value, null, $formats);
         }
 
         return new static($value, $formats);
     }
 
+    public static function fromCarbon(CarbonInterface $value, DateFormat $toFormat = null, ?array $formats = null): static
+    {
+        if (is_null($toFormat)) {
+            $toFormat = $formats[0] ?? static::$formats[0];
+        }
+
+        $formatted = $value->format($toFormat->value);
+        $instance = new static($formatted, $formats);
+        $instance->valueCarbon = $value->toImmutable();
+
+        return $instance;
+    }
+
     public static function parse($value, DateFormat $toFormat = null, ?array $formats = null): static
     {
+        if ($value instanceof CarbonInterface) {
+            return static::fromCarbon($value, $toFormat, $formats);
+        }
+
         if (is_null($toFormat)) {
             $toFormat = $formats[0] ?? static::$formats[0];
         }
