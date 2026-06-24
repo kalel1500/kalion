@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static \Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\PendingCooldown for(string $key)
+ * @method static void touch(string $key, \Illuminate\Support\Carbon|null $time = null)
  *
  * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\CooldownManager
  */

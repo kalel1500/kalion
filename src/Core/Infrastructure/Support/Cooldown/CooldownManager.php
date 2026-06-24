@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown;
 
+use Illuminate\Support\Carbon;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\CooldownStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\Mutex;
 
@@ -19,5 +20,13 @@ readonly class CooldownManager
     public function for(string $key): PendingCooldown
     {
         return new PendingCooldown($key, $this->store, $this->mutex);
+    }
+
+    public function touch(string $key, ?Carbon $time = null): void
+    {
+        $this->store->setLastExecutedAt(
+            key : $key,
+            time: $time ?? Carbon::now(),
+        );
     }
 }
