@@ -10,6 +10,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\ClearAll;
@@ -22,6 +23,10 @@ use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\AddPreferenc
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\ForceArraySessionInCloud;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Filters\TabulatorFilterManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Output\ConsoleOutputRelay;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\CooldownStore;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\Mutex;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Mutex\CacheMutex;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Store\CacheCooldownStore;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Middleware\CheckAbility;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting\BroadcastDispatcher;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
@@ -87,6 +92,16 @@ class KalionServiceProvider extends ServiceProvider
 
         // Register the Fortify-based authentication flow
         $this->app->register(FortifyServiceProvider::class);
+
+
+        // Register Cooldown classes
+        $this->app->singleton(CooldownStore::class, function () {
+            $store = config('kalion.cooldown.cache_store');
+            return new CacheCooldownStore(Cache::store($store));
+        });
+        $this->app->singleton(Mutex::class, function () {
+            return new CacheMutex(config('kalion.cooldown.cache_store'));
+        });
     }
 
     /**

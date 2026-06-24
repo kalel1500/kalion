@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\SidebarState;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
 
 $defaults = KalionConfig::getDefaults();
@@ -346,5 +345,24 @@ return [
         'tabulator' => [
             'driver' => env('KALION_FILTER_TABULATOR_DRIVER', 'eloquent'),
         ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cooldown
+    |--------------------------------------------------------------------------
+    |
+    | The following options allow you to configure the Cooldown feature,
+    | which ensures a process runs only once within a given time window,
+    | using atomic locks to prevent concurrent executions.
+    |
+    | - "cache_store": The cache store used for locks and timestamps.
+    |                  null = Laravel's default store.
+    |                  Recommended: "redis" in multi-process environments.
+    |
+    */
+
+    'cooldown' => [
+        'cache_store' => env('KALION_COOLDOWN_CACHE_STORE', $defaults['kalion.cooldown.cache_store']),
     ],
 ];

@@ -77,6 +77,7 @@ class KalionConfig
         'kalion.command.start.package_in_develop'                                    => false,
         'kalion.command.start.keep_migrations_date'                                  => false,
         'kalion.exceptions.http.show_logout_form'                                    => false,
+        'kalion.cooldown.cache_store'                                                => null,
     ];
     protected static array $registry     = [];
     protected static array $priority     = [];
