@@ -45,11 +45,8 @@ abstract class AbstractDateVo extends AbstractStringVo
             return static::fromCarbon($value, null, $formats);
         }
 
-        if (is_null($value)) return new static($value, $formats);
-
         // Normalize from inputFormats
-        $inputFormats = array_map(fn($f) => $f->value, static::$inputFormats);
-        if (DateHelper::matchesAnyFormat($value, $inputFormats)) {
+        if (! is_null($value) && DateHelper::matchesAnyFormat($value, array_map(fn($f) => $f->value, static::$inputFormats))) {
             return static::parse($value, null, $formats);
         }
 
@@ -58,12 +55,7 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public static function fromCarbon(CarbonInterface $value, DateFormat $toFormat = null, ?array $formats = null): static
     {
-        $effectiveFormats = static::resolveFormats($formats);
-
-        if (is_null($toFormat)) {
-            $toFormat = $effectiveFormats[0];
-        }
-
+        $toFormat = $toFormat ?? static::resolveFormats($formats)[0];
         $formatted = $value->format($toFormat->value);
         $instance = new static($formatted, $formats);
         $instance->valueCarbon = $value->toImmutable();
@@ -77,11 +69,7 @@ abstract class AbstractDateVo extends AbstractStringVo
             return static::fromCarbon($value, $toFormat, $formats);
         }
 
-        $effectiveFormats = static::resolveFormats($formats);
-
-        if (is_null($toFormat)) {
-            $toFormat = $effectiveFormats[0];
-        }
+        $toFormat = $toFormat ?? static::resolveFormats($formats)[0];
         $formatted = CarbonImmutable::parse($value)->format($toFormat->value);
         return static::from($formatted, $formats);
     }
