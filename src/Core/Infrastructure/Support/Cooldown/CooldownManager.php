@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown;
 
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\CooldownStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\Mutex;
 

@@ -2,7 +2,7 @@
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts;
 
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 interface CooldownStore
 {

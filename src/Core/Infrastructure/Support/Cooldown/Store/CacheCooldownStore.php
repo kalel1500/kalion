@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Store;
 
 use Illuminate\Cache\Repository;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\CooldownStore;
 
 class CacheCooldownStore implements CooldownStore
