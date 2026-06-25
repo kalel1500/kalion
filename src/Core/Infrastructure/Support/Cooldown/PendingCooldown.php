@@ -19,9 +19,9 @@ class PendingCooldown
     private mixed $onLocked     = null;
 
     public function __construct(
-        private readonly string        $key,
-        private readonly CooldownStore $store,
-        private readonly Mutex         $mutex,
+        private readonly string $key,
+        private CooldownStore   $store,
+        private readonly Mutex  $mutex,
     )
     {
     }
@@ -73,6 +73,12 @@ class PendingCooldown
     public function onLocked(callable $callback): static
     {
         $this->onLocked = $callback;
+        return $this;
+    }
+
+    public function withStore(CooldownStore $store): static
+    {
+        $this->store = $store;
         return $this;
     }
 
