@@ -16,6 +16,6 @@ class Cooldown extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return CooldownManager::class;
+        return 'kalion.cooldown';
     }
 }

@@ -21,6 +21,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\AddPreferencesCookies;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\ForceArraySessionInCloud;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\CooldownManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Filters\TabulatorFilterManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Output\ConsoleOutputRelay;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\CooldownStore;
@@ -59,6 +60,7 @@ class KalionServiceProvider extends ServiceProvider
         'kalion.broadcast'              => BroadcastDispatcher::class,
         'kalion.consoleOutputRelay'     => ConsoleOutputRelay::class,
         'kalion.tabulatorFilter'        => TabulatorFilterManager::class,
+        'kalion.cooldown'               => CooldownManager::class,
         AuthFactory::class              => AuthManager::class,
         PreferencesCookieStore::class   => LayoutPreferencesCookieStore::class,
         TabulatorRepository::class      => EloquentTabulatorRepository::class,
