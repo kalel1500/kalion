@@ -18,8 +18,8 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected static array    $formats         = [DateFormat::datetime_startYear->value];
-    protected static array    $inputFormats    = [DateFormat::html_datetime_local->value, DateFormat::html_datetime_local_withoutSeconds->value];
+    protected static array    $formats         = [DateFormat::datetime_YMD->value];
+    protected static array    $inputFormats    = [DateFormat::html_datetime->value, DateFormat::html_datetime_short->value];
     protected ?array          $instanceFormats = null;
     protected CarbonImmutable $valueCarbon;
 
@@ -84,22 +84,22 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public function formatToSpainDatetime(): ?string
     {
-        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_startDay_slash->value);
+        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_DMY_slash->value);
     }
 
     public function formatToSpainDatetimeWithoutSeconds(): ?string
     {
-        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_startDay_slash_withoutSeconds->value);
+        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_DMY_slash_short->value);
     }
 
     public function formatDatetime(): ?string
     {
-        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_startYear->value);
+        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_YMD->value);
     }
 
     public function formatDatetimeWithoutSeconds(): ?string
     {
-        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_startYear_withoutSeconds->value);
+        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_YMD_short->value);
     }
 
     public function format(string $format): ?string

@@ -12,31 +12,31 @@ enum DateFormat: string implements ArrayableEnum
     use HasArray;
 
     // Fechas con guión (separador por defecto, sin sufijo)
-    case date_startYear                         = 'Y-m-d';
-    case date_startDay                          = 'd-m-Y';
+    case date_YMD                 = 'Y-m-d';
+    case date_DMY                 = 'd-m-Y';
 
     // Fechas con barra
-    case date_startYear_slash                   = 'Y/m/d';
-    case date_startDay_slash                    = 'd/m/Y';
-    case date_startMonthWithoutDay_slash        = 'm/Y';
+    case date_YMD_slash           = 'Y/m/d';
+    case date_DMY_slash           = 'd/m/Y';
+    case date_MY_slash            = 'm/Y';
 
     // Datetime con guión
-    case datetime_startYear                     = 'Y-m-d H:i:s';
-    case datetime_startYear_withoutSeconds      = 'Y-m-d H:i';
+    case datetime_YMD             = 'Y-m-d H:i:s';
+    case datetime_YMD_short       = 'Y-m-d H:i';
 
     // Datetime con barra
-    case datetime_startDay_slash                = 'd/m/Y H:i:s';
-    case datetime_startDay_slash_withoutSeconds = 'd/m/Y H:i';
+    case datetime_DMY_slash       = 'd/m/Y H:i:s';
+    case datetime_DMY_slash_short = 'd/m/Y H:i';
 
     // Datetime especiales
-    case datetime_timestamp                     = 'Y-m-d H:i:s.u';
-    case datetime_eloquent_timestamps           = 'Y-m-d\TH:i:s.u\Z';
+    case datetime_micro           = 'Y-m-d H:i:s.u';
+    case datetime_eloquent        = 'Y-m-d\TH:i:s.u\Z';
 
     // HTML datetime-local
-    case html_datetime_local                    = 'Y-m-d\TH:i:s';
-    case html_datetime_local_withoutSeconds     = 'Y-m-d\TH:i';
+    case html_datetime            = 'Y-m-d\TH:i:s';
+    case html_datetime_short      = 'Y-m-d\TH:i';
 
     // Otros
-    case time                                   = 'H:i:s';
-    case zeros                                  = '0000-00-00 00:00:00';
+    case time                     = 'H:i:s';
+    case zeros                    = '0000-00-00 00:00:00';
 }

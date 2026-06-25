@@ -13,5 +13,5 @@ abstract class AbstractTimestampVo extends AbstractDateVo
     protected const CLASS_REQUIRED = TimestampVo::class;
     protected const CLASS_NULLABLE = TimestampNullVo::class;
 
-    protected static array $formats = [DateFormat::datetime_timestamp->value, DateFormat::datetime_eloquent_timestamps->value];
+    protected static array $formats = [DateFormat::datetime_micro->value, DateFormat::datetime_eloquent->value];
 }

@@ -38,7 +38,7 @@ class DateHelper
     {
         $date = ($date instanceof CarbonInterface) ? $date : CarbonImmutable::parse($date);
         $time = ($time instanceof CarbonInterface) ? $time : CarbonImmutable::parse($time);
-        $date = $date->format(DateFormat::date_startYear->value);
+        $date = $date->format(DateFormat::date_YMD->value);
         $time = $time->format(DateFormat::time->value);
         return CarbonImmutable::parse($date . ' ' . $time);
     }
