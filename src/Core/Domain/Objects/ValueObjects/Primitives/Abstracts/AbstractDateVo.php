@@ -18,14 +18,15 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected static array $formats         = [DateFormat::datetime_startYear];
-    protected static array $inputFormats    = [DateFormat::html_datetime_local, DateFormat::html_datetime_local_withoutSeconds];
-    protected ?array       $instanceFormats = null;
-    protected              $valueCarbon;
+    protected static array    $formats         = [DateFormat::datetime_startYear];
+    protected static array    $inputFormats    = [DateFormat::html_datetime_local, DateFormat::html_datetime_local_withoutSeconds];
+    protected ?array          $instanceFormats = null;
+    protected CarbonImmutable $valueCarbon;
 
     public function __construct(?string $value, ?array $formats = null)
     {
         $this->instanceFormats = $formats;
+        $this->valueCarbon     = CarbonImmutable::parse($this->value);
         parent::__construct($value);
     }
 
@@ -55,12 +56,9 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public static function fromCarbon(CarbonInterface $value, DateFormat $toFormat = null, ?array $formats = null): static
     {
-        $toFormat              = $toFormat ?? static::resolveFormats($formats)[0];
-        $formatted             = $value->format($toFormat->value);
-        $instance              = new static($formatted, $formats);
-        $instance->valueCarbon = $value->toImmutable();
-
-        return $instance;
+        $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
+        $formatted = $value->format($toFormat->value);
+        return new static($formatted, $formats);
     }
 
     public static function parse($value, DateFormat $toFormat = null, ?array $formats = null): static
@@ -111,6 +109,6 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public function carbon(): CarbonImmutable
     {
-        return $this->valueCarbon ?? CarbonImmutable::parse($this->value);
+        return $this->valueCarbon;
     }
 }
