@@ -29,4 +29,9 @@ readonly class CooldownManager
             time: $time ?? Carbon::now(),
         );
     }
+
+    public function getLastExecutedAt(string $key): ?Carbon
+    {
+        return $this->store->getLastExecutedAt($key);
+    }
 }
