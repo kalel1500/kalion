@@ -18,8 +18,8 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected static array    $formats         = [DateFormat::datetime_startYear];
-    protected static array    $inputFormats    = [DateFormat::html_datetime_local, DateFormat::html_datetime_local_withoutSeconds];
+    protected static array    $formats         = [DateFormat::datetime_startYear->value];
+    protected static array    $inputFormats    = [DateFormat::html_datetime_local->value, DateFormat::html_datetime_local_withoutSeconds->value];
     protected ?array          $instanceFormats = null;
     protected CarbonImmutable $valueCarbon;
 
@@ -47,28 +47,28 @@ abstract class AbstractDateVo extends AbstractStringVo
         }
 
         // Normalize from inputFormats
-        if (! is_null($value) && DateHelper::matchesAnyFormat($value, array_map(fn($f) => $f->value, static::$inputFormats))) {
+        if (! is_null($value) && DateHelper::matchesAnyFormat($value, static::$inputFormats)) {
             return static::parse($value, null, $formats);
         }
 
         return new static($value, $formats);
     }
 
-    public static function fromCarbon(?CarbonInterface $value, DateFormat $toFormat = null, ?array $formats = null): static
+    public static function fromCarbon(?CarbonInterface $value, string $toFormat = null, ?array $formats = null): static
     {
         $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
-        $formatted = $value?->format($toFormat->value);
+        $formatted = $value?->format($toFormat);
         return new static($formatted, $formats);
     }
 
-    public static function parse($value, DateFormat $toFormat = null, ?array $formats = null): static
+    public static function parse($value, string $toFormat = null, ?array $formats = null): static
     {
         if ($value instanceof CarbonInterface) {
             return static::fromCarbon($value, $toFormat, $formats);
         }
 
         $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
-        $formatted = CarbonImmutable::parse($value)->format($toFormat->value);
+        $formatted = CarbonImmutable::parse($value)->format($toFormat);
         return new static($formatted, $formats);
     }
 
@@ -76,7 +76,7 @@ abstract class AbstractDateVo extends AbstractStringVo
     {
         parent::ensureIsValidValue($value);
 
-        $formats = array_map(fn(\BackedEnum $item) => $item->value, $this->resolveInstanceFormats());
+        $formats = $this->resolveInstanceFormats();
         if (! is_null($value) && ! DateHelper::matchesAnyFormat($value, $formats)) {
             throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $formats)));
         }

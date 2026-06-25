@@ -13,5 +13,5 @@ abstract class AbstractTimeVo extends AbstractDateVo
     protected const CLASS_REQUIRED = TimeVo::class;
     protected const CLASS_NULLABLE = TimeNullVo::class;
 
-    protected static array $formats = [DateFormat::time];
+    protected static array $formats = [DateFormat::time->value];
 }
