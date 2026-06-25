@@ -13,17 +13,22 @@ class CacheCooldownStore implements CooldownStore
 {
     private const KEY_PREFIX = 'cooldown:last-run:';
 
-    public function __construct(private readonly Repository $cache) {}
-
-    public function getLastExecutedAt(string $key): ?CarbonImmutable
+    public function __construct(
+        private readonly Repository $cache,
+        private readonly string     $key,
+    )
     {
-        $value = $this->cache->get(self::KEY_PREFIX . $key);
+    }
+
+    public function getLastExecutedAt(): ?CarbonImmutable
+    {
+        $value = $this->cache->get(self::KEY_PREFIX . $this->key);
 
         return $value ? CarbonImmutable::parse($value) : null;
     }
 
-    public function setLastExecutedAt(string $key, DateTimeInterface $time): void
+    public function setLastExecutedAt(DateTimeInterface $time): void
     {
-        $this->cache->put(self::KEY_PREFIX . $key, $time->format(DateTimeInterface::ATOM));
+        $this->cache->put(self::KEY_PREFIX . $this->key, $time->format(DateTimeInterface::ATOM));
     }
 }

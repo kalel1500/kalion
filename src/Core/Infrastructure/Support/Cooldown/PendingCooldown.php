@@ -84,7 +84,7 @@ class PendingCooldown
 
     public function run(callable $callback): mixed
     {
-        $lastExecutedAt = $this->store->getLastExecutedAt($this->key);
+        $lastExecutedAt = $this->store->getLastExecutedAt();
 
         // skipWhen: deshabilitado por config
         if ($this->skipWhen) {
@@ -105,7 +105,7 @@ class PendingCooldown
             seconds : $this->mutexSeconds,
             callback: function () use ($callback, &$result, &$didRun) {
                 // Double-check in lock
-                $lastExecutedAt = $this->store->getLastExecutedAt($this->key);
+                $lastExecutedAt = $this->store->getLastExecutedAt();
                 if (! $this->forceWhen && $this->isCoolingDown($lastExecutedAt)) {
                     return;
                 }
@@ -113,15 +113,12 @@ class PendingCooldown
                 $result = $callback($lastExecutedAt);
                 $didRun = true;
 
-                $this->store->setLastExecutedAt(
-                    key : $this->key,
-                    time: CarbonImmutable::now(),
-                );
+                $this->store->setLastExecutedAt(CarbonImmutable::now());
             }
         );
 
         // post-mutex
-        $lastExecutedAt = $this->store->getLastExecutedAt($this->key);
+        $lastExecutedAt = $this->store->getLastExecutedAt();
 
         // No consiguió el mutex → otro proceso en curso
         if (! $acquired) {

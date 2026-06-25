@@ -7,7 +7,7 @@ use DateTimeInterface;
 
 interface CooldownStore
 {
-    public function getLastExecutedAt(string $key): ?CarbonImmutable;
+    public function getLastExecutedAt(): ?CarbonImmutable;
 
-    public function setLastExecutedAt(string $key, DateTimeInterface $time): void;
+    public function setLastExecutedAt(DateTimeInterface $time): void;
 }

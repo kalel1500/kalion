@@ -21,13 +21,13 @@ use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\AddPreferencesCookies;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Middleware\ForceArraySessionInCloud;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\CooldownStoreFactory;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\CooldownManager;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Store\CacheCooldownStoreFactory;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Filters\TabulatorFilterManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Output\ConsoleOutputRelay;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\CooldownStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\Mutex;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Mutex\CacheMutex;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Store\CacheCooldownStore;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Middleware\CheckAbility;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting\BroadcastDispatcher;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
@@ -97,9 +97,9 @@ class KalionServiceProvider extends ServiceProvider
 
 
         // Register Cooldown classes
-        $this->app->singleton(CooldownStore::class, function () {
+        $this->app->singleton(CooldownStoreFactory::class, function () {
             $store = config('kalion.cooldown.cache_store');
-            return new CacheCooldownStore(Cache::store($store));
+            return new CacheCooldownStoreFactory(Cache::store($store));
         });
         $this->app->singleton(Mutex::class, function () {
             return new CacheMutex(config('kalion.cooldown.cache_store'));
