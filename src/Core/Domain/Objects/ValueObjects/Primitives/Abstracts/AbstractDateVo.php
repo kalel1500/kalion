@@ -82,22 +82,22 @@ abstract class AbstractDateVo extends AbstractStringVo
         }
     }
 
-    public function formatToSpainDatetime(): ?string
+    public function toDatetimeDMYSlash(): ?string
     {
         return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_DMY_slash->value);
     }
 
-    public function formatToSpainDatetimeWithoutSeconds(): ?string
+    public function toDatetimeDMYSlashShort(): ?string
     {
         return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_DMY_slash_short->value);
     }
 
-    public function formatDatetime(): ?string
+    public function toDatetimeYMD(): ?string
     {
         return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_YMD->value);
     }
 
-    public function formatDatetimeWithoutSeconds(): ?string
+    public function toDatetimeYMDShort(): ?string
     {
         return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_YMD_short->value);
     }
