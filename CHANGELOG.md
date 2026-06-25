@@ -1,6 +1,25 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.53.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.53.3-beta.0...master)
+
+## [v0.53.3-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.2-beta.0...v0.53.3-beta.0) - 2026-06-25
+
+### Added
+
+* Nueva funcionalidad `Cooldown`.
+* `AbstractDateVo`: Nuevo método `fromCarbon`. Además, ahora los métodos `from` y `parse` también acepten carbon.
+* Nuevo componente `form.dropzone`.
+* `AbstractCollectionBase`: Se ha añadido el método `reject` en las colecciones.
+
+### Changed
+
+* (warn) `AbstractDateVo`: ahora resuelve los formatos de fecha por instancia y ya no modifica el estado estático compartido en el constructor. Esto reduce los efectos secundarios entre instancias; los usuarios que dependen de la modificación global en tiempo de ejecución de `static::$formats` deben actualizar su código.
+
+### Fixed
+
+* `AbstractDateVo`: ahora el método `parse` devuelve `new static` en vez de llamar al `from` para evitar un posible bucle infinito.
+* Se ha corregido el método `AbstractDateVo::parse()` para buscar el formato en el parametro `$formats` en vez de usar la propiedad estatica `$formats`.
+* Se ha corregido la reflexion en las clases `AbstractEntity` y `AbstractDataTransferObject` ya que el método `resolveFromArray` solo hacia el `cast` cuando el tipo era una clase.
 
 ## [v0.53.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.1-beta.0...v0.53.2-beta.0) - 2026-06-15
 
