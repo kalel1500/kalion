@@ -18,8 +18,8 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected static array $formats      = [DateFormat::datetime_startYear];
-    protected static array $inputFormats = [DateFormat::html_datetime_local, DateFormat::html_datetime_local_withoutSeconds];
+    protected static array $formats         = [DateFormat::datetime_startYear];
+    protected static array $inputFormats    = [DateFormat::html_datetime_local, DateFormat::html_datetime_local_withoutSeconds];
     protected ?array       $instanceFormats = null;
     protected              $valueCarbon;
 
@@ -55,9 +55,9 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public static function fromCarbon(CarbonInterface $value, DateFormat $toFormat = null, ?array $formats = null): static
     {
-        $toFormat = $toFormat ?? static::resolveFormats($formats)[0];
-        $formatted = $value->format($toFormat->value);
-        $instance = new static($formatted, $formats);
+        $toFormat              = $toFormat ?? static::resolveFormats($formats)[0];
+        $formatted             = $value->format($toFormat->value);
+        $instance              = new static($formatted, $formats);
         $instance->valueCarbon = $value->toImmutable();
 
         return $instance;
@@ -69,7 +69,7 @@ abstract class AbstractDateVo extends AbstractStringVo
             return static::fromCarbon($value, $toFormat, $formats);
         }
 
-        $toFormat = $toFormat ?? static::resolveFormats($formats)[0];
+        $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
         $formatted = CarbonImmutable::parse($value)->format($toFormat->value);
         return new static($formatted, $formats);
     }
