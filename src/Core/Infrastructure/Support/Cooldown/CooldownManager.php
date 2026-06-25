@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown;
 
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use DateTimeInterface;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\CooldownStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\Mutex;
 
@@ -22,15 +23,15 @@ readonly class CooldownManager
         return new PendingCooldown($key, $this->store, $this->mutex);
     }
 
-    public function touch(string $key, ?Carbon $time = null): void
+    public function touch(string $key, ?DateTimeInterface $time = null): void
     {
         $this->store->setLastExecutedAt(
             key : $key,
-            time: $time ?? Carbon::now(),
+            time: $time ?? CarbonImmutable::now(),
         );
     }
 
-    public function getLastExecutedAt(string $key): ?Carbon
+    public function getLastExecutedAt(string $key): ?CarbonImmutable
     {
         return $this->store->getLastExecutedAt($key);
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown;
 
+use Carbon\CarbonImmutable;
 use DateTimeInterface;
-use Carbon\Carbon;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\CooldownStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Cooldown\Contracts\Mutex;
 
@@ -31,7 +31,7 @@ class PendingCooldown
      */
     public function every(int|DateTimeInterface $time): static
     {
-        $this->everySeconds = $time instanceof DateTimeInterface ? Carbon::now()->diffInSeconds($time, true) : $time;
+        $this->everySeconds = $time instanceof DateTimeInterface ? CarbonImmutable::now()->diffInSeconds($time, true) : $time;
         return $this;
     }
 
@@ -40,7 +40,7 @@ class PendingCooldown
      */
     public function expiresIn(int|DateTimeInterface $time): static
     {
-        $this->mutexSeconds = $time instanceof DateTimeInterface ? Carbon::now()->diffInSeconds($time, true) : $time;
+        $this->mutexSeconds = $time instanceof DateTimeInterface ? CarbonImmutable::now()->diffInSeconds($time, true) : $time;
         return $this;
     }
 
@@ -109,7 +109,7 @@ class PendingCooldown
 
                 $this->store->setLastExecutedAt(
                     key : $this->key,
-                    time: Carbon::now(),
+                    time: CarbonImmutable::now(),
                 );
             }
         );
@@ -130,21 +130,21 @@ class PendingCooldown
         return $result;
     }
 
-    private function resolveSkipped(?Carbon $lastExecutedAt): mixed
+    private function resolveSkipped(?CarbonImmutable $lastExecutedAt): mixed
     {
         return $this->onSkipped
             ? ($this->onSkipped)($lastExecutedAt)
             : $lastExecutedAt;
     }
 
-    private function resolveLocked(?Carbon $lastExecutedAt): mixed
+    private function resolveLocked(?CarbonImmutable $lastExecutedAt): mixed
     {
         return $this->onLocked
             ? ($this->onLocked)($lastExecutedAt)
             : $lastExecutedAt;
     }
 
-    private function isCoolingDown(?Carbon $lastExecutedAt): bool
+    private function isCoolingDown(?CarbonImmutable $lastExecutedAt): bool
     {
         return $lastExecutedAt?->clone()->addSeconds($this->everySeconds)->isFuture() ?? false;
     }
