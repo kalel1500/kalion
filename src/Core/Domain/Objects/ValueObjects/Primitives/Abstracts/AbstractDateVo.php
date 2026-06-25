@@ -54,10 +54,10 @@ abstract class AbstractDateVo extends AbstractStringVo
         return new static($value, $formats);
     }
 
-    public static function fromCarbon(CarbonInterface $value, DateFormat $toFormat = null, ?array $formats = null): static
+    public static function fromCarbon(?CarbonInterface $value, DateFormat $toFormat = null, ?array $formats = null): static
     {
         $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
-        $formatted = $value->format($toFormat->value);
+        $formatted = $value?->format($toFormat->value);
         return new static($formatted, $formats);
     }
 
