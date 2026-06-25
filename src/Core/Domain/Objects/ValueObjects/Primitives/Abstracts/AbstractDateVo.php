@@ -71,7 +71,7 @@ abstract class AbstractDateVo extends AbstractStringVo
 
         $toFormat = $toFormat ?? static::resolveFormats($formats)[0];
         $formatted = CarbonImmutable::parse($value)->format($toFormat->value);
-        return static::from($formatted, $formats);
+        return new static($formatted, $formats);
     }
 
     protected function ensureIsValidValue(?string $value): void
