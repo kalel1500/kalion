@@ -31,7 +31,7 @@ class PendingCooldown
      */
     public function every(int|DateTimeInterface $time): static
     {
-        $this->everySeconds = $time instanceof DateTimeInterface ? now()->diffInSeconds($time, true) : $time;
+        $this->everySeconds = $time instanceof DateTimeInterface ? Carbon::now()->diffInSeconds($time, true) : $time;
         return $this;
     }
 
@@ -40,7 +40,7 @@ class PendingCooldown
      */
     public function expiresIn(int|DateTimeInterface $time): static
     {
-        $this->mutexSeconds = $time instanceof DateTimeInterface ? now()->diffInSeconds($time, true) : $time;
+        $this->mutexSeconds = $time instanceof DateTimeInterface ? Carbon::now()->diffInSeconds($time, true) : $time;
         return $this;
     }
 
