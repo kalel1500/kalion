@@ -23,7 +23,7 @@
 ])
 
 @php
-    $id   = $id   ?? $name ?? '';
+    $id   = $id   ?? 'field-' . uniqid();
     $name = $name ?? $id   ?? '';
 
     $checked = session()->hasOldInput() ? old($name) : $checked;
