@@ -41,7 +41,7 @@
                     type="checkbox"
                     id="{{ $id }}"
                     name="{{ $name }}"
-                    class="@twMerge('w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft', $class)"
+                    class="@twMerge($bgClass, 'w-4 h-4 border border-default-medium rounded-xs focus:ring-2 focus:ring-brand-soft', $class)"
                     {{ $attributes }}
                     @checked($checked)
                     @disabled($disabled)
@@ -62,7 +62,7 @@
                     type="radio"
                     id="{{ $id }}"
                     name="{{ $name }}"
-                    class="@twMerge('w-4 h-4 text-neutral-primary border-default-medium bg-neutral-secondary-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none', $class)"
+                    class="@twMerge($bgClass, 'w-4 h-4 text-neutral-primary border-default-medium rounded-full checked:border-brand focus:ring-2 focus:outline-none focus:ring-brand-subtle border appearance-none', $class)"
                     {{ $attributes }}
                     @checked($checked)
                     @disabled($disabled)
