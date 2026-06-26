@@ -212,7 +212,15 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
             $args[] = $value;
         }
 
-        return new static(...$args);
+        try {
+            return new static(...$args);
+        } catch (\Throwable $th) {
+            throw KalionReflectionException::resolveFailedToHydrate(
+                th: $th,
+                expectedClass: AbstractEntity::class,
+                exception: KalionReflectionException::failedToHydrateClass(static::class, $th->getMessage())
+            );
+        }
     }
 
     protected function props(): array

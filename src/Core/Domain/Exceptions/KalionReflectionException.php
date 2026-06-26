@@ -62,4 +62,9 @@ class KalionReflectionException extends KalionRuntimeException
         $type = get_debug_type($value);
         return new static("Failed to hydrate $class using fromArray(): parameter \"$param\" expected an instance of $expectedClass (or a compatible primitive), but received $type. Error: $errorMessage");
     }
+
+    public static function failedToHydrateClass(string $class, string $errorMessage): static
+    {
+        return new static("Failed to hydrate $class using fromArray(). Error: $errorMessage");
+    }
 }

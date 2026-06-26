@@ -241,7 +241,15 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
             $args[] = $value;
         }
 
-        return new static(...$args);
+        try {
+            return new static(...$args);
+        } catch (\Throwable $th) {
+            throw KalionReflectionException::resolveFailedToHydrate(
+                th: $th,
+                expectedClass: AbstractDataTransferObject::class,
+                exception: KalionReflectionException::failedToHydrateClass(static::class, $th->getMessage())
+            );
+        }
     }
 
     protected function props(): array
