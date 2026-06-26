@@ -26,8 +26,8 @@
 @php
     $id          = $id   ?? 'field-' . uniqid();
     $name        = $name ?? $id   ?? '';
-    $bgClass     = $sunken ? 'bg-neutral-secondary' : 'bg-neutral-secondary-medium';
-    $shadowClass = $sunken ? ''                     : 'shadow-xs';
+    $bgClass     = $sunken ? 'bg-neutral-primary' : 'bg-neutral-secondary-medium';
+    $shadowClass = $sunken ? 'inset-shadow-xs'   : 'shadow-xs';
 
     $checked = session()->hasOldInput() ? old($name) : $checked;
 @endphp
@@ -108,7 +108,7 @@
                     'lg'  => 'text-base px-3.5 py-3',
                     'xl'  => 'text-base px-4   py-3.5',
                 ];
-                $common     = $shadowClass . 'border block w-full' . ' ' . get_rounded_class($rounded) . ' ' . $sizeClasses[$size];
+                $common     = $shadowClass . ' border block w-full' . ' ' . get_rounded_class($rounded) . ' ' . $sizeClasses[$size];
                 $normal     = $bgClass . ' border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
                 if (str_contains($type, 'date')) {
                     $common .= ' dark:scheme-dark';
