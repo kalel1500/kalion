@@ -10,6 +10,7 @@
      'value'          => '',
      'size'           => 'md', // xs | sm | md | lg | xl
      'rounded'        => 'base', // none | 2xs | xs | sm | md | rounded | base | lg
+     'sunken'         => false,
      'containerClass' => null,
      'labelClass'     => null,
      'class'          => null,
@@ -23,8 +24,10 @@
 ])
 
 @php
-    $id   = $id   ?? 'field-' . uniqid();
-    $name = $name ?? $id   ?? '';
+    $id          = $id   ?? 'field-' . uniqid();
+    $name        = $name ?? $id   ?? '';
+    $bgClass     = $sunken ? 'bg-neutral-secondary' : 'bg-neutral-secondary-medium';
+    $shadowClass = $sunken ? ''                     : 'shadow-xs';
 
     $checked = session()->hasOldInput() ? old($name) : $checked;
 @endphp
@@ -105,8 +108,8 @@
                     'lg'  => 'text-base px-3.5 py-3',
                     'xl'  => 'text-base px-4   py-3.5',
                 ];
-                $common     = 'border block w-full shadow-xs' . ' ' . get_rounded_class($rounded) . ' ' . $sizeClasses[$size];
-                $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
+                $common     = $shadowClass . 'border block w-full' . ' ' . get_rounded_class($rounded) . ' ' . $sizeClasses[$size];
+                $normal     = $bgClass . ' border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
                 if (str_contains($type, 'date')) {
                     $common .= ' dark:scheme-dark';
                 }
