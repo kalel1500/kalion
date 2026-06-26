@@ -8,6 +8,9 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 
+/**
+ * @deprecated This class is deprecated and will be removed in future versions. Please use php native enum  instead.
+ */
 abstract class AbstractBaseEnumVo extends AbstractValueObject
 {
     protected ?array $permittedValues  = null;
