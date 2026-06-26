@@ -231,7 +231,11 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
                     default                                                                            => $class::$method($value, ...$makeParams),
                 };
             } catch (\Throwable $th) {
-                throw KalionReflectionException::failedToHydrateUsingFromArray(static::class, $paramName, $class, $value, $th->getMessage());
+                throw KalionReflectionException::resolveFailedToHydrate(
+                    th: $th,
+                    expectedClass: AbstractValueObject::class,
+                    exception: KalionReflectionException::failedToHydrateValueObject(static::class, $paramName, $class, $value, $th->getMessage())
+                );
             }
 
             $args[] = $value;
