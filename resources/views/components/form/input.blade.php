@@ -113,9 +113,6 @@
                 if ($disabled && !$readonly) {
                     $normal = twMerge($normal, 'text-fg-disabled');
                 }
-                if ($type === 'textarea') {
-                    $normal = twMerge($normal, 'p-3.5');
-                }
                 $error      = 'bg-danger-soft border-danger-subtle text-fg-danger-strong focus:ring-danger focus:border-danger placeholder:text-fg-danger-strong';
                 $classes    = $errors->has($name) ? twMerge($common, $class, $error) : twMerge($common, $normal, $class);
 
