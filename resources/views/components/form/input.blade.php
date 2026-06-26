@@ -98,11 +98,12 @@
 
             @php
                 $sizeClasses = [
-                    'xs' => 'text-xs   px-2   py-1.5',
-                    'sm' => 'text-sm   px-2.5 py-2',
-                    'md' => 'text-sm   px-3   py-2.5',
-                    'lg' => 'text-base px-3.5 py-3',
-                    'xl' => 'text-base px-4   py-3.5',
+                    '2xs' => 'text-xs   px-2   py-1.5',
+                    'xs'  => 'text-sm   px-2   py-1.5',
+                    'sm'  => 'text-sm   px-2.5 py-2',
+                    'md'  => 'text-sm   px-3   py-2.5',
+                    'lg'  => 'text-base px-3.5 py-3',
+                    'xl'  => 'text-base px-4   py-3.5',
                 ];
                 $common     = 'border block w-full shadow-xs' . ' ' . get_rounded_class($rounded) . ' ' . $sizeClasses[$size];
                 $normal     = 'bg-neutral-secondary-medium border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
