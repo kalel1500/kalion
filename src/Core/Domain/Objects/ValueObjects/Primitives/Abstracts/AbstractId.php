@@ -35,12 +35,12 @@ abstract class AbstractId extends AbstractIntVo
     }
 
     /**
-     * @param int|null $id
-     * @return ($id is null ? null : IdVo|IdNullVo)
+     * @param int|null $value
+     * @return ($value is null ? null : IdVo|IdNullVo)
      */
-    public static function resolve(?int $id)
+    public static function resolve(?int $value)
     {
-        $class = is_null($id) ? static::CLASS_NULLABLE : static::CLASS_REQUIRED;
-        return $class::from($id);
+        $class = is_null($value) ? static::CLASS_NULLABLE : static::CLASS_REQUIRED;
+        return $class::from($value);
     }
 }
