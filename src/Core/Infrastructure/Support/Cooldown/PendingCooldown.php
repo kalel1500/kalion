@@ -97,22 +97,21 @@ class PendingCooldown
         }
 
         // Mutex atómico
-        $result = null;
-        $didRun = false;
+        $result            = null;
+        $passedDoubleCheck = false;
 
         $acquired = $this->mutex->runExclusive(
             key     : $this->key,
             seconds : $this->mutexSeconds,
-            callback: function () use ($callback, &$result, &$didRun) {
+            callback: function () use ($callback, &$result, &$passedDoubleCheck) {
                 // Double-check in lock
                 $lastExecutedAt = $this->store->getLastExecutedAt();
                 if (! $this->forceWhen && $this->isCoolingDown($lastExecutedAt)) {
                     return;
                 }
+                $passedDoubleCheck = true;
 
                 $result = $callback($lastExecutedAt);
-                $didRun = true;
-
                 $this->store->setLastExecutedAt(CarbonImmutable::now());
             }
         );
@@ -126,7 +125,7 @@ class PendingCooldown
         }
 
         // Consiguió el mutex pero el double-check lo detuvo
-        if (! $didRun) {
+        if (! $passedDoubleCheck) {
             return $this->resolveSkipped($lastExecutedAt);
         }
 
