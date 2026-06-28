@@ -25,9 +25,9 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public function __construct(?string $value, ?array $formats = null)
     {
-        $this->instanceFormats = $formats;
-        $this->valueCarbon     = CarbonImmutable::parse($this->value);
         parent::__construct($value);
+        $this->instanceFormats = $formats;
+        $this->valueCarbon     = CarbonImmutable::parse($value);
     }
 
     protected static function resolveFormats(?array $formats = null): array
