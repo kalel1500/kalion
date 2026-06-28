@@ -111,8 +111,11 @@ class PendingCooldown
                 }
                 $passedDoubleCheck = true;
 
-                $result = $callback($lastExecutedAt);
-                $this->store->setLastExecutedAt(CarbonImmutable::now());
+                $context = new CooldownContext();
+                $result = $callback($lastExecutedAt, $context);
+                if ($context->shouldUpdateLastExecutedAt()) {
+                    $this->store->setLastExecutedAt(CarbonImmutable::now());
+                }
             }
         );
 
