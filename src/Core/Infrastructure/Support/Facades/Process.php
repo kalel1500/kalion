@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;

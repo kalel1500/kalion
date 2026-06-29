@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Web;
 
 use Illuminate\Contracts\View\View;
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Controllers\Controller;
 
 final class ExampleController extends Controller
 {

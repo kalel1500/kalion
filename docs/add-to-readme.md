@@ -4,7 +4,7 @@
 ### Exceptions
 
 ```php
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Exceptions\ExceptionHandler;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Exceptions\ExceptionHandler;
 
 ->withExceptions(function (Exceptions $exceptions): void {
     ExceptionHandler::handle($exceptions);

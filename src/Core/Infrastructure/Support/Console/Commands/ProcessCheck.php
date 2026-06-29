@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands;
 
 use Illuminate\Console\Command;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\Process;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\Process;
 
 class ProcessCheck extends Command
 {

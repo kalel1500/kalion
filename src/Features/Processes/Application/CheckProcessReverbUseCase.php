@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Features\Processes\Application;
 
 use Illuminate\Http\JsonResponse;
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\Process;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\Process;
 
 final readonly class CheckProcessReverbUseCase
 {

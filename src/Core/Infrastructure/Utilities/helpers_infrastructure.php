@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades\Broadcast;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\Broadcast;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;

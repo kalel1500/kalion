@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Features\Processes\Infrastructure\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Controllers\Controller;
 use Thehouseofel\Kalion\Features\Processes\Application\CheckProcessQueueUseCase;
 use Thehouseofel\Kalion\Features\Processes\Application\CheckProcessReverbUseCase;
 use Thehouseofel\Kalion\Features\Processes\Infrastructure\Events\ProcessStatusChecked;
