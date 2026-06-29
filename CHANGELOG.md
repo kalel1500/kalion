@@ -1,6 +1,77 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.53.3-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.54.0-beta.0...master)
+
+## [v0.54.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.3-beta.0...v0.54.0-beta.0) - 2026-06-29
+
+### Changed
+
+* Se ha mejorado el PhpDoc del `TabulatorFilter`.
+* Se ha creado el nuevo método `parse()` en la clase `AbstractValueObject` y se ha definido en cada clase base con su cast correspondiente.
+  * Ahora todos los `VOs` tienen el método `parse()`.
+  * Ahora en la reflexion (entidades y dtos) se usa el método `parse` si el tipo es un VO y el parámetro `$resolve` es `true`.
+  * **(breaking)** Se ha eliminado la propiedad estatica `$inputFormats` de la clase `AbstractDateVo`.
+  * **(breaking)** Ahora el método `from` del `AbstractDateVo` ya no resuelve valores `carbon` ni con formatos definidos en `$inputFormats`.
+    * De esta forma el from siempre es puro y falla si la fecha es incorrecta. Ahora se debe usar el método `parse` cunado la fecha no coincide con los formatos del VO.
+  * **(breaking)** Ahora el método `parse` del `AbstractDateVo` devuelve `null` si lo recibe. Antes se llamaba directamente al `CarbonImmutable::parse()` que devolvía la fecha actual.
+* Mejorar la gestion de errores de la reflexion (método `make`).
+  * Ahora solo salta el error `Failed to hydrate $class using fromArray()` cuando realmente falla el `from` de un VO y no con cualquer error de PHP.
+  * **(breaking)** Se ha renombrado el método `failedToHydrateUsingFromArray` de la clase `KalionReflectionException` a `failedToHydrateValueObject`
+  * Nuevo método `resolveFailedToHydrate` en la clase `KalionReflectionException`
+  * Añadir `tryCacth` al `new static` y lanzar la excepción `KalionReflectionException::failedToHydrateClass()` si falla la creacion de la entidad.
+* (warn) Se han deprecado las clases del `EnumVo` ya que a partir de PHP 8.2 se deben utilizar los enums nativos:
+  * `AbstractBaseEnumVo (deprecated)`
+  * `AbstractEnumNullVo (deprecated)`
+  * `AbstractEnumVo (deprecated)`
+* **(breaking)** Componente `form.input` modificado:
+  * Ahora se define id único si no lo recibe. Antes se usaba el name.
+  * Nuevo tamaño `2xs` con los valores del `xs`. Ahora el `xs` mantiene el texto a `text-sm`.
+  * Se elimina el `p-3.5` que del `textarea`.
+  * Nueva prop `sunken` en el componente `form.input` para que el fondo sea más oscuro en modo `dark` y no que las sombras sean internas en modo `ligth`.
+* **(breaking)** AbstractDateVo: Se han renombrado los formaters:
+  * |                                       |        |                           |
+    |---------------------------------------|--------|---------------------------|
+    | `formatToSpainDatetime`               | &rarr; | `toDatetimeDMYSlash`      |
+    | `formatToSpainDatetimeWithoutSeconds` | &rarr; | `toDatetimeDMYSlashShort` |
+    | `formatDatetime`                      | &rarr; | `toDatetimeYMD`           |
+    | `formatDatetimeWithoutSeconds`        | &rarr; | `toDatetimeYMDShort`      |
+* **(breaking)** DateFormat: Se han renombrado la mayoria de casos:
+  * |                                          |        |                            |
+    |------------------------------------------|--------|----------------------------|
+    | `date_startYear`                         | &rarr; | `date_YMD`                 |
+    | `date_startDay`                          | &rarr; | `date_DMY`                 |
+    | `date_startYear_slash`                   | &rarr; | `date_YMD_slash`           |
+    | `date_startDay_slash`                    | &rarr; | `date_DMY_slash`           |
+    | `date_startMonthWithoutDay_slash`        | &rarr; | `date_MY_slash`            |
+    | `datetime_startYear`                     | &rarr; | `datetime_YMD`             |
+    | `datetime_startYear_withoutSeconds`      | &rarr; | `datetime_YMD_short`       |
+    | `datetime_startDay_slash`                | &rarr; | `datetime_DMY_slash`       |
+    | `datetime_startDay_slash_withoutSeconds` | &rarr; | `datetime_DMY_slash_short` |
+    | `datetime_timestamp`                     | &rarr; | `datetime_micro`           |
+    | `datetime_eloquent_timestamps`           | &rarr; | `datetime_eloquent`        |
+    | `html_datetime_local`                    | &rarr; | `html_datetime`            |
+    | `html_datetime_local_withoutSeconds`     | &rarr; | `html_datetime_short`      |
+* Nuevas mejoras en la funcionalidad `Cooldown`: 
+    * Nuevo método `withStore` para poder configurarla y pasarle una custom
+    * **(breaking)** Eliminar el parámetro `key` de los métodos del `CooldownStore` y moverlo al constructor. Ahora el `CooldownManager` recibe la interfaz `CooldownStoreFactory` que genera el `CooldownStore` con su `key`.
+    * Ahora el callback del `run` recibe una instancia de `CooldownContext` como segundo parámetro y le permite al usuario saltarse la actualización de la hora sin tener que lanzar una excepción usando el método `skipUpdateLastExecutedAt()`.
+* **(breaking)** Ahora todas las fechas de la clase `DateVo` son strings.
+  * Los valores de los arrays estáticos `$formats` e `$inputFormats` ahora son strings en vez de objetos `DateFormat`.
+  * Lo mismo con los valores del parámerto `$formats` de los métodos `from`, `fromCarbon` y `parse`.
+  * Esto permite que se puedan usar strings en vez de solo instancias del enum `DateFormat` lo que permite usar formatos que no se hayan contemplado en el paquete.
+
+### Removed
+
+* **(breaking)** Se ha eliminado el método `value` de la clase `AbstractValueObject`. Ahora en su lugar se debe usar la propiedad pública `value`.
+* **(breaking)** Se han eliminado los siguientes Value Objects:
+  * `StatusPluckFieldVo`
+  * `StatusPluckKeyVo`
+
+### Fixed
+
+* Ahora también se hace `unset` del campo `deleted_at` en el `toArrayDb` de la clase `AbstractEntity` ya que si se define a `null` se sobreescribirá el valor y el modelo dejara de estar eliminado.
+* Se corrige un error introducido en la version `v0.53.3-beta.0` que calculaba mal el valor de la propiedad `$valueCarbon` en la clase `AbstractDateVo`.
+  * En el constructor se usaba `$this->valueCarbon = Carbon::parse($this->value);` antes de llamar al constructor padre por lo que `$this->value` no tenía valor y siempre se guardaba la hora actual.
 
 ## [v0.53.3-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.2-beta.0...v0.53.3-beta.0) - 2026-06-25
 
