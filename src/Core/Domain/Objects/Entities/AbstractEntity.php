@@ -409,6 +409,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         if (static::$incrementing && ! $keepId) unset($array[static::$primaryKey]);
         unset($array['created_at']);
         unset($array['updated_at']);
+        unset($array['deleted_at']);
         return $array;
     }
 
