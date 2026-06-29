@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
