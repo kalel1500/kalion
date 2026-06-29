@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Filters\Contracts\TabulatorFilterInterface;
 
+/**
+ * @implements TabulatorFilterInterface<Builder|QueryBuilder>
+ */
 class EloquentTabulatorFilter implements TabulatorFilterInterface
 {
     /**

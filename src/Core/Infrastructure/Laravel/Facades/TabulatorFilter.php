@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static \Thehouseofel\Kalion\Core\Infrastructure\Support\Filters\TabulatorFilterManager driver(string $driver)
- * @method static mixed filter(mixed $query, ?array $filters, ?array $sorters = null)
+ * @method static filter(mixed $query, ?array $filters, ?array $sorters = null)
  *
  * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Filters\TabulatorFilterManager
  */
