@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void warn(string $message)
  * @method static void line(string $message)
  *
- * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Output\ConsoleOutputRelay
+ * @see \Thehouseofel\Kalion\Core\Infrastructure\Utilities\Output\ConsoleOutputRelay
  */
 class ConsoleOutput extends Facade
 {

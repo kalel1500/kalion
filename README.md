@@ -66,7 +66,7 @@ There are two configurations for this (in `config/kalion.php`):
 
 For more complex cases, you can use the configuration method:
    ```php
-   use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
+   use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfig;
    
    public function register(): void
    {

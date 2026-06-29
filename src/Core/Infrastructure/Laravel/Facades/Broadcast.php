@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static void dispatch(\Illuminate\Contracts\Broadcasting\ShouldBroadcast $errorMessage = null)
  *
- * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Broadcasting\BroadcastDispatcher
+ * @see \Thehouseofel\Kalion\Core\Infrastructure\Utilities\Broadcasting\BroadcastDispatcher
  */
 class Broadcast extends Facade
 {

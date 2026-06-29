@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Attributes;
+
+use Attribute;
+
+#[Attribute(Attribute::TARGET_METHOD)]
+final class Title
+{
+    public array $values;
+
+    public function __construct(...$values)
+    {
+        $first        = $values[0] ?? [];
+        $this->values = is_array($first) ? $first : $values;
+    }
+}

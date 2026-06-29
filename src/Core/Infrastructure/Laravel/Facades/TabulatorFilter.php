@@ -7,10 +7,10 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Thehouseofel\Kalion\Core\Infrastructure\Support\Filters\TabulatorFilterManager driver(string $driver)
+ * @method static \Thehouseofel\Kalion\Core\Infrastructure\Utilities\Filters\TabulatorFilterManager driver(string $driver)
  * @method static filter(mixed $query, ?array $filters, ?array $sorters = null)
  *
- * @see \Thehouseofel\Kalion\Core\Infrastructure\Support\Filters\TabulatorFilterManager
+ * @see \Thehouseofel\Kalion\Core\Infrastructure\Utilities\Filters\TabulatorFilterManager
  */
 class TabulatorFilter extends Facade
 {

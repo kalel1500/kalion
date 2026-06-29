@@ -1,4 +1,4 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
+@use('Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\PackageAssets')
 @props(['title', 'cardTitle' => '', 'cardText' => ''])
 
 <!DOCTYPE html>

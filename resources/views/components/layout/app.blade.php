@@ -1,4 +1,4 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Support\Layout\PackageAssets')
+@use('Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\PackageAssets')
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
 @use('Thehouseofel\Kalion\Features\Components\Domain\Support\LayoutMetrics')
 

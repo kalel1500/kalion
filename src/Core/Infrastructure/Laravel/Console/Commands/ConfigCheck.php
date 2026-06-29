@@ -6,7 +6,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Helper\TableSeparator;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Config\KalionConfig;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfig;
 
 class ConfigCheck extends Command
 {

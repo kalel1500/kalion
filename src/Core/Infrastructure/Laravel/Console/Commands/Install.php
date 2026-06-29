@@ -4,8 +4,8 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands;
 
 use Illuminate\Console\Command;
 use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Console\Commands\Concerns\InteractsWithComposerPackages;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Install\Objects\InstallDto;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Install\ProcessorBuilder;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Objects\InstallDto;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\ProcessorBuilder;
 
 class Install extends Command
 {
