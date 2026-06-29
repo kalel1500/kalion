@@ -21,24 +21,24 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Middleware\AddPreferencesCookies;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Middleware\ForceArraySessionInCloud;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Contracts\CooldownStoreFactory;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\CooldownManager;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Store\CacheCooldownStoreFactory;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Filters\TabulatorFilterManager;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Output\ConsoleOutputRelay;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Contracts\Mutex;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Mutex\CacheMutex;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Middleware\CheckAbility;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Broadcasting\BroadcastDispatcher;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfig;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Contracts\CooldownStoreFactory;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Contracts\Mutex;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\CooldownManager;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Mutex\CacheMutex;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Store\CacheCooldownStoreFactory;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Filters\TabulatorFilterManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\LayoutPreferencesCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\PreferencesCookieStore;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Output\ConsoleOutputRelay;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Process\SystemProcessInspector;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\AuthManager;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Middleware\CheckAbility;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentRoleRepository;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\FortifyServiceProvider;
@@ -138,7 +138,7 @@ class KalionServiceProvider extends ServiceProvider
     {
         // Blade Icons
         config([
-            'blade-icons.attributes.width' => 24,
+            'blade-icons.attributes.width'  => 24,
             'blade-icons.attributes.height' => 24,
         ]);
 
