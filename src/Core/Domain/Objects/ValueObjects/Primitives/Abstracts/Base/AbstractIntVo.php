@@ -24,6 +24,11 @@ abstract class AbstractIntVo extends AbstractValueObject
         $this->value = $value;
     }
 
+    public static function parse($value): static
+    {
+        return static::from(!is_null($value) ? (int)$value : $value);
+    }
+
     public function isBiggerThan(int $number): bool
     {
         $other = new IntVo($number);

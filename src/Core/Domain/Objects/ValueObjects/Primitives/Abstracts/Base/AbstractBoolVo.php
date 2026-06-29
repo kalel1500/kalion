@@ -25,6 +25,11 @@ abstract class AbstractBoolVo extends AbstractValueObject
         $this->value = is_null($value) ? null : boolval($value);
     }
 
+    public static function parse($value): static
+    {
+        return static::from(!is_null($value) ? (bool)$value : $value);
+    }
+
     public function isTrue(): bool
     {
         return $this->value === true;

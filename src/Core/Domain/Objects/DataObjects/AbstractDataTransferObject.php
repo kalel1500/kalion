@@ -101,6 +101,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
         $makeMethod = match (true) {
             $classIsNull                      => null,
             $useMethod !== null               => $useMethod,
+            ($isVo && $resolve)               => 'parse',
             $isEnum || $isVo                  => 'from',
             $isArrayResolvable && $resolve    => 'resolveFromArray',
             $isArray                          => 'fromArray',

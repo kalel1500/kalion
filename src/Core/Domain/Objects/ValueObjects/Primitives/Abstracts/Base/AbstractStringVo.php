@@ -24,6 +24,11 @@ abstract class AbstractStringVo extends AbstractValueObject
         $this->value = $value; // $this->clearString($value);
     }
 
+    public static function parse($value): static
+    {
+        return static::from(!is_null($value) ? (string)$value : $value);
+    }
+
     protected function ensureIsValidValue(?string $value): void
     {
         $this->checkNullable($value);

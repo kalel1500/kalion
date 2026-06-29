@@ -24,6 +24,11 @@ abstract class AbstractFloatVo extends AbstractValueObject
         $this->value = $value;
     }
 
+    public static function parse($value): static
+    {
+        return static::from(!is_null($value) ? (float)$value : $value);
+    }
+
     public function isBiggerThan(float $number): bool
     {
         return $this->value > $number;

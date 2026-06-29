@@ -44,7 +44,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     protected array            $relations = [];
     protected array            $computed  = [];
 
-    private static function resolveConstructorParams(): array
+    private static function resolveConstructorParams(bool $resolve): array
     {
         $className = static::class;
 
@@ -141,6 +141,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                     $classIsNull        => null,
                     $useMethod !== null => $useMethod,
                     $isId               => 'resolve',
+                    $isVo && $resolve   => 'parse',
                     $isEnum || $isVo    => 'from',
                     default             => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
                 };
@@ -175,7 +176,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     {
         $args = [];
 
-        foreach (self::resolveConstructorParams() as $meta) {
+        foreach (self::resolveConstructorParams($resolve) as $meta) {
             $paramName  = $meta['name'];
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
@@ -228,7 +229,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         $props = [];
 
         // Recorrer los nombres ya cacheados
-        foreach (self::resolveConstructorParams() as $meta) {
+        foreach (self::resolveConstructorParams(false) as $meta) {
             $name   = $meta['name'];
             $isEnum = $meta['isEnum'];
             $isVo   = $meta['isVo'];

@@ -32,6 +32,11 @@ abstract class AbstractValueObject implements JsonSerializable
         }
     }
 
+    public static function parse($value): static
+    {
+        return static::from($value);
+    }
+
     public static function null(): static
     {
         return new static(null);

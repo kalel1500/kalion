@@ -19,7 +19,6 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_NULLABLE = DateNullVo::class;
 
     protected static array    $formats         = [DateFormat::datetime_YMD->value];
-    protected static array    $inputFormats    = [DateFormat::html_datetime->value, DateFormat::html_datetime_short->value];
     protected ?array          $instanceFormats = null;
     protected CarbonImmutable $valueCarbon;
 
@@ -42,15 +41,6 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public static function from($value, ?array $formats = null): static
     {
-        if ($value instanceof CarbonInterface) {
-            return static::fromCarbon($value, null, $formats);
-        }
-
-        // Normalize from inputFormats
-        if (! is_null($value) && DateHelper::matchesAnyFormat($value, static::$inputFormats)) {
-            return static::parse($value, null, $formats);
-        }
-
         return new static($value, $formats);
     }
 
@@ -68,7 +58,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         }
 
         $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
-        $formatted = CarbonImmutable::parse($value)->format($toFormat);
+        $formatted = is_null($value) ? $value : CarbonImmutable::parse($value)->format($toFormat);
         return new static($formatted, $formats);
     }
 

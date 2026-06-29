@@ -26,6 +26,11 @@ abstract class AbstractArrayVo extends AbstractValueObject implements ArrayAcces
         $this->value = $value;
     }
 
+    public static function parse($value): static
+    {
+        return static::from(!is_null($value) ? (array)$value : $value);
+    }
+
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->value);
