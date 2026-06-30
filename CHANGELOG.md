@@ -1,8 +1,32 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.54.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.55.0-beta.0...master)
+
+## [v0.55.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.54.0-beta.0...v0.55.0-beta.0) - 2026-06-30
+
+### Changed
+
+* **(breaking)** Se han reorganizado varias clases y carpetas:
+  1. Todos los namespaces `Thehouseofel\Kalion\Core\Infrastructure\Support\*` ahora pasan a `Thehouseofel\Kalion\Core\Infrastructure\Utilities\*`. 
+  2. Todos los namespaces `Thehouseofel\Kalion\Core\Infrastructure\Laravel\*` ahora pasan a `Thehouseofel\Kalion\Core\Infrastructure\Support\*`.
+  3. Se ha movido la fachada `Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Cooldown` a `Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\Cooldown`
+  4. Se ha movido la fachada `Thehouseofel\Kalion\Features\Auth\Infrastructure\Facades\Auth` a `Thehouseofel\Kalion\Features\Support\Facades\Auth`
+
+### Removed
+
+* **(breaking)** Se elimina la fachada `LayoutData` ya que es de uso interno y no se debe usar desde la aplicación. En su luagr ahora se usa el helper `app()` para resolver la interfaz.
+
+### Fixed
+
+* Se corrige un error introducido en la version `v0.54.0-beta.0` en la reflexion de la Entidad no hacia bien el `resolveFromArray()` si antes se habia hecho un `fromArray()`.
+  * Como ahora el parámetro `$resolve` se pasa al `resolveConstructorParams` se debe tener en cuenta al guardar la cache.
+* Se corrige un error en `KalionReflectionException::resolveFailedToHydrate()` que no devolvia la exceocion correcta.
+  * Se usaba `is_subclass_of` y cuando fallaba en la clase padre devilvia `false`. Ahora usa `is_a` en su lugar.
 
 ## [v0.54.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.3-beta.0...v0.54.0-beta.0) - 2026-06-29
+
+> [!WARNING]  
+> ⚠️ ATENCIÓN: Esta versión introduce un error crítico en la reflexión de la Entidad: no ejecuta correctamente el método `resolveFromArray()` si previamente se ha invocado `fromArray()`. Corrección disponible en la versión v0.55.0-beta.0.
 
 ### Changed
 
@@ -74,6 +98,9 @@
   * En el constructor se usaba `$this->valueCarbon = Carbon::parse($this->value);` antes de llamar al constructor padre por lo que `$this->value` no tenía valor y siempre se guardaba la hora actual.
 
 ## [v0.53.3-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.2-beta.0...v0.53.3-beta.0) - 2026-06-25
+
+> [!WARNING]  
+> ⚠️ ATENCIÓN: Esta versión introduce un error en el cálculo del método `->carbon()` de los `AbstractDateVo` y siempre devuelve la hora actual. Corrección disponible en la versión v0.54.0-beta.0.
 
 ### Added
 
