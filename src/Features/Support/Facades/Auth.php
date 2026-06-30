@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Auth\Infrastructure\Facades;
+namespace Thehouseofel\Kalion\Features\Support\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
