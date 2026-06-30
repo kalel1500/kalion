@@ -48,7 +48,9 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     {
         $className = static::class;
 
-        if (! isset(self::$constructCache[$className])) {
+        $cacheKey = $className . ($resolve ? ':resolve' : '');
+
+        if (! isset(self::$constructCache[$cacheKey])) {
             $ref         = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $ref->getConstructor();
 
