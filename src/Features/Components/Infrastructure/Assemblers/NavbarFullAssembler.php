@@ -7,21 +7,23 @@ namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\Collections\NavbarItemCollection;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\NavbarFullDto;
-use Thehouseofel\Kalion\Features\Components\Infrastructure\Facades\LayoutData;
+use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
 
 class NavbarFullAssembler
 {
     public static function fromProps(?string $navbarTitle): NavbarFullDto
     {
+        $layoutData = app(LayoutData::class);
+
         $items = NavbarItemCollection::fromArray(config('kalion_links.navbar.items') ?? []);
-        $items = $items->map(function (NavbarItemDto $item) {
+        $items = $items->map(function (NavbarItemDto $item) use ($layoutData) {
             if (! is_null($dropdown = $item->dropdown) && ! is_null($action = $dropdown->get_data_action)) {
                 switch ($action) {
                     case 'getNavbarNotifications':
-                        $dropdown->setItems(LayoutData::getNavbarNotifications());
+                        $dropdown->setItems($layoutData->getNavbarNotifications());
                         break;
                     case 'getUserInfo':
-                        $dropdown->setUserInfo(LayoutData::getUserInfo());
+                        $dropdown->setUserInfo($layoutData->getUserInfo());
                         break;
                 }
             }
