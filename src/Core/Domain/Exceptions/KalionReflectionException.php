@@ -54,7 +54,7 @@ class KalionReflectionException extends KalionRuntimeException
     public static function resolveFailedToHydrate(Throwable $th, string $expectedClass, KalionReflectionException $exception): Throwable
     {
         $class = $th->getTrace()[0]['class'] ?? null;
-        return is_subclass_of($class, $expectedClass) ? $exception : $th;
+        return ($class && is_a($class, $expectedClass, true)) ? $exception : $th;
     }
 
     public static function failedToHydrateValueObject(string $class, string $param, string $expectedClass, $value, string $errorMessage): static
