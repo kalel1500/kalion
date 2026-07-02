@@ -712,10 +712,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toAny($collResult->toArray());
     }
 
-//    public function max()
-//    {
-//        //
-//    }
+    public function max($callback = null)
+    {
+        return collect($this->toArray())->max($callback);
+    }
 
 //    public function median()
 //    {
@@ -733,10 +733,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function min()
-//    {
-//        //
-//    }
+    public function min($callback = null)
+    {
+        return collect($this->toArray())->min($callback);
+    }
 
 //    public function mode()
 //    {
