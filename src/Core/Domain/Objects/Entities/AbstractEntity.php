@@ -168,10 +168,10 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                 ];
             }
 
-            self::$constructCache[$className] = $newParams;
+            self::$constructCache[$cacheKey] = $newParams;
         }
 
-        return self::$constructCache[$className];
+        return self::$constructCache[$cacheKey];
     }
 
     protected static function make(array $data, bool $resolve = false): static
