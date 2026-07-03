@@ -909,10 +909,12 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function prepend()
-//    {
-//        //
-//    }
+    public function prepend($value, $key = null)
+    {
+        $this->items = Arr::prepend($this->items, ...(func_num_args() > 1 ? func_get_args() : [$value]));
+
+        return $this;
+    }
 
 //    public function pull()
 //    {
