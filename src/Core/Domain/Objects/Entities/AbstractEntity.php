@@ -47,8 +47,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     private static function resolveConstructorParams(bool $resolve): array
     {
         $className = static::class;
-
-        $cacheKey = $className . ($resolve ? ':resolve' : '');
+        $cacheKey  = $className . ($resolve ? ':resolve' : '');
 
         if (! isset(self::$constructCache[$cacheKey])) {
             $ref         = new ReflectionClass($className); // REFLECTION - cached
@@ -58,7 +57,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                 throw KalionReflectionException::constructorMissing($className);
             }
 
-            $params = [];
+            $newParams = [];
 
             foreach ($constructor->getParameters() as $param) {
                 $name  = $param->getName();
@@ -93,16 +92,16 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                             break;
                         }
                     }
-                    $class      = $idClass; // null si no aplica
+                    $class      = $idClass;
                     $isId       = (bool)$idClass;
                     $allowsNull = $type->allowsNull();
                 }
 
-                // Named type (Class), tipo primitivo (int, string, bool, etc.)
+                // Named type (Class), tipo primitivo
                 if ($type instanceof \ReflectionNamedType) {
                     $typeName   = $type->getName();
                     $class      = $type->isBuiltin() ? null : $typeName;
-                    $isId       = false; // para single class → usamos ::new || is_class_id($class)
+                    $isId       = false;
                     $allowsNull = $type->allowsNull();
                 }
 
@@ -116,25 +115,6 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                     $makeParams = $attr->params;
                 }
 
-                // Llenar array para cada parámetro
-                $params[] = [
-                    'name'       => $name,
-                    'typeName'   => $typeName,
-                    'class'      => $class,
-                    'isId'       => $isId,
-                    'allowsNull' => $allowsNull,
-                    'useMethod'  => $useMethod,
-                    'makeParams' => $makeParams,
-                ];
-            }
-
-            $newParams = [];
-            foreach ($params as $meta) {
-                $typeName  = $meta['typeName'];
-                $class     = $meta['class'];
-                $isId      = $meta['isId'];
-                $useMethod = $meta['useMethod'];
-
                 $classIsNull = $class === null;
                 $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
                 $isVo        = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
@@ -145,7 +125,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                     $isId               => 'resolve',
                     $isVo && $resolve   => 'parse',
                     $isEnum || $isVo    => 'from',
-                    default             => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $meta['name']),
+                    default             => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $name),
                 };
 
                 $castType = match (true) {
@@ -160,7 +140,13 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                 };
 
                 $newParams[] = [
-                    ...$meta,
+                    'name'       => $name,
+                    'typeName'   => $typeName,
+                    'class'      => $class,
+                    'isId'       => $isId,
+                    'allowsNull' => $allowsNull,
+                    'useMethod'  => $useMethod,
+                    'makeParams' => $makeParams,
                     'isEnum'     => $isEnum,
                     'isVo'       => $isVo,
                     'makeMethod' => $makeMethod,

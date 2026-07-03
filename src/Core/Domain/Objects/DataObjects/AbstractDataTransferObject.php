@@ -31,7 +31,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
     private static array $reflectionDisabled = [];
     private static array $reflectionCache    = [];
 
-    private static function getParamType(\ReflectionParameter|\ReflectionProperty $param, bool $allowUnionTypes): array
+    private static function getParamMetadata(\ReflectionParameter|\ReflectionProperty $param, bool $allowUnionTypes, bool $resolve): array
     {
         $className = static::class;
         $name      = $param->getName();
@@ -43,19 +43,17 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
             throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
         }
 
+        if ($type instanceof \ReflectionUnionType) {
+            if (! $allowUnionTypes) {
+                throw KalionReflectionException::unionTypeNotSupported($name, $className, '__construct');
+            }
+            $type = $type->getTypes()[0];
+        }
+
         $typeName   = null;
         $class      = null;
         $allowsNull = true;
         $makeParams = null;
-
-        // Union type → no permitido
-        if ($type instanceof ReflectionUnionType) {
-            if (! $allowUnionTypes) {
-                throw KalionReflectionException::unionTypeNotSupported($name, $className, '__construct');
-            }
-
-            $type = $type->getTypes()[0];
-        }
 
         // Named type (Class)
         if ($type instanceof \ReflectionNamedType) {
@@ -74,24 +72,6 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
             $makeParams = $attr->params;
         }
 
-        // Devolver el array con la información del parámetro
-        return [
-            'name'       => $name,
-            'typeName'   => $typeName,
-            'class'      => $class,
-            'allowsNull' => $allowsNull,
-            'useMethod'  => $useMethod,
-            'makeParams' => $makeParams,
-        ];
-    }
-
-    private static function getParamMeta(array $meta, bool $resolve): array
-    {
-        $className = static::class;
-        $typeName  = $meta['typeName'];
-        $class     = $meta['class'];
-        $useMethod = $meta['useMethod'];
-
         $classIsNull       = $class === null;
         $isEnum            = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
         $isVo              = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
@@ -105,7 +85,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
             $isEnum || $isVo                  => 'from',
             $isArrayResolvable && $resolve    => 'resolveFromArray',
             $isArray                          => 'fromArray',
-            default                           => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $meta['name']),
+            default                           => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $name),
         };
 
         $propsMethod = match (true) {
@@ -125,7 +105,12 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
         };
 
         return [
-            ...$meta,
+            'name'        => $name,
+            'typeName'    => $typeName,
+            'class'       => $class,
+            'allowsNull'  => $allowsNull,
+            'useMethod'   => $useMethod,
+            'makeParams'  => $makeParams,
             'isEnum'      => $isEnum,
             'isVo'        => $isVo,
             'makeMethod'  => $makeMethod,
@@ -137,38 +122,27 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
     private static function resolveConstructorParams(bool $resolve): array
     {
         $className = static::class;
+        $cacheKey  = $className . ($resolve ? ':resolve' : '');
 
-        $cacheKey = $className . ($resolve ? ':resolve' : '');
-
-        // Cacheamos ya los parámetros procesados
         if (! isset(self::$reflectionCache[$cacheKey])) {
             $reflection  = new ReflectionClass($className); // REFLECTION - cached
             $constructor = $reflection->getConstructor();
 
             if (! $constructor) {
-                throw KalionReflectionException::constructorMissing(static::class);
-            }
-
-            $paramsMake  = [];
-            $paramsProps = [];
-
-            // Make
-            foreach ($constructor->getParameters() as $param) {
-                $paramsMake[] = self::getParamType($param, false);
-            }
-
-            // Props
-            foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $param) {
-                $paramsProps[] = self::getParamType($param, true);
+                throw KalionReflectionException::constructorMissing($className);
             }
 
             $newParamsMake  = [];
             $newParamsProps = [];
-            foreach ($paramsMake as $meta) {
-                $newParamsMake[] = self::getParamMeta($meta, $resolve);
+
+            // Procesar parámetros del constructor
+            foreach ($constructor->getParameters() as $param) {
+                $newParamsMake[] = self::getParamMetadata($param, allowUnionTypes: false, resolve: $resolve);
             }
-            foreach ($paramsProps as $meta) {
-                $newParamsProps[] = self::getParamMeta($meta, $resolve);
+
+            // Procesar propiedades públicas
+            foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $prop) {
+                $newParamsProps[] = self::getParamMetadata($prop, allowUnionTypes: true, resolve: $resolve);
             }
 
             self::$reflectionCache[$cacheKey] = [
