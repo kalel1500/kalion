@@ -34,20 +34,20 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
     private static function getParamMetadata(\ReflectionParameter|\ReflectionProperty $param, bool $allowUnionTypes, bool $resolve): array
     {
         $className = static::class;
-        $name      = $param->getName();
-        $type      = $param->getType();
+        $paramName = $param->getName();
+        $paramType = $param->getType();
         $attrs     = $param->getAttributes(WithParams::class);
 
         // Intersection type → no permitido
-        if ($type instanceof ReflectionIntersectionType) {
-            throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
+        if ($paramType instanceof ReflectionIntersectionType) {
+            throw KalionReflectionException::intersectionTypeNotSupported($paramName, $className, '__construct');
         }
 
-        if ($type instanceof \ReflectionUnionType) {
+        if ($paramType instanceof \ReflectionUnionType) {
             if (! $allowUnionTypes) {
-                throw KalionReflectionException::unionTypeNotSupported($name, $className, '__construct');
+                throw KalionReflectionException::unionTypeNotSupported($paramName, $className, '__construct');
             }
-            $type = $type->getTypes()[0];
+            $paramType = $paramType->getTypes()[0];
         }
 
         $typeName   = null;
@@ -56,10 +56,10 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
         $makeParams = null;
 
         // Named type (Class)
-        if ($type instanceof \ReflectionNamedType) {
-            $typeName   = $type->getName();
-            $class      = $type->isBuiltin() ? null : $typeName;
-            $allowsNull = $type->allowsNull();
+        if ($paramType instanceof \ReflectionNamedType) {
+            $typeName   = $paramType->getName();
+            $class      = $paramType->isBuiltin() ? null : $typeName;
+            $allowsNull = $paramType->allowsNull();
         }
 
         // Attr: UseMethod
@@ -85,7 +85,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
             $isEnum || $isVo                  => 'from',
             $isArrayResolvable && $resolve    => 'resolveFromArray',
             $isArray                          => 'fromArray',
-            default                           => throw KalionReflectionException::unexpectedTypeInConstructor($className, $name),
+            default                           => throw KalionReflectionException::unexpectedTypeInConstructor($className, $paramName),
         };
 
         $propsMethod = match (true) {
@@ -105,7 +105,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
         };
 
         return [
-            'name'        => $name,
+            'paramName'   => $paramName,
             'typeName'    => $typeName,
             'class'       => $class,
             'allowsNull'  => $allowsNull,
@@ -180,7 +180,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
 
         $params = self::resolveConstructorParams($resolve)['make'];
         foreach ($params as $key => $meta) {
-            $paramName  = arr_is_assoc($data) ? $meta['name'] : $key;
+            $paramName  = arr_is_assoc($data) ? $meta['paramName'] : $key;
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
             $isEnum     = $meta['isEnum'];
@@ -245,11 +245,11 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
         $props  = [];
         $params = self::resolveConstructorParams(false)['props'];
         foreach ($params as $meta) {
-            $name   = $meta['name'];
-            $isEnum = $meta['isEnum'];
-            $isVo   = $meta['isVo'];
-            $method = $meta['propsMethod'];
-            $value  = $this->{$name};
+            $paramName = $meta['paramName'];
+            $isEnum    = $meta['isEnum'];
+            $isVo      = $meta['isVo'];
+            $method    = $meta['propsMethod'];
+            $value     = $this->{$paramName};
 
             $value = match (true) {
                 $isEnum || $isVo => $value?->value,
@@ -261,7 +261,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
                 $value = null;
             }
 
-            $props[$name] = $value;
+            $props[$paramName] = $value;
         }
 
         return $props;

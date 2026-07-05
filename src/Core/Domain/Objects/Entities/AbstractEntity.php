@@ -60,13 +60,13 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
             $newParams = [];
 
             foreach ($constructor->getParameters() as $param) {
-                $name  = $param->getName();
-                $type  = $param->getType();
-                $attrs = $param->getAttributes(WithParams::class);
+                $paramName = $param->getName();
+                $paramType = $param->getType();
+                $attrs     = $param->getAttributes(WithParams::class);
 
-                // Intersection type → no permitido
-                if ($type instanceof \ReflectionIntersectionType) {
-                    throw KalionReflectionException::intersectionTypeNotSupported($name, $className, '__construct');
+                // Intersection paramType → no permitido
+                if ($paramType instanceof \ReflectionIntersectionType) {
+                    throw KalionReflectionException::intersectionTypeNotSupported($paramName, $className, '__construct');
                 }
 
                 $typeName   = null;
@@ -76,11 +76,11 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                 $makeParams = null;
 
                 // Union type (ej. IdVo|IdNullVo)
-                if ($type instanceof \ReflectionUnionType) {
+                if ($paramType instanceof \ReflectionUnionType) {
                     $typeNames = array_map(
                         callback: fn($t) => $t->getName(),
                         array   : array_filter(
-                            array   : $type->getTypes(),
+                            array   : $paramType->getTypes(),
                             callback: fn($t) => $t instanceof \ReflectionNamedType && ! $t->isBuiltin()
                         )
                     );
@@ -94,15 +94,15 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                     }
                     $class      = $idClass;
                     $isId       = (bool)$idClass;
-                    $allowsNull = $type->allowsNull();
+                    $allowsNull = $paramType->allowsNull();
                 }
 
                 // Named type (Class), tipo primitivo
-                if ($type instanceof \ReflectionNamedType) {
-                    $typeName   = $type->getName();
-                    $class      = $type->isBuiltin() ? null : $typeName;
+                if ($paramType instanceof \ReflectionNamedType) {
+                    $typeName   = $paramType->getName();
+                    $class      = $paramType->isBuiltin() ? null : $typeName;
                     $isId       = false;
-                    $allowsNull = $type->allowsNull();
+                    $allowsNull = $paramType->allowsNull();
                 }
 
                 // Attr: UseMethod
@@ -125,7 +125,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                     $isId               => 'resolve',
                     $isVo && $resolve   => 'parse',
                     $isEnum || $isVo    => 'from',
-                    default             => throw KalionReflectionException::unexpectedTypeInConstructor($className, $name),
+                    default             => throw KalionReflectionException::unexpectedTypeInConstructor($className, $paramName),
                 };
 
                 $castType = match (true) {
@@ -140,7 +140,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                 };
 
                 $newParams[] = [
-                    'name'       => $name,
+                    'paramName'  => $paramName,
                     'typeName'   => $typeName,
                     'class'      => $class,
                     'isId'       => $isId,
@@ -165,7 +165,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         $args = [];
 
         foreach (self::resolveConstructorParams($resolve) as $meta) {
-            $paramName  = $meta['name'];
+            $paramName  = $meta['paramName'];
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
             $isEnum     = $meta['isEnum'];
@@ -218,10 +218,10 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
 
         // Recorrer los nombres ya cacheados
         foreach (self::resolveConstructorParams(false) as $meta) {
-            $name   = $meta['name'];
-            $isEnum = $meta['isEnum'];
-            $isVo   = $meta['isVo'];
-            $value  = $this->{$name};
+            $paramName = $meta['paramName'];
+            $isEnum    = $meta['isEnum'];
+            $isVo      = $meta['isVo'];
+            $value     = $this->{$paramName};
 
             $value = match (true) {
                 $isEnum || $isVo => $value?->value,
@@ -232,7 +232,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                 $value = null;
             }
 
-            $props[$name] = $value;
+            $props[$paramName] = $value;
         }
 
         return $props;
