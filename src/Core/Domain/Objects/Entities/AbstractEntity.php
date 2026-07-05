@@ -12,31 +12,24 @@ use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
-use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\UseMethod;
-use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\WithParams;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionConfig;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionResolvable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractDateVo;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractBoolVo;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractFloatVo;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractIntVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 
 abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, JsonSerializable
 {
-    use ParsesRelationFlags;
+    use ReflectionResolvable, ParsesRelationFlags;
 
-    private static array          $constructCache = [];
-    private static array          $computedCache  = [];
-    protected static ?array       $fillable       = null;
-    protected static string       $primaryKey     = 'id';
-    protected static bool         $incrementing   = true;
-    protected static JsonMethodVo $jsonMethod     = JsonMethodVo::encodedValue;
+    private static array          $computedCache = [];
+    protected static ?array       $fillable      = null;
+    protected static string       $primaryKey    = 'id';
+    protected static bool         $incrementing  = true;
+    protected static JsonMethodVo $jsonMethod    = JsonMethodVo::encodedValue;
 
     protected ?array           $with      = null;
     protected bool|string|null $isFull;
@@ -44,198 +37,14 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     protected array            $relations = [];
     protected array            $computed  = [];
 
-    private static function resolveConstructorParams(bool $resolve): array
+    protected static function reflectionConfig(): ReflectionConfig
     {
-        $className = static::class;
-        $cacheKey  = $className . ($resolve ? ':resolve' : '');
-
-        if (! isset(self::$constructCache[$cacheKey])) {
-            $ref         = new ReflectionClass($className); // REFLECTION - cached
-            $constructor = $ref->getConstructor();
-
-            if (! $constructor) {
-                throw KalionReflectionException::constructorMissing($className);
-            }
-
-            $newParams = [];
-
-            foreach ($constructor->getParameters() as $param) {
-                $paramName = $param->getName();
-                $paramType = $param->getType();
-                $attrs     = $param->getAttributes(WithParams::class);
-
-                // Intersection paramType → no permitido
-                if ($paramType instanceof \ReflectionIntersectionType) {
-                    throw KalionReflectionException::intersectionTypeNotSupported($paramName, $className, '__construct');
-                }
-
-                $typeName   = null;
-                $class      = null;
-                $isId       = false;
-                $allowsNull = true;
-                $makeParams = null;
-
-                // Union type (ej. IdVo|IdNullVo)
-                if ($paramType instanceof \ReflectionUnionType) {
-                    $typeNames = array_map(
-                        callback: fn($t) => $t->getName(),
-                        array   : array_filter(
-                            array   : $paramType->getTypes(),
-                            callback: fn($t) => $t instanceof \ReflectionNamedType && ! $t->isBuiltin()
-                        )
-                    );
-
-                    $idClass = null;
-                    foreach ($typeNames as $typeName) {
-                        if (is_class_id($typeName) && ! str_ends_with($typeName, 'NullVo')) {
-                            $idClass = $typeName;
-                            break;
-                        }
-                    }
-                    $class      = $idClass;
-                    $isId       = (bool)$idClass;
-                    $allowsNull = $paramType->allowsNull();
-                }
-
-                // Named type (Class), tipo primitivo
-                if ($paramType instanceof \ReflectionNamedType) {
-                    $typeName   = $paramType->getName();
-                    $class      = $paramType->isBuiltin() ? null : $typeName;
-                    $isId       = false;
-                    $allowsNull = $paramType->allowsNull();
-                }
-
-                // Attr: UseMethod
-                $useMethodAttr = $param->getAttributes(UseMethod::class);
-                $useMethod     = ! empty($useMethodAttr) ? $useMethodAttr[0]->newInstance()->method : null;
-
-                if (! empty($attrs)) {
-                    /** @var WithParams $attr */
-                    $attr       = $attrs[0]->newInstance();
-                    $makeParams = $attr->params;
-                }
-
-                $classIsNull = $class === null;
-                $isEnum      = ! $classIsNull && is_a($class, class: \BackedEnum::class, allow_string: true);
-                $isVo        = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
-
-                $makeMethod = match (true) {
-                    $classIsNull        => null,
-                    $useMethod !== null => $useMethod,
-                    $isId               => 'resolve',
-                    $isVo && $resolve   => 'parse',
-                    $isEnum || $isVo    => 'from',
-                    default             => throw KalionReflectionException::unexpectedTypeInConstructor($className, $paramName),
-                };
-
-                $castType = match (true) {
-                    $classIsNull                                                     => $typeName,
-                    is_a($class, class: AbstractArrayVo::class, allow_string: true)  => 'array',
-                    is_a($class, class: AbstractBoolVo::class, allow_string: true)   => 'bool',
-                    is_a($class, class: AbstractFloatVo::class, allow_string: true)  => 'float',
-                    is_a($class, class: AbstractIntVo::class, allow_string: true)    => 'int',
-                    is_a($class, class: AbstractJsonVo::class, allow_string: true)   => 'string',
-                    is_a($class, class: AbstractStringVo::class, allow_string: true) => 'string',
-                    default                                                          => null,
-                };
-
-                $newParams[] = [
-                    'paramName'  => $paramName,
-                    'typeName'   => $typeName,
-                    'class'      => $class,
-                    'isId'       => $isId,
-                    'allowsNull' => $allowsNull,
-                    'useMethod'  => $useMethod,
-                    'makeParams' => $makeParams,
-                    'isEnum'     => $isEnum,
-                    'isVo'       => $isVo,
-                    'makeMethod' => $makeMethod,
-                    'castType'   => $castType,
-                ];
-            }
-
-            self::$constructCache[$cacheKey] = $newParams;
-        }
-
-        return self::$constructCache[$cacheKey];
-    }
-
-    protected static function make(array $data, bool $resolve = false): static
-    {
-        $args = [];
-
-        foreach (self::resolveConstructorParams($resolve) as $meta) {
-            $paramName  = $meta['paramName'];
-            $class      = $meta['class'];
-            $allowsNull = $meta['allowsNull'];
-            $isEnum     = $meta['isEnum'];
-            $method     = $meta['makeMethod'];
-            $makeParams = $meta['makeParams'] ?? [];
-            $castType   = $meta['castType'];
-            $value      = $data[$paramName] ?? null;
-
-            if ($resolve && $value !== null && $castType !== null) {
-                $value = match ($castType) {
-                    'array'  => (array)$value,
-                    'bool'   => (bool)$value,
-                    'float'  => (float)$value,
-                    'int'    => (int)$value,
-                    'string' => (string)$value,
-                };
-            }
-
-            try {
-                $value = match (true) {
-                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
-                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(KALION_ENUM_NULL_VALUE),
-                    default                                                                            => $class::$method($value, ...$makeParams),
-                };
-            } catch (\Throwable $th) {
-                throw KalionReflectionException::resolveFailedToHydrate(
-                    th: $th,
-                    expectedClass: AbstractValueObject::class,
-                    exception: KalionReflectionException::failedToHydrateValueObject(static::class, $paramName, $class, $value, $th->getMessage())
-                );
-            }
-
-            $args[] = $value;
-        }
-
-        try {
-            return new static(...$args);
-        } catch (\Throwable $th) {
-            throw KalionReflectionException::resolveFailedToHydrate(
-                th: $th,
-                expectedClass: AbstractEntity::class,
-                exception: KalionReflectionException::failedToHydrateClass(static::class, $th->getMessage())
-            );
-        }
-    }
-
-    protected function props(): array
-    {
-        $props = [];
-
-        // Recorrer los nombres ya cacheados
-        foreach (self::resolveConstructorParams(false) as $meta) {
-            $paramName = $meta['paramName'];
-            $isEnum    = $meta['isEnum'];
-            $isVo      = $meta['isVo'];
-            $value     = $this->{$paramName};
-
-            $value = match (true) {
-                $isEnum || $isVo => $value?->value,
-                default          => $value,
-            };
-
-            if ($isEnum && $value === KALION_ENUM_NULL_VALUE) {
-                $value = null;
-            }
-
-            $props[$paramName] = $value;
-        }
-
-        return $props;
+        return new ReflectionConfig(
+            props_from_public       : false,
+            allow_id_union          : true,
+            allow_disable_reflection: false,
+            expected_exception_class: AbstractEntity::class,
+        );
     }
 
     /**
