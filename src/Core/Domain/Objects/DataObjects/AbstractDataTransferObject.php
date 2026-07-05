@@ -85,7 +85,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
             $isEnum || $isVo                  => 'from',
             $isArrayResolvable && $resolve    => 'resolveFromArray',
             $isArray                          => 'fromArray',
-            default                           => throw KalionReflectionException::unexpectedTypeInDtoConstructor($className, $name),
+            default                           => throw KalionReflectionException::unexpectedTypeInConstructor($className, $name),
         };
 
         $propsMethod = match (true) {

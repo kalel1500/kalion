@@ -125,7 +125,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
                     $isId               => 'resolve',
                     $isVo && $resolve   => 'parse',
                     $isEnum || $isVo    => 'from',
-                    default             => throw KalionReflectionException::unexpectedTypeInEntityConstructor($className, $name),
+                    default             => throw KalionReflectionException::unexpectedTypeInConstructor($className, $name),
                 };
 
                 $castType = match (true) {
