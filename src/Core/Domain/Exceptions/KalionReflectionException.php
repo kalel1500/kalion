@@ -41,9 +41,14 @@ class KalionReflectionException extends KalionRuntimeException
         return new static("Unexpected argument type when constructing the class $class. The argument $parameter was passed with an incorrect type. It was expected to be a primitive type (such as string, int, bool, etc.) or an instance of a class that extends BackedEnum or AbstractValueObject (or ArrayConvertible in DTO).");
     }
 
-    public static function disabledReflectionInDto(string $class): static
+    public static function disabledReflection(string $class): static
     {
-        return new static("The $class class has the DisableReflection attribute defined. In these cases, it is necessary to define either the props() method or the toMakeArray() and toArray() methods.");
+        return new self(
+            "The class {$class} defines the DisableReflection attribute. You must implement " .
+            "either the 'props' method, or the 'toArray' method (along with 'toMakeArray' " .
+            "if the class implements MakeArrayable). Alternatively, enable 'useJsonSerialization' " .
+            "in the attribute."
+        );
     }
 
     public static function resolveFailedToHydrate(Throwable $th, string $expectedClass, KalionReflectionException $exception): Throwable

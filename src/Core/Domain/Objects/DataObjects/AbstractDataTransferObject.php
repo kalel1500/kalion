@@ -239,7 +239,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
                 return legacy_json_to_array($props);
             }
 
-            return throw KalionReflectionException::disabledReflectionInDto(static::class);
+            return throw KalionReflectionException::disabledReflection(static::class);
         }
 
         $props  = [];
