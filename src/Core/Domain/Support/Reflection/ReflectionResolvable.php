@@ -207,7 +207,7 @@ trait ReflectionResolvable
             return self::$reflectionDisabledCache[$className];
         }
 
-        if (self::config()->allow_disable_reflection) {
+        if (!self::config()->allow_disable_reflection) {
             return self::$reflectionDisabledCache[$className] = [
                 'isDisabled'           => false,
                 'useJsonSerialization' => false,
