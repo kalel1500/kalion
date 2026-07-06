@@ -15,7 +15,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
-use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionConfig;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionResolvable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;

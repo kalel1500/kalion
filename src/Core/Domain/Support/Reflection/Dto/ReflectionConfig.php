@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Support\Reflection;
+namespace Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto;
 
 readonly class ReflectionConfig
 {

@@ -9,7 +9,7 @@ use JsonSerializable;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
-use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionConfig;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionResolvable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 

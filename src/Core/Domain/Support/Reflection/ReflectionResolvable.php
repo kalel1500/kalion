@@ -23,6 +23,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Ba
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractIntVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 
 trait ReflectionResolvable
 {
