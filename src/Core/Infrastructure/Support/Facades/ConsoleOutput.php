@@ -7,6 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
+ * @method static \Symfony\Component\Console\Output\OutputInterface getOutput()
  * @method static void setOutput(\Symfony\Component\Console\Output\OutputInterface $output)
  * @method static void info(string $message)
  * @method static void error(string $message)

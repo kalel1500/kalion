@@ -16,6 +16,11 @@ class ConsoleOutputRelay
         $this->output = new NullOutput();
     }
 
+    public function getOutput(): OutputInterface
+    {
+        return $this->output;
+    }
+
     public function setOutput(OutputInterface $output): void
     {
         $this->output = $output;
