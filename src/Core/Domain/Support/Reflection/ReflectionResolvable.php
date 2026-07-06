@@ -24,6 +24,10 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Ba
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ConstructorParams;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\DisabledData;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ParamMetadata;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\UnionTypeResolution;
 
 trait ReflectionResolvable
 {
@@ -40,7 +44,7 @@ trait ReflectionResolvable
         return self::$reflectionConfigCache[$className] ??= static::reflectionConfig();
     }
 
-    private static function getParamMetadata(ReflectionParameter|ReflectionProperty $param, bool $allowUnionTypes, bool $resolve): array
+    private static function getParamMetadata(ReflectionParameter|ReflectionProperty $param, bool $allowUnionTypes, bool $resolve): ParamMetadata
     {
         $className = static::class;
         $paramName = $param->getName();
@@ -60,12 +64,17 @@ trait ReflectionResolvable
 
         // Union type (ej. [ent => IdVo|IdNullVo, dto => in props])
         if ($paramType instanceof ReflectionUnionType) {
-            [$typeName, $class, $allowsNull, $isId] = self::resolveUnionType(
+            $unionType = self::resolveUnionType(
                 paramType      : $paramType,
                 paramName      : $paramName,
                 className      : $className,
                 allowUnionTypes: $allowUnionTypes,
             );
+
+            $typeName   = $unionType->typeName;
+            $class      = $unionType->class;
+            $allowsNull = $unionType->allowsNull;
+            $isId       = $unionType->isId;
         }
 
         // Named type (Class)
@@ -115,23 +124,23 @@ trait ReflectionResolvable
             default                                                          => null,
         };
 
-        return [
-            'paramName'   => $paramName,
-            'typeName'    => $typeName,
-            'class'       => $class,
-            'isId'        => $isId,
-            'allowsNull'  => $allowsNull,
-            'useMethod'   => $useMethod,
-            'makeParams'  => $makeParams,
-            'isEnum'      => $isEnum,
-            'isVo'        => $isVo,
-            'makeMethod'  => $makeMethod,
-            'propsMethod' => $propsMethod,
-            'castType'    => $castType,
-        ];
+        return new ParamMetadata(
+            paramName  : $paramName,
+            typeName   : $typeName,
+            class      : $class,
+            isId       : $isId,
+            allowsNull : $allowsNull,
+            useMethod  : $useMethod,
+            makeParams : $makeParams,
+            isEnum     : $isEnum,
+            isVo       : $isVo,
+            makeMethod : $makeMethod,
+            propsMethod: $propsMethod,
+            castType   : $castType,
+        );
     }
 
-    private static function resolveConstructorParams(bool $resolve): array
+    private static function resolveConstructorParams(bool $resolve): ConstructorParams
     {
         $className = static::class;
         $cacheKey  = $className . ($resolve ? ':resolve' : '');
@@ -159,16 +168,16 @@ trait ReflectionResolvable
                 $newParamsProps = $newParamsMake;
             }
 
-            self::$reflectionCache[$cacheKey] = [
-                'make'  => $newParamsMake,
-                'props' => $newParamsProps,
-            ];
+            self::$reflectionCache[$cacheKey] = new ConstructorParams(
+                make : $newParamsMake,
+                props: $newParamsProps,
+            );
         }
 
         return self::$reflectionCache[$cacheKey];
     }
 
-    private static function resolveUnionType(ReflectionUnionType $paramType, string $paramName, string $className, bool $allowUnionTypes): array
+    private static function resolveUnionType(ReflectionUnionType $paramType, string $paramName, string $className, bool $allowUnionTypes): UnionTypeResolution
     {
         $allowsNull = $paramType->allowsNull();
 
@@ -181,7 +190,12 @@ trait ReflectionResolvable
             foreach ($types as $namedType) {
                 $candidate = $namedType->getName();
                 if (is_class_id($candidate) && ! str_ends_with($candidate, 'NullVo')) {
-                    return [$candidate, $candidate, $allowsNull, true];
+                    return new UnionTypeResolution(
+                        typeName  : $candidate,
+                        class     : $candidate,
+                        allowsNull: $allowsNull,
+                        isId      : true,
+                    );
                 }
             }
         }
@@ -197,10 +211,15 @@ trait ReflectionResolvable
 
         $typeName = $first->getName();
         $class    = $first->isBuiltin() ? null : $typeName;
-        return [$typeName, $class, $allowsNull, false];
+        return new UnionTypeResolution(
+            typeName  : $typeName,
+            class     : $class,
+            allowsNull: $allowsNull,
+            isId      : false,
+        );
     }
 
-    private static function reflectionDisabledData(): array
+    private static function reflectionDisabledData(): DisabledData
     {
         $className = static::class;
 
@@ -209,42 +228,42 @@ trait ReflectionResolvable
         }
 
         if (!self::config()->allow_disable_reflection) {
-            return self::$reflectionDisabledCache[$className] = [
-                'isDisabled'           => false,
-                'useJsonSerialization' => false,
-            ];
+            return self::$reflectionDisabledCache[$className] = new DisabledData(
+                isDisabled          : false,
+                useJsonSerialization: false,
+            );
         }
 
         $reflection = new ReflectionClass($className); // REFLECTION - cached
         $attributes = $reflection->getAttributes(DisableReflection::class);
         $instance   = ! empty($attributes) ? $attributes[0]->newInstance() : null;
 
-        return self::$reflectionDisabledCache[$className] = [
-            'isDisabled'           => $instance !== null,
-            'useJsonSerialization' => (bool)($instance?->useJsonSerialization ?? false),
-        ];
+        return self::$reflectionDisabledCache[$className] = new DisabledData(
+            isDisabled          : $instance !== null,
+            useJsonSerialization: (bool)($instance?->useJsonSerialization ?? false),
+        );
     }
 
     protected static function make(array $data, bool $resolve = false): static
     {
         $disabled = self::reflectionDisabledData();
-        if ($disabled['isDisabled']) {
+        if ($disabled->isDisabled) {
             return new static(...array_values($data));
         }
 
         $args = [];
 
-        $params = self::resolveConstructorParams($resolve)['make'];
+        $params = self::resolveConstructorParams($resolve)->make;
         $isAssoc = arr_is_assoc($data);
 
         foreach ($params as $key => $meta) {
-            $paramName  = $isAssoc ? $meta['paramName'] : $key;
-            $class      = $meta['class'];
-            $allowsNull = $meta['allowsNull'];
-            $isEnum     = $meta['isEnum'];
-            $method     = $meta['makeMethod'];
-            $makeParams = $meta['makeParams'] ?? [];
-            $castType   = $meta['castType'];
+            $paramName  = $isAssoc ? $meta->paramName : $key;
+            $class      = $meta->class;
+            $allowsNull = $meta->allowsNull;
+            $isEnum     = $meta->isEnum;
+            $method     = $meta->makeMethod;
+            $makeParams = $meta->makeParams ?? [];
+            $castType   = $meta->castType;
             $value      = $data[$paramName] ?? null;
 
             if ($resolve && $value !== null && $castType !== null) {
@@ -288,8 +307,8 @@ trait ReflectionResolvable
     protected function props(): array
     {
         $disabled = self::reflectionDisabledData();
-        if ($disabled['isDisabled']) {
-            if ($disabled['useJsonSerialization']) {
+        if ($disabled->isDisabled) {
+            if ($disabled->useJsonSerialization) {
                 $props = [];
                 foreach ($this as $key => $value) {
                     $props[$key] = $value;
@@ -301,12 +320,12 @@ trait ReflectionResolvable
         }
 
         $props  = [];
-        $params = self::resolveConstructorParams(false)['props'];
+        $params = self::resolveConstructorParams(false)->props;
         foreach ($params as $meta) {
-            $name   = $meta['paramName'];
-            $isEnum = $meta['isEnum'];
-            $isVo   = $meta['isVo'];
-            $method = $meta['propsMethod'];
+            $name   = $meta->paramName;
+            $isEnum = $meta->isEnum;
+            $isVo   = $meta->isVo;
+            $method = $meta->propsMethod;
             $value  = $this->{$name};
 
             $value = match (true) {
