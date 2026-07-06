@@ -257,14 +257,16 @@ trait ReflectionResolvable
         $isAssoc = arr_is_assoc($data);
 
         foreach ($params as $key => $meta) {
-            $paramName  = $isAssoc ? $meta->paramName : $key;
+            $sourceKey  = $isAssoc ? $meta->paramName : $key;
+
+            $paramName  = $meta->paramName;
             $class      = $meta->class;
             $allowsNull = $meta->allowsNull;
             $isEnum     = $meta->isEnum;
             $method     = $meta->makeMethod;
             $makeParams = $meta->makeParams ?? [];
             $castType   = $meta->castType;
-            $value      = $data[$paramName] ?? null;
+            $value      = $data[$sourceKey] ?? null;
 
             if ($resolve && $value !== null && $castType !== null) {
                 $value = match ($castType) {
