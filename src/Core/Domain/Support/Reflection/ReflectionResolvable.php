@@ -234,8 +234,10 @@ trait ReflectionResolvable
         $args = [];
 
         $params = self::resolveConstructorParams($resolve)['make'];
+        $isAssoc = arr_is_assoc($data);
+
         foreach ($params as $key => $meta) {
-            $paramName  = arr_is_assoc($data) ? $meta['paramName'] : $key;
+            $paramName  = $isAssoc ? $meta['paramName'] : $key;
             $class      = $meta['class'];
             $allowsNull = $meta['allowsNull'];
             $isEnum     = $meta['isEnum'];
