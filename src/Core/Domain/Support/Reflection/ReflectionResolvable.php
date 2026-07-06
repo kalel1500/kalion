@@ -306,6 +306,76 @@ trait ReflectionResolvable
         }
     }
 
+    protected function updateProps(array $data, bool $resolve = false): static
+    {
+        $disabled = self::reflectionDisabledData();
+        if ($disabled->isDisabled) {
+            foreach ($data as $key => $value) {
+                if (property_exists($this, (string)$key)) {
+                    $this->{(string)$key} = $value;
+                }
+            }
+
+            return $this;
+        }
+
+        $params  = self::resolveConstructorParams($resolve)->make;
+        $isAssoc = arr_is_assoc($data);
+
+        foreach ($params as $key => $meta) {
+            $sourceKey = $isAssoc ? $meta->paramName : $key;
+
+            if (! array_key_exists($sourceKey, $data)) {
+                continue;
+            }
+
+            $paramName  = $meta->paramName;
+            $class      = $meta->class;
+            $allowsNull = $meta->allowsNull;
+            $isEnum     = $meta->isEnum;
+            $method     = $meta->makeMethod;
+            $makeParams = $meta->makeParams ?? [];
+            $castType   = $meta->castType;
+            $value      = $data[$sourceKey];
+
+            if ($resolve && $value !== null && $castType !== null) {
+                $value = match ($castType) {
+                    'array'  => (array)$value,
+                    'bool'   => (bool)$value,
+                    'float'  => (float)$value,
+                    'int'    => (int)$value,
+                    'string' => (string)$value,
+                };
+            }
+
+            try {
+                $value = match (true) {
+                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
+                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(KALION_ENUM_NULL_VALUE),
+                    default                                                                            => $class::$method($value, ...$makeParams),
+                };
+            } catch (\Throwable $th) {
+                throw KalionReflectionException::resolveFailedToHydrate(
+                    th           : $th,
+                    expectedClass: AbstractValueObject::class,
+                    exception    : KalionReflectionException::failedToHydrateValueObject(static::class, $paramName, $class, $value, $th->getMessage())
+                );
+            }
+
+            try {
+                $this->{$paramName} = $value;
+            } catch (\Throwable $th) {
+                throw KalionReflectionException::resolveFailedToHydrate(
+                    th           : $th,
+                    expectedClass: self::config()->expected_exception_class,
+                    exception    : KalionReflectionException::failedToHydrateClass(static::class, $th->getMessage())
+                );
+            }
+        }
+
+        return $this;
+    }
+
     protected function props(): array
     {
         $disabled = self::reflectionDisabledData();
