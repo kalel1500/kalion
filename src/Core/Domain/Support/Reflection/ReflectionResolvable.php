@@ -244,6 +244,59 @@ trait ReflectionResolvable
         );
     }
 
+
+    private static function castResolvedValue(mixed $value, ?string $castType, bool $resolve): mixed
+    {
+        if (! $resolve || $value === null || $castType === null) {
+            return $value;
+        }
+
+        return match ($castType) {
+            'array'  => (array)$value,
+            'bool'   => (bool)$value,
+            'float'  => (float)$value,
+            'int'    => (int)$value,
+            'string' => (string)$value,
+        };
+    }
+
+    private static function hydrateParamValue(ParamMetadata $meta, mixed $value): mixed
+    {
+        $paramName  = $meta->paramName;
+        $class      = $meta->class;
+        $allowsNull = $meta->allowsNull;
+        $isEnum     = $meta->isEnum;
+        $method     = $meta->makeMethod;
+        $makeParams = $meta->makeParams ?? [];
+
+        try {
+            return match (true) {
+                ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
+                (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(KALION_ENUM_NULL_VALUE),
+                default                                                                            => $class::$method($value, ...$makeParams),
+            };
+        } catch (\Throwable $th) {
+            throw KalionReflectionException::resolveFailedToHydrate(
+                th           : $th,
+                expectedClass: AbstractValueObject::class,
+                exception    : KalionReflectionException::failedToHydrateValueObject(static::class, $paramName, $class, $value, $th->getMessage())
+            );
+        }
+    }
+
+    private static function executeHydrationWrite(callable $callback): mixed
+    {
+        try {
+            return $callback();
+        } catch (\Throwable $th) {
+            throw KalionReflectionException::resolveFailedToHydrate(
+                th           : $th,
+                expectedClass: self::config()->expected_exception_class,
+                exception    : KalionReflectionException::failedToHydrateClass(static::class, $th->getMessage())
+            );
+        }
+    }
+
     protected static function make(array $data, bool $resolve = false): static
     {
         $disabled = self::reflectionDisabledData();
@@ -257,53 +310,15 @@ trait ReflectionResolvable
         $isAssoc = arr_is_assoc($data);
 
         foreach ($params as $key => $meta) {
-            $sourceKey  = $isAssoc ? $meta->paramName : $key;
+            $sourceKey = $isAssoc ? $meta->paramName : $key;
+            $value     = $data[$sourceKey] ?? null;
 
-            $paramName  = $meta->paramName;
-            $class      = $meta->class;
-            $allowsNull = $meta->allowsNull;
-            $isEnum     = $meta->isEnum;
-            $method     = $meta->makeMethod;
-            $makeParams = $meta->makeParams ?? [];
-            $castType   = $meta->castType;
-            $value      = $data[$sourceKey] ?? null;
-
-            if ($resolve && $value !== null && $castType !== null) {
-                $value = match ($castType) {
-                    'array'  => (array)$value,
-                    'bool'   => (bool)$value,
-                    'float'  => (float)$value,
-                    'int'    => (int)$value,
-                    'string' => (string)$value,
-                };
-            }
-
-            try {
-                $value = match (true) {
-                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
-                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(KALION_ENUM_NULL_VALUE),
-                    default                                                                            => $class::$method($value, ...$makeParams),
-                };
-            } catch (\Throwable $th) {
-                throw KalionReflectionException::resolveFailedToHydrate(
-                    th           : $th,
-                    expectedClass: AbstractValueObject::class,
-                    exception    : KalionReflectionException::failedToHydrateValueObject(static::class, $paramName, $class, $value, $th->getMessage())
-                );
-            }
-
-            $args[] = $value;
+            $value    = self::castResolvedValue($value, $meta->castType, $resolve);
+            $value    = self::hydrateParamValue($meta, $value);
+            $args[]   = $value;
         }
 
-        try {
-            return new static(...$args);
-        } catch (\Throwable $th) {
-            throw KalionReflectionException::resolveFailedToHydrate(
-                th           : $th,
-                expectedClass: self::config()->expected_exception_class,
-                exception    : KalionReflectionException::failedToHydrateClass(static::class, $th->getMessage())
-            );
-        }
+        return self::executeHydrationWrite(fn() => new static(...$args));
     }
 
     protected function updateProps(array $data, bool $resolve = false): static
@@ -329,48 +344,14 @@ trait ReflectionResolvable
                 continue;
             }
 
-            $paramName  = $meta->paramName;
-            $class      = $meta->class;
-            $allowsNull = $meta->allowsNull;
-            $isEnum     = $meta->isEnum;
-            $method     = $meta->makeMethod;
-            $makeParams = $meta->makeParams ?? [];
-            $castType   = $meta->castType;
-            $value      = $data[$sourceKey];
+            $paramName = $meta->paramName;
+            $value     = $data[$sourceKey];
+            $value     = self::castResolvedValue($value, $meta->castType, $resolve);
+            $value     = self::hydrateParamValue($meta, $value);
 
-            if ($resolve && $value !== null && $castType !== null) {
-                $value = match ($castType) {
-                    'array'  => (array)$value,
-                    'bool'   => (bool)$value,
-                    'float'  => (float)$value,
-                    'int'    => (int)$value,
-                    'string' => (string)$value,
-                };
-            }
-
-            try {
-                $value = match (true) {
-                    ($allowsNull && $value === null) || $method === null || ($value instanceof $class) => $value,
-                    (! $allowsNull && $value === null && $isEnum)                                      => $class::$method(KALION_ENUM_NULL_VALUE),
-                    default                                                                            => $class::$method($value, ...$makeParams),
-                };
-            } catch (\Throwable $th) {
-                throw KalionReflectionException::resolveFailedToHydrate(
-                    th           : $th,
-                    expectedClass: AbstractValueObject::class,
-                    exception    : KalionReflectionException::failedToHydrateValueObject(static::class, $paramName, $class, $value, $th->getMessage())
-                );
-            }
-
-            try {
+            self::executeHydrationWrite(function () use ($paramName, $value): void {
                 $this->{$paramName} = $value;
-            } catch (\Throwable $th) {
-                throw KalionReflectionException::resolveFailedToHydrate(
-                    th           : $th,
-                    expectedClass: self::config()->expected_exception_class,
-                    exception    : KalionReflectionException::failedToHydrateClass(static::class, $th->getMessage())
-                );
-            }
+            });
         }
 
         return $this;
