@@ -2,6 +2,26 @@
 
 ## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.55.0-beta.0...master)
 
+## [v0.55.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.54.0-beta.0...v0.55.0-beta.0) - 2026-06-30
+
+### Changed
+
+* `ConsoleOutput`: Nuevo método `ConsoleOutput::getOutput()` para obtener el output actual
+* (refactor) `Reflexion`: Se ha refactorizado toda la reflexion de las entidades y dtos:
+  * (warn) Unificadas excepciones `unexpectedTypeInEntityConstructor` y `unexpectedTypeInDtoConstructor` en `unexpectedTypeInConstructor`. El texto ha cambiado para que sea más genérico y se pueda usar en entidades y dtos.
+  * (warn) Excepción `disabledReflectionInDto` renombrada a `disabledReflection`. El texto ha cambiado para que sea más genérico y se pueda usar en entidades y dtos.
+  * Se ha extraido la reflexion a un trait `ReflectionResolvable` para evitar duplicar el código en las clases `AbstractEntity` y `AbstractDataTransferObject`.
+    * Ahora en cada clase se configura la reflexion con el método `reflectionConfig`.
+    * Ahora se usan DTOs para gestionar todos los datos internos en vez de arrays.
+    * Nuevo método protected `updateProps` para añadir el `update` más adelante.
+    * Se extrae el código común entre el `make` y el `updateProps`
+* Se han añadido los métodos `max`, `min` y `prepend` en las colecciones (`AbstractCollectionBase`).
+
+### Fixed
+
+* Se ha corregido la reflexion de la Entidad:
+  * Al consultar la `cache` usaba `$className` en vez de `$cacheKey` por lo que el `resolve` no se cacheaba nunca.
+
 ## [v0.55.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.54.0-beta.0...v0.55.0-beta.0) - 2026-06-30
 
 ### Changed
