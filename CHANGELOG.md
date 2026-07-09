@@ -1,8 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.55.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.55.2-beta.1...master)
 
-## [v0.55.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.54.0-beta.0...v0.55.0-beta.0) - 2026-06-30
+## [v0.55.2-beta.1](https://github.com/kalel1500/kalion/compare/v0.55.1-beta.0...v0.55.2-beta.1) - 2026-07-09
+
+### Added
+
+* Se ha añadido el nuevo método `KalionConfig::afterApply()` para poder configurar callbacks desde otros paquetes que se deben ejecutar después de aplicar la config.
+* Se ha añadido el parámetro `$key` al método `computed()` de la clase `AbstractEntity` para poder cachear props que reciben parámetros.
+
+## [v0.55.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.55.0-beta.1...v0.55.1-beta.0) - 2026-06-30
 
 ### Changed
 
@@ -22,7 +29,7 @@
 * Se ha corregido la reflexion de la Entidad:
   * Al consultar la `cache` usaba `$className` en vez de `$cacheKey` por lo que el `resolve` no se cacheaba nunca.
 
-## [v0.55.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.54.0-beta.0...v0.55.0-beta.0) - 2026-06-30
+## [v0.55.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.54.0-beta.0...v0.55.0-beta.1) - 2026-06-30
 
 ### Changed
 
@@ -46,7 +53,7 @@
 ## [v0.54.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.53.3-beta.0...v0.54.0-beta.0) - 2026-06-29
 
 > [!WARNING]  
-> ⚠️ ATENCIÓN: Esta versión introduce un error crítico en la reflexión de la Entidad: no ejecuta correctamente el método `resolveFromArray()` si previamente se ha invocado `fromArray()`. Corrección disponible en la versión v0.55.0-beta.0.
+> ⚠️ ATENCIÓN: Esta versión introduce un error crítico en la reflexión de la Entidad: no ejecuta correctamente el método `resolveFromArray()` si previamente se ha invocado `fromArray()`. Corrección disponible en la versión v0.55.0-beta.1.
 
 ### Changed
 
