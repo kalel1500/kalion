@@ -82,6 +82,8 @@ class KalionConfig
     protected static array $registry     = [];
     protected static array $priority     = [];
     protected static array $scanPackages = [];
+    protected static array $afterApply   = [];
+    protected static bool  $applied      = false;
 
     public static function getDefaults(): array
     {
@@ -157,6 +159,25 @@ class KalionConfig
             'auth.providers.users.model'     => config('kalion.auth.models.web'),
             'auth.providers.api_users.model' => config('kalion.auth.models.api'),
         ]);
+
+        static::$applied = true;
+
+        foreach (static::$afterApply as $callback) {
+            $callback();
+        }
+
+        // Limpiar callbacks para evitar ejecuciones duplicadas en apply() posteriores
+        static::$afterApply = [];
+    }
+
+    public static function afterApply(callable $callback): void
+    {
+        if (static::$applied) {
+            $callback();
+            return;
+        }
+
+        static::$afterApply[] = $callback;
     }
 
     public static function registerPackagesToScanJobs(string|array $packages): void
