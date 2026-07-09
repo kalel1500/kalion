@@ -318,10 +318,15 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         return $this->relations[$name];
     }
 
-    protected function computed(callable $value)
+    protected function computed(callable $value, ?string $key = null)
     {
-        $name = debug_backtrace()[1]['function'];
-        return $this->computed[$name] ??= $value();
+        $cacheKey = debug_backtrace()[1]['function'];
+
+        if (! is_null($key)) {
+            $cacheKey = $cacheKey . ':' . $key;
+        }
+
+        return $this->computed[$cacheKey] ??= $value();
     }
 
 
