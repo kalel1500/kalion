@@ -1,4 +1,5 @@
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\NavbarFullAssembler')
+@use('Thehouseofel\Kalion\Features\Components\Domain\Support\LayoutMetrics')
 
 @php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $item */ @endphp
 @php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $subItem */ @endphp
@@ -18,7 +19,7 @@
 
         <x-kal::navbar.brand/>
 
-        <div class="text-heading hidden md:block">
+        <div class="text-heading hidden md:block {{ LayoutMetrics::navbarTitleSpacingClass() }}">
             {{ $data->navbarTitle ?? '' }}
         </div>
 

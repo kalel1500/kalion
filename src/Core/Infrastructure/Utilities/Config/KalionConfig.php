@@ -36,6 +36,7 @@ class KalionConfig
         'kalion.layout.default_theme'                                                => null,
         'kalion.layout.use_elevated_shadows'                                         => false,
         'kalion.layout.navbar_density'                                               => 'normal',
+        'kalion.layout.navbar_title_spacing'                                         => 'none',
         'kalion.layout.default_sidebar_state'                                        => null,
         'kalion.layout.sidebar_state_per_page'                                       => false,
         'kalion.layout.sidebar_disabled'                                             => false,

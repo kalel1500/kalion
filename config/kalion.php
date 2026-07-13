@@ -169,6 +169,8 @@ return [
 
         'navbar_density' => env('KALION_LAYOUT_NAVBAR_DENSITY', $defaults['kalion.layout.navbar_density']), // tight | compact | normal | comfortable
 
+        'navbar_title_spacing' => env('KALION_LAYOUT_NAVBAR_TITLE_SPACING', $defaults['kalion.layout.navbar_title_spacing']), // none | xs | sm | md | lg | xl
+
         'default_sidebar_state' => env('KALION_LAYOUT_DEFAULT_SIDEBAR_STATE', $defaults['kalion.layout.default_sidebar_state']),  // expanded | collapsed
 
         'sidebar_state_per_page' => (bool) env('KALION_LAYOUT_SIDEBAR_STATE_PER_PAGE', $defaults['kalion.layout.sidebar_state_per_page']),
