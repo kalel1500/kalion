@@ -155,12 +155,6 @@ class KalionConfig
             }
         }
 
-        // Finalmente, nos aseguramos de que Laravel reciba la clase final
-        config([
-            'auth.providers.users.model'     => config('kalion.auth.models.web'),
-            'auth.providers.api_users.model' => config('kalion.auth.models.api'),
-        ]);
-
         static::$applied = true;
 
         foreach (static::$afterApply as $callback) {

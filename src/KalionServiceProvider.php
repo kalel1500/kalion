@@ -136,48 +136,48 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function setConfig(): void
     {
-        // Blade Icons
-        config([
-            'blade-icons.attributes.width'  => 24,
-            'blade-icons.attributes.height' => 24,
-        ]);
-
-        // Logs
-        config([
-            'logging.channels.queues' => array_merge([
-                'driver'               => 'single',
-                'path'                 => storage_path('logs/queues.log'),
-                'level'                => config('kalion.logging.queues_level'),
-                'replace_placeholders' => true,
-            ], config('logging.channels.queues', [])),
-
-            'logging.channels.loads' => array_merge([
-                'driver'               => 'single',
-                'path'                 => storage_path('logs/loads.log'),
-                'level'                => config('kalion.logging.queues_level'),
-                'replace_placeholders' => true,
-            ], config('logging.channels.loads', [])),
-        ]);
-
-        // Auth Model
-        config(['auth.providers.users.model' => config('kalion.auth.models.web', config('auth.providers.users.model'))]);
-
-        // Api (Guard and Provider)
-        config([
-            'auth.guards.api' => array_merge([
-                'driver'   => 'session',
-                'provider' => 'api_users',
-            ], config('auth.guards.api', [])),
-
-            'auth.providers.api_users' => array_merge([
-                'driver' => 'eloquent',
-                'model'  => config('kalion.auth.models.api'),
-            ], config('auth.providers.api_users', []))
-        ]);
-
-        // Aplicar las posibles sobreescrituras de configuración hechas por otros paquetes o la propia app
         $this->app->booted(function () {
+            // Aplicar los overrides de configuración registrados (por paquetes o la app)
             KalionConfig::apply();
+
+            // Blade Icons
+            config([
+                'blade-icons.attributes.width'  => 24,
+                'blade-icons.attributes.height' => 24,
+            ]);
+
+            // Logs
+            config([
+                'logging.channels.queues' => array_merge([
+                    'driver'               => 'single',
+                    'path'                 => storage_path('logs/queues.log'),
+                    'level'                => config('kalion.logging.queues_level'),
+                    'replace_placeholders' => true,
+                ], config('logging.channels.queues', [])),
+
+                'logging.channels.loads' => array_merge([
+                    'driver'               => 'single',
+                    'path'                 => storage_path('logs/loads.log'),
+                    'level'                => config('kalion.logging.queues_level'),
+                    'replace_placeholders' => true,
+                ], config('logging.channels.loads', [])),
+            ]);
+
+            // Auth Model
+            config(['auth.providers.users.model' => config('kalion.auth.models.web', config('auth.providers.users.model'))]);
+
+            // Api (Guard and Provider)
+            config([
+                'auth.guards.api' => array_merge([
+                    'driver'   => 'session',
+                    'provider' => 'api_users',
+                ], config('auth.guards.api', [])),
+
+                'auth.providers.api_users' => array_merge([
+                    'driver' => 'eloquent',
+                    'model'  => config('kalion.auth.models.api'),
+                ], config('auth.providers.api_users', []))
+            ]);
         });
     }
 
