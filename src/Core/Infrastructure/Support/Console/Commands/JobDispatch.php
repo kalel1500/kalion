@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands;
 
 use Illuminate\Console\Command;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfig;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\KalionConfig;
 
 class JobDispatch extends Command
 {

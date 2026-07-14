@@ -19,9 +19,9 @@ use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\CreateNewUser;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\ResetUserPassword;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\BaseLayoutData;
 
-class KalionConfig
+class KalionConfigManager
 {
-    protected static array $defaults     = [
+    protected static array $defaults = [
         'kalion.provider.run_migrations'                                                      => false,
         'kalion.provider.register_routes'                                                     => true,
         'kalion.provider.web_middlewares.add_preferences_cookies.active'                      => true,
@@ -80,35 +80,36 @@ class KalionConfig
         'kalion.exceptions.http.show_logout_form'                                             => false,
         'kalion.cooldown.cache_store'                                                         => null,
     ];
-    protected static array $registry     = [];
-    protected static array $priority     = [];
-    protected static array $scanPackages = [];
-    protected static array $afterApply   = [];
-    protected static bool  $applied      = false;
+
+    protected array $registry     = [];
+    protected array $priority     = [];
+    protected array $scanPackages = [];
+    protected array $afterApply   = [];
+    protected bool  $applied      = false;
 
     public static function getDefaults(): array
     {
         return static::$defaults;
     }
 
-    public static function getRegistry(): array
+    public function getRegistry(): array
     {
-        return static::$registry;
+        return $this->registry;
     }
 
-    public static function getOrderedIdentifiers(): array
+    public function getOrderedIdentifiers(): array
     {
-        $keys = array_keys(static::$registry);
+        $keys = array_keys($this->registry);
 
         // Si no hay prioridad definida, devolvemos las keys tal cual
-        if (empty(static::$priority)) {
+        if (empty($this->priority)) {
             return $keys;
         }
 
         // Mapeamos la prioridad a índices [nombre => orden] para búsqueda O(1)
-        $priorityOrder = array_flip(static::$priority);
+        $priorityOrder = array_flip($this->priority);
 
-        usort($keys, function ($a, $b) use ($priorityOrder) {
+        usort($keys, function (string $a, string $b) use ($priorityOrder): int {
             // Obtenemos la posición o asignamos el final (PHP_INT_MAX)
             $posA = $priorityOrder[$a] ?? PHP_INT_MAX;
             $posB = $priorityOrder[$b] ?? PHP_INT_MAX;
@@ -120,70 +121,75 @@ class KalionConfig
         return $keys;
     }
 
-    public static function getScanPackages(): array
+    public function getScanPackages(): array
     {
         $packages = config('kalion.packages_to_scan_for_jobs');
         $merged   = array_merge(
-            is_array($packages) ? $packages : explode(';', $packages),
-            static::$scanPackages
+            is_array($packages) ? $packages : explode(';', (string)$packages),
+            $this->scanPackages
         );
-        return array_filter($merged); // Limpiar valores vacíos (por el explode)
+
+        return array_values(array_filter($merged));
     }
 
-    public static function setPriority(array $priority): void
+    public function setPriority(array $priority): void
     {
-        static::$priority = $priority;
+        $this->priority = $priority;
     }
 
-    public static function override(array $overrides, string $identifier): void
+    public function override(array $overrides, string $identifier): void
     {
-        static::$registry[$identifier] = array_merge(
-            static::$registry[$identifier] ?? [],
+        $this->registry[$identifier] = array_merge(
+            $this->registry[$identifier] ?? [],
             $overrides
         );
     }
 
-    public static function apply(): void
+    public function apply(): void
     {
         $defaults = self::getDefaults();
 
-        foreach (self::getOrderedIdentifiers() as $id) {
-            foreach (static::$registry[$id] as $key => $class) {
+        foreach ($this->getOrderedIdentifiers() as $id) {
+            foreach ($this->registry[$id] as $key => $value) {
+                if (! array_key_exists($key, $defaults)) {
+                    continue;
+                }
+
                 if (config($key) === $defaults[$key]) {
-                    config([$key => $class]);
+                    config([$key => $value]);
                 }
             }
         }
 
-        static::$applied = true;
+        $this->applied = true;
 
-        foreach (static::$afterApply as $callback) {
+        foreach ($this->afterApply as $callback) {
             $callback();
         }
 
         // Limpiar callbacks para evitar ejecuciones duplicadas en apply() posteriores
-        static::$afterApply = [];
+        $this->afterApply = [];
     }
 
-    public static function afterApply(callable $callback): void
+    public function afterApply(callable $callback): void
     {
-        if (static::$applied) {
+        if ($this->applied) {
             $callback();
             return;
         }
 
-        static::$afterApply[] = $callback;
+        $this->afterApply[] = $callback;
     }
 
-    public static function registerPackagesToScanJobs(string|array $packages): void
+    public function registerPackagesToScanJobs(string|array $packages): void
     {
-        static::$scanPackages = array_merge(
-            static::$scanPackages,
+        $this->scanPackages = array_merge(
+            $this->scanPackages,
             Arr::wrap($packages)
         );
     }
 
-    public static function redirectTo(callable|string|null $defaultPath = null, callable|string|null $afterLogin = null): void
+    public function redirectTo(callable|string|null $defaultPath = null, callable|string|null $afterLogin = null): void
     {
         $defaultPath = is_string($defaultPath) ? fn() => $defaultPath : $defaultPath;
         $afterLogin  = is_string($afterLogin) ? fn() => $afterLogin : $afterLogin;

@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Str;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfig;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfigManager;
 
-$defaults = KalionConfig::getDefaults();
+$defaults = KalionConfigManager::getDefaults();
 
 return [
 

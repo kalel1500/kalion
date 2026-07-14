@@ -19,10 +19,11 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\Install;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\JobDispatch;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\ProcessCheck;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Middleware\AddPreferencesCookies;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Middleware\ForceArraySessionInCloud;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Broadcasting\BroadcastDispatcher;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfig;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfigManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Contracts\CooldownStoreFactory;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Contracts\Mutex;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\CooldownManager;
@@ -91,6 +92,9 @@ class KalionServiceProvider extends ServiceProvider
     {
         $this->app->singleton(abstract: LayoutData::class,          concrete: fn($app) => app(config('kalion.layout.data_provider')));
         $this->app->singleton(abstract: Guard::class,               concrete: fn($app, $params) => new (config('kalion.auth.guard'))(...$params) );
+
+        // Scoped to avoid state leaks across Octane requests while keeping one instance per lifecycle.
+        $this->app->scoped('kalion.config', KalionConfigManager::class);
 
         // Register the Fortify-based authentication flow
         $this->app->register(FortifyServiceProvider::class);
