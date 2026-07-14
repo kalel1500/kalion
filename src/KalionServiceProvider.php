@@ -186,7 +186,7 @@ class KalionServiceProvider extends ServiceProvider
      */
     protected function registerRoutes(): void
     {
-        if (config('kalion.register_routes')) {
+        if (config('kalion.provider.register_routes')) {
             Route::group([
 //                'as' => 'kalion.',
 //                'prefix' => 'kalion',
@@ -288,7 +288,7 @@ class KalionServiceProvider extends ServiceProvider
      */
     protected function registerMigrations(): void
     {
-        if ($this->app->runningInConsole() && config('kalion.run_migrations')) {
+        if ($this->app->runningInConsole() && config('kalion.provider.run_migrations')) {
             $this->loadMigrationsFrom(KALION_PATH . '/database/migrations');
         }
     }
@@ -352,7 +352,7 @@ class KalionServiceProvider extends ServiceProvider
 //        $router->prependMiddlewareToGroup('web', ShareInertiaData::class);
 
         // Añadir el Middleware AddPreferencesCookies al grupo de rutas web
-        if (config('kalion.web_middlewares.add_preferences_cookies.active')) {
+        if (config('kalion.provider.web_middlewares.add_preferences_cookies.active')) {
             // Añadir middlewares al final de un grupo
             $router->pushMiddlewareToGroup('web', AddPreferencesCookies::class);
 
@@ -365,7 +365,7 @@ class KalionServiceProvider extends ServiceProvider
         }
 
         // Añadir el Middleware ForceArraySessionInCloud al grupo de rutas web
-        if (config('kalion.web_middlewares.force_array_session_in_cloud.active')) {
+        if (config('kalion.provider.web_middlewares.force_array_session_in_cloud.active')) {
             // Añadir middlewares al principio de un grupo
             $router->prependMiddlewareToGroup('web', ForceArraySessionInCloud::class);
         }

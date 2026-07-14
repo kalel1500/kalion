@@ -25,18 +25,20 @@ return [
     |
     */
 
-    'run_migrations' => (bool) env('KALION_RUN_MIGRATIONS', $defaults['kalion.run_migrations']),
+    'provider' => [
+        'run_migrations' => (bool) env('KALION_PROVIDER_RUN_MIGRATIONS', $defaults['kalion.provider.run_migrations']),
 
-    'register_routes' => (bool) env('KALION_REGISTER_ROUTES', $defaults['kalion.register_routes']),
+        'register_routes' => (bool) env('KALION_PROVIDER_REGISTER_ROUTES', $defaults['kalion.provider.register_routes']),
 
-    'web_middlewares' => [
-        'add_preferences_cookies' => [
-            'active' => (bool) env('KALION_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE', $defaults['kalion.web_middlewares.add_preferences_cookies.active']),
-        ],
+        'web_middlewares' => [
+            'add_preferences_cookies' => [
+                'active' => (bool) env('KALION_PROVIDER_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE', $defaults['kalion.provider.web_middlewares.add_preferences_cookies.active']),
+            ],
 
-        'force_array_session_in_cloud' => [
-            'active' => (bool) env('KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE', $defaults['kalion.web_middlewares.force_array_session_in_cloud.active']),
-            'cloud_user_agent_value' => env('KALION_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_CLOUD_USER_AGENT_VALUE', $defaults['kalion.web_middlewares.force_array_session_in_cloud.cloud_user_agent_value']),
+            'force_array_session_in_cloud' => [
+                'active' => (bool) env('KALION_PROVIDER_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE', $defaults['kalion.provider.web_middlewares.force_array_session_in_cloud.active']),
+                'cloud_user_agent_value' => env('KALION_PROVIDER_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_CLOUD_USER_AGENT_VALUE', $defaults['kalion.provider.web_middlewares.force_array_session_in_cloud.cloud_user_agent_value']),
+            ],
         ],
     ],
 
