@@ -1,6 +1,36 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.55.2-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.0...master)
+
+## [v0.56.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.55.2-beta.1...v0.56.0-beta.0) - 2026-07-15
+
+### Added
+
+* Nueva funcionalidad para forzar todos los drivers que usan la base de datos a array según las rutas y agentes configurations.
+    * Nuevas keys de configuración `kalion.provider.stateless_requests.paths` y `kalion.provider.stateless_requests.user_agents`
+    * Nuevas variables de entorno `KALION_PROVIDER_STATELESS_REQUESTS_PATHS` y `KALION_PROVIDER_STATELESS_REQUESTS_USER_AGENTS`
+    * En el booted del service provider se comprueba si la ruta o el `User-Agent` actual coinciden con alguna de las rutas configuradas. Si es así, se fuerza a que todos los drivers que usan la base de datos (session, cache, queue) usen el driver `array` para esa petición.
+* Se ha añadirdo una nueva key de configuración `kalion.layout.navbar_title_spacing` (`KALION_LAYOUT_NAVBAR_TITLE_SPACING`) que permite configurar un espacio para dejar entre el título de la app y el título de la página en el navbar.
+
+### Changed
+
+* (breaking) Toda la lógica de la clase estática `KalionConfig` se ha migrado a la clase normal `KalionConfigManager` y se ha creado la fachada `KalionConfig`.
+  * Basta con cambiar el namespace `Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfig` a `Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\KalionConfig`
+* (breaking) Las keys de configuración que se usan en el service provider se han movido dentro de la hey `provider`.
+  * `kalion.run_migrations` => `kalion.provider.run_migrations`
+  * `kalion.register_routes` => `kalion.provider.register_routes`
+  * `kalion.web_middlewares.add_preferences_cookies.active` => `kalion.provider.web_middlewares.add_preferences_cookies.active`
+  * También han cambiado las variables de entorno:
+    * `KALION_RUN_MIGRATIONS` => `KALION_PROVIDER_RUN_MIGRATIONS`
+    * `KALION_REGISTER_ROUTES` => `KALION_PROVIDER_REGISTER_ROUTES`
+    * `KALION_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE` => `KALION_PROVIDER_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE`
+
+### Removed
+
+* **(breaking)** Se ha eliminado el Middleware `ForceArraySessionInCloud`.
+  * Keys eliminadas `kalion.web_middlewares.force_array_session_in_cloud.active` y `kalion.provider.web_middlewares.force_array_session_in_cloud.cloud_user_agent_value`
+  * Variables de entorno eliminadas `KALION_PROVIDER_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE` y `KALION_PROVIDER_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_CLOUD_USER_AGENT_VALUE`
+  * Ahora se usa la nueva funcionalidad de `stateless_requests` para forzar los drivers a array según las rutas y agentes configurados.
 
 ## [v0.55.2-beta.1](https://github.com/kalel1500/kalion/compare/v0.55.1-beta.0...v0.55.2-beta.1) - 2026-07-09
 
