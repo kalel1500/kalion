@@ -21,7 +21,11 @@ return [
     | - "register_routes": Sets whether package routes should be registered.
     |
     | - "web_middlewares": Sets whether the following middlewares should be
-    |                      added to the web route group: [AddPreferencesCookies, ForceArraySessionInCloud]
+    |                      added to the web route group: [AddPreferencesCookies]
+    |
+    | - "stateless_requests": Define which routes or User-Agents should be treated as 100% stateless.
+    |                         Kalion will force in-memory drivers (arrays) to prevent unwanted
+    |                         session writes (garbage in the database) and slow database connections.
     |
     */
 
@@ -33,12 +37,12 @@ return [
         'web_middlewares' => [
             'add_preferences_cookies' => [
                 'active' => (bool) env('KALION_PROVIDER_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE', $defaults['kalion.provider.web_middlewares.add_preferences_cookies.active']),
-            ],
+            ]
+        ],
 
-            'force_array_session_in_cloud' => [
-                'active' => (bool) env('KALION_PROVIDER_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_ACTIVE', $defaults['kalion.provider.web_middlewares.force_array_session_in_cloud.active']),
-                'cloud_user_agent_value' => env('KALION_PROVIDER_WEB_MIDDLEWARE_FORCE_ARRAY_SESSION_IN_CLOUD_CLOUD_USER_AGENT_VALUE', $defaults['kalion.provider.web_middlewares.force_array_session_in_cloud.cloud_user_agent_value']),
-            ],
+        'stateless_requests' => [
+            'paths' => env('KALION_PROVIDER_STATELESS_REQUESTS_PATHS', $defaults['kalion.provider.stateless_requests.paths']),
+            'user_agents' => env('KALION_PROVIDER_STATELESS_REQUESTS_USER_AGENTS', $defaults['kalion.provider.stateless_requests.user_agents']),
         ],
     ],
 

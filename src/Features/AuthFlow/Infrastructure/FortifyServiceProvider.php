@@ -43,7 +43,6 @@ class FortifyServiceProvider extends ServiceProvider
 
         $this->configureViews();
         $this->configureActions();
-        $this->configureRateLimiter();
     }
 
     /**
@@ -88,7 +87,7 @@ class FortifyServiceProvider extends ServiceProvider
     /**
      * Configure the rate limiter.
      */
-    protected function configureRateLimiter(): void
+    public static function configureRateLimiter(): void
     {
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());

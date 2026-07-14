@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\ClearAll;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\ConfigCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\Install;
@@ -21,7 +22,6 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\KalionConfig;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Middleware\AddPreferencesCookies;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Middleware\ForceArraySessionInCloud;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Broadcasting\BroadcastDispatcher;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfigManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Contracts\CooldownStoreFactory;
@@ -182,7 +182,53 @@ class KalionServiceProvider extends ServiceProvider
                     'model'  => config('kalion.auth.models.api'),
                 ], config('auth.providers.api_users', []))
             ]);
+
+            if ($this->shouldForceArrayDrivers()) {
+                config([
+                    'session.driver' => 'array',
+                    'cache.default'  => 'array',
+                    'queue.default'  => 'sync',
+                ]);
+            }
+
+            FortifyServiceProvider::configureRateLimiter();
         });
+    }
+
+    protected function shouldForceArrayDrivers(): bool
+    {
+        if ($this->app->runningInConsole()) {
+            return false;
+        }
+
+        /** @var \Illuminate\Http\Request $request */
+        $request = $this->app->make('request');
+
+        // Path
+        $paths = $this->getNormalizedListFromConfig('kalion.provider.stateless_requests.paths');
+        if (! empty($paths) && $request->is($paths)) {
+            return true;
+        }
+
+        // User-Agent
+        $userAgent = $request->header('User-Agent', '');
+        if (! empty($userAgent)) {
+            $ignoredAgents = $this->getNormalizedListFromConfig('kalion.provider.stateless_requests.user_agents');
+
+            if (! empty($ignoredAgents) && Str::contains($userAgent, $ignoredAgents, ignoreCase: true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function getNormalizedListFromConfig(string $key): array
+    {
+        $value = config($key, '');
+        $items = is_array($value) ? $value : explode(',', (string) $value);
+
+        return array_values(array_filter(array_map(static fn(string $item): string => trim($item), $items)));
     }
 
     /**
@@ -366,12 +412,6 @@ class KalionServiceProvider extends ServiceProvider
                     $middleware->disableFor(config('kalion.cookie.name')); // laravel_kalion_user_preferences
                 });
             }
-        }
-
-        // Añadir el Middleware ForceArraySessionInCloud al grupo de rutas web
-        if (config('kalion.provider.web_middlewares.force_array_session_in_cloud.active')) {
-            // Añadir middlewares al principio de un grupo
-            $router->prependMiddlewareToGroup('web', ForceArraySessionInCloud::class);
         }
     }
 
