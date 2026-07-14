@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static void afterApply(callable $callback)
  * @method static void registerPackagesToScanJobs(string|array $packages)
  * @method static void redirectTo(callable|string|null $defaultPath = null, callable|string|null $afterLogin = null)
+ *
+ * @see \Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfigManager
  */
 class KalionConfig extends Facade
 {
