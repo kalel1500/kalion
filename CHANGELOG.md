@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.1...master)
+
+## [v0.56.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.0...v0.56.0-beta.1) - 2026-07-15
+
+### Fixed
+
+* Se saca el seteo de la configuracion de los iconos del "booted" ya que no se aplicaba correctamente.
 
 ## [v0.56.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.55.2-beta.1...v0.56.0-beta.0) - 2026-07-15
 
