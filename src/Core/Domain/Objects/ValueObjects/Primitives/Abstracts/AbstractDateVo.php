@@ -18,15 +18,15 @@ abstract class AbstractDateVo extends AbstractStringVo
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected static array    $formats         = [DateFormat::datetime_YMD->value];
-    protected ?array          $instanceFormats = null;
-    protected CarbonImmutable $valueCarbon;
+    protected static array     $formats         = [DateFormat::datetime_YMD->value];
+    protected ?array           $instanceFormats = null;
+    protected ?CarbonImmutable $valueCarbon;
 
     public function __construct(?string $value, ?array $formats = null)
     {
         parent::__construct($value);
         $this->instanceFormats = $formats;
-        $this->valueCarbon     = CarbonImmutable::parse($value);
+        $this->valueCarbon     = is_null($value) ? null : CarbonImmutable::parse($value);
     }
 
     protected static function resolveFormats(?array $formats = null): array
@@ -117,7 +117,7 @@ abstract class AbstractDateVo extends AbstractStringVo
         return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format($format);
     }
 
-    public function carbon(): CarbonImmutable
+    public function carbon(): ?CarbonImmutable
     {
         return $this->valueCarbon;
     }
