@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.2...master)
+
+## [v0.56.0-beta.2](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.1...v0.56.0-beta.2) - 2026-07-15
+
+### Fixed
+
+* Ahora el método `carbon()` de las fechas (`AbstractDateVo`) devuelve `null` si el valor es `null`.
 
 ## [v0.56.0-beta.1](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.0...v0.56.0-beta.1) - 2026-07-15
 
