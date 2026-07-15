@@ -140,15 +140,15 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function setConfig(): void
     {
+        // Blade Icons
+        config([
+            'blade-icons.attributes.width'  => 24,
+            'blade-icons.attributes.height' => 24,
+        ]);
+
         $this->app->booted(function () {
             // Aplicar los overrides de configuración registrados (por paquetes o la app)
             KalionConfig::apply();
-
-            // Blade Icons
-            config([
-                'blade-icons.attributes.width'  => 24,
-                'blade-icons.attributes.height' => 24,
-            ]);
 
             // Logs
             config([
