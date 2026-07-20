@@ -1,6 +1,26 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.2...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.1-beta.0...master)
+
+## [v0.56.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.2...v0.56.1-beta.0) - 2026-07-15
+
+### Added
+
+* Nuevo método `updateRelations` en la clase AbstractEntity
+* Nueva la funcionalidad para gestionar eventos en las entidades:
+  * Nuevos métodos en la clase AbstractEntity para gestionar los eventos:
+    * `record()`
+    * `pullDomainEvents()`
+    * `diffSnapshots()`
+  * Nueva clase `SnapshotDiff` que permite comparar dos arrays de valores para saber si hay cambios.
+
+### Changed
+
+* Se ha modificado la visibilidad del método `updateProps` del triat `ReflectionResolvable` a `public`.
+
+### Fixed
+
+* components: permitir html en el navbarTitle del componente `navbar.full`
 
 ## [v0.56.0-beta.2](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.1...v0.56.0-beta.2) - 2026-07-15
 
@@ -12,7 +32,7 @@
 
 ### Fixed
 
-* Se saca el seteo de la configuracion de los iconos del "booted" ya que no se aplicaba correctamente.
+* Se saca el seteo de la configuracion de los iconos del `booted` ya que no se aplicaba correctamente.
 
 ## [v0.56.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.55.2-beta.1...v0.56.0-beta.0) - 2026-07-15
 
