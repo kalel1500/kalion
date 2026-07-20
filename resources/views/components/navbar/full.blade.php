@@ -20,7 +20,7 @@
         <x-kal::navbar.brand/>
 
         <div class="text-heading hidden md:block {{ LayoutMetrics::navbarTitleSpacingClass() }}">
-            {{ $data->navbarTitle ?? '' }}
+            {!! $data->navbarTitle ?? '' !!}
         </div>
 
         @if($data->showSearch)
