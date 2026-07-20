@@ -28,18 +28,19 @@ class ClearAll extends Command
      */
     public function handle()
     {
-        /*Artisan::call('schedule:clear-cache');
-        Artisan::call('debugbar:clear');*/
-
-        /*Artisan::call('cache:clear');
-        Artisan::call('clear-compiled');
-        Artisan::call('config:clear');
-        Artisan::call('event:clear');
-        Artisan::call('route:clear');
-        Artisan::call('view:clear');*/
         Artisan::call('optimize:clear');
+//        Artisan::call('config:clear');
+//        Artisan::call('cache:clear');
+//        Artisan::call('clear-compiled');
+//        Artisan::call('event:clear');
+//        Artisan::call('route:clear');
+//        Artisan::call('view:clear');
+
+//        Artisan::call('debugbar:clear');
 
         Artisan::call('kalion:logs-clear');
+
+//        Artisan::call('schedule:clear-cache');
 
         $this->info('All cache files are cleared');
     }
