@@ -13,6 +13,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Database\EntityRelationException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\SnapshotDiff;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
@@ -36,6 +37,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     protected array            $originalArray;
     protected array            $relations = [];
     protected array            $computed  = [];
+    protected array            $domainEvents = [];
 
     protected static function reflectionConfig(): ReflectionConfig
     {
@@ -327,6 +329,26 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         }
 
         return $this->computed[$cacheKey] ??= $value();
+    }
+
+    protected function record(object $event): void
+    {
+        $this->domainEvents[] = $event;
+    }
+
+    /**
+     * @return object[]
+     */
+    public function pullDomainEvents(): array
+    {
+        $events = $this->domainEvents;
+        $this->domainEvents = [];
+        return $events;
+    }
+
+    protected function diffSnapshots(array $oldSnapshot, array $newSnapshot): SnapshotDiff
+    {
+        return SnapshotDiff::between($oldSnapshot, $newSnapshot);
     }
 
 
