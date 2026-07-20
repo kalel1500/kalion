@@ -269,6 +269,12 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         return $this;
     }
 
+    public function updateRelations(array $data, string|array $with): static
+    {
+        $this->originalArray = array_merge($this->originalArray ?? [], $data);
+        return $this->with($with);
+    }
+
     private function setCurrentRelation(string $relation): void
     {
         $relationName = str_snake($relation);

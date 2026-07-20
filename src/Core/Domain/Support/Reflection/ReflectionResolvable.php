@@ -321,7 +321,7 @@ trait ReflectionResolvable
         return self::executeHydrationWrite(fn() => new static(...$args));
     }
 
-    protected function updateProps(array $data, bool $resolve = false): static
+    public function updateProps(array $data, bool $resolve = false): static
     {
         $disabled = self::reflectionDisabledData();
         if ($disabled->isDisabled) {
