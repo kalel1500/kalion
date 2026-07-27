@@ -86,13 +86,6 @@ if (! function_exists('legacy_deep_clone')) {
     }
 }
 
-if (! function_exists('array_keep')) {
-    function array_keep(array $arrayData, array $arrayKeys): array
-    {
-        return array_intersect_key($arrayData, array_flip($arrayKeys));
-    }
-}
-
 if (! function_exists('array_delete')) {
     function array_delete(array $arrayData, array $arrayKeys): array
     {

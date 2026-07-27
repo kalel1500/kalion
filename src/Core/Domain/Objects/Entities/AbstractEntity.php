@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Objects\Entities;
 
+use Illuminate\Support\Arr;
 use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Core\Domain\Concerns\Relations\ParsesRelationFlags;
@@ -203,7 +204,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     {
         $array = $this->props();
         if (! is_null(static::$fillable)) {
-            return array_keep($array, static::$fillable);
+            return Arr::only($array, static::$fillable);
         }
         if (static::$incrementing && ! $keepId) unset($array[static::$primaryKey]);
         unset($array['created_at']);
