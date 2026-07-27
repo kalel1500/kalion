@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Support;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str as IStr;
 use Illuminate\Support\Traits\Macroable;
 
@@ -20,6 +21,24 @@ class Str
         }
 
         return static::$slugCamelCache[$value] = IStr::camel(IStr::slug($value, language: $language, dictionary: $dictionary));
+    }
+
+    public static function isValidEmail($value, bool $dns = false): bool
+    {
+        $rules = 'rfc,strict,filter';
+
+        if (extension_loaded('intl')) {
+            $rules .= ',spoof';
+        }
+
+        if ($dns) {
+            $rules .= ',dns';
+        }
+
+        return Validator::make(
+            ['email' => $value],
+            ['email' => "email:$rules"]
+        )->passes();
     }
 
     public static function htmlToText(?string $html, bool $preserveParagraphs = false): string

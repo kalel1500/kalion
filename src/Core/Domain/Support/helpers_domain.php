@@ -7,13 +7,6 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterfac
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 
-if (! function_exists('validate_email')) {
-    function validate_email(string $email): string|false
-    {
-        return (filter_var($email, FILTER_VALIDATE_EMAIL));
-    }
-}
-
 if (! function_exists('explode_by_uppercase')) {
     function explode_by_uppercase(string $value): array|false
     {
