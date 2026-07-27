@@ -441,14 +441,3 @@ if (! function_exists('html_to_plain_text')) {
         return trim($text);
     }
 }
-
-if (! function_exists('array_transform_if_exists')) {
-    function array_transform_if_exists(array $data, string $key, callable $callback): array
-    {
-        if (array_key_exists($key, $data) && $data[$key] !== null) {
-            $data[$key] = $callback($data[$key]);
-        }
-
-        return $data;
-    }
-}
