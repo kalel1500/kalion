@@ -69,10 +69,10 @@ abstract class AbstractValueObject implements JsonSerializable
         return $this;
     }
 
-    public function toSlugCamel(): static
+    public function toSlugCamel($language = 'en', $dictionary = ['@' => 'at']): static
     {
         if ($this->isNotNull()) {
-            $this->value = Str::slugCamel($this->value);
+            $this->value = Str::slugCamel($this->value, language: $language, dictionary: $dictionary);
         }
         return $this;
     }
