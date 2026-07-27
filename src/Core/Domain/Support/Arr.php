@@ -10,10 +10,12 @@ class Arr
 {
     use Macroable;
 
-    public static function transformIfPresent(array $array, string $key, callable $callback): array
+    public static function transformIfPresent(array $array, string|array $keys, callable $callback): array
     {
-        if (array_key_exists($key, $array) && $array[$key] !== null) {
-            $array[$key] = $callback($array[$key]);
+        foreach ((array) $keys as $key) {
+            if (array_key_exists($key, $array) && $array[$key] !== null) {
+                $array[$key] = $callback($array[$key]);
+            }
         }
 
         return $array;
