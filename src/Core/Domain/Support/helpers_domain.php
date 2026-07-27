@@ -7,13 +7,6 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterfac
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 
-if (! function_exists('explode_by_uppercase')) {
-    function explode_by_uppercase(string $value): array|false
-    {
-        return preg_split('/(?=[A-Z])/', $value, -1, PREG_SPLIT_NO_EMPTY);
-    }
-}
-
 if (! function_exists('abort_d')) {
     function abort_d(
         int        $statusCode,
