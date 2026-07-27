@@ -239,16 +239,6 @@ if (! function_exists('is_class_id')) {
     }
 }
 
-if (! function_exists('array_rename_keys')) {
-    function array_rename_keys(array $data, string $search, string $replace): array
-    {
-        return array_combine(
-            str_replace($search, $replace, array_keys($data)),
-            array_values($data)
-        );
-    }
-}
-
 if (! function_exists('is_generic_object')) {
     function is_generic_object(mixed $variable): bool
     {

@@ -38,6 +38,14 @@ class Arr
         return $difference;
     }
 
+    public static function replaceInKeys(array $data, string $search, string $replace): array
+    {
+        return array_combine(
+            str_replace($search, $replace, array_keys($data)),
+            array_values($data)
+        );
+    }
+
     public static function transformIfPresent(array $array, string|array $keys, callable $callback): array
     {
         foreach ((array)$keys as $key) {
