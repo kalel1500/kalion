@@ -86,45 +86,6 @@ if (! function_exists('legacy_deep_clone')) {
     }
 }
 
-if (! function_exists('array_diff_assoc_deep')) {
-    function array_diff_assoc_deep(array $array1, array $array2): array
-    {
-        $difference = array();
-        foreach ($array1 as $key => $value) {
-            if (is_array($value)) {
-                if (! isset($array2[$key]) || ! is_array($array2[$key])) {
-                    $difference[$key] = $value;
-                } else {
-                    $new_diff = array_diff_assoc_deep($value, $array2[$key]);
-                    if (! empty($new_diff)) {
-                        $difference[$key] = $new_diff;
-                    }
-                }
-            } else if (! array_key_exists($key, $array2) || $array2[$key] !== $value) {
-                $difference[$key] = $value;
-            }
-
-            /*if (
-                (!is_array($value) && (!array_key_exists($key, $array2) || $array2[$key] !== $value))
-                ||
-                (is_array($value) && (!isset($array2[$key]) || !is_array($array2[$key])))
-            ) {
-                $difference[$key] = $value;
-                continue;
-            }
-
-            if (is_array($value) && (isset($array2[$key]) && is_array($array2[$key]))) {
-                $new_diff = array_diff_assoc_recursive($value, $array2[$key]);
-                if(!empty($new_diff)) {
-                    $difference[$key] = $new_diff;
-                }
-            }*/
-        }
-        return $difference;
-    }
-
-}
-
 if (! function_exists('array_unshift_assoc')) {
     function array_unshift_assoc($arr, $key, $val): array
     {
