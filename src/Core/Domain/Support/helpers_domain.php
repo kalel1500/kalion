@@ -86,15 +86,6 @@ if (! function_exists('legacy_deep_clone')) {
     }
 }
 
-if (! function_exists('array_unshift_assoc')) {
-    function array_unshift_assoc($arr, $key, $val): array
-    {
-        $arr       = array_reverse($arr, true);
-        $arr[$key] = $val;
-        return array_reverse($arr, true);
-    }
-}
-
 if (! function_exists('so_is_windows')) {
     function so_is_windows(): bool
     {
