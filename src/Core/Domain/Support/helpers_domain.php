@@ -7,34 +7,6 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterfac
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 
-if (! function_exists('str_truncate')) {
-    function str_truncate(string $string, int $length = 100, string $append = '&hellip;'): ?string
-    {
-        // Check append length
-        if ($length <= strlen($append)) {
-            return null;
-        }
-
-        // Srting min length
-        if (strlen($string) <= $length) {
-            return $string;
-        }
-
-        // Truncate code
-
-        $length = $length - strlen($append);
-        $string = trim($string);
-
-        // Version 1 (este código no corta palabras por la mitad)
-//        $string = wordwrap($string, $length);
-//        $string = explode("\n", $string, 2);
-//        $string = $string[0] . $append;
-
-        // Version 2
-        return substr($string, 0, $length) . $append;
-    }
-}
-
 if (! function_exists('validate_email')) {
     function validate_email(string $email): string|false
     {
