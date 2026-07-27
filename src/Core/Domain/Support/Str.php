@@ -52,7 +52,7 @@ class Str
             return '';
         }
 
-        $blockTags = [
+        $blockTags   = [
             'div', 'p', 'li', 'dd', 'dt', 'tr', 'blockquote', 'pre',
             'ul', 'ol', 'table', 'section', 'article', 'header', 'footer',
             'aside', 'nav', 'fieldset', 'address', 'figure', 'figcaption',

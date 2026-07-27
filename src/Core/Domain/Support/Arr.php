@@ -40,7 +40,7 @@ class Arr
 
     public static function transformIfPresent(array $array, string|array $keys, callable $callback): array
     {
-        foreach ((array) $keys as $key) {
+        foreach ((array)$keys as $key) {
             if (array_key_exists($key, $array) && $array[$key] !== null) {
                 $array[$key] = $callback($array[$key]);
             }
