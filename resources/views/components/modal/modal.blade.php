@@ -124,10 +124,10 @@
                             <h3 class="text-lg font-medium text-heading">{{ $header }}</h3>
                             <x-kal::modal.close :modalId="$id" :text="$closeText" :declarative="$declarative"/>
                         </div>
-                        <x-kal::alert variant="brand"   class="hidden fmodal-message-info" :dismiss="true"/>
-                        <x-kal::alert variant="success" class="hidden fmodal-message-success" :dismiss="true"/>
-                        <x-kal::alert variant="danger"  class="hidden fmodal-message-error" :dismiss="true"/>
-                        <x-kal::alert variant="warning" class="hidden fmodal-message-warning" :dismiss="true"/>
+                        <x-kal::alert variant="brand"   class="whitespace-pre-line hidden fmodal-message-info" :dismiss="true"/>
+                        <x-kal::alert variant="success" class="whitespace-pre-line hidden fmodal-message-success" :dismiss="true"/>
+                        <x-kal::alert variant="danger"  class="whitespace-pre-line hidden fmodal-message-error" :dismiss="true"/>
+                        <x-kal::alert variant="warning" class="whitespace-pre-line hidden fmodal-message-warning" :dismiss="true"/>
                     </div>
                 @endif
 
