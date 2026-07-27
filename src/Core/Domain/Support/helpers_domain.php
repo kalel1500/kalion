@@ -2,19 +2,10 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
-
-if (! function_exists('str_camel')) {
-    function str_camel(?string $string): ?string
-    {
-        if (is_null($string)) return null;
-        return lcfirst(Str::camel(Str::slug($string)));
-    }
-}
 
 if (! function_exists('str_truncate')) {
     function str_truncate(string $string, int $length = 100, string $append = '&hellip;'): ?string

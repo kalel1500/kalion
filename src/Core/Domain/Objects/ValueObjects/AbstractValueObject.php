@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects;
 
 use JsonSerializable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Support\Str;
 
 /**
  * @template T of AbstractValueObject
@@ -68,10 +69,10 @@ abstract class AbstractValueObject implements JsonSerializable
         return $this;
     }
 
-    public function toCamelCase(): static
+    public function toSlugCamel(): static
     {
         if ($this->isNotNull()) {
-            $this->value = str_camel($this->value);
+            $this->value = Str::slugCamel($this->value);
         }
         return $this;
     }

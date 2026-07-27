@@ -4,11 +4,23 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Support;
 
+use Illuminate\Support\Str as IStr;
 use Illuminate\Support\Traits\Macroable;
 
 class Str
 {
     use Macroable;
+
+    protected static array $slugCamelCache = [];
+
+    public static function slugCamel($value, $language = 'en', $dictionary = ['@' => 'at']): string
+    {
+        if (isset(static::$slugCamelCache[$value])) {
+            return static::$slugCamelCache[$value];
+        }
+
+        return static::$slugCamelCache[$value] = IStr::camel(IStr::slug($value, language: $language, dictionary: $dictionary));
+    }
 
     public static function htmlToText(?string $html, bool $preserveParagraphs = false): string
     {
