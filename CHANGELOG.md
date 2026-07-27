@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.2-beta.0...master)
+
+## [v0.56.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.56.1-beta.0...v0.56.2-beta.0) - 2026-07-27
+
+### Added
+
+* Nueva clase de soporte `Arr` con el método estático `transformIfPresent`.
+* Nueva clase de soporte `Str` con el método estático `htmlToText`.
 
 ## [v0.56.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.56.0-beta.2...v0.56.1-beta.0) - 2026-07-15
 
