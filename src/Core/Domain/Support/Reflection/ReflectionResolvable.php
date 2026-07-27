@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Support\Reflection;
 
+use Illuminate\Support\Arr;
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
@@ -307,7 +308,7 @@ trait ReflectionResolvable
         $args = [];
 
         $params = self::resolveConstructorParams($resolve)->make;
-        $isAssoc = arr_is_assoc($data);
+        $isAssoc = Arr::isAssoc($data);
 
         foreach ($params as $key => $meta) {
             $sourceKey = $isAssoc ? $meta->paramName : $key;
@@ -335,7 +336,7 @@ trait ReflectionResolvable
         }
 
         $params  = self::resolveConstructorParams($resolve)->make;
-        $isAssoc = arr_is_assoc($data);
+        $isAssoc = Arr::isAssoc($data);
 
         foreach ($params as $key => $meta) {
             $sourceKey = $isAssoc ? $meta->paramName : $key;

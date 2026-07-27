@@ -239,13 +239,6 @@ if (! function_exists('is_class_id')) {
     }
 }
 
-if (! function_exists('arr_is_assoc')) {
-    function arr_is_assoc(array $array): bool
-    {
-        return ! array_is_list($array);
-    }
-}
-
 if (! function_exists('array_rename_keys')) {
     function array_rename_keys(array $data, string $search, string $replace): array
     {
