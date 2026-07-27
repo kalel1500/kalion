@@ -156,13 +156,6 @@ if (! function_exists('so_is_windows')) {
     }
 }
 
-if (! function_exists('str_contains_html')) {
-    function str_contains_html(string $value): bool
-    {
-        return $value !== strip_tags($value);
-    }
-}
-
 if (! function_exists('normalize_path')) {
     function normalize_path(string $path): string
     {

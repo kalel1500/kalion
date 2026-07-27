@@ -41,6 +41,11 @@ class Str
         )->passes();
     }
 
+    public static function containsHtml($value): bool
+    {
+        return preg_match('/<\/?([a-z][a-z0-9]*)\b[^>]*>/i', $value) === 1;
+    }
+
     public static function htmlToText(?string $html, bool $preserveParagraphs = false): string
     {
         if (blank($html)) {

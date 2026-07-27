@@ -1,6 +1,7 @@
+@use('Thehouseofel\Kalion\Core\Domain\Support\Str')
 @props(['icon' => '', 'class' => ''])
 
-@if (str_contains_html($icon))
+@if (Str::containsHtml($icon))
     {!! $icon !!}
 @else
     @if (str_contains($icon, ';'))
