@@ -86,13 +86,6 @@ if (! function_exists('legacy_deep_clone')) {
     }
 }
 
-if (! function_exists('array_delete')) {
-    function array_delete(array $arrayData, array $arrayKeys): array
-    {
-        return array_diff_key($arrayData, array_flip($arrayKeys));
-    }
-}
-
 if (! function_exists('array_diff_assoc_deep')) {
     function array_diff_assoc_deep(array $array1, array $array2): array
     {
