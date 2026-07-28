@@ -77,15 +77,6 @@ if (! function_exists('safe_route')) {
     }
 }
 
-if (! function_exists('concat_fields_with')) {
-    function concat_fields_with(array $fields = ['name', 'code'], string $separator = 'or'): string
-    {
-        $separator = __('k::art.' . $separator);
-        $fields    = array_map(fn(string $item): string => '"' . ucfirst(__('k::field.' . $item)) . '"', $fields);
-        return implode(" $separator ", $fields);
-    }
-}
-
 if (! function_exists('get_html_laravel_debug_stack_trace')) {
     function get_html_laravel_debug_stack_trace(Request $request, Throwable $exception): string
     {
