@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts;
 
 use Illuminate\Support\Arr;
+use stdClass;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Concerns\HasRelatableOptions;
@@ -81,7 +82,8 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
             $data           = $data['data'];
         }
 
-        if (is_generic_object(Arr::first($data))) {
+        $first = Arr::first($data);
+        if (is_object($first) && get_class($first) === stdClass::class) {
             $data = Serialization::jsonToArray($data);
         }
 
