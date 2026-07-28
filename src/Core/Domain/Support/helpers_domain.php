@@ -103,15 +103,6 @@ if (! function_exists('normalize_path')) {
     }
 }
 
-if (! function_exists('pipe_str_to_array')) {
-    function pipe_str_to_array(array|string $value): array
-    {
-        return is_array($value)
-            ? $value
-            : explode('|', $value);
-    }
-}
-
 if (! function_exists('get_class_from_file')) {
     function get_class_from_file($filePath): ?string
     {
