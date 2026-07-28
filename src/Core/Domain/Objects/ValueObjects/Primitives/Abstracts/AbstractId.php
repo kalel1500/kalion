@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
+use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractIntVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
@@ -42,5 +43,16 @@ abstract class AbstractId extends AbstractIntVo
     {
         $class = is_null($value) ? static::CLASS_NULLABLE : static::CLASS_REQUIRED;
         return $class::parse($value);
+    }
+
+    public static function isIdClass(string $class): bool
+    {
+        if (! class_exists($class)) {
+            return false;
+        }
+
+        $short = Str::afterLast($class, '\\');
+
+        return str_starts_with($short, 'Id') || is_subclass_of($class, self::class);
     }
 }

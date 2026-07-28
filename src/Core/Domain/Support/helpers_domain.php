@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Thehouseofel\Kalion\Core\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 use Thehouseofel\Kalion\Core\Domain\Support\Path;
 
 if (! function_exists('kabort')) {
@@ -76,24 +75,6 @@ if (! function_exists('get_class_from_file')) {
         }
 
         return null;
-    }
-}
-
-if (! function_exists('is_class_id')) {
-    function is_class_id(string $class): bool
-    {
-        if (! class_exists($class)) {
-            return false;
-        }
-
-        // Obtener solo el nombre corto de la clase (sin namespace)
-        $short = substr(strrchr($class, '\\') ?: $class, 1) ?: $class;
-
-        if (str_starts_with($short, 'Id')) {
-            return true;
-        }
-
-        return is_subclass_of($class, AbstractId::class);
     }
 }
 

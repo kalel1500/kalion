@@ -18,6 +18,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\UseMethod;
 use Thehouseofel\Kalion\Core\Domain\Objects\Attributes\WithParams;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractBoolVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractFloatVo;
@@ -191,7 +192,7 @@ trait ReflectionResolvable
 
             foreach ($types as $namedType) {
                 $candidate = $namedType->getName();
-                if (is_class_id($candidate) && ! str_ends_with($candidate, 'NullVo')) {
+                if (AbstractId::isIdClass($candidate) && ! str_ends_with($candidate, 'NullVo')) {
                     return new UnionTypeResolution(
                         typeName  : $candidate,
                         class     : $candidate,
