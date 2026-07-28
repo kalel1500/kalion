@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
@@ -210,13 +209,6 @@ if (! function_exists('env_isProd')) {
     function env_isProd(): bool
     {
         return get_environment()->isProd();
-    }
-}
-
-if (! function_exists('current_route_name_is')) {
-    function current_route_name_is(string $name): bool
-    {
-        return Route::currentRouteName() === $name;
     }
 }
 
