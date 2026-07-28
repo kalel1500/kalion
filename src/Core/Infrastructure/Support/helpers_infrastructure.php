@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Kalion;
@@ -85,17 +84,6 @@ if (! function_exists('app_url')) {
     function app_url(): string
     {
         return url('/');
-    }
-}
-
-if (! function_exists('log_if_fail')) {
-    function log_if_fail(string $errorPrefix, callable $callback, ?string $logChannel = null): void
-    {
-        try {
-            $callback();
-        } catch (Throwable $exception) {
-            Log::channel($logChannel)->error($errorPrefix . $exception->getMessage());
-        }
     }
 }
 
