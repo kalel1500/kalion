@@ -18,7 +18,7 @@ class KalionLoginResponse implements LoginResponseContract
     {
         return $request->wantsJson()
             ? response()->json(['two_factor' => false])
-            : redirect()->intended(redirect_after_login_to($request));
+            : redirect()->intended(kalion()->redirectAfterLoginTo($request));
     }
 }
 

@@ -84,20 +84,6 @@ if (! function_exists('safe_route')) {
     }
 }
 
-if (! function_exists('redirect_default_to')) {
-    function redirect_default_to(Request $request): ?string
-    {
-        return app(RedirectDefaultPath::class)->redirectTo($request);
-    }
-}
-
-if (! function_exists('redirect_after_login_to')) {
-    function redirect_after_login_to(Request $request): ?string
-    {
-        return app(RedirectAfterLogin::class)->redirectTo($request);
-    }
-}
-
 if (! function_exists('app_url')) {
     function app_url(): string
     {
@@ -108,7 +94,7 @@ if (! function_exists('app_url')) {
 if (! function_exists('default_url')) {
     function default_url(): string
     {
-        $defaultUrl = redirect_default_to(request());
+        $defaultUrl = kalion()->redirectDefaultTo(request());
 
         // El paquete llama al "default_url" en la ruta "/" por lo que si coinciden podría entrar en bucle
         if ($defaultUrl === app_url()) {
