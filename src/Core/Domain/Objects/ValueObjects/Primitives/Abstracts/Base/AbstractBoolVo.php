@@ -44,7 +44,8 @@ abstract class AbstractBoolVo extends AbstractValueObject
     {
         $this->checkNullable($value);
 
-        if (! is_null($value) && ! is_valid_bool($value)) {
+        $isValidBool = fn($v) => is_bool($v) || (($v == 0 || $v == 1));
+        if (! is_null($value) && ! $isValidBool($value)) {
             throw new InvalidValueException(sprintf('<%s> does not allow the value <%s> as valid boolean.', class_basename(static::class), $value));
         }
     }
