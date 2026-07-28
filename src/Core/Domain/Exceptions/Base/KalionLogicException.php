@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Concerns\KalionExceptionBehavior;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Throwable;
 
-abstract class KalionLogicException extends LogicException implements KalionExceptionInterface
+class KalionLogicException extends LogicException implements KalionExceptionInterface
 {
     use KalionExceptionBehavior;
 

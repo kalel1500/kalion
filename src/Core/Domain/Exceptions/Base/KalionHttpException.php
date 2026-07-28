@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Concerns\KalionExceptionBehavior;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Throwable;
 
-abstract class KalionHttpException extends RuntimeException implements KalionExceptionInterface, HttpExceptionInterface
+class KalionHttpException extends RuntimeException implements KalionExceptionInterface, HttpExceptionInterface
 {
     use KalionExceptionBehavior;
 
