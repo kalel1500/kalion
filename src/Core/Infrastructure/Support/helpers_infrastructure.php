@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\Broadcast;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectAfterLogin;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;
 
 if (! function_exists('kalion')) {
@@ -88,20 +85,6 @@ if (! function_exists('app_url')) {
     function app_url(): string
     {
         return url('/');
-    }
-}
-
-if (! function_exists('default_url')) {
-    function default_url(): string
-    {
-        $defaultUrl = kalion()->redirectDefaultTo(request());
-
-        // El paquete llama al "default_url" en la ruta "/" por lo que si coinciden podría entrar en bucle
-        if ($defaultUrl === app_url()) {
-            kabort(500, __('k::error.default_url_equals_to_app_url'));
-        }
-
-        return $defaultUrl;
     }
 }
 

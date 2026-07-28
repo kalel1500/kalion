@@ -47,4 +47,16 @@ class Kalion
     {
         return app(RedirectAfterLogin::class)->redirectTo($request);
     }
+
+    public function defaultUrl(): string
+    {
+        $defaultUrl = $this->redirectDefaultTo(request());
+
+        // El paquete llama a "defaultUrl" en la ruta "/", así que si coinciden entraría en bucle
+        if ($defaultUrl === url('/')) {
+            kabort(500, __('k::error.default_url_equals_to_app_url'));
+        }
+
+        return $defaultUrl;
+    }
 }

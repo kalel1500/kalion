@@ -9,7 +9,7 @@ use Thehouseofel\Kalion\Features\Jobs\Infrastructure\Http\Controllers\Ajax\AjaxJ
 use Thehouseofel\Kalion\Features\Jobs\Infrastructure\Http\Controllers\Web\JobsController;
 use Thehouseofel\Kalion\Features\Processes\Infrastructure\Controllers\AjaxCheckProcessController;
 
-Route::get('/', fn() => redirect(default_url()))->name('index');
+Route::get('/', fn() => redirect(kalion()->defaultUrl()))->name('index');
 
 Route::middleware('auth')->group(function () {
 
