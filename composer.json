@@ -33,8 +33,8 @@
             "Thehouseofel\\Kalion\\Database\\Seeders\\": "database/seeders"
         },
         "files": [
-            "src/Core/Domain/Support/helpers_domain.php",
-            "src/Core/Infrastructure/Support/helpers_infrastructure.php",
+            "src/Core/helpers_domain.php",
+            "src/Core/helpers_infrastructure.php",
             "src/Features/Auth/Infrastructure/Support/auth_helpers.php",
             "src/Features/Components/Domain/Support/helpers_feat_components.php"
         ]
