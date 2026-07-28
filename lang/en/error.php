@@ -16,6 +16,8 @@ return [
     'default_url_equals_to_app_url'                 => 'No default route found',
     'min_value_cant_be_greater_than_max'            => 'The minimum value cannot be greater than the maximum',
     'amount_must_be_greater_than_number'            => 'The amount must be greater than :number',
+    'range_exceeds_maximum_allowed'                 => 'The range of values exceeds the maximum allowed value of :max',
+    'weight_key_out_of_range'                       => 'The weight key :number is outside the allowed range (:min - :max).',
     'sum_of_probabilities_cant_be_greater_than_100' => 'The sum of custom probabilities cannot be greater than 100%',
     'generated_distribution_empty'                  => 'The generated distribution is empty. Check your probabilities.',
     'failed_processing_$step'                       => 'Error processing step [:step]',

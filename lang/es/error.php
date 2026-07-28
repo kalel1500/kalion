@@ -16,6 +16,8 @@ return [
     'default_url_equals_to_app_url'                 => 'No se ha encontrado ninguna ruta por defecto',
     'min_value_cant_be_greater_than_max'            => 'El valor mínimo no puede ser mayor que el máximo',
     'amount_must_be_greater_than_number'            => 'La cantidad debe ser mayor a :number',
+    'range_exceeds_maximum_allowed'                 => 'El rango de valores excede el máximo permitido de :max',
+    'weight_key_out_of_range'                       => 'La clave de peso :number está fuera del rango permitido (:min - :max).',
     'sum_of_probabilities_cant_be_greater_than_100' => 'La suma de probabilidades personalizadas no puede ser mayor a 100%',
     'generated_distribution_empty'                  => 'La distribución generada está vacía. Verifica tus probabilidades',
     'failed_processing_$step'                       => 'Error al procesar el paso [:step]',

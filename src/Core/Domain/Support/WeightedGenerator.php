@@ -10,6 +10,12 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 class WeightedGenerator
 {
     /**
+     * Maximum allowed number of values in the range ($maxValue - $minValue + 1).
+     * Prevents memory overflows from uncontrolled calls to range().
+     */
+    public const MAX_RANGE_SIZE = 100_000;
+
+    /**
      * Final normalized weights.
      *
      * @var array<int, float>
@@ -33,7 +39,7 @@ class WeightedGenerator
     /**
      * Sum of all weights.
      */
-    private float $totalWeight = 0;
+    private float $totalWeight = 0.0;
 
     public function __construct(
         private readonly int   $quantity,
@@ -82,6 +88,17 @@ class WeightedGenerator
             );
         }
 
+        $rangeSize = ($this->maxValue - $this->minValue) + 1;
+        if ($rangeSize > self::MAX_RANGE_SIZE) {
+            throw new InvalidValueException(__('k::error.range_exceeds_maximum_allowed', ['max' => self::MAX_RANGE_SIZE]));
+        }
+
+        foreach ($this->customWeights as $number => $weight) {
+            if ((int)$number < $this->minValue || (int)$number > $this->maxValue) {
+                throw new InvalidValueException(__('k::error.weight_key_out_of_range', ['number' => $number, 'min'    => $this->minValue, 'max'    => $this->maxValue,]));
+            }
+        }
+
         $totalCustomWeight = array_sum($this->customWeights);
 
         if ($totalCustomWeight > 100) {
@@ -109,7 +126,6 @@ class WeightedGenerator
         );
 
         if ($remainingNumbers !== []) {
-
             $weightPerNumber = $remainingWeight > 0
                 ? $remainingWeight / count($remainingNumbers)
                 : 0;
@@ -166,12 +182,9 @@ class WeightedGenerator
     private function buildDistribution(): void
     {
         foreach ($this->weights as $number => $weight) {
-
-            $this->numbers[] = (int)$number;
-
+            $this->numbers[]   = (int)$number;
             $this->totalWeight += $weight;
-
-            $this->limits[] = $this->totalWeight;
+            $this->limits[]    = $this->totalWeight;
         }
     }
 
@@ -180,9 +193,7 @@ class WeightedGenerator
      */
     private function pick(): int
     {
-        $randomWeight = random_int(0, PHP_INT_MAX - 1)
-            / PHP_INT_MAX
-            * $this->totalWeight;
+        $randomWeight = (random_int(0, PHP_INT_MAX - 1) / PHP_INT_MAX) * $this->totalWeight;
 
         $index = $this->binarySearch($randomWeight);
 
@@ -200,11 +211,7 @@ class WeightedGenerator
         $high = count($this->limits) - 1;
 
         while ($low < $high) {
-
-            $middle = intdiv(
-                $low + $high,
-                2,
-            );
+            $middle = intdiv($low + $high, 2);
 
             if ($target <= $this->limits[$middle]) {
                 $high = $middle;
@@ -215,5 +222,4 @@ class WeightedGenerator
 
         return $low;
     }
-
 }
