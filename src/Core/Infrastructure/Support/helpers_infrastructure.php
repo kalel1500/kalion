@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
@@ -21,20 +20,6 @@ if (! function_exists('debug_is_active')) {
     function debug_is_active(): bool
     {
         return config('app.debug');
-    }
-}
-
-if (! function_exists('url_contains_ajax')) {
-    function url_contains_ajax(): bool
-    {
-        return (str_contains(URL::current(), '/ajax/'));
-    }
-}
-
-if (! function_exists('url_contains_fetch')) {
-    function url_contains_fetch(): bool
-    {
-        return (str_contains(URL::current(), '/fetch/'));
     }
 }
 

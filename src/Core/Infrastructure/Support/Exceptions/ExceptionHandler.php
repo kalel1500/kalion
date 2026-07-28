@@ -9,6 +9,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\URL;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -140,7 +141,10 @@ class ExceptionHandler
 
     private static function shouldRenderJson(Request $request): bool
     {
-        return $request->expectsJson() || url_contains_ajax() || url_contains_fetch();
+        $url = URL::current();
+        $containsAjax = str_contains($url, '/ajax/');
+        $containsFetch = str_contains($url, '/fetch/');
+        return $request->expectsJson() || $containsAjax || $containsFetch;
     }
 
     private static function renderJson(ExceptionContextDto $context): JsonResponse
