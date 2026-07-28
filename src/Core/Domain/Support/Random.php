@@ -7,6 +7,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Support;
 use Illuminate\Support\Traits\Macroable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionRuntimeException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Support\Random\WeightedGenerator;
 
 class Random
 {

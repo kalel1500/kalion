@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Domain\Support;
+namespace Thehouseofel\Kalion\Core\Domain\Support\Random;
 
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionRuntimeException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
