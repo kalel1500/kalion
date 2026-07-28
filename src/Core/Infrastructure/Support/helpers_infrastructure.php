@@ -100,12 +100,16 @@ if (! function_exists('log_if_fail')) {
 }
 
 if (! function_exists('vite_asset')) {
-    function vite_asset(string $asset): string
+    function vite_asset(string $asset, bool $silent = false): ?string
     {
         try {
             return \Illuminate\Support\Facades\Vite::asset($asset);
         } catch (\Illuminate\Foundation\ViteException $exception) {
-            return $exception->getMessage();
+            if (! $silent) {
+                throw $exception;
+            }
+
+            return null;
         }
     }
 }
