@@ -6,12 +6,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request as RequestF;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Str;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
@@ -19,17 +16,6 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\Broadcast;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;
-
-if (! function_exists('dropdown_is_open')) {
-    function dropdown_is_open(string $htmlLinks): bool
-    {
-        $currentUrl = strtok(RequestF::fullUrl(), '?');
-        // Expresión regular para encontrar todos los href en los enlaces
-        preg_match_all('/<a\s+href=["\']([^"\']+)["\']/', $htmlLinks, $matches);
-        $hrefs = array_map(fn(string $href) => strtok($href, '?'), $matches[1]);
-        return in_array($currentUrl, $hrefs); // Comprueba si la URL actual está en la lista
-    }
-}
 
 if (! function_exists('debug_is_active')) {
     function debug_is_active(): bool

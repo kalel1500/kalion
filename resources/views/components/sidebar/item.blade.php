@@ -1,6 +1,15 @@
 @props(['href' => '#', 'icon', 'dropdown', 'counter', 'level' => 0, 'active' => false, 'open' => null])
 
 @php
+
+    $dropdownIsOpen = function ($html) {
+        $currentUrl = strtok(\Illuminate\Support\Facades\Request::fullUrl(), '?');
+        // Expresión regular para encontrar todos los href en los enlaces
+        preg_match_all('/<a\s+href=["\']([^"\']+)["\']/', $htmlLinks, $matches);
+        $hrefs = array_map(fn(string $href) => strtok($href, '?'), $matches[1]);
+        return in_array($currentUrl, $hrefs); // Comprueba si la URL actual está en la lista
+    };
+
     $isDropdown = isset($dropdown);
     $hasIcon = isset($icon);
     $isSubitem = $attributes->has('subitem');
@@ -9,7 +18,7 @@
     $iconHtml = !$hasIcon ? '' : '<div class="h-6 w-6 shrink-0 text-body transition duration-75 group-hover:text-heading">' . $icon . '</div>';
     $spanClasses = !$hasIcon ? '' : 'ml-3 md:sc:ml-0 truncate md:sc:w-full';
     $dropdownId = $isDropdown ? $dropdown->attributes->get('id') : '';
-    $dropdownIsOpen = $isDropdown && ($open ?? dropdown_is_open($dropdown->toHtml()));
+    $dropdownIsOpen = $isDropdown && ($open ?? $dropdownIsOpen($dropdown->toHtml()));
     $isDeepLevel = (int)$level > 0;
 
     /*
