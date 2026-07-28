@@ -46,6 +46,16 @@ class Arr
         );
     }
 
+    public static function validEmails(array $emails, bool $strict = false, bool $dns = false): array
+    {
+        return array_values(array_filter(
+            array_map('trim', $emails),
+            fn (string $email): bool => $strict
+                ? Str::isValidEmail($email, $dns)
+                : filter_var($email, FILTER_VALIDATE_EMAIL) !== false
+        ));
+    }
+
     public static function transformIfPresent(array $array, string|array $keys, callable $callback): array
     {
         foreach ((array)$keys as $key) {

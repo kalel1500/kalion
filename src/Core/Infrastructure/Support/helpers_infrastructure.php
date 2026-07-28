@@ -38,23 +38,6 @@ if (! function_exists('debug_is_active')) {
     }
 }
 
-if (! function_exists('filter_valid_emails')) {
-    function filter_valid_emails(array|string $emails): array
-    {
-        if (is_string($emails)) {
-            $emails = explode(',', $emails);
-        }
-        return collect($emails)
-            ->map(function ($value) {
-                return trim($value);
-            })
-            ->filter(function ($value) {
-                return filter_var($value, FILTER_VALIDATE_EMAIL);
-            })
-            ->all();
-    }
-}
-
 if (! function_exists('url_contains_ajax')) {
     function url_contains_ajax(): bool
     {
