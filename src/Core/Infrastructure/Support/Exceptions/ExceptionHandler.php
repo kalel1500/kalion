@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\Debug;
 use Throwable;
 
 class ExceptionHandler
@@ -154,7 +155,7 @@ class ExceptionHandler
 
     private static function renderHtmlDebug(\Throwable $exception, Request $request): Response
     {
-        return response(get_html_laravel_debug_stack_trace($request, $exception));
+        return response(Debug::renderLaravelDebugStackTrace($request, $exception));
     }
 
     private static function renderHtmlCustom(ExceptionContextDto $context): Response

@@ -77,13 +77,6 @@ if (! function_exists('safe_route')) {
     }
 }
 
-if (! function_exists('get_html_laravel_debug_stack_trace')) {
-    function get_html_laravel_debug_stack_trace(Request $request, Throwable $exception): string
-    {
-        return app()->make(\Illuminate\Foundation\Exceptions\Renderer\Renderer::class)->render($request, $exception);
-    }
-}
-
 if (! function_exists('redirect_default_to')) {
     function redirect_default_to(Request $request): ?string
     {
