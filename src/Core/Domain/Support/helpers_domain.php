@@ -6,6 +6,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
+use Thehouseofel\Kalion\Core\Domain\Support\Path;
 
 if (! function_exists('kabort')) {
     function kabort(
@@ -87,19 +88,10 @@ if (! function_exists('so_is_windows')) {
     }
 }
 
-if (! function_exists('normalize_path')) {
-    function normalize_path(string $path): string
-    {
-        return DIRECTORY_SEPARATOR === '\\'
-            ? str_replace('/', '\\', $path)  // Windows
-            : str_replace('\\', '/', $path); // Linux/macOS
-    }
-}
-
 if (! function_exists('get_class_from_file')) {
     function get_class_from_file($filePath): ?string
     {
-        $filePath = normalize_path($filePath);
+        $filePath = Path::normalize($filePath);
 
         if (! file_exists($filePath)) return null;
 

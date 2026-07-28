@@ -3,6 +3,7 @@
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands;
 
 use Illuminate\Console\Command;
+use Thehouseofel\Kalion\Core\Domain\Support\Path;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\Concerns\InteractsWithComposerPackages;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Objects\InstallDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\ProcessorBuilder;
@@ -34,7 +35,7 @@ class Install extends Command
      */
     public function handle()
     {
-        $stepsPath          = normalize_path(KALION_PATH . '/install/steps/');
+        $stepsPath          = Path::normalize(KALION_PATH . '/install/steps/');
         $stepsPattern       = $stepsPath . '*.php';
 
         $data = new InstallDto(

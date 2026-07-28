@@ -7,6 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use Thehouseofel\Kalion\Core\Domain\Support\Path;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Attributes\Step;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Attributes\Title;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Exceptions\SkippedStep;
@@ -166,9 +167,9 @@ class InstallStepProcessor
         $fullPaths = [];
         foreach ($paths as $path) {
             $fullPaths[] = match (true) {
-                ($this->data->rollback && ! $forceUp) || $forceDown                                                                                           => normalize_path(join_paths($this->data->pathOriginal, $path)),
-                $forceExamples || $stepAttribute->getPathFrom === Step::EXAMPLES || ($stepAttribute->getPathFrom === Step::BOTH && $this->data->withExamples) => normalize_path(join_paths($this->data->pathGenExamples, $path)),
-                default                                                                                                                                       => normalize_path(join_paths($this->data->pathGenBase, $path)),
+                ($this->data->rollback && ! $forceUp) || $forceDown                                                                                           => Path::normalize(join_paths($this->data->pathOriginal, $path)),
+                $forceExamples || $stepAttribute->getPathFrom === Step::EXAMPLES || ($stepAttribute->getPathFrom === Step::BOTH && $this->data->withExamples) => Path::normalize(join_paths($this->data->pathGenExamples, $path)),
+                default                                                                                                                                       => Path::normalize(join_paths($this->data->pathGenBase, $path)),
             };
         }
         return count($fullPaths) === 1 ? $fullPaths[0] : $fullPaths;
@@ -179,7 +180,7 @@ class InstallStepProcessor
         $paths     = Arr::wrap($stepAttribute->paths);
         $fullPaths = [];
         foreach ($paths as $path) {
-            $fullPaths[] = normalize_path(base_path($path));
+            $fullPaths[] = Path::normalize(base_path($path));
         }
         return count($fullPaths) === 1 ? $fullPaths[0] : $fullPaths;
     }

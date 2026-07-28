@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands;
 
 use Illuminate\Console\Command;
+use Thehouseofel\Kalion\Core\Domain\Support\Path;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\KalionConfig;
 
 class JobDispatch extends Command
@@ -119,11 +120,11 @@ class JobDispatch extends Command
     private function getPathsFromConfigPackages(): array
     {
         $vendorPath = base_path() . '/vendor/';
-        $kalionPath = normalize_path($vendorPath . 'kalel1500/kalion');
+        $kalionPath = Path::normalize($vendorPath . 'kalel1500/kalion');
 
         // Obtener las rutas de todos los paquetes definidos en la configuración
         $packages = KalionConfig::getScanPackages();
-        $otherPaths = array_map(fn($item) => normalize_path($vendorPath . $item), $packages);
+        $otherPaths = array_map(fn($item) => Path::normalize($vendorPath . $item), $packages);
 
         // Definir las rutas donde buscar los Jobs:
         $allPaths = [
@@ -164,14 +165,14 @@ class JobDispatch extends Command
 
             // Comprobar si la carpeta actual ya es la de Jobs. En ese caso guardamos la ruta en el array "$pathsWithJobs"
             if ($item === 'Jobs') {
-                $pathsWithJobs[] = normalize_path($fullPathCurrent);
+                $pathsWithJobs[] = Path::normalize($fullPathCurrent);
                 continue;
             }
 
             // Comprobar si existe la carpeta "Jobs" en la ruta actual. En ese caso guardamos la ruta en el array "$pathsWithJobs"
             $fullPathJobs = $fullPathCurrent . DIRECTORY_SEPARATOR . 'Jobs';
             if (is_dir($fullPathJobs)) {
-                $pathsWithJobs[] = normalize_path($fullPathJobs);
+                $pathsWithJobs[] = Path::normalize($fullPathJobs);
                 continue;
             }
 
