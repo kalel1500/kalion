@@ -9,6 +9,7 @@ use ArrayIterator;
 use Countable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use IteratorAggregate;
 use JsonSerializable;
 use ReflectionClass;
@@ -864,7 +865,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
             // Si el segmento no existe en el nivel actual, intenta su versión snake_case
             if (! array_key_exists($segment, $current)) {
-                $snake = str_snake($segment);
+                $snake = Str::snake($segment);
 
                 if (array_key_exists($snake, $current)) {
                     $segment = $snake;

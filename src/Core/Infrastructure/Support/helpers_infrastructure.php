@@ -90,13 +90,6 @@ if (! function_exists('src_path')) {
     }
 }
 
-if (! function_exists('str_snake')) {
-    function str_snake($str): string
-    {
-        return Str::snake($str);
-    }
-}
-
 if (! function_exists('safe_route')) {
     function safe_route(?string $name, string $default = null, array $params = []): ?string
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Objects\Entities;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use JsonSerializable;
 use ReflectionClass;
 use Thehouseofel\Kalion\Core\Domain\Concerns\Relations\ParsesRelationFlags;
@@ -100,7 +101,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
             foreach ($this->with as $key => $rel) {
                 $relation = (is_array($rel)) ? $key : $rel;
                 [$relation, $isFull] = $this->getInfoFromRelationWithFlag($relation);
-                $data[str_snake($relation)] = $this->$relation()?->toArray();
+                $data[Str::snake($relation)] = $this->$relation()?->toArray();
             }
         }
 
@@ -278,7 +279,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
 
     private function setCurrentRelation(string $relation): void
     {
-        $relationName = str_snake($relation);
+        $relationName = Str::snake($relation);
         if (! array_key_exists($relationName, $this->originalArray)) {
             throw EntityRelationException::relationNotLoadedInEloquentResult($relationName, static::class);
         }
