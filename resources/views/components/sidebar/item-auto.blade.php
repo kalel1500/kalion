@@ -1,3 +1,5 @@
+@use(Illuminate\Support\Facades\Route)
+
 @php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\SidebarItemDto $item */ @endphp
 
 @props(['item', 'level'])
@@ -9,7 +11,7 @@
         :href="$item->hasDropdown() ? null : $item->getHref()"
         :counter="$item->hasCounter() ? $item->getCounter() : null"
         :level="$level"
-        :active="current_route_matches($item->route_name, $item->route_params ?? [])"
+        :active="Route::currentMatches($item->route_name, $item->route_params ?? [])"
         :open="$item->isOpenDropdown()"
     >
         @if(!is_null($item->icon))

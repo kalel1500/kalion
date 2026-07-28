@@ -220,52 +220,6 @@ if (! function_exists('current_route_name_is')) {
     }
 }
 
-if (! function_exists('current_route_matches')) {
-    function current_route_matches(?string $routeName, array $routeParams = []): bool
-    {
-        if (is_null($routeName)) {
-            return false;
-        }
-
-        if (!Route::currentRouteNamed($routeName)) {
-            return false;
-        }
-
-        if (empty($routeParams)) {
-            return true;
-        }
-
-        $currentParams = request()->route()?->parameters() ?? [];
-
-        foreach ($routeParams as $key => $expected) {
-            if (!array_key_exists($key, $currentParams)) {
-                return false;
-            }
-
-            $actual = $currentParams[$key];
-
-            // Normalize enum instances to their scalar value
-            if ($actual instanceof \BackedEnum) {
-                $actual = $actual->value;
-            } elseif ($actual instanceof \UnitEnum) {
-                $actual = $actual->name;
-            }
-
-            if ($expected instanceof \BackedEnum) {
-                $expected = $expected->value;
-            } elseif ($expected instanceof \UnitEnum) {
-                $expected = $expected->name;
-            }
-
-            if ((string) $actual !== (string) $expected) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
 if (! function_exists('safe_broadcast')) {
     function safe_broadcast(ShouldBroadcast $event): ResultDto
     {

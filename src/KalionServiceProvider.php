@@ -433,5 +433,35 @@ class KalionServiceProvider extends ServiceProvider
 
             return $this;
         });
+
+        Route::macro('currentMatches', function (string|array $patterns, array $parameters = []): bool {
+            if (! $this->currentRouteNamed($patterns)) {
+                return false;
+            }
+
+            if (empty($parameters)) {
+                return true;
+            }
+
+            $currentParams = $this->current()?->parameters() ?? [];
+
+            $normalize = fn($val) => match (true) {
+                $val instanceof \BackedEnum => (string)$val->value,
+                $val instanceof \UnitEnum   => $val->name,
+                default                     => (string)$val,
+            };
+
+            foreach ($parameters as $key => $expected) {
+                if (! array_key_exists($key, $currentParams)) {
+                    return false;
+                }
+
+                if ($normalize($currentParams[$key]) !== $normalize($expected)) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items;
 
+use Illuminate\Support\Facades\Route;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Abstracts\NavigationItem;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\Collections\SidebarItemCollection;
 
@@ -57,6 +58,6 @@ final class SidebarItemDto extends NavigationItem
 
     public function isOpenDropdown(): bool
     {
-        return $this->dropdown?->contains(fn(SidebarItemDto $subItem) => current_route_matches($subItem->route_name, $subItem->route_params ?? [])) ?? false;
+        return $this->dropdown?->contains(fn(SidebarItemDto $subItem) => Route::currentMatches($subItem->route_name, $subItem->route_params ?? [])) ?? false;
     }
 }
