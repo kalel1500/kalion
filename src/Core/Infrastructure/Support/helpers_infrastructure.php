@@ -119,6 +119,7 @@ if (! function_exists('default_url')) {
     {
         $defaultUrl = redirect_default_to(request());
 
+        // El paquete llama al "default_url" en la ruta "/" por lo que si coinciden podría entrar en bucle
         if ($defaultUrl === app_url()) {
             kabort(500, __('k::error.default_url_equals_to_app_url'));
         }
