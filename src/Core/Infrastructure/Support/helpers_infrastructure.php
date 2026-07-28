@@ -15,10 +15,10 @@ use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectAf
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;
 
-if (! function_exists('debug_is_active')) {
-    function debug_is_active(): bool
+if (! function_exists('debug_enabled')) {
+    function debug_enabled(): bool
     {
-        return config('app.debug');
+        return app()->hasDebugModeEnabled();
     }
 }
 

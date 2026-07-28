@@ -73,7 +73,7 @@ class ExceptionContextDto extends AbstractDataTransferObject
     public function getMessage(Throwable $e): string
     {
         $message = $this->texts[$this->statusCode]['message'] ?? __('Unknown Error');
-        return (is_kalion_exception($e) || ($e instanceof HttpException) || debug_is_active()) ? $e->getMessage() : $message;
+        return (is_kalion_exception($e) || ($e instanceof HttpException) || debug_enabled()) ? $e->getMessage() : $message;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -117,7 +117,7 @@ class ExceptionContextDto extends AbstractDataTransferObject
 
     public function toArray(bool $throwInDebugMode = true): array
     {
-        $addDebugInfo = debug_is_active() && $throwInDebugMode;
+        $addDebugInfo = debug_enabled() && $throwInDebugMode;
         $toArray      = $this->customResponse ?? $this->toArrayForProd();
         return $addDebugInfo ? array_merge($toArray, $this->arrayDebugInfo()) : $toArray;
     }

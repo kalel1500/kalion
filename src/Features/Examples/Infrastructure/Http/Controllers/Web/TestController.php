@@ -20,7 +20,7 @@ final class TestController extends Controller
 
     public function sessions()
     {
-        if (! debug_is_active()) {
+        if (! debug_enabled()) {
             throw new NotFoundHttpException();
         }
         $sessions = DB::table('sessions')->get();

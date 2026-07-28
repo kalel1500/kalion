@@ -50,7 +50,7 @@ class ExceptionHandler
 
                 $context = ExceptionContextDto::from($modelException);
                 $isJson  = self::shouldRenderJson($request);
-                $isDebug = debug_is_active();
+                $isDebug = debug_enabled();
 
                 // Si la respuesta esperada es JSON
                 if ($isJson) {
@@ -70,7 +70,7 @@ class ExceptionHandler
         if ($overrideHttp) {
             $exceptions->render(function (HttpException $e, Request $request) {
                 $isJson  = self::shouldRenderJson($request);
-                $isDebug = debug_is_active();
+                $isDebug = debug_enabled();
                 if (! $isJson) {
                     return $isDebug
                         ? self::renderHtmlDebug($e, $request)
@@ -85,7 +85,7 @@ class ExceptionHandler
         // Renderizar nuestras excepciones de dominio
         $exceptions->render(function (KalionExceptionInterface $e, Request $request) {
             $context  = $e->getContext();
-            $notDebug = ! debug_is_active();
+            $notDebug = ! debug_enabled();
 
             // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
             if (self::shouldRenderJson($request)) {
