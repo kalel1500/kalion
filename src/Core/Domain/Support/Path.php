@@ -12,8 +12,10 @@ class Path
 
     public static function normalize(string $path): string
     {
-        return DIRECTORY_SEPARATOR === '\\'
-            ? str_replace('/', '\\', $path)  // Windows
-            : str_replace('\\', '/', $path); // Linux/macOS
+        return str_replace(
+            ['/', '\\'],
+            DIRECTORY_SEPARATOR,
+            $path,
+        );
     }
 }
