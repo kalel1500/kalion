@@ -1196,12 +1196,12 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return array_map(fn($item) => $item->$toArrayMethod(...$params), $this->items);
     }
 
-    public function toClearedArray(): array
+    public function toPlainArray(): array
     {
         return Serialization::jsonToArray($this->toArray());
     }
 
-    public function toClearedObject(): object|array
+    public function toPlainObject(): object|array
     {
         return Serialization::jsonToObject($this->toArray());
     }
