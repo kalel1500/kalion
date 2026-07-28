@@ -56,6 +56,17 @@ class Arr
         ));
     }
 
+    public static function containsOnlyArrays(array $array): bool
+    {
+        foreach ($array as $value) {
+            if (! is_array($value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static function transformIfPresent(array $array, string|array $keys, callable $callback): array
     {
         foreach ((array)$keys as $key) {

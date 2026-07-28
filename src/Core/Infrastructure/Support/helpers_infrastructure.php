@@ -97,16 +97,6 @@ if (! function_exists('str_snake')) {
     }
 }
 
-if (! function_exists('array_has_only_arrays')) {
-    function array_has_only_arrays(array $array): bool
-    {
-        $filtered = Arr::where($array, function ($value, $key) {
-            return ! is_array($value);
-        });
-        return (count($filtered) === 0);
-    }
-}
-
 if (! function_exists('safe_route')) {
     function safe_route(?string $name, string $default = null, array $params = []): ?string
     {
