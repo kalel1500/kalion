@@ -9,11 +9,18 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
+use Thehouseofel\Kalion\Core\Infrastructure\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\Broadcast;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectAfterLogin;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectDefaultPath;
 use function Illuminate\Filesystem\join_paths;
+
+if (! function_exists('kalion')) {
+    function kalion(): Kalion
+    {
+        return app(Kalion::class);
+    }
+}
 
 if (! function_exists('debug_enabled')) {
     function debug_enabled(): bool
@@ -131,41 +138,6 @@ if (! function_exists('vite_asset')) {
         } catch (\Illuminate\Foundation\ViteException $exception) {
             return $exception->getMessage();
         }
-    }
-}
-
-if (! function_exists('get_environment')) {
-    function get_environment(): EnvVo
-    {
-        return EnvVo::from(config('app.env'));
-    }
-}
-
-if (! function_exists('env_isTesting')) {
-    function env_isTesting(): bool
-    {
-        return get_environment()->isTesting();
-    }
-}
-
-if (! function_exists('env_isLocal')) {
-    function env_isLocal(): bool
-    {
-        return get_environment()->isLocal();
-    }
-}
-
-if (! function_exists('env_isPre')) {
-    function env_isPre(): bool
-    {
-        return get_environment()->isPre();
-    }
-}
-
-if (! function_exists('env_isProd')) {
-    function env_isProd(): bool
-    {
-        return get_environment()->isProd();
     }
 }
 
