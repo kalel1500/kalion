@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands;
 use Illuminate\Console\Command;
 use Thehouseofel\Kalion\Core\Domain\Support\Path;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\KalionConfig;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\FileClass;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\PhpClass;
 
 class JobDispatch extends Command
 {
@@ -97,7 +97,7 @@ class JobDispatch extends Command
         // INFO: En este punto $job es la ruta absoluta del archivo (/var/www/html/app/Jobs/TestJob.php)
 
         // Obtener la clase del Job (namespace + classname)
-        $class = FileClass::resolve($job);
+        $class = PhpClass::fromFile($job);
 
         // INFO: En este punto $class es el nombre de la clase con su namespace (App\Jobs\TestJob)
 

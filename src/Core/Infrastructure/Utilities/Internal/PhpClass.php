@@ -10,9 +10,9 @@ use Thehouseofel\Kalion\Core\Domain\Support\Path;
 /**
  * @internal This class is intended for internal package usage only.
  */
-final class FileClass
+final class PhpClass
 {
-    public static function resolve(string $filePath): ?string
+    public static function fromFile(string $filePath): ?string
     {
         $filePath = Path::normalize($filePath);
 
