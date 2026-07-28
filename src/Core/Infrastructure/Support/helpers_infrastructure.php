@@ -120,7 +120,7 @@ if (! function_exists('default_url')) {
         $defaultUrl = redirect_default_to(request());
 
         if ($defaultUrl === app_url()) {
-            abort_d(500, __('k::error.default_url_equals_to_app_url'));
+            kabort(500, __('k::error.default_url_equals_to_app_url'));
         }
 
         return $defaultUrl;

@@ -7,8 +7,8 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterfac
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 
-if (! function_exists('abort_d')) {
-    function abort_d(
+if (! function_exists('kabort')) {
+    function kabort(
         int        $statusCode,
         string     $message,
         ?array     $data = null,
@@ -20,8 +20,8 @@ if (! function_exists('abort_d')) {
     }
 }
 
-if (! function_exists('abort_d_if')) {
-    function abort_d_if(
+if (! function_exists('kabort_if')) {
+    function kabort_if(
         bool       $condition,
         int        $code,
         string     $message,
@@ -31,7 +31,7 @@ if (! function_exists('abort_d_if')) {
     ): void
     {
         if ($condition) {
-            abort_d($code, $message, $data, $success, $previous);
+            kabort($code, $message, $data, $success, $previous);
         }
     }
 }
