@@ -48,7 +48,6 @@ class Arr
 
     public static function validEmails(array $emails, bool $strict = false, bool $dns = false): array
     {
-        app()->isLocal();
         return array_values(array_filter(
             array_map('trim', $emails),
             fn (string $email): bool => $strict
