@@ -73,13 +73,6 @@ if (! function_exists('legacy_json_to_object')) {
     }
 }
 
-if (! function_exists('legacy_deep_clone')) {
-    function legacy_deep_clone($object)
-    {
-        return unserialize(serialize($object));
-    }
-}
-
 if (! function_exists('so_is_windows')) {
     function so_is_windows(): bool
     {
