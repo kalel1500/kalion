@@ -11,6 +11,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Concerns\HasRelatableOpt
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Contracts\Relatable;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\PaginationDataDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
+use Thehouseofel\Kalion\Core\Domain\Support\Internal\Serialization;
 
 abstract class AbstractCollectionEntity extends AbstractCollectionBase implements Relatable, ArrayResolvable
 {
@@ -81,7 +82,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         }
 
         if (is_generic_object(Arr::first($data))) {
-            $data = legacy_json_to_array($data);
+            $data = Serialization::jsonToArray($data);
         }
 
         /** @var class-string<AbstractEntity> $entity */

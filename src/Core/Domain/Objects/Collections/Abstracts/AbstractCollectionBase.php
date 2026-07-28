@@ -23,6 +23,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\JsonVo;
+use Thehouseofel\Kalion\Core\Domain\Support\Internal\Serialization;
 use TypeError;
 
 abstract class AbstractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, ArrayConvertible, JsonSerializable
@@ -1197,12 +1198,12 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
     public function toClearedArray(): array
     {
-        return legacy_json_to_array($this->toArray());
+        return Serialization::jsonToArray($this->toArray());
     }
 
     public function toClearedObject(): object|array
     {
-        return legacy_json_to_object($this->toArray());
+        return Serialization::jsonToObject($this->toArray());
     }
 
     public function toCollect(): Collection

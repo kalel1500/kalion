@@ -9,6 +9,7 @@ use JsonSerializable;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
+use Thehouseofel\Kalion\Core\Domain\Support\Internal\Serialization;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionResolvable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\ArrayVo;
@@ -96,7 +97,7 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
 
     public function toObject(): object|array
     {
-        return legacy_json_to_object($this->toArray());
+        return Serialization::jsonToObject($this->toArray());
     }
 
     public function toJson($options = 0): false|string

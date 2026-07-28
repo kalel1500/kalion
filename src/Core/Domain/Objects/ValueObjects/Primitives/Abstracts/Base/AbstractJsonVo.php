@@ -8,6 +8,7 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\JsonNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\JsonVo;
+use Thehouseofel\Kalion\Core\Domain\Support\Internal\Serialization;
 
 abstract class AbstractJsonVo extends AbstractValueObject
 {
@@ -60,8 +61,8 @@ abstract class AbstractJsonVo extends AbstractValueObject
         }
 
         if (is_array($value) || is_object($value)) {
-            $this->valueArray  = legacy_json_to_array($value);
-            $this->valueObject = legacy_json_to_object($value);
+            $this->valueArray  = Serialization::jsonToArray($value);
+            $this->valueObject = Serialization::jsonToObject($value);
             $this->valueString = (! $decoded = json_encode($value)) ? null : $decoded;
             $executed          = true;
         }

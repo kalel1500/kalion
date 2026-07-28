@@ -49,12 +49,12 @@ use Illuminate\Support\Facades\Mail;
 
     public function getRecipientsTo()
     {
-        return legacy_json_to_object($this->mailable->to);
+        return Serialization::jsonToObject($this->mailable->to);
     }
 
     public function getRecipientsCc()
     {
-        return legacy_json_to_object($this->mailable->cc);
+        return Serialization::jsonToObject($this->mailable->cc);
     }
 
     public static function getRecipientsFromStringVariable($stringRecipients)

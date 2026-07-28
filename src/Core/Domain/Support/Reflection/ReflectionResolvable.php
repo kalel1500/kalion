@@ -24,6 +24,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Ba
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractIntVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
+use Thehouseofel\Kalion\Core\Domain\Support\Internal\Serialization;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ConstructorParams;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\DisabledData;
@@ -367,7 +368,7 @@ trait ReflectionResolvable
                 foreach ($this as $key => $value) {
                     $props[$key] = $value;
                 }
-                return legacy_json_to_array($props);
+                return Serialization::jsonToArray($props);
             }
 
             throw KalionReflectionException::disabledReflection(static::class);
