@@ -25,4 +25,5 @@ return [
     'step_not_found_$name'                          => 'No step was found with the name :name',
     'multiple_steps_found_$name'                    => 'Multiple steps were found with the same name ":name". Which one do you want to execute?',
     'no_step_selected'                              => 'No step has been selected',
+    'percentage_must_be_between_0_and_100'          => 'The percentage must be between 0 and 100.',
 ];

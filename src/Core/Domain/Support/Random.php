@@ -13,6 +13,27 @@ class Random
     use Macroable;
 
     /**
+     * Returns true with the given probability.
+     */
+    public static function chance(float $percentage): bool
+    {
+        if (!is_finite($percentage) || $percentage < 0 || $percentage > 100) {
+            throw new InvalidValueException(__('k::error.percentage_must_be_between_0_and_100'));
+        }
+
+        if ($percentage === 0.0) {
+            return false;
+        }
+
+        if ($percentage === 100.0) {
+            return true;
+        }
+
+        return random_int(0, PHP_INT_MAX - 1)
+            < ($percentage / 100) * PHP_INT_MAX;
+    }
+
+    /**
      * Generates random integers using weighted probabilities.
      *
      * Any number without an explicit weight automatically receives an equal
