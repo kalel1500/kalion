@@ -6,7 +6,7 @@ use Symfony\Component\Process\Process;
 use function Illuminate\Support\php_binary;
 
 /**
- * @internal This trait is not meant to be used or overwritten outside the package.
+ * @internal This class is intended for internal package usage only.
  */
 trait InteractsWithComposerPackages
 {

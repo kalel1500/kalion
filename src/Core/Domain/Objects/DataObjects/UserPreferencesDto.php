@@ -8,7 +8,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\SidebarState
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\ThemeVo;
 
 /**
- * @internal This class is not meant to be used or overwritten outside the package.
+ * @internal This class is intended for internal package usage only.
  */
 class UserPreferencesDto extends AbstractDataTransferObject
 {

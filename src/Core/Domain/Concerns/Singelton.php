@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Concerns;
 
 /**
- * @internal This trait is not meant to be used or overwritten outside the package.
+ * @internal This class is intended for internal package usage only.
  */
 trait Singelton
 {

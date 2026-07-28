@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Features\Auth\Domain\Support;
 use Illuminate\Support\Collection;
 
 /**
- * @internal This class is not meant to be used or overwritten outside the package.
+ * @internal This class is intended for internal package usage only.
  */
 class AbilityParser
 {

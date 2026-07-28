@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect;
 
 /**
- * @internal This class is not meant to be used or overwritten outside the package.
+ * @internal This class is intended for internal package usage only.
  */
 class RedirectDefaultPath extends Redirector
 {

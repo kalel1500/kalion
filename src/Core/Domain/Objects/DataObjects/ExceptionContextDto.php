@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflec
 use Throwable;
 
 /**
- * @internal This class is not meant to be used or overwritten outside the package.
+ * @internal This class is intended for internal package usage only.
  */
 #[DisableReflection]
 class ExceptionContextDto extends AbstractDataTransferObject

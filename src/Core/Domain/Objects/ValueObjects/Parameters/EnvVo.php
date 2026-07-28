@@ -7,7 +7,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractEnumVo;
 
 /**
- * @internal This class is not meant to be used or overwritten outside the package.
+ * @internal This class is intended for internal package usage only.
  */
 class EnvVo extends AbstractEnumVo
 {
