@@ -51,14 +51,6 @@ if (! function_exists('collect_any')) {
     }
 }
 
-if (! function_exists('so_is_windows')) {
-    function so_is_windows(): bool
-    {
-        $so = strtoupper(substr(PHP_OS, 0, 3));
-        return $so === 'WIN';
-    }
-}
-
 if (! function_exists('get_class_from_file')) {
     function get_class_from_file($filePath): ?string
     {

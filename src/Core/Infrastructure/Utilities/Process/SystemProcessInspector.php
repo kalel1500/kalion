@@ -7,6 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Process;
 use Symfony\Component\Process\Process;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\ProcessException;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
+use Thehouseofel\Kalion\Core\Domain\Support\Os;
 
 class SystemProcessInspector
 {
@@ -51,7 +52,7 @@ class SystemProcessInspector
     private function checkSystemFor(CheckableProcessVo $processName): bool
     {
         try {
-            $command = so_is_windows()
+            $command = Os::isWindows()
                 ? $this->getWindowsCommand($processName)
                 : $this->getLinuxCommand($processName);
 

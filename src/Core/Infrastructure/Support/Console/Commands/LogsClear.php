@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Thehouseofel\Kalion\Core\Domain\Support\Os;
 
 class LogsClear extends Command
 {
@@ -43,7 +44,7 @@ class LogsClear extends Command
         $this->info('Logs have been cleared');
 
         // Ajustar permisos (solo en Linux/Mac)
-        if (so_is_windows()) {
+        if (Os::isWindows()) {
             // $this->info('En Windows, no es necesario ajustar permisos.');
             return;
         }
