@@ -1,6 +1,92 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.56.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.57.0-beta.0...master)
+
+## [v0.57.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.56.2-beta.0...v0.57.0-beta.0) - 2026-07-29
+
+### Changed
+
+* <u>**¡¡¡(breaking)!!!**</u> Se han movido varios helpers globales a la nueva clase Kalion (se pueden acceder con el nuveo helper `kalion()`):
+  * `get_environment` => `kalion()->environment();`
+  * `env_isTesting` => `kalion()->isTesting();`
+  * `env_isLocal` => `kalion()->isLocal();`
+  * `env_isPre` => `kalion()->isPre();`
+  * `env_isProd` => `kalion()->isProd();`
+  * `redirect_default_to` => `kalion()->redirectDefaultTo();`
+  * `redirect_after_login_to` => `kalion()->redirectAfterLoginTo();`
+  * `default_url` => `kalion()->defaultUrl();`
+
+* <u>**¡¡¡(breaking)!!!**</u> Se han renombrado algunos metodos de las clases principales:
+  * `AbstractValueObject`
+    * `toCamelCase()` => `toSlugCamel()`
+  * `AbstractCollectionBase`
+      * `toClearedArray()` => `toPlainArray()`
+      * `toClearedObject()` => `toPlainObject()`
+
+* Se ha eliminado el modificador `abstract` de las clases de excepciones base para permitir su instanciación directa:
+  * `KalionException`
+  * `KalionHttpException`
+  * `KalionLogicException`
+  * `KalionRuntimeException`
+
+* <u>**¡¡¡(breaking)!!!**</u> Se han renombrado algunos helpers:
+  * `abort_d` => `kabort`.
+  * `abort_d_if` => `kabort_if`.
+  * `debug_is_active` => `debug_enabled`.
+
+* <u>**¡¡¡(breaking)!!!**</u> Se han movido helpers a macros de clases de Laravel:
+  * `current_route_matches` => movido a macro de la fachada `\Illuminate\Support\Facades\Route::currentMatches`. Ahora acepta array pero no null.
+  * `current_route_name_is` => se puede usar el mismo `Route::currentMatches` ya que son equivalentes si no reciben parámetros.
+
+* <u>**¡¡¡(breaking)!!!**</u> Se han movido varios helpers globales a las clases de soporte de Kalion (`\Thehouseofel\Kalion\Core\Domain\Support\...`):
+  * `str_camel` => movido a `Str::slugCamel`.
+  * `validate_email` => movido a `Str::isValidEmail`. Ahora usa el validador de Laravel y recibe `$dns` como segundo parámetro para asegúrarse de que el dominio de la dirección de correo electrónico tenga un registro MX válido.
+  * `str_contains_html` => movido a `Str::containsHtml`. Se mejora la logica usando `preg_match` para evitar falsos positivos.
+  * `array_diff_assoc_deep` => movido a `Arr::diffAssocDeep`.
+  * `array_rename_keys` => movido a `Arr::replaceInKeys`.
+  * `filter_valid_emails` => movido a `Str::validEmails`. Se añaden los parametros `$strict` y `$dns` para usar el `Str::isValidEmail`.
+  * `array_has_only_arrays` => movido a `Str::containsOnlyArrays`.
+  * `weighted_random_numbers` => movido a `Random::weighted`. Se mejora mucho internamente, ya que podia dar problemas de rendimiento con grandes numeros.
+  * `random_bool_by_rate` => movido a `Random::chance`. Se mejora internamente añadiendo validaciones y permitiendo decimales.
+  * `normalize_path` => movido a `Path::normalize`.
+  * `legacy_json_to_array` => movido a `Serialization::jsonToArray`. Ahora solo devuelve `array` si la conversión ha ido bien o `null` si ha ido mal.
+  * `legacy_json_to_object` => movido a `Serialization::jsonToObject`. Ahora solo devuelve `object` si la conversión ha ido bien o `null` si ha ido mal.
+  * `so_is_windows` => movido a `Os::isWindows`. Se mejora usando la constante nativa `PHP_OS_FAMILY`
+  * `is_class_id` => movido a `\Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId::isIdClass`. No se mueve a una clase helper porque es de uso interno. Se mejora usando `Str::afterLast` en vez de `substr` (que no devolvia bien la clase si no había barra).
+  * `get_html_laravel_debug_stack_trace` => movido a `Debug::renderLaravelDebugStackTrace`.
+  * `get_class_from_file` => movido a `PhpClass::fromFile`. Ahora se usa `PhpToken` en vez de regex, ya que puede dar falsos positivos.
+
+* <u>**¡¡¡(breaking)!!!**</u> Se han eliminado helpers que se pueden reemplazar por los de Laravel (`\Illuminate\Support\Arr` o `\Illuminate\Support\Str`):
+  * `str_truncate` => eliminado. Usar el `Str::limit` de Laravel.
+  * `explode_by_uppercase` => eliminado. Usar el `Str::ucsplit` de Laravel.
+  * `array_keep` => eliminado. Usar el `Arr::only` de Laravel.
+  * `array_delete` => eliminado. Usar el `Arr::except` de Laravel.
+  * `array_unshift_assoc` => eliminado. Usar el `Arr::prepend` de Laravel.
+  * `arr_is_assoc` => eliminado. Usar el `Arr::isAssoc` de Laravel.
+  * `str_snake` => eliminado. Usar el `Str::snake` de Laravel.
+  * `log_if_fail` => eliminado. Usar el `rescue()` de Laravel ya que es mucho mejor
+  
+* component: Se ha añadido clase `whitespace-pre-line` a los alerts del componente `modal` (por si el texto tiene saltos de línea).
+
+### Removed
+
+* Se han eliminado varios helpers:
+  * `pipe_str_to_array` (no se usa y es muy específico).
+  * `dropdown_is_open` (es interno y se ha movido a la llamada).
+  * `url_contains_ajax` (es interno y se ha movido a la llamada).
+  * `url_contains_fetch` (es interno y se ha movido a la llamada).
+  * `is_valid_bool` (es interno y se ha movido a la llamada).
+  * `log_error` (es muy específico).
+  * `log_error_on` (es muy específico).
+  * `log_error_on_queues` (es muy específico).
+  * `log_error_on_loads` (es muy específico).
+  * `concat_fields_with` (Era interno y ya no se usa. No es tan genérico como para mantenerlo).
+  * `legacy_deep_clone` (No se usa internamente y es recomendable que no se use esta práctica anticuada).
+  * `is_generic_object` (se mueve a la llamada porque solo se usa una vez).
+
+### Fixed
+
+* support: Ahora el helper `vite_asset` recibe el parámetro `$silent=false`. Si es `false` y falla se lanza la excepción (en vez de devolver el mensaje que se pintaba como enlace). Si es `true` y falla devuelve `null`.
 
 ## [v0.56.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.56.1-beta.0...v0.56.2-beta.0) - 2026-07-27
 
