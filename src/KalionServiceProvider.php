@@ -39,6 +39,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\RoleRepository;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\AuthManager;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\EntityGuard;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Http\Middleware\CheckAbility;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentPermissionRepository;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentRoleRepository;
@@ -90,8 +91,8 @@ class KalionServiceProvider extends ServiceProvider
 
     protected function registerSingletons(): void
     {
-        $this->app->singleton(abstract: LayoutData::class,          concrete: fn($app) => app(config('kalion.layout.data_provider')));
-        $this->app->singleton(abstract: Guard::class,               concrete: fn($app, $params) => new (config('kalion.auth.guard'))(...$params) );
+        $this->app->singleton(abstract: LayoutData::class, concrete: fn($app) => app(config('kalion.layout.data_provider')));
+        $this->app->singleton(abstract: Guard::class,      concrete: fn($app, $params) => new EntityGuard(...$params));
 
         // Scoped to avoid state leaks across Octane requests while keeping one instance per lifecycle.
         $this->app->scoped('kalion.config', KalionConfigManager::class);

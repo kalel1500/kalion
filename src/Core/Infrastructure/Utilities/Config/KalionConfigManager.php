@@ -9,7 +9,6 @@ use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectAf
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectDefaultPath;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\EntityGuard;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\ApiUser;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\User;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository;
@@ -60,7 +59,6 @@ class KalionConfigManager
         'kalion.auth.entities.api'                                       => ApiUserEntity::class,
         'kalion.auth.repositories.web'                                   => EloquentUserRepository::class,
         'kalion.auth.repositories.api'                                   => EloquentApiUserRepository::class,
-        'kalion.auth.guard'                                              => EntityGuard::class,
         'kalion.auth.actions.authenticate_user'                          => AuthenticateUser::class,
         'kalion.auth.actions.create_new_user'                            => CreateNewUser::class,
         'kalion.auth.actions.reset_user_password'                        => ResetUserPassword::class,
