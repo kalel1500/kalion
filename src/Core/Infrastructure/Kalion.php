@@ -6,8 +6,8 @@ namespace Thehouseofel\Kalion\Core\Infrastructure;
 
 use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectAfterLogin;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectDefaultPath;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectUsers;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectGuests;
 
 class Kalion
 {
@@ -38,25 +38,13 @@ class Kalion
         return $this->environment()->isTesting();
     }
 
-    public function redirectDefaultTo(Request $request): ?string
+    public function redirectGuestsTo(Request $request): ?string
     {
-        return app(RedirectDefaultPath::class)->redirectTo($request);
+        return app(RedirectGuests::class)->redirectTo($request);
     }
 
-    public function redirectAfterLoginTo(Request $request): ?string
+    public function redirectUsersTo(Request $request): ?string
     {
-        return app(RedirectAfterLogin::class)->redirectTo($request);
-    }
-
-    public function defaultUrl(): string
-    {
-        $defaultUrl = $this->redirectDefaultTo(request());
-
-        // El paquete llama a "defaultUrl" en la ruta "/", así que si coinciden entraría en bucle
-        if ($defaultUrl === url('/')) {
-            kabort(500, __('k::error.default_url_equals_to_app_url'));
-        }
-
-        return $defaultUrl;
+        return app(RedirectUsers::class)->redirectTo($request);
     }
 }

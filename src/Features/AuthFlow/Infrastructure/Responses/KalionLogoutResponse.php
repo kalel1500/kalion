@@ -18,7 +18,7 @@ class KalionLogoutResponse implements LogoutResponseContract
     {
         return $request->wantsJson()
             ? response()->json(['message' => 'Logged out'])
-            : redirect(app_url());
+            : redirect(kalion()->redirectGuestsTo($request) ?? app_url());
     }
 }
 

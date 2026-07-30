@@ -48,18 +48,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Path
-    |--------------------------------------------------------------------------
-    |
-    | The following option allow you to configure the default path to which
-    | the application should redirect you
-    |
-    */
-
-    'default_path' => env('KALION_DEFAULT_PATH', $defaults['kalion.default_path']),
-
-    /*
-    |--------------------------------------------------------------------------
     | Real environment during testing
     |--------------------------------------------------------------------------
     |
@@ -216,7 +204,8 @@ return [
         'fake' => (bool) env('KALION_AUTH_FAKE', $defaults['kalion.auth.fake']),
         'show_register_link' => (bool) env('KALION_AUTH_SHOW_REGISTER_LINK', $defaults['kalion.auth.show_register_link']),
         'show_password_reset_link' => (bool) env('KALION_AUTH_SHOW_PASSWORD_RESET_LINK', $defaults['kalion.auth.show_password_reset_link']),
-        'redirect_after_login' => env('KALION_AUTH_REDIRECT_AFTER_LOGIN', $defaults['kalion.auth.redirect_after_login']),
+        'redirect_users' => env('KALION_AUTH_REDIRECT_USERS', $defaults['kalion.auth.redirect_users']),
+        'redirect_guests' => env('KALION_AUTH_REDIRECT_GUESTS', $defaults['kalion.auth.redirect_guests']),
         'blades' => [
             'fake' => env('KALION_AUTH_BLADE_FAKE', $defaults['kalion.auth.blades.fake']),
             'login' => env('KALION_AUTH_BLADE_LOGIN', $defaults['kalion.auth.blades.login']),

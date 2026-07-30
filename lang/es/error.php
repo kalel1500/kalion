@@ -13,7 +13,7 @@ return [
 
     'feature_unavailable'                           => 'Esta funcionalidad aun no esta lista',
     'exception_message_can_not_be_empty'            => 'La excepción :exception no puede tener un mensaje vacío',
-    'default_url_equals_to_app_url'                 => 'No se ha encontrado ninguna ruta por defecto',
+    'cant_redirect_itself'                          => 'No se puede redirigir una página a sí misma. Si configuras "redirectUsers" como "/", debes redefinir esta ruta en tu aplicación.',
     'min_value_cant_be_greater_than_max'            => 'El valor mínimo no puede ser mayor que el máximo',
     'amount_must_be_greater_than_number'            => 'La cantidad debe ser mayor a :number',
     'range_exceeds_maximum_allowed'                 => 'El rango de valores excede el máximo permitido de :max',

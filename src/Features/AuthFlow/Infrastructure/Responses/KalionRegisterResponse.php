@@ -18,7 +18,7 @@ class KalionRegisterResponse implements RegisterResponseContract
     {
         return $request->wantsJson()
             ? response()->json(['message' => 'Registered'])
-            : redirect()->intended(kalion()->redirectAfterLoginTo($request));
+            : redirect()->intended(kalion()->redirectUsersTo($request));
     }
 }
 

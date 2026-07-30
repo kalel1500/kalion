@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config;
 
 use Illuminate\Support\Arr;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectAfterLogin;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectDefaultPath;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectUsers;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectGuests;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\ApiUser;
@@ -26,7 +26,6 @@ class KalionConfigManager
         'kalion.provider.web_middlewares.add_preferences_cookies.active' => true,
         'kalion.provider.stateless_requests.paths'                       => '',
         'kalion.provider.stateless_requests.user_agents'                 => '',
-        'kalion.default_path'                                            => null,
         'kalion.broadcasting_enabled'                                    => false,
         'kalion.entity_calculated_props_mode'                            => 's',
         'kalion.minimum_value_for_id'                                    => 1,
@@ -47,7 +46,8 @@ class KalionConfigManager
         'kalion.auth.fake'                                               => false,
         'kalion.auth.show_register_link'                                 => true,
         'kalion.auth.show_password_reset_link'                           => true,
-        'kalion.auth.redirect_after_login'                               => null,
+        'kalion.auth.redirect_users'                                     => null,
+        'kalion.auth.redirect_guests'                                    => null,
         'kalion.auth.blades.fake'                                        => 'kal::pages.auth.landing',
         'kalion.auth.blades.login'                                       => 'kal::pages.auth.login',
         'kalion.auth.blades.register'                                    => 'kal::pages.auth.register',
@@ -187,17 +187,17 @@ class KalionConfigManager
         );
     }
 
-    public function redirectTo(callable|string|null $defaultPath = null, callable|string|null $afterLogin = null): void
+    public function redirectTo(callable|string|null $guests = null, callable|string|null $users = null): void
     {
-        $defaultPath = is_string($defaultPath) ? fn() => $defaultPath : $defaultPath;
-        $afterLogin  = is_string($afterLogin) ? fn() => $afterLogin : $afterLogin;
+        $guests = is_string($guests) ? fn() => $guests : $guests;
+        $users  = is_string($users) ? fn() => $users : $users;
 
-        if ($defaultPath) {
-            RedirectDefaultPath::redirectUsing($defaultPath);
+        if ($guests) {
+            RedirectGuests::redirectUsing($guests);
         }
 
-        if ($afterLogin) {
-            RedirectAfterLogin::redirectUsing($afterLogin);
+        if ($users) {
+            RedirectUsers::redirectUsing($users);
         }
 
     }

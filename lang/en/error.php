@@ -13,7 +13,7 @@ return [
 
     'feature_unavailable'                           => 'This feature is not ready yet',
     'exception_message_can_not_be_empty'            => 'The exception :exception cannot have an empty message',
-    'default_url_equals_to_app_url'                 => 'No default route found',
+    'cant_redirect_itself'                          => 'A page cannot redirect to itself. If you configure "redirectUsers" as "/", you must redefine this route in your application.',
     'min_value_cant_be_greater_than_max'            => 'The minimum value cannot be greater than the maximum',
     'amount_must_be_greater_than_number'            => 'The amount must be greater than :number',
     'range_exceeds_maximum_allowed'                 => 'The range of values exceeds the maximum allowed value of :max',

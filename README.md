@@ -61,18 +61,26 @@ You can configure where the application will redirect in two cases:
 * After login (if no previous route is found)
 
 There are two configurations for this (in `config/kalion.php`):
-* `kalion.default_path` (`KALION_DEFAULT_PATH`)
-* `kalion.auth.redirect_after_login` (`KALION_AUTH_REDIRECT_AFTER_LOGIN`)
+* `kalion.auth.redirect_guests` (`KALION_AUTH_REDIRECT_GUESTS`)
+* `kalion.auth.redirect_users` (`KALION_AUTH_REDIRECT_USERS`)
 
 For more complex cases, you can use the configuration method:
+
    ```php
+   use Illuminate\Http\Request;
    use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\KalionConfig;
    
    public function register(): void
    {
+        KalionConfig::redirectTo(
+           guests: '/welcome',
+           users: '/panel',
+       );
+   
+        // Using a closure...
        KalionConfig::redirectTo(
-           defaultPath: fn() => 'home',
-           afterLogin: fn() => 'home',
+           guests: fn(Request $request) => route('welcome'),
+           users: fn(Request $request) => route('panel'),
        );
    }
    ```

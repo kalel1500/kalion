@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Ajax\AjaxCookiesController;
 use Thehouseofel\Kalion\Features\Examples\Infrastructure\Http\Controllers\Web\ExampleController;
@@ -9,7 +10,15 @@ use Thehouseofel\Kalion\Features\Jobs\Infrastructure\Http\Controllers\Ajax\AjaxJ
 use Thehouseofel\Kalion\Features\Jobs\Infrastructure\Http\Controllers\Web\JobsController;
 use Thehouseofel\Kalion\Features\Processes\Infrastructure\Controllers\AjaxCheckProcessController;
 
-Route::get('/', fn() => redirect(kalion()->defaultUrl()))->name('index');
+Route::get('/', function (Request $request) {
+    $redirectTo = kalion()->redirectUsersTo($request);
+
+    if ($redirectTo === url('/')) {
+        kabort(500, __('k::error.cant_redirect_itself'));
+    }
+
+    return redirect($redirectTo);
+})->name('index');
 
 Route::middleware('auth')->group(function () {
 
