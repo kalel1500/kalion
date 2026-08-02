@@ -6,7 +6,6 @@ namespace Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\LayoutPreferences;
 use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout\LayoutAppDto;
 
 class LayoutAppAssembler
@@ -19,7 +18,7 @@ class LayoutAppAssembler
         ?string $pageData,
     ): LayoutAppDto
     {
-        $preferences = LayoutPreferences::get();
+        $userSettings = kalion()->userSettings()->get();
 
         return new LayoutAppDto(
             isFromPackage   : $package,
@@ -28,10 +27,10 @@ class LayoutAppAssembler
             flush           : $flush,
             pageData        : $pageData,
             sidebarEnabled  : ! config('kalion.layout.sidebar_disabled'),
-            sidebarCollapsed: $preferences->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $preferences->sidebar_state->isCollapsed(),
-            darkMode        : $preferences->theme->isDark(),
-            dataTheme       : $preferences->theme->getDataTheme(),
-            colorTheme      : $preferences->theme->value,
+            sidebarCollapsed: $userSettings->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $userSettings->sidebar_state->isCollapsed(),
+            darkMode        : $userSettings->theme->isDark(),
+            dataTheme       : $userSettings->theme->getDataTheme(),
+            colorTheme      : $userSettings->theme->value,
         );
     }
 

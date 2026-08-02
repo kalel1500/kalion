@@ -6,8 +6,9 @@ namespace Thehouseofel\Kalion\Core\Infrastructure;
 
 use Illuminate\Http\Request;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectUsers;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectGuests;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectUsers;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cookies\UserSettingsCookieStore;
 
 class Kalion
 {
@@ -46,5 +47,10 @@ class Kalion
     public function redirectUsersTo(Request $request): ?string
     {
         return app(RedirectUsers::class)->redirectTo($request);
+    }
+
+    public function userSettings(): UserSettingsCookieStore
+    {
+        return app(UserSettingsCookieStore::class);
     }
 }

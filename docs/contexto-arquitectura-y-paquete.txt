@@ -364,7 +364,6 @@ Esta es la estructura de archivos de mi paquete Kalion:
                     -ExceptionHandler.php
                 -Facades
                     -Broadcast.php
-                    -LayoutPreferences.php
                     -Process.php
                 -Http
                     -Controllers
@@ -389,9 +388,7 @@ Esta es la estructura de archivos de mi paquete Kalion:
                     -ProcessorBuilder.php
                     -StepBase.php
                 -Layout
-                    -LayoutPreferencesCookieStore.php
                     -PackageAssets.php
-                    -PreferencesCookieStore.php
                 -Process
                     -ProcessStateStore.php
                     -SystemProcessInspector.php
@@ -516,7 +513,7 @@ Y esto solo fue el principio, ya que después le fui añadiendo mas funcionalida
     26_exec_git_add.php
     27_exec_npm_install.php
     28_exec_npm_runBuild.php
-- Clase LayoutPreferencesCookieStore -> clase que permite gestionar la cookie de las preferencias del usuario fácilmente
+- Clase UserSettingsCookieStore -> clase que permite gestionar la cookie de las preferencias del usuario fácilmente
 - Clase SystemProcessInspector.php -> permite detectar si hay procesos como "php artisan queue:work" en la maquina
 - Clase ProcessStateStore.php.php -> permite guardar en cache si los procesos están activos o no
 

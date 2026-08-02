@@ -115,7 +115,6 @@ Esta es la estructura de archivos de mi paquete Kalion:
                     -ExceptionHandler.php
                 -Facades
                     -Broadcast.php
-                    -LayoutPreferences.php
                     -Process.php
                 -Http
                     -Controllers
@@ -140,9 +139,7 @@ Esta es la estructura de archivos de mi paquete Kalion:
                     -ProcessorBuilder.php
                     -StepBase.php
                 -Layout
-                    -LayoutPreferencesCookieStore.php
                     -PackageAssets.php
-                    -PreferencesCookieStore.php
                 -Process
                     -ProcessStateStore.php
                     -SystemProcessInspector.php

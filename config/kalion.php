@@ -20,9 +20,6 @@ return [
     |
     | - "register_routes": Sets whether package routes should be registered.
     |
-    | - "web_middlewares": Sets whether the following middlewares should be
-    |                      added to the web route group: [AddPreferencesCookies]
-    |
     | - "stateless_requests": Define which routes or User-Agents should be treated as 100% stateless.
     |                         Kalion will force in-memory drivers (arrays) to prevent unwanted
     |                         session writes (garbage in the database) and slow database connections.
@@ -33,12 +30,6 @@ return [
         'run_migrations' => (bool) env('KALION_PROVIDER_RUN_MIGRATIONS', $defaults['kalion.provider.run_migrations']),
 
         'register_routes' => (bool) env('KALION_PROVIDER_REGISTER_ROUTES', $defaults['kalion.provider.register_routes']),
-
-        'web_middlewares' => [
-            'add_preferences_cookies' => [
-                'active' => (bool) env('KALION_PROVIDER_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE', $defaults['kalion.provider.web_middlewares.add_preferences_cookies.active']),
-            ]
-        ],
 
         'stateless_requests' => [
             'paths' => env('KALION_PROVIDER_STATELESS_REQUESTS_PATHS', $defaults['kalion.provider.stateless_requests.paths']),
@@ -137,14 +128,30 @@ return [
     | Cookies
     |--------------------------------------------------------------------------
     |
-    | The next option allows you to set the cookie package prefix and duration.
+    | Here you can configure the cookies managed by Kalion.
+    | Each cookie entry (for example: "user_settings") supports:
+    |
+    | - "active": Enables or disables that cookie flow.
+    | - "name": Cookie name sent to the browser.
+    | - "duration": Lifetime in minutes.
+    | - "version": Version used to invalidate old payloads.
+    | - "store": CookieStore class (or container alias) responsible for payload handling.
+    | - "middleware_groups": Comma-separated middleware groups where EnsureValidCookies
+    |   should run (for example: "web" or "web,api").
     |
     */
 
-    'cookie' => [
-        'name' => Str::slug(env('APP_NAME', 'laravel'), '_').'_kalion_user_preferences',
-        'duration' => (int) env('KALION_COOKIE_DURATION', $defaults['kalion.cookie.duration']),
-        'version' => env('KALION_COOKIE_VERSION', $defaults['kalion.cookie.version']),
+    'cookies' => [
+
+        'user_settings' => [
+            'active' => (bool) env('KALION_COOKIE_USER_SETTINGS_ACTIVE', $defaults['kalion.cookies.user_settings.active']),
+            'name' => env('KALION_COOKIE_USER_SETTINGS_NAME', $defaults['kalion.cookies.user_settings.name']),
+            'duration' => (int) env('KALION_COOKIE_USER_SETTINGS_DURATION', $defaults['kalion.cookies.user_settings.duration']),
+            'version' => env('KALION_COOKIE_USER_SETTINGS_VERSION', $defaults['kalion.cookies.user_settings.version']),
+            'store' => env('KALION_COOKIE_USER_SETTINGS_STORE', $defaults['kalion.cookies.user_settings.store']),
+            'middleware_groups' => env('KALION_COOKIE_USER_SETTINGS_MIDDLEWARE_GROUPS', $defaults['kalion.cookies.user_settings.middleware_groups']),
+        ],
+
     ],
 
     /*

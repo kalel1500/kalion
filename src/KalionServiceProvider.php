@@ -21,8 +21,9 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\JobDispatch
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\LogsClear;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\ProcessCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\KalionConfig;
-use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Middleware\AddPreferencesCookies;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Middleware\EnsureValidCookies;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Broadcasting\BroadcastDispatcher;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\ConfigParser;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\KalionConfigManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Contracts\CooldownStoreFactory;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Contracts\Mutex;
@@ -30,8 +31,6 @@ use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\CooldownManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Mutex\CacheMutex;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Store\CacheCooldownStoreFactory;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Filters\TabulatorFilterManager;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\LayoutPreferencesCookieStore;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\PreferencesCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Output\ConsoleOutputRelay;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Process\SystemProcessInspector;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
@@ -64,7 +63,6 @@ class KalionServiceProvider extends ServiceProvider
         'kalion.tabulatorFilter'        => TabulatorFilterManager::class,
         'kalion.cooldown'               => CooldownManager::class,
         AuthFactory::class              => AuthManager::class,
-        PreferencesCookieStore::class   => LayoutPreferencesCookieStore::class,
         TabulatorRepository::class      => EloquentTabulatorRepository::class,
         JobRepository::class            => EloquentJobRepository::class,
         RoleRepository::class           => EloquentRoleRepository::class,
@@ -386,7 +384,9 @@ class KalionServiceProvider extends ServiceProvider
     protected function registerMiddlewares(): void
     {
         /** @var Router $router */
-        $router = $this->app->make(Router::class);
+        /** @var ConfigParser $configParser */
+        $router       = $this->app->make(Router::class);
+        $configParser = $this->app->make(ConfigParser::class);
 
         // Registrar middlewares solo para rutas específicas
         $router->aliasMiddleware('ability', CheckAbility::class);
@@ -402,18 +402,17 @@ class KalionServiceProvider extends ServiceProvider
         // Añadir middlewares al principio de un grupo
 //        $router->prependMiddlewareToGroup('web', ShareInertiaData::class);
 
-        // Añadir el Middleware AddPreferencesCookies al grupo de rutas web
-        if (config('kalion.provider.web_middlewares.add_preferences_cookies.active')) {
-            // Añadir middlewares al final de un grupo
-            $router->pushMiddlewareToGroup('web', AddPreferencesCookies::class);
-
-            // Evitar el encriptado de las cookies de las preferencias del usuario
-            if (! empty(config('app.key'))) {
-                $this->app->afterResolving(EncryptCookies::class, function (EncryptCookies $middleware) {
-                    $middleware->disableFor(config('kalion.cookie.name')); // laravel_kalion_user_preferences
-                });
-            }
+        // Añadir EnsureValidCookies a los grupos de middleware especificados en la configuración
+        foreach ($configParser->getEnsureValidCookiesMiddlewareGroups() as $group) {
+            $router->pushMiddlewareToGroup($group, EnsureValidCookies::class);
         }
+
+        // Desactivar la encriptación de las cookies que tengan el atributo SkipCookieEncryption
+        $this->app->afterResolving(EncryptCookies::class, function (EncryptCookies $middleware) use ($configParser) {
+            foreach ($configParser->getCookiesToSkipEncryption() as $cookieName) {
+                $middleware->disableFor($cookieName);
+            }
+        });
     }
 
     /**
