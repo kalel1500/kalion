@@ -9,6 +9,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectGuests;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectUsers;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cookies\UserSettingsCookieStore;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\PackageAssets;
 
 class Kalion
 {
@@ -37,6 +38,16 @@ class Kalion
     public function isTesting(): bool
     {
         return $this->environment()->isTesting();
+    }
+
+    public function renderCss(): string
+    {
+        return PackageAssets::css();
+    }
+
+    public function renderJs(): string
+    {
+        return PackageAssets::js();
     }
 
     public function redirectGuestsTo(Request $request): ?string

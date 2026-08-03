@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal;
 
+/**
+ * @internal This class is intended for internal package usage only.
+ */
 class PackageAssets
 {
     protected const DIST = KALION_PATH . '/public/build/';

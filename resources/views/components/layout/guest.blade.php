@@ -1,4 +1,3 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\PackageAssets')
 @props(['title', 'cardTitle' => '', 'cardText' => ''])
 
 <!DOCTYPE html>
@@ -16,7 +15,7 @@
         <x-kal::js.dark-mode/>
 
         <!-- CSS del paquete -->
-        {!! PackageAssets::css() !!}
+        {!! kalion()->renderCss() !!}
     </head>
     <body class="bg-neutral-secondary">
 

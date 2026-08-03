@@ -1,5 +1,3 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\PackageAssets')
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -23,7 +21,7 @@
         </style>
 
         <!-- CSS del paquete -->
-        {!! PackageAssets::css() !!}
+        {!! kalion()->renderCss() !!}
     </head>
 
     <body class="leading-normal tracking-normal text-indigo-400 m-6 bg-cover bg-fixed" style="background-image: url(@viteAsset('resources/images/login/header.png'));">

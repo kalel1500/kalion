@@ -1,4 +1,3 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\PackageAssets')
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
 @use('Thehouseofel\Kalion\Features\Components\Domain\Support\LayoutMetrics')
 
@@ -46,8 +45,8 @@
 
         @if($data->isFromPackage)
             <!-- JavaScript y CSS del paquete -->
-            {!! PackageAssets::css() !!}
-            {!! PackageAssets::js() !!}
+            {!! kalion()->renderCss() !!}
+            {!! kalion()->renderJs() !!}
         @else
             <!-- JavaScript y CSS compilados -->
             @if(file_exists(resource_path('js/app.ts')))

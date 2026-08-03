@@ -1,5 +1,3 @@
-@use('Thehouseofel\Kalion\Core\Infrastructure\Utilities\Layout\PackageAssets')
-
 @props(['title', 'code', 'message'])
 
     <!DOCTYPE html>
@@ -19,7 +17,7 @@
     </script>
 
     <!-- JavaScript y CSS del paquete -->
-    {!! PackageAssets::css() !!}
+    {!! kalion()->renderCss() !!}
 </head>
 <body class="antialiased">
 <div class="relative flex items-top justify-center min-h-screen bg-[#f7fafc] dark:bg-gray-900 sm:items-center sm:pt-0">
