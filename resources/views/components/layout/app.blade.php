@@ -1,5 +1,4 @@
 @use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
-@use('Thehouseofel\Kalion\Features\Components\Domain\Support\LayoutMetrics')
 
 @props([
     'package'       => false,
@@ -17,7 +16,7 @@
     @class(['dark' => $data->darkMode, 'sc' => $data->sidebarCollapsed])
     data-theme="{{ $data->dataTheme }}"
     color-theme="{{ $data->colorTheme }}"
-    style="--kal-navbar-height: {{ LayoutMetrics::navbarHeight() }}; --kal-main-gap: {{ $data->flush ? '0px' : '20px' }};"
+    style="--kal-navbar-height: {{ kalion()->layout()->navbarHeight() }}; --kal-main-gap: {{ $data->flush ? '0px' : '20px' }};"
 >
     <head>
         <!-- Meta tags -->

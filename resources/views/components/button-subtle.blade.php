@@ -30,7 +30,7 @@
         ],
     ];
     $finalClasses = 'transition-colors focus:outline-none'
-        .' '.get_rounded_class($rounded)
+        .' '.kalion()->layout()->getRoundedClass($rounded)
         .' '.$sizeClasses[$size]
         .' '.$colorClasses[$tone][$color];
 @endphp

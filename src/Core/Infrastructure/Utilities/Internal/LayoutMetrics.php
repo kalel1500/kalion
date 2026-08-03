@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Features\Components\Domain\Support;
+namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal;
 
+/**
+ * @internal This class is intended for internal package usage only.
+ */
 class LayoutMetrics
 {
     public const NAVBAR_HEIGHT = [
@@ -33,24 +36,29 @@ class LayoutMetrics
         'lg'      => 'rounded-lg',      /* 8px  -> 16px = 16px */
     ];
 
-    public static function getShadowClasses(string $normalShadow = ''): string
+    public function getShadowClasses(string $normalShadow = ''): string
     {
         return config('kalion.layout.use_elevated_shadows')
             ? 'shadow-glow-2'
             : $normalShadow;
     }
 
-    public static function navbarHeight(): string
+    public function navbarHeight(): string
     {
         $density = config('kalion.layout.navbar_density', 'normal');
 
         return self::NAVBAR_HEIGHT[$density] ?? self::NAVBAR_HEIGHT['normal'];
     }
 
-    public static function navbarTitleSpacingClass(): string
+    public function navbarTitleSpacingClass(): string
     {
         $spacing = config('kalion.layout.navbar_title_spacing', 'md');
 
         return self::NAVBAR_TITLE_SPACING[$spacing] ?? self::NAVBAR_TITLE_SPACING['md'];
+    }
+
+    public function getRoundedClass($variant): string
+    {
+        return self::ROUNDED_VARIANTS[$variant];
     }
 }

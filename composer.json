@@ -35,8 +35,7 @@
         "files": [
             "src/Core/helpers_domain.php",
             "src/Core/helpers_infrastructure.php",
-            "src/Features/Auth/helpers_feat_auth_infra.php",
-            "src/Features/Components/helpers_feat_components_dom.php"
+            "src/Features/Auth/helpers_feat_auth_infra.php"
         ]
     },
     "autoload-dev": {

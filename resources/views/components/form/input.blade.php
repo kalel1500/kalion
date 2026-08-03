@@ -108,7 +108,7 @@
                     'lg'  => 'text-base px-3.5 py-3',
                     'xl'  => 'text-base px-4   py-3.5',
                 ];
-                $common     = $shadowClass . ' border block w-full' . ' ' . get_rounded_class($rounded) . ' ' . $sizeClasses[$size];
+                $common     = $shadowClass . ' border block w-full' . ' ' . kalion()->layout()->getRoundedClass($rounded) . ' ' . $sizeClasses[$size];
                 $normal     = $bgClass . ' border-default-medium text-heading focus:ring-brand focus:border-brand placeholder:text-body';
                 if (str_contains($type, 'date')) {
                     $common .= ' dark:scheme-dark';

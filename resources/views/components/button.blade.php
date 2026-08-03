@@ -31,7 +31,7 @@
     ];
     $finalClasses = $icon
         ? $commonClasses.' '.$iconClasses.' '.$colorClasses[$variant]
-        : $commonClasses.' '.$btnClasses.' '.get_rounded_class($rounded).' '.$sizeClasses[$size].' '.$colorClasses[$variant];
+        : $commonClasses.' '.$btnClasses.' '.kalion()->layout()->getRoundedClass($rounded).' '.$sizeClasses[$size].' '.$colorClasses[$variant];
 
     $isButton = $type === 'button';
 @endphp

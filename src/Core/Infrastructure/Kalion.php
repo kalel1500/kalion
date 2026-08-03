@@ -10,10 +10,12 @@ use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectGu
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectUsers;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cookies\UserSettingsCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\PackageAssets;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\LayoutMetrics;
 
 class Kalion
 {
-    protected ?EnvVo $environment = null;
+    protected ?EnvVo        $environment = null;
+    protected LayoutMetrics $layoutMetrics;
 
     public function environment(): EnvVo
     {
@@ -63,5 +65,10 @@ class Kalion
     public function userSettings(): UserSettingsCookieStore
     {
         return app(UserSettingsCookieStore::class);
+    }
+
+    public function layout(): LayoutMetrics
+    {
+        return $this->layoutMetrics ??= new LayoutMetrics();
     }
 }
