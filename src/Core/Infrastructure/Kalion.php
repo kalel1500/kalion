@@ -11,11 +11,13 @@ use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectUs
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cookies\UserSettingsCookieStore;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\PackageAssets;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\LayoutMetrics;
+use Thehouseofel\Kalion\Features\Components\Infrastructure\ComponentAssemblerResolver;
 
 class Kalion
 {
-    protected ?EnvVo        $environment = null;
-    protected LayoutMetrics $layoutMetrics;
+    protected ?EnvVo                     $environment = null;
+    protected LayoutMetrics              $layoutMetrics;
+    protected ComponentAssemblerResolver $componentAssemblerResolver;
 
     public function environment(): EnvVo
     {
@@ -70,5 +72,10 @@ class Kalion
     public function layout(): LayoutMetrics
     {
         return $this->layoutMetrics ??= new LayoutMetrics();
+    }
+
+    public function component(): ComponentAssemblerResolver
+    {
+        return $this->componentAssemblerResolver ??= new ComponentAssemblerResolver();
     }
 }

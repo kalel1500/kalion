@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
 
 class SidebarFullAssembler
 {
-    public static function fromProps(): SidebarFullDto
+    public function fromProps(): SidebarFullDto
     {
         $layoutData = app(LayoutData::class);
 

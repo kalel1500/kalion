@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
 
 class NavbarFullAssembler
 {
-    public static function fromProps(?string $navbarTitle): NavbarFullDto
+    public function fromProps(?string $navbarTitle): NavbarFullDto
     {
         $layoutData = app(LayoutData::class);
 

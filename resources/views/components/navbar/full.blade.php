@@ -1,11 +1,9 @@
-@use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\NavbarFullAssembler')
-
 @php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $item */ @endphp
 @php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Navbar\Items\NavbarItemDto $subItem */ @endphp
 
 @props(['navbarTitle' => null])
 
-@php($data = NavbarFullAssembler::fromProps($navbarTitle))
+@php($data = kalion()->component()->navbarFull()->fromProps($navbarTitle))
 
         <!-- New -->
 <x-kal::navbar>

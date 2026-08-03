@@ -1,9 +1,7 @@
-@use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\SidebarFullAssembler')
-
 @php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\SidebarItemDto $item */ @endphp
 @php /** @var \Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Sidebar\Items\SidebarItemDto $subItem */ @endphp
 
-@php($data = SidebarFullAssembler::fromProps())
+@php($data = kalion()->component()->sidebarFull()->fromProps())
 
 <x-kal::sidebar>
     @if($data->showSearch)

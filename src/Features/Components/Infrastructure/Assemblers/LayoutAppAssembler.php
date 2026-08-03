@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Features\Components\Domain\Objects\DataObjects\Layout\La
 
 class LayoutAppAssembler
 {
-    public static function fromProps(
+    public function fromProps(
         bool    $package,
         ?string $headTitle,
         ?string $navbarTitle,
@@ -27,14 +27,14 @@ class LayoutAppAssembler
             flush           : $flush,
             pageData        : $pageData,
             sidebarEnabled  : ! config('kalion.layout.sidebar_disabled'),
-            sidebarCollapsed: $userSettings->sidebar_state_per_page ? self::calculateSidebarCollapsedFromItems() : $userSettings->sidebar_state->isCollapsed(),
+            sidebarCollapsed: $userSettings->sidebar_state_per_page ? $this->calculateSidebarCollapsedFromItems() : $userSettings->sidebar_state->isCollapsed(),
             darkMode        : $userSettings->theme->isDark(),
             dataTheme       : $userSettings->theme->getDataTheme(),
             colorTheme      : $userSettings->theme->value,
         );
     }
 
-    private static function calculateSidebarCollapsedFromItems(): bool
+    private function calculateSidebarCollapsedFromItems(): bool
     {
         $links = collect(config('kalion_links.sidebar.items'));
 

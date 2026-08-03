@@ -1,5 +1,3 @@
-@use('Thehouseofel\Kalion\Features\Components\Infrastructure\Assemblers\LayoutAppAssembler')
-
 @props([
     'package'       => false,
     'headTitle'     => null,
@@ -8,7 +6,7 @@
     'pageData'      => null,
 ])
 
-@php($data = LayoutAppAssembler::fromProps($package, $headTitle, $navbarTitle, $flush, $pageData))
+@php($data = kalion()->component()->layoutApp()->fromProps($package, $headTitle, $navbarTitle, $flush, $pageData))
 
 <!DOCTYPE html>
 <html
