@@ -8,6 +8,9 @@ use ReflectionClass;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cookies\Attributes\SkipCookieEncryption;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cookies\CookieStore;
 
+/**
+ * @internal This class is intended for internal package usage only.
+ */
 class ConfigParser
 {
     /**
