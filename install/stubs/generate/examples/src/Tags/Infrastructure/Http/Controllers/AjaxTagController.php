@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Src\Tags\Application\DeleteTagUseCase;
 use Src\Tags\Application\GetTagListUseCase;
 use Src\Tags\Application\UpdateOrCreateTagUseCase;
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Controllers\Controller;
 
 final class AjaxTagController extends Controller
 {

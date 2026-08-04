@@ -8,7 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Src\Tags\Application\GetViewDataTagsUseCase;
-use Thehouseofel\Kalion\Core\Infrastructure\Laravel\Http\Controllers\Controller;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Http\Controllers\Controller;
 
 final class TagController extends Controller
 {
