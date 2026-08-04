@@ -5,6 +5,14 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Src\Shared\Domain\Contracts\Repositories\CommentRepository;
+use Src\Shared\Domain\Contracts\Repositories\PostRepository;
+use Src\Shared\Domain\Contracts\Repositories\TagRepository;
+use Src\Shared\Domain\Contracts\Repositories\TagTypeRepository;
+use Src\Shared\Infrastructure\Repositories\Eloquent\EloquentCommentRepository;
+use Src\Shared\Infrastructure\Repositories\Eloquent\EloquentPostRepository;
+use Src\Shared\Infrastructure\Repositories\Eloquent\EloquentTagRepository;
+use Src\Shared\Infrastructure\Repositories\Eloquent\EloquentTagTypeRepository;
 
 final class DependencyServiceProvider extends ServiceProvider
 {
@@ -14,9 +22,9 @@ final class DependencyServiceProvider extends ServiceProvider
      * @var array
      */
     public $singletons = [
-        \Src\Shared\Domain\Contracts\Repositories\CommentRepository::class => \Src\Shared\Infrastructure\Repositories\Eloquent\EloquentCommentRepository::class,
-        \Src\Shared\Domain\Contracts\Repositories\PostRepository::class    => \Src\Shared\Infrastructure\Repositories\Eloquent\EloquentPostRepository::class,
-        \Src\Shared\Domain\Contracts\Repositories\TagRepository::class     => \Src\Shared\Infrastructure\Repositories\Eloquent\EloquentTagRepository::class,
-        \Src\Shared\Domain\Contracts\Repositories\TagTypeRepository::class => \Src\Shared\Infrastructure\Repositories\Eloquent\EloquentTagTypeRepository::class,
+        CommentRepository::class => EloquentCommentRepository::class,
+        PostRepository::class    => EloquentPostRepository::class,
+        TagRepository::class     => EloquentTagRepository::class,
+        TagTypeRepository::class => EloquentTagTypeRepository::class,
     ];
 }
