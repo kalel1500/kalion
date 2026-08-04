@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Composer\InstalledVersions;
 use Illuminate\Support\Facades\File;
+use Thehouseofel\Kalion\Core\Domain\Support\Path;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Attributes\Step;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\StepBase;
 
@@ -63,7 +64,7 @@ class PrevHandleLockFile extends StepBase
         foreach ($paths as $path) {
             $allFiles = File::allFiles($path, true);
             foreach ($allFiles as $file) {
-                $relativePaths[] = ltrim(str_replace(normalize_path($path), '', $file->getRealPath()), DIRECTORY_SEPARATOR);
+                $relativePaths[] = ltrim(str_replace(Path::normalize($path), '', $file->getRealPath()), DIRECTORY_SEPARATOR);
             }
         }
         $relativePaths = array_unique($relativePaths);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Thehouseofel\Kalion\Core\Domain\Support\Path;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Attributes\Step;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Attributes\Title;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\StepBase;
@@ -26,7 +27,7 @@ class CopyMigrations extends StepBase
 
     public function prepare(): void
     {
-        $this->pathKalionMigrations       = normalize_path(KALION_PATH . '/' . $this->data->stepPaths);
+        $this->pathKalionMigrations       = Path::normalize(KALION_PATH . '/' . $this->data->stepPaths);
         $this->now                        = now();
         $this->currentAppMigrations       = collect(File::files($this->data->to))->map(fn($f) => $this->getMigrationBaseName($f));
         $this->migrationsToKeepInRollback = ['create_users_table.php', 'create_cache_table.php', 'create_jobs_table.php',];
@@ -56,7 +57,7 @@ class CopyMigrations extends StepBase
                     $this->now->addSecond();
                 }
 
-                File::copy($file->getPathname(), normalize_path($this->data->to . '/' . $fileTimestamp . '_' . $baseName));
+                File::copy($file->getPathname(), Path::normalize($this->data->to . '/' . $fileTimestamp . '_' . $baseName));
             }
         };
 

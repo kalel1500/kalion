@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
+use Thehouseofel\Kalion\Core\Domain\Support\Path;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Attributes\Step;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\Attributes\Title;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Install\StepBase;
@@ -39,7 +40,7 @@ class CopyConfig extends StepBase
 
         foreach ($files as $file) {
             $from = $file->getPathname();
-            $to   = normalize_path("{$this->data->to}/{$file->getFilename()}");
+            $to   = Path::normalize("{$this->data->to}/{$file->getFilename()}");
             $callback($from, $to);
         }
     }
