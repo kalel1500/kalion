@@ -18,7 +18,7 @@ class PublishConfig extends StepBase
     #[Title('Publicando')]
     public function up(): void
     {
-        $this->callDown();
+        $this->down();
 
         $this->skipOnDevelop('Skipped "vendor:publish" in develop mode');
 

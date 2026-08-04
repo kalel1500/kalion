@@ -31,7 +31,7 @@ class ModifyComposerToAddNamespaces extends StepBase
                 }
             );
         } else {
-            $this->callDown();
+            $this->down();
         }
     }
 

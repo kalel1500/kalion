@@ -16,7 +16,7 @@ class StepDto
         public readonly string       $pathGenBase,
         public readonly string       $pathGenExamples,
         public readonly string|array $stepPaths,
-        public string|array          $from,
+        public readonly string|array $from,
         public readonly string|array $to,
         public readonly string|array $up_from,
         public readonly string|array $down_from,

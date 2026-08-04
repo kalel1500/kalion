@@ -21,14 +21,14 @@ class DeleteModels extends StepBase
         if ($this->data->withExamples) {
             File::deleteDirectory($this->data->to);
         } else {
-            $this->callDown();
+            $this->down($this->data->from);
         }
     }
 
     #[Title('Restaurando')]
-    public function down(): void
+    public function down($from = null): void
     {
         File::ensureDirectoryExists($this->data->to);
-        File::copyDirectory($this->data->from, $this->data->to);
+        File::copyDirectory($from ?? $this->data->from, $this->data->to);
     }
 }

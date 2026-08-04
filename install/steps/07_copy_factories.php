@@ -23,15 +23,15 @@ class CopyFactories extends StepBase
             File::ensureDirectoryExists($this->data->to);
             File::copyDirectory($this->data->from, $this->data->to);
         } else {
-            $this->callDown();
+            $this->down($this->data->from);
         }
     }
 
     #[Title('Restaurando')]
-    public function down(): void
+    public function down($from = null): void
     {
         File::deleteDirectory($this->data->to);
         File::ensureDirectoryExists($this->data->to);
-        File::copyDirectory($this->data->from, $this->data->to);
+        File::copyDirectory($from ?? $this->data->from, $this->data->to);
     }
 }

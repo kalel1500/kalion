@@ -36,18 +36,6 @@ abstract class StepBase
 
     abstract public function down(): void;
 
-    protected function callUp(): void
-    {
-        $this->data->from = $this->data->up_from;
-        $this->up();
-    }
-
-    protected function callDown(): void
-    {
-        $this->data->from = $this->data->down_from;
-        $this->down();
-    }
-
     protected function skipOnDevelop(string $message = 'Skipped step on develop mode'): void
     {
         if ($this->data->developMode) {

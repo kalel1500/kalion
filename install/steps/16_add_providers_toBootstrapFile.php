@@ -23,7 +23,7 @@ class AddProvidersToBootstrapFile extends StepBase
         if ($this->data->withExamples) {
             ServiceProvider::addProviderToBootstrapFile($this->provider);
         } else {
-            $this->callDown();
+            $this->down();
         }
     }
 

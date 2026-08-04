@@ -18,7 +18,7 @@ class CopyDependencyServiceProvider extends StepBase
     #[Title('Copiando')]
     public function up(): void
     {
-        $this->callDown();
+        $this->down();
 
         $this->skipWithoutExamples();
 

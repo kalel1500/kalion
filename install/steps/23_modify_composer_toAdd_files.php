@@ -37,7 +37,7 @@ class ModifyComposerToAddFiles extends StepBase
                 }
             );
         } else {
-            $this->callDown();
+            $this->down();
         }
     }
 
