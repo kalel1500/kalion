@@ -209,10 +209,15 @@ return [
 
     'auth' => [
         'fake' => (bool) env('KALION_AUTH_FAKE', $defaults['kalion.auth.fake']),
+
         'show_register_link' => (bool) env('KALION_AUTH_SHOW_REGISTER_LINK', $defaults['kalion.auth.show_register_link']),
+
         'show_password_reset_link' => (bool) env('KALION_AUTH_SHOW_PASSWORD_RESET_LINK', $defaults['kalion.auth.show_password_reset_link']),
+
         'redirect_users' => env('KALION_AUTH_REDIRECT_USERS', $defaults['kalion.auth.redirect_users']),
+
         'redirect_guests' => env('KALION_AUTH_REDIRECT_GUESTS', $defaults['kalion.auth.redirect_guests']),
+
         'blades' => [
             'fake' => env('KALION_AUTH_BLADE_FAKE', $defaults['kalion.auth.blades.fake']),
             'login' => env('KALION_AUTH_BLADE_LOGIN', $defaults['kalion.auth.blades.login']),
@@ -220,27 +225,33 @@ return [
             'forgot_password' => env('KALION_AUTH_BLADE_FORGOT_PASSWORD', $defaults['kalion.auth.blades.forgot_password']),
             'reset_password' => env('KALION_AUTH_BLADE_RESET_PASSWORD', $defaults['kalion.auth.blades.reset_password']),
         ],
+
         'models' => [
             'web' => env('KALION_AUTH_MODEL_WEB', $defaults['kalion.auth.models.web']),
             'api' => env('KALION_AUTH_MODEL_API', $defaults['kalion.auth.models.api']),
         ],
+
         'entities' => [
             'web' => env('KALION_AUTH_ENTITY_WEB', $defaults['kalion.auth.entities.web']),
             'api' => env('KALION_AUTH_ENTITY_API', $defaults['kalion.auth.entities.api']),
         ],
+
         'repositories' => [
             'web' => env('KALION_AUTH_REPOSITORY_WEB', $defaults['kalion.auth.repositories.web']),
             'api' => env('KALION_AUTH_REPOSITORY_API', $defaults['kalion.auth.repositories.api']),
         ],
+
         'actions' => [
             'authenticate_user' => env('KALION_AUTH_ACTION_AUTHENTICATE_USER', $defaults['kalion.auth.actions.authenticate_user']),
             'create_new_user' => env('KALION_AUTH_ACTION_CREATE_NEW_USER', $defaults['kalion.auth.actions.create_new_user']),
             'reset_user_password' => env('KALION_AUTH_ACTION_RESET_USER_PASSWORD', $defaults['kalion.auth.actions.reset_user_password']),
         ],
+
         'fields' => [
             'web' => env('KALION_AUTH_FIELD', $defaults['kalion.auth.fields.web']),
             'api' => env('KALION_AUTH_FIELD_API', $defaults['kalion.auth.fields.api']),
         ],
+
         'available_fields' => [
             'id' => [
                 'name' => 'id',
@@ -267,8 +278,11 @@ return [
                 'placeholder' => env('KALION_AUTH_FIELD_CUSTOM_PLACEHOLDER', $defaults['kalion.auth.available_fields.custom.placeholder']), // you@somewhere.com
             ]
         ],
+
         'load_roles' => (bool) env('KALION_AUTH_LOAD_ROLES', $defaults['kalion.auth.load_roles']),
+
         'display_role_in_exception' => (bool) env('KALION_AUTH_DISPLAY_ROLE_IN_EXCEPTION', $defaults['kalion.auth.display_role_in_exception']),
+
         'display_permission_in_exception' => (bool) env('KALION_AUTH_DISPLAY_PERMISSION_IN_EXCEPTION', $defaults['kalion.auth.display_permission_in_exception']),
     ],
 
