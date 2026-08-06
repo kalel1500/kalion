@@ -30,7 +30,6 @@ class KalionConfigManager
         'kalion.entity_calculated_props_mode'             => 's',
         'kalion.minimum_value_for_id'                     => 1,
         'kalion.cookies.user_settings.active'             => true,
-        'kalion.cookies.user_settings.name'               => 'kalion-user-settings',
         'kalion.cookies.user_settings.duration'           => (60 * 24 * 364),
         'kalion.cookies.user_settings.version'            => '0',
         'kalion.cookies.user_settings.store'              => UserSettingsCookieStore::class,

@@ -145,7 +145,7 @@ return [
 
         'user_settings' => [
             'active' => (bool) env('KALION_COOKIE_USER_SETTINGS_ACTIVE', $defaults['kalion.cookies.user_settings.active']),
-            'name' => env('KALION_COOKIE_USER_SETTINGS_NAME', $defaults['kalion.cookies.user_settings.name']),
+            'name' => env('KALION_COOKIE_USER_SETTINGS_NAME', Str::slug((string) env('APP_NAME', 'laravel')).'-user-settings'),
             'duration' => (int) env('KALION_COOKIE_USER_SETTINGS_DURATION', $defaults['kalion.cookies.user_settings.duration']),
             'version' => env('KALION_COOKIE_USER_SETTINGS_VERSION', $defaults['kalion.cookies.user_settings.version']),
             'store' => env('KALION_COOKIE_USER_SETTINGS_STORE', $defaults['kalion.cookies.user_settings.store']),
