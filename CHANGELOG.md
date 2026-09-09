@@ -1,12 +1,99 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.57.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.58.0-beta.0...master)
+
+## [v0.58.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.57.0-beta.0...v0.58.0-beta.0) - 2026-09-09
+
+### Migration notes
+
+* Cambiar las variables de entorno `KALION_DEFAULT_PATH` y `KALION_AUTH_REDIRECT_AFTER_LOGIN` por `KALION_AUTH_REDIRECT_USERS`.
+* Cambiar las configuraciones `kalion.default_path` y `kalion.auth.redirect_after_login` por `kalion.auth.redirect_users`.
+* Modificar parámetros del método `KalionConfig::redirectTo()`:
+  * Antes:
+  * ```php
+    KalionConfig::redirectTo(
+        defaultPath: '/home',
+        afterLogin: '/home',
+    );
+    ```
+  * Ahora:
+  * ```php
+    KalionConfig::redirectTo(
+        guests: '/welcome',
+        users: '/home',
+    );
+    ```
+* Cambiar las llamadas a métodos estáticos o helpers por los nuevos métodos del helper `kalion()`:
+  * `LayoutPreferences::get()`                 => `kalion()->userSettings()->get()`
+  * `LayoutPreferences::set('...')`            => `kalion()->userSettings()->set('...')`
+  * `PackageAssets::css()`                     => `kalion()->renderCss()`
+  * `PackageAssets::js()`                      => `kalion()->renderJs()`
+  * `LayoutMetrics::getShadowClasses('...')`   => `kalion()->layout()->getShadowClasses('...')`
+  * `LayoutMetrics::navbarHeight()`            => `kalion()->layout()->navbarHeight()`
+  * `LayoutMetrics::navbarTitleSpacingClass()` => `kalion()->layout()->navbarTitleSpacingClass()`
+  * `get_rounded_class('...')`                 => `kalion()->layout()->getRoundedClass('...')`
+  * `LayoutAppAssembler::fromProps(...)`       => `kalion()->component()->layoutApp()->fromProps(...)`
+  * `NavbarFullAssembler::fromProps(...)`      => `kalion()->component()->navbarFull()->fromProps(...)`
+  * `SidebarFullAssembler::fromProps(...)`      => `kalion()->component()->sidebarFull()->fromProps(...)`
+
+### Added
+
+* Nuevos métodos en la clase Kalion a los que se pueden acceder con el helper `kalion()`:
+    * `renderCss()`
+    * `renderJs()`
+    * `layout()`
+    * `component()`
+
+### Changed
+
+* (breaking) Se ha mejorado el valor por defecto del nombre de la cookie `user_settings` para evitar conflictos con otras apps de Laravel que usen el paquete.
+  * Antes tenía el valor `kalion-user-settings` y para cambiarlo había que definir o la config `kalion.cookies.user_settings.name` o la variable de entorno `KALION_COOKIE_USER_SETTINGS_NAME`.
+  * Ahora se forma combinando el nombre de la app para evitar conflictos con otra app que tenga el mismo paquete instalado: `Str::slug((string) env('APP_NAME', 'laravel')).'-user-settings'`.
+  * Se elimina la key `kalion.cookies.user_settings.name` de `KalionConfigManager::$defaults`, ya que no puede ser dinámico.
+
+* Actualizar `kalel1500/laravel-tailwind-merge` a la version 1.
+
+* (breaking) Archivos del comando de instalación actualizados.
+
+* (breaking) Varios cambios en las clases de soporte:
+  * `PackageAssets` marcada como `@internal`. Ahora se usa el helper `kalion()` para acceder a los métodos.
+  * `LayoutMetrics` marcada como `@internal`. Ahora se usa el helper `kalion()` para acceder a los métodos.
+  * Se ha quitado el `static` de los métodos `fromProps` de los Assembles de los componentes para que se puedan acceder a traves de helper con los nuevos métodos `kalion()->component()->sidebarFull()->fromProps()`
+
+* (breaking) Se ha rehecho por completo el sistema de la cookie de las preferencias del usuario:
+  * Se ha eliminado la configuración `kalion.web_middlewares.add_preferences_cookies.active` y su variable de entorno `KALION_PROVIDER_WEB_MIDDLEWARE_ADD_PREFERENCES_COOKIES_ACTIVE`.
+  * Se ha eliminado el array configuración `kalion.cookie.*` y sus variables de entorno `KALION_COOKIE_*`.
+  * Ahora se pueden configurar varias cookies en el array `kalion.cookies.*`.
+  * Además, en el array de configuración ahora se pueden configurar los grupos de rutas a los que añadir la cookie y la clase (`store`) que se usara para guardar y recuperar la cookie.
+  * Se ha creado el nuevo atributo `SkipCookieEncryption` para poder usar en los nuevos `stores` e indicar que no se debe encriptar la cookie: `#[SkipCookieEncryption]`.
+  * Se ha centralizado toda la lógica para leer la configuración en la nueva clase `ConfigParser`.
+  * Se ha eliminado la fachada `LayoutPreferences` y ahora se debe usar el nuevo helper `kalion()->userSettings()` para acceder a las preferencias del usuario.
+
+* (breaking) Se ha rehecho el sistema de redirecciones:
+  * Se han substituido las funcionalidades `redirectDefault` y `redirectAfterLogin` por `redirectUsers` y `redirectGuest`, ya que queda más claro y es más coherente con Laravel.
+  * Se ha eliminado la config `default_path` y su variable de entorno `KALION_DEFAULT_PATH`
+  * Se ha eliminado el método `kalion()->defaultUrl()` y se ha movido la lógica a la ruta `/`
+  * Ahora el logout usa `kalion()->redirectGuestsTo($request) ?? app_url()` en vez de redirigir a `app_url()`
+
+* (breaking) Se elimina la config `kalion.auth.guard` y su variable de entorno `KALION_AUTH_GUARD`. Ahora se define la clase directamente en el Provider.
+
+### Removed
+
+* Helper `get_rounded_class()` eliminado.
+
+### Fixed
+
+* Ahora el `ExceptionHandler` deja que Laravel maneje los `render` de excepciones `HttpException` y `ModelNotFoundException` en PRO y JSON para que devuelva lo que corresponda. El paquete solo las sobreescribe para mostrar el `trace` cuando es `debug` y deja la blade custom solo para las excepciones de kalion.
+* Se han corregido varios errores del comando `kalion:install`:
+  * Imports actualizados.
+  * Reemplazado el helper `normalize_path` por `Path::normalize`.
+  * Se ha corregido el flujo cuando se llama al `down`, ya que el `callDown` modificaba el `from` y después no era correcto en el `up`. Ahora es `readonly` y se llama directamente al down pasandole el `$from`
 
 ## [v0.57.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.56.2-beta.0...v0.57.0-beta.0) - 2026-07-29
 
 ### Changed
 
-* <u>**¡¡¡(breaking)!!!**</u> Se han movido varios helpers globales a la nueva clase Kalion (se pueden acceder con el nuveo helper `kalion()`):
+* <u>**¡¡¡(breaking)!!!**</u> Se han movido varios helpers globales a la nueva clase Kalion (se pueden acceder con el nuevo helper `kalion()`):
   * `get_environment` => `kalion()->environment();`
   * `env_isTesting` => `kalion()->isTesting();`
   * `env_isLocal` => `kalion()->isLocal();`
