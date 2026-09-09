@@ -39,46 +39,33 @@ class ExceptionHandler
      */
     public static function handle(Exceptions $exceptions, bool $overrideModelNotFound = true, bool $overrideHttp = true): void
     {
-        // Renderizar manualmente los ModelNotFoundException para que todos los "findOrFail()" en local muestren la vista "trace" y en PRO muestren nuestra vita "custom-error" sin tener que envolverlos en un "tryCatch"
+        // Renderizar manualmente los ModelNotFoundException para que todos los "findOrFail()" en local muestren la vista "trace"
         if ($overrideModelNotFound) {
             $exceptions->render(function (NotFoundHttpException $e, Request $request) {
                 $modelException = $e->getPrevious();
 
                 // Comprobar que la excepción previa sea ModelNotFoundException
                 if (! ($modelException instanceof ModelNotFoundException)) {
-                    return null; // Que Laravel lo maneje como siempre
+                    return null;
                 }
 
-                $context = ExceptionContextDto::from($modelException);
-                $isJson  = self::shouldRenderJson($request);
-                $isDebug = debug_enabled();
-
-                // Si la respuesta esperada es JSON
-                if ($isJson) {
-                    return $isDebug
-                        ? self::renderJson($context) // Renderizarlo con el contexto de la excepción ModelNotFoundException
-                        : null; // Deja que Laravel lo maneje con su JSON genérico
+                // Sobreescribir solo cuando se espera una respuesta HTML y el debug está activado
+                if (! self::shouldRenderJson($request) && debug_enabled()) {
+                    return self::renderHtmlDebug($modelException, $request);
                 }
 
-                // Si la respuesta es HTML
-                return $isDebug
-                    ? self::renderHtmlDebug($modelException, $request)
-                    : self::renderHtmlCustom($context);
+                return null;
             });
         }
 
         // Renderizar manualmente las excepciones HttpException, ya que Laravel siempre muestra una vista sin el debug (trace) aunque el APP_DEBUG esté activo
         if ($overrideHttp) {
             $exceptions->render(function (HttpException $e, Request $request) {
-                $isJson  = self::shouldRenderJson($request);
-                $isDebug = debug_enabled();
-                if (! $isJson) {
-                    return $isDebug
-                        ? self::renderHtmlDebug($e, $request)
-                        : self::renderHtmlCustom(ExceptionContextDto::from($e));
+                if (! self::shouldRenderJson($request) && debug_enabled()) {
+                    return self::renderHtmlDebug($e, $request);
                 }
 
-                return null; // Que Laravel lo maneje como siempre
+                return null;
             });
         }
 
