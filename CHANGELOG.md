@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.58.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.58.1-beta.0...master)
+
+## [v0.58.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.58.0-beta.0...v0.58.1-beta.0) - 2026-09-17
+
+### Added
+
+* Nuevas clases `TabulatorSortDto` y `TabulatorSortCollection` para guardar los `sorts` de tabulator.
 
 ## [v0.58.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.57.0-beta.0...v0.58.0-beta.0) - 2026-09-09
 
