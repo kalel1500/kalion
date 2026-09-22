@@ -30,5 +30,5 @@ interface Guard
     /**
      * @return class-string|null
      */
-    public function getClassUserRepository(): ?string;
+    public function getClassAbilityRepository(): ?string;
 }

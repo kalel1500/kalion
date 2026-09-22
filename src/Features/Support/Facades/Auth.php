@@ -13,7 +13,7 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
  * @method static \Thehouseofel\Kalion\Features\Auth\Domain\Objects\DataObjects\LoginFieldDto getLoginFieldData()
  * @method static string getClassUserModel()
  * @method static string getClassUserEntity()
- * @method static string getClassUserRepository()
+ * @method static string getClassAbilityRepository()
  *
  * @see \Thehouseofel\Kalion\Features\Auth\Infrastructure\AuthManager
  */

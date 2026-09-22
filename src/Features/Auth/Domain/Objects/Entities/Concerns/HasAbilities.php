@@ -90,7 +90,7 @@ trait HasAbilities
             }
 
             if ($item->getIsQuery()) {
-                $repositoryClass = kauth($this->getGuard())->getClassUserRepository();
+                $repositoryClass = kauth($this->getGuard())->getClassAbilityRepository();
                 if (is_null($repositoryClass)) {
                     throw new RequiredDefinitionException(sprintf('The repository class for the guard "%s" is not defined. Please define it in the configuration.', $this->getGuard()));
                 }
