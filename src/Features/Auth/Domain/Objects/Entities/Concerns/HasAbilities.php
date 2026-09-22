@@ -20,6 +20,10 @@ trait HasAbilities
 
     public function fillStaticAbilities(): void
     {
+        if (! kalion()->config()->abilitiesEnabled()) {
+            return;
+        }
+
         $repositoryRole       = app(RoleRepository::class);
         $repositoryPermission = app(PermissionRepository::class);
 
@@ -68,6 +72,10 @@ trait HasAbilities
 
     protected function userHas(string $method, string $value, array $params = []): bool
     {
+        if (! kalion()->config()->abilitiesEnabled()) {
+            return false;
+        }
+
         if (! in_array($method, ['permissions', 'roles'])) {
             throw new NeverCalledException(sprintf('The method %s is not meant to be called with the item "%s".', __METHOD__, $method));
         }

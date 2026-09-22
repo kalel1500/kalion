@@ -35,10 +35,8 @@ class EntityGuard implements Guard
             return null;
         }
 
-        $abilitiesEnabled = config('kalion.auth.abilities_enabled', true);
-
         $with = null;
-        if ($abilitiesEnabled) {
+        if (kalion()->config()->abilitiesEnabled()) {
             $with = ['roles', 'permissions.roles'];
             $user->load($with);
         }
