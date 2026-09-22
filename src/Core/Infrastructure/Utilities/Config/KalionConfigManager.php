@@ -71,7 +71,7 @@ class KalionConfigManager
         'kalion.auth.available_fields.custom.label'       => 'k::text.input.email',
         'kalion.auth.available_fields.custom.type'        => 'email',
         'kalion.auth.available_fields.custom.placeholder' => 'name@company.com',
-        'kalion.auth.load_roles'                          => true,
+        'kalion.auth.abilities_enabled'                   => true,
         'kalion.auth.display_role_in_exception'           => false,
         'kalion.auth.display_permission_in_exception'     => false,
         'kalion.process.status_should_use_cache'          => true,

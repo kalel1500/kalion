@@ -189,7 +189,7 @@ return [
     |           Should only be used in local environments for testing.
     | - "fields": Defines which database field will be used for authentication.
     | - "available_fields": Contains all available login fields and their attributes.
-    | - "load_roles": If enabled, user roles will be loaded automatically.
+    | - "abilities_enabled": Enables Kalion's abilities system, including roles and permissions. Disable it when authentication only requires the users table.
     | - "display_role_in_exception": Shows required roles in exception messages.
     | - "display_permission_in_exception": Shows required permissions in exceptions.
     |
@@ -267,7 +267,7 @@ return [
             ]
         ],
 
-        'load_roles' => (bool) env('KALION_AUTH_LOAD_ROLES', $defaults['kalion.auth.load_roles']),
+        'abilities_enabled' => (bool) env('KALION_AUTH_ABILITIES_ENABLED', $defaults['kalion.auth.abilities_enabled']),
 
         'display_role_in_exception' => (bool) env('KALION_AUTH_DISPLAY_ROLE_IN_EXCEPTION', $defaults['kalion.auth.display_role_in_exception']),
 
