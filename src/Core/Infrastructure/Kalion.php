@@ -19,29 +19,29 @@ class Kalion
     protected LayoutMetrics              $layoutMetrics;
     protected ComponentAssemblerResolver $componentAssemblerResolver;
 
-    public function environment(): EnvVo
+    public function env(): EnvVo
     {
         return $this->environment ??= EnvVo::from(config('app.env'));
     }
 
     public function isProd(): bool
     {
-        return $this->environment()->isProd();
+        return $this->env()->isProd();
     }
 
     public function isLocal(): bool
     {
-        return $this->environment()->isLocal();
+        return $this->env()->isLocal();
     }
 
     public function isPre(): bool
     {
-        return $this->environment()->isPre();
+        return $this->env()->isPre();
     }
 
     public function isTesting(): bool
     {
-        return $this->environment()->isTesting();
+        return $this->env()->isTesting();
     }
 
     public function renderCss(): string
