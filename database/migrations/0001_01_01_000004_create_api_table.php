@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('api_user_role', function (Blueprint $table) {
+        Schema::create('api_role_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('role_id')->constrained();
             $table->foreignId('api_user_id')->constrained();
@@ -48,7 +48,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('api_users');
-        Schema::dropIfExists('api_user_role');
+        Schema::dropIfExists('api_role_user');
         Schema::dropIfExists('api_logs');
     }
 };
