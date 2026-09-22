@@ -33,6 +33,7 @@ use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cooldown\Store\CacheCooldo
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Filters\TabulatorFilterManager;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Output\ConsoleOutputRelay;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Process\SystemProcessInspector;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Response\ResponseStreamFactory;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthFactory;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Repositories\PermissionRepository;
@@ -62,6 +63,7 @@ class KalionServiceProvider extends ServiceProvider
         'kalion.consoleOutputRelay'     => ConsoleOutputRelay::class,
         'kalion.tabulatorFilter'        => TabulatorFilterManager::class,
         'kalion.cooldown'               => CooldownManager::class,
+        'kalion.responseStream'         => ResponseStreamFactory::class,
         AuthFactory::class              => AuthManager::class,
         TabulatorRepository::class      => EloquentTabulatorRepository::class,
         JobRepository::class            => EloquentJobRepository::class,

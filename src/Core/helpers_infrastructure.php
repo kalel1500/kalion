@@ -5,10 +5,13 @@ declare(strict_types=1);
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
 use Thehouseofel\Kalion\Core\Infrastructure\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\Broadcast;
+use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\ResponseStream;
+use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Response\ResponseStreamer;
 use function Illuminate\Filesystem\join_paths;
 
 if (! function_exists('kalion')) {
@@ -49,6 +52,16 @@ if (! function_exists('response_json_error')) {
         // INFO kalel1500 - mi_estructura_de_respuesta
         $exceptionData = ExceptionContextDto::from($e);
         return response()->json($exceptionData->toArray($throwInDebugMode), $exceptionData->statusCode);
+    }
+}
+
+if (! function_exists('response_stream')) {
+    /**
+     * @param callable(ResponseStreamer): void $callback
+     */
+    function response_stream(callable $callback, int $status = 200, array $headers = []): StreamedResponse
+    {
+        return ResponseStream::make($callback, $status, $headers);
     }
 }
 
