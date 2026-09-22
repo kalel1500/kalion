@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\AbstractEntity;
-use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Concerns\HasGuard;
+use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns\HasGuard;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
