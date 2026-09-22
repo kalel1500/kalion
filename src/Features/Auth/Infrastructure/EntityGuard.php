@@ -80,9 +80,9 @@ class EntityGuard implements Guard
     }
 
     /**
-     * @return class-string
+     * @return class-string|null
      */
-    public function getClassUserRepository(): string
+    public function getClassUserRepository(): ?string
     {
         return config('kalion.auth.repositories.' . $this->guard);
     }

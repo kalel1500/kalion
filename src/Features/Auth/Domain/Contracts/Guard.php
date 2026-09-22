@@ -28,7 +28,7 @@ interface Guard
     public function getClassUserEntity(): string;
 
     /**
-     * @return class-string
+     * @return class-string|null
      */
-    public function getClassUserRepository(): string;
+    public function getClassUserRepository(): ?string;
 }

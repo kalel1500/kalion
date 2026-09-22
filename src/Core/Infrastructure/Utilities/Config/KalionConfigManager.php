@@ -12,8 +12,6 @@ use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\ApiUserEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\UserEntity;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\ApiUser;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\User;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentApiUserRepository;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentUserRepository;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\AuthenticateUser;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\CreateNewUser;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\Actions\ResetUserPassword;
@@ -60,8 +58,8 @@ class KalionConfigManager
         'kalion.auth.models.api'                          => ApiUser::class,
         'kalion.auth.entities.web'                        => UserEntity::class,
         'kalion.auth.entities.api'                        => ApiUserEntity::class,
-        'kalion.auth.repositories.web'                    => EloquentUserRepository::class,
-        'kalion.auth.repositories.api'                    => EloquentApiUserRepository::class,
+        'kalion.auth.repositories.web'                    => null,
+        'kalion.auth.repositories.api'                    => null,
         'kalion.auth.actions.authenticate_user'           => AuthenticateUser::class,
         'kalion.auth.actions.create_new_user'             => CreateNewUser::class,
         'kalion.auth.actions.reset_user_password'         => ResetUserPassword::class,

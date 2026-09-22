@@ -3,6 +3,7 @@
 namespace Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns;
 
 use Thehouseofel\Kalion\Core\Domain\Exceptions\NeverCalledException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AbilityEntity;
@@ -84,9 +85,19 @@ trait HasAbilities
         if ($method === 'permissions' && $this->all_permissions()) return true;
 
         return $this->$method()->contains(function (AbilityEntity $item) use ($method, $value, $params) {
-            $repositoryUser = new (kauth($this->getGuard())->getClassUserRepository());
-            if ($item->name->value !== $value) return false;
-            if ($item->getIsQuery()) return $repositoryUser->{$value}($this, ...$params);
+            if ($item->name->value !== $value) {
+                return false;
+            }
+
+            if ($item->getIsQuery()) {
+                $repositoryClass = kauth($this->getGuard())->getClassUserRepository();
+                if (is_null($repositoryClass)) {
+                    throw new RequiredDefinitionException(sprintf('The repository class for the guard "%s" is not defined. Please define it in the configuration.', $this->getGuard()));
+                }
+                $repositoryUser = app($repositoryClass);
+                return $repositoryUser->{$value}($this, ...$params);
+            }
+
             return true;
         });
     }
