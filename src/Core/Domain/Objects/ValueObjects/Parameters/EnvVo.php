@@ -4,29 +4,17 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters;
 
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractEnumVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 
 /**
  * @internal This class is intended for internal package usage only.
  */
-class EnvVo extends AbstractEnumVo
+class EnvVo extends AbstractStringVo
 {
     const local         = 'local';
     const preproduction = 'preproduction';
     const production    = 'production';
     const testing       = 'testing';
-
-    protected ?array $permittedValues = [self::local, self::preproduction, self::production,];
-    private bool     $isTesting       = false;
-
-    public function __construct(string $value)
-    {
-        if ($value === static::testing) {
-            $this->isTesting = true;
-            $value           = config('kalion.real_env_in_tests');
-        }
-        parent::__construct($value);
-    }
 
     public function isLocal(): bool
     {
@@ -45,6 +33,6 @@ class EnvVo extends AbstractEnumVo
 
     public function isTesting(): bool
     {
-        return $this->isTesting;
+        return ($this->value === static::testing);
     }
 }

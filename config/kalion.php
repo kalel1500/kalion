@@ -39,18 +39,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Real environment during testing
-    |--------------------------------------------------------------------------
-    |
-    | It is equivalent to the 'app.env' that you are in when doing the tests,
-    | since during the tests the value of 'app.env' testing.
-    |
-    */
-
-    'real_env_in_tests' => env('KALION_REAL_ENV_IN_TESTS', 'local'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Mailer Configurations
     |--------------------------------------------------------------------------
     |
