@@ -1,6 +1,38 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.58.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.59.0-beta.0...master)
+
+## [v0.59.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.58.1-beta.0...v0.59.0-beta.0) - 2026-09-28
+
+### Added
+
+* Nueva clase `Config` y nuevo método para obtenerla añadido a al helper global `kalion`: `kalion()->config()->...`
+* Nueva utilidad `ResponseStream` para crear respuestas HTTP transmitidas en tiempo real:
+  * Incorpora la facade `ResponseStream`, el helper `response_stream()` y las clases `ResponseStreamFactory` y `ResponseStreamer`.
+  * El callback recibe un `ResponseStreamer` extensible mediante macros, cuyo método `echo()` envía contenido de forma fluida y permite encadenar llamadas.
+  * Desactiva por defecto el buffering de respuesta de Nginx mediante el header `X-Accel-Buffering: no`, que puede sobrescribirse con headers personalizados.
+
+### Changed
+
+* (breaking) install: Ahora la clase `EloquentUserRepository` ya no extiende de una clase padre.
+* (breaking) Se realizan varios cambios en la feature `Auht`:
+  * Se ha renombrado el trait `HasRoles` a `HasAbilities`.
+  * Se ha renombrado la configuración `kalion.auth.load_roles` a `kalion.auth.abilities_enabled`.
+  * Se ha movido el trait `Thehouseofel\Kalion\Core\Domain\Objects\Entities\Concerns\HasGuard` a `Thehouseofel\Kalion\Features\Auth\Domain\Objects\Entities\Concerns\HasGuard`.
+  * Se ha renombrado el método `environment()` de la clase Kalion a `env()` para que sea más fácil de usar.
+  * Se ha renombrado el método `getClassUserRepository()` de la interfaz `Guard` a `getClassAbilityRepository()`.
+* (breaking) Se ha renombrado la tabla `api_user_role` a `api_role_user` para mantener la coherencia con la tabla `role_user`.
+* (breaking) Ahora la clase `EnvVo` extiende de `AbstractStringVo` en vez de `AbstractEnumVo` por lo que los valores de la variable de entorno "APP_ENV" ya no están limitados a `local`, `preproduction`, `production` y `testing`.
+  * Además, se ha eliminado la configuración `kalion.real_env_in_tests` que ya no hace falta porque ahora no se sobreescribe el valor cuando el valor es `testing`.
+
+### Removed
+
+* (breaking) Se han eliminado los repositorios `EloquentApiUserRepository` y `EloquentUserRepository` ya que solo tenían el método `find` y no se usaban para nada. Además de que establecían una estructura rígida que no siempre se querrá usar en la app.
+* (breaking) Se ha eliminado la configuración `kalion.real_env_in_tests` y su variable de entorno `KALION_REAL_ENV_IN_TESTS`.
+
+### Fixed
+
+* Ahora se comprueba la configuración `kalion.auth.abilities_enabled` en los métodos `fillStaticAbilities()` y `userHas()` del trait `HasAbilities`. De esta forma si la configuración está desactivada no se intentan cargar las habilidades.
 
 ## [v0.58.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.58.0-beta.0...v0.58.1-beta.0) - 2026-09-17
 
