@@ -1,6 +1,29 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.59.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.59.1-beta.0...master)
+
+## [v0.59.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.59.0-beta.0...v0.59.1-beta.0) - 2026-09-29
+
+### Added
+
+* Nuevo método `Serialization::jsonToArrayOrFail()` para realizar conversiones JSON estrictas sin ocultar la `JsonException` original.
+
+### Changed
+
+* Se ha ampliado el sistema de gestión de excepciones con soporte para datos de depuración mediante `$debugData`:
+  * Las excepciones base aceptan ahora `$debugData` en el constructor y lo propagan a `KalionExceptionBehavior::initKalionException()` de forma separada a `$data`, que continúa reservado para los datos públicos de la respuesta.
+  * La propiedad `$context` de `KalionExceptionBehavior` se ha renombrado a `$exceptionContext` para diferenciar el `ExceptionContextDto` propio del paquete del método `context()` reconocido por Laravel.
+  * (breaking) El método `getContext()` de `KalionExceptionInterface` y `KalionExceptionBehavior` se ha renombrado a `getExceptionContext()` para reflejar mejor su finalidad y evitar confusiones con el contexto de logging de Laravel.
+  * Se ha añadido el método `context()` a `KalionExceptionInterface` y `KalionExceptionBehavior`, permitiendo que Laravel incorpore los datos bajo la clave `kalion_debug` al contexto de los logs cuando el modo debug está activo.
+  * `ExceptionContextDto` incorpora la propiedad `$debugData` y la añade como `debug_data` dentro de `arrayDebugInfo()`, por lo que solo se incluye en las respuestas JSON cuando el modo debug está activo.
+  * Nueva clase interna `DebugData`, encargada de convertir objetos, recursos, referencias circulares y valores con UTF-8 inválido en una representación textual segura y limitada mediante Symfony VarDumper.
+  * `KalionReflectionException::jsonSerializationFailed()` recibe las propiedades que no se han podido serializar y conserva la `JsonException` original como excepción previa, facilitando el diagnóstico de la causa real.
+  * `ExceptionHandler::renderHtmlDebug()` y `Debug::renderLaravelDebugStackTrace()` reciben ahora `$debugData`. Cuando existen datos de depuración, se muestran al final del trace HTML nativo de Laravel mediante la nueva vista `pages.exceptions.debug-data`.
+  * Los datos de depuración no se incluyen en las respuestas ni en el contexto adicional de los logs cuando el modo debug está desactivado, evitando exponer información interna en producción.
+
+### Fixed
+
+* Se ha corregido el error de tipo producido en `ReflectionResolvable::props()` cuando `Serialization::jsonToArray()` no podía serializar las propiedades y devolvía `null`; ahora se lanza una `KalionReflectionException` descriptiva que mantiene el contrato de retorno `array`.
 
 ## [v0.59.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.58.1-beta.0...v0.59.0-beta.0) - 2026-09-28
 
