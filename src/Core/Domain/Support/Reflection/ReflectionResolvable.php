@@ -369,7 +369,7 @@ trait ReflectionResolvable
                 foreach ($this as $key => $value) {
                     $props[$key] = $value;
                 }
-                return Serialization::jsonToArray($props);
+                return Serialization::jsonToArray($props) ?? throw KalionReflectionException::jsonSerializationFailed(static::class);
             }
 
             throw KalionReflectionException::disabledReflection(static::class);

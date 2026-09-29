@@ -51,6 +51,14 @@ class KalionReflectionException extends KalionRuntimeException
         );
     }
 
+    public static function jsonSerializationFailed(string $class): static
+    {
+        return new static(
+            "Failed to serialize {$class} to an array using JSON serialization. " .
+            "The object may contain unsupported values, malformed UTF-8, or circular references."
+        );
+    }
+
     public static function resolveFailedToHydrate(Throwable $th, string $expectedClass, KalionReflectionException $exception): Throwable
     {
         $class = $th->getTrace()[0]['class'] ?? null;
