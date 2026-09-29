@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Support\Reflection;
 
 use Illuminate\Support\Arr;
+use JsonException;
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
@@ -369,7 +370,16 @@ trait ReflectionResolvable
                 foreach ($this as $key => $value) {
                     $props[$key] = $value;
                 }
-                return Serialization::jsonToArray($props) ?? throw KalionReflectionException::jsonSerializationFailed(static::class);
+
+                try {
+                    return Serialization::jsonToArrayOrFail($props);
+                } catch (JsonException $exception) {
+                    throw KalionReflectionException::jsonSerializationFailed(
+                        class   : static::class,
+                        props   : $props,
+                        previous: $exception,
+                    );
+                }
             }
 
             throw KalionReflectionException::disabledReflection(static::class);
