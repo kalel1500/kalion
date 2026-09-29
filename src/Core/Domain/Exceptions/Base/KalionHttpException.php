@@ -23,7 +23,8 @@ class KalionHttpException extends RuntimeException implements KalionExceptionInt
         ?Throwable $previous = null,
         int        $code = 0,
         ?array     $data = null,
-        bool       $success = false
+        bool       $success = false,
+        array      $debugData = [],
     )
     {
         $this->initKalionException(
@@ -32,7 +33,8 @@ class KalionHttpException extends RuntimeException implements KalionExceptionInt
             previous  : $previous,
             code      : $code,
             data      : $data,
-            success   : $success
+            success   : $success,
+            debugData : $debugData,
         );
     }
 

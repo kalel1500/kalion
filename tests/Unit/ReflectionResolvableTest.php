@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Tests\Unit;
 
 use Illuminate\Container\Container;
+use JsonException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflection;
+use Thehouseofel\Kalion\Core\Domain\Support\Internal\DebugData;
 
 class ReflectionResolvableTest extends TestCase
 {
@@ -21,7 +23,12 @@ class ReflectionResolvableTest extends TestCase
 
         $this->previousContainer = Container::getInstance();
 
-        $container = new Container();
+        $container = new class extends Container {
+            public function hasDebugModeEnabled(): bool
+            {
+                return true;
+            }
+        };
         $container->instance('translator', new class {
             public function get(string $key): string
             {
@@ -55,12 +62,36 @@ class ReflectionResolvableTest extends TestCase
     {
         $dto = new JsonSerializationDto("\xB1\x31");
 
-        $this->expectException(KalionReflectionException::class);
-        $this->expectExceptionMessage(
-            'Failed to serialize ' . JsonSerializationDto::class . ' to an array using JSON serialization.'
-        );
+        try {
+            $dto->toArray();
+            $this->fail('A serialization exception was expected.');
+        } catch (KalionReflectionException $exception) {
+            $context   = $exception->getExceptionContext();
+            $debugData = $context->debugData;
 
-        $dto->toArray();
+            $this->assertStringContainsString(
+                'Failed to serialize ' . JsonSerializationDto::class,
+                $exception->getMessage(),
+            );
+            $this->assertInstanceOf(JsonException::class, $exception->getPrevious());
+            $this->assertStringContainsString(JsonSerializationDto::class, $debugData['serialization_class']);
+            $this->assertStringContainsString('data', $debugData['serialization_target']);
+            $this->assertSame(['kalion_debug' => $debugData], $exception->context());
+            $this->assertArrayNotHasKey('debug_data', $context->toArray(false));
+            $this->assertSame($debugData, $context->toArray()['debug_data']);
+            $this->assertIsString(json_encode($context->toArray(), JSON_THROW_ON_ERROR));
+        }
+    }
+
+    public function test_debug_data_safely_dumps_circular_references(): void
+    {
+        $recursive         = [];
+        $recursive['self'] = &$recursive;
+
+        $debugData = DebugData::normalize(['recursive' => $recursive]);
+
+        $this->assertStringContainsString('&1', $debugData['recursive']);
+        $this->assertIsString(json_encode($debugData, JSON_THROW_ON_ERROR));
     }
 }
 

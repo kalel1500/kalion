@@ -20,6 +20,7 @@ class KalionLogicException extends LogicException implements KalionExceptionInte
         ?array     $data = null,
         bool       $success = false,
         ?int       $statusCode = null,
+        array      $debugData = [],
     )
     {
         $this->initKalionException(
@@ -28,7 +29,8 @@ class KalionLogicException extends LogicException implements KalionExceptionInte
             previous  : $previous,
             code      : $code,
             data      : $data,
-            success   : $success
+            success   : $success,
+            debugData : $debugData,
         );
     }
 }

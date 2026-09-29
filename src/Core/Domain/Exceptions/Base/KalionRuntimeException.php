@@ -20,6 +20,7 @@ class KalionRuntimeException extends RuntimeException implements KalionException
         ?array     $data = null,
         bool       $success = false,
         ?int       $statusCode = null,
+        array      $debugData = [],
     )
     {
         $this->initKalionException(
@@ -28,7 +29,8 @@ class KalionRuntimeException extends RuntimeException implements KalionException
             previous  : $previous,
             code      : $code,
             data      : $data,
-            success   : $success
+            success   : $success,
+            debugData : $debugData,
         );
     }
 }

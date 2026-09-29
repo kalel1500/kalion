@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Throwable;
 
@@ -31,12 +32,14 @@ class ExceptionContextDto extends AbstractDataTransferObject
     public readonly array      $trace;
     public readonly ?Throwable $previous;
     public readonly bool       $showLogout;
+    public readonly array      $debugData;
 
     public function __construct(
         Throwable $e,
         ?array    $data = null,
         bool      $success = false,
         ?array    $customResponse = null,
+        array     $debugData = [],
     )
     {
         $this->texts = [
@@ -63,6 +66,7 @@ class ExceptionContextDto extends AbstractDataTransferObject
         $this->trace          = collect($e->getTrace())->map(fn($trace) => Arr::except($trace, ['args']))->all();
         $this->previous       = $e->getPrevious();
         $this->showLogout     = $e instanceof KalionHttpException && config('kalion.exceptions.http.show_logout_form') && $e::SHOW_LOGOUT_FORM;
+        $this->debugData      = $debugData;
     }
 
     public function getTitle(): string
@@ -79,15 +83,24 @@ class ExceptionContextDto extends AbstractDataTransferObject
     /*----------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------- Create Functions -----------------------------------------------*/
 
-    public static function from(Throwable $e, ?array $data = null, bool $success = false, ?array $customResponse = null): static
+    public static function from(
+        Throwable $e,
+        ?array    $data = null,
+        bool      $success = false,
+        ?array    $customResponse = null,
+        array     $debugData = [],
+    ): static
     {
-        if (method_exists($e, 'getContext') && ! is_null($e->getContext())) return $e->getContext();
+        if ($e instanceof KalionExceptionInterface && $e->getExceptionContext() !== null) {
+            return $e->getExceptionContext();
+        }
 
         return new static(
             e             : $e,
             data          : $data,
             success       : $success,
             customResponse: $customResponse,
+            debugData     : $debugData,
         );
     }
 
@@ -107,11 +120,12 @@ class ExceptionContextDto extends AbstractDataTransferObject
     {
         $previousData = is_null($this->previous) ? null : static::from($this->previous);
         return [
-            'exception' => $this->exception,
-            'file'      => $this->file,
-            'line'      => $this->line,
-            'trace'     => $this->trace,
-            'previous'  => $previousData?->toArray(),
+            'exception'  => $this->exception,
+            'file'       => $this->file,
+            'line'       => $this->line,
+            'trace'      => $this->trace,
+            'previous'   => $previousData?->toArray(),
+            'debug_data' => $this->debugData,
         ];
     }
 

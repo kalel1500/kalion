@@ -14,16 +14,28 @@ final class Serialization
     public static function jsonToArray(mixed $object): ?array
     {
         try {
-            $decoded = json_decode(
-                json       : json_encode($object, JSON_THROW_ON_ERROR),
-                associative: true,
-                flags      : JSON_THROW_ON_ERROR,
-            );
-
-            return is_array($decoded) ? $decoded : null;
+            return self::jsonToArrayOrFail($object);
         } catch (JsonException) {
             return null;
         }
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public static function jsonToArrayOrFail(mixed $object): array
+    {
+        $decoded = json_decode(
+            json       : json_encode($object, JSON_THROW_ON_ERROR),
+            associative: true,
+            flags      : JSON_THROW_ON_ERROR,
+        );
+
+        if (! is_array($decoded)) {
+            throw new JsonException('The JSON value cannot be represented as an array.');
+        }
+
+        return $decoded;
     }
 
     public static function jsonToObject(mixed $object): ?object

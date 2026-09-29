@@ -13,8 +13,18 @@ use Throwable;
  */
 final class Debug
 {
-    public static function renderLaravelDebugStackTrace(Request $request, Throwable $exception): string
+    public static function renderLaravelDebugStackTrace(Request $request, Throwable $exception, array $debugData = []): string
     {
-        return app()->make(Renderer::class)->render($request, $exception);
+        $html = app()->make(Renderer::class)->render($request, $exception);
+
+        if ($debugData === []) {
+            return $html;
+        }
+
+        $panel = view('kal::pages.exceptions.debug-data', compact('debugData'))->render();
+
+        return str_contains($html, '</body>')
+            ? str_replace('</body>', $panel . '</body>', $html)
+            : $html . $panel;
     }
 }

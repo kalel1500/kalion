@@ -20,6 +20,7 @@ class KalionException extends Exception implements KalionExceptionInterface
         ?array     $data = null,
         bool       $success = false,
         ?int       $statusCode = null,
+        array      $debugData = [],
     )
     {
         $this->initKalionException(
@@ -28,7 +29,8 @@ class KalionException extends Exception implements KalionExceptionInterface
             previous  : $previous,
             code      : $code,
             data      : $data,
-            success   : $success
+            success   : $success,
+            debugData : $debugData,
         );
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Exceptions\Concerns;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
+use Thehouseofel\Kalion\Core\Domain\Support\Internal\DebugData;
 use Throwable;
 use UnexpectedValueException;
 
@@ -14,7 +15,7 @@ trait KalionExceptionBehavior
     const MESSAGE     = '';
 
     protected int                  $statusCode;
-    protected ?ExceptionContextDto $context = null;
+    protected ?ExceptionContextDto $exceptionContext = null;
 
     protected function initKalionException(
         int        $statusCode,
@@ -22,7 +23,8 @@ trait KalionExceptionBehavior
         ?Throwable $previous = null,
         int        $code = 0,
         ?array     $data = null,
-        bool       $success = false
+        bool       $success = false,
+        array      $debugData = [],
     ): void
     {
         if ($message === '') {
@@ -36,7 +38,13 @@ trait KalionExceptionBehavior
         $this->statusCode = $statusCode;
 
         // Guardar código y montar estructura del Json a devolver // INFO kalel1500 - mi_estructura_de_respuesta
-        $this->context = ExceptionContextDto::from($this, $data, $success, $this->getResponse($data));
+        $this->exceptionContext = ExceptionContextDto::from(
+            e             : $this,
+            data          : $data,
+            success       : $success,
+            customResponse: $this->getResponse($data),
+            debugData     : DebugData::normalize($debugData),
+        );
     }
 
     public function getStatusCode(): int
@@ -44,9 +52,21 @@ trait KalionExceptionBehavior
         return $this->statusCode;
     }
 
-    public function getContext(): ?ExceptionContextDto
+    public function getExceptionContext(): ?ExceptionContextDto
     {
-        return $this->context;
+        return $this->exceptionContext;
+    }
+
+    /**
+     * Laravel calls this method when building the exception log context.
+     */
+    public function context(): array
+    {
+        $debugData = $this->exceptionContext?->debugData ?? [];
+
+        return ! debug_enabled() || $debugData === []
+            ? []
+            : ['kalion_debug' => $debugData];
     }
 
     public function getResponse($data): ?array

@@ -8,7 +8,12 @@ interface KalionExceptionInterface extends \Throwable
 {
     public function getStatusCode(): int;
 
-    public function getContext(): ?ExceptionContextDto;
+    public function getExceptionContext(): ?ExceptionContextDto;
+
+    /**
+     * Additional context consumed by Laravel's exception logger.
+     */
+    public function context(): array;
 
     public function getResponse($data): ?array;
 }

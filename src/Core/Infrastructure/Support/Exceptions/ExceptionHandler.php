@@ -72,7 +72,7 @@ class ExceptionHandler
 
         // Renderizar nuestras excepciones de dominio
         $exceptions->render(function (KalionExceptionInterface $e, Request $request) {
-            $context  = $e->getContext();
+            $context  = $e->getExceptionContext();
             $notDebug = ! debug_enabled();
 
             // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
@@ -92,22 +92,9 @@ class ExceptionHandler
             /**
              * Para este punto el APP_DEBUG es siempre "true".
              *
-             * Forzar el "debug_stack_trace" si se cumplen estas opciones (and):
-             *  - El debug está desactivado
-             *  - Si la excepcion es una instancia de "KalionHttpException" y la constante "SHOULD_RENDER_TRACE" es "true"
+             * Renderizamos el trace nativo de Laravel y añadimos los datos de depuración de Kalion cuando existan.
              */
-            if (self::isKalionHttpExceptionAnd($e, shouldRenderTrace: true)) {
-                return self::renderHtmlDebug($e, $request);
-            }
-
-            /**
-             * Para este punto el APP_DEBUG es siempre "true".
-             *
-             * Por lo que dejamos que laravel se encargue de renderizar el error.
-             *
-             * En teoria siempre deberia pintar el "renderHtmlDebug" pero me parece mejor dejar que lo haga laravel en vez de forzarlo manualmente.
-             */
-            return null;
+            return self::renderHtmlDebug($e, $request, $context->debugData);
         });
 
         // Indicar a Laravel cuando devolver un Json (mirar url "/ajax/")
@@ -140,9 +127,9 @@ class ExceptionHandler
         return response()->json($context->toArray(), $context->statusCode);
     }
 
-    private static function renderHtmlDebug(\Throwable $exception, Request $request): Response
+    private static function renderHtmlDebug(Throwable $exception, Request $request, array $debugData = []): Response
     {
-        return response(Debug::renderLaravelDebugStackTrace($request, $exception));
+        return response(Debug::renderLaravelDebugStackTrace($request, $exception, $debugData));
     }
 
     private static function renderHtmlCustom(ExceptionContextDto $context): Response
