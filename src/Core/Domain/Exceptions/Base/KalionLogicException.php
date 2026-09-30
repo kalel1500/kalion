@@ -13,6 +13,10 @@ class KalionLogicException extends LogicException implements KalionExceptionInte
 {
     use KalionExceptionBehavior;
 
+    /**
+     * @param array|null $data Public, JSON-serializable data included in the response.
+     * @param array $debugData Internal diagnostic data; it may contain non-serializable values.
+     */
     public function __construct(
         ?string    $message = null,
         ?Throwable $previous = null,
