@@ -24,7 +24,7 @@ final class Debug
         $panel = view('kal::pages.exceptions.debug-data', compact('debugData'))->render();
 
         return str_contains($html, '</body>')
-            ? str_replace('</body>', $panel . '</body>', $html)
+            ? str_replace(search: '</body>', replace: $panel . '</body>', subject: $html)
             : $html . $panel;
     }
 }
