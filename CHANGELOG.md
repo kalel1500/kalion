@@ -1,6 +1,18 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.59.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.60.0-beta.0...master)
+
+## [v0.60.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.59.1-beta.0...v0.60.0-beta.0) - 2026-09-30
+
+### Changed
+
+* (breaking) Los métodos `fromArray()` y `resolveFromArray()` de las colecciones devuelven ahora una colección vacía cuando reciben `null`; los DTO y entidades no colección mantienen su comportamiento nullable.
+* (breaking) `TabulatorDataCollection::fromTabulator()` devuelve ahora una colección vacía cuando recibe `null`, en lugar de `null`, y lanza `InvalidValueException` ante JSON mal formado o cuya raíz no sea un array. Cuando falla la decodificación, conserva la `JsonException` original como excepción previa.
+* `ExceptionHandler::renderJson()` valida ahora la serialización de la respuesta. Si `$data` contiene valores no serializables, registra el error —incluyendo un dump seguro en modo debug— y devuelve una respuesta JSON estándar con estado 500, sin modificar el payload cuando es válido.
+
+### Removed
+
+* (breaking) Se han eliminado la propiedad y el parámetro `$customResponse` de `ExceptionContextDto`, junto con el método `getResponse()` de `KalionExceptionInterface` y `KalionExceptionBehavior`. Todas las excepciones mantienen ahora la respuesta JSON estándar con las claves `success`, `message` y `data`; las personalizaciones destinadas al diagnóstico deben enviarse mediante `$debugData`.
 
 ## [v0.59.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.59.0-beta.0...v0.59.1-beta.0) - 2026-09-29
 
