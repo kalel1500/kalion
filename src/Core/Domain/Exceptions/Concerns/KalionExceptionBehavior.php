@@ -62,11 +62,14 @@ trait KalionExceptionBehavior
      */
     public function context(): array
     {
+        $context   = [];
         $debugData = $this->exceptionContext?->debugData ?? [];
 
-        return ! debug_enabled() || $debugData === []
-            ? []
-            : ['kalion_debug' => $debugData];
+        if (debug_enabled() && !empty($debugData)) {
+            $context['kalion_debug'] = $debugData;
+        }
+
+        return $context;
     }
 
     public function getResponse($data): ?array
