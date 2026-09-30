@@ -6,10 +6,12 @@ namespace Thehouseofel\Kalion\Tests\Unit;
 
 use JsonException;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Collections\TabulatorDataCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Collections\TabulatorFilterCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Collections\TabulatorSortCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\TabulatorFilterDto;
+use Thehouseofel\Kalion\Tests\TestCase;
 
 class TabulatorDataCollectionTest extends TestCase
 {
@@ -21,6 +23,7 @@ class TabulatorDataCollectionTest extends TestCase
         ];
     }
 
+    /** @param class-string<TabulatorDataCollection> $collectionClass */
     #[DataProvider('tabulatorCollectionClasses')]
     public function test_from_tabulator_returns_empty_collection_for_null(string $collectionClass): void
     {
@@ -71,14 +74,18 @@ class TabulatorDataCollectionTest extends TestCase
 
     public function test_from_tabulator_throws_for_malformed_json(): void
     {
-        $this->expectException(JsonException::class);
-
-        TabulatorFilterCollection::fromTabulator('%5Binvalid-json%5D');
+        try {
+            TabulatorFilterCollection::fromTabulator('%5Binvalid-json%5D');
+            $this->fail('An InvalidValueException was not thrown.');
+        } catch (InvalidValueException $exception) {
+            $this->assertInstanceOf(JsonException::class, $exception->getPrevious());
+            $this->assertSame('The Tabulator value must contain valid JSON.', $exception->getMessage());
+        }
     }
 
     public function test_from_tabulator_throws_when_json_root_is_not_an_array(): void
     {
-        $this->expectException(JsonException::class);
+        $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('must decode to an array');
 
         TabulatorFilterCollection::fromTabulator(urlencode('null'));
