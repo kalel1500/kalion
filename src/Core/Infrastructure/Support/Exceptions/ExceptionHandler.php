@@ -10,12 +10,15 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\URL;
+use InvalidArgumentException;
+use JsonException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Base\KalionHttpException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
+use Thehouseofel\Kalion\Core\Domain\Support\Internal\DebugData;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\Debug;
 use Throwable;
 
@@ -124,7 +127,29 @@ class ExceptionHandler
 
     private static function renderJson(ExceptionContextDto $context): JsonResponse
     {
-        return response()->json($context->toArray(), $context->statusCode);
+        try {
+            return response()->json(
+                data   : $context->toArray(),
+                status : $context->statusCode,
+                options: JSON_THROW_ON_ERROR,
+            );
+        } catch (JsonException|InvalidArgumentException $exception) {
+            $logContext = ['exception' => $exception];
+
+            if (debug_enabled()) {
+                $logContext['response_data'] = DebugData::dump($context->data);
+            }
+
+            logger()->error('The exception response data could not be serialized.', $logContext);
+
+            return response()->json([
+                'success' => false,
+                'message' => debug_enabled()
+                    ? 'The exception response data could not be serialized: ' . $exception->getMessage()
+                    : 'Server Error',
+                'data'    => null,
+            ], 500);
+        }
     }
 
     private static function renderHtmlDebug(Throwable $exception, Request $request, array $debugData = []): Response
