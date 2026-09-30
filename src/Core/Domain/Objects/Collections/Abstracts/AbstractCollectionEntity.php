@@ -51,17 +51,9 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         return $this->toArrayDynamic(__FUNCTION__, $fields);
     }
 
-    /**
-     * @template T of array|null
-     * @param T $data
-     * @param string|array|null $with
-     * @param bool|string $isFull
-     * @param bool $resolve
-     * @return (T is null ? null : static)
-     */
-    protected static function fromArrayBase(?array $data, string|array|null $with, bool|string|null $isFull, bool $resolve): ?static
+    protected static function fromArrayBase(?array $data, string|array|null $with, bool|string|null $isFull, bool $resolve): static
     {
-        if (is_null($data)) return null;
+        $data ??= [];
 
         if (! is_null($with) && ($with === '' || is_array($with) && in_array('', $with))) {
             throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class AbstractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
@@ -107,25 +99,17 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
     }
 
     /**
-     * @template T of array|null
-     * @param T $data
-     * @param string|array|null $with
-     * @param bool|string $isFull
-     * @return (T is null ? null : static)
+     * A null value represents an empty collection.
      */
-    public static function fromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
+    public static function fromArray(?array $data, string|array|null $with = null, bool|string|null $isFull = null): static
     {
         return static::fromArrayBase($data, $with, $isFull, false);
     }
 
     /**
-     * @template T of array|null
-     * @param T $data
-     * @param string|array|null $with
-     * @param bool|string $isFull
-     * @return (T is null ? null : static)
+     * A null value represents an empty collection.
      */
-    public static function resolveFromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
+    public static function resolveFromArray(?array $data, string|array|null $with = null, bool|string|null $isFull = null): static
     {
         return static::fromArrayBase($data, $with, $isFull, true);
     }

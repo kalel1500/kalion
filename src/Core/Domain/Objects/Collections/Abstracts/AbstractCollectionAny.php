@@ -12,16 +12,11 @@ abstract class AbstractCollectionAny extends AbstractCollectionBase implements R
     use HasRelatableOptions;
 
     /**
-     * @template T of array|null
-     * @param T $data
-     * @param string|array|null $with
-     * @param bool|string $isFull
-     * @return (T is null ? null : static)
+     * A null value represents an empty collection.
      */
-    public static function fromArray(?array $data, string|array|null $with = null, bool|string|null $isFull = null): ?static
+    public static function fromArray(?array $data, string|array|null $with = null, bool|string|null $isFull = null): static
     {
-        if (is_null($data)) return null;
-        $collection         = new static($data);
+        $collection         = new static($data ?? []);
         $collection->with   = $with;
         $collection->isFull = $isFull;
         return $collection;

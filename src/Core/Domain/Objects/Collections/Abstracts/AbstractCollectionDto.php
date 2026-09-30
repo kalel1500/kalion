@@ -21,36 +21,28 @@ abstract class AbstractCollectionDto extends AbstractCollectionBase implements M
     }
 
     /**
-     * @template T of array|null
-     * @param T $data
-     * @return (T is null ? null : static)
+     * A null value represents an empty collection.
      */
-    public static function fromArray(?array $data): ?static
+    public static function fromArray(?array $data): static
     {
-        if (is_null($data)) return null;
-
         /** @var AbstractDataTransferObject $valueClass */
         $valueClass = static::resolveItemType();
         $res        = [];
-        foreach ($data as $key => $value) {
+        foreach ($data ?? [] as $key => $value) {
             $res[$key] = ($value instanceof $valueClass) ? $value : $valueClass::fromArray($value);
         }
         return new static($res);
     }
 
     /**
-     * @template T of array|null
-     * @param T $data
-     * @return (T is null ? null : static)
+     * A null value represents an empty collection.
      */
-    public static function resolveFromArray(?array $data): ?static
+    public static function resolveFromArray(?array $data): static
     {
-        if (is_null($data)) return null;
-
         /** @var AbstractDataTransferObject $valueClass */
         $valueClass = static::resolveItemType();
         $res        = [];
-        foreach ($data as $key => $value) {
+        foreach ($data ?? [] as $key => $value) {
             $res[$key] = ($value instanceof $valueClass) ? $value : $valueClass::resolveFromArray($value);
         }
         return new static($res);

@@ -22,18 +22,13 @@ abstract class AbstractCollectionVo extends AbstractCollectionBase
     }
 
     /**
-     * @template T of array|null
-     * @param T $data
-     * @param callable|null $valueModifierCallback
-     * @return (T is null ? null : static)
+     * A null value represents an empty collection.
      */
-    public static function fromArray(?array $data, callable $valueModifierCallback = null): ?static
+    public static function fromArray(?array $data, callable $valueModifierCallback = null): static
     {
-        if (is_null($data)) return null;
-
         $valueClass = static::resolveItemType();
         $res        = [];
-        foreach ($data as $key => $value) {
+        foreach ($data ?? [] as $key => $value) {
             if ($value instanceof $valueClass) {
                 $res[$key] = $value;
             } else {

@@ -30,7 +30,6 @@ abstract class TabulatorDataCollection extends AbstractCollectionDto
             }
         }
 
-        /** @var static */
         return static::fromArray($value);
     }
 

@@ -13,11 +13,7 @@ interface Relatable extends ArrayConvertible
     public function setIsFull(bool|string|null $isFull): static;
 
     /**
-     * @template T of array|null
-     * @param T $data
-     * @param string|array|null $with
-     * @param bool|string $isFull
-     * @return (T is null ? null : static)
+     * A null value represents an empty collection.
      */
-    public static function fromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static;
+    public static function fromArray(?array $data, string|array|null $with = null, bool|string|null $isFull = null): static;
 }
