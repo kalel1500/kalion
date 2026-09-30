@@ -14,6 +14,4 @@ interface KalionExceptionInterface extends \Throwable
      * Additional context consumed by Laravel's exception logger.
      */
     public function context(): array;
-
-    public function getResponse($data): ?array;
 }

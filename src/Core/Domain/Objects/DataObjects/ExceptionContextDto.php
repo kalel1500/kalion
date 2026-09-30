@@ -24,7 +24,6 @@ class ExceptionContextDto extends AbstractDataTransferObject
     public readonly string     $message;
     public readonly bool       $success;
     public readonly ?array     $data;
-    public readonly ?array     $customResponse;
     public readonly int|string $code;
     public readonly string     $exception;
     public readonly string     $file;
@@ -38,7 +37,6 @@ class ExceptionContextDto extends AbstractDataTransferObject
         Throwable $e,
         ?array    $data = null,
         bool      $success = false,
-        ?array    $customResponse = null,
         array     $debugData = [],
     )
     {
@@ -58,7 +56,6 @@ class ExceptionContextDto extends AbstractDataTransferObject
         $this->message        = $this->getMessage($e);
         $this->success        = $success;
         $this->data           = $data;
-        $this->customResponse = $customResponse;
         $this->code           = $e->getCode();
         $this->exception      = get_class($e);
         $this->file           = $e->getFile();
@@ -87,7 +84,6 @@ class ExceptionContextDto extends AbstractDataTransferObject
         Throwable $e,
         ?array    $data = null,
         bool      $success = false,
-        ?array    $customResponse = null,
         array     $debugData = [],
     ): static
     {
@@ -99,7 +95,6 @@ class ExceptionContextDto extends AbstractDataTransferObject
             e             : $e,
             data          : $data,
             success       : $success,
-            customResponse: $customResponse,
             debugData     : $debugData,
         );
     }
@@ -132,7 +127,7 @@ class ExceptionContextDto extends AbstractDataTransferObject
     public function toArray(bool $throwInDebugMode = true): array
     {
         $addDebugInfo = debug_enabled() && $throwInDebugMode;
-        $toArray      = $this->customResponse ?? $this->toArrayForProd();
+        $toArray      = $this->toArrayForProd();
         return $addDebugInfo ? array_merge($toArray, $this->arrayDebugInfo()) : $toArray;
     }
 }

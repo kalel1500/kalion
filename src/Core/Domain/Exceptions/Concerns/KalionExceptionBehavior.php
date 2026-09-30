@@ -39,11 +39,10 @@ trait KalionExceptionBehavior
 
         // Guardar código y montar estructura del Json a devolver // INFO kalel1500 - mi_estructura_de_respuesta
         $this->exceptionContext = ExceptionContextDto::from(
-            e             : $this,
-            data          : $data,
-            success       : $success,
-            customResponse: $this->getResponse($data),
-            debugData     : DebugData::normalize($debugData),
+            e        : $this,
+            data     : $data,
+            success  : $success,
+            debugData: DebugData::normalize($debugData),
         );
     }
 
@@ -70,10 +69,5 @@ trait KalionExceptionBehavior
         }
 
         return $context;
-    }
-
-    public function getResponse($data): ?array
-    {
-        return null;
     }
 }
