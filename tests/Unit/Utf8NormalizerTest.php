@@ -46,6 +46,18 @@ class Utf8NormalizerTest extends TestCase
         ], $normalized);
     }
 
+    public function test_it_accepts_windows_1252_as_explicit_source_encoding(): void
+    {
+        $this->assertSame(
+            'conexión',
+            Utf8Normalizer::normalize("conexi\xF3n", 'Windows-1252'),
+        );
+        $this->assertSame(
+            'Error €',
+            Utf8Normalizer::normalize("Error \x80", 'Windows-1252'),
+        );
+    }
+
     public function test_it_accepts_a_custom_source_encoding(): void
     {
         $iso88591 = mb_convert_encoding('Petición inválida', 'ISO-8859-1', 'UTF-8');
