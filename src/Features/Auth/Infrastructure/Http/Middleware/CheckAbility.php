@@ -30,7 +30,7 @@ class CheckAbility
         $user = user();
 
         if (! method_exists($user, $method)) {
-            throw UnauthorizedException::missingTraitHasRoles($user);
+            throw UnauthorizedException::missingTraitHasAbilities($user);
         }
 
         $values = str_replace('+', ',', $values);
