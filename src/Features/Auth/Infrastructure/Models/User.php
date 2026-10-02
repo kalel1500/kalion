@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Thehouseofel\Kalion\Database\Factories\UserFactory;
-use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Concerns\HasRoles;
+use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Concerns\HasAbilities;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasAbilities;
 
     static string $factory = UserFactory::class;
 

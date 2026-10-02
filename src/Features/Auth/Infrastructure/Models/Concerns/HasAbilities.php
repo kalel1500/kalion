@@ -8,7 +8,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Permission;
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Role;
 
-trait HasRoles
+trait HasAbilities
 {
     use HasRelationships;
 
