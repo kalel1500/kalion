@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.60.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.60.1-beta.0...master)
+
+## [v0.60.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.60.0-beta.0...v0.60.1-beta.0) - 2026-10-02
+
+### Added
+
+* Nueva utilidad pública `Utf8Normalizer`, que convierte recursivamente strings y claves de arrays a `UTF-8`. Detecta automáticamente `Windows-1252` e `ISO-8859-1`, permite indicar explícitamente otra codificación de origen y conserva intactos los valores que ya son `UTF-8` válido y los tipos no string.
 
 ## [v0.60.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.59.1-beta.0...v0.60.0-beta.0) - 2026-09-30
 
