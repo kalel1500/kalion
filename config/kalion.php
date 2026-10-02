@@ -187,11 +187,16 @@ return [
     |
     | - "fake": Enables fake login mode, bypassing password authentication.
     |           Should only be used in local environments for testing.
-    | - "fields": Defines which database field will be used for authentication.
     | - "available_fields": Contains all available login fields and their attributes.
     | - "abilities_enabled": Enables Kalion's abilities system, including roles and permissions. Disable it when authentication only requires the users table.
     | - "display_role_in_exception": Shows required roles in exception messages.
     | - "display_permission_in_exception": Shows required permissions in exceptions.
+    | - "providers": Settings for each Laravel auth provider (same keys as "auth.providers").
+    |                Each guard resolves its provider through "auth.guards.{guard}.provider".
+    |     - "model": Eloquent model used by the provider.
+    |     - "entity": Entity returned by kauth()->user() / user().
+    |     - "ability_repository": Repository used to load roles and permissions (null = default).
+    |     - "field": Key of "available_fields" used as login field.
     |
     */
 
@@ -214,30 +219,10 @@ return [
             'reset_password' => env('KALION_AUTH_BLADE_RESET_PASSWORD', $defaults['kalion.auth.blades.reset_password']),
         ],
 
-        'models' => [
-            'web' => env('KALION_AUTH_MODEL_WEB', $defaults['kalion.auth.models.web']),
-            'api' => env('KALION_AUTH_MODEL_API', $defaults['kalion.auth.models.api']),
-        ],
-
-        'entities' => [
-            'web' => env('KALION_AUTH_ENTITY_WEB', $defaults['kalion.auth.entities.web']),
-            'api' => env('KALION_AUTH_ENTITY_API', $defaults['kalion.auth.entities.api']),
-        ],
-
-        'repositories' => [
-            'web' => env('KALION_AUTH_REPOSITORY_WEB', $defaults['kalion.auth.repositories.web']),
-            'api' => env('KALION_AUTH_REPOSITORY_API', $defaults['kalion.auth.repositories.api']),
-        ],
-
         'actions' => [
             'authenticate_user' => env('KALION_AUTH_ACTION_AUTHENTICATE_USER', $defaults['kalion.auth.actions.authenticate_user']),
             'create_new_user' => env('KALION_AUTH_ACTION_CREATE_NEW_USER', $defaults['kalion.auth.actions.create_new_user']),
             'reset_user_password' => env('KALION_AUTH_ACTION_RESET_USER_PASSWORD', $defaults['kalion.auth.actions.reset_user_password']),
-        ],
-
-        'fields' => [
-            'web' => env('KALION_AUTH_FIELD', $defaults['kalion.auth.fields.web']),
-            'api' => env('KALION_AUTH_FIELD_API', $defaults['kalion.auth.fields.api']),
         ],
 
         'available_fields' => [
@@ -272,6 +257,24 @@ return [
         'display_role_in_exception' => (bool) env('KALION_AUTH_DISPLAY_ROLE_IN_EXCEPTION', $defaults['kalion.auth.display_role_in_exception']),
 
         'display_permission_in_exception' => (bool) env('KALION_AUTH_DISPLAY_PERMISSION_IN_EXCEPTION', $defaults['kalion.auth.display_permission_in_exception']),
+
+        'providers' => [
+
+            'users' => [
+                'model' => env('KALION_AUTH_PROVIDER_USERS_MODEL', $defaults['kalion.auth.providers.users.model']),
+                'entity' => env('KALION_AUTH_PROVIDER_USERS_ENTITY', $defaults['kalion.auth.providers.users.entity']),
+                'ability_repository' => env('KALION_AUTH_PROVIDER_USERS_ABILITY_REPOSITORY', $defaults['kalion.auth.providers.users.ability_repository']),
+                'field' => env('KALION_AUTH_PROVIDER_USERS_FIELD', $defaults['kalion.auth.providers.users.field']),
+            ],
+
+            'api_users' => [
+                'model' => env('KALION_AUTH_PROVIDER_API_USERS_MODEL', $defaults['kalion.auth.providers.api_users.model']),
+                'entity' => env('KALION_AUTH_PROVIDER_API_USERS_ENTITY', $defaults['kalion.auth.providers.api_users.entity']),
+                'ability_repository' => env('KALION_AUTH_PROVIDER_API_USERS_ABILITY_REPOSITORY', $defaults['kalion.auth.providers.api_users.ability_repository']),
+                'field' => env('KALION_AUTH_PROVIDER_API_USERS_FIELD', $defaults['kalion.auth.providers.api_users.field']),
+            ],
+
+        ],
     ],
 
     /*

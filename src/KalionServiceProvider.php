@@ -169,7 +169,7 @@ class KalionServiceProvider extends ServiceProvider
             ]);
 
             // Auth Model
-            config(['auth.providers.users.model' => config('kalion.auth.models.web', config('auth.providers.users.model'))]);
+            config(['auth.providers.users.model' => config('kalion.auth.providers.users.model', config('auth.providers.users.model'))]);
 
             // Api (Guard and Provider)
             config([
@@ -180,7 +180,7 @@ class KalionServiceProvider extends ServiceProvider
 
                 'auth.providers.api_users' => array_merge([
                     'driver' => 'eloquent',
-                    'model'  => config('kalion.auth.models.api'),
+                    'model'  => config('kalion.auth.providers.api_users.model'),
                 ], config('auth.providers.api_users', []))
             ]);
 

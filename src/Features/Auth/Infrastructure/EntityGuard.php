@@ -51,7 +51,7 @@ class EntityGuard implements Guard
 
     public function getLoginFieldData(): LoginFieldDto
     {
-        $defaultField = config('kalion.auth.fields.' . $this->guard);
+        $defaultField = $this->providerConfig('field');
         $fields       = config('kalion.auth.available_fields');
         $field        = $fields[$defaultField] ?? $fields['email'];
         return new LoginFieldDto(
@@ -67,8 +67,7 @@ class EntityGuard implements Guard
      */
     public function getClassUserModel(): string // |\Illuminate\Foundation\Auth\User
     {
-        $provider = config('auth.guards.' . $this->guard . '.provider');
-        return config('auth.providers.' . $provider . '.model');
+        return config('auth.providers.' . $this->getProviderName() . '.model');
     }
 
     /**
@@ -76,7 +75,7 @@ class EntityGuard implements Guard
      */
     public function getClassUserEntity(): string
     {
-        return config('kalion.auth.entities.' . $this->guard);
+        return $this->providerConfig('entity');
     }
 
     /**
@@ -84,6 +83,28 @@ class EntityGuard implements Guard
      */
     public function getClassAbilityRepository(): ?string
     {
-        return config('kalion.auth.repositories.' . $this->guard);
+        return $this->providerConfig('ability_repository');
+    }
+
+    /**
+     * Get the name of the Laravel auth provider used by this guard.
+     */
+    protected function getProviderName(): ?string
+    {
+        return config('auth.guards.' . $this->guard . '.provider');
+    }
+
+    /**
+     * Get a value from the Kalion configuration of the provider used by this guard.
+     */
+    protected function providerConfig(string $key, mixed $default = null): mixed
+    {
+        $provider = $this->getProviderName();
+
+        if ($provider === null) {
+            return $default;
+        }
+
+        return config('kalion.auth.providers.' . $provider . '.' . $key, $default);
     }
 }
