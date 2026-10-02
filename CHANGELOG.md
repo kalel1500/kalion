@@ -1,6 +1,12 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.60.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.60.1-beta.1...master)
+
+## [v0.60.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.60.1-beta.0...v0.60.1-beta.1) - 2026-10-02
+
+### Added
+
+* Nuevo archivo `ide.json` para que el IDE reconozca y autocomplete los componentes blade.
 
 ## [v0.60.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.60.0-beta.0...v0.60.1-beta.0) - 2026-10-02
 
