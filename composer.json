@@ -11,6 +11,7 @@
     "license": "GPL-3.0-or-later",
     "require": {
         "ext-json": "*",
+        "ext-mbstring": "*",
         "php" : "^8.2",
         "laravel/framework": "^11.0|^12.0",
         "laravel/fortify": "^1.37",
