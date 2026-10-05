@@ -63,8 +63,8 @@ class EntityGuard implements Guard
     }
 
     /**
-     * Kalion config is the source of truth (it is synced into Laravel's auth config by the KalionServiceProvider).
-     * Laravel's config is only used as a fallback for providers not managed by Kalion.
+     * Providers are owned by Kalion ("kalion.auth.providers"), which registers them in Laravel's auth config.
+     * Laravel's config is only used as a fallback for providers defined outside Kalion.
      *
      * @return class-string
      */

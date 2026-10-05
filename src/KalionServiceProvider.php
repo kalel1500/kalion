@@ -168,7 +168,8 @@ class KalionServiceProvider extends ServiceProvider
                 ], config('logging.channels.loads', [])),
             ]);
 
-            // Api Guard (only defaults: the app config takes precedence)
+            // Auth: guards are defined in Laravel ("config/auth.php") and providers in Kalion ("kalion.auth.providers").
+            // 1) Default "api" guard (only the keys missing in the app config).
             config([
                 'auth.guards.api' => array_merge([
                     'driver'   => 'session',
@@ -176,15 +177,12 @@ class KalionServiceProvider extends ServiceProvider
                 ], config('auth.guards.api', [])),
             ]);
 
-            // Auth Providers: Kalion config is the source of truth for the model of each provider it manages
-            // (the entity depends on it), so it always overrides Laravel's. Other provider keys are respected.
+            // 2) Register every Kalion provider in Laravel (Kalion owns them, so they replace any definition in "config/auth.php").
+            //    The Kalion-only keys are removed and the rest (driver, model, table, etc.) are passed to Laravel as is.
+            $kalionOnlyKeys = ['entity', 'ability_repository', 'field'];
             foreach ((array) config('kalion.auth.providers', []) as $provider => $providerConfig) {
                 config([
-                    "auth.providers.{$provider}" => array_merge(
-                        ['driver' => 'eloquent'],
-                        config("auth.providers.{$provider}", []),
-                        ['model' => $providerConfig['model']],
-                    ),
+                    "auth.providers.{$provider}" => array_diff_key((array) $providerConfig, array_flip($kalionOnlyKeys)),
                 ]);
             }
 
