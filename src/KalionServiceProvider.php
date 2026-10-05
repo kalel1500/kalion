@@ -168,21 +168,25 @@ class KalionServiceProvider extends ServiceProvider
                 ], config('logging.channels.loads', [])),
             ]);
 
-            // Auth Model
-            config(['auth.providers.users.model' => config('kalion.auth.providers.users.model', config('auth.providers.users.model'))]);
-
-            // Api (Guard and Provider)
+            // Api Guard (only defaults: the app config takes precedence)
             config([
                 'auth.guards.api' => array_merge([
                     'driver'   => 'session',
                     'provider' => 'api_users',
                 ], config('auth.guards.api', [])),
-
-                'auth.providers.api_users' => array_merge([
-                    'driver' => 'eloquent',
-                    'model'  => config('kalion.auth.providers.api_users.model'),
-                ], config('auth.providers.api_users', []))
             ]);
+
+            // Auth Providers: Kalion config is the source of truth for the model of each provider it manages
+            // (the entity depends on it), so it always overrides Laravel's. Other provider keys are respected.
+            foreach ((array) config('kalion.auth.providers', []) as $provider => $providerConfig) {
+                config([
+                    "auth.providers.{$provider}" => array_merge(
+                        ['driver' => 'eloquent'],
+                        config("auth.providers.{$provider}", []),
+                        ['model' => $providerConfig['model']],
+                    ),
+                ]);
+            }
 
             if ($this->shouldForceArrayDrivers()) {
                 config([

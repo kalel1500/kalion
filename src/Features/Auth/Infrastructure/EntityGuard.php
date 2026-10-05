@@ -63,11 +63,14 @@ class EntityGuard implements Guard
     }
 
     /**
+     * Kalion config is the source of truth (it is synced into Laravel's auth config by the KalionServiceProvider).
+     * Laravel's config is only used as a fallback for providers not managed by Kalion.
+     *
      * @return class-string
      */
     public function getClassUserModel(): string // |\Illuminate\Foundation\Auth\User
     {
-        return config('auth.providers.' . $this->getProviderName() . '.model');
+        return $this->providerConfig('model') ?? config('auth.providers.' . $this->getProviderName() . '.model');
     }
 
     /**
