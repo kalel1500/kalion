@@ -1,6 +1,31 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.60.1-beta.1...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.61.0-beta.0...master)
+
+## [v0.61.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.60.1-beta.1...v0.61.0-beta.0) - 2026-10-05
+
+### Changed
+
+* (breaking) Se ha unificado la integración con la configuración de autenticación de Laravel:
+  * Los guards se definen en Laravel (`config/auth.php`) y los providers en Kalion (`kalion.auth.providers`). Kalion solo registra por defecto el guard `api` (únicamente las claves que falten en la configuración de la app).
+  * Cada provider de `kalion.auth.providers` se registra en `auth.providers.{provider}` con el driver `eloquent` y su `model`, sustituyendo cualquier definición de `config/auth.php` (antes en `users` solo se sobrescribía el modelo y en `api_users` prevalecía el valor de `config/auth.php`). El driver no es configurable porque la feature Auth necesita modelos Eloquent.
+  * Para añadir un guard nuevo hay que definir el guard en `config/auth.php` y su provider en `kalion.auth.providers.{provider}`.
+  * Nueva clave `kalion.auth.enabled` (`KALION_AUTH_ENABLED`, por defecto `true`). Si se desactiva, Kalion no registra el flujo de Fortify ni su rate limiter, y no modifica `auth.guards` ni `auth.providers`, por lo que la autenticación de Laravel funciona de forma normal (útil si solo se usan los componentes u otras partes del paquete).
+  * El `EntityGuard` lanza ahora una `RequiredDefinitionException` descriptiva si falta el `model` o la `entity` del provider, o si el guard no devuelve un modelo Eloquent.
+  * `Guard::getClassUserModel()` lee ahora el modelo desde `kalion.auth.providers` y solo usa `auth.providers` de Laravel como *fallback* para providers no gestionados por Kalion.
+* (breaking) Se ha reorganizado la configuración de autenticación por *provider* de Laravel en la nueva clave `kalion.auth.providers`. Cada guard resuelve su configuración a través de `auth.guards.{guard}.provider`:
+  * `kalion.auth.models.web` -> `kalion.auth.providers.users.model` (`KALION_AUTH_MODEL_WEB` -> `KALION_AUTH_PROVIDER_USERS_MODEL`)
+  * `kalion.auth.models.api` -> `kalion.auth.providers.api_users.model` (`KALION_AUTH_MODEL_API` -> `KALION_AUTH_PROVIDER_API_USERS_MODEL`)
+  * `kalion.auth.entities.web` -> `kalion.auth.providers.users.entity` (`KALION_AUTH_ENTITY_WEB` -> `KALION_AUTH_PROVIDER_USERS_ENTITY`)
+  * `kalion.auth.entities.api` -> `kalion.auth.providers.api_users.entity` (`KALION_AUTH_ENTITY_API` -> `KALION_AUTH_PROVIDER_API_USERS_ENTITY`)
+  * `kalion.auth.repositories.web` -> `kalion.auth.providers.users.ability_repository` (`KALION_AUTH_REPOSITORY_WEB` -> `KALION_AUTH_PROVIDER_USERS_ABILITY_REPOSITORY`)
+  * `kalion.auth.repositories.api` -> `kalion.auth.providers.api_users.ability_repository` (`KALION_AUTH_REPOSITORY_API` -> `KALION_AUTH_PROVIDER_API_USERS_ABILITY_REPOSITORY`)
+  * `kalion.auth.fields.web` -> `kalion.auth.providers.users.field` (`KALION_AUTH_FIELD` -> `KALION_AUTH_PROVIDER_USERS_FIELD`)
+  * `kalion.auth.fields.api` -> `kalion.auth.providers.api_users.field` (`KALION_AUTH_FIELD_API` -> `KALION_AUTH_PROVIDER_API_USERS_FIELD`)
+* (breaking) Renombrar trait `HasRoles` del Modelo a `HasAbilities`.
+  * `Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Concerns\HasRoles` -> `Thehouseofel\Kalion\Features\Auth\Infrastructure\Models\Concerns\HasAbilities`.
+  * Se ha renombrado el literal `k::auth.missing_trait_has_roles` a `k::auth.missing_trait_has_abilities`.
+  * Se ha renombrado el método `UnauthorizedException::missingTraitHasRoles` a `UnauthorizedException::missingTraitHasAbilities`.
 
 ## [v0.60.1-beta.1](https://github.com/kalel1500/kalion/compare/v0.60.1-beta.0...v0.60.1-beta.1) - 2026-10-02
 
