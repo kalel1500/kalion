@@ -44,6 +44,7 @@ class KalionConfigManager
         'kalion.layout.data_provider'                        => BaseLayoutData::class,
         'kalion.layout.logo_path'                            => 'resources/images/logo.svg',
         'kalion.layout.favicon_path'                         => 'resources/images/favicon.ico',
+        'kalion.auth.enabled'                                => true,
         'kalion.auth.fake'                                   => false,
         'kalion.auth.show_register_link'                     => true,
         'kalion.auth.show_password_reset_link'               => true,

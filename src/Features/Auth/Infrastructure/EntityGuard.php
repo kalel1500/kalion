@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Features\Auth\Infrastructure;
 
+use Illuminate\Database\Eloquent\Model;
+use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity;
 use Thehouseofel\Kalion\Features\Auth\Domain\Contracts\Guard;
 use Thehouseofel\Kalion\Features\Auth\Domain\Objects\DataObjects\LoginFieldDto;
@@ -33,6 +35,14 @@ class EntityGuard implements Guard
 
         if (! $user) {
             return null;
+        }
+
+        if (! $user instanceof Model) {
+            throw new RequiredDefinitionException(sprintf(
+                'The guard "%s" must return an Eloquent model to build the user entity, but returned "%s". Use the "eloquent" driver (or a compatible one) in "kalion.auth.providers".',
+                $this->guard,
+                get_debug_type($user),
+            ));
         }
 
         $with = null;

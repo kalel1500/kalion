@@ -185,6 +185,8 @@ return [
     |
     | These configuration options control the authentication behavior of Kalion.
     |
+    | - "enabled": Enables the Kalion auth feature (Fortify flow, "api" guard and providers registration).
+    |              Disable it if you only use other parts of the package and Laravel's auth must remain untouched.
     | - "fake": Enables fake login mode, bypassing password authentication.
     |           Should only be used in local environments for testing.
     | - "available_fields": Contains all available login fields and their attributes.
@@ -197,7 +199,8 @@ return [
     |                "auth.guards.{guard}.provider" (Kalion only registers the default "api" guard if it is missing).
     |                Any key other than "entity", "ability_repository" and "field" is passed to Laravel's
     |                provider as is (for example "table" for the "database" driver).
-    |     - "driver": Laravel auth provider driver ("eloquent", "database" or a custom one).
+    |     - "driver": Laravel auth provider driver (default "eloquent"). Kalion auth needs Eloquent models,
+    |                 so use "eloquent" or a custom driver that returns Eloquent models.
     |     - "model": Eloquent model used by the provider.
     |     - "entity": Entity returned by kauth()->user() / user().
     |     - "ability_repository": Repository used to load roles and permissions (null = default).
@@ -206,6 +209,8 @@ return [
     */
 
     'auth' => [
+        'enabled' => (bool) env('KALION_AUTH_ENABLED', $defaults['kalion.auth.enabled']),
+
         'fake' => (bool) env('KALION_AUTH_FAKE', $defaults['kalion.auth.fake']),
 
         'show_register_link' => (bool) env('KALION_AUTH_SHOW_REGISTER_LINK', $defaults['kalion.auth.show_register_link']),

@@ -85,8 +85,8 @@ class KalionServiceProvider extends ServiceProvider
             define('KALION_ENUM_NULL_VALUE', 'k_null');
         }
 
-        $this->registerSingletons();
         $this->mergeConfig();
+        $this->registerSingletons();
     }
 
     protected function registerSingletons(): void
@@ -97,8 +97,10 @@ class KalionServiceProvider extends ServiceProvider
         // Scoped to avoid state leaks across Octane requests while keeping one instance per lifecycle.
         $this->app->scoped('kalion.config', KalionConfigManager::class);
 
-        // Register the Fortify-based authentication flow
-        $this->app->register(FortifyServiceProvider::class);
+        // Register the Fortify-based authentication flow (only when the Kalion auth feature is enabled)
+        if (config('kalion.auth.enabled')) {
+            $this->app->register(FortifyServiceProvider::class);
+        }
 
 
         // Register Cooldown classes
@@ -168,22 +170,9 @@ class KalionServiceProvider extends ServiceProvider
                 ], config('logging.channels.loads', [])),
             ]);
 
-            // Auth: guards are defined in Laravel ("config/auth.php") and providers in Kalion ("kalion.auth.providers").
-            // 1) Default "api" guard (only the keys missing in the app config).
-            config([
-                'auth.guards.api' => array_merge([
-                    'driver'   => 'session',
-                    'provider' => 'api_users',
-                ], config('auth.guards.api', [])),
-            ]);
-
-            // 2) Register every Kalion provider in Laravel (Kalion owns them, so they replace any definition in "config/auth.php").
-            //    The Kalion-only keys are removed and the rest (driver, model, table, etc.) are passed to Laravel as is.
-            $kalionOnlyKeys = ['entity', 'ability_repository', 'field'];
-            foreach ((array) config('kalion.auth.providers', []) as $provider => $providerConfig) {
-                config([
-                    "auth.providers.{$provider}" => array_diff_key((array) $providerConfig, array_flip($kalionOnlyKeys)),
-                ]);
+            // When the Kalion auth feature is disabled, Laravel's auth config is left untouched.
+            if (kalion()->config()->authEnabled()) {
+                $this->syncAuthConfig();
             }
 
             if ($this->shouldForceArrayDrivers()) {
@@ -194,8 +183,37 @@ class KalionServiceProvider extends ServiceProvider
                 ]);
             }
 
-            FortifyServiceProvider::configureRateLimiter();
+            if (kalion()->config()->authEnabled()) {
+                FortifyServiceProvider::configureRateLimiter();
+            }
         });
+    }
+
+    /**
+     * Sync the Kalion auth config into Laravel's auth config.
+     */
+    protected function syncAuthConfig(): void
+    {
+        // Auth: guards are defined in Laravel ("config/auth.php") and providers in Kalion ("kalion.auth.providers").
+        // 1) Default "api" guard (only the keys missing in the app config).
+        config([
+            'auth.guards.api' => array_merge([
+                'driver'   => 'session',
+                'provider' => 'api_users',
+            ], config('auth.guards.api', [])),
+        ]);
+
+        // 2) Register every Kalion provider in Laravel (Kalion owns them, so they replace any definition in "config/auth.php").
+        //    The Kalion-only keys are removed and the rest (driver, model, etc.) are passed to Laravel as is.
+        $kalionOnlyKeys = ['entity', 'ability_repository', 'field'];
+        foreach ((array) config('kalion.auth.providers', []) as $provider => $providerConfig) {
+            config([
+                "auth.providers.{$provider}" => array_merge(
+                    ['driver' => 'eloquent'],
+                    array_diff_key((array) $providerConfig, array_flip($kalionOnlyKeys)),
+                ),
+            ]);
+        }
     }
 
     protected function shouldForceArrayDrivers(): bool
