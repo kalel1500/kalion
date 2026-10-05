@@ -39,7 +39,7 @@ class EntityGuard implements Guard
 
         if (! $user instanceof Model) {
             throw new RequiredDefinitionException(sprintf(
-                'The guard "%s" must return an Eloquent model to build the user entity, but returned "%s". Use the "eloquent" driver (or a compatible one) in "kalion.auth.providers".',
+                'The guard "%s" must return an Eloquent model to build the user entity, but returned "%s". Define its provider in "kalion.auth.providers".',
                 $this->guard,
                 get_debug_type($user),
             ));

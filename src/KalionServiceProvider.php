@@ -204,14 +204,13 @@ class KalionServiceProvider extends ServiceProvider
         ]);
 
         // 2) Register every Kalion provider in Laravel (Kalion owns them, so they replace any definition in "config/auth.php").
-        //    The Kalion-only keys are removed and the rest (driver, model, etc.) are passed to Laravel as is.
-        $kalionOnlyKeys = ['entity', 'ability_repository', 'field'];
+        //    Kalion auth needs Eloquent models, so the providers always use the "eloquent" driver.
         foreach ((array) config('kalion.auth.providers', []) as $provider => $providerConfig) {
             config([
-                "auth.providers.{$provider}" => array_merge(
-                    ['driver' => 'eloquent'],
-                    array_diff_key((array) $providerConfig, array_flip($kalionOnlyKeys)),
-                ),
+                "auth.providers.{$provider}" => [
+                    'driver' => 'eloquent',
+                    'model'  => $providerConfig['model'] ?? null,
+                ],
             ]);
         }
     }

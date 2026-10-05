@@ -197,10 +197,7 @@ return [
     |                registered in "auth.providers.{provider}" (replacing any definition in "config/auth.php").
     |                Guards are defined in "config/auth.php" and point to these providers through
     |                "auth.guards.{guard}.provider" (Kalion only registers the default "api" guard if it is missing).
-    |                Any key other than "entity", "ability_repository" and "field" is passed to Laravel's
-    |                provider as is (for example "table" for the "database" driver).
-    |     - "driver": Laravel auth provider driver (default "eloquent"). Kalion auth needs Eloquent models,
-    |                 so use "eloquent" or a custom driver that returns Eloquent models.
+    |                Providers always use the "eloquent" driver, since Kalion auth needs Eloquent models.
     |     - "model": Eloquent model used by the provider.
     |     - "entity": Entity returned by kauth()->user() / user().
     |     - "ability_repository": Repository used to load roles and permissions (null = default).
@@ -271,7 +268,6 @@ return [
         'providers' => [
 
             'users' => [
-                'driver' => env('KALION_AUTH_PROVIDER_USERS_DRIVER', $defaults['kalion.auth.providers.users.driver']),
                 'model' => env('KALION_AUTH_PROVIDER_USERS_MODEL', $defaults['kalion.auth.providers.users.model']),
                 'entity' => env('KALION_AUTH_PROVIDER_USERS_ENTITY', $defaults['kalion.auth.providers.users.entity']),
                 'ability_repository' => env('KALION_AUTH_PROVIDER_USERS_ABILITY_REPOSITORY', $defaults['kalion.auth.providers.users.ability_repository']),
@@ -279,7 +275,6 @@ return [
             ],
 
             'api_users' => [
-                'driver' => env('KALION_AUTH_PROVIDER_API_USERS_DRIVER', $defaults['kalion.auth.providers.api_users.driver']),
                 'model' => env('KALION_AUTH_PROVIDER_API_USERS_MODEL', $defaults['kalion.auth.providers.api_users.model']),
                 'entity' => env('KALION_AUTH_PROVIDER_API_USERS_ENTITY', $defaults['kalion.auth.providers.api_users.entity']),
                 'ability_repository' => env('KALION_AUTH_PROVIDER_API_USERS_ABILITY_REPOSITORY', $defaults['kalion.auth.providers.api_users.ability_repository']),
