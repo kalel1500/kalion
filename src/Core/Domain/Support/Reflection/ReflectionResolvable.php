@@ -27,6 +27,8 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Ba
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 use Thehouseofel\Kalion\Core\Domain\Support\Internal\Serialization;
+use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ComputedMetadata;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ConstructorParams;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\DisabledData;
@@ -38,6 +40,7 @@ trait ReflectionResolvable
     private static array $reflectionCache         = [];
     private static array $reflectionDisabledCache = [];
     private static array $reflectionConfigCache   = [];
+    private static array $reflectionComputedCache = [];
 
     abstract protected static function reflectionConfig(): ReflectionConfig;
 
@@ -408,5 +411,88 @@ trait ReflectionResolvable
         }
 
         return $props;
+    }
+
+    /**
+     * Métodos públicos con el atributo #[Computed] (cacheados por clase).
+     *
+     * @return ComputedMetadata[]
+     */
+    private static function resolveComputedMethods(): array
+    {
+        $className = static::class;
+
+        if (isset(self::$reflectionComputedCache[$className])) {
+            return self::$reflectionComputedCache[$className];
+        }
+
+        $reflection = new ReflectionClass($className); // REFLECTION - cached
+        $computed   = [];
+
+        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            $attrs = $method->getAttributes(Computed::class);
+
+            if (empty($attrs)) {
+                continue;
+            }
+
+            $returnType = $method->getReturnType();
+
+            if (! ($returnType instanceof ReflectionNamedType)) {
+                throw KalionReflectionException::wrongComputedReturnType();
+            }
+
+            $returnClass = $returnType->isBuiltin() ? null : $returnType->getName();
+            $isEnum      = $returnClass !== null && is_a($returnClass, class: \BackedEnum::class, allow_string: true);
+            $isVo        = $returnClass !== null && is_a($returnClass, class: AbstractValueObject::class, allow_string: true);
+            $isArray     = $returnClass !== null && is_a($returnClass, class: ArrayConvertible::class, allow_string: true);
+
+            /** @var Computed $attr */
+            $attr = $attrs[0]->newInstance();
+
+            $computed[] = new ComputedMetadata(
+                methodName : $method->getName(),
+                contexts   : is_string($attr->contexts) ? [$attr->contexts] : $attr->contexts,
+                addOnFull  : $attr->addOnFull,
+                isEnum     : $isEnum,
+                isVo       : $isVo,
+                propsMethod: $isArray ? 'toArray' : null,
+            );
+        }
+
+        return self::$reflectionComputedCache[$className] = $computed;
+    }
+
+    /**
+     * Devuelve los valores de los métodos con #[Computed].
+     *
+     * @param null|callable(ComputedMetadata): bool $filter Permite filtrar qué métodos se incluyen (ej. contextos en entidades)
+     */
+    protected function computedProps(?callable $filter = null): array
+    {
+        $result = [];
+
+        foreach (self::resolveComputedMethods() as $meta) {
+            if ($filter !== null && ! $filter($meta)) {
+                continue;
+            }
+
+            $name  = $meta->methodName;
+            $value = $this->{$name}();
+
+            $value = match (true) {
+                $meta->isEnum || $meta->isVo => $value?->value,
+                $meta->propsMethod !== null  => $value?->{$meta->propsMethod}(),
+                default                      => $value,
+            };
+
+            if ($meta->isEnum && $value === KALION_ENUM_NULL_VALUE) {
+                $value = null;
+            }
+
+            $result[$name] = $value;
+        }
+
+        return $result;
     }
 }

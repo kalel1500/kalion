@@ -82,7 +82,10 @@ abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayReso
 
     public function toArray(): array
     {
-        return $this->props();
+        return [
+            ...$this->props(),
+            ...$this->computedProps(),
+        ];
     }
 
     public function toMakeArray(): array

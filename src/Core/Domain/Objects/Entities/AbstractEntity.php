@@ -12,23 +12,20 @@ use Thehouseofel\Kalion\Core\Domain\Concerns\Relations\ParsesRelationFlags;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Database\EntityRelationException;
-use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\RequiredDefinitionException;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollectionEntity;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\SnapshotDiff;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
+use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ComputedMetadata;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionResolvable;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractJsonVo;
 
 abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, JsonSerializable
 {
     use ReflectionResolvable, ParsesRelationFlags;
 
-    private static array          $computedCache = [];
     protected static ?array       $fillable      = null;
     protected static string       $primaryKey    = 'id';
     protected static bool         $incrementing  = true;
@@ -92,9 +89,9 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         $data   = $this->props();
         $isFull = $this->isFull ?? config('kalion.entity_calculated_props_mode'); // kalion.entity_calculated_props_mode => s
         if ($isFull === true) {
-            $data = array_merge($data, $this->computedProps());
+            $data = array_merge($data, $this->computedPropsForContext());
         } elseif (is_string($isFull)) {
-            $data = array_merge($data, $this->computedProps($isFull));
+            $data = array_merge($data, $this->computedPropsForContext($isFull));
         }
 
         if ($this->with) {
@@ -108,76 +105,11 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         return $data;
     }
 
-    private function computedProps(?string $context = null): array
+    private function computedPropsForContext(?string $context = null): array
     {
-        $className = static::class;
-
-        // Cachear los métodos con #[Computed]
-        if (! isset(self::$computedCache[$className])) {
-            $ref    = new ReflectionClass($this); // REFLECTION - cached
-            $cached = [];
-
-            foreach ($ref->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-                $attrs = $method->getAttributes(Computed::class);
-
-                if (empty($attrs)) {
-                    continue;
-                }
-
-                $returnType = $method->getReturnType();
-
-                if (! ($returnType instanceof \ReflectionNamedType)) {
-                    throw KalionReflectionException::wrongComputedReturnType();
-                }
-
-                $returnClass = $returnType->getName();
-                $propMethod  = match (true) {
-                    is_a($returnClass, class: AbstractJsonVo::class, allow_string: true)   => static::$jsonMethod->value,
-                    is_a($returnClass, class: ArrayConvertible::class, allow_string: true) => 'toArray',
-                    default                                                                => null,
-                };
-
-                /** @var Computed $attr */
-                $attr = $attrs[0]->newInstance();
-
-                $cached[] = [
-                    'name'      => $method->getName(),
-                    'contexts'  => is_string($attr->contexts) ? [$attr->contexts] : $attr->contexts,
-                    'addOnFull' => $attr->addOnFull,
-                    'method'    => $propMethod,
-                    'isEnum'    => is_a($returnClass, class: \BackedEnum::class, allow_string: true),
-                    'isVo'      => is_a($returnClass, class: AbstractValueObject::class, allow_string: true),
-                ];
-            }
-
-            self::$computedCache[$className] = $cached;
-        }
-
-        $result = [];
-
-        foreach (self::$computedCache[$className] as $meta) {
-            $contexts  = $meta['contexts'];
-            $addOnFull = $meta['addOnFull'];
-
-            if (! $this->contextMatch($context, $contexts, $addOnFull)) {
-                continue;
-            }
-
-            $name          = $meta['name'];
-            $method        = $meta['method'];
-            $value         = $this->{$name}();
-            $result[$name] = match (true) {
-                $meta['isEnum'] || $meta['isVo'] => $value->value,
-                $method !== null                 => $value->{$method}(),
-                default                          => $value,
-            };
-
-            if ($meta['isEnum'] && $result[$name] === KALION_ENUM_NULL_VALUE) {
-                $result[$name] = null;
-            }
-        }
-
-        return $result;
+        return $this->computedProps(
+            fn(ComputedMetadata $meta) => $this->contextMatch($context, $meta->contexts, $meta->addOnFull)
+        );
     }
 
     private function contextMatch(?string $selectedContext, array $attributeContexts, bool $addOnFull): bool
