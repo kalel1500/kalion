@@ -20,7 +20,6 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ComputedMetadata;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionResolvable;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\JsonMethodVo;
 
 abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, JsonSerializable
 {
@@ -29,7 +28,6 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     protected static ?array       $fillable      = null;
     protected static string       $primaryKey    = 'id';
     protected static bool         $incrementing  = true;
-    protected static JsonMethodVo $jsonMethod    = JsonMethodVo::encodedValue;
 
     protected ?array           $with      = null;
     protected bool|string|null $isFull;
