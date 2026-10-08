@@ -1,6 +1,30 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.61.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.61.1-beta.0...master)
+
+## [v0.61.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.61.0-beta.0...v0.61.1-beta.0) - 2026-10-08
+
+### Added
+
+* Los DTO (`AbstractDataTransferObject`) soportan ahora el atributo `#[Computed]`: los métodos públicos marcados con él se añaden automáticamente al resultado de `toArray()` (y por tanto a `toJson()`, `jsonSerialize()`, `toArrayVo()` y `toObject()`), sin necesidad de sobrescribir `props()`. No se incluyen en `toMakeArray()`, para que los campos calculados no interfieran al reconstruir el DTO. Los contextos del atributo (`contexts`, `addOnFull`, `Computed::AS_ATTRIBUTE`) se ignoran en los DTO, ya que estos no tienen relaciones y los métodos computados se añaden siempre.
+* Nuevo objeto interno `ComputedMetadata` (`Core\Domain\Support\Reflection\Dto`) que almacena la información cacheada de cada método con `#[Computed]` (`methodName`, `contexts`, `addOnFull`, `isEnum`, `isVo`, `propsMethod`) en lugar del array asociativo usado hasta ahora.
+
+### Changed
+
+* La lógica de las propiedades computadas se ha trasladado de `AbstractEntity` al trait `ReflectionResolvable`, compartido por entidades y DTO:
+  * `resolveComputedMethods()` obtiene por reflexión los métodos públicos con `#[Computed]` y los cachea por clase como objetos `ComputedMetadata`.
+  * `computedProps(?callable $filter = null)` devuelve los valores de esos métodos aplicando la misma conversión que `props()`: enums y Value Objects mediante `->value` (convirtiendo `KALION_ENUM_NULL_VALUE` en `null`), y objetos `ArrayConvertible` mediante `toArray()`. El filtro opcional recibe cada `ComputedMetadata` y permite decidir qué métodos se incluyen.
+  * `AbstractEntity` mantiene la gestión de contextos (exclusiva de las entidades) y la aplica como filtro sobre `computedProps()` a través de `computedPropsForContext()` y `contextMatch()`.
+
+### Removed
+
+* (warn) Se han eliminado el enum `JsonMethodVo` (`Core\Domain\Objects\ValueObjects\Parameters\JsonMethodVo`) y la propiedad estática `AbstractEntity::$jsonMethod`. No tenían efecto desde que `AbstractJsonVo` expone su valor mediante `->value`, ya que los Value Objects se resolvían antes por esa vía en las propiedades computadas.
+
+### Fixed
+
+* Se ha corregido el cálculo de las propiedades computadas de las entidades según el valor de `isFull` (parámetro de `fromArray()`/`resolveFromArray()` o, si es `null`, la configuración `kalion.entity_calculated_props_mode`):
+  * Con `isFull = false` no se añadía ninguna propiedad computada, ni siquiera las definidas con `#[Computed(Computed::AS_ATTRIBUTE)]`, que deben añadirse siempre. Ahora `false` se comporta como el modo simple y añade únicamente las `AS_ATTRIBUTE`. Esto afecta también a las relaciones con el flag `:s`, que se traduce a `false`.
+  * Si `kalion.entity_calculated_props_mode` (o el parámetro `isFull`) valía `'f'` o `'s'`, el valor se trataba como el nombre de un contexto en lugar de como modo completo o simple, por lo que configurar `'f'` por defecto no añadía las propiedades computadas. Ahora `'f'` equivale a `true` (completo) y `'s'` (o `null`) a `false` (simple), igual que los flags de las relaciones. En consecuencia, `'f'` y `'s'` quedan reservados y no pueden usarse como nombre de contexto en `#[Computed]`.
 
 ## [v0.61.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.60.1-beta.1...v0.61.0-beta.0) - 2026-10-05
 
