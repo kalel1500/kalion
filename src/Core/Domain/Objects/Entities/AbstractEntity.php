@@ -85,12 +85,8 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     public function toArray(): array
     {
         $data   = $this->props();
-        $isFull = $this->isFull ?? config('kalion.entity_calculated_props_mode'); // kalion.entity_calculated_props_mode => s
-        if ($isFull === true) {
-            $data = array_merge($data, $this->computedPropsForContext());
-        } elseif (is_string($isFull)) {
-            $data = array_merge($data, $this->computedPropsForContext($isFull));
-        }
+        $isFull = $this->normalizeIsFull($this->isFull ?? config('kalion.entity_calculated_props_mode')); // kalion.entity_calculated_props_mode => s
+        $data   = array_merge($data, $this->computedPropsForContext($isFull));
 
         if ($this->with) {
             foreach ($this->with as $key => $rel) {
@@ -103,31 +99,44 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         return $data;
     }
 
-    private function computedPropsForContext(?string $context = null): array
+    /**
+     * Normaliza los flags de la configuración ('f' => full, 's' => simple).
+     * Cualquier otro string se considera un contexto.
+     */
+    private function normalizeIsFull(bool|string|null $isFull): bool|string
+    {
+        return match ($isFull) {
+            'f'         => true,
+            's', null   => false,
+            default     => $isFull,
+        };
+    }
+
+    private function computedPropsForContext(bool|string $isFull): array
     {
         return $this->computedProps(
-            fn(ComputedMetadata $meta) => $this->contextMatch($context, $meta->contexts, $meta->addOnFull)
+            fn(ComputedMetadata $meta) => $this->contextMatch($isFull, $meta->contexts, $meta->addOnFull)
         );
     }
 
-    private function contextMatch(?string $selectedContext, array $attributeContexts, bool $addOnFull): bool
+    private function contextMatch(bool|string $isFull, array $attributeContexts, bool $addOnFull): bool
     {
+        // AS_ATTRIBUTE: se añade siempre (también en modo simple)
         if (in_array(Computed::AS_ATTRIBUTE, $attributeContexts)) {
             return true;
         }
 
-        $isFull = is_null($selectedContext);
-
         // IS_FULL: sin contextos, o con contextos + addOnFull = true
-        if ($isFull && (empty($attributeContexts) || $addOnFull)) {
-            return true;
+        if ($isFull === true) {
+            return empty($attributeContexts) || $addOnFull;
         }
 
         // IS_CONTEXT: si el contexto está en contexts (independiente de addOnFull)
-        if (! $isFull && in_array($selectedContext, $attributeContexts)) {
-            return true;
+        if (is_string($isFull)) {
+            return in_array($isFull, $attributeContexts);
         }
 
+        // IS_SIMPLE (false): solo los AS_ATTRIBUTE
         return false;
     }
 
