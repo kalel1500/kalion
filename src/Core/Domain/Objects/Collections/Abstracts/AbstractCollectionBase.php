@@ -173,6 +173,36 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return $new;
     }
 
+    /**
+     * Crea una nueva instancia con los items originales correspondientes a las claves de `$result`,
+     * respetando su orden.
+     *
+     * Permite calcular un resultado sobre la representación en array (comparando escalares, props y
+     * valores de los Value Objects) y devolver después las instancias originales en lugar de reconstruirlas.
+     * Solo es válido si la operación de Laravel usada para obtener `$result` conserva las claves.
+     *
+     * @param array<array-key, mixed> $result
+     * @return static
+     */
+    private function fromResultKeys(array $result): static
+    {
+        $items = [];
+        foreach (array_keys($result) as $key) {
+            $items[$key] = $this->items[$key];
+        }
+
+        return $this->fromItems($items);
+    }
+
+    /**
+     * Mismo criterio que Laravel (`useAsCallable`): los strings no se tratan como callables,
+     * para que nombres de campo como `'count'` o `'date'` no se confundan con funciones de PHP.
+     */
+    private static function useAsCallable(mixed $value): bool
+    {
+        return ! is_string($value) && is_callable($value);
+    }
+
     private function isInstanceOfRelatable(): bool
     {
         return ($this instanceof Relatable);
@@ -453,13 +483,20 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param $key
+     * Si `$key` es un callable, recibe los items originales de la colección (no arrays) y su clave.
+     * Si es un campo, se compara sobre la representación en array (props y valores de los Value Objects).
+     *
+     * @param (callable(TItem, int|string): bool)|string $key
      * @param $operator
      * @param $value
      * @return bool
      */
     public function every($key, $operator = null, $value = null)
     {
+        if (self::useAsCallable($key)) {
+            return collect($this->items)->every($key);
+        }
+
         return collect($this->toArray())->every(...func_get_args());
     }
 
@@ -565,7 +602,11 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     }
 
     /**
-     * @param $groupBy
+     * Si `$groupBy` (o el primer nivel, si es un array) es un callable, recibe los items originales de la
+     * colección (no arrays) y su clave, y cada grupo contiene las mismas instancias. Si es un campo, se
+     * agrupa sobre la representación en array.
+     *
+     * @param (callable(TItem, int|string): array-key)|string|array $groupBy
      * @param $preserveKeys
      * @return CollectionAny
      */
@@ -573,19 +614,24 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         // --- 1. Separar el primer nivel del resto (igual que Laravel) ---
         $nextGroups = [];
-        if (!is_callable($groupBy) && is_array($groupBy)) {
+        if (! self::useAsCallable($groupBy) && is_array($groupBy)) {
             $nextGroups = $groupBy;
             $groupBy    = array_shift($nextGroups);
         }
 
-        // --- 2. Agrupar este nivel usando la colección de Laravel ---
-        $grouped = collect($this->toArrayMake())->groupBy($groupBy, $preserveKeys);
-
-        // --- 3. Convertir cada grupo en tu colección tipada ---
-        $mapped = $grouped->map(function ($group) {
-            // $group es una Illuminate\Support\Collection de entidades (arrays)
-            return $this->toStatic($group->toArray());
-        });
+        // --- 2 y 3. Agrupar este nivel y convertir cada grupo en tu colección tipada ---
+        if (self::useAsCallable($groupBy)) {
+            // Con callable: se agrupan los items originales y cada grupo conserva las mismas instancias
+            $mapped = collect($this->items)
+                ->groupBy($groupBy, $preserveKeys)
+                ->map(fn(Collection $group) => $this->fromItems($group->all()));
+        } else {
+            $grouped = collect($this->toArrayMake())->groupBy($groupBy, $preserveKeys);
+            $mapped  = $grouped->map(function ($group) {
+                // $group es una Illuminate\Support\Collection de entidades (arrays)
+                return $this->toStatic($group->toArray());
+            });
+        }
 
         // --- 4. Envolver todo en una CollectionAny ---
         $result = $this->toAny($mapped->toArray());
@@ -616,11 +662,18 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param string $value
+     * Si `$value` es un callable, recibe los items originales de la colección (no arrays) y su clave.
+     * Si es un campo (o el separador), se trabaja sobre la representación en array.
+     *
+     * @param (callable(TItem, int|string): mixed)|string $value
      * @return string
      */
     public function implode($value, $glue = null)
     {
+        if (self::useAsCallable($value)) {
+            return collect($this->items)->implode($value, $glue);
+        }
+
         return collect($this->toArray())->implode(...func_get_args());
     }
 
@@ -748,8 +801,19 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->toAny($collResult->toArray());
     }
 
+    /**
+     * Si `$callback` es un callable, recibe los items originales de la colección (no arrays).
+     * Si es un campo, se calcula sobre la representación en array.
+     *
+     * @param (callable(TItem): mixed)|string|null $callback
+     * @return mixed
+     */
     public function max($callback = null)
     {
+        if (self::useAsCallable($callback)) {
+            return collect($this->items)->max($callback);
+        }
+
         return collect($this->toArray())->max($callback);
     }
 
@@ -769,8 +833,19 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
+    /**
+     * Si `$callback` es un callable, recibe los items originales de la colección (no arrays).
+     * Si es un campo, se calcula sobre la representación en array.
+     *
+     * @param (callable(TItem): mixed)|string|null $callback
+     * @return mixed
+     */
     public function min($callback = null)
     {
+        if (self::useAsCallable($callback)) {
+            return collect($this->items)->min($callback);
+        }
+
         return collect($this->toArray())->min($callback);
     }
 
@@ -1130,29 +1205,49 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param $callback
+     * Ordena la colección conservando las claves y las instancias originales.
+     *
+     * Si `$callback` es un callable (comparador), recibe los items originales de la colección (no arrays).
+     * Sin callback (o con flags de ordenación), se ordena sobre la representación en array.
+     *
+     * @param (callable(TItem, TItem): int)|int|null $callback
      * @return static
      */
     public function sort($callback = null)
     {
+        if (self::useAsCallable($callback)) {
+            return $this->fromItems(collect($this->items)->sort($callback)->all());
+        }
+
         $collResult = collect($this->toArrayMake())->sort($callback);
-        return $this->toStatic($collResult->toArray());
+        return $this->fromResultKeys($collResult->all());
     }
 
     /**
-     * @param $callback
+     * Ordena la colección conservando las claves y las instancias originales.
+     *
+     * Si `$callback` es un callable, recibe los items originales de la colección (no arrays) y su clave.
+     * Si es un campo (o un array de comparaciones), se ordena sobre la representación en array.
+     *
+     * @param (callable(TItem, int|string): mixed)|string|array $callback
      * @param $options
      * @param $descending
      * @return static
      */
     public function sortBy($callback, $options = SORT_REGULAR, $descending = false)
     {
+        if (self::useAsCallable($callback)) {
+            return $this->fromItems(collect($this->items)->sortBy($callback, $options, $descending)->all());
+        }
+
         $collResult = collect($this->toArrayMake())->sortBy($callback, $options, $descending);
-        return $this->toStatic($collResult->toArray());
+        return $this->fromResultKeys($collResult->all());
     }
 
     /**
-     * @param $callback
+     * Igual que `sortBy()` pero en orden descendente.
+     *
+     * @param (callable(TItem, int|string): mixed)|string|array $callback
      * @param $options
      * @return static
      */
@@ -1207,13 +1302,15 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
+     * Devuelve los primeros (o, si es negativo, los últimos) `$limit` items, conservando las claves
+     * y las instancias originales.
+     *
      * @param int $limit
      * @return static
      */
     public function take($limit)
     {
-        $collResult = collect($this->toArrayMake())->take($limit);
-        return $this->toStatic($collResult->toArray());
+        return $this->fromItems(collect($this->items)->take($limit)->all());
     }
 
 //    public function takeUntil()
@@ -1325,14 +1422,23 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param $key
+     * Elimina los items duplicados conservando las claves y las instancias originales.
+     *
+     * Si `$key` es un callable, recibe los items originales de la colección (no arrays) y su clave.
+     * Sin clave (o con un campo), se compara sobre la representación en array.
+     *
+     * @param (callable(TItem, int|string): mixed)|string|null $key
      * @param $strict
      * @return static
      */
     public function unique($key = null, $strict = false)
     {
+        if (self::useAsCallable($key)) {
+            return $this->fromItems(collect($this->items)->unique($key, $strict)->all());
+        }
+
         $collResult = collect($this->toArrayMake())->unique($key, $strict);
-        return $this->toStatic($collResult->toArray());
+        return $this->fromResultKeys($collResult->all());
     }
 
 //    public function uniqueStrict()
@@ -1366,11 +1472,13 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
+     * Reindexa las claves conservando las instancias originales.
+     *
      * @return static
      */
     public function values()
     {
-        return $this->toStatic(array_values($this->items));
+        return $this->fromItems(array_values($this->items));
     }
 
 //    public function when()
@@ -1389,6 +1497,9 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
+     * Filtra sobre la representación en array (props y valores de los Value Objects), pero devuelve
+     * las instancias originales conservando las claves.
+     *
      * @param $key
      * @param $operator
      * @param $value
@@ -1397,7 +1508,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function where($key, $operator = null, $value = null)
     {
         $collResult = collect($this->toArrayMake())->where(...func_get_args());
-        return $this->toStatic($collResult->toArray());
+        return $this->fromResultKeys($collResult->all());
     }
 
 //    public function whereStrict()
@@ -1411,6 +1522,9 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
+     * Filtra sobre la representación en array (props y valores de los Value Objects), pero devuelve
+     * las instancias originales conservando las claves.
+     *
      * @param $key
      * @param $values
      * @param $strict
@@ -1419,7 +1533,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function whereIn($key, $values, $strict = false)
     {
         $collResult = collect($this->toArrayMake())->whereIn($key, $values, $strict);
-        return $this->toStatic($collResult->toArray());
+        return $this->fromResultKeys($collResult->all());
     }
 
 //    public function whereInStrict()
@@ -1438,6 +1552,9 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
+     * Filtra sobre la representación en array (props y valores de los Value Objects), pero devuelve
+     * las instancias originales conservando las claves.
+     *
      * @param string $key
      * @param array $values
      * @param bool $strict
@@ -1446,7 +1563,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function whereNotIn($key, $values, $strict = false)
     {
         $collResult = collect($this->toArrayMake())->whereNotIn($key, $values, $strict);
-        return $this->toStatic($collResult->toArray());
+        return $this->fromResultKeys($collResult->all());
     }
 
 //    public function whereNotInStrict()

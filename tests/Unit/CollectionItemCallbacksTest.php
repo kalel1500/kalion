@@ -236,6 +236,156 @@ class CollectionItemCallbacksTest extends TestCase
         $this->assertSame([1], $tagTypes->keys()->all());
         $this->assertSame('Deportes', $tagTypes->first()->name->value);
     }
+
+    /* -----------------------------------------------------------------
+     | Métodos por clave: calculan sobre arrays pero devuelven los items originales
+     | ----------------------------------------------------------------- */
+
+    public function test_where_preserves_identity(): void
+    {
+        $tagTypes = $this->tagTypes();
+        $result   = $tagTypes->where('code', 'sport');
+        $this->assertSame($tagTypes[1], $result[1]);
+
+        $dtos   = $this->dtos();
+        $result = $dtos->where('modelString', 'foo');
+        $this->assertSame($dtos[0], $result[0]);
+        $this->assertSame($dtos[2], $result[2]);
+
+        $this->assertSame($dtos[1], $dtos->firstWhere('number', 2));
+        $this->assertSame([0, 1, 2], $dtos->whereNotNull('modelString')->keys()->all());
+        $this->assertSame([0], $dtos->whereNotNull('enum')->keys()->all());
+    }
+
+    public function test_where_in_and_where_not_in_preserve_identity(): void
+    {
+        $tagTypes = $this->tagTypes();
+
+        $in = $tagTypes->whereIn('code', ['tech', 'music']);
+        $this->assertInstanceOf(TagTypeCollection::class, $in);
+        $this->assertSame([0, 2], $in->keys()->all());
+        $this->assertSame($tagTypes[0], $in[0]);
+        $this->assertSame($tagTypes[2], $in[2]);
+
+        $notIn = $tagTypes->whereNotIn('code', ['tech', 'music']);
+        $this->assertSame([1], $notIn->keys()->all());
+        $this->assertSame($tagTypes[1], $notIn[1]);
+    }
+
+    public function test_sort_by_field_keeps_order_and_identity(): void
+    {
+        $tagTypes = $this->tagTypes();
+
+        // Ordena por el valor escalar del Value Object `name`: Deportes, Música, Tecnología
+        $asc = $tagTypes->sortBy('name');
+        $this->assertInstanceOf(TagTypeCollection::class, $asc);
+        $this->assertSame([1, 2, 0], $asc->keys()->all());
+        $this->assertSame([$tagTypes[1], $tagTypes[2], $tagTypes[0]], $asc->values()->all());
+
+        $desc = $tagTypes->sortByDesc('name');
+        $this->assertSame([0, 2, 1], $desc->keys()->all());
+        $this->assertSame($tagTypes[0], $desc->first());
+    }
+
+    public function test_sort_by_callable_receives_items_and_keeps_order_and_identity(): void
+    {
+        $dtos = $this->dtos();
+
+        $result = $dtos->sortBy(fn(ExampleDto $dto, int $key) => -$dto->number);
+
+        $this->assertSame([2, 1, 0], $result->keys()->all());
+        $this->assertSame([$dtos[2], $dtos[1], $dtos[0]], $result->values()->all());
+    }
+
+    public function test_sort_preserves_identity(): void
+    {
+        $dtos = $this->dtos();
+
+        $byCallback = $dtos->sort(fn(ExampleDto $a, ExampleDto $b) => $b->number <=> $a->number);
+        $this->assertSame([$dtos[2], $dtos[1], $dtos[0]], $byCallback->values()->all());
+
+        $plain = new CollectionAny([3, 1, 2]);
+        $this->assertSame([1 => 1, 2 => 2, 0 => 3], $plain->sort()->all());
+    }
+
+    public function test_values_reindexes_and_preserves_identity(): void
+    {
+        $tagTypes = $this->tagTypes()->setWith('tags')->setIsFull(true);
+        $filtered = $tagTypes->filter(fn(TagTypeEntity $tagType) => $tagType->code->value !== 'tech');
+
+        $values = $filtered->values();
+
+        $this->assertInstanceOf(TagTypeCollection::class, $values);
+        $this->assertSame([0, 1], $values->keys()->all());
+        $this->assertSame($tagTypes[1], $values[0]);
+        $this->assertSame($tagTypes[2], $values[1]);
+        $this->assertSame('tags', $this->readProperty($values, 'with'));
+        $this->assertTrue($this->readProperty($values, 'isFull'));
+    }
+
+    public function test_take_preserves_identity(): void
+    {
+        $tagTypes = $this->tagTypes();
+
+        $this->assertSame([$tagTypes[0], $tagTypes[1]], $tagTypes->take(2)->all());
+        $this->assertSame([2 => $tagTypes[2]], $tagTypes->take(-1)->all());
+    }
+
+    public function test_unique_preserves_identity(): void
+    {
+        $dtos = $this->dtos();
+
+        $byField = $dtos->unique('modelString');
+        $this->assertSame([0, 1], $byField->keys()->all());
+        $this->assertSame($dtos[0], $byField[0]);
+
+        $byCallable = $dtos->unique(fn(ExampleDto $dto) => $dto->modelString->value);
+        $this->assertSame([0, 1], $byCallable->keys()->all());
+        $this->assertSame($dtos[1], $byCallable[1]);
+    }
+
+    /* -----------------------------------------------------------------
+     | Variantes con callable: reciben los items originales
+     | ----------------------------------------------------------------- */
+
+    public function test_every_with_callable_receives_items(): void
+    {
+        $dtos = $this->dtos();
+
+        $this->assertTrue($dtos->every(fn(ExampleDto $dto, int $key) => $dto->number > 0));
+        $this->assertFalse($dtos->every(fn(ExampleDto $dto) => $dto->modelString->value === 'foo'));
+        $this->assertTrue($dtos->every('number', '>', 0));
+    }
+
+    public function test_group_by_callable_receives_items_and_groups_keep_identity(): void
+    {
+        $dtos = $this->dtos();
+
+        $groups = $dtos->groupBy(fn(ExampleDto $dto, int $key) => $dto->modelString->value);
+
+        $this->assertInstanceOf(CollectionAny::class, $groups);
+        $this->assertSame(['foo', 'bar'], $groups->keys()->all());
+        $this->assertInstanceOf(ExampleDtoCollection::class, $groups['foo']);
+        $this->assertSame([$dtos[0], $dtos[2]], $groups['foo']->all());
+        $this->assertSame([$dtos[1]], $groups['bar']->all());
+
+        $byField = $dtos->groupBy('modelString');
+        $this->assertInstanceOf(ExampleDtoCollection::class, $byField['foo']);
+        $this->assertCount(2, $byField['foo']);
+    }
+
+    public function test_max_min_and_implode_with_callable_receive_items(): void
+    {
+        $dtos = $this->dtos();
+
+        $this->assertSame(3, $dtos->max(fn(ExampleDto $dto) => $dto->number));
+        $this->assertSame(1, $dtos->min(fn(ExampleDto $dto) => $dto->number));
+        $this->assertSame('aaa-bbb-ccc', $dtos->implode(fn(ExampleDto $dto) => $dto->string1, '-'));
+
+        $this->assertSame(3, $dtos->max('number'));
+        $this->assertSame(1, $dtos->min('number'));
+        $this->assertSame('aaa, bbb, ccc', $dtos->implode('string1', ', '));
+    }
 }
 
 
