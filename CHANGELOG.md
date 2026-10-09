@@ -1,6 +1,15 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.61.1-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.61.2-beta.0...master)
+
+## [v0.61.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.61.1-beta.0...v0.61.2-beta.0) - 2026-10-09
+
+### Added
+
+* Nueva feature `Database` con soporte para transacciones desacopladas de Laravel:
+  * Nuevo contrato `TransactionManager` (`Features\Database\Domain\Contracts`) con el método `transaction(callable $operation): mixed`, que ejecuta la operación dentro de una transacción, hace rollback y relanza la excepción si falla, y devuelve el valor retornado por la operación (tipado con generics `@template T`).
+  * Nueva implementación `LaravelTransactionManager` (`Features\Database\Infrastructure`) basada en `DB::transaction()`. Solo cubre la conexión por defecto: las escrituras en otras conexiones no se revierten y deben realizarse fuera de la transacción.
+  * `TransactionManager` se registra como singleton en `KalionServiceProvider` resuelto a `LaravelTransactionManager`, por lo que puede inyectarse directamente desde el contenedor.
 
 ## [v0.61.1-beta.0](https://github.com/kalel1500/kalion/compare/v0.61.0-beta.0...v0.61.1-beta.0) - 2026-10-08
 
