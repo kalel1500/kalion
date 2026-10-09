@@ -72,6 +72,20 @@ class TabulatorDataCollectionTest extends TestCase
         $this->assertEquals($original, $result);
     }
 
+    public function test_except_removes_filters_by_field(): void
+    {
+        $collection = TabulatorFilterCollection::fromArray([
+            ['field' => 'status', 'type' => '=', 'value' => 'active'],
+            ['field' => 'email', 'type' => 'like', 'value' => '@example.com'],
+        ]);
+
+        $result = $collection->except('status');
+
+        $this->assertInstanceOf(TabulatorFilterCollection::class, $result);
+        $this->assertCount(1, $result);
+        $this->assertSame($collection->getByField('email'), $result->first());
+    }
+
     public function test_from_tabulator_throws_for_malformed_json(): void
     {
         try {

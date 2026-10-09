@@ -26,6 +26,9 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\JsonVo;
 use Thehouseofel\Kalion\Core\Domain\Support\Internal\Serialization;
 use TypeError;
 
+/**
+ * @template TItem Tipo de los items de la colección (entidad, DTO, Value Object... o `mixed` en `CollectionAny`).
+ */
 abstract class AbstractCollectionBase implements Countable, ArrayAccess, IteratorAggregate, ArrayConvertible, JsonSerializable
 {
     use ParsesRelationFlags;
@@ -141,6 +144,33 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             ! $this->isInstanceOfRelatable() => CollectionAny::fromArray($data),
             default                          => CollectionAny::fromArray($data, $this->with, $this->isFull),
         };
+    }
+
+    /**
+     * Crea una nueva instancia de la colección a partir de items ya construidos (entidades, DTOs, VOs...),
+     * sin pasar por `fromArray()`: los items no se serializan ni se reconstruyen, por lo que se conserva
+     * su identidad (mismas instancias, valores `computed` cacheados, estado interno...).
+     *
+     * Se usa `clone` para no depender del constructor (variádico o redefinido en las clases hijas) y para
+     * conservar el estado de la colección: `with` e `isFull` en las colecciones `Relatable`, y el tipo
+     * de item ya resuelto. Los items no se revalidan porque proceden de esta misma colección.
+     *
+     * La información de paginación no se conserva (igual que al reconstruir con `fromArray()`), ya que
+     * deja de corresponderse con los items resultantes.
+     *
+     * @param array<array-key, TItem> $items
+     * @return static
+     */
+    private function fromItems(array $items): static
+    {
+        $new        = clone $this;
+        $new->items = $items;
+
+        if ($new instanceof AbstractCollectionEntity) {
+            $new->setIsPaginate(false);
+        }
+
+        return $new;
     }
 
     private function isInstanceOfRelatable(): bool
@@ -439,13 +469,17 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param callable|null $callback
+     * Filtra la colección conservando las claves.
+     *
+     * El callback recibe los items originales de la colección (las mismas instancias, no arrays) y su clave.
+     * Si no se pasa callback, se eliminan los items que evalúen a `false`.
+     *
+     * @param (callable(TItem, int|string): bool)|null $callback
      * @return static
      */
-    public function filter(callable $callback = null)
+    public function filter(?callable $callback = null): static
     {
-        $collResult = collect($this->toArrayMake())->filter($callback);
-        return $this->toStatic($collResult->toArray());
+        return $this->fromItems(collect($this->items)->filter($callback)->all());
     }
 
     /**
@@ -765,10 +799,29 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function partition()
-//    {
-//        //
-//    }
+    /**
+     * Separa la colección en dos: los items que cumplen el callback y los que no. Se conservan las claves.
+     *
+     * El callback recibe los items originales de la colección (las mismas instancias, no arrays) y su clave.
+     *
+     * @param callable(TItem, int|string): bool $callback
+     * @return array{0: static, 1: static}
+     */
+    public function partition(callable $callback): array
+    {
+        $passed = [];
+        $failed = [];
+
+        foreach ($this->items as $key => $item) {
+            if ($callback($item, $key)) {
+                $passed[$key] = $item;
+            } else {
+                $failed[$key] = $item;
+            }
+        }
+
+        return [$this->fromItems($passed), $this->fromItems($failed)];
+    }
 
 //    public function percentage()
 //    {
@@ -970,15 +1023,17 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * Create a collection of all elements that do not pass a given truth test.
+     * Create a collection of all elements that do not pass a given truth test. Keys are preserved.
      *
-     * @param  $callback
+     * El callback recibe los items originales de la colección (las mismas instancias, no arrays) y su clave.
+     * Si se pasa un valor en lugar de un callback, se eliminan los items iguales (`==`) a ese valor.
+     *
+     * @param (callable(TItem, int|string): bool)|mixed $callback
      * @return static
      */
-    public function reject($callback = true)
+    public function reject($callback = true): static
     {
-        $collResult = collect($this->toArrayMake())->reject($callback);
-        return $this->toStatic($collResult->toArray());
+        return $this->fromItems(collect($this->items)->reject($callback)->all());
     }
 
 //    public function replace()
@@ -991,10 +1046,15 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function reverse()
-//    {
-//        //
-//    }
+    /**
+     * Invierte el orden de los items conservando las claves y las instancias originales.
+     *
+     * @return static
+     */
+    public function reverse(): static
+    {
+        return $this->fromItems(array_reverse($this->items, true));
+    }
 
 //    public function search()
 //    {
@@ -1024,10 +1084,15 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function skip()
-//    {
-//        //
-//    }
+    /**
+     * Omite los primeros `$count` items conservando las claves y las instancias originales.
+     *
+     * @return static
+     */
+    public function skip(int $count): static
+    {
+        return $this->slice($count);
+    }
 
 //    public function skipUntil()
 //    {
@@ -1039,10 +1104,15 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
-//    public function slice()
-//    {
-//        //
-//    }
+    /**
+     * Devuelve un tramo de la colección conservando las claves y las instancias originales.
+     *
+     * @return static
+     */
+    public function slice(int $offset, ?int $length = null): static
+    {
+        return $this->fromItems(array_slice($this->items, $offset, $length, true));
+    }
 
 //    public function sliding()
 //    {
