@@ -248,9 +248,19 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return $this->items[$offset];
     }
 
+    /**
+     * Valida el tipo del item igual que `push()`/`put()`. Con `$offset` `null` (`$coll[] = $item`)
+     * se añade al final, igual que en Laravel.
+     */
     public function offsetSet($offset, $value): void
     {
-        $this->items[$offset] = $value;
+        $this->assertItemTypeResolved($value);
+
+        if (is_null($offset)) {
+            $this->items[] = $value;
+        } else {
+            $this->items[$offset] = $value;
+        }
     }
 
     public function offsetUnset($offset): void
@@ -337,14 +347,18 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param $key
+     * Si `$key` es un callable, recibe los items originales de la colección (no arrays) y su clave.
+     * Si es un campo o un valor, se busca sobre la representación en array (props y valores de los
+     * Value Objects). Los strings nunca se tratan como callables (`'count'`, `'date'`... son campos).
+     *
+     * @param (callable(TItem, int|string): bool)|string|mixed $key
      * @param $operator
      * @param $value
      * @return bool
      */
     public function contains($key, $operator = null, $value = null)
     {
-        $array = (is_callable($key)) ? $this->items : $this->toArray();
+        $array = self::useAsCallable($key) ? $this->items : $this->toArray();
         return collect($array)->contains(...func_get_args());
     }
 
@@ -374,6 +388,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
+     * Devuelve los items que no están en `$items`, comparando sobre la representación en array
+     * (por el campo `$field` o por el item completo). Se devuelven las instancias originales,
+     * con las claves reindexadas.
+     *
      * @param AbstractCollectionBase $items
      * @param string|null $field
      * @return static
@@ -381,24 +399,22 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function diff($items, string $field = null)
     {
         if (! is_null($field)) {
-            $diff       = collect();
+            $result     = [];
             $dictionary = $items->pluck($field);
-            foreach ($this->toArrayMake() as $item) {
+            foreach ($this->toArrayMake() as $key => $item) {
                 if (! $dictionary->contains($item[$field])) {
-                    $diff->add($item);
+                    $result[$key] = $item;
                 }
             }
         } else {
             $array1 = array_map('json_encode', $this->toArrayMake());
             $array2 = array_map('json_encode', $items->toArrayMake());
 
+            // array_diff conserva las claves de $array1
             $result = array_diff($array1, $array2);
-            $result = array_map(fn($item) => json_decode($item, true), $result);
-
-            $diff = collect($result)->values();
         }
 
-        return $this->toStatic($diff->toArray());
+        return $this->fromResultKeys($result)->values();
     }
 
 //    public function diffAssoc()
@@ -412,6 +428,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
+     * Devuelve los items cuyas claves no están en `$items`, conservando las claves y las instancias originales.
+     *
      * @param AbstractCollectionBase|array $items
      * @return static
      */
@@ -419,9 +437,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     {
         $array1 = $this->toArrayMake();
         $array2 = $this->getArrayableItems($items);
-        $result = array_diff_key($array1, $array2);
-        $diff   = collect($result);
-        return $this->toStatic($diff->toArray());
+        return $this->fromResultKeys(array_diff_key($array1, $array2));
     }
 
     /**
@@ -603,8 +619,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
     /**
      * Si `$groupBy` (o el primer nivel, si es un array) es un callable, recibe los items originales de la
-     * colección (no arrays) y su clave, y cada grupo contiene las mismas instancias. Si es un campo, se
-     * agrupa sobre la representación en array.
+     * colección (no arrays) y su clave. Si es un campo, se agrupa sobre la representación en array.
+     * En ambos casos cada grupo contiene las mismas instancias originales.
      *
      * @param (callable(TItem, int|string): array-key)|string|array $groupBy
      * @param $preserveKeys
@@ -626,11 +642,15 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 ->groupBy($groupBy, $preserveKeys)
                 ->map(fn(Collection $group) => $this->fromItems($group->all()));
         } else {
-            $grouped = collect($this->toArrayMake())->groupBy($groupBy, $preserveKeys);
-            $mapped  = $grouped->map(function ($group) {
-                // $group es una Illuminate\Support\Collection de entidades (arrays)
-                return $this->toStatic($group->toArray());
-            });
+            // Por campo: se agrupa sobre la representación en array conservando siempre las claves, para
+            // poder recuperar los items originales con fromResultKeys. Después se reindexa cada grupo
+            // si no se pidió $preserveKeys (mismo orden que Laravel, que añade los items según los recorre).
+            $mapped = collect($this->toArrayMake())
+                ->groupBy($groupBy, true)
+                ->map(function (Collection $group) use ($preserveKeys) {
+                    $group = $this->fromResultKeys($group->all());
+                    return $preserveKeys ? $group : $group->values();
+                });
         }
 
         // --- 4. Envolver todo en una CollectionAny ---
@@ -1039,8 +1059,16 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
+    /**
+     * Añade un item al principio de la colección, validando su tipo igual que `push()`/`put()`.
+     *
+     * @param TItem $value
+     * @param array-key|null $key
+     * @return static
+     */
     public function prepend($value, $key = null)
     {
+        $this->assertItemTypeResolved($value);
         $this->items = Arr::prepend($this->items, ...(func_num_args() > 1 ? func_get_args() : [$value]));
 
         return $this;
@@ -1100,15 +1128,21 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     /**
      * Create a collection of all elements that do not pass a given truth test. Keys are preserved.
      *
-     * El callback recibe los items originales de la colección (las mismas instancias, no arrays) y su clave.
-     * Si se pasa un valor en lugar de un callback, se eliminan los items iguales (`==`) a ese valor.
+     * Si `$callback` es un callable, recibe los items originales de la colección (no arrays) y su clave.
+     * Si es un valor, se eliminan los items cuya representación en array (o valor escalar, en los Value
+     * Objects) sea igual (`==`) a ese valor. En ambos casos se devuelven las instancias originales.
      *
      * @param (callable(TItem, int|string): bool)|mixed $callback
      * @return static
      */
     public function reject($callback = true): static
     {
-        return $this->fromItems(collect($this->items)->reject($callback)->all());
+        if (self::useAsCallable($callback)) {
+            return $this->fromItems(collect($this->items)->reject($callback)->all());
+        }
+
+        $collResult = collect($this->toArrayMake())->reject($callback);
+        return $this->fromResultKeys($collResult->all());
     }
 
 //    public function replace()
@@ -1228,6 +1262,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      *
      * Si `$callback` es un callable, recibe los items originales de la colección (no arrays) y su clave.
      * Si es un campo (o un array de comparaciones), se ordena sobre la representación en array.
+     *
+     * Atención: en la variante con array de comparaciones (`sortBy([['name', 'asc'], fn($a, $b) => ...])`),
+     * los comparadores callable reciben la representación en array de cada item (`toMakeArray()`/`toArray()`),
+     * no las instancias originales. El resultado sí contiene las instancias originales.
      *
      * @param (callable(TItem, int|string): mixed)|string|array $callback
      * @param $options

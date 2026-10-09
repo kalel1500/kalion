@@ -9,13 +9,18 @@ use ReflectionProperty;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollectionBase;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckableProcessVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Collections\CollectionInts;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Collections\CollectionStrings;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\TagTypeCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\TagTypeEntity;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\CounterDto;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\CounterDtoCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDto;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDtoCollection;
 use Thehouseofel\Kalion\Tests\TestCase;
+use TypeError;
 
 class CollectionItemCallbacksTest extends TestCase
 {
@@ -429,6 +434,162 @@ class CollectionItemCallbacksTest extends TestCase
         $this->assertSame(3, $dtos->max('number'));
         $this->assertSame(1, $dtos->min('number'));
         $this->assertSame('aaa, bbb, ccc', $dtos->implode('string1', ', '));
+    }
+
+    /* -----------------------------------------------------------------
+     | reject con un valor (no invocable)
+     | ----------------------------------------------------------------- */
+
+    public function test_reject_with_int_value_on_int_value_objects(): void
+    {
+        $ints = CollectionInts::fromArray([1, 5, 7, 5]);
+
+        $result = $ints->reject(5);
+
+        $this->assertInstanceOf(CollectionInts::class, $result);
+        $this->assertSame([0 => 1, 2 => 7], $result->toArray());
+        $this->assertSame($ints[0], $result[0]);
+        $this->assertSame($ints[2], $result[2]);
+    }
+
+    public function test_reject_with_string_value_on_string_value_objects(): void
+    {
+        $strings = CollectionStrings::fromArray(['a', 'b', 'c']);
+
+        $result = $strings->reject('b');
+
+        $this->assertSame([0 => 'a', 2 => 'c'], $result->toArray());
+        $this->assertSame($strings[0], $result[0]);
+        $this->assertSame($strings[2], $result[2]);
+    }
+
+    /* -----------------------------------------------------------------
+     | contains: los strings son campos, aunque coincidan con funciones de PHP
+     | ----------------------------------------------------------------- */
+
+    public function test_contains_treats_strings_matching_php_functions_as_fields(): void
+    {
+        $counters = new CounterDtoCollection(
+            new CounterDto(new IntVo(2), StringVo::from('2026-10-08')),
+            new CounterDto(new IntVo(3), StringVo::from('2026-10-09')),
+        );
+
+        $this->assertTrue($counters->contains('count', 3));
+        $this->assertFalse($counters->contains('count', 1));
+        $this->assertTrue($counters->contains('count', '>', 2));
+        $this->assertTrue($counters->contains('date', '2026-10-09'));
+        $this->assertTrue($counters->doesntContain('date', '2020-01-01'));
+        $this->assertTrue($counters->contains(fn(CounterDto $dto) => $dto->count->value === 2));
+    }
+
+    /* -----------------------------------------------------------------
+     | diff / diffKeys
+     | ----------------------------------------------------------------- */
+
+    public function test_diff_keys_preserves_keys_and_identity(): void
+    {
+        $dtos = $this->dtos();
+
+        $result = $dtos->diffKeys([1 => true]);
+
+        $this->assertInstanceOf(ExampleDtoCollection::class, $result);
+        $this->assertSame([0, 2], $result->keys()->all());
+        $this->assertSame($dtos[0], $result[0]);
+        $this->assertSame($dtos[2], $result[2]);
+    }
+
+    public function test_diff_by_field_reindexes_and_preserves_identity(): void
+    {
+        $dtos  = $this->dtos();
+        $other = new ExampleDtoCollection(new ExampleDto('bbb', 'otro', 99, null, null));
+
+        $result = $dtos->diff($other, 'string1');
+
+        $this->assertInstanceOf(ExampleDtoCollection::class, $result);
+        $this->assertSame([$dtos[0], $dtos[2]], $result->all());
+    }
+
+    public function test_diff_without_field_reindexes_and_preserves_identity(): void
+    {
+        $dtos  = $this->dtos();
+        $other = new ExampleDtoCollection(new ExampleDto('bbb', 'y', 2, null, StringVo::from('bar')));
+
+        $result = $dtos->diff($other);
+
+        $this->assertInstanceOf(ExampleDtoCollection::class, $result);
+        $this->assertSame([$dtos[0], $dtos[2]], $result->all());
+    }
+
+    /* -----------------------------------------------------------------
+     | groupBy por campo
+     | ----------------------------------------------------------------- */
+
+    public function test_group_by_field_preserves_identity(): void
+    {
+        $dtos = $this->dtos();
+
+        $groups = $dtos->groupBy('modelString');
+
+        $this->assertSame(['foo', 'bar'], $groups->keys()->all());
+        $this->assertInstanceOf(ExampleDtoCollection::class, $groups['foo']);
+        $this->assertSame([0 => $dtos[0], 1 => $dtos[2]], $groups['foo']->all());
+        $this->assertSame([0 => $dtos[1]], $groups['bar']->all());
+
+        $preserved = $dtos->groupBy('modelString', true);
+        $this->assertSame([0 => $dtos[0], 2 => $dtos[2]], $preserved['foo']->all());
+        $this->assertSame([1 => $dtos[1]], $preserved['bar']->all());
+    }
+
+    public function test_nested_group_by_field_preserves_identity(): void
+    {
+        $dtos = $this->dtos();
+
+        $groups = $dtos->groupBy(['modelString', 'string1']);
+
+        $this->assertSame([$dtos[2]], $groups['foo']['ccc']->all());
+        $this->assertSame([$dtos[1]], $groups['bar']['bbb']->all());
+    }
+
+    /* -----------------------------------------------------------------
+     | prepend / offsetSet validan el tipo
+     | ----------------------------------------------------------------- */
+
+    public function test_prepend_validates_item_type(): void
+    {
+        $dtos = $this->dtos();
+        $new  = new ExampleDto('zzz', 'z', 0, null, null);
+
+        $dtos->prepend($new);
+        $this->assertSame($new, $dtos->first());
+        $this->assertCount(4, $dtos);
+
+        $this->expectException(TypeError::class);
+        $dtos->prepend(new IntVo(1));
+    }
+
+    public function test_offset_set_validates_item_type_and_appends_on_null_offset(): void
+    {
+        $dtos = $this->dtos();
+        $new  = new ExampleDto('zzz', 'z', 0, null, null);
+
+        $dtos[] = $new;
+        $this->assertSame($new, $dtos[3]);
+
+        $dtos['custom'] = $new;
+        $this->assertSame($new, $dtos['custom']);
+
+        $this->expectException(TypeError::class);
+        $dtos[] = ['string1' => 'raw array'];
+    }
+
+    public function test_collection_any_accepts_any_item_on_prepend_and_offset_set(): void
+    {
+        $any = new CollectionAny([1]);
+
+        $any->prepend('a');
+        $any[] = ['x' => 1];
+
+        $this->assertSame(['a', 1, ['x' => 1]], $any->all());
     }
 }
 
