@@ -45,6 +45,8 @@ use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\Eloqu
 use Thehouseofel\Kalion\Features\Auth\Infrastructure\Repositories\Eloquent\EloquentRoleRepository;
 use Thehouseofel\Kalion\Features\AuthFlow\Infrastructure\FortifyServiceProvider;
 use Thehouseofel\Kalion\Features\Components\Domain\Support\Contracts\LayoutData;
+use Thehouseofel\Kalion\Features\Database\Domain\Contracts\TransactionManager;
+use Thehouseofel\Kalion\Features\Database\Infrastructure\LaravelTransactionManager;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\JobRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\StatusRepository;
 use Thehouseofel\Kalion\Features\Shared\Domain\Contracts\Repositories\TabulatorRepository;
@@ -70,6 +72,7 @@ class KalionServiceProvider extends ServiceProvider
         RoleRepository::class           => EloquentRoleRepository::class,
         PermissionRepository::class     => EloquentPermissionRepository::class,
         StatusRepository::class         => EloquentStatusRepository::class,
+        TransactionManager::class       => LaravelTransactionManager::class,
     ];
 
     /**
