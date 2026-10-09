@@ -591,6 +591,46 @@ class CollectionItemCallbacksTest extends TestCase
 
         $this->assertSame(['a', 1, ['x' => 1]], $any->all());
     }
+
+    /* -----------------------------------------------------------------
+     | flatten / flip generan items nuevos: devuelven CollectionAny
+     | ----------------------------------------------------------------- */
+
+    public function test_flatten_returns_collection_any_on_typed_collections(): void
+    {
+        $strings = CollectionStrings::fromArray(['a', 'b']);
+        $result  = $strings->flatten();
+        $this->assertSame(CollectionAny::class, $result::class);
+        $this->assertSame(['a', 'b'], $result->all());
+
+        $dtos   = new ExampleDtoCollection(new ExampleDto('aaa', 'x', 1, null, StringVo::from('foo')));
+        $result = $dtos->flatten();
+        $this->assertSame(CollectionAny::class, $result::class);
+        $this->assertSame(['aaa', 'x', 1, null, 'foo'], $result->all());
+    }
+
+    public function test_flatten_keeps_with_and_is_full_on_relatable_collections(): void
+    {
+        $result = $this->tagTypes()->setWith('tags')->setIsFull(true)->flatten();
+
+        $this->assertSame(CollectionAny::class, $result::class);
+        $this->assertSame([1, 'Tecnología', 'tech', 2, 'Deportes', 'sport', 3, 'Música', 'music'], $result->all());
+        $this->assertSame('tags', $this->readProperty($result, 'with'));
+        $this->assertTrue($this->readProperty($result, 'isFull'));
+    }
+
+    public function test_flip_returns_collection_any_on_typed_collections(): void
+    {
+        $strings = CollectionStrings::fromArray(['a', 'b', 'c']);
+
+        $result = $strings->flip();
+
+        $this->assertSame(CollectionAny::class, $result::class);
+        $this->assertSame(['a' => 0, 'b' => 1, 'c' => 2], $result->all());
+
+        $ints = CollectionInts::fromArray([10, 20]);
+        $this->assertSame([10 => 0, 20 => 1], $ints->flip()->all());
+    }
 }
 
 

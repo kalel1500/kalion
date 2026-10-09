@@ -128,16 +128,6 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         $this->doAssertItemType($item, $expectedType);
     }
 
-    private function toStatic(array $collResult): static
-    {
-        if ($this->isInstanceOfRelatable()) {
-            /** @var Relatable $this */
-            return static::fromArray($collResult, $this->with, $this->isFull);
-        } else {
-            return static::fromArray($collResult);
-        }
-    }
-
     private function toAny(array $data): CollectionAny
     {
         return match (true) {
@@ -569,23 +559,32 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     }
 
     /**
+     * Aplana la representación en array de la colección (props y valores de los Value Objects).
+     *
+     * Genera items nuevos (escalares), que no son del tipo de la colección, por lo que siempre
+     * devuelve una `CollectionAny`.
+     *
      * @param $depth
-     * @return static
+     * @return CollectionAny
      */
     public function flatten($depth = INF)
     {
         $collResult = collect($this->toArrayMake())->flatten($depth);
-        return $this->toStatic($collResult->toArray());
+        return $this->toAny($collResult->toArray());
     }
 
     /**
-     * @return static
+     * Intercambia claves y valores de la representación en array de la colección. Requiere que los
+     * valores sean escalares (por ejemplo, colecciones de Value Objects).
+     *
+     * Los nuevos valores son las claves antiguas, que no son del tipo de la colección, por lo que siempre
+     * devuelve una `CollectionAny`.
+     *
+     * @return CollectionAny
      */
     public function flip()
     {
-        $result = array_flip($this->toArrayMake());
-        $diff   = collect($result);
-        return $this->toStatic($diff->toArray());
+        return $this->toAny(array_flip($this->toArrayMake()));
     }
 
 //    public function forget()
