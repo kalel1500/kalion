@@ -1257,13 +1257,16 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     }
 
     /**
+     * Ordena en orden descendente sobre la representación en array, conservando las claves y las
+     * instancias originales.
+     *
      * @param $options
      * @return static
      */
     public function sortDesc($options = SORT_REGULAR)
     {
         $collResult = collect($this->toArrayMake())->sortDesc($options);
-        return $this->toStatic($collResult->toArray());
+        return $this->fromResultKeys($collResult->all());
     }
 
 //    public function sortKeys()
@@ -1497,16 +1500,23 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * Filtra sobre la representación en array (props y valores de los Value Objects), pero devuelve
-     * las instancias originales conservando las claves.
+     * Si `$key` es un callable, equivale a `filter($key)`: recibe los items originales de la colección
+     * (no arrays) y su clave.
      *
-     * @param $key
+     * Si es un campo, filtra sobre la representación en array (props y valores de los Value Objects),
+     * pero devuelve las instancias originales conservando las claves.
+     *
+     * @param (callable(TItem, int|string): bool)|string|null $key
      * @param $operator
      * @param $value
      * @return static
      */
     public function where($key, $operator = null, $value = null)
     {
+        if (self::useAsCallable($key)) {
+            return $this->filter($key);
+        }
+
         $collResult = collect($this->toArrayMake())->where(...func_get_args());
         return $this->fromResultKeys($collResult->all());
     }

@@ -308,6 +308,50 @@ class CollectionItemCallbacksTest extends TestCase
         $this->assertSame([1 => 1, 2 => 2, 0 => 3], $plain->sort()->all());
     }
 
+    public function test_sort_desc_keeps_order_and_identity(): void
+    {
+        $plain = new CollectionAny([3, 1, 2]);
+        $this->assertSame([0 => 3, 2 => 2, 1 => 1], $plain->sortDesc()->all());
+
+        $vos    = CollectionStrings::fromArray(['b', 'c', 'a']);
+        $result = $vos->sortDesc();
+        $this->assertInstanceOf(CollectionStrings::class, $result);
+        $this->assertSame([1, 0, 2], $result->keys()->all());
+        $this->assertSame([$vos[1], $vos[0], $vos[2]], $result->values()->all());
+    }
+
+    public function test_where_with_callable_receives_items_and_keys(): void
+    {
+        $tagTypes = $this->tagTypes();
+        $received = [];
+
+        $result = $tagTypes->where(function (TagTypeEntity $tagType, int $key) use (&$received) {
+            $received[$key] = $tagType;
+            return $tagType->code->value !== 'sport';
+        });
+
+        $this->assertSame([0, 1, 2], array_keys($received));
+        $this->assertSame([$tagTypes[0], $tagTypes[1], $tagTypes[2]], array_values($received));
+        $this->assertInstanceOf(TagTypeCollection::class, $result);
+        $this->assertSame([0, 2], $result->keys()->all());
+    }
+
+    public function test_where_with_callable_preserves_identity(): void
+    {
+        $tagTypes = $this->tagTypes()->setWith('tags')->setIsFull(true);
+
+        $result = $tagTypes->where(fn(TagTypeEntity $tagType) => $tagType->code->value === 'music');
+
+        $this->assertSame($tagTypes[2], $result[2]);
+        $this->assertSame('tags', $this->readProperty($result, 'with'));
+        $this->assertTrue($this->readProperty($result, 'isFull'));
+
+        $this->assertSame(
+            $tagTypes[1],
+            $tagTypes->firstWhere(fn(TagTypeEntity $tagType) => $tagType->code->value === 'sport')
+        );
+    }
+
     public function test_values_reindexes_and_preserves_identity(): void
     {
         $tagTypes = $this->tagTypes()->setWith('tags')->setIsFull(true);
