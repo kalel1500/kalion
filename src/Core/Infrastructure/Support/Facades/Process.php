@@ -12,13 +12,13 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\CheckablePro
  * @method static \Thehouseofel\Kalion\Core\Infrastructure\Utilities\Process\SystemProcessInspector withoutCache()
  * @method static bool isRunning(CheckableProcessVo $processName)
  * @method static bool tryIsRunning(CheckableProcessVo $processName)
- * @method static void assert(string $processName, string $errorMessage = null)
+ * @method static void assert(CheckableProcessVo $processName, ?string $errorMessage = null)
  * @method static bool isRunningQueue()
  * @method static bool tryIsRunningQueue()
- * @method static void assertQueue(string $errorMessage = null)
+ * @method static void assertQueue(?string $errorMessage = null)
  * @method static bool isRunningReverb()
  * @method static bool tryIsRunningReverb()
- * @method static void assertReverb(string $errorMessage = null)
+ * @method static void assertReverb(?string $errorMessage = null)
  *
  * @see \Thehouseofel\Kalion\Core\Infrastructure\Utilities\Process\SystemProcessInspector
  */

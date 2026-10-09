@@ -44,14 +44,14 @@ abstract class AbstractDateVo extends AbstractStringVo
         return new static($value, $formats);
     }
 
-    public static function fromCarbon(?CarbonInterface $value, string $toFormat = null, ?array $formats = null): static
+    public static function fromCarbon(?CarbonInterface $value, ?string $toFormat = null, ?array $formats = null): static
     {
         $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
         $formatted = $value?->format($toFormat);
         return new static($formatted, $formats);
     }
 
-    public static function parse($value, string $toFormat = null, ?array $formats = null): static
+    public static function parse($value, ?string $toFormat = null, ?array $formats = null): static
     {
         if ($value instanceof CarbonInterface) {
             return static::fromCarbon($value, $toFormat, $formats);

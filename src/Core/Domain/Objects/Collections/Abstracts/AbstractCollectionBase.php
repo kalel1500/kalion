@@ -386,7 +386,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      * @param string|null $field
      * @return static
      */
-    public function diff($items, string $field = null)
+    public function diff($items, ?string $field = null)
     {
         if (! is_null($field)) {
             $result     = [];

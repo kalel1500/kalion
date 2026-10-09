@@ -117,7 +117,7 @@ class SystemProcessInspector
     /**
      * @throws ProcessException
      */
-    public function assert(CheckableProcessVo $processName, string $errorMessage = null): void
+    public function assert(CheckableProcessVo $processName, ?string $errorMessage = null): void
     {
         if (! $this->isRunning($processName)) {
             throw ProcessException::isNotRunningWithOptionalMessage($processName->value, $errorMessage);

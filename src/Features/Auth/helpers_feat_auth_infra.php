@@ -29,7 +29,7 @@ if (! function_exists('user')) {
      * @param string|null $guard
      * @return \Thehouseofel\Kalion\Features\Auth\Domain\Contracts\AuthenticatableEntity|null
      */
-    function user(string $guard = null)
+    function user(?string $guard = null)
     {
         return kauth($guard)->user();
     }

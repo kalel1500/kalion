@@ -53,7 +53,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
      * @param bool|string $isFull
      * @return (T is null ? null : static)
      */
-    public static function fromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
+    public static function fromArray(?array $data, string|array|null $with = null, bool|string|null $isFull = null): ?static
     {
         if (empty($data)) return null;
 
@@ -71,7 +71,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
      * @param bool|string $isFull
      * @return (T is null ? null : static)
      */
-    public static function resolveFromArray(?array $data, string|array|null $with = null, bool|string $isFull = null): ?static
+    public static function resolveFromArray(?array $data, string|array|null $with = null, bool|string|null $isFull = null): ?static
     {
         if (empty($data)) return null;
 
@@ -299,7 +299,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     }
 
 
-    public static function createFake(array $overwriteParams = null): static|null
+    public static function createFake(?array $overwriteParams = null): static|null
     {
         return null;
     }

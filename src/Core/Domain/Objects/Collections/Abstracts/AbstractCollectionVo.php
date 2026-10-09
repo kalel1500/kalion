@@ -24,7 +24,7 @@ abstract class AbstractCollectionVo extends AbstractCollectionBase
     /**
      * A null value represents an empty collection.
      */
-    public static function fromArray(?array $data, callable $valueModifierCallback = null): static
+    public static function fromArray(?array $data, ?callable $valueModifierCallback = null): static
     {
         $valueClass = static::resolveItemType();
         $res        = [];

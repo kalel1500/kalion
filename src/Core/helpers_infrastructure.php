@@ -77,7 +77,7 @@ if (! function_exists('src_path')) {
 }
 
 if (! function_exists('safe_route')) {
-    function safe_route(?string $name, string $default = null, array $params = []): ?string
+    function safe_route(?string $name, ?string $default = null, array $params = []): ?string
     {
         $fallback = match ($default) {
             null    => null,
