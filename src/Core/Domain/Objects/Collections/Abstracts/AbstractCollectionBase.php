@@ -539,14 +539,17 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param $key
+     * Equivale a `where(...)->first()`, igual que en Laravel: admite un campo (con o sin operador) o un
+     * callable, y devuelve el item original o `null`.
+     *
+     * @param (callable(TItem, int|string): bool)|string $key
      * @param $operator
      * @param $value
-     * @return mixed
+     * @return TItem|null
      */
     public function firstWhere($key, $operator = null, $value = null)
     {
-        return $this->where(...func_get_args())->first(); // TODO Canals - hacer pruebas y adaptar a Laravel
+        return $this->where(...func_get_args())->first();
     }
 
     /**
@@ -653,7 +656,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         }
 
         // --- 4. Envolver todo en una CollectionAny ---
-        $result = $this->toAny($mapped->toArray());
+        // Se usa all() y no toArray(): el toArray() de Laravel convertiría en array cualquier item Arrayable
+        $result = $this->toAny($mapped->all());
 
         // --- 5. Si quedan niveles, aplicar groupBy recursivamente en cada grupo ---
         if (!empty($nextGroups)) {
@@ -664,7 +668,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
                 return $subCollection->groupBy($nextGroups, $preserveKeys);
             });
 
-            return $this->toAny($reGrouped->toArray());
+            return $this->toAny($reGrouped->all());
         }
 
         return $result;
@@ -786,13 +790,16 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param callable $callback
+     * El callback recibe los items originales de la colección y su clave. Los valores devueltos se
+     * guardan tal cual en la `CollectionAny` resultante (no se convierten a array).
+     *
+     * @param callable(TItem, int|string): mixed $callback
      * @return CollectionAny
      */
     public function map(callable $callback)
     {
         $collResult = collect($this->items)->map($callback);
-        return $this->toAny($collResult->toArray());
+        return $this->toAny($collResult->all());
     }
 
 //    public function mapInto()
@@ -811,13 +818,16 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param callable $callback
+     * El callback recibe los items originales de la colección y su clave, y debe devolver un array
+     * `[clave => valor]`. Los valores se guardan tal cual en la `CollectionAny` resultante.
+     *
+     * @param callable(TItem, int|string): array $callback
      * @return CollectionAny
      */
     public function mapWithKeys(callable $callback)
     {
         $collResult = collect($this->items)->mapWithKeys($callback);
-        return $this->toAny($collResult->toArray());
+        return $this->toAny($collResult->all());
     }
 
     /**
@@ -841,6 +851,13 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
+    /**
+     * Combina la representación en array de la colección con `$items`. El resultado puede contener
+     * items de cualquier tipo, por lo que siempre devuelve una `CollectionAny`.
+     *
+     * @param iterable|\Illuminate\Contracts\Support\Arrayable $items
+     * @return CollectionAny
+     */
     public function merge($items)
     {
         $collResult = collect($this->toArray())->merge($items);
@@ -966,12 +983,12 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
         $newWith   = null;
         $newIsFull = null;
-        foreach ($with as $key => $rel) {
+        foreach ($with as $relKey => $rel) {
 
-            if (is_string($key)) {
-                [$key, $isFull] = $this->getInfoFromRelationWithFlag($key);
+            if (is_string($relKey)) {
+                [$relKey, $isFull] = $this->getInfoFromRelationWithFlag($relKey);
 
-                if ($key === $relationName) {
+                if ($relKey === $relationName) {
                     $newWith   = $rel;
                     $newIsFull = $isFull;
                     break;
@@ -1001,7 +1018,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         }
 
         $segments   = explode('.', $path);
-        $current    = $data[0] ?? $data; // por si la colección no tiene índice numérico
+        $current    = $data[array_key_first($data)]; // primer item, aunque la colección no tenga la clave 0 (tras where, skip, filter...)
         $normalized = [];
 
         foreach ($segments as $segment) {
@@ -1092,13 +1109,14 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     }
 
     /**
-     * @param $key
-     * @param $value
+     * Añade o sustituye el item de la clave `$key`. El tipo se valida en `offsetSet()`.
+     *
+     * @param array-key|null $key
+     * @param TItem $value
      * @return static
      */
     public function put($key, $value)
     {
-        $this->assertItemTypeResolved($value);
         $this->offsetSet($key, $value);
 
         return $this;
@@ -1170,8 +1188,11 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * @param $keys
-     * @return static
+     * Devuelve, para cada item, un array con solo los campos indicados (reindexado). Genera items nuevos,
+     * por lo que siempre devuelve una `CollectionAny`.
+     *
+     * @param string|array $keys
+     * @return CollectionAny
      */
     public function select($keys)
     {

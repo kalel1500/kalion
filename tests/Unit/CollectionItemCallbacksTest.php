@@ -13,7 +13,9 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Collections\
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Collections\CollectionStrings;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IntVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\StringVo;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\TagCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\Collections\TagTypeCollection;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\TagEntity;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\TagTypeEntity;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\CounterDto;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\CounterDtoCollection;
@@ -630,6 +632,104 @@ class CollectionItemCallbacksTest extends TestCase
 
         $ints = CollectionInts::fromArray([10, 20]);
         $this->assertSame([10 => 0, 20 => 1], $ints->flip()->all());
+    }
+
+    /* -----------------------------------------------------------------
+     | pluck con camelCase cuando la colección no tiene la clave 0
+     | ----------------------------------------------------------------- */
+
+    private function tags(): TagCollection
+    {
+        return TagCollection::fromArray([
+            ['id' => 1, 'name' => 'PHP', 'code' => 'php', 'tag_type_id' => 10],
+            ['id' => 2, 'name' => 'Laravel', 'code' => 'laravel', 'tag_type_id' => 20],
+            ['id' => 3, 'name' => 'Vue', 'code' => 'vue', 'tag_type_id' => 30],
+        ]);
+    }
+
+    public function test_pluck_camel_case_after_where_without_key_zero(): void
+    {
+        $filtered = $this->tags()->where('code', '!=', 'php');
+        $this->assertArrayNotHasKey(0, $filtered->all());
+
+        $this->assertSame([20, 30], $filtered->pluck('tagTypeId')->all());
+        $this->assertSame([20, 30], $filtered->pluck('tag_type_id')->all());
+    }
+
+    public function test_pluck_camel_case_after_skip_without_key_zero(): void
+    {
+        $skipped = $this->tags()->skip(1);
+        $this->assertSame([1, 2], $skipped->keys()->all());
+
+        $this->assertSame([20, 30], $skipped->pluck('tagTypeId')->all());
+        $this->assertSame(['laravel' => 20, 'vue' => 30], $skipped->pluck('tagTypeId', 'code')->all());
+    }
+
+    /* -----------------------------------------------------------------
+     | map / mapWithKeys / groupBy no convierten los resultados en arrays
+     | ----------------------------------------------------------------- */
+
+    public function test_map_returns_same_instances(): void
+    {
+        $tags = $this->tags();
+
+        $result = $tags->map(fn(TagEntity $tag) => $tag);
+
+        $this->assertSame(CollectionAny::class, $result::class);
+        $this->assertSame([$tags[0], $tags[1], $tags[2]], $result->all());
+    }
+
+    public function test_map_and_map_with_keys_keep_arrayable_results(): void
+    {
+        $tags = $this->tags();
+
+        // Una Collection de Laravel es Arrayable: antes se convertía en array
+        $mapped = $tags->map(fn(TagEntity $tag) => collect([$tag->code->value]));
+        $this->assertInstanceOf(\Illuminate\Support\Collection::class, $mapped[0]);
+
+        $withKeys = $tags->mapWithKeys(fn(TagEntity $tag) => [$tag->code->value => $tag]);
+        $this->assertSame(['php', 'laravel', 'vue'], $withKeys->keys()->all());
+        $this->assertSame($tags[1], $withKeys['laravel']);
+    }
+
+    public function test_group_by_groups_are_typed_collections_on_every_level(): void
+    {
+        $dtos = $this->dtos();
+
+        // Por campo, varios niveles
+        $byField = $dtos->groupBy(['modelString', 'string1']);
+        $this->assertSame(CollectionAny::class, $byField::class);
+        $this->assertSame(CollectionAny::class, $byField['foo']::class);
+        $this->assertInstanceOf(ExampleDtoCollection::class, $byField['foo']['aaa']);
+        $this->assertInstanceOf(ExampleDtoCollection::class, $byField['foo']['ccc']);
+        $this->assertSame($dtos[0], $byField['foo']['aaa']->first());
+
+        // Con callable, varios niveles
+        $byCallable = $dtos->groupBy([
+            fn(ExampleDto $dto) => $dto->modelString->value,
+            fn(ExampleDto $dto) => $dto->number > 1 ? 'big' : 'small',
+        ]);
+        $this->assertInstanceOf(ExampleDtoCollection::class, $byCallable['foo']['small']);
+        $this->assertInstanceOf(ExampleDtoCollection::class, $byCallable['foo']['big']);
+        $this->assertSame([$dtos[0]], $byCallable['foo']['small']->all());
+        $this->assertSame([$dtos[2]], $byCallable['foo']['big']->all());
+        $this->assertSame([$dtos[1]], $byCallable['bar']['big']->all());
+    }
+
+    /* -----------------------------------------------------------------
+     | put valida el tipo (a través de offsetSet)
+     | ----------------------------------------------------------------- */
+
+    public function test_put_validates_item_type(): void
+    {
+        $dtos = $this->dtos();
+        $new  = new ExampleDto('zzz', 'z', 0, null, null);
+
+        $dtos->put('nuevo', $new);
+        $this->assertSame($new, $dtos['nuevo']);
+
+        $this->expectException(TypeError::class);
+        $dtos->put('otro', new IntVo(1));
     }
 }
 
