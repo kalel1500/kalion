@@ -1,6 +1,417 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.61.2-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.62.0-beta.0...master)
+
+## [v0.62.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.61.2-beta.0...v0.62.0-beta.0) - 2026-11-02
+
+### Added
+
+* Nuevos métodos en las colecciones (`AbstractCollectionBase`): `skip(int $count)`, `slice(int $offset, ?int $length = null)`, `reverse()` y `partition(callable $callback)` (devuelve `[static, static]`). Trabajan directamente sobre los items de la colección, conservan las claves y las instancias originales, y en las colecciones `Relatable` mantienen `with` e `isFull`.
+* Las colecciones de entidades paginadas conservan la paginación al reordenar o reindexar: `values()`, `reverse()`, `sort()`, `sortBy()`/`sortByDesc()` y `sortDesc()` mantienen `isPaginate()` y `paginationData()`, por lo que `jsonSerialize()` sigue devolviendo `{last_page, last_row, data}` (por ejemplo, al reordenar una página antes de enviarla a Tabulator). Solo se reordena la página actual, no el conjunto completo. El resto de métodos que devuelven un subconjunto (`filter()`, `where()`, `reject()`, `unique()`, `take()`, `skip()`...) siguen perdiendo la paginación, igual que antes.
+
+### Changed
+
+* **(breaking) Cambio de licencia:** El paquete ha migrado de la licencia GNU GPL a la licencia [Mozilla Public License 2.0 (MPL-2.0)](LICENSE). Esto permite integrar libremente Kalion en proyectos comerciales de Laravel sin obligar a los usuarios a liberar el código de su aplicación principal.
+* (breaking) Los métodos `filter()` y `reject()` de las colecciones (`AbstractCollectionBase`) trabajan ahora sobre los items originales en lugar de sobre su representación en array (`toMakeArray()`/`toArray()`):
+  * El callback recibe la propia instancia (entidad, DTO, Value Object...) y su clave, por lo que se pueden usar type-hints (`fn(MyEntity $e) => ...`) y métodos de dominio (`$e->getType()`), igual que en `first($callback)` y `last($callback)`. Los callbacks que leían arrays (`fn($i) => $i['campo']`) dejan de funcionar y deben usar las propiedades o métodos del objeto (`fn(MyEntity $e) => $e->campo->value`). En `CollectionAny` el callback recibe el item tal cual se guardó.
+  * La colección resultante contiene las mismas instancias (`$coll->filter(fn() => true)->first() === $coll->first()`): ya no se reconstruyen con `fromArray()`, por lo que se conservan los valores `computed` cacheados y cualquier estado interno, y se evita el coste de serializar y revalidar la colección. En las colecciones `Relatable` se conservan `with` e `isFull`; la información de paginación no se conserva (igual que antes).
+  * Ambos métodos declaran ahora el tipo de retorno `static` (y `filter()` el parámetro `?callable`), por lo que las clases hijas que los sobrescriban deben adaptar su firma.
+  * `reject()` con un valor no invocable (`reject(5)`, `reject('a')`) sigue comparando sobre la representación en array (el valor escalar en las colecciones de Value Objects), pero devuelve las instancias originales.
+* (breaking) Las variantes con callable de `every()`, `sort()`, `sortBy()`/`sortByDesc()`, `unique()`, `groupBy()`, `max()`, `min()` e `implode()` reciben ahora los items originales (entidad, DTO, Value Object...) en lugar de arrays, igual que `filter()` y `reject()`. Los callbacks que leían arrays (`fn($i) => $i['campo']`) deben usar las propiedades o métodos del objeto. Se considera callable cualquier valor invocable que no sea un string (mismo criterio que Laravel), por lo que las variantes por campo (`sortBy('name')`, `unique('code')`, `groupBy('type')`, `max('price')`...) no cambian y siguen trabajando sobre la representación en array. En `groupBy()` con callable, cada grupo contiene las mismas instancias. Lo mismo ocurre en `sortBy()`/`sortByDesc()` con un array de comparaciones (`sortBy([['name', 'asc'], fn($a, $b) => ...])`): los comparadores callable reciben los items originales y los campos se comparan sobre la representación en array.
+* (breaking) `where()` y `firstWhere()` con un callable como primer argumento delegan ahora en `filter()`: el callback recibe los items originales (entidad, DTO, Value Object...) y su clave en lugar de arrays, y la colección resultante contiene las mismas instancias. Los callbacks que leían arrays (`fn($i) => $i['campo']`) deben usar las propiedades o métodos del objeto. Las variantes por campo (`where('campo', 'valor')`, `where('campo', '>', 1)`...) no cambian.
+* Los métodos que filtran u ordenan por campo (`where()`, `whereIn()`, `whereNotIn()`, `whereNotNull()`, `firstWhere()`, `unique()` sin callable, `sort()` sin callable, `sortDesc()`, `sortBy()`/`sortByDesc()` por campo, `reject()` con un valor, `diff()` y los grupos de `groupBy()` por campo) siguen calculando el resultado sobre la representación en array (`toArray()`: props y valor escalar de los Value Objects), pero ahora devuelven las instancias originales en el orden resultante en lugar de reconstruirlas con `fromArray()`. Se conservan la identidad de los objetos (`===`), los valores `computed` cacheados y, en las colecciones `Relatable`, `with` e `isFull`. El tratamiento de las claves no cambia (se conservan, salvo en `groupBy()` sin `$preserveKeys`, que sigue reindexando cada grupo), excepto en `diff()` (ver más abajo).
+* `diffKeys()` compara ahora directamente las claves de los items (y las de `$items`, si es una colección del paquete, una `Collection` de Laravel o un iterable), sin serializar ningún item, y devuelve las instancias originales conservando las claves.
+* `values()` y `take()` trabajan ahora directamente sobre los items, sin serializar ni reconstruir la colección, y conservan las instancias originales.
+* (breaking) Cambios en la representación de los items que usan los métodos de las colecciones:
+  * `flatten()` y `flip()` devuelven ahora siempre una `CollectionAny` (igual que `map()`, `pluck()`, `collapse()`, `merge()` y `select()`) en lugar de una instancia de la propia colección (`static`). Ambos generan items nuevos que no son del tipo de la colección: `flatten()` aplana los campos de todos los items en una lista de escalares y `flip()` deja como valores las claves antiguas. Antes se intentaba reconstruir la colección tipada con `fromArray()` a partir de esos escalares, lo que daba resultados sin sentido o lanzaba excepciones. En las colecciones `Relatable` se conservan `with` e `isFull`. El código que dependa de recibir la colección tipada debe convertir el resultado explícitamente (por ejemplo, con `->toCollection(MiColeccion::class)`).
+  * Los métodos que comparan, filtran, ordenan o extraen campos usan ahora siempre la misma representación de los items: `toArray()`. Antes unos usaban `toMakeArray()` (`where()`, `whereIn()`, `whereNotIn()`, `sort()`, `sortBy()`, `sortDesc()`, `unique()`, `reject()` con un valor, `diff()`, `groupBy()` por campo, `flatten()` y `flip()`) y otros `toArray()` (`contains()`, `every()`, `pluck()`, `max()`, `min()`, `implode()`...). Solo afecta a las colecciones de DTO (`MakeArrayable`), únicos items en los que ambos formatos difieren (en entidades y Value Objects son idénticos):
+    * Los métodos anteriores ven ahora también los campos que solo aparecen en el `toArray()` del DTO (campos `#[Computed]` o añadidos en un override de `toArray()`), igual que `pluck()` y `contains()`. Por ejemplo, `where('campo_computed', 'valor')` o `sortBy('campo_computed')` antes no encontraban el campo y ahora sí.
+    * `flatten()` y `flip()` incluyen también esos campos.
+    * `diff($items, $field)` deja de mezclar formatos: compara `toArray()` en las dos colecciones (antes `$this` usaba `toMakeArray()` y `$items->pluck()` usaba `toArray()`). `diff($items)` sin campo compara también los campos computed.
+    * `toMakeArray()` queda reservado para reconstruir los items con `fromArray()` (`toCollection()`).
+  * `merge()` trabaja ahora sobre los items originales de ambos lados en lugar de sobre la representación en array de `$this`: `$entities->merge($otros)` devuelve una `CollectionAny` con las entidades (DTO, Value Objects...) tal cual, sin convertirlas a array. Antes los items de `$this` se convertían a array y, si `$items` era otra colección del paquete, sus items se quedaban como objetos, por lo que el resultado mezclaba ambos formatos. Si `$items` es una colección del paquete o de Laravel se usan sus items (`all()`); el resto de valores se convierten igual que en Laravel. El código que esperaba arrays debe llamar a `->toArray()` sobre el resultado.
+  * `collapse()` (y por tanto `flatMap()`) trabaja ahora sobre los items originales, igual que en Laravel: une los items que sean arrays o colecciones (del paquete o de Laravel) y conserva los objetos que contengan. Por ejemplo, `$coll->groupBy('type')->collapse()` o `$coll->flatMap(fn($e) => $e->tags())` devuelven las entidades y no sus arrays. Los items que no son arrays ni colecciones (por ejemplo, las entidades de una colección tipada) se ignoran; antes se convertían a array y se mezclaban sus campos, lo que no tenía sentido.
+* (breaking) `diff()` y `select()` conservan ahora las claves, igual que en Laravel y que el resto de métodos que filtran (`where()`, `filter()`, `reject()`, `diffKeys()`...). Antes reindexaban el resultado. Si se necesitan claves consecutivas, hay que llamar a `->values()`.
+* (breaking) Todos los métodos públicos de `AbstractCollectionBase` declaran ahora su tipo de retorno nativo (`static`, `CollectionAny`, `bool`, `string`, `array`, `mixed`...). Las clases hijas que sobrescriban alguno de estos métodos deben declarar un tipo de retorno compatible (por ejemplo, `public function first(?callable $callback = null, $default = null): mixed`). Las sobrescrituras de `first()` en `AbstractCollectionEntity`, `AbstractCollectionDto` y `AbstractCollectionVo` ya se han adaptado.
+* (breaking) `prepend()` y `offsetSet()` (`$coll[] = $item`, `$coll['clave'] = $item`) validan ahora el tipo del item igual que `push()` y `put()`: en las colecciones tipadas (`#[CollectionOf]`/`ITEM_TYPE`) lanzan un `TypeError` si el item no es del tipo esperado. Antes permitían añadir cualquier valor (por ejemplo, arrays sin convertir). `CollectionAny` sigue aceptando cualquier valor.
+* (breaking) Se eliminan `AbstractCollectionEntity::setIsPaginate()` y `AbstractCollectionEntity::setPaginationData()`. La paginación es un dato de origen que solo establece `fromArray()`/`resolveFromArray()` a partir de la página de Laravel, y los setters permitían estados incoherentes (colección «paginada» sin datos de paginación). `isPaginate()` se deriva ahora de `paginationData()` (es `true` si y solo si hay datos de paginación) y desaparece la propiedad `$isPaginate`.
+
+### Fixed
+
+* `contains()` y `doesntContain()` trataban como callable cualquier string que coincidiera con una función de PHP (`'count'`, `'date'`, `'key'`...), por lo que `contains('count', 3)` buscaba sobre los objetos en lugar de sobre su representación en array y podía dar resultados incorrectos con Value Objects. Ahora usan el mismo criterio que Laravel: los strings siempre se tratan como campos.
+* `offsetSet()` con `$offset` `null` (`$coll[] = $item`) guardaba el item con la clave `''` en lugar de añadirlo al final. Ahora lo añade al final, igual que en Laravel.
+* `pluck()` con un campo en `camelCase` (por ejemplo `pluck('tagTypeId')`) devolvía `null` cuando la colección no tenía la clave `0`, situación habitual ahora que `where()`, `filter()`, `skip()`, `reject()`… conservan las claves. La normalización a `snake_case` tomaba como primer item `$data[0] ?? $data` (es decir, la colección entera si faltaba la clave `0`); ahora usa el primer item real (`array_key_first()`).
+* `map()`, `mapWithKeys()` y `groupBy()` construían la `CollectionAny` resultante con el `toArray()` de la Collection de Laravel, que convierte en array cualquier item `Arrayable`. Ahora usan `all()`, por lo que los valores se guardan tal cual. Los objetos del paquete (entidades, DTO, Value Objects y colecciones) no implementan `Arrayable`, así que su comportamiento no cambia; sí cambia para los callbacks de `map()`/`mapWithKeys()` que devuelvan objetos `Arrayable` de Laravel (modelos Eloquent, `Collection`...), que antes se convertían en arrays y ahora se conservan como objetos.
+* Se han declarado explícitamente como nullables los parámetros con valor por defecto `null` y tipo no nullable (nullable implícito, obsoleto en PHP 8.4): `AbstractCollectionBase::diff()`, `AbstractCollectionVo::fromArray()`, `AbstractEntity::fromArray()`, `AbstractEntity::resolveFromArray()`, `AbstractEntity::createFake()`, `AbstractDateVo::fromCarbon()`, `AbstractDateVo::parse()`, `SystemProcessInspector::assert()` y los helpers `safe_route()` y `user()`. El comportamiento no cambia. También se ha corregido el PHPDoc de la fachada `Process` (`assert()`, `assertQueue()` y `assertReverb()`).
+* `TabulatorFilterCollection::except()` lanzaba un `TypeError`, ya que su callback (`fn(TabulatorFilterDto $f) => ...`) recibía arrays en lugar de DTO. Funciona correctamente con el nuevo comportamiento de `filter()`.
+* `flatten()` y `select()` construían la `CollectionAny` resultante con el `toArray()` de la Collection de Laravel, igual que `map()`. Ahora usan `all()`.
+* `sortByDesc()` con un array de comparaciones (`sortByDesc(['name'])`) ordenaba en orden ascendente, ya que el array se pasaba sin marcar como `desc`. Ahora aplica todas las comparaciones en orden descendente, igual que Laravel.
+* `whereIn()` y `whereNotIn()` no encontraban coincidencias cuando `$values` era una colección del paquete (por ejemplo, `whereIn('id', $collectionIds)`), porque comparaban los valores escalares con los Value Objects. Ahora usan la representación en array (`toArray()`) de esa colección.
+* `diff($items, $field)` lanzaba un error si `$field` estaba en `camelCase` o con notación de puntos, porque leía `$item[$field]` directamente mientras que `$items->pluck($field)` sí lo normalizaba. Ahora usa la misma normalización que `pluck()`.
+* Las colecciones de entidades obtenidas con métodos que pierden la paginación (`filter()`, `where()`, `take()`...) conservaban los datos de la paginación original en `paginationData()` aunque `isPaginate()` devolviera `false`. Ahora `paginationData()` devuelve `null`.
+* `AbstractCollectionEntity::$paginationData` no tenía valor por defecto, por lo que `paginationData()` lanzaba un `Error` en las colecciones creadas con `new` (sin pasar por `fromArray()`). Ahora es `null` por defecto, y `jsonSerialize()` devuelve la lista de items cuando no hay datos de paginación.
+
+### Migration notes
+
+**Migración a MPL-2.0:** El paquete pasa de GNU GPL a **Mozilla Public License 2.0**. No tienes que cambiar nada en tu código de Laravel, pero si utilizas herramientas automáticas de auditoría de licencias (como FOSSA o Snyk) en tu CI/CD, recuerda actualizar sus reglas para permitir `MPL-2.0`.
+
+Esta versión cambia el comportamiento de las colecciones (`AbstractCollectionBase` y sus hijas: `AbstractCollectionEntity`, `AbstractCollectionDto`, `AbstractCollectionVo` y `CollectionAny`). Regla general: **los métodos trabajan con los items originales (entidades, DTO, Value Objects...) y ya no con su representación en array**. Las variantes por campo (`where('campo', 'valor')`, `sortBy('campo')`...) no cambian.
+
+#### 1. Callbacks: reciben el objeto, no un array
+
+Afecta a `filter()`, `reject()`, `where(callable)`, `firstWhere(callable)`, `every()`, `sort()`, `sortBy()`/`sortByDesc()`, `unique()`, `groupBy()`, `max()`, `min()` e `implode()` cuando se les pasa un callable. Los comparadores callable de `sortBy([...])` también reciben ahora los items.
+
+```php
+// Antes: el callback recibía un array
+$tags->filter(fn(array $t) => $t['code'] === 'php');
+$tags->sortBy(fn($t) => $t['name']);
+
+// Ahora: recibe la entidad / DTO / Value Object
+$tags->filter(fn(TagEntity $t) => $t->code->value === 'php');
+$tags->sortBy(fn(TagEntity $t) => $t->name->value);
+```
+
+Cómo localizarlos en el proyecto (regex, revisión manual):
+
+* Callbacks que leen claves de array: `fn\(\$?\w+\)\s*=>\s*\$\w+\['` y `function\s*\(\$?\w+\)[^{]*\{[^}]*\$\w+\['`.
+* Type-hints `array` en callbacks de colecciones: `(filter|reject|where|every|sortBy|sortByDesc|unique|groupBy|max|min|implode|firstWhere)\(\s*(static\s+)?(fn|function)\s*\(\s*array\b`.
+
+En los Value Objects, accede al valor con `->value` (`fn(IdVo $id) => $id->value > 3`). Si necesitas el array, llama a `$item->toArray()` dentro del callback.
+
+#### 2. Los resultados conservan las mismas instancias
+
+`filter()`, `reject()`, `where*()`, `sort*()`, `unique()`, `take()`, `values()`, `diff()`, `groupBy()`... devuelven ahora los **mismos objetos** (`===`) en lugar de copias reconstruidas con `fromArray()`. No requiere cambios, pero:
+
+* Si mutabas el resultado esperando que no afectara a la colección original, ahora sí afecta (los objetos son los mismos).
+* Se conservan los valores `computed` cacheados y el estado interno.
+
+#### 3. Métodos que ahora devuelven `CollectionAny`
+
+`flatten()` y `flip()` devuelven siempre `CollectionAny` (antes `static`). `merge()` y `collapse()` también trabajan con los items originales. Si necesitas la colección tipada, conviértela:
+
+```php
+// Antes
+$result = $tagTypes->flatten();            // intentaba construir TagTypeCollection
+
+// Ahora
+$result = $tagTypes->flatten();            // CollectionAny de escalares
+$typed  = $tagTypes->flatten()->toCollection(MiColeccion::class);
+```
+
+`merge()` ya no convierte los items de la colección a array:
+
+```php
+// Antes: ['id' => 1, ...] (array) mezclado con objetos
+$entities->merge($others)->all();
+
+// Ahora: entidades tal cual. Si necesitas arrays:
+$entities->merge($others)->toArray();
+```
+
+`collapse()` / `flatMap()` unen los items que sean arrays o colecciones y conservan los objetos que contengan. Si lo usabas sobre una colección de entidades esperando campos mezclados, revisa el resultado: esas entidades se ignoran.
+
+#### 4. `diff()` y `select()` conservan las claves
+
+```php
+// Antes: [0 => a, 1 => c] (reindexado)
+// Ahora: [0 => a, 2 => c]  (igual que Laravel)
+$result = $coll->diff($other);
+
+// Si necesitas claves consecutivas:
+$result = $coll->diff($other)->values();
+```
+
+Busca usos de `->diff(` y `->select(` donde se acceda por índice (`[0]`, `->get(0)`, `foreach` con `$i`) y añade `->values()`.
+
+#### 5. Validación de tipo en `prepend()` y `$coll[] = ...`
+
+`prepend()`, `put()` y la asignación por índice validan ahora el tipo del item y lanzan `TypeError` en colecciones tipadas.
+
+```php
+// Antes: se aceptaba un array sin convertir
+$tags[] = ['id' => 1, 'name' => 'php'];
+
+// Ahora
+$tags[] = TagEntity::fromArray(['id' => 1, 'name' => 'php']);
+```
+
+`CollectionAny` sigue aceptando cualquier valor. Además, `$coll[] = $x` añade al final (antes guardaba el item con la clave `''`).
+
+#### 6. DTO: `toArray()` en lugar de `toMakeArray()` en las comparaciones
+
+En colecciones de DTO, `where`, `whereIn`, `sort*`, `unique`, `diff`, `groupBy`, `flatten`, `flip`... ven ahora los campos que solo aparecen en `toArray()` (campos `#[Computed]` y los añadidos en un override). Solo afecta si tenías un campo con el mismo nombre en `toMakeArray()` y `toArray()` con valores distintos.
+
+#### 7. Clases hijas que sobrescriben métodos de la colección
+
+Todos los métodos públicos de `AbstractCollectionBase` tienen ahora tipo de retorno nativo. Si sobrescribes alguno, adapta la firma:
+
+```php
+// Antes
+public function first(?callable $callback = null, $default = null) { ... }
+public function filter(callable $callback = null) { ... }
+
+// Ahora
+public function first(?callable $callback = null, $default = null): mixed { ... }
+public function filter(?callable $callback = null): static { ... }
+```
+
+Referencia de tipos: `static` (`filter`, `reject`, `where*`, `sort*`, `unique`, `take`, `values`, `diff`, `diffKeys`, `each`, `push`, `put`, `prepend`), `CollectionAny` (`map`, `mapWithKeys`, `flatMap`, `pluck`, `flatten`, `flip`, `merge`, `collapse`, `select`, `groupBy`, `keys`), `bool` (`contains`, `doesntContain`, `every`, `isEmpty`, `isNotEmpty`), `string` (`implode`, `join`), `array` (`all`), `mixed` (`first`, `last`, `firstWhere`, `get`, `max`, `min`).
+
+Para localizar sobrescrituras: `grep -rEn "extends\s+(Abstract)?Collection\w*" app/ src/` y revisa los `public function` de esas clases.
+
+#### 8. Valores no `callable` en `contains()`
+
+Los strings nunca se tratan como funciones (`'count'`, `'date'`, `'key'`...): son siempre nombres de campo. Si pasabas el nombre de una función de PHP como callable, usa un `Closure` (`fn($i) => count($i)`).
+
+#### 9. `map()`, `mapWithKeys()`, `merge()`, `groupBy()`, `flatten()` y `select()` con objetos `Arrayable`
+
+Los valores devueltos que sean objetos `Arrayable` de Laravel (modelos Eloquent, `Collection`...) ya no se convierten en arrays: se guardan tal cual. Si dependías de esa conversión, llama a `->toArray()` en el callback.
+
+#### 10. Paginación: setters eliminados
+
+`setIsPaginate()` y `setPaginationData()` ya no existen. La paginación solo se establece al crear la colección con `fromArray()`/`resolveFromArray()` a partir de la página de Laravel; `isPaginate()` y `paginationData()` se mantienen. Busca `->setIsPaginate(` y `->setPaginationData(` y elimínalos (si construías la colección a mano, crea la colección desde la página paginada).
+
+#### Lista de comprobación
+
+1. Buscar callbacks con arrays (regex del punto 1) y pasarlos a objetos.
+2. Buscar `->diff(` / `->select(` con acceso por índice y añadir `->values()`.
+3. Buscar `->flatten(` / `->flip(` / `->merge(` / `->collapse(` que esperen la colección tipada o arrays.
+4. Buscar `[] =`, `->prepend(` y `->put(` con arrays sin convertir sobre colecciones tipadas.
+5. Revisar clases propias que sobrescriban métodos de colección (tipos de retorno).
+6. Buscar `->setIsPaginate(` y `->setPaginationData(` y eliminarlos.
+7. Ejecutar los tests: los fallos suelen ser `TypeError` (un array donde se espera un objeto) o `Cannot access offset on object`.
+
+#### Prompt para Copilot
+
+```text
+
+    ## Rol y objetivo
+    
+    Eres un asistente de migración. Debes adaptar esta app Laravel a `kalel1500/kalion` v0.62.0-beta.0.
+    Cambia el comportamiento de las colecciones del paquete: `AbstractCollectionBase` y sus hijas
+    `AbstractCollectionEntity`, `AbstractCollectionDto`, `AbstractCollectionVo` y `CollectionAny`.
+    
+    **Regla general nueva:** los métodos de colección trabajan con los items originales
+    (entidades, DTO, Value Objects) y devuelven esas mismas instancias.
+    Ya no los convierten a array ni los reconstruyen con `fromArray()`.
+    Las variantes por campo (`where('campo', 'valor')`, `sortBy('campo')`, `unique('campo')`...) NO cambian.
+    
+    No cambies lógica de negocio. Solo adapta lo afectado por los puntos de abajo.
+    Trabaja por fases: busca, lista los hallazgos, aplica el cambio y ejecuta los tests.
+    Ante la duda, no adivines: déjalo marcado con `// TODO(kalion-migration):` y explica por qué.
+    
+    ---
+    
+    ## 1. Resumen de breaking changes
+    
+    | #  | Cambio                                                                                                | Impacto                                              |
+    |----|-------------------------------------------------------------------------------------------------------|------------------------------------------------------|
+    | 1  | Los callbacks reciben el **objeto** (entidad/DTO/VO) y su clave, no un array                          | Alto: `TypeError` o `Cannot access offset on object` |
+    | 2  | `diff()` y `select()` **conservan las claves** (antes reindexaban)                                    | Medio: accesos por índice (`[0]`) devuelven `null`   |
+    | 3  | `flatten()` y `flip()` devuelven siempre `CollectionAny` (antes `static`)                             | Medio                                                |
+    | 4  | `merge()` y `collapse()`/`flatMap()` trabajan con los items originales y devuelven `CollectionAny`    | Medio                                                |
+    | 5  | `prepend()`, `put()` y `$coll[] = x` **validan el tipo** (`TypeError` en colecciones tipadas)         | Alto si se añaden arrays                             |
+    | 6  | Todos los métodos públicos de la colección tienen **tipo de retorno nativo**                          | Alto si la app sobrescribe métodos                   |
+    | 7  | En DTO, las comparaciones usan `toArray()` (antes `toMakeArray()`)                                    | Bajo                                                 |
+    | 8  | Los resultados son las **mismas instancias** (`===`), no copias                                       | Bajo: cuidado con mutaciones                         |
+    | 9  | Los strings nunca son callables en `contains()` y similares                                           | Bajo                                                 |
+    | 10 | `map`/`mapWithKeys`/`merge`/`groupBy`/`flatten`/`select` ya no convierten objetos `Arrayable` a array | Bajo                                                 |
+    | 11 | Se eliminan `setIsPaginate()` y `setPaginationData()` de `AbstractCollectionEntity`                   | Bajo: `Error` si se llaman                           |
+    
+    Métodos nuevos disponibles: `skip()`, `slice()`, `reverse()` y `partition()`.
+    
+    ---
+    
+    ## 2. Qué buscar y cómo adaptarlo
+    
+    Los patrones regex son orientativos y pueden dar falsos positivos. Revisa cada hallazgo manualmente.
+    
+    ### Paso 1. Inventario
+    1. Lista todas las clases de la app que extiendan `AbstractCollectionEntity`, `AbstractCollectionDto`,
+       `AbstractCollectionVo`, `AbstractCollectionAny` o `CollectionAny`.
+       Búsqueda: `extends\s+(Abstract)?Collection(Entity|Dto|Vo|Any|Base)?\b`.
+    2. Lista las variables o propiedades que contengan esas colecciones.
+       Trabaja sobre los usos de esas colecciones, no sobre los `collect()` de Laravel, que NO cambian.
+    
+    ### Paso 2. Callbacks que leen arrays (cambio 1)
+    Afecta a estos métodos cuando reciben un callable:
+    `filter`, `reject`, `where`, `firstWhere`, `every`, `sort`, `sortBy`, `sortByDesc`, `unique`, `groupBy`, `max`, `min`, `implode`.
+    También afecta a los comparadores callable dentro de `sortBy([...])`.
+    
+    Búsquedas:
+    - `->(filter|reject|where|firstWhere|every|sortBy|sortByDesc|sort|unique|groupBy|max|min|implode)\(\s*(static\s+)?(fn|function)\b`
+    - Dentro de esos callbacks: `\$\w+\['[^']+'\]` o `\$\w+\["[^"]+"\]`
+    - Type-hint `array`: `(fn|function)\s*\(\s*array\s+\$`
+    
+    Regla de adaptación:
+    - Entidad o DTO: `$i['campo']` → `$i->campo` (si es Value Object, `$i->campo->value`).
+    - Value Object: `$v` → `$v->value`.
+    - Claves en `snake_case` del array (`$i['tag_type_id']`) → propiedad en `camelCase` (`$i->tagTypeId->value`).
+    - Si necesitas el array completo: `$i->toArray()`.
+    - Si había type-hint `array`, cámbialo por la clase del item.
+    
+    ```php
+    // ANTES
+    $tags->filter(fn(array $t) => $t['code'] === 'php');
+    $tags->sortBy(fn($t) => $t['name']);
+    $ids->filter(fn($id) => $id > 3);                 // CollectionIds (VO)
+    $tags->groupBy(fn($t) => $t['tag_type_id']);
+    
+    // DESPUÉS
+    $tags->filter(fn(TagEntity $t) => $t->code->value === 'php');
+    $tags->sortBy(fn(TagEntity $t) => $t->name->value);
+    $ids->filter(fn(IdVo $id) => $id->value > 3);
+    $tags->groupBy(fn(TagEntity $t) => $t->tagTypeId->value);
+    ```
+    
+    Si el callback solo compara un campo, valora simplificar con la variante por campo,
+    que no cambia: `$tags->where('code', 'php')`.
+    
+    Caso especial `sortBy([...])` con comparadores callable:
+    ```php
+    // ANTES: $a y $b eran arrays
+    $coll->sortBy([['name', 'asc'], fn($a, $b) => $a['id'] <=> $b['id']]);
+    // DESPUÉS: $a y $b son los items
+    $coll->sortBy([['name', 'asc'], fn(TagEntity $a, TagEntity $b) => $a->id->value <=> $b->id->value]);
+    ```
+    Los campos string de `['name', 'asc']` se siguen leyendo del array: no cambian.
+    
+    ### Paso 3. `diff()` y `select()` (cambio 2)
+    Búsqueda: `->diff\(`, `->select\(`
+    Para cada uso, comprueba si el resultado se accede por índice (`[0]`, `->get(0)`, `->first()` no afecta),
+    se itera asumiendo claves consecutivas, o se serializa con `json_encode`/`jsonSerialize`.
+    En esos casos añade `->values()`.
+    
+    ```php
+    // ANTES (diff reindexaba)
+    $new = $actual->diff($anterior);
+    $primero = $new[0];
+    
+    // DESPUÉS
+    $new = $actual->diff($anterior)->values();
+    $primero = $new[0];
+    ```
+    Importante: si el resultado se envía como JSON al front (por ejemplo, a Tabulator), las claves no consecutivas
+    convierten la lista en un objeto JSON. Añade `->values()` en esos casos.
+    
+    Nota: `where`, `filter`, `reject`, `unique`, `diffKeys`, `skip` y `slice` ya conservaban claves.
+    Si la app tiene el mismo problema con ellos, `->values()` también lo resuelve.
+    
+    ### Paso 4. `flatten()`, `flip()`, `merge()`, `collapse()`, `flatMap()` (cambios 3 y 4)
+    Búsqueda: `->(flatten|flip|merge|collapse|flatMap)\(`
+    
+    - `flatten()`/`flip()`: ahora devuelven `CollectionAny` de escalares, no la colección tipada.
+      Si se usaba el resultado como la colección original, conviértelo con `->toCollection(MiColeccion::class)`
+      o refactoriza para no necesitarlo.
+    - `merge($otra)`: ahora devuelve `CollectionAny` con los items originales de ambos lados (sin pasar a array).
+      Si esperabas arrays, añade `->toArray()` sobre el resultado.
+      Si esperabas una colección tipada, construye `new MiColeccion(...$result->all())`
+      (solo vale si todos los items son del tipo correcto).
+    - `collapse()`/`flatMap()`: unen únicamente items que sean arrays o colecciones.
+      Los items de una colección tipada (entidades, DTO...) se ignoran.
+      Típico válido: `$coll->groupBy('x')->collapse()` o `$coll->flatMap(fn($e) => $e->tags())`,
+      que ahora devuelven entidades, no arrays.
+    
+    ```php
+    // ANTES
+    $all = $a->merge($b);            // mezcla de arrays y objetos
+    $arr = $all->toArray();
+    
+    // DESPUÉS
+    $all = $a->merge($b);            // CollectionAny con los items originales
+    $arr = $all->toArray();          // si necesitas arrays
+    $typed = new TagCollection(...$all->all());   // si necesitas colección tipada
+    ```
+    
+    ### Paso 5. Añadir items a colecciones tipadas (cambio 5)
+    Búsqueda: `\]\s*=\s*`, `->prepend\(`, `->put\(` sobre colecciones del Paso 1.
+    
+    Si el valor no es una instancia del tipo declarado (`#[CollectionOf]` o `ITEM_TYPE`), lanza `TypeError`.
+    ```php
+    // ANTES (aceptaba cualquier valor)
+    $tags[] = ['id' => 1, 'code' => 'php'];
+    $tags->prepend(['id' => 1, 'code' => 'php']);
+    
+    // DESPUÉS
+    $tags[] = TagEntity::fromArray(['id' => 1, 'code' => 'php']);
+    $tags->prepend(TagEntity::fromArray(['id' => 1, 'code' => 'php']));
+    ```
+    Además, `$coll[] = $x` ahora añade al final (antes guardaba con la clave `''`).
+    `CollectionAny` sigue aceptando cualquier valor.
+    
+    ### Paso 6. Clases propias que sobrescriben métodos (cambio 6)
+    Para cada clase del Paso 1, busca `public function (first|last|filter|reject|where|map|values|take|sort\w*|unique|each|push|put|prepend|toJson|toCollection|pluck\w*|contains|all|keys|isEmpty|isNotEmpty|implode|join|get|max|min)\(`
+    y adapta la firma al tipo de retorno del paquete:
+    
+    | Tipo de retorno            | Métodos                                                                                                                                                                                                                        |
+    |----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | `static`                   | `filter`, `reject`, `where`, `whereIn`, `whereNotIn`, `whereNotNull`, `sort`, `sortBy`, `sortByDesc`, `sortDesc`, `unique`, `take`, `values`, `diff`, `diffKeys`, `each`, `push`, `put`, `prepend`, `skip`, `slice`, `reverse` |
+    | `CollectionAny`            | `map`, `mapWithKeys`, `flatMap`, `pluck`, `flatten`, `flip`, `merge`, `collapse`, `select`, `groupBy`, `keys`                                                                                                                  |
+    | `bool`                     | `contains`, `doesntContain`, `every`, `isEmpty`, `isNotEmpty`                                                                                                                                                                  |
+    | `string` / `string\|false` | `implode`, `join` / `toJson`                                                                                                                                                                                                   |
+    | `array`                    | `all`                                                                                                                                                                                                                          |
+    | `mixed`                    | `first`, `last`, `firstWhere`, `get`, `max`, `min`                                                                                                                                                                             |
+    
+    ```php
+    // ANTES
+    public function first(?callable $callback = null, $default = null) { return parent::first(...func_get_args()); }
+    public function filter(callable $callback = null) { ... }
+    
+    // DESPUÉS
+    public function first(?callable $callback = null, $default = null): mixed { return parent::first(...func_get_args()); }
+    public function filter(?callable $callback = null): static { ... }
+    ```
+    Si una sobrescritura reconstruía la colección con `fromArray()`, valora si sigue haciendo falta.
+    
+    ### Paso 7. DTO y `toArray()` vs `toMakeArray()` (cambio 7)
+    Solo afecta a colecciones de DTO con campos `#[Computed]` o un override de `toArray()` que añada campos.
+    Los métodos por campo (`where`, `whereIn`, `sortBy`, `unique`, `diff`, `groupBy`...) ahora ven esos campos,
+    igual que `pluck` y `contains`.
+    - Revisa los DTO de la app con `toArray()` sobrescrito o `#[Computed]`.
+    - Comprueba que ningún `where`/`sortBy`/`unique` dependiera de que ese campo NO existiera.
+    - `toMakeArray()` queda reservado para reconstruir con `fromArray()` (`toCollection()`).
+    
+    ### Paso 8. Identidad de instancias (cambio 8)
+    Los resultados de `filter`, `where`, `sort*`, `unique`, `take`, `values`, `diff`, `groupBy`, etc. contienen los mismos objetos.
+    - Busca código que mute items del resultado asumiendo que era una copia (setters, `array_walk`, `each` con modificaciones).
+    - Si necesitas aislar, clona explícitamente el item.
+    - Efecto positivo: los valores `computed` cacheados se conservan y ya no se revalida cada vez.
+    
+    ### Paso 9. `contains()` con strings (cambio 9)
+    Los strings siempre son nombres de campo, nunca funciones de PHP.
+    Busca `->contains\('(count|date|key|max|min|trim|strlen|...)'` y revisa que se pretendiera un campo.
+    Si se pasaba el nombre de una función como callable, usa un `Closure`.
+    
+    ### Paso 10. Objetos `Arrayable` en callbacks (cambio 10)
+    En callbacks de `map`/`mapWithKeys` (y en `merge`, `groupBy`, `flatten`, `select`) que devuelvan modelos Eloquent
+    o `Collection` de Laravel: ahora se guardan como objeto, no como array.
+    Si necesitas arrays, llama a `->toArray()` dentro del callback.
+    
+    ### Paso 11. Paginación (cambio 11)
+    - `values`, `reverse`, `sort`, `sortBy`, `sortByDesc` y `sortDesc` conservan la paginación (`isPaginate()`, `paginationData()`), y solo reordenan la página actual.
+    - Los demás métodos que devuelven un subconjunto la pierden, y `paginationData()` devuelve `null`.
+    - Si la app llamaba a `paginationData()` tras un `filter`/`where`/`take`, comprueba `isPaginate()` antes o contempla `null`.
+    - Se eliminan `setIsPaginate()` y `setPaginationData()`: la paginación solo se establece al crear la colección con `fromArray()`/`resolveFromArray()` a partir de la página de Laravel, y `isPaginate()` es `true` si y solo si hay `paginationData()`.
+      Búsqueda: `->(setIsPaginate|setPaginationData)\(`. Elimina esas llamadas; si se construía la colección a mano, créala desde la página paginada.
+    
+    ---
+    
+    ## 3. Verificación
+    1. Ejecuta los tests y el análisis estático (`vendor/bin/phpunit`, PHPStan/Larastan si existe).
+    2. Fallos esperables y su causa:
+        - `TypeError: ... must be of type X, array given` → Paso 5 o un callback del Paso 2.
+        - `Cannot access offset of type string on <Clase>` / `Cannot use object of type ... as array` → Paso 2.
+        - Resultado `null` al acceder a `[0]` tras `diff`/`select` → Paso 3.
+        - `Declaration of ... must be compatible with ...` → Paso 6.
+    3. Revisa a mano las vistas Blade y los endpoints JSON que consuman colecciones (Tabulator, APIs):
+       comprueba que las listas siguen siendo listas (claves consecutivas) y no objetos JSON.
+    
+    ## 4. Formato de entrega
+    - Haz un commit (o bloque de cambios) por paso, con mensaje `migrate(kalion): paso N - <resumen>`.
+    - Al terminar, entrega una tabla con: archivo, línea, método afectado, cambio aplicado y si queda algún `TODO(kalion-migration)`.
+    - No modifiques `vendor/` ni el paquete.
+
+```
 
 ## [v0.61.2-beta.0](https://github.com/kalel1500/kalion/compare/v0.61.1-beta.0...v0.61.2-beta.0) - 2026-10-09
 
