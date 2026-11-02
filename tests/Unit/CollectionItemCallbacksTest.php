@@ -502,7 +502,7 @@ class CollectionItemCallbacksTest extends TestCase
         $this->assertSame($dtos[2], $result[2]);
     }
 
-    public function test_diff_by_field_reindexes_and_preserves_identity(): void
+    public function test_diff_by_field_preserves_keys_and_identity(): void
     {
         $dtos  = $this->dtos();
         $other = new ExampleDtoCollection(new ExampleDto('bbb', 'otro', 99, null, null));
@@ -510,10 +510,10 @@ class CollectionItemCallbacksTest extends TestCase
         $result = $dtos->diff($other, 'string1');
 
         $this->assertInstanceOf(ExampleDtoCollection::class, $result);
-        $this->assertSame([$dtos[0], $dtos[2]], $result->all());
+        $this->assertSame([0 => $dtos[0], 2 => $dtos[2]], $result->all());
     }
 
-    public function test_diff_without_field_reindexes_and_preserves_identity(): void
+    public function test_diff_without_field_preserves_keys_and_identity(): void
     {
         $dtos  = $this->dtos();
         $other = new ExampleDtoCollection(new ExampleDto('bbb', 'y', 2, null, StringVo::from('bar')));
@@ -521,7 +521,7 @@ class CollectionItemCallbacksTest extends TestCase
         $result = $dtos->diff($other);
 
         $this->assertInstanceOf(ExampleDtoCollection::class, $result);
-        $this->assertSame([$dtos[0], $dtos[2]], $result->all());
+        $this->assertSame([0 => $dtos[0], 2 => $dtos[2]], $result->all());
     }
 
     /* -----------------------------------------------------------------
@@ -810,7 +810,7 @@ class CollectionItemCallbacksTest extends TestCase
         $other  = new RankedDtoCollection(new RankedDto('bea', 9));
 
         $result = $ranked->diff($other, 'initial');
-        $this->assertSame([$ranked[0], $ranked[2]], $result->all());
+        $this->assertSame([0 => $ranked[0], 2 => $ranked[2]], $result->all());
     }
 
     public function test_dto_flatten_includes_computed_fields(): void
@@ -930,8 +930,98 @@ class CollectionItemCallbacksTest extends TestCase
         $result = CollectionStrings::fromArray(['a'])->merge([$laravelCollection]);
 
         $this->assertSame(CollectionAny::class, $result::class);
-        $this->assertSame('a', $result[0]);
+        $this->assertInstanceOf(StringVo::class, $result[0]);
+        $this->assertSame('a', $result[0]->value);
         $this->assertSame($laravelCollection, $result[1]);
+    }
+
+    /* -----------------------------------------------------------------
+     | Ajustes finales: collapse, merge, whereIn, diff, select, sortBy([...])
+     | ----------------------------------------------------------------- */
+
+    public function test_collapse_and_flat_map_keep_original_instances(): void
+    {
+        $tagTypes = $this->tagTypes();
+
+        $collapsed = $tagTypes->groupBy('code')->collapse();
+        $this->assertSame(CollectionAny::class, $collapsed::class);
+        $this->assertSame($tagTypes->all(), $collapsed->all());
+
+        $flat = $tagTypes->flatMap(fn(TagTypeEntity $t) => [$t, $t]);
+        $this->assertCount(6, $flat);
+        $this->assertSame($tagTypes[0], $flat[0]);
+        $this->assertSame($tagTypes[2], $flat[5]);
+    }
+
+    public function test_merge_keeps_original_instances_on_both_sides(): void
+    {
+        $tagTypes = $this->tagTypes();
+
+        $result = $tagTypes->merge($tagTypes->take(1));
+
+        $this->assertSame(CollectionAny::class, $result::class);
+        $this->assertCount(4, $result);
+        $this->assertSame($tagTypes[0], $result[0]);
+        $this->assertSame($tagTypes[0], $result[3]);
+    }
+
+    public function test_where_in_accepts_package_collections(): void
+    {
+        $tagTypes = $this->tagTypes();
+        $ids      = CollectionInts::fromArray([1, 3]);
+
+        $this->assertSame([0, 2], $tagTypes->whereIn('id', $ids)->keys()->all());
+        $this->assertSame([1], $tagTypes->whereNotIn('id', $ids)->keys()->all());
+    }
+
+    public function test_diff_by_camel_case_field(): void
+    {
+        $tags = $this->tags();
+
+        $result = $tags->diff($tags->take(1), 'tagTypeId');
+
+        $this->assertSame([1, 2], $result->keys()->all());
+        $this->assertSame($tags[1], $result[1]);
+    }
+
+    public function test_select_preserves_keys(): void
+    {
+        $result = $this->tagTypes()->where('code', '!=', 'tech')->select('name');
+
+        $this->assertSame([1 => ['name' => 'Deportes'], 2 => ['name' => 'Música']], $result->all());
+    }
+
+    public function test_sort_by_many_compares_fields_and_callables_receive_items(): void
+    {
+        $tagTypes = $this->tagTypes();
+
+        $this->assertSame([1, 2, 0], $tagTypes->sortBy([['name', 'asc']])->keys()->all());
+        $this->assertSame([0, 2, 1], $tagTypes->sortByDesc(['name'])->keys()->all());
+
+        $received = [];
+        $sorted   = $tagTypes->sortBy([
+            function (TagTypeEntity $a, TagTypeEntity $b) use (&$received) {
+                $received[] = $a;
+                return $b->id->value <=> $a->id->value;
+            },
+        ]);
+
+        $this->assertNotEmpty($received);
+        $this->assertSame([2, 1, 0], $sorted->keys()->all());
+        $this->assertSame($tagTypes[2], $sorted->first());
+    }
+
+    public function test_sort_by_many_keeps_pagination_and_filtering_clears_pagination_data(): void
+    {
+        $tagTypes = $this->paginatedTagTypes();
+
+        $sorted = $tagTypes->sortBy([['name', 'desc']]);
+        $this->assertTrue($sorted->isPaginate());
+        $this->assertSame($tagTypes->paginationData(), $sorted->paginationData());
+
+        $filtered = $tagTypes->where('code', 'tech');
+        $this->assertFalse($filtered->isPaginate());
+        $this->assertNull($filtered->paginationData());
     }
 }
 

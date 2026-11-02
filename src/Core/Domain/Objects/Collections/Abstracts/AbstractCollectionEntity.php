@@ -24,7 +24,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
     /**
      * @return AbstractEntity|null
      */
-    public function first(?callable $callback = null, $default = null)
+    public function first(?callable $callback = null, $default = null): mixed
     {
         return parent::first(...func_get_args());
     }

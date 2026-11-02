@@ -10,7 +10,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
 
 abstract class AbstractCollectionDto extends AbstractCollectionBase implements MakeArrayable, ArrayResolvable
 {
-    public function first(?callable $callback = null, $default = null)
+    public function first(?callable $callback = null, $default = null): mixed
     {
         return parent::first(...func_get_args());
     }
