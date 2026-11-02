@@ -145,18 +145,20 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      * conservar el estado de la colección: `with` e `isFull` en las colecciones `Relatable`, y el tipo
      * de item ya resuelto. Los items no se revalidan porque proceden de esta misma colección.
      *
-     * La información de paginación no se conserva (igual que al reconstruir con `fromArray()`), ya que
-     * deja de corresponderse con los items resultantes.
+     * Por defecto la información de paginación no se conserva (igual que al reconstruir con `fromArray()`),
+     * ya que deja de corresponderse con los items resultantes. Los métodos que solo reordenan o reindexan
+     * la página actual (`values`, `reverse`, `sort*`) pasan `$keepPagination = true` para conservarla.
      *
      * @param array<array-key, TItem> $items
+     * @param bool $keepPagination Conservar la paginación (solo si los items son los mismos, reordenados o reindexados)
      * @return static
      */
-    private function fromItems(array $items): static
+    private function fromItems(array $items, bool $keepPagination = false): static
     {
         $new        = clone $this;
         $new->items = $items;
 
-        if ($new instanceof AbstractCollectionEntity) {
+        if (! $keepPagination && $new instanceof AbstractCollectionEntity) {
             $new->setIsPaginate(false);
         }
 
@@ -167,21 +169,22 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      * Crea una nueva instancia con los items originales correspondientes a las claves de `$result`,
      * respetando su orden.
      *
-     * Permite calcular un resultado sobre la representación en array (comparando escalares, props y
-     * valores de los Value Objects) y devolver después las instancias originales en lugar de reconstruirlas.
+     * Permite calcular un resultado sobre la representación en array (`toArray()`) y devolver después
+     * las instancias originales en lugar de reconstruirlas.
      * Solo es válido si la operación de Laravel usada para obtener `$result` conserva las claves.
      *
      * @param array<array-key, mixed> $result
+     * @param bool $keepPagination Ver `fromItems()`
      * @return static
      */
-    private function fromResultKeys(array $result): static
+    private function fromResultKeys(array $result, bool $keepPagination = false): static
     {
         $items = [];
         foreach (array_keys($result) as $key) {
             $items[$key] = $this->items[$key];
         }
 
-        return $this->fromItems($items);
+        return $this->fromItems($items, $keepPagination);
     }
 
     /**
@@ -198,15 +201,18 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return ($this instanceof Relatable);
     }
 
+    /**
+     * Devuelve los items de `$items` como array sin serializarlos (se usa para comparar claves).
+     */
     private function getArrayableItems($items): array
     {
-        if (is_array($items)) {
-            return $items;
-        } elseif ($items instanceof AbstractCollectionBase) {
-            return $items->toArrayMake();
-        }
-
-        return (array)$items;
+        return match (true) {
+            is_array($items)                                 => $items,
+            $items instanceof AbstractCollectionBase         => $items->all(),
+            $items instanceof \Illuminate\Support\Enumerable => $items->all(),
+            $items instanceof \Traversable                   => iterator_to_array($items),
+            default                                          => (array)$items,
+        };
     }
 
 
@@ -378,9 +384,9 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //    }
 
     /**
-     * Devuelve los items que no están en `$items`, comparando sobre la representación en array
-     * (por el campo `$field` o por el item completo). Se devuelven las instancias originales,
-     * con las claves reindexadas.
+     * Devuelve los items que no están en `$items`, comparando sobre la representación en array (`toArray()`)
+     * de ambas colecciones (por el campo `$field` o por el item completo). Se devuelven las instancias
+     * originales, con las claves reindexadas.
      *
      * @param AbstractCollectionBase $items
      * @param string|null $field
@@ -391,14 +397,14 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         if (! is_null($field)) {
             $result     = [];
             $dictionary = $items->pluck($field);
-            foreach ($this->toArrayMake() as $key => $item) {
+            foreach ($this->toArray() as $key => $item) {
                 if (! $dictionary->contains($item[$field])) {
                     $result[$key] = $item;
                 }
             }
         } else {
-            $array1 = array_map('json_encode', $this->toArrayMake());
-            $array2 = array_map('json_encode', $items->toArrayMake());
+            $array1 = array_map('json_encode', $this->toArray());
+            $array2 = array_map('json_encode', $items->toArray());
 
             // array_diff conserva las claves de $array1
             $result = array_diff($array1, $array2);
@@ -419,15 +425,14 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 
     /**
      * Devuelve los items cuyas claves no están en `$items`, conservando las claves y las instancias originales.
+     * Solo se comparan claves, por lo que no se serializa ningún item.
      *
-     * @param AbstractCollectionBase|array $items
+     * @param AbstractCollectionBase|\Illuminate\Support\Enumerable|iterable $items
      * @return static
      */
     public function diffKeys($items)
     {
-        $array1 = $this->toArrayMake();
-        $array2 = $this->getArrayableItems($items);
-        return $this->fromResultKeys(array_diff_key($array1, $array2));
+        return $this->fromItems(array_diff_key($this->items, $this->getArrayableItems($items)));
     }
 
     /**
@@ -562,7 +567,8 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     }
 
     /**
-     * Aplana la representación en array de la colección (props y valores de los Value Objects).
+     * Aplana la representación en array de la colección (`toArray()`: props, valores de los Value Objects
+     * y, en los DTO, también los campos computed).
      *
      * Genera items nuevos (escalares), que no son del tipo de la colección, por lo que siempre
      * devuelve una `CollectionAny`.
@@ -572,13 +578,13 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function flatten($depth = INF)
     {
-        $collResult = collect($this->toArrayMake())->flatten($depth);
-        return $this->toAny($collResult->toArray());
+        $collResult = collect($this->toArray())->flatten($depth);
+        return $this->toAny($collResult->all());
     }
 
     /**
-     * Intercambia claves y valores de la representación en array de la colección. Requiere que los
-     * valores sean escalares (por ejemplo, colecciones de Value Objects).
+     * Intercambia claves y valores de la representación en array (`toArray()`) de la colección. Requiere
+     * que los valores sean escalares (por ejemplo, colecciones de Value Objects).
      *
      * Los nuevos valores son las claves antiguas, que no son del tipo de la colección, por lo que siempre
      * devuelve una `CollectionAny`.
@@ -587,7 +593,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function flip()
     {
-        return $this->toAny(array_flip($this->toArrayMake()));
+        return $this->toAny(array_flip($this->toArray()));
     }
 
 //    public function forget()
@@ -647,7 +653,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             // Por campo: se agrupa sobre la representación en array conservando siempre las claves, para
             // poder recuperar los items originales con fromResultKeys. Después se reindexa cada grupo
             // si no se pidió $preserveKeys (mismo orden que Laravel, que añade los items según los recorre).
-            $mapped = collect($this->toArrayMake())
+            $mapped = collect($this->toArray())
                 ->groupBy($groupBy, true)
                 ->map(function (Collection $group) use ($preserveKeys) {
                     $group = $this->fromResultKeys($group->all());
@@ -861,7 +867,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function merge($items)
     {
         $collResult = collect($this->toArray())->merge($items);
-        return $this->toAny($collResult->toArray());
+        return $this->toAny($collResult->all());
     }
 
 //    public function mergeRecursive()
@@ -1158,7 +1164,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             return $this->fromItems(collect($this->items)->reject($callback)->all());
         }
 
-        $collResult = collect($this->toArrayMake())->reject($callback);
+        $collResult = collect($this->toArray())->reject($callback);
         return $this->fromResultKeys($collResult->all());
     }
 
@@ -1175,11 +1181,14 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     /**
      * Invierte el orden de los items conservando las claves y las instancias originales.
      *
+     * En una colección paginada se conserva la paginación: solo se invierte la página actual, no el
+     * conjunto completo.
+     *
      * @return static
      */
     public function reverse(): static
     {
-        return $this->fromItems(array_reverse($this->items, true));
+        return $this->fromItems(array_reverse($this->items, true), keepPagination: true);
     }
 
 //    public function search()
@@ -1200,7 +1209,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         $collResult = collect($this->toArray())
             ->select($keys)
             ->values();
-        return $this->toAny($collResult->toArray());
+        return $this->toAny($collResult->all());
     }
 
 //    public function shift()
@@ -1262,7 +1271,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      * Ordena la colección conservando las claves y las instancias originales.
      *
      * Si `$callback` es un callable (comparador), recibe los items originales de la colección (no arrays).
-     * Sin callback (o con flags de ordenación), se ordena sobre la representación en array.
+     * Sin callback (o con flags de ordenación), se ordena sobre la representación en array (`toArray()`).
+     *
+     * En una colección paginada se conserva la paginación: solo se ordena la página actual, no el
+     * conjunto completo.
      *
      * @param (callable(TItem, TItem): int)|int|null $callback
      * @return static
@@ -1270,22 +1282,25 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function sort($callback = null)
     {
         if (self::useAsCallable($callback)) {
-            return $this->fromItems(collect($this->items)->sort($callback)->all());
+            return $this->fromItems(collect($this->items)->sort($callback)->all(), keepPagination: true);
         }
 
-        $collResult = collect($this->toArrayMake())->sort($callback);
-        return $this->fromResultKeys($collResult->all());
+        $collResult = collect($this->toArray())->sort($callback);
+        return $this->fromResultKeys($collResult->all(), keepPagination: true);
     }
 
     /**
      * Ordena la colección conservando las claves y las instancias originales.
      *
      * Si `$callback` es un callable, recibe los items originales de la colección (no arrays) y su clave.
-     * Si es un campo (o un array de comparaciones), se ordena sobre la representación en array.
+     * Si es un campo (o un array de comparaciones), se ordena sobre la representación en array (`toArray()`).
      *
      * Atención: en la variante con array de comparaciones (`sortBy([['name', 'asc'], fn($a, $b) => ...])`),
-     * los comparadores callable reciben la representación en array de cada item (`toMakeArray()`/`toArray()`),
+     * los comparadores callable reciben la representación en array de cada item (`toArray()`),
      * no las instancias originales. El resultado sí contiene las instancias originales.
+     *
+     * En una colección paginada se conserva la paginación: solo se ordena la página actual, no el
+     * conjunto completo.
      *
      * @param (callable(TItem, int|string): mixed)|string|array $callback
      * @param $options
@@ -1295,15 +1310,18 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     public function sortBy($callback, $options = SORT_REGULAR, $descending = false)
     {
         if (self::useAsCallable($callback)) {
-            return $this->fromItems(collect($this->items)->sortBy($callback, $options, $descending)->all());
+            return $this->fromItems(collect($this->items)->sortBy($callback, $options, $descending)->all(), keepPagination: true);
         }
 
-        $collResult = collect($this->toArrayMake())->sortBy($callback, $options, $descending);
-        return $this->fromResultKeys($collResult->all());
+        $collResult = collect($this->toArray())->sortBy($callback, $options, $descending);
+        return $this->fromResultKeys($collResult->all(), keepPagination: true);
     }
 
     /**
      * Igual que `sortBy()` pero en orden descendente.
+     *
+     * En una colección paginada se conserva la paginación: solo se ordena la página actual, no el
+     * conjunto completo.
      *
      * @param (callable(TItem, int|string): mixed)|string|array $callback
      * @param $options
@@ -1315,16 +1333,19 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     }
 
     /**
-     * Ordena en orden descendente sobre la representación en array, conservando las claves y las
-     * instancias originales.
+     * Ordena en orden descendente sobre la representación en array (`toArray()`), conservando las claves
+     * y las instancias originales.
+     *
+     * En una colección paginada se conserva la paginación: solo se ordena la página actual, no el
+     * conjunto completo.
      *
      * @param $options
      * @return static
      */
     public function sortDesc($options = SORT_REGULAR)
     {
-        $collResult = collect($this->toArrayMake())->sortDesc($options);
-        return $this->fromResultKeys($collResult->all());
+        $collResult = collect($this->toArray())->sortDesc($options);
+        return $this->fromResultKeys($collResult->all(), keepPagination: true);
     }
 
 //    public function sortKeys()
@@ -1394,6 +1415,14 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
 //        //
 //    }
 
+    /**
+     * Convierte cada item a su representación en array:
+     * - con `$forMakeArray = false` (`toArray()`): la representación pública del item (en los DTO incluye
+     *   los campos computed y cualquier override de `toArray()`). Es la que usan todos los métodos que
+     *   comparan, filtran, ordenan o extraen campos (`where*`, `sort*`, `unique`, `contains`, `pluck`...).
+     * - con `$forMakeArray = true` (`toArrayMake()`): en los items `MakeArrayable` (DTO), solo los datos
+     *   necesarios para reconstruirlos con `fromArray()`. En el resto de items es igual que `toArray()`.
+     */
     private function buildArray(bool $forMakeArray): array
     {
         $result = [];
@@ -1409,6 +1438,10 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         return $result;
     }
 
+    /**
+     * Representación en array pensada para reconstruir los items con `fromArray()`. Solo se usa en
+     * `toCollection()`; para comparar, filtrar o extraer campos se usa siempre `toArray()`.
+     */
     private function toArrayMake(): array
     {
         return $this->buildArray(true);
@@ -1498,7 +1531,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             return $this->fromItems(collect($this->items)->unique($key, $strict)->all());
         }
 
-        $collResult = collect($this->toArrayMake())->unique($key, $strict);
+        $collResult = collect($this->toArray())->unique($key, $strict);
         return $this->fromResultKeys($collResult->all());
     }
 
@@ -1535,11 +1568,13 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
     /**
      * Reindexa las claves conservando las instancias originales.
      *
+     * En una colección paginada se conserva la paginación: solo se reindexa la página actual.
+     *
      * @return static
      */
     public function values()
     {
-        return $this->fromItems(array_values($this->items));
+        return $this->fromItems(array_values($this->items), keepPagination: true);
     }
 
 //    public function when()
@@ -1575,7 +1610,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
             return $this->filter($key);
         }
 
-        $collResult = collect($this->toArrayMake())->where(...func_get_args());
+        $collResult = collect($this->toArray())->where(...func_get_args());
         return $this->fromResultKeys($collResult->all());
     }
 
@@ -1600,7 +1635,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function whereIn($key, $values, $strict = false)
     {
-        $collResult = collect($this->toArrayMake())->whereIn($key, $values, $strict);
+        $collResult = collect($this->toArray())->whereIn($key, $values, $strict);
         return $this->fromResultKeys($collResult->all());
     }
 
@@ -1630,7 +1665,7 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
      */
     public function whereNotIn($key, $values, $strict = false)
     {
-        $collResult = collect($this->toArrayMake())->whereNotIn($key, $values, $strict);
+        $collResult = collect($this->toArray())->whereNotIn($key, $values, $strict);
         return $this->fromResultKeys($collResult->all());
     }
 

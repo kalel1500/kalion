@@ -21,6 +21,8 @@ use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\CounterDtoCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDto;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDtoCollection;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\RankedDto;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\RankedDtoCollection;
 use Thehouseofel\Kalion\Tests\TestCase;
 use TypeError;
 
@@ -608,7 +610,8 @@ class CollectionItemCallbacksTest extends TestCase
         $dtos   = new ExampleDtoCollection(new ExampleDto('aaa', 'x', 1, null, StringVo::from('foo')));
         $result = $dtos->flatten();
         $this->assertSame(CollectionAny::class, $result::class);
-        $this->assertSame(['aaa', 'x', 1, null, 'foo'], $result->all());
+        // Se aplana toArray(), que en los DTO incluye los campos computed (only_in_to_array)
+        $this->assertSame(['aaa', 'x', 1, null, 'foo', 'text'], $result->all());
     }
 
     public function test_flatten_keeps_with_and_is_full_on_relatable_collections(): void
@@ -730,6 +733,205 @@ class CollectionItemCallbacksTest extends TestCase
 
         $this->expectException(TypeError::class);
         $dtos->put('otro', new IntVo(1));
+    }
+
+    /* -----------------------------------------------------------------
+     | Comparación, filtrado y extracción sobre toArray() (campos computed de los DTO)
+     | ----------------------------------------------------------------- */
+
+    private function ranked(): RankedDtoCollection
+    {
+        return new RankedDtoCollection(
+            new RankedDto('ana', 3),
+            new RankedDto('bob', 1),
+            new RankedDto('alba', 2),
+        );
+    }
+
+    public function test_dto_where_filters_by_computed_fields(): void
+    {
+        $dtos = $this->dtos();
+        $all  = $dtos->where('only_in_to_array', 'text');
+        $this->assertCount(3, $all);
+        $this->assertSame($dtos->all(), $all->all());
+
+        $ranked = $this->ranked();
+        $result = $ranked->where('score', '>', 15);
+        $this->assertInstanceOf(RankedDtoCollection::class, $result);
+        $this->assertSame([0, 2], $result->keys()->all());
+        $this->assertSame($ranked[0], $result[0]);
+        $this->assertSame($ranked[2], $result[2]);
+
+        $this->assertSame([1], $ranked->whereIn('score', [10])->keys()->all());
+        $this->assertSame([0, 2], $ranked->whereNotIn('score', [10])->keys()->all());
+    }
+
+    public function test_dto_sort_by_computed_field(): void
+    {
+        $ranked = $this->ranked();
+
+        $asc = $ranked->sortBy('score');
+        $this->assertSame([1, 2, 0], $asc->keys()->all());
+        $this->assertSame([$ranked[1], $ranked[2], $ranked[0]], $asc->values()->all());
+
+        $desc = $ranked->sortByDesc('score');
+        $this->assertSame([0, 2, 1], $desc->keys()->all());
+        $this->assertSame($ranked[0], $desc->first());
+    }
+
+    public function test_dto_unique_by_computed_field(): void
+    {
+        $ranked = $this->ranked();
+
+        $result = $ranked->unique('initial');
+        $this->assertSame([0, 1], $result->keys()->all());
+        $this->assertSame($ranked[0], $result[0]);
+        $this->assertSame($ranked[1], $result[1]);
+    }
+
+    public function test_dto_where_and_pluck_see_the_same_fields(): void
+    {
+        $dtos = $this->dtos();
+        $this->assertSame(['text', 'text', 'text'], $dtos->pluck('only_in_to_array')->all());
+        $this->assertCount(3, $dtos->where('only_in_to_array', 'text'));
+        $this->assertTrue($dtos->contains('only_in_to_array', 'text'));
+
+        $ranked = $this->ranked();
+        $scores = $ranked->pluck('score')->all();
+        $this->assertSame([30, 10, 20], $scores);
+        $this->assertCount(3, $ranked->whereIn('score', $scores));
+        $this->assertSame(['A', 'B', 'A'], $ranked->pluck('initial')->all());
+        $this->assertCount(2, $ranked->where('initial', 'A'));
+    }
+
+    public function test_dto_diff_by_computed_field_uses_the_same_format_on_both_sides(): void
+    {
+        $ranked = $this->ranked();
+        $other  = new RankedDtoCollection(new RankedDto('bea', 9));
+
+        $result = $ranked->diff($other, 'initial');
+        $this->assertSame([$ranked[0], $ranked[2]], $result->all());
+    }
+
+    public function test_dto_flatten_includes_computed_fields(): void
+    {
+        $ranked = new RankedDtoCollection(new RankedDto('ana', 3));
+
+        $this->assertSame(['ana', 3, 30, 'A'], $ranked->flatten()->all());
+    }
+
+    /* -----------------------------------------------------------------
+     | diffKeys compara solo claves, sin serializar
+     | ----------------------------------------------------------------- */
+
+    public function test_diff_keys_uses_keys_without_serializing(): void
+    {
+        $tagTypes = $this->tagTypes();
+
+        $result = $tagTypes->diffKeys(new CollectionAny([1 => 'x']));
+        $this->assertInstanceOf(TagTypeCollection::class, $result);
+        $this->assertSame([0, 2], $result->keys()->all());
+        $this->assertSame($tagTypes[0], $result[0]);
+
+        // Colección tipada (sus items no se serializan, solo se usan sus claves)
+        $this->assertSame([1, 2], $tagTypes->diffKeys($tagTypes->take(1))->keys()->all());
+
+        // Collection de Laravel y array
+        $this->assertSame([0], $tagTypes->diffKeys(collect([1 => 'a', 2 => 'b']))->keys()->all());
+        $this->assertSame([1], $tagTypes->diffKeys([0 => null, 2 => null])->keys()->all());
+    }
+
+    /* -----------------------------------------------------------------
+     | Paginación
+     | ----------------------------------------------------------------- */
+
+    private function paginatedTagTypes(): TagTypeCollection
+    {
+        return TagTypeCollection::fromArray([
+            'current_page' => 1,
+            'data'         => [
+                ['id' => 1, 'name' => 'Tecnología', 'code' => 'tech'],
+                ['id' => 2, 'name' => 'Deportes', 'code' => 'sport'],
+                ['id' => 3, 'name' => 'Música', 'code' => 'music'],
+            ],
+            'total'        => 10,
+            'last_page'    => 4,
+            'per_page'     => '3',
+            'path'         => 'http://localhost/tag-types',
+        ]);
+    }
+
+    public function test_sort_by_keeps_pagination(): void
+    {
+        $tagTypes = $this->paginatedTagTypes();
+        $sorted   = $tagTypes->sortBy('name');
+
+        $this->assertTrue($sorted->isPaginate());
+        $this->assertSame($tagTypes->paginationData(), $sorted->paginationData());
+
+        $json = $sorted->jsonSerialize();
+        $this->assertSame(['last_page', 'last_row', 'data'], array_keys($json));
+        $this->assertSame(4, $json['last_page']);
+        $this->assertSame(10, $json['last_row']);
+        $this->assertSame(['Deportes', 'Música', 'Tecnología'], array_values(array_column($json['data'], 'name')));
+    }
+
+    public function test_reordering_methods_keep_pagination(): void
+    {
+        $tagTypes = $this->paginatedTagTypes();
+
+        $this->assertTrue($tagTypes->values()->isPaginate());
+        $this->assertTrue($tagTypes->reverse()->isPaginate());
+        $this->assertTrue($tagTypes->sort(fn(TagTypeEntity $a, TagTypeEntity $b) => $b->id->value <=> $a->id->value)->isPaginate());
+        $this->assertTrue($tagTypes->sortBy(fn(TagTypeEntity $t) => $t->code->value)->isPaginate());
+        $this->assertTrue($tagTypes->sortByDesc('name')->isPaginate());
+        $this->assertTrue($tagTypes->sortDesc()->isPaginate());
+    }
+
+    public function test_filtering_methods_lose_pagination(): void
+    {
+        $tagTypes = $this->paginatedTagTypes();
+
+        $where = $tagTypes->where('code', 'tech');
+        $this->assertFalse($where->isPaginate());
+        $this->assertTrue(array_is_list($where->jsonSerialize()));
+
+        $filter = $tagTypes->filter(fn(TagTypeEntity $t) => true);
+        $this->assertFalse($filter->isPaginate());
+        $this->assertCount(3, $filter->jsonSerialize());
+        $this->assertArrayNotHasKey('last_page', $filter->jsonSerialize());
+    }
+
+    public function test_collection_created_with_new_has_no_pagination_data(): void
+    {
+        $empty = new TagTypeCollection();
+        $this->assertFalse($empty->isPaginate());
+        $this->assertNull($empty->paginationData());
+        $this->assertSame([], $empty->jsonSerialize());
+
+        $tagTypes = new TagTypeCollection(...$this->tagTypes()->all());
+        $this->assertNull($tagTypes->paginationData());
+        $this->assertCount(3, $tagTypes->jsonSerialize());
+
+        // Marcada como paginada pero sin datos de paginación: se serializa como lista
+        $tagTypes->setIsPaginate(true);
+        $this->assertCount(3, $tagTypes->jsonSerialize());
+        $this->assertArrayNotHasKey('last_page', $tagTypes->jsonSerialize());
+    }
+
+    /* -----------------------------------------------------------------
+     | merge conserva los objetos Arrayable
+     | ----------------------------------------------------------------- */
+
+    public function test_merge_keeps_arrayable_objects(): void
+    {
+        $laravelCollection = collect(['x', 'y']);
+
+        $result = CollectionStrings::fromArray(['a'])->merge([$laravelCollection]);
+
+        $this->assertSame(CollectionAny::class, $result::class);
+        $this->assertSame('a', $result[0]);
+        $this->assertSame($laravelCollection, $result[1]);
     }
 }
 

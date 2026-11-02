@@ -19,7 +19,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
     use HasRelatableOptions;
 
     protected bool               $isPaginate = false;
-    protected ?PaginationDataDto $paginationData;
+    protected ?PaginationDataDto $paginationData = null;
 
     /**
      * @return AbstractEntity|null
@@ -31,7 +31,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
 
     public function jsonSerialize(): array
     {
-        if (! $this->isPaginate()) {
+        if (! $this->isPaginate() || is_null($this->paginationData)) {
             return parent::jsonSerialize();
         }
         return [
