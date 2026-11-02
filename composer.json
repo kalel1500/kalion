@@ -8,7 +8,7 @@
             "email": "a.canals14@gmail.com"
         }
     ],
-    "license": "GPL-3.0-or-later",
+    "license": "MPL-2.0",
     "require": {
         "ext-json": "*",
         "ext-mbstring": "*",
