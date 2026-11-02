@@ -158,12 +158,20 @@ abstract class AbstractCollectionBase implements Countable, ArrayAccess, Iterato
         $new        = clone $this;
         $new->items = $items;
 
-        if (! $keepPagination && $new instanceof AbstractCollectionEntity) {
-            $new->isPaginate     = false;
-            $new->paginationData = null;
+        if (! $keepPagination) {
+            $new->clearPagination();
         }
 
         return $new;
+    }
+
+    /**
+     * Hook para descartar la información de paginación de una colección derivada. Por defecto no hace nada;
+     * `AbstractCollectionEntity` lo sobrescribe, que es la única que guarda datos de paginación.
+     */
+    protected function clearPagination(): void
+    {
+        //
     }
 
     /**

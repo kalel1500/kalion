@@ -18,7 +18,10 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
 {
     use HasRelatableOptions;
 
-    protected bool               $isPaginate = false;
+    /**
+     * Datos de paginación. Solo existen si la colección se creó a partir de una página (`fromArray()` con
+     * `current_page`); es la única fuente de verdad de `isPaginate()`.
+     */
     protected ?PaginationDataDto $paginationData = null;
 
     /**
@@ -31,7 +34,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
 
     public function jsonSerialize(): array
     {
-        if (! $this->isPaginate() || is_null($this->paginationData)) {
+        if (is_null($this->paginationData)) {
             return parent::jsonSerialize();
         }
         return [
@@ -59,9 +62,8 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
             throw new InvalidValueException(sprintf('$with can not contain empty values on <%s>:<%s>. Maybe you can see the class AbstractEntity::setFirstRelation', class_basename(static::class), 'fromData'));
         }
 
-        $isPaginate     = array_key_exists('current_page', $data);
         $paginationData = null;
-        if ($isPaginate) {
+        if (array_key_exists('current_page', $data)) {
             $paginationData = new PaginationDataDto(
                 total      : $data['total'],
                 lastPage   : $data['last_page'],
@@ -91,7 +93,6 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
             }
         }
         $collection                 = new static($array);
-        $collection->isPaginate     = $isPaginate;
         $collection->paginationData = $paginationData;
         $collection->with           = $with;
         $collection->isFull         = $isFull;
@@ -116,7 +117,7 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
 
     public function isPaginate(): bool
     {
-        return $this->isPaginate;
+        return ! is_null($this->paginationData);
     }
 
     public function paginationData(): ?PaginationDataDto
@@ -124,14 +125,12 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         return $this->paginationData;
     }
 
-    public function setIsPaginate(bool $isPaginate): void
+    /**
+     * Descarta la información de paginación (se usa al derivar colecciones que ya no se corresponden con la página).
+     */
+    protected function clearPagination(): void
     {
-        $this->isPaginate = $isPaginate;
-    }
-
-    public function setPaginationData(PaginationDataDto $paginationData): void
-    {
-        $this->paginationData = $paginationData;
+        $this->paginationData = null;
     }
 
     /**

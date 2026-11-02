@@ -912,11 +912,6 @@ class CollectionItemCallbacksTest extends TestCase
         $tagTypes = new TagTypeCollection(...$this->tagTypes()->all());
         $this->assertNull($tagTypes->paginationData());
         $this->assertCount(3, $tagTypes->jsonSerialize());
-
-        // Marcada como paginada pero sin datos de paginación: se serializa como lista
-        $tagTypes->setIsPaginate(true);
-        $this->assertCount(3, $tagTypes->jsonSerialize());
-        $this->assertArrayNotHasKey('last_page', $tagTypes->jsonSerialize());
     }
 
     /* -----------------------------------------------------------------
