@@ -1,0 +1,11 @@
+Contexto: Estamos en una aplicación Laravel que usa Clean Architecture y DDD:
+-separar por contextos
+-en cada contexto las carpetas: Infrastructure, Application, y Domain
+-los controllers se encargan de la validación Laravel y la respuesta Laravel.
+-los casos de uso reciben primitivos y los transforman a Value Objects, Data Objects o Entidades para validar en dominio
+-los controllers tienen los casos de uso inyectados en el constructor
+-Los casos de uso tienen inyectadas las interfaces repositorios y servicios (o el servicio directo si no tiene interfaz)
+-Los servicios solo se usan cuando se repile la lógica en más de un caso de uso
+-una regla interna nuestra (para evitar crear mil casos de uso y que se llamen unos a otros y sea un caos seguirlos) es crear un caso de uso por cada ruta de controller y que no se puedan llamar entre ellos. Por eso la logica que se repite siempre se mueve a un servicio.
+-si los casos de uso deben devolver más de un dato, se meten en: VO, DTO, Entidad, Colección (los elementos de las colecciones deben ser: VO, DTO, Entidad)
+-los repositorios siempre devuelven una entidad o Colección de entidades.
