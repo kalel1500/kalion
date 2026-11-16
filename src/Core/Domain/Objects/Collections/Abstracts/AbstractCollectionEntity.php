@@ -37,8 +37,9 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         if (is_null($this->paginationData)) {
             return parent::jsonSerialize();
         }
+
         return [
-            'last_page' => $this->paginationData->lastPage,
+            'last_page' => $this->paginationData->last_page,
             'last_row'  => $this->paginationData->total,
             'data'      => $this->toArray(),
         ];
@@ -65,13 +66,13 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         $paginationData = null;
         if (array_key_exists('current_page', $data)) {
             $paginationData = new PaginationDataDto(
-                total      : $data['total'] ?? null,
-                lastPage   : $data['last_page'] ?? null,
-                perPage    : intval($data['per_page']),
-                currentPage: $data['current_page'],
-                path       : $data['path'],
-                pageName   : 'page',
-                htmlLinks  : '--',
+                total       : $data['total'] ?? null,
+                last_page   : $data['last_page'] ?? null,
+                per_page    : intval($data['per_page']),
+                current_page: $data['current_page'],
+                path        : $data['path'],
+                page_name   : 'page',
+                html_links  : '--',
             );
             $data           = $data['data'];
         }

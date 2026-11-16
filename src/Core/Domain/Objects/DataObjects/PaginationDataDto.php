@@ -8,12 +8,12 @@ class PaginationDataDto extends AbstractDataTransferObject
 {
     public function __construct(
         public readonly ?int   $total,
-        public readonly ?int   $lastPage,
-        public readonly int    $perPage,
-        public readonly int    $currentPage,
+        public readonly ?int   $last_page,
+        public readonly int    $per_page,
+        public readonly int    $current_page,
         public readonly string $path,
-        public readonly string $pageName,
-        public readonly string $htmlLinks,
+        public readonly string $page_name,
+        public readonly string $html_links,
     )
     {
     }
