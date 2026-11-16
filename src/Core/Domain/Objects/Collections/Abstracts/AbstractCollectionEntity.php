@@ -65,8 +65,8 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         $paginationData = null;
         if (array_key_exists('current_page', $data)) {
             $paginationData = new PaginationDataDto(
-                total      : $data['total'],
-                lastPage   : $data['last_page'],
+                total      : $data['total'] ?? null,
+                lastPage   : $data['last_page'] ?? null,
                 perPage    : intval($data['per_page']),
                 currentPage: $data['current_page'],
                 path       : $data['path'],

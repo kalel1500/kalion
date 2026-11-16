@@ -7,8 +7,8 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects;
 class PaginationDataDto extends AbstractDataTransferObject
 {
     public function __construct(
-        public readonly int    $total,
-        public readonly int    $lastPage,
+        public readonly ?int   $total,
+        public readonly ?int   $lastPage,
         public readonly int    $perPage,
         public readonly int    $currentPage,
         public readonly string $path,
