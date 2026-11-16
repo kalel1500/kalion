@@ -39,9 +39,8 @@ abstract class AbstractCollectionEntity extends AbstractCollectionBase implement
         }
 
         return [
-            'last_page' => $this->paginationData->last_page,
-            'last_row'  => $this->paginationData->total,
-            'data'      => $this->toArray(),
+            ...$this->paginationData->toArray(),
+            'data' => $this->toArray(),
         ];
     }
 
