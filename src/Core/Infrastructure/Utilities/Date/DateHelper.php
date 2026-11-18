@@ -46,7 +46,8 @@ class DateHelper
     public static function matchesFormat(string $date, string $format): bool
     {
         try {
-            $dt = CarbonImmutable::createFromFormat($format, $date);
+            $timezone = str_ends_with($format, '\Z') ? 'UTC' : null;
+            $dt = CarbonImmutable::createFromFormat($format, $date, $timezone);
             return $dt !== false && $dt->format($format) === $date;
         } catch (Throwable $e) {
             return false;
