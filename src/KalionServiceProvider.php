@@ -418,9 +418,11 @@ class KalionServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) return;
 
         // Añadir EnsureValidCookies a los grupos de middleware especificados en la configuración
-        foreach ($configParser->getEnsureValidCookiesMiddlewareGroups() as $group) {
-            $router->pushMiddlewareToGroup($group, EnsureValidCookies::class);
-        }
+        $this->app->booted(function () use ($configParser, $router) {
+            foreach ($configParser->getEnsureValidCookiesMiddlewareGroups() as $group) {
+                $router->pushMiddlewareToGroup($group, EnsureValidCookies::class);
+            }
+        });
 
         // Desactivar la encriptación de las cookies que tengan el atributo SkipCookieEncryption
         $this->app->afterResolving(EncryptCookies::class, function (EncryptCookies $middleware) use ($configParser) {
