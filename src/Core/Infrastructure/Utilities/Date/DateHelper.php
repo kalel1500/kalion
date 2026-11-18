@@ -138,7 +138,7 @@ class DateHelper
     /**
      * Whether the format contains the literal Zulu designator (`\Z`), meaning the string is expressed in UTC.
      */
-    public static function isUtcFormat(string $format): bool
+    protected static function isUtcFormat(string $format): bool
     {
         $length = strlen($format);
         for ($i = 0; $i < $length; $i++) {

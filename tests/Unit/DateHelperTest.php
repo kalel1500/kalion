@@ -42,9 +42,8 @@ class DateHelperTest extends TestCase
     }
 
     #[DataProvider('utcFormatsProvider')]
-    public function test_is_utc_format_and_timezone_for_format(string $format, bool $isUtc): void
+    public function test_timezone_for_format(string $format, bool $isUtc): void
     {
-        $this->assertSame($isUtc, DateHelper::isUtcFormat($format));
         $this->assertSame($isUtc ? 'UTC' : 'Europe/Madrid', DateHelper::timezoneForFormat($format));
     }
 
