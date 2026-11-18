@@ -26,7 +26,7 @@ abstract class AbstractDateVo extends AbstractStringVo
     {
         parent::__construct($value);
         $this->instanceFormats = $formats;
-        $this->valueCarbon     = is_null($value) ? null : CarbonImmutable::parse($value);
+        $this->valueCarbon     = is_null($value) ? null : CarbonImmutable::parse($value)->tz(date_default_timezone_get());
     }
 
     protected static function resolveFormats(?array $formats = null): array
@@ -46,8 +46,14 @@ abstract class AbstractDateVo extends AbstractStringVo
 
     public static function fromCarbon(?CarbonInterface $value, ?string $toFormat = null, ?array $formats = null): static
     {
+        if (is_null($value)) {
+            return new static(null, $formats);
+        }
+
         $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
-        $formatted = $value?->format($toFormat);
+        $targetTz  = str_ends_with($toFormat, '\Z') ? 'UTC' : date_default_timezone_get();
+        $formatted = $value->copy()->tz($targetTz)->format($toFormat);
+
         return new static($formatted, $formats);
     }
 
@@ -57,8 +63,14 @@ abstract class AbstractDateVo extends AbstractStringVo
             return static::fromCarbon($value, $toFormat, $formats);
         }
 
+        if (is_null($value)) {
+            return new static(null, $formats);
+        }
+
         $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
-        $formatted = is_null($value) ? $value : CarbonImmutable::parse($value)->format($toFormat);
+        $targetTz  = str_ends_with($toFormat, '\Z') ? 'UTC' : date_default_timezone_get();
+        $formatted = CarbonImmutable::parse($value)->tz($targetTz)->format($toFormat);
+
         return new static($formatted, $formats);
     }
 
