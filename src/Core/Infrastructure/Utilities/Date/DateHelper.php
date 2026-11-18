@@ -28,16 +28,10 @@ class DateHelper
     public static function createFromFormat(string $format, string $date): CarbonImmutable
     {
         try {
-            $dt = CarbonImmutable::createFromFormat(static::normalizeParseFormat($format), $date, static::timezoneForFormat($format));
+            return CarbonImmutable::createFromFormat(static::normalizeParseFormat($format), $date, static::timezoneForFormat($format));
         } catch (Throwable $e) {
             throw new InvalidArgumentException(sprintf('The date <%s> does not match the format <%s>.', $date, $format), 0, $e);
         }
-
-        if ($dt === false) {
-            throw new InvalidArgumentException(sprintf('The date <%s> does not match the format <%s>.', $date, $format));
-        }
-
-        return $dt;
     }
 
     /**
@@ -93,7 +87,7 @@ class DateHelper
     {
         try {
             $dt = CarbonImmutable::createFromFormat(static::normalizeParseFormat($format), $date, 'UTC');
-            return $dt !== false && $dt->format($format) === $date;
+            return $dt->format($format) === $date;
         } catch (Throwable) {
             return false;
         }
