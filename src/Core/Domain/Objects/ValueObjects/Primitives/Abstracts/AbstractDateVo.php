@@ -79,7 +79,7 @@ abstract class AbstractDateVo extends AbstractStringVo
      */
     public function toDatetimeDMYSlash(): ?string
     {
-        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_DMY_slash->value);
+        return $this->valueCarbon?->format(DateFormat::datetime_DMY_slash->value);
     }
 
     /**
@@ -89,7 +89,7 @@ abstract class AbstractDateVo extends AbstractStringVo
      */
     public function toDatetimeDMYSlashShort(): ?string
     {
-        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_DMY_slash_short->value);
+        return $this->valueCarbon?->format(DateFormat::datetime_DMY_slash_short->value);
     }
 
     /**
@@ -99,7 +99,7 @@ abstract class AbstractDateVo extends AbstractStringVo
      */
     public function toDatetimeYMD(): ?string
     {
-        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_YMD->value);
+        return $this->valueCarbon?->format(DateFormat::datetime_YMD->value);
     }
 
     /**
@@ -109,12 +109,12 @@ abstract class AbstractDateVo extends AbstractStringVo
      */
     public function toDatetimeYMDShort(): ?string
     {
-        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format(DateFormat::datetime_YMD_short->value);
+        return $this->valueCarbon?->format(DateFormat::datetime_YMD_short->value);
     }
 
     public function format(string $format): ?string
     {
-        return $this->isNull() ? null : CarbonImmutable::parse($this->value)->format($format);
+        return $this->valueCarbon?->format($format);
     }
 
     public function carbon(): ?CarbonImmutable
