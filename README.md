@@ -89,4 +89,4 @@ For more complex cases, you can use the configuration method:
 
 ## License
 
-Kalion is open-sourced software licensed under the [GNU General Public License v3.0](LICENSE).
+Kalion is open-sourced software licensed under the [Mozilla Public License Version 2.0](LICENSE).
