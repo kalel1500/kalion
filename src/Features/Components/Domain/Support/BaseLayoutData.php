@@ -48,6 +48,7 @@ class BaseLayoutData implements LayoutData
 
     public function getUserInfo(): ?UserInfoDto
     {
+        // TODO Canals - infraOnDomain: Quitar dependencia de Infra en el dominio.
         if (is_null(user())) return null;
         return new UserInfoDto(
             id    : user()->id->value, // 1

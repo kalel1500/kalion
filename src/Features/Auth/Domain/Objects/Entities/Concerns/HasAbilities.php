@@ -25,6 +25,7 @@ trait HasAbilities
             return;
         }
 
+        // TODO Canals - infraOnDomain: Quitar dependencia de Infra en el dominio.
         $repositoryRole       = app(RoleRepository::class);
         $repositoryPermission = app(PermissionRepository::class);
 
@@ -90,10 +91,12 @@ trait HasAbilities
             }
 
             if ($item->getIsQuery()) {
+                // TODO Canals - infraOnDomain: Quitar dependencia de Infra en el dominio.
                 $repositoryClass = kauth($this->getGuard())->getClassAbilityRepository();
                 if (is_null($repositoryClass)) {
                     throw new RequiredDefinitionException(sprintf('The repository class for the guard "%s" is not defined. Please define it in the configuration.', $this->getGuard()));
                 }
+                // TODO Canals - infraOnDomain: Quitar dependencia de Infra en el dominio.
                 $repositoryUser = app($repositoryClass);
                 return $repositoryUser->{$value}($this, ...$params);
             }

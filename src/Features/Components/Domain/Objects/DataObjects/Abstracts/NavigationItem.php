@@ -34,6 +34,7 @@ abstract class NavigationItem extends AbstractDataTransferObject
 
     public function getHref(): string
     {
+        // TODO Canals - infraOnDomain: Quitar dependencia de Infra en el dominio.
         return safe_route($this->route_name, '#', $this->route_params ?? []);
     }
 
