@@ -21,6 +21,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflec
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractId;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractArrayVo;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\AbstractDateVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractBoolVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractFloatVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractIntVo;
@@ -106,6 +107,7 @@ trait ReflectionResolvable
         $isVo              = ! $classIsNull && is_a($class, class: AbstractValueObject::class, allow_string: true);
         $isArray           = ! $classIsNull && is_a($class, class: ArrayConvertible::class, allow_string: true);
         $isArrayResolvable = ! $classIsNull && is_a($class, class: ArrayResolvable::class, allow_string: true);
+        $isDateVo          = ! $classIsNull && is_a($class, class: AbstractDateVo::class, allow_string: true);
 
         $makeMethod = match (true) {
             $classIsNull                   => null,
@@ -118,7 +120,11 @@ trait ReflectionResolvable
             default                        => throw KalionReflectionException::unexpectedTypeInConstructor($className, $paramName),
         };
 
-        $propsMethod = $isArray ? 'toArray' : null;
+        $propsMethod = match (true) {
+            $isArray   => 'toArray',
+            $isDateVo  => 'jsonSerialize',
+            default    => null,
+        };
 
         $castType = match (true) {
             $classIsNull                                                     => $typeName,
@@ -398,9 +404,9 @@ trait ReflectionResolvable
             $value  = $this->{$name};
 
             $value = match (true) {
+                $method !== null => $value?->{$method}(),
                 $isEnum || $isVo => $value?->value,
-                $method === null => $value,
-                default          => $value?->{$method}(),
+                default          => $value,
             };
 
             if ($isEnum && $value === KALION_ENUM_NULL_VALUE) {
