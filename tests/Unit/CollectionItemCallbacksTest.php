@@ -870,9 +870,10 @@ class CollectionItemCallbacksTest extends TestCase
         $this->assertSame($tagTypes->paginationData(), $sorted->paginationData());
 
         $json = $sorted->jsonSerialize();
-        $this->assertSame(['last_page', 'last_row', 'data'], array_keys($json));
+        $this->assertSame(['total', 'last_page', 'per_page', 'current_page', 'path', 'page_name', 'html_links', 'data'], array_keys($json));
         $this->assertSame(4, $json['last_page']);
-        $this->assertSame(10, $json['last_row']);
+        $this->assertSame(10, $json['total']);
+        $this->assertArrayNotHasKey('last_row', $json);
         $this->assertSame(['Deportes', 'Música', 'Tecnología'], array_values(array_column($json['data'], 'name')));
     }
 
