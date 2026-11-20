@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Date;
+namespace Thehouseofel\Kalion\Core\Domain\Support;
 
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;

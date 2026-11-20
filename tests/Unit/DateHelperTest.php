@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Date\DateHelper;
+use Thehouseofel\Kalion\Core\Domain\Support\DateHelper;
 
 class DateHelperTest extends TestCase
 {

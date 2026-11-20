@@ -12,7 +12,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateVo;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Date\DateHelper;
+use Thehouseofel\Kalion\Core\Domain\Support\DateHelper;
 use Throwable;
 
 /**
