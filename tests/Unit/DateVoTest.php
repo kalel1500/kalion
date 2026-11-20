@@ -367,6 +367,49 @@ class DateVoTest extends TestCase
         $this->assertNull(TimestampNullVo::from(null)->jsonSerialize());
     }
 
+    public function test_serialization_with_custom_format_uses_utc_by_default(): void
+    {
+        config(['kalion.dates.json_format' => 'Y-m-d H:i:s']);
+
+        $vo = TimestampVo::from(self::LOCAL);
+
+        $this->assertSame('2026-03-29 02:30:00', $vo->jsonSerialize());
+        $this->assertSame('"2026-03-29 02:30:00"', json_encode($vo));
+        $this->assertNull(TimestampNullVo::from(null)->jsonSerialize());
+    }
+
+    public function test_serialization_local_without_format_returns_iso_with_offset(): void
+    {
+        config(['kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'Europe/Madrid']);
+
+        $this->assertSame('2026-03-29T04:30:00.000000+02:00', TimestampVo::from(self::ELOQUENT)->jsonSerialize());
+    }
+
+    public function test_serialization_local_with_custom_format(): void
+    {
+        config([
+            'kalion.dates.json_local'    => true,
+            'kalion.dates.local_timezone' => 'Europe/Madrid',
+            'kalion.dates.json_format'   => 'd/m/Y H:i:s',
+        ]);
+
+        $this->assertSame('29/03/2026 04:30:00', TimestampVo::from(self::ELOQUENT)->jsonSerialize());
+    }
+
+    public function test_serialization_local_defaults_to_the_application_timezone(): void
+    {
+        config(['kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => null, 'kalion.dates.json_format' => 'H:i']);
+
+        $this->assertSame('04:30', TimestampVo::from(self::ELOQUENT)->jsonSerialize());
+    }
+
+    public function test_serialization_does_not_depend_on_the_timezone_of_the_vo(): void
+    {
+        config(['kalion.dates.json_format' => 'H:i']);
+
+        $this->assertSame('02:30', TimestampVo::from(self::ELOQUENT, tz: 'Asia/Tokyo')->jsonSerialize());
+    }
+
     // ---------------------------------------------------------------------------------------------------------------
     // Entities
     // ---------------------------------------------------------------------------------------------------------------
@@ -385,11 +428,15 @@ class DateVoTest extends TestCase
         $post = PostEntity::fromArray($data);
         $this->assertSame('29/03/2026 04:30:00', $post->created_at->toDatetimeDMYSlash());
 
-        // toArray() keeps the Carbon (json serialized like Eloquent) and can be used to rebuild the entity
+        // toArray() serializes the dates (jsonSerialize) and can be used to rebuild the entity
         $array = $post->toArray();
-        $this->assertInstanceOf(CarbonImmutable::class, $array['created_at']);
+        $this->assertSame(self::ELOQUENT, $array['created_at']);
         $this->assertSame(self::ELOQUENT, json_decode(json_encode($post), true)['created_at']);
         $this->assertTrue(PostEntity::fromArray($array)->created_at->eq($post->created_at->value));
+
+        // The serialization config is also applied to toArray()
+        config(['kalion.dates.json_format' => 'd/m/Y H:i', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'Europe/Madrid']);
+        $this->assertSame('29/03/2026 04:30', $post->toArray()['created_at']);
 
         // resolveFromArray() uses parse()
         $resolved = PostEntity::resolveFromArray(array_merge($data, ['created_at' => '2026-03-29T04:30:00+02:00']));
