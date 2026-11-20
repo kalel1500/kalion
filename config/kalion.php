@@ -111,10 +111,24 @@ return [
     |
     |                     null = Laravel's "app.timezone".
     |
+    | - "json_format": PHP date format returned by "jsonSerialize()" of the date
+    |                  Value Objects (and therefore by "toArray()" of entities,
+    |                  collections and DTOs). For example: "Y-m-d H:i:s".
+    |
+    |                  null = ISO-8601 like Carbon and Eloquent
+    |                  ("2026-03-29T02:30:00.000000Z" in UTC or
+    |                  "2026-03-29T04:30:00.000000+02:00" if "json_local" is true).
+    |
+    | - "json_local": Whether "jsonSerialize()" converts the date to the
+    |                 "local_timezone" (true) or to "UTC" (false) before
+    |                 formatting it.
+    |
     */
 
     'dates' => [
         'local_timezone' => env('KALION_DATES_LOCAL_TIMEZONE', $defaults['kalion.dates.local_timezone']),
+        'json_format'    => env('KALION_DATES_JSON_FORMAT', $defaults['kalion.dates.json_format']),
+        'json_local'     => (bool) env('KALION_DATES_JSON_LOCAL', $defaults['kalion.dates.json_local']),
     ],
 
     /*

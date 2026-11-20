@@ -202,11 +202,22 @@ abstract class AbstractDateVo extends AbstractValueObject
     }
 
     /**
-     * Same serialization as Carbon and Eloquent: ISO-8601 in UTC (`2026-03-29T02:30:00.000000Z`).
+     * By default, same serialization as Carbon and Eloquent: ISO-8601 in UTC (`2026-03-29T02:30:00.000000Z`).
+     *
+     * It can be configured with `kalion.dates.json_format` (custom format) and `kalion.dates.json_local`
+     * (convert to the local timezone instead of `UTC`).
      */
     public function jsonSerialize(): mixed
     {
-        return $this->value?->jsonSerialize();
+        if (is_null($this->value)) {
+            return null;
+        }
+
+        $local  = (bool)config('kalion.dates.json_local');
+        $date   = $this->value->tz($local ? DateHelper::localTimezone() : 'UTC');
+        $format = config('kalion.dates.json_format') ?: ($local ? 'Y-m-d\TH:i:s.uP' : 'Y-m-d\TH:i:s.u\Z');
+
+        return $date->format($format);
     }
 
     /**

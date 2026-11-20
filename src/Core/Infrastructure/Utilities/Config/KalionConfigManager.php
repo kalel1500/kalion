@@ -28,6 +28,8 @@ class KalionConfigManager
         'kalion.entity_calculated_props_mode'                => 's',
         'kalion.minimum_value_for_id'                        => 1,
         'kalion.dates.local_timezone'                        => null,
+        'kalion.dates.json_format'                           => null,
+        'kalion.dates.json_local'                            => false,
         'kalion.cookies.user_settings.active'                => true,
         'kalion.cookies.user_settings.duration'              => (60 * 24 * 364),
         'kalion.cookies.user_settings.version'               => '0',
