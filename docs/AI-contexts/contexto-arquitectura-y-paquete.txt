@@ -518,11 +518,10 @@ Y esto solo fue el principio, ya que después le fui añadiendo mas funcionalida
 - Clase ProcessStateStore.php.php -> permite guardar en cache si los procesos están activos o no
 
 
-Ademas de esas clases "support" el paquete tiene Features como:
+Además de esas clases "support" el paquete tiene Features como:
 - Auth:
     sistema de autenticación como en Laravel "kauth()->user()" que devielve la entidad del usuario autenticado con los roles cargados.
     Esto ya trae un sistema de roles y permisos que se pueden consultar asi "kauth()->user()->is('role_name')" o "kauth()->user()->can('permission_name')"
-    Admas trae
 - AuthFlow
 - Components
 - Examples
