@@ -85,7 +85,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
     public function toArray(): array
     {
         $data   = $this->props();
-        $isFull = $this->normalizeIsFull($this->isFull ?? config('kalion.entity_calculated_props_mode')); // kalion.entity_calculated_props_mode => s
+        $isFull = $this->normalizeIsFull($this->isFull ?? kalion()->config()->entityCalculatedPropsMode()); // kalion.entity_calculated_props_mode => s
         $data   = array_merge($data, $this->computedPropsForContext($isFull));
 
         if ($this->with) {

@@ -8,23 +8,15 @@ use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ExceptionContextDto;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\ResultDto;
-use Thehouseofel\Kalion\Core\Infrastructure\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\Broadcast;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\ResponseStream;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Response\ResponseStreamer;
 use function Illuminate\Filesystem\join_paths;
 
-if (! function_exists('kalion')) {
-    function kalion(): Kalion
-    {
-        return app(Kalion::class);
-    }
-}
-
 if (! function_exists('debug_enabled')) {
     function debug_enabled(): bool
     {
-        return app()->hasDebugModeEnabled();
+        return kalion()->isDebug();
     }
 }
 

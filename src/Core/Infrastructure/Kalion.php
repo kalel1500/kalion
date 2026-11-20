@@ -5,46 +5,18 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Infrastructure;
 
 use Illuminate\Http\Request;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\EnvVo;
+use Thehouseofel\Kalion\Core\Domain\KalionContext;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectGuests;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Config\Redirect\RedirectUsers;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Cookies\UserSettingsCookieStore;
-use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\Config;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\PackageAssets;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\LayoutMetrics;
 use Thehouseofel\Kalion\Features\Components\Infrastructure\ComponentAssemblerResolver;
 
-class Kalion
+class Kalion extends KalionContext
 {
-    protected ?EnvVo                     $environment = null;
     protected LayoutMetrics              $layoutMetrics;
     protected ComponentAssemblerResolver $componentAssemblerResolver;
-    protected Config                     $config;
-
-    public function env(): EnvVo
-    {
-        return $this->environment ??= EnvVo::from(config('app.env'));
-    }
-
-    public function isProd(): bool
-    {
-        return $this->env()->isProd();
-    }
-
-    public function isLocal(): bool
-    {
-        return $this->env()->isLocal();
-    }
-
-    public function isPre(): bool
-    {
-        return $this->env()->isPre();
-    }
-
-    public function isTesting(): bool
-    {
-        return $this->env()->isTesting();
-    }
 
     public function renderCss(): string
     {
@@ -79,10 +51,5 @@ class Kalion
     public function component(): ComponentAssemblerResolver
     {
         return $this->componentAssemblerResolver ??= new ComponentAssemblerResolver();
-    }
-
-    public function config(): Config
-    {
-        return $this->config ??= new Config();
     }
 }

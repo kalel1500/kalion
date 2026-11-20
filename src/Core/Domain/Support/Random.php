@@ -19,7 +19,7 @@ class Random
     public static function chance(float $percentage): bool
     {
         if (!is_finite($percentage) || $percentage < 0 || $percentage > 100) {
-            throw new InvalidValueException(__('k::error.percentage_must_be_between_0_and_100'));
+            throw new InvalidValueException(kalion()->trans('k::error.percentage_must_be_between_0_and_100'));
         }
 
         if ($percentage === 0.0) {

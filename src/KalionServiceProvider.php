@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Thehouseofel\Kalion\Core\Domain\KalionContext;
+use Thehouseofel\Kalion\Core\Infrastructure\Kalion;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\ClearAll;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\ConfigCheck;
 use Thehouseofel\Kalion\Core\Infrastructure\Support\Console\Commands\Install;
@@ -99,6 +101,17 @@ class KalionServiceProvider extends ServiceProvider
 
         // Scoped to avoid state leaks across Octane requests while keeping one instance per lifecycle.
         $this->app->scoped('kalion.config', KalionConfigManager::class);
+
+        /**
+         * Request-scoped instance resolved by the kalion() helper.
+         *
+         * How it works: `kalion()` delegates to `KalionContext::instance()`, which checks the container
+         * for `KalionContext::class`. Aliasing `Kalion` to `KalionContext` ensures Laravel provides the
+         * full framework-integrated instance, while plain unit tests (without this provider) seamlessly
+         * fall back to a standalone `KalionContext`.
+         */
+        $this->app->scoped(Kalion::class);
+        $this->app->alias(Kalion::class, KalionContext::class);
 
         // Register the Fortify-based authentication flow (only when the Kalion auth feature is enabled)
         if (config('kalion.auth.enabled')) {

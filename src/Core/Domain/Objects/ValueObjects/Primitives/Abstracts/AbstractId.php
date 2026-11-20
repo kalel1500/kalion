@@ -20,7 +20,7 @@ abstract class AbstractId extends AbstractIntVo
     public function __construct(?int $value)
     {
         if (is_null($this->minimumValueForId)) {
-            $this->minimumValueForId = config('kalion.minimum_value_for_id');
+            $this->minimumValueForId = kalion()->config()->minimumValueForId();
         }
 
         parent::__construct($value);

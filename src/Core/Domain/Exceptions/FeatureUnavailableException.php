@@ -12,6 +12,6 @@ class FeatureUnavailableException extends KalionLogicException
 
     public static function default(): static
     {
-        return new static(__('k::error.feature_unavailable'));
+        return new static(kalion()->trans('k::error.feature_unavailable'));
     }
 }

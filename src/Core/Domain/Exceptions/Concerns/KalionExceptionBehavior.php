@@ -28,7 +28,7 @@ trait KalionExceptionBehavior
     ): void
     {
         if ($message === '') {
-            throw new UnexpectedValueException(__('k::error.exception_message_can_not_be_empty', ['exception' => static::class]));
+            throw new UnexpectedValueException(kalion()->trans('k::error.exception_message_can_not_be_empty', ['exception' => static::class]));
         }
 
         // Llamar al constructor
@@ -64,7 +64,7 @@ trait KalionExceptionBehavior
         $context   = [];
         $debugData = $this->exceptionContext?->debugData ?? [];
 
-        if (debug_enabled() && !empty($debugData)) {
+        if (kalion()->isDebug() && !empty($debugData)) {
             $context['kalion_debug'] = $debugData;
         }
 

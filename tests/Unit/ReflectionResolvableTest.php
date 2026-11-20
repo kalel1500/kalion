@@ -9,6 +9,7 @@ use JsonException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\KalionReflectionException;
+use Thehouseofel\Kalion\Core\Domain\KalionContext;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\AbstractDataTransferObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Attributes\DisableReflection;
 use Thehouseofel\Kalion\Core\Domain\Support\Internal\DebugData;
@@ -22,24 +23,15 @@ class ReflectionResolvableTest extends TestCase
         parent::setUp();
 
         $this->previousContainer = Container::getInstance();
+        Container::setInstance(null);
+        KalionContext::flushState();
 
-        $container = new class extends Container {
-            public function hasDebugModeEnabled(): bool
-            {
-                return true;
-            }
-        };
-        $container->instance('translator', new class {
-            public function get(string $key): string
-            {
-                return $key;
-            }
-        });
-        Container::setInstance($container);
+        kalion()->config()->fake(['app.debug' => true]);
     }
 
     protected function tearDown(): void
     {
+        KalionContext::flushState();
         Container::setInstance($this->previousContainer);
 
         parent::tearDown();

@@ -76,13 +76,13 @@ class WeightedGenerator
     {
         if ($this->minValue > $this->maxValue) {
             throw new InvalidValueException(
-                __('k::error.min_value_cant_be_greater_than_max')
+                kalion()->trans('k::error.min_value_cant_be_greater_than_max')
             );
         }
 
         if ($this->quantity <= 0) {
             throw new InvalidValueException(
-                __('k::error.amount_must_be_greater_than_number', [
+                kalion()->trans('k::error.amount_must_be_greater_than_number', [
                     'number' => 0,
                 ])
             );
@@ -90,12 +90,12 @@ class WeightedGenerator
 
         $rangeSize = ($this->maxValue - $this->minValue) + 1;
         if ($rangeSize > self::MAX_RANGE_SIZE) {
-            throw new InvalidValueException(__('k::error.range_exceeds_maximum_allowed', ['max' => self::MAX_RANGE_SIZE]));
+            throw new InvalidValueException(kalion()->trans('k::error.range_exceeds_maximum_allowed', ['max' => self::MAX_RANGE_SIZE]));
         }
 
         foreach ($this->customWeights as $number => $weight) {
             if ((int)$number < $this->minValue || (int)$number > $this->maxValue) {
-                throw new InvalidValueException(__('k::error.weight_key_out_of_range', ['number' => $number, 'min'    => $this->minValue, 'max'    => $this->maxValue,]));
+                throw new InvalidValueException(kalion()->trans('k::error.weight_key_out_of_range', ['number' => $number, 'min'    => $this->minValue, 'max'    => $this->maxValue,]));
             }
         }
 
@@ -103,7 +103,7 @@ class WeightedGenerator
 
         if ($totalCustomWeight > 100) {
             throw new InvalidValueException(
-                __('k::error.sum_of_probabilities_cant_be_greater_than_100')
+                kalion()->trans('k::error.sum_of_probabilities_cant_be_greater_than_100')
             );
         }
     }
@@ -143,7 +143,7 @@ class WeightedGenerator
 
         if ($this->weights === []) {
             throw new KalionRuntimeException(
-                __('k::error.generated_distribution_empty')
+                kalion()->trans('k::error.generated_distribution_empty')
             );
         }
 

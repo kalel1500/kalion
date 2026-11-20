@@ -13,10 +13,10 @@ class UnauthorizedException extends KalionHttpException
 
     public static function forRoles(string $roles): static
     {
-        $message = __('k::auth.invalid_roles');
+        $message = kalion()->trans('k::auth.invalid_roles');
 
-        if (config('kalion.auth.display_role_in_exception')) {
-            $message .= ' ' . __('k::auth.necessary_roles', ['roles' => $roles]);
+        if (kalion()->config()->displayRoleInException()) {
+            $message .= ' ' . kalion()->trans('k::auth.necessary_roles', ['roles' => $roles]);
         }
 
         return new static(static::STATUS_CODE, $message);
@@ -24,10 +24,10 @@ class UnauthorizedException extends KalionHttpException
 
     public static function forPermissions(string $permissions): static
     {
-        $message = __('k::auth.invalid_permissions');
+        $message = kalion()->trans('k::auth.invalid_permissions');
 
-        if (config('kalion.auth.display_permission_in_exception')) {
-            $message .= ' ' . __('k::auth.necessary_permissions', ['permissions' => $permissions]);
+        if (kalion()->config()->displayPermissionInException()) {
+            $message .= ' ' . kalion()->trans('k::auth.necessary_permissions', ['permissions' => $permissions]);
         }
 
         return new static(static::STATUS_CODE, $message);
@@ -37,12 +37,12 @@ class UnauthorizedException extends KalionHttpException
     {
         $class = get_class($user);
 
-        return new static(403, __('k::auth.missing_trait_has_abilities', ['class' => $class]));
+        return new static(403, kalion()->trans('k::auth.missing_trait_has_abilities', ['class' => $class]));
     }
 
     public static function notLoggedIn(): static
     {
-        return new static(static::STATUS_CODE, __('k::auth.not_logged_in'));
+        return new static(static::STATUS_CODE, kalion()->trans('k::auth.not_logged_in'));
     }
 
 }

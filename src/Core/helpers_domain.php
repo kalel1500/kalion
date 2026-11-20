@@ -4,7 +4,20 @@ declare(strict_types=1);
 
 use Thehouseofel\Kalion\Core\Domain\Exceptions\AbortException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterface;
+use Thehouseofel\Kalion\Core\Domain\KalionContext;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
+
+if (! function_exists('kalion')) {
+    /**
+     * Returns the full `Kalion` instance with Laravel, or a `KalionContext` (config, trans and env) without it.
+     *
+     * @return \Thehouseofel\Kalion\Core\Infrastructure\Kalion
+     */
+    function kalion(): KalionContext
+    {
+        return KalionContext::instance();
+    }
+}
 
 if (! function_exists('kabort')) {
     function kabort(

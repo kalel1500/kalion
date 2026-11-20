@@ -41,14 +41,14 @@ class ExceptionContextDto extends AbstractDataTransferObject
     )
     {
         $this->texts = [
-            401 => ['title' => __('Unauthorized'),          'message' => __('Unauthorized')                     ],
-            402 => ['title' => __('Payment Required'),      'message' => __('Payment Required')                 ],
-            403 => ['title' => __('Forbidden'),             'message' => __($e->getMessage() ?: 'Forbidden')    ],
-            404 => ['title' => __('Not Found'),             'message' => __('Not Found')                        ],
-            419 => ['title' => __('Page Expired'),          'message' => __('Page Expired')                     ],
-            429 => ['title' => __('Too Many Requests'),     'message' => __('Too Many Requests')                ],
-            500 => ['title' => __('Server Error'),          'message' => __('Server Error')                     ],
-            503 => ['title' => __('Service Unavailable'),   'message' => __('Service Unavailable')              ],
+            401 => ['title' => kalion()->trans('Unauthorized'),          'message' => kalion()->trans('Unauthorized')                     ],
+            402 => ['title' => kalion()->trans('Payment Required'),      'message' => kalion()->trans('Payment Required')                 ],
+            403 => ['title' => kalion()->trans('Forbidden'),             'message' => kalion()->trans($e->getMessage() ?: 'Forbidden')    ],
+            404 => ['title' => kalion()->trans('Not Found'),             'message' => kalion()->trans('Not Found')                        ],
+            419 => ['title' => kalion()->trans('Page Expired'),          'message' => kalion()->trans('Page Expired')                     ],
+            429 => ['title' => kalion()->trans('Too Many Requests'),     'message' => kalion()->trans('Too Many Requests')                ],
+            500 => ['title' => kalion()->trans('Server Error'),          'message' => kalion()->trans('Server Error')                     ],
+            503 => ['title' => kalion()->trans('Service Unavailable'),   'message' => kalion()->trans('Service Unavailable')              ],
         ];
 
         $this->statusCode     = (method_exists($e, 'getStatusCode')) ? $e->getStatusCode() : 500;
@@ -62,19 +62,19 @@ class ExceptionContextDto extends AbstractDataTransferObject
         $this->line           = $e->getLine();
         $this->trace          = collect($e->getTrace())->map(fn($trace) => Arr::except($trace, ['args']))->all();
         $this->previous       = $e->getPrevious();
-        $this->showLogout     = $e instanceof KalionHttpException && config('kalion.exceptions.http.show_logout_form') && $e::SHOW_LOGOUT_FORM;
+        $this->showLogout     = $e instanceof KalionHttpException && kalion()->config()->exceptionsShowLogoutForm() && $e::SHOW_LOGOUT_FORM;
         $this->debugData      = $debugData;
     }
 
     public function getTitle(): string
     {
-        return $this->texts[$this->statusCode]['title'] ?? __(Response::$statusTexts[$this->statusCode]);
+        return $this->texts[$this->statusCode]['title'] ?? kalion()->trans(Response::$statusTexts[$this->statusCode]);
     }
 
     public function getMessage(Throwable $e): string
     {
-        $message = $this->texts[$this->statusCode]['message'] ?? __('Unknown Error');
-        return (is_kalion_exception($e) || ($e instanceof HttpException) || debug_enabled()) ? $e->getMessage() : $message;
+        $message = $this->texts[$this->statusCode]['message'] ?? kalion()->trans('Unknown Error');
+        return (is_kalion_exception($e) || ($e instanceof HttpException) || kalion()->isDebug()) ? $e->getMessage() : $message;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -126,7 +126,7 @@ class ExceptionContextDto extends AbstractDataTransferObject
 
     public function toArray(bool $throwInDebugMode = true): array
     {
-        $addDebugInfo = debug_enabled() && $throwInDebugMode;
+        $addDebugInfo = kalion()->isDebug() && $throwInDebugMode;
         $toArray      = $this->toArrayForProd();
         return $addDebugInfo ? array_merge($toArray, $this->arrayDebugInfo()) : $toArray;
     }
