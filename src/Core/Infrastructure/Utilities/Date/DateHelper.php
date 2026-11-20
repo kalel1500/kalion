@@ -7,6 +7,7 @@ namespace Thehouseofel\Kalion\Core\Infrastructure\Utilities\Date;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;
 use DateTimeInterface;
+use DateTimeZone;
 use InvalidArgumentException;
 use Throwable;
 
@@ -17,7 +18,8 @@ class DateHelper
 
     /**
      * Creates a date from a string using the exact given format, interpreting it in the timezone the format implies
-     * (`UTC` for `\Z`, application timezone otherwise). Unlike `CarbonImmutable::parse()`, ambiguous formats such as
+     * (`UTC` for `\Z`, otherwise `$tz` or, by default, the application timezone). Formats that carry their own offset
+     * (`P`, `O`, `e`, `T`...) keep the parsed offset. Unlike `CarbonImmutable::parse()`, ambiguous formats such as
      * `d/m/Y` are never interpreted as `m/d/Y`.
      *
      * Fields not present in a format containing a date part are reset (e.g. `Y-m-d` => `00:00:00`, `m/Y` => day 1).
@@ -25,10 +27,10 @@ class DateHelper
      *
      * @throws InvalidArgumentException if the string does not match the format
      */
-    public static function createFromFormat(string $format, string $date): CarbonImmutable
+    public static function createFromFormat(string $format, string $date, DateTimeZone|string|null $tz = null): CarbonImmutable
     {
         try {
-            return CarbonImmutable::createFromFormat(static::normalizeParseFormat($format), $date, static::timezoneForFormat($format));
+            return CarbonImmutable::createFromFormat(static::normalizeParseFormat($format), $date, static::timezoneForFormat($format, $tz));
         } catch (Throwable $e) {
             throw new InvalidArgumentException(sprintf('The date <%s> does not match the format <%s>.', $date, $format), 0, $e);
         }
@@ -125,14 +127,26 @@ class DateHelper
 
     /**
      * Returns the timezone in which a string with the given format is expressed:
-     * `UTC` if the format contains the literal Zulu designator (`\Z`), otherwise the application timezone.
+     * `UTC` if the format contains the literal Zulu designator (`\Z`), otherwise `$default`
+     * or, if it is not provided, the application timezone (`date_default_timezone_get()`).
      *
      * Note: an unescaped `Z` is the PHP token for the offset in seconds (the string carries its own offset),
      * so only the escaped literal `\Z` is considered a UTC marker.
      */
-    public static function timezoneForFormat(string $format): string
+    public static function timezoneForFormat(string $format, DateTimeZone|string|null $default = null): DateTimeZone|string
     {
-        return static::isUtcFormat($format) ? 'UTC' : date_default_timezone_get();
+        return static::isUtcFormat($format) ? 'UTC' : ($default ?? date_default_timezone_get());
+    }
+
+    /**
+     * Timezone used to present dates to the users (`kalion.dates.local_timezone`).
+     *
+     * It does not affect Laravel's `app.timezone` (the one used to interpret and store dates):
+     * if it is not configured, the application timezone is returned.
+     */
+    public static function localTimezone(): string
+    {
+        return config('kalion.dates.local_timezone') ?: date_default_timezone_get();
     }
 
     /**

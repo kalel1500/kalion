@@ -8,147 +8,157 @@ use Carbon\CarbonImmutable;
 use DateTimeInterface;
 use DateTimeZone;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\AbstractValueObject;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractStringVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\DateVo;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Date\DateHelper;
+use Throwable;
 
 /**
- * Date Value Object.
+ * Date Value Object: an immutable (and optionally nullable) wrapper of `CarbonImmutable`.
  *
- * - `$value` is the canonical string representation (the one that is validated, serialized and persisted).
- *   Strings without timezone information are interpreted in the application timezone (`date_default_timezone_get()`),
- *   and strings with the Zulu designator (`\Z`) in UTC.
- * - `carbon()` (and therefore `format()` and `toDatetime*()`) is always normalized to the application timezone,
- *   regardless of how the VO was hydrated, unless it is explicitly projected with `tz()`/`timezone()`.
+ * - `$value` is a `CarbonImmutable` (or `null`), always expressed in the timezone given when creating the VO
+ *   (`$tz`) or, by default, in the application timezone (`date_default_timezone_get()`), regardless of the origin
+ *   of the data (for example, `2026-03-29T02:30:00.000000Z` and `2026-03-29 04:30:00.000000` are the same date
+ *   with `Europe/Madrid`).
+ * - `from()` validates that the string matches one of the allowed formats (`static::$formats`): use it to read
+ *   from the database or to check whether a string is a valid date.
+ * - `parse()` accepts any value understood by `CarbonImmutable::parse()`: use it with dates received from the front.
+ * - The methods of Carbon can be called directly on the VO (`$vo->toDateTimeString()`, `$vo->diffForHumans()`...).
+ *   They return `null` when the value is `null`.
+ *
+ * @mixin CarbonImmutable
  */
-abstract class AbstractDateVo extends AbstractStringVo
+abstract class AbstractDateVo extends AbstractValueObject
 {
     protected const CLASS_REQUIRED = DateVo::class;
     protected const CLASS_NULLABLE = DateNullVo::class;
 
-    protected static array     $formats         = [DateFormat::datetime_YMD->value];
-    protected ?array           $instanceFormats = null;
-    protected ?CarbonImmutable $valueCarbon     = null;
+    /**
+     * Formats allowed by `from()`.
+     */
+    protected static array $formats = [DateFormat::datetime_YMD->value];
 
-    public function __construct(?string $value, ?array $formats = null)
-    {
-        // Must be set before parent::__construct(), which runs the format validation
-        $this->instanceFormats = $formats;
-        parent::__construct($value);
-        $this->valueCarbon = is_null($value) ? null : $this->toCarbon($value);
-    }
+    /**
+     * @var CarbonImmutable|null
+     */
+    public $value;
 
-    protected static function resolveFormats(?array $formats = null): array
+    /**
+     * @param DateTimeInterface|null   $value The date (it is never modified, even if it is mutable)
+     * @param DateTimeZone|string|null $tz    Timezone of the VO (default: application timezone)
+     */
+    public function __construct(?DateTimeInterface $value, DateTimeZone|string|null $tz = null)
     {
-        return $formats ?? static::$formats;
-    }
-
-    protected function resolveInstanceFormats(): array
-    {
-        return static::resolveFormats($this->instanceFormats);
+        $this->checkNullable($value);
+        $this->value = is_null($value) ? null : CarbonImmutable::instance($value)->tz($tz ?? date_default_timezone_get());
     }
 
     /**
-     * Parses the (already validated) value with the format it matches, and normalizes it to the application timezone.
+     * Creates the VO validating that the string matches one of the allowed formats.
+     *
+     * Strings without timezone information are interpreted in `$tz` (default: application timezone),
+     * and strings with the Zulu designator (`\Z`) in `UTC`.
+     *
+     * @param string|DateTimeInterface|null $value
+     * @param string[]|null                 $formats Allowed formats (default: `static::$formats`)
+     * @param DateTimeZone|string|null      $tz      Timezone of the VO (default: application timezone)
+     * @throws InvalidValueException if the value is not a string matching one of the allowed formats
      */
-    protected function toCarbon(string $value): CarbonImmutable
-    {
-        $format = DateHelper::firstMatchingFormat($value, $this->resolveInstanceFormats());
-
-        return DateHelper::createFromFormat($format, $value)->tz(date_default_timezone_get());
-    }
-
-    public static function from($value, ?array $formats = null): static
-    {
-        return new static($value, $formats);
-    }
-
-    /**
-     * Builds the VO from a date instance, preserving the instant: the date is converted to the timezone implied
-     * by `$toFormat` (`UTC` for `\Z`, application timezone otherwise) before formatting it.
-     */
-    public static function fromCarbon(?DateTimeInterface $value, ?string $toFormat = null, ?array $formats = null): static
-    {
-        if (is_null($value)) {
-            return new static(null, $formats);
-        }
-
-        $toFormat  = $toFormat ?? static::resolveFormats($formats)[0];
-        $formatted = CarbonImmutable::instance($value)
-            ->tz(DateHelper::timezoneForFormat($toFormat))
-            ->format($toFormat);
-
-        return new static($formatted, $formats);
-    }
-
-    /**
-     * Builds the VO from any date instance or any string understood by `CarbonImmutable::parse()`
-     * (strings without timezone information are interpreted in the application timezone).
-     */
-    public static function parse($value, ?string $toFormat = null, ?array $formats = null): static
+    public static function from($value, ?array $formats = null, DateTimeZone|string|null $tz = null): static
     {
         if (is_null($value) || $value instanceof DateTimeInterface) {
-            return static::fromCarbon($value, $toFormat, $formats);
+            return new static($value, $tz);
         }
 
-        return static::fromCarbon(CarbonImmutable::parse((string)$value), $toFormat, $formats);
-    }
+        $formats = $formats ?? static::$formats;
+        $format  = is_string($value) ? DateHelper::firstMatchingFormat($value, $formats) : null;
 
-    protected function ensureIsValidValue(?string $value): void
-    {
-        parent::ensureIsValidValue($value);
-
-        $formats = $this->resolveInstanceFormats();
-        if (! is_null($value) && ! DateHelper::matchesAnyFormat($value, $formats)) {
-            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $value, implode(', ', $formats)));
+        if (is_null($format)) {
+            $printable = is_scalar($value) ? (string)$value : get_debug_type($value);
+            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $printable, implode(', ', $formats)));
         }
+
+        return new static(DateHelper::createFromFormat($format, $value, $tz), $tz);
     }
 
     /**
-     * Returns a new instance whose date (`carbon()`, `format()`, `toDatetime*()`) is projected to the given timezone.
+     * Creates the VO from any value understood by `CarbonImmutable::parse()` (without format validation).
      *
-     * The canonical `$value` is not modified: it still represents the same instant, so it can be safely
-     * serialized or persisted (re-formatting it without timezone information would change the instant).
+     * Strings without timezone information are interpreted in `$tz` (default: application timezone).
+     *
+     * @param string|DateTimeInterface|null $value
+     * @param DateTimeZone|string|null      $tz Timezone of the VO (default: application timezone)
+     * @throws InvalidValueException if the value can not be parsed as a date
      */
-    public function tz(string|DateTimeZone $timezone): static
+    public static function parse($value, DateTimeZone|string|null $tz = null): static
     {
-        $clone              = clone $this;
-        $clone->valueCarbon = $this->valueCarbon?->tz($timezone);
+        if (is_null($value) || $value instanceof DateTimeInterface) {
+            return new static($value, $tz);
+        }
+
+        try {
+            $date = CarbonImmutable::parse((string)$value, $tz ?? date_default_timezone_get());
+        } catch (Throwable) {
+            $printable = is_scalar($value) ? (string)$value : get_debug_type($value);
+            throw new InvalidValueException(sprintf('<%s> can not parse the value <%s> as a date.', class_basename(static::class), $printable));
+        }
+
+        return new static($date, $tz);
+    }
+
+    /**
+     * Returns a new instance converted to the given timezone (the instant does not change).
+     */
+    public function tz(DateTimeZone|string $timezone): static
+    {
+        $clone        = clone $this;
+        $clone->value = $this->value?->tz($timezone);
         return $clone;
     }
 
     /**
      * Alias of `tz()`.
      */
-    public function timezone(string|DateTimeZone $timezone): static
+    public function timezone(DateTimeZone|string $timezone): static
     {
         return $this->tz($timezone);
     }
 
     /**
-     * Keeps the instance formats and the projected timezone.
+     * Returns a new instance converted to `UTC`. Equivalent to `->tz('UTC')`.
+     */
+    public function utc(): static
+    {
+        return $this->tz('UTC');
+    }
+
+    /**
+     * Returns a new instance converted to the timezone used to present dates to the users
+     * (`kalion.dates.local_timezone` or, if it is not configured, Laravel's `app.timezone`).
+     */
+    public function local(): static
+    {
+        return $this->tz(DateHelper::localTimezone());
+    }
+
+    /**
+     * Keeps the timezone of the instance.
      */
     public function toNull()
     {
         $class = static::CLASS_NULLABLE;
-        return $class::from($this->value, $this->instanceFormats)->withCarbonOf($this);
+        return new $class($this->value, $this->value?->getTimezone());
     }
 
     /**
-     * Keeps the instance formats and the projected timezone.
+     * Keeps the timezone of the instance.
      */
     public function toNotNull()
     {
         $class = static::CLASS_REQUIRED;
-        return $class::from($this->value, $this->instanceFormats)->withCarbonOf($this);
-    }
-
-    protected function withCarbonOf(self $other): static
-    {
-        $this->valueCarbon = $other->valueCarbon;
-        return $this;
+        return new $class($this->value, $this->value?->getTimezone());
     }
 
     /**
@@ -158,7 +168,7 @@ abstract class AbstractDateVo extends AbstractStringVo
      */
     public function toDatetimeDMYSlash(): ?string
     {
-        return $this->valueCarbon?->format(DateFormat::datetime_DMY_slash->value);
+        return $this->value?->format(DateFormat::datetime_DMY_slash->value);
     }
 
     /**
@@ -168,7 +178,7 @@ abstract class AbstractDateVo extends AbstractStringVo
      */
     public function toDatetimeDMYSlashShort(): ?string
     {
-        return $this->valueCarbon?->format(DateFormat::datetime_DMY_slash_short->value);
+        return $this->value?->format(DateFormat::datetime_DMY_slash_short->value);
     }
 
     /**
@@ -178,7 +188,7 @@ abstract class AbstractDateVo extends AbstractStringVo
      */
     public function toDatetimeYMD(): ?string
     {
-        return $this->valueCarbon?->format(DateFormat::datetime_YMD->value);
+        return $this->value?->format(DateFormat::datetime_YMD->value);
     }
 
     /**
@@ -188,16 +198,22 @@ abstract class AbstractDateVo extends AbstractStringVo
      */
     public function toDatetimeYMDShort(): ?string
     {
-        return $this->valueCarbon?->format(DateFormat::datetime_YMD_short->value);
+        return $this->value?->format(DateFormat::datetime_YMD_short->value);
     }
 
-    public function format(string $format): ?string
+    /**
+     * Same serialization as Carbon and Eloquent: ISO-8601 in UTC (`2026-03-29T02:30:00.000000Z`).
+     */
+    public function jsonSerialize(): mixed
     {
-        return $this->valueCarbon?->format($format);
+        return $this->value?->jsonSerialize();
     }
 
-    public function carbon(): ?CarbonImmutable
+    /**
+     * Forwards the call to the `CarbonImmutable` value (returns `null` if the value is `null`).
+     */
+    public function __call(string $method, array $arguments): mixed
     {
-        return $this->valueCarbon;
+        return $this->value?->{$method}(...$arguments);
     }
 }

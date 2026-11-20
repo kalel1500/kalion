@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects;
 
+use DateTimeInterface;
+
 class SnapshotDiff
 {
     /**
@@ -24,13 +26,25 @@ class SnapshotDiff
         foreach ($newSnapshot as $key => $newValue) {
             $oldValue = $oldSnapshot[$key] ?? null;
 
-            if ($oldValue !== $newValue) {
+            if (! self::areEqual($oldValue, $newValue)) {
                 $old[$key] = $oldValue;
                 $new[$key] = $newValue;
             }
         }
 
         return new self($old, $new);
+    }
+
+    /**
+     * Dates (e.g. the `CarbonImmutable` of the date Value Objects) are compared as instants.
+     */
+    private static function areEqual(mixed $oldValue, mixed $newValue): bool
+    {
+        if ($oldValue instanceof DateTimeInterface && $newValue instanceof DateTimeInterface) {
+            return $oldValue == $newValue;
+        }
+
+        return $oldValue === $newValue;
     }
 
     public function hasChanges(): bool

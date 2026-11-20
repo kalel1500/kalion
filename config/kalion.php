@@ -98,6 +98,27 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Dates
+    |--------------------------------------------------------------------------
+    |
+    | - "local_timezone": Timezone used to present dates to the users with the
+    |                     "local()" method of the date Value Objects (DateVo,
+    |                     TimestampVo, TimeVo...). For example: "Europe/Madrid".
+    |
+    |                     It does NOT modify Laravel's "app.timezone", which is
+    |                     the one used to interpret and store dates (the
+    |                     recommended value for "app.timezone" is "UTC").
+    |
+    |                     null = Laravel's "app.timezone".
+    |
+    */
+
+    'dates' => [
+        'local_timezone' => env('KALION_DATES_LOCAL_TIMEZONE', $defaults['kalion.dates.local_timezone']),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Jobs
     |--------------------------------------------------------------------------
     |

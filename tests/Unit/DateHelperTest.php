@@ -45,6 +45,7 @@ class DateHelperTest extends TestCase
     public function test_timezone_for_format(string $format, bool $isUtc): void
     {
         $this->assertSame($isUtc ? 'UTC' : 'Europe/Madrid', DateHelper::timezoneForFormat($format));
+        $this->assertSame($isUtc ? 'UTC' : 'America/New_York', DateHelper::timezoneForFormat($format, 'America/New_York'));
     }
 
     public static function dstValuesProvider(): array
@@ -95,6 +96,19 @@ class DateHelperTest extends TestCase
         $local = DateHelper::createFromFormat(DateFormat::datetime_YMD->value, '2026-03-29 04:30:00');
         $this->assertSame('Europe/Madrid', $local->getTimezone()->getName());
         $this->assertTrue($utc->eq($local));
+    }
+
+    public function test_create_from_format_with_timezone(): void
+    {
+        // Zoneless strings are interpreted in the given timezone
+        $utc = DateHelper::createFromFormat(DateFormat::datetime_YMD->value, '2026-03-29 02:30:00', 'UTC');
+        $this->assertSame('UTC', $utc->getTimezone()->getName());
+        $this->assertSame('2026-03-29T02:30:00+00:00', $utc->toIso8601String());
+
+        // \Z is always UTC
+        $zulu = DateHelper::createFromFormat(DateFormat::datetime_eloquent->value, '2026-03-29T02:30:00.000000Z', 'America/New_York');
+        $this->assertSame('UTC', $zulu->getTimezone()->getName());
+        $this->assertTrue($utc->eq($zulu));
     }
 
     public function test_create_from_format_respects_the_exact_format_and_resets_unparsed_fields(): void
