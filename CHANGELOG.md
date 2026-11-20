@@ -1,6 +1,79 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.62.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.63.0-beta.0...master)
+
+## [v0.63.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.62.0-beta.0...v0.63.0-beta.0) - 2026-11-20
+
+### Added
+
+* Value Objects de fecha (`AbstractDateVo`: `DateVo`, `TimestampVo`, `TimeVo` y sus variantes nullables):
+  * Nuevos métodos inmutables para cambiar de zona horaria, con la misma ergonomía que en Carbon. Devuelven una nueva instancia con el mismo instante:
+    * `tz(DateTimeZone|string $timezone)` y su alias `timezone()`.
+    * `utc()`: equivalente a `->tz('UTC')`. Pensado para guardar (`$post->date->utc()->toDatetimeYMD()`).
+    * `local()`: convierte a la zona horaria de presentación (`kalion.dates.local_timezone`). Pensado para mostrar en las vistas (`$post->date->local()->toDatetimeDMYSlash()`).
+  * Los métodos de Carbon se pueden llamar directamente sobre el VO gracias a `__call()` (`$post->date->toDateTimeString()`, `$post->date->diffForHumans()`...). Devuelven el resultado de Carbon (o `null` si el valor es `null`). La clase tiene la anotación `@mixin CarbonImmutable` para que el IDE los autocomplete.
+  * Nuevo parámetro `$tz` en el constructor, en `from()` y en `parse()` para indicar la zona horaria del VO (por defecto, la de la aplicación). En `from()` y `parse()`, los strings sin zona horaria se interpretan en esa zona horaria (por ejemplo, `TimestampVo::from($value, tz: 'UTC')` para leer de una base de datos en `UTC` con un `app.timezone` local).
+* Nueva configuración `kalion.dates.local_timezone` (`KALION_DATES_LOCAL_TIMEZONE`): zona horaria usada por `local()` para mostrar las fechas a los usuarios (por ejemplo, `Europe/Madrid`). No modifica el `app.timezone` de Laravel, que se recomienda dejar en `UTC`. Si no se configura, se usa `app.timezone`.
+* Nuevas configuraciones para `jsonSerialize()` de los VOs de fecha (y por tanto `toArray()` de entidades, colecciones y DTO):
+  * `kalion.dates.json_format` (`KALION_DATES_JSON_FORMAT`): formato de PHP del string devuelto (por ejemplo, `Y-m-d H:i:s`). Por defecto (`null`), ISO-8601 como Carbon y Eloquent.
+  * `kalion.dates.json_local` (`KALION_DATES_JSON_LOCAL`): si es `true`, la fecha se convierte a `kalion.dates.local_timezone` antes de formatearla; si es `false` (por defecto), a `UTC`. Con formato por defecto y `true`, devuelve ISO-8601 con offset (`2026-03-29T04:30:00.000000+02:00`).
+* Nuevos métodos en `DateHelper`:
+  * `createFromFormat(string $format, string $date, DateTimeZone|string|null $tz = null)`: crea un `CarbonImmutable` con el formato exacto. Los strings con `\Z` se interpretan en `UTC` y el resto en `$tz` (por defecto, la zona horaria de la aplicación). Los campos que no aparecen en un formato con fecha se ponen a cero (`Y-m-d` => `00:00:00`, `m/Y` => día 1). Los formatos solo de hora (`H:i:s`) conservan la fecha actual. Si el string no coincide con el formato, lanza un `InvalidArgumentException`.
+  * `firstMatchingFormat(string $date, array $formats)`: devuelve el primer formato que coincide, o `null` si no coincide ninguno.
+  * `timezoneForFormat(string $format, DateTimeZone|string|null $default = null)`: devuelve la zona horaria en la que se expresa un string con ese formato: `UTC` para el designador Zulu literal (`\Z`, como en `DateFormat::datetime_eloquent`) y `$default` (por defecto, la zona horaria de la aplicación) en el resto de casos. Una `Z` sin escapar es el token de PHP para el offset en segundos, por lo que no se considera UTC.
+  * `localTimezone()`: devuelve la zona horaria de `kalion.dates.local_timezone` o, si no está configurada, la de la aplicación.
+
+### Changed
+
+* Value Objects de fecha (`AbstractDateVo`):
+  * (breaking) Ahora son un wrapper inmutable de `CarbonImmutable`: ya no extienden de `AbstractStringVo` y la propiedad `$value` contiene un `CarbonImmutable` (o `null`) en lugar del string recibido. Para obtener un string, usa los métodos `to...()` (`toDatetimeYMD()`, `toDatetimeDMYSlash()`...) o cualquier método de Carbon (`format()`, `toDateTimeString()`...).
+  * (breaking) El `CarbonImmutable` se expresa siempre en la zona horaria indicada en `$tz` o, por defecto, en la de la aplicación (`app.timezone`), sea cual sea el origen del dato. Antes, un VO creado desde `$model->toArray()` de Eloquent (`2026-03-29T02:30:00.000000Z`) quedaba en `UTC` y uno creado desde la BD (`2026-03-29 04:30:00.000000`) en la zona horaria local, por lo que `toDatetimeDMYSlash()` o `format()` devolvían horas distintas para el mismo instante. Ahora ambos devuelven `29/03/2026 04:30:00` (con `Europe/Madrid`).
+  * (breaking) El constructor recibe un `?DateTimeInterface` (y el nuevo `$tz`) en lugar de un `?string` y los formatos. Las fechas recibidas nunca se modifican, aunque sean mutables (`Carbon`, `DateTime`).
+  * (breaking) `from($value, ?array $formats = null, $tz = null)` valida que el string coincida con uno de los formatos permitidos y lo interpreta con ese formato exacto (`DateHelper::createFromFormat()`) en lugar de con `CarbonImmutable::parse()`. Así, los formatos ambiguos como `d/m/Y` ya no se interpretan como `m/d/Y` (`05/11/2026` es el 5 de noviembre y no el 11 de mayo) y los valores con un día mayor que 12 (`18/11/2026`) ya no lanzan una excepción. Si recibe un `DateTimeInterface`, no se valida el formato. Está pensado para leer de la base de datos o comprobar si un string es una fecha válida.
+  * (breaking) `parse($value, $tz = null)` ya no valida los formatos ni recibe `$toFormat` ni `$formats`: acepta cualquier valor que entienda `CarbonImmutable::parse()` o un `DateTimeInterface`. Está pensado para las fechas recibidas del front. Si el valor no es una fecha, lanza un `InvalidValueException`.
+  * (breaking) `jsonSerialize()` devuelve la misma serialización que Carbon y Eloquent: ISO-8601 en `UTC` (`2026-03-29T02:30:00.000000Z`). En las entidades, colecciones y DTO, `toArray()` y `toArrayDb()` contienen ese mismo string (la reflexión usa `jsonSerialize()` en lugar de `->value` para los `AbstractDateVo`), por lo que ya no devuelven el `CarbonImmutable`.
+  * `toNull()` y `toNotNull()` conservan la zona horaria de la instancia.
+* `SnapshotDiff::between()` compara las fechas (`DateTimeInterface`) por instante, en lugar de por identidad, para no detectar cambios en las fechas de las entidades que no han cambiado.
+* `DateHelper`
+  * (breaking) `matchesFormat()` (y por tanto `matchesAnyFormat()` y la validación de los Value Objects de fecha) hace una comprobación puramente sintáctica en `UTC`, una zona horaria sin cambios de hora. Los formatos que incluyen su propio offset (`P`, `O`, `e`, `T`...) no se ven afectados.
+  * (breaking) `mergeDateAndTime()` normaliza ambos parámetros a la zona horaria de la aplicación antes de combinarlos y devuelve el resultado en esa zona horaria. Antes, una fecha en `UTC` aportaba su día en `UTC`, que podía ser distinto del día local. Ahora acepta cualquier `DateTimeInterface` y no modifica los parámetros.
+  * `compare()` acepta ahora cualquier `DateTimeInterface`. La comparación sigue siendo entre instantes, por lo que no depende de la zona horaria de cada operando.
+* Paginación de colecciones de entidades (`AbstractCollectionEntity`):
+  * **Ahora se permiten valores del `->simplePaginte()`:** Se hacen nullables las propiedades `$total` y `$lastPage` de la clase `PaginationDataDto` para admitir el `simplePaginate()` de Laravel
+  * (breaking) Se ha renombrado las propiedades de la clase `PaginationDataDto` a `snake_case`
+  * (breaking) Ahora el `jsonSerialize` devuelve el array completo del `paginationData`. De esta forma es coherente con el paginador de Laravel y delega la tarea de transformar los datos al tabulator.
+
+### Removed
+
+* Value Objects de fecha (`AbstractDateVo`):
+  * (breaking) Se ha eliminado `fromCarbon()`. Su lógica está ahora en el constructor: `new TimestampVo($carbon)` o `TimestampVo::from($carbon)`.
+  * (breaking) Se ha eliminado `carbon()`, ya que `$value` es ahora el `CarbonImmutable`.
+  * (breaking) Se ha eliminado `format()`, que ahora es el de Carbon (a través de `__call()`).
+  * (breaking) Se han eliminado los métodos heredados de `AbstractStringVo` (por ejemplo, `contains()`).
+
+### Fixed
+
+* `KalionServiceProvider`: Mover el `pushMiddlewareToGroup` del `EnsureValidCookies` como callback dentro del `$this->app->booted()`. Si no, es posible que otros paquetes usen `$kernel->prependToMiddlewarePriority()` lo que provoca que el `pushMiddlewareToGroup` no tenga efecto.
+* `DateHelper::matchesFormat()` fallaba con los timestamps de Eloquent (`Y-m-d\TH:i:s.u\Z`) cuya hora UTC coincidía con una hora inexistente en la zona horaria de la aplicación por el cambio de hora (por ejemplo, `2026-03-29T02:30:00.000000Z` con `Europe/Madrid`). Esto impedía crear `TimestampVo` desde `created_at`/`updated_at`. Ahora el valor se interpreta en `UTC`.
+* `DateHelper::matchesFormat()` ya no da falsos negativos con horas locales inexistentes (`2026-03-29 02:30:00` con `Europe/Madrid`). Igual que en PHP y Carbon, al convertirlas a fecha se desplazan hacia delante (`03:30:00`).
+* Los formatos personalizados que se pasaban a los Value Objects de fecha (`DateVo::from($value, $formats)`) se ignoraban en la validación, porque se asignaban después de validar. Por eso se validaba siempre con los formatos por defecto de la clase.
+* `fromCarbon()` y `parse()` con un formato con `\Z` generaban la hora local con una `Z` falsa (ahora el instante se conserva siempre, porque el VO guarda el `CarbonImmutable`).
+* `TimeNullVo` extendía de `AbstractTimestampVo` en lugar de `AbstractTimeVo`, por lo que no aceptaba el formato `H:i:s`.
+
+### Migration notes
+
+* Fechas:
+  * **`$value` es un `CarbonImmutable`:** el código que usaba `$vo->value` como string debe usar un método `to...()` (`$vo->toDatetimeYMD()`) o de Carbon (`$vo->format('...')`, `$vo->toDateTimeString()`). Sustituye `$vo->carbon()` por `$vo->value` (o llama a los métodos de Carbon directamente sobre el VO).
+  * **Constructor:** `new DateVo('2026-11-18 10:00:00')` ya no es válido. Usa `DateVo::from('2026-11-18 10:00:00')` (con validación de formato) o `DateVo::parse(...)` (flexible). Las clases hijas que sobrescriban el constructor deben adaptar su firma: `__construct(?DateTimeInterface $value, DateTimeZone|string|null $tz = null)`.
+  * **`fromCarbon($carbon)`:** sustitúyelo por `from($carbon)` o `new TimestampVo($carbon)`. El parámetro `$toFormat` ya no existe, porque el VO no guarda un string: el formato se elige al convertirlo (`to...()`, `format()`).
+  * **`parse($value, $toFormat, $formats)`:** ahora es `parse($value, $tz)`. Si necesitas validar el formato, usa `from($value, $formats)`.
+  * **Zona horaria:** el VO se expresa siempre en `app.timezone` (o en `$tz`), aunque el valor venga en `UTC` (`...Z`). Usa `utc()`, `local()` o `tz()` para convertirlo.
+  * **Recomendación:** deja `app.timezone` en `UTC`, configura `KALION_DATES_LOCAL_TIMEZONE` (por ejemplo, `Europe/Madrid`) y usa `local()` para mostrar las fechas en las vistas. Si mantienes un `app.timezone` local con la base de datos en `UTC`, lee con `from($value, tz: 'UTC')` y guarda con `utc()`.
+  * **Serialización:** `jsonSerialize()` y el `toArray()` de las entidades serializado a JSON devuelven `2026-03-29T02:30:00.000000Z` (como Eloquent), en lugar del string recibido. `toArray()` y `toArrayDb()` contienen ese mismo string.
+  * **Formatos `d/m/Y`:** los valores que antes se interpretaban como `m/d/Y` (por ejemplo, `05/11/2026` como el 11 de mayo) se interpretan ahora correctamente. Revisa los datos que se hayan generado a partir de esas fechas.
+  * **Formatos personalizados:** al aplicarse ahora en la validación, los valores que antes pasaban por los formatos por defecto pueden fallar si no coinciden con los formatos indicados. Revisa las llamadas a `from($value, $formats)`.
+* Colecciones:
+  * Si se esperaba que una `CollectionEntity` paginada devolviera `last_row` en `jsonSerialize()` se debe cambiar en el Tabulator del JS: `dataReceiveParams:{"last_row":"total"}`. 
 
 ## [v0.62.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.61.2-beta.0...v0.62.0-beta.0) - 2026-11-02
 
@@ -538,7 +611,7 @@ Los valores devueltos que sean objetos `Arrayable` de Laravel (modelos Eloquent,
   * Se ha renombrado el método `environment()` de la clase Kalion a `env()` para que sea más fácil de usar.
   * Se ha renombrado el método `getClassUserRepository()` de la interfaz `Guard` a `getClassAbilityRepository()`.
 * (breaking) Se ha renombrado la tabla `api_user_role` a `api_role_user` para mantener la coherencia con la tabla `role_user`.
-* (breaking) Ahora la clase `EnvVo` extiende de `AbstractStringVo` en vez de `AbstractEnumVo` por lo que los valores de la variable de entorno "APP_ENV" ya no están limitados a `local`, `preproduction`, `production` y `testing`.
+* (breaking) Ahora la clase `EnvVo` extiende de `AbstractStringVo` en vez de `AbstractEnumVo` por lo que los valores de la variable de entorno `APP_ENV` ya no están limitados a `local`, `preproduction`, `production` y `testing`.
   * Además, se ha eliminado la configuración `kalion.real_env_in_tests` que ya no hace falta porque ahora no se sobreescribe el valor cuando el valor es `testing`.
 
 ### Removed
