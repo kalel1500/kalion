@@ -9,7 +9,7 @@ use Illuminate\Container\Container;
 use PHPUnit\Framework\TestCase;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\UnauthorizedException;
-use Thehouseofel\Kalion\Core\Domain\KalionContext;
+use Thehouseofel\Kalion\Core\Domain\KalionKernel;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\IdVo;
 use Thehouseofel\Kalion\Core\Domain\Support\KalionConfigReader;
 use Thehouseofel\Kalion\Core\Domain\Support\Random;
@@ -18,25 +18,25 @@ use Thehouseofel\Kalion\Core\Infrastructure\Kalion;
 /**
  * The domain must work without booting Laravel: these tests use plain PHPUnit and an empty container.
  */
-class KalionContextWithoutLaravelTest extends TestCase
+class KalionKernelWithoutLaravelTest extends TestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
         Container::setInstance(null);
-        KalionContext::flushState();
+        KalionKernel::flushState();
     }
 
     protected function tearDown(): void
     {
-        KalionContext::flushState();
+        KalionKernel::flushState();
         Container::setInstance(null);
         parent::tearDown();
     }
 
     public function test_kalion_helper_returns_the_context_without_laravel(): void
     {
-        $this->assertSame(KalionContext::class, get_class(kalion()));
+        $this->assertSame(KalionKernel::class, get_class(kalion()));
         $this->assertNotInstanceOf(Kalion::class, kalion());
         $this->assertSame(kalion(), kalion());
     }
@@ -105,7 +105,7 @@ class KalionContextWithoutLaravelTest extends TestCase
         $before = kalion();
         $before->config()->fake(['kalion.minimum_value_for_id' => 0]);
 
-        KalionContext::flushState();
+        KalionKernel::flushState();
 
         $this->assertNotSame($before, kalion());
         $this->assertSame(1, kalion()->config()->minimumValueForId());
@@ -162,7 +162,7 @@ class KalionContextWithoutLaravelTest extends TestCase
     public function test_unknown_methods_throw_a_method_not_found_exception(): void
     {
         $this->expectException(BadMethodCallException::class);
-        $this->expectExceptionMessage(KalionContext::class . '::doesNotExist() does not exist.');
+        $this->expectExceptionMessage(KalionKernel::class . '::doesNotExist() does not exist.');
 
         kalion()->doesNotExist();
     }

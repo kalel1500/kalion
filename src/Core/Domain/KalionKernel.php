@@ -15,7 +15,7 @@ use Thehouseofel\Kalion\Core\Domain\Support\KalionConfigReader;
  * With Laravel, `kalion()` resolves the full `Kalion` class from the container (registered by the
  * KalionServiceProvider). Without Laravel (plain unit tests), it returns this class.
  */
-class KalionContext
+class KalionKernel
 {
     use InteractsWithContainer;
 

@@ -6,19 +6,19 @@ namespace Thehouseofel\Kalion\Tests\Feature;
 
 use ReflectionClass;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\UnauthorizedException;
-use Thehouseofel\Kalion\Core\Domain\KalionContext;
+use Thehouseofel\Kalion\Core\Domain\KalionKernel;
 use Thehouseofel\Kalion\Core\Domain\Support\KalionConfigReader;
 use Thehouseofel\Kalion\Core\Infrastructure\Kalion;
 use Thehouseofel\Kalion\Tests\TestCase;
 
-class KalionContextWithLaravelTest extends TestCase
+class KalionKernelWithLaravelTest extends TestCase
 {
     public function test_kalion_helper_resolves_the_scoped_kalion_instance_from_the_container(): void
     {
         $this->assertInstanceOf(Kalion::class, kalion());
         $this->assertSame(kalion(), kalion());
         $this->assertSame(app(Kalion::class), kalion());
-        $this->assertSame(app(KalionContext::class), kalion());
+        $this->assertSame(app(KalionKernel::class), kalion());
 
         $before = kalion();
         $this->app->forgetScopedInstances();
