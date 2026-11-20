@@ -13,13 +13,6 @@ use Thehouseofel\Kalion\Core\Infrastructure\Support\Facades\ResponseStream;
 use Thehouseofel\Kalion\Core\Infrastructure\Utilities\Response\ResponseStreamer;
 use function Illuminate\Filesystem\join_paths;
 
-if (! function_exists('debug_enabled')) {
-    function debug_enabled(): bool
-    {
-        return kalion()->isDebug();
-    }
-}
-
 if (! function_exists('response_json')) {
     function response_json(bool $success, string $message, array|object|string|null $data = null, int $responseCode = 200): JsonResponse
     {

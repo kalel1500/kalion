@@ -20,7 +20,7 @@ final class TestController extends Controller
 
     public function sessions()
     {
-        if (! debug_enabled()) {
+        if (! kalion()->isDebug()) {
             throw new NotFoundHttpException();
         }
         $sessions = DB::table('sessions')->get();

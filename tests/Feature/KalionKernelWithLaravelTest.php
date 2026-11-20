@@ -74,11 +74,9 @@ class KalionKernelWithLaravelTest extends TestCase
 
         config()->set('app.debug', true);
         $this->assertTrue(kalion()->isDebug());
-        $this->assertTrue(debug_enabled());
 
         config()->set('app.debug', false);
         $this->assertFalse(kalion()->isDebug());
-        $this->assertFalse(debug_enabled());
     }
 
     public function test_trans_uses_the_laravel_translator(): void

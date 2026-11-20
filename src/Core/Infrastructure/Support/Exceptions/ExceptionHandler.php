@@ -53,7 +53,7 @@ class ExceptionHandler
                 }
 
                 // Sobreescribir solo cuando se espera una respuesta HTML y el debug está activado
-                if (! self::shouldRenderJson($request) && debug_enabled()) {
+                if (! self::shouldRenderJson($request) && kalion()->isDebug()) {
                     return self::renderHtmlDebug($modelException, $request);
                 }
 
@@ -64,7 +64,7 @@ class ExceptionHandler
         // Renderizar manualmente las excepciones HttpException, ya que Laravel siempre muestra una vista sin el debug (trace) aunque el APP_DEBUG esté activo
         if ($overrideHttp) {
             $exceptions->render(function (HttpException $e, Request $request) {
-                if (! self::shouldRenderJson($request) && debug_enabled()) {
+                if (! self::shouldRenderJson($request) && kalion()->isDebug()) {
                     return self::renderHtmlDebug($e, $request);
                 }
 
@@ -76,7 +76,7 @@ class ExceptionHandler
         // Renderizar nuestras excepciones de dominio
         $exceptions->render(function (KalionExceptionInterface $e, Request $request) {
             $context  = $e->getExceptionContext();
-            $notDebug = ! debug_enabled();
+            $notDebug = ! kalion()->isDebug();
 
             // Si se espera un Json, pasarle todos los datos de nuestra "KalionException" [success, message, data]
             if (self::shouldRenderJson($request)) {
@@ -136,7 +136,7 @@ class ExceptionHandler
         } catch (JsonException|InvalidArgumentException $exception) {
             $logContext = ['exception' => $exception];
 
-            if (debug_enabled()) {
+            if (kalion()->isDebug()) {
                 $logContext['response_data'] = DebugData::dump($context->data);
             }
 
@@ -144,7 +144,7 @@ class ExceptionHandler
 
             return response()->json([
                 'success' => false,
-                'message' => debug_enabled()
+                'message' => kalion()->isDebug()
                     ? 'The exception response data could not be serialized: ' . $exception->getMessage()
                     : 'Server Error',
                 'data'    => null,

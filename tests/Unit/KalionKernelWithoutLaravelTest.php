@@ -129,12 +129,10 @@ class KalionKernelWithoutLaravelTest extends TestCase
     public function test_is_debug_follows_the_config(): void
     {
         $this->assertFalse(kalion()->isDebug());
-        $this->assertFalse(debug_enabled());
 
         kalion()->config()->fake(['app.debug' => true]);
 
         $this->assertTrue(kalion()->isDebug());
-        $this->assertTrue(debug_enabled());
     }
 
     public function test_trans_returns_the_key_with_the_replacements_without_laravel(): void
