@@ -18,7 +18,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimestampNul
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimestampVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimeVo;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\PostEntity;
-use Thehouseofel\Kalion\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class DateVoTest extends TestCase
 {

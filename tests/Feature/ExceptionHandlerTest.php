@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Thehouseofel\Kalion\Tests\Unit;
+namespace Thehouseofel\Kalion\Tests\Feature;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;

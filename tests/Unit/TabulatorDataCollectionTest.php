@@ -11,7 +11,7 @@ use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Collections\TabulatorDat
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Collections\TabulatorFilterCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Collections\TabulatorSortCollection;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\TabulatorFilterDto;
-use Thehouseofel\Kalion\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class TabulatorDataCollectionTest extends TestCase
 {

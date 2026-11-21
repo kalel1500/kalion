@@ -23,7 +23,7 @@ use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ExampleDtoCollection;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\RankedDto;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\RankedDtoCollection;
-use Thehouseofel\Kalion\Tests\TestCase;
+use PHPUnit\Framework\TestCase;
 use TypeError;
 
 class CollectionItemCallbacksTest extends TestCase

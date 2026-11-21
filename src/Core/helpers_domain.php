@@ -7,6 +7,10 @@ use Thehouseofel\Kalion\Core\Domain\Exceptions\Contracts\KalionExceptionInterfac
 use Thehouseofel\Kalion\Core\Domain\KalionKernel;
 use Thehouseofel\Kalion\Core\Domain\Objects\Collections\CollectionAny;
 
+if (! defined('KALION_ENUM_NULL_VALUE')) {
+    define('KALION_ENUM_NULL_VALUE', 'k_null');
+}
+
 if (! function_exists('kalion')) {
     /**
      * Returns the full `Kalion` instance with Laravel, or a `KalionKernel` (config, trans and env) without it.
