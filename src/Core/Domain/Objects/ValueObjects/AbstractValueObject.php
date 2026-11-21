@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects;
 
 use JsonSerializable;
+use Stringable;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Support\Str;
 
 /**
  * @template T of AbstractValueObject
  */
-abstract class AbstractValueObject implements JsonSerializable
+abstract class AbstractValueObject implements JsonSerializable, Stringable
 {
     protected const CLASS_REQUIRED = null;
     protected const CLASS_NULLABLE = null;

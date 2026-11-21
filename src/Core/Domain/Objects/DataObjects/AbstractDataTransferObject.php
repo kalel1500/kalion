@@ -6,6 +6,7 @@ namespace Thehouseofel\Kalion\Core\Domain\Objects\DataObjects;
 
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
+use Stringable;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayConvertible;
 use Thehouseofel\Kalion\Core\Domain\Contracts\ArrayResolvable;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\Contracts\MakeArrayable;
@@ -14,7 +15,7 @@ use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionResolvable;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\ArrayVo;
 
-abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayResolvable, MakeArrayable, Jsonable, JsonSerializable
+abstract class AbstractDataTransferObject implements ArrayConvertible, ArrayResolvable, MakeArrayable, Jsonable, JsonSerializable, Stringable
 {
     use ReflectionResolvable;
 
