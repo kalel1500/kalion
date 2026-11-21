@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts;
 
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
+use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractDateVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimeNullVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimeVo;
 
