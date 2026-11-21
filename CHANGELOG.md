@@ -1,6 +1,44 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.64.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.65.0-beta.0...master)
+
+## [v0.65.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.64.0-beta.0...v0.65.0-beta.0) - 2026-11-21
+
+### Added
+
+* Value Objects de fecha (`AbstractDateVo`):
+  * `serializationFormat()` y `serializationTimezone()` (estáticos): devuelven el formato y la zona horaria que usa `jsonSerialize()` según `kalion.dates.serialization_format` y `kalion.dates.serialize_to_local_tz`.
+  * `toDb()`: devuelve la fecha en su formato de almacenamiento (el primero de `static::$formats`) y en la zona horaria con la que `from()` la vuelve a leer (la de la aplicación, o `UTC` si el formato contiene `\Z`). No depende de la configuración de serialización. Por ejemplo, `TimestampVo` => `2026-03-29 04:30:00.000000` y `TimeVo` => `04:30:00`.
+* Nuevo caso `DateFormat::datetime_iso_offset` (`Y-m-d\TH:i:s.uP`): ISO-8601 con offset, que es el formato que usa `jsonSerialize()` cuando `kalion.dates.serialize_to_local_tz` es `true` y no hay `kalion.dates.serialization_format`.
+
+### Changed
+
+* (breaking) Configuraciones renombradas:
+  * `kalion.dates.json_format` => `kalion.dates.serialization_format` (env: `KALION_DATES_SERIALIZATION_FORMAT`, método: `dateJsonFormat()` => `dateSerializationFormat()`)
+  * `kalion.dates.json_local` => `kalion.dates.serialize_to_local_tz` (env: `KALION_DATES_SERIALIZE_TO_LOCAL_TZ`, método: `dateJsonLocal()` => `dateSerializeToLocalTz()`)
+  * El nombre anterior era engañoso, porque no solo afectan al JSON sino también a `toArray()` de las entidades, colecciones y DTO.
+* Value Objects de fecha (`AbstractDateVo`):
+  * `from()` sin `$formats` acepta, además de `static::$formats`, el formato de serialización (`serializationFormat()`) y lo interpreta en la zona horaria de serialización. Si se pasan `$formats`, solo se aceptan esos. El mensaje de error incluye todos los formatos permitidos.
+  * (breaking) Con un `serialization_format` personalizado y `serialize_to_local_tz` a `false`, `jsonSerialize()` formatea la fecha en la zona horaria de la aplicación (`app.timezone`) en lugar de en `UTC`, igual que los casts de fecha con formato de Eloquent (`datetime:Y-m-d H:i`). Los formatos con el designador Zulu (`\Z`) se formatean siempre en `UTC`. Sin formato personalizado no cambia nada (ISO-8601 en `UTC`), y con `app.timezone` en `UTC` (el valor recomendado) tampoco.
+* (breaking) `AbstractEntity::toArrayDb()` (y por tanto `toArrayDb()` de las colecciones de entidades y `toArrayWith()`/`toArrayWithout()` con `$fromArrayDb = true`) devuelve las fechas en su formato de almacenamiento (`AbstractDateVo::toDb()`) en lugar de en el de serialización. Así, lo que se guarda en la base de datos ya no depende de `kalion.dates.serialization_*`, y no se mandan a MySQL strings como `2026-03-29T02:30:00.000000Z`. `toArray()` sigue devolviendo el formato de serialización.
+
+### Fixed
+
+* Las entidades y los DTO con fechas ya se pueden reconstruir a partir de su propio array: `Entity::fromArray($entity->toArray())`. Antes fallaban con `InvalidValueException` si `kalion.dates.serialization_format` no era uno de los `$formats` del VO, y con la configuración por defecto en `DateVo` y `TimeVo`, cuyos `$formats` no incluyen el ISO-8601.
+
+### Migration notes
+
+* Renombra variables de entorno (`.env`):
+  * `KALION_DATES_JSON_FORMAT` => `KALION_DATES_SERIALIZATION_FORMAT`
+  * `KALION_DATES_JSON_LOCAL` => `KALION_DATES_SERIALIZE_TO_LOCAL_TZ`.
+* Si tienes publicado `config/kalion.php`, renombra también las keys:
+  * `dates.json_format` => `dates.serialization_format`
+  * `dates.json_local` => `dates.serialize_to_local_tz`
+* KalionConfigReader
+* En los tests, cambia las keys de `kalion()->config()->fake([...])` y las llamadas a `dateJsonFormat()`/`dateJsonLocal()`.
+* Si usas un `serialization_format` personalizado, `serialize_to_local_tz` a `false` y un `app.timezone` distinto de `UTC`, las fechas se serializan ahora en `app.timezone`. Para mantenerlas en `UTC`, añade `\Z` al formato (por ejemplo, `Y-m-d H:i:s\Z`) o pon `app.timezone` en `UTC`.
+* Si `serialize_to_local_tz` es `true` y `local_timezone` es distinto de `app.timezone`, usa un `kalion.dates.serialization_format` que no coincida con ninguno de los `$formats` de los VOs, o que incluya el offset (`P`). Si coincide, `from()` lo interpreta como formato de almacenamiento (en `app.timezone`) y no puede saber que estaba en la zona horaria local.
+* Si tratabas los strings ISO-8601 de `toArrayDb()` (por ejemplo, para convertirlos antes de guardarlos), ya no hace falta: ahora contiene el formato de almacenamiento de cada VO.
 
 ## [v0.64.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.63.0-beta.0...v0.64.0-beta.0) - 2026-11-21
 
