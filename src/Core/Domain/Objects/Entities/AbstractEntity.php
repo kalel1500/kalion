@@ -156,7 +156,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
 
     /**
      * Same as `props()`, but with the dates in their storage format (`AbstractDateVo::toDb()`)
-     * instead of the serialization one, so they do not depend on `kalion.dates.json_*`.
+     * instead of the serialization one, so they do not depend on `kalion.dates.serialization_*`.
      */
     private function propsDb(): array
     {

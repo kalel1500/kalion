@@ -27,8 +27,8 @@ use Throwable;
  *   whether a string is a valid date.
  * - `parse()` accepts any value understood by `CarbonImmutable::parse()`: use it with dates received from the front.
  * - `jsonSerialize()` (and therefore `toArray()` of entities, collections and DTOs) returns the serialization format
- *   (`kalion.dates.json_format` and `kalion.dates.json_local`) and `toDb()` (used by `toArrayDb()` of the entities)
- *   the storage format (the first of `static::$formats`).
+ *   (`kalion.dates.serialization_format` and `kalion.dates.serialize_to_local_tz`) and `toDb()` (used by `toArrayDb()`
+ *   of the entities) the storage format (the first of `static::$formats`).
  * - The methods of Carbon can be called directly on the VO (`$vo->toDateTimeString()`, `$vo->diffForHumans()`...).
  *   They return `null` when the value is `null`.
  *
@@ -220,27 +220,27 @@ abstract class AbstractDateVo extends AbstractValueObject
     }
 
     /**
-     * Format used by `jsonSerialize()`: `kalion.dates.json_format` or, if it is not configured, ISO-8601
+     * Format used by `jsonSerialize()`: `kalion.dates.serialization_format` or, if it is not configured, ISO-8601
      * like Carbon and Eloquent (`2026-03-29T02:30:00.000000Z`, or `2026-03-29T04:30:00.000000+02:00`
-     * if `kalion.dates.json_local` is `true`).
+     * if `kalion.dates.serialize_to_local_tz` is `true`).
      */
     public static function serializationFormat(): string
     {
         $config = kalion()->config();
 
-        return $config->dateJsonFormat() ?: ($config->dateJsonLocal()
+        return $config->dateSerializationFormat() ?: ($config->dateSerializeToLocalTz()
             ? DateFormat::datetime_iso_offset->value
             : DateFormat::datetime_eloquent->value);
     }
 
     /**
      * Timezone used by `jsonSerialize()`: `UTC` if the serialization format contains the Zulu designator (`\Z`),
-     * otherwise the local timezone (if `kalion.dates.json_local` is `true`) or the application timezone,
+     * otherwise the local timezone (if `kalion.dates.serialize_to_local_tz` is `true`) or the application timezone,
      * like the custom formats of the Eloquent date casts.
      */
     public static function serializationTimezone(): string
     {
-        $default = kalion()->config()->dateJsonLocal() ? DateHelper::localTimezone() : null;
+        $default = kalion()->config()->dateSerializeToLocalTz() ? DateHelper::localTimezone() : null;
 
         return (string)DateHelper::timezoneForFormat(static::serializationFormat(), $default);
     }

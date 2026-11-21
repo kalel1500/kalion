@@ -19,8 +19,8 @@ use Thehouseofel\Kalion\Core\Domain\Concerns\InteractsWithContainer;
  * @method bool abilitiesEnabled()
  * @method int minimumValueForId()
  * @method string|null dateLocalTimezone()
- * @method string|null dateJsonFormat()
- * @method bool dateJsonLocal()
+ * @method string|null dateSerializationFormat()
+ * @method bool dateSerializeToLocalTz()
  * @method bool displayRoleInException()
  * @method bool displayPermissionInException()
  * @method bool exceptionsShowLogoutForm()
@@ -41,8 +41,8 @@ class KalionConfigReader
         'abilitiesEnabled'             => ['kalion.auth.abilities_enabled', true],
         'minimumValueForId'            => ['kalion.minimum_value_for_id', 1],
         'dateLocalTimezone'            => ['kalion.dates.local_timezone', null],
-        'dateJsonFormat'               => ['kalion.dates.json_format', null],
-        'dateJsonLocal'                => ['kalion.dates.json_local', false],
+        'dateSerializationFormat'      => ['kalion.dates.serialization_format', null],
+        'dateSerializeToLocalTz'       => ['kalion.dates.serialize_to_local_tz', false],
         'displayRoleInException'       => ['kalion.auth.display_role_in_exception', false],
         'displayPermissionInException' => ['kalion.auth.display_permission_in_exception', false],
         'exceptionsShowLogoutForm'     => ['kalion.exceptions.http.show_logout_form', false],
