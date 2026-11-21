@@ -1,6 +1,47 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.63.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.64.0-beta.0...master)
+
+## [v0.64.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.63.0-beta.0...v0.64.0-beta.0) - 2026-11-21
+
+### Added
+
+* **El dominio ya se puede usar sin levantar Laravel:** las clases del dominio de `Core` (Value Objects, entidades, DTOs, excepciones, `Random`...) ya no llaman a `config()`, `__()` ni `app()`, por lo que se pueden usar en tests unitarios de PHPUnit puro.
+  * Nueva clase `Thehouseofel\Kalion\Core\Domain\KalionKernel`: es la parte del helper `kalion()` que no depende del framework, y la clase `Kalion` extiende de ella. Contiene:
+    * `config()`: devuelve el nuevo `KalionConfigReader`.
+    * `trans($key, $replace = [], $locale = null)`: usa el `translator` de Laravel si está disponible. Si no, devuelve la key con los reemplazos aplicados (`:name`, `:Name` y `:NAME`).
+    * `env()`, `isProd()`, `isLocal()`, `isPre()`, `isTesting()` (antes estaban en `Kalion`) y el nuevo `isDebug()`.
+    * `KalionKernel::flushState()`: olvida la instancia que se usa sin Laravel (y los valores de `fake()`). Pensado para el `tearDown()` de los tests.
+  * Nueva clase `Thehouseofel\Kalion\Core\Domain\Support\KalionConfigReader` (sustituye a `Utilities\Internal\Config`):
+    * Lee la configuración de Laravel si el contenedor está disponible. Si no, devuelve los valores por defecto del paquete (y los de Laravel para `app.env` => `production` y `app.debug` => `false`).
+    * Métodos tipados (el valor se castea al tipo del valor por defecto): `appEnv()`, `appDebug()`, `authEnabled()`, `abilitiesEnabled()`, `minimumValueForId()`, `displayRoleInException()`, `displayPermissionInException()`, `exceptionsShowLogoutForm()` y `entityCalculatedPropsMode()`.
+    * `get(string $key, mixed $default = null)`: lee cualquier key de la configuración.
+    * `fake(array $values)` y `reset()`: sobrescriben keys de la configuración en los tests, con o sin Laravel (ej: `kalion()->config()->fake(['kalion.minimum_value_for_id' => 0])`).
+  * Tests para `KalionKernel` y `KalionConfigReader`, con y sin Laravel. También comprueban que los valores por defecto de `KalionConfigReader` coincidan con los de `KalionConfigManager`.
+
+### Changed
+
+* **El dominio ya se puede usar sin levantar Laravel:**
+  * (breaking) El helper `kalion()` declara ahora el tipo de retorno `KalionKernel` (antes `Kalion`). Con Laravel sigue devolviendo una instancia de `Kalion` (el docblock `@return Kalion` mantiene el autocompletado). Sin Laravel devuelve un `KalionKernel`, y llamar a un método que necesita Laravel (`renderCss()`, `layout()`...) lanza un `BadMethodCallException` con un mensaje descriptivo.
+  * (breaking) Se ha eliminado la clase interna `Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\Config`. `kalion()->config()` devuelve ahora un `Thehouseofel\Kalion\Core\Domain\Support\KalionConfigReader`.
+  * `Kalion` se registra en el contenedor como `scoped` (con el alias `KalionKernel`), por lo que `kalion()` devuelve la misma instancia durante todo el ciclo de vida de la petición. Antes se creaba una instancia nueva en cada llamada. Al ser `scoped`, no se comparte estado entre peticiones de Octane.
+  * `kalion()->env()` ya no se cachea. Ahora refleja siempre el valor actual de `app.env`.
+  * El helper `kalion()` se ha movido de `helpers_infrastructure.php` a `helpers_domain.php`, porque ahora lo usa el dominio.
+  * (breaking) Se ha eliminado el helper global `debug_enabled()`. Usa `kalion()->isDebug()`, que lee `app.debug` y funciona también sin Laravel.
+  * Los tests unitarios ahora extienden de `PHPUnit\Framework\TestCase` y no levantan Laravel.
+* (breaking) `DateHelper` se ha movido de `Thehouseofel\Kalion\Core\Infrastructure\Utilities\Date\DateHelper` a `Thehouseofel\Kalion\Core\Domain\Support\DateHelper`, porque no depende de la infraestructura y lo usa el dominio (`AbstractDateVo`).
+* (breaking) `AbstractDateVo` se ha movido de `Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts` a `Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base`, porque ahora extiende directamente de `AbstractValueObject`.
+* Ahora las clases `AbstractValueObject` y `AbstractDataTransferObject` implementan `Stringable` ya que tenían definido el método `__toString()`.
+* Ahora el método `__toString` del `AbstractValueObject` llama al `jsonSerialize`.
+
+### Migration notes
+
+* Si importabas `Thehouseofel\Kalion\Core\Infrastructure\Utilities\Internal\Config` (por ejemplo, como type-hint del resultado de `kalion()->config()`), cámbialo por `Thehouseofel\Kalion\Core\Domain\Support\KalionConfigReader`.
+* Si tipabas el resultado de `kalion()` como `Kalion` en código que se puede ejecutar sin Laravel, tipalo como `KalionKernel`.
+* Cambia las llamadas a `debug_enabled()` por `kalion()->isDebug()`.
+* Cambia el `use` de `Thehouseofel\Kalion\Core\Infrastructure\Utilities\Date\DateHelper` por `Thehouseofel\Kalion\Core\Domain\Support\DateHelper`.
+* Cambia el `use` de `Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts` por `Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base`.
+* **Tests unitarios sin Laravel:** ya no hace falta crear un contenedor falso (con `translator` o `hasDebugModeEnabled()`) para usar el dominio. Para cambiar la configuración, usa `kalion()->config()->fake([...])` (ej: `['app.debug' => true]`) y llama a `KalionKernel::flushState()` en el `tearDown()`.
 
 ## [v0.63.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.62.0-beta.0...v0.63.0-beta.0) - 2026-11-20
 
