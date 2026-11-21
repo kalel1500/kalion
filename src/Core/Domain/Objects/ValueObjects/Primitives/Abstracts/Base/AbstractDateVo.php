@@ -220,6 +220,11 @@ abstract class AbstractDateVo extends AbstractValueObject
         return $date->format($format);
     }
 
+    public function __get($name): mixed
+    {
+        return $this->value?->{$name};
+    }
+
     /**
      * Forwards the call to the `CarbonImmutable` value (returns `null` if the value is `null`).
      */
