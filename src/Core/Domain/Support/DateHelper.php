@@ -146,7 +146,7 @@ class DateHelper
      */
     public static function localTimezone(): string
     {
-        return config('kalion.dates.local_timezone') ?: date_default_timezone_get();
+        return kalion()->config()->dateLocalTimezone() ?: date_default_timezone_get();
     }
 
     /**

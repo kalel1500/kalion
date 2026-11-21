@@ -36,6 +36,7 @@ class DateVoTest extends TestCase
 
     protected function tearDown(): void
     {
+        kalion()->config()->reset();
         date_default_timezone_set($this->originalTimezone);
         parent::tearDown();
     }
@@ -273,7 +274,7 @@ class DateVoTest extends TestCase
     public function test_local_uses_the_configured_local_timezone(): void
     {
         date_default_timezone_set('UTC');
-        config(['kalion.dates.local_timezone' => 'Europe/Madrid']);
+        kalion()->config()->fake(['kalion.dates.local_timezone' => 'Europe/Madrid']);
 
         $vo = TimestampVo::from('2026-03-29 02:30:00.000000');
 
@@ -287,7 +288,7 @@ class DateVoTest extends TestCase
 
     public function test_local_defaults_to_the_application_timezone(): void
     {
-        config(['kalion.dates.local_timezone' => null]);
+        kalion()->config()->fake(['kalion.dates.local_timezone' => null]);
 
         $local = TimestampVo::from(self::ELOQUENT)->tz('UTC')->local();
 
@@ -369,7 +370,7 @@ class DateVoTest extends TestCase
 
     public function test_serialization_with_custom_format_uses_utc_by_default(): void
     {
-        config(['kalion.dates.json_format' => 'Y-m-d H:i:s']);
+        kalion()->config()->fake(['kalion.dates.json_format' => 'Y-m-d H:i:s']);
 
         $vo = TimestampVo::from(self::LOCAL);
 
@@ -380,17 +381,17 @@ class DateVoTest extends TestCase
 
     public function test_serialization_local_without_format_returns_iso_with_offset(): void
     {
-        config(['kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'Europe/Madrid']);
+        kalion()->config()->fake(['kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'Europe/Madrid']);
 
         $this->assertSame('2026-03-29T04:30:00.000000+02:00', TimestampVo::from(self::ELOQUENT)->jsonSerialize());
     }
 
     public function test_serialization_local_with_custom_format(): void
     {
-        config([
-            'kalion.dates.json_local'    => true,
+        kalion()->config()->fake([
+            'kalion.dates.json_local'     => true,
             'kalion.dates.local_timezone' => 'Europe/Madrid',
-            'kalion.dates.json_format'   => 'd/m/Y H:i:s',
+            'kalion.dates.json_format'    => 'd/m/Y H:i:s',
         ]);
 
         $this->assertSame('29/03/2026 04:30:00', TimestampVo::from(self::ELOQUENT)->jsonSerialize());
@@ -398,14 +399,14 @@ class DateVoTest extends TestCase
 
     public function test_serialization_local_defaults_to_the_application_timezone(): void
     {
-        config(['kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => null, 'kalion.dates.json_format' => 'H:i']);
+        kalion()->config()->fake(['kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => null, 'kalion.dates.json_format' => 'H:i']);
 
         $this->assertSame('04:30', TimestampVo::from(self::ELOQUENT)->jsonSerialize());
     }
 
     public function test_serialization_does_not_depend_on_the_timezone_of_the_vo(): void
     {
-        config(['kalion.dates.json_format' => 'H:i']);
+        kalion()->config()->fake(['kalion.dates.json_format' => 'H:i']);
 
         $this->assertSame('02:30', TimestampVo::from(self::ELOQUENT, tz: 'Asia/Tokyo')->jsonSerialize());
     }
@@ -435,7 +436,7 @@ class DateVoTest extends TestCase
         $this->assertTrue(PostEntity::fromArray($array)->created_at->eq($post->created_at->value));
 
         // The serialization config is also applied to toArray()
-        config(['kalion.dates.json_format' => 'd/m/Y H:i', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'Europe/Madrid']);
+        kalion()->config()->fake(['kalion.dates.json_format' => 'd/m/Y H:i', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'Europe/Madrid']);
         $this->assertSame('29/03/2026 04:30', $post->toArray()['created_at']);
 
         // resolveFromArray() uses parse()

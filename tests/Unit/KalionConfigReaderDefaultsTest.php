@@ -47,6 +47,12 @@ class KalionConfigReaderDefaultsTest extends TestCase
         $types = ['integer' => 'int', 'boolean' => 'bool', 'string' => 'string', 'double' => 'float', 'array' => 'array'];
 
         foreach (self::readerDefaults() as $method => [, $default]) {
+            // A null default does not reveal the type (e.g. "string|null"): only the annotation is required
+            if ($default === null) {
+                $this->assertMatchesRegularExpression("/@method\s+\S+\s+$method\(\)/", $docComment, "Missing \"@method <type> $method()\" annotation in KalionConfigReader.");
+                continue;
+            }
+
             $type = $types[gettype($default)] ?? 'mixed';
 
             $this->assertStringContainsString("@method $type $method()", $docComment, "Missing or wrong \"@method $type $method()\" annotation in KalionConfigReader.");

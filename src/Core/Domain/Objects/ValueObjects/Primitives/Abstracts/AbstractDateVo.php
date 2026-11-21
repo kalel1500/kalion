@@ -213,9 +213,9 @@ abstract class AbstractDateVo extends AbstractValueObject
             return null;
         }
 
-        $local  = (bool)config('kalion.dates.json_local');
+        $local  = kalion()->config()->dateJsonLocal();
         $date   = $this->value->tz($local ? DateHelper::localTimezone() : 'UTC');
-        $format = config('kalion.dates.json_format') ?: ($local ? 'Y-m-d\TH:i:s.uP' : 'Y-m-d\TH:i:s.u\Z');
+        $format = kalion()->config()->dateJsonFormat() ?: ($local ? 'Y-m-d\TH:i:s.uP' : 'Y-m-d\TH:i:s.u\Z');
 
         return $date->format($format);
     }
