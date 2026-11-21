@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use DateTimeImmutable;
 use DateTimeZone;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Thehouseofel\Kalion\Core\Domain\Exceptions\InvalidValueException;
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\SnapshotDiff;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Parameters\DateFormat;
@@ -18,6 +19,8 @@ use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimestampNul
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimestampVo;
 use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\TimeVo;
 use Thehouseofel\Kalion\Tests\Support\Contexts\Blog\Domain\Objects\Entities\PostEntity;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\DataObjects\ScheduleDto;
+use Thehouseofel\Kalion\Tests\Support\Contexts\Shared\Domain\Objects\Entities\ScheduleEntity;
 use PHPUnit\Framework\TestCase;
 
 class DateVoTest extends TestCase
@@ -364,19 +367,26 @@ class DateVoTest extends TestCase
 
         $this->assertSame(self::ELOQUENT, $vo->jsonSerialize());
         $this->assertSame('"' . self::ELOQUENT . '"', json_encode($vo));
-        $this->assertSame('2026-03-29 04:30:00', (string)$vo);
+        $this->assertSame(self::ELOQUENT, (string)$vo);
         $this->assertNull(TimestampNullVo::from(null)->jsonSerialize());
     }
 
-    public function test_serialization_with_custom_format_uses_utc_by_default(): void
+    public function test_serialization_with_custom_format_uses_the_application_timezone(): void
     {
         kalion()->config()->fake(['kalion.dates.json_format' => 'Y-m-d H:i:s']);
 
-        $vo = TimestampVo::from(self::LOCAL);
+        $vo = TimestampVo::from(self::ELOQUENT);
 
-        $this->assertSame('2026-03-29 02:30:00', $vo->jsonSerialize());
-        $this->assertSame('"2026-03-29 02:30:00"', json_encode($vo));
+        $this->assertSame('2026-03-29 04:30:00', $vo->jsonSerialize());
+        $this->assertSame('"2026-03-29 04:30:00"', json_encode($vo));
         $this->assertNull(TimestampNullVo::from(null)->jsonSerialize());
+    }
+
+    public function test_serialization_with_custom_format_with_zulu_designator_uses_utc(): void
+    {
+        kalion()->config()->fake(['kalion.dates.json_format' => 'Y-m-d H:i:s\Z', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'Europe/Madrid']);
+
+        $this->assertSame('2026-03-29 02:30:00Z', TimestampVo::from(self::LOCAL)->jsonSerialize());
     }
 
     public function test_serialization_local_without_format_returns_iso_with_offset(): void
@@ -408,7 +418,83 @@ class DateVoTest extends TestCase
     {
         kalion()->config()->fake(['kalion.dates.json_format' => 'H:i']);
 
-        $this->assertSame('02:30', TimestampVo::from(self::ELOQUENT, tz: 'Asia/Tokyo')->jsonSerialize());
+        $this->assertSame('04:30', TimestampVo::from(self::ELOQUENT, tz: 'Asia/Tokyo')->jsonSerialize());
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------
+    // Round trip (from() always accepts the serialization format)
+    // ---------------------------------------------------------------------------------------------------------------
+
+    public static function roundTripProvider(): array
+    {
+        $configs = [
+            'default'                 => [],
+            'local without format'    => ['kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'America/New_York'],
+            'custom format'           => ['kalion.dates.json_format' => 'd/m/Y H:i:s'],
+            'custom format local'     => ['kalion.dates.json_format' => 'd/m/Y H:i:s', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'America/New_York'],
+            'custom format with Zulu' => ['kalion.dates.json_format' => 'Y-m-d H:i:s\Z', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'America/New_York'],
+            'storage format'          => ['kalion.dates.json_format' => 'Y-m-d H:i:s'],
+        ];
+
+        $classes = [DateVo::class, DateNullVo::class, TimestampVo::class, TimestampNullVo::class, TimeVo::class, TimeNullVo::class];
+
+        $cases = [];
+        foreach ($configs as $configName => $config) {
+            foreach ($classes as $class) {
+                $cases[class_basename($class) . ' - ' . $configName] = [$class, $config];
+            }
+        }
+        return $cases;
+    }
+
+    #[DataProvider('roundTripProvider')]
+    public function test_from_accepts_its_own_serialization(string $class, array $config): void
+    {
+        kalion()->config()->fake($config);
+
+        $vo         = new $class(new DateTimeImmutable(self::ELOQUENT));
+        $serialized = $vo->jsonSerialize();
+        $rebuilt    = $class::from($serialized);
+
+        $this->assertTrue($rebuilt->eq($vo->value), "$serialized => " . $rebuilt->value?->toIso8601String());
+        $this->assertSame('Europe/Madrid', $rebuilt->getTimezone()->getName());
+    }
+
+    public function test_from_with_explicit_formats_does_not_accept_the_serialization_format(): void
+    {
+        $this->expectException(InvalidValueException::class);
+
+        DateVo::from(self::ELOQUENT, [DateFormat::datetime_YMD->value]);
+    }
+
+    public function test_from_error_lists_the_serialization_format(): void
+    {
+        kalion()->config()->fake(['kalion.dates.json_format' => 'd/m/Y H:i:s']);
+
+        $this->expectException(InvalidValueException::class);
+        $this->expectExceptionMessage('Needle formats: <Y-m-d H:i:s.u, Y-m-d\TH:i:s.u\Z, d/m/Y H:i:s>');
+
+        TimestampVo::from('29-03-2026');
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------
+    // Storage
+    // ---------------------------------------------------------------------------------------------------------------
+
+    public function test_to_db_uses_the_storage_format_and_ignores_the_serialization_config(): void
+    {
+        kalion()->config()->fake(['kalion.dates.json_format' => 'd/m/Y H:i', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'America/New_York']);
+
+        $date = new DateTimeImmutable(self::ELOQUENT);
+
+        $this->assertSame(self::LOCAL, TimestampVo::from($date, tz: 'Asia/Tokyo')->toDb());
+        $this->assertSame('2026-03-29 04:30:00', DateVo::from($date)->toDb());
+        $this->assertSame('04:30:00', TimeVo::from($date)->toDb());
+        $this->assertNull(TimestampNullVo::from(null)->toDb());
+
+        // The storage format is read back by from()
+        $this->assertTrue(TimestampVo::from(TimestampVo::from($date)->toDb())->eq($date));
+        $this->assertTrue(DateVo::from(DateVo::from($date)->toDb())->eq($date));
     }
 
     // ---------------------------------------------------------------------------------------------------------------
@@ -435,13 +521,66 @@ class DateVoTest extends TestCase
         $this->assertSame(self::ELOQUENT, json_decode(json_encode($post), true)['created_at']);
         $this->assertTrue(PostEntity::fromArray($array)->created_at->eq($post->created_at->value));
 
-        // The serialization config is also applied to toArray()
-        kalion()->config()->fake(['kalion.dates.json_format' => 'd/m/Y H:i', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'Europe/Madrid']);
-        $this->assertSame('29/03/2026 04:30', $post->toArray()['created_at']);
+        // The serialization config is also applied to toArray(), and the entity can still be rebuilt from it
+        kalion()->config()->fake(['kalion.dates.json_format' => 'd/m/Y H:i', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'America/New_York']);
+        $array = $post->toArray();
+        $this->assertSame('28/03/2026 22:30', $array['created_at']);
+        $this->assertTrue(PostEntity::fromArray($array)->created_at->eq($post->created_at->value));
 
         // resolveFromArray() uses parse()
         $resolved = PostEntity::resolveFromArray(array_merge($data, ['created_at' => '2026-03-29T04:30:00+02:00']));
         $this->assertTrue($resolved->created_at->eq($post->created_at->value));
+    }
+
+    public function test_entity_to_array_db_uses_the_storage_format_and_both_arrays_rebuild_the_entity(): void
+    {
+        kalion()->config()->fake(['kalion.dates.json_format' => 'd/m/Y H:i:s', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'America/New_York']);
+
+        $entity = ScheduleEntity::fromArray([
+            'id'        => 1,
+            'starts_at' => self::ELOQUENT,
+            'ends_on'   => null,
+            'opens_at'  => '04:30:00',
+        ]);
+
+        $this->assertSame([
+            'id'        => 1,
+            'starts_at' => '28/03/2026 22:30:00',
+            'ends_on'   => null,
+            'opens_at'  => $entity->opens_at->tz('America/New_York')->format('d/m/Y H:i:s'),
+        ], $entity->toArray());
+
+        $this->assertSame([
+            'id'        => 1,
+            'starts_at' => self::LOCAL,
+            'ends_on'   => null,
+            'opens_at'  => '04:30:00',
+        ], $entity->toArrayDb(true));
+
+        foreach ([$entity->toArray(), $entity->toArrayDb(true)] as $array) {
+            $rebuilt = ScheduleEntity::fromArray($array);
+            $this->assertTrue($rebuilt->starts_at->eq($entity->starts_at->value));
+            $this->assertTrue($rebuilt->opens_at->eq($entity->opens_at->value));
+            $this->assertNull($rebuilt->ends_on->value);
+        }
+    }
+
+    public function test_dto_can_be_rebuilt_from_its_own_array(): void
+    {
+        kalion()->config()->fake(['kalion.dates.json_format' => 'd/m/Y H:i:s', 'kalion.dates.json_local' => true, 'kalion.dates.local_timezone' => 'America/New_York']);
+
+        $dto = ScheduleDto::fromArray([
+            'starts_at' => self::ELOQUENT,
+            'ends_on'   => '2026-03-30 10:00:00',
+            'opens_at'  => '04:30:00',
+        ]);
+
+        foreach ([$dto->toArray(), $dto->toMakeArray(), json_decode($dto->toJson(), true)] as $array) {
+            $rebuilt = ScheduleDto::fromArray($array);
+            $this->assertTrue($rebuilt->starts_at->eq($dto->starts_at->value));
+            $this->assertTrue($rebuilt->ends_on->eq($dto->ends_on->value));
+            $this->assertTrue($rebuilt->opens_at->eq($dto->opens_at->value));
+        }
     }
 
     public function test_snapshot_diff_compares_dates_as_instants(): void

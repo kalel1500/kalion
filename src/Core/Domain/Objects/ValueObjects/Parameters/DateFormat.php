@@ -31,6 +31,7 @@ enum DateFormat: string implements ArrayableEnum
     // Datetime especiales
     case datetime_micro           = 'Y-m-d H:i:s.u';
     case datetime_eloquent        = 'Y-m-d\TH:i:s.u\Z';
+    case datetime_iso_offset      = 'Y-m-d\TH:i:s.uP';
 
     // HTML datetime-local
     case html_datetime            = 'Y-m-d\TH:i:s';

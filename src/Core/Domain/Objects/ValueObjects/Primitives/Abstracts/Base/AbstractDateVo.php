@@ -22,9 +22,13 @@ use Throwable;
  *   (`$tz`) or, by default, in the application timezone (`date_default_timezone_get()`), regardless of the origin
  *   of the data (for example, `2026-03-29T02:30:00.000000Z` and `2026-03-29 04:30:00.000000` are the same date
  *   with `Europe/Madrid`).
- * - `from()` validates that the string matches one of the allowed formats (`static::$formats`): use it to read
- *   from the database or to check whether a string is a valid date.
+ * - `from()` validates that the string matches one of the allowed formats (`static::$formats`) or the format produced
+ *   by `jsonSerialize()`: use it to read from the database, to rebuild an object from its own `toArray()` or to check
+ *   whether a string is a valid date.
  * - `parse()` accepts any value understood by `CarbonImmutable::parse()`: use it with dates received from the front.
+ * - `jsonSerialize()` (and therefore `toArray()` of entities, collections and DTOs) returns the serialization format
+ *   (`kalion.dates.json_format` and `kalion.dates.json_local`) and `toDb()` (used by `toArrayDb()` of the entities)
+ *   the storage format (the first of `static::$formats`).
  * - The methods of Carbon can be called directly on the VO (`$vo->toDateTimeString()`, `$vo->diffForHumans()`...).
  *   They return `null` when the value is `null`.
  *
@@ -36,7 +40,7 @@ abstract class AbstractDateVo extends AbstractValueObject
     protected const CLASS_NULLABLE = DateNullVo::class;
 
     /**
-     * Formats allowed by `from()`.
+     * Formats allowed by `from()`. The first one is the storage format (`toDb()`).
      */
     protected static array $formats = [DateFormat::datetime_YMD->value];
 
@@ -58,11 +62,14 @@ abstract class AbstractDateVo extends AbstractValueObject
     /**
      * Creates the VO validating that the string matches one of the allowed formats.
      *
-     * Strings without timezone information are interpreted in `$tz` (default: application timezone),
-     * and strings with the Zulu designator (`\Z`) in `UTC`.
+     * By default, the allowed formats are `static::$formats` and the serialization format (`serializationFormat()`),
+     * so an object can always be rebuilt from its own `toArray()`/`jsonSerialize()`. Strings matching
+     * `static::$formats` without timezone information are interpreted in `$tz` (default: application timezone),
+     * strings matching the serialization format in the serialization timezone, and strings with the Zulu
+     * designator (`\Z`) in `UTC`.
      *
      * @param string|DateTimeInterface|null $value
-     * @param string[]|null                 $formats Allowed formats (default: `static::$formats`)
+     * @param string[]|null                 $formats Allowed formats (default: `static::$formats` and the serialization format)
      * @param DateTimeZone|string|null      $tz      Timezone of the VO (default: application timezone)
      * @throws InvalidValueException if the value is not a string matching one of the allowed formats
      */
@@ -72,15 +79,26 @@ abstract class AbstractDateVo extends AbstractValueObject
             return new static($value, $tz);
         }
 
-        $formats = $formats ?? static::$formats;
-        $format  = is_string($value) ? DateHelper::firstMatchingFormat($value, $formats) : null;
+        $allowed = $formats ?? static::$formats;
+        $format  = is_string($value) ? DateHelper::firstMatchingFormat($value, $allowed) : null;
+        $parseTz = $tz;
+
+        if (is_null($formats)) {
+            $serializationFormat = static::serializationFormat();
+            $allowed             = array_values(array_unique([...$allowed, $serializationFormat]));
+
+            if (is_null($format) && is_string($value) && DateHelper::matchesFormat($value, $serializationFormat)) {
+                $format  = $serializationFormat;
+                $parseTz = static::serializationTimezone();
+            }
+        }
 
         if (is_null($format)) {
             $printable = is_scalar($value) ? (string)$value : get_debug_type($value);
-            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $printable, implode(', ', $formats)));
+            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $printable, implode(', ', $allowed)));
         }
 
-        return new static(DateHelper::createFromFormat($format, $value, $tz), $tz);
+        return new static(DateHelper::createFromFormat($format, $value, $parseTz), $tz);
     }
 
     /**
@@ -202,22 +220,50 @@ abstract class AbstractDateVo extends AbstractValueObject
     }
 
     /**
-     * By default, same serialization as Carbon and Eloquent: ISO-8601 in UTC (`2026-03-29T02:30:00.000000Z`).
-     *
-     * It can be configured with `kalion.dates.json_format` (custom format) and `kalion.dates.json_local`
-     * (convert to the local timezone instead of `UTC`).
+     * Format used by `jsonSerialize()`: `kalion.dates.json_format` or, if it is not configured, ISO-8601
+     * like Carbon and Eloquent (`2026-03-29T02:30:00.000000Z`, or `2026-03-29T04:30:00.000000+02:00`
+     * if `kalion.dates.json_local` is `true`).
+     */
+    public static function serializationFormat(): string
+    {
+        $config = kalion()->config();
+
+        return $config->dateJsonFormat() ?: ($config->dateJsonLocal()
+            ? DateFormat::datetime_iso_offset->value
+            : DateFormat::datetime_eloquent->value);
+    }
+
+    /**
+     * Timezone used by `jsonSerialize()`: `UTC` if the serialization format contains the Zulu designator (`\Z`),
+     * otherwise the local timezone (if `kalion.dates.json_local` is `true`) or the application timezone,
+     * like the custom formats of the Eloquent date casts.
+     */
+    public static function serializationTimezone(): string
+    {
+        $default = kalion()->config()->dateJsonLocal() ? DateHelper::localTimezone() : null;
+
+        return (string)DateHelper::timezoneForFormat(static::serializationFormat(), $default);
+    }
+
+    /**
+     * Serialization of the date (`serializationFormat()` in `serializationTimezone()`).
+     * `from()` always accepts it, so an object can be rebuilt from its own `toArray()`.
      */
     public function jsonSerialize(): mixed
     {
-        if (is_null($this->value)) {
-            return null;
-        }
+        return $this->value?->tz(static::serializationTimezone())->format(static::serializationFormat());
+    }
 
-        $local  = kalion()->config()->dateJsonLocal();
-        $date   = $this->value->tz($local ? DateHelper::localTimezone() : 'UTC');
-        $format = kalion()->config()->dateJsonFormat() ?: ($local ? 'Y-m-d\TH:i:s.uP' : 'Y-m-d\TH:i:s.u\Z');
+    /**
+     * Storage representation of the date: the first format of `static::$formats` in the timezone that `from()`
+     * uses to read it back (the application timezone or `UTC` if the format contains `\Z`).
+     * It does not depend on the serialization config.
+     */
+    public function toDb(): ?string
+    {
+        $format = static::$formats[0];
 
-        return $date->format($format);
+        return $this->value?->tz(DateHelper::timezoneForFormat($format))->format($format);
     }
 
     public function __get($name): mixed
