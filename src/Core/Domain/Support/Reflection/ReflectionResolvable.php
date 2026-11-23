@@ -420,6 +420,23 @@ trait ReflectionResolvable
     }
 
     /**
+     * Same as `props()`, but with the dates in their storage format (`AbstractDateVo::toDb()`) instead of the
+     * serialization one, so the result does not depend on `kalion.dates.serialization_*` and can be read back
+     * with the strict `fromArray()` (`AbstractDateVo::from()`).
+     */
+    protected function storageProps(): array
+    {
+        $props = $this->props();
+        foreach ($props as $key => $value) {
+            $property = property_exists($this, (string)$key) ? ($this->{$key} ?? null) : null;
+            if ($property instanceof AbstractDateVo) {
+                $props[$key] = $property->toDb();
+            }
+        }
+        return $props;
+    }
+
+    /**
      * Métodos públicos con el atributo #[Computed] (cacheados por clase).
      *
      * @return ComputedMetadata[]

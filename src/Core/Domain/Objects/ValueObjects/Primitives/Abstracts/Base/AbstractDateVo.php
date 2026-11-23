@@ -22,13 +22,14 @@ use Throwable;
  *   (`$tz`) or, by default, in the application timezone (`date_default_timezone_get()`), regardless of the origin
  *   of the data (for example, `2026-03-29T02:30:00.000000Z` and `2026-03-29 04:30:00.000000` are the same date
  *   with `Europe/Madrid`).
- * - `from()` validates that the string matches one of the allowed formats (`static::$formats`) or the format produced
- *   by `jsonSerialize()`: use it to read from the database, to rebuild an object from its own `toArray()` or to check
+ * - Storage representation (strict and independent of the config): `toDb()` (used by `toArrayDb()` of the entities
+ *   and `toMakeArray()` of the DTOs) returns the first of `static::$formats`, and `from()` (used by `fromArray()`)
+ *   only accepts `static::$formats` (plus the extra formats received). Use it to read from the database or to check
  *   whether a string is a valid date.
- * - `parse()` accepts any value understood by `CarbonImmutable::parse()`: use it with dates received from the front.
- * - `jsonSerialize()` (and therefore `toArray()` of entities, collections and DTOs) returns the serialization format
- *   (`kalion.dates.serialization_format` and `kalion.dates.serialize_to_local_tz`) and `toDb()` (used by `toArrayDb()`
- *   of the entities) the storage format (the first of `static::$formats`).
+ * - Serialization (configurable): `jsonSerialize()` (and therefore `toArray()` of entities, collections and DTOs)
+ *   returns `serializationFormat()`, and `parse()` (used by `resolveFromArray()`) accepts it, as well as any value
+ *   understood by `CarbonImmutable::parse()`. Use it with dates received from the front or to rebuild an object
+ *   from its own `toArray()`.
  * - The methods of Carbon can be called directly on the VO (`$vo->toDateTimeString()`, `$vo->diffForHumans()`...).
  *   They return `null` when the value is `null`.
  *
@@ -60,16 +61,14 @@ abstract class AbstractDateVo extends AbstractValueObject
     }
 
     /**
-     * Creates the VO validating that the string matches one of the allowed formats.
+     * Creates the VO validating that the string matches one of the allowed formats (`static::$formats`
+     * and the extra `$formats`). It does not depend on the serialization config.
      *
-     * By default, the allowed formats are `static::$formats` and the serialization format (`serializationFormat()`),
-     * so an object can always be rebuilt from its own `toArray()`/`jsonSerialize()`. Strings matching
-     * `static::$formats` without timezone information are interpreted in `$tz` (default: application timezone),
-     * strings matching the serialization format in the serialization timezone, and strings with the Zulu
-     * designator (`\Z`) in `UTC`.
+     * Strings without timezone information are interpreted in `$tz` (default: application timezone),
+     * and strings with the Zulu designator (`\Z`) in `UTC`.
      *
      * @param string|DateTimeInterface|null $value
-     * @param string[]|null                 $formats Allowed formats (default: `static::$formats` and the serialization format)
+     * @param string[]|null                 $formats Extra allowed formats (added to `static::$formats`)
      * @param DateTimeZone|string|null      $tz      Timezone of the VO (default: application timezone)
      * @throws InvalidValueException if the value is not a string matching one of the allowed formats
      */
@@ -79,32 +78,26 @@ abstract class AbstractDateVo extends AbstractValueObject
             return new static($value, $tz);
         }
 
-        $allowed = $formats ?? static::$formats;
+        $allowed = array_values(array_unique([...static::$formats, ...($formats ?? [])]));
         $format  = is_string($value) ? DateHelper::firstMatchingFormat($value, $allowed) : null;
-        $parseTz = $tz;
-
-        if (is_null($formats)) {
-            $serializationFormat = static::serializationFormat();
-            $allowed             = array_values(array_unique([...$allowed, $serializationFormat]));
-
-            if (is_null($format) && is_string($value) && DateHelper::matchesFormat($value, $serializationFormat)) {
-                $format  = $serializationFormat;
-                $parseTz = static::serializationTimezone();
-            }
-        }
 
         if (is_null($format)) {
             $printable = is_scalar($value) ? (string)$value : get_debug_type($value);
             throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $printable, implode(', ', $allowed)));
         }
 
-        return new static(DateHelper::createFromFormat($format, $value, $parseTz), $tz);
+        return new static(DateHelper::createFromFormat($format, $value, $tz), $tz);
     }
 
     /**
-     * Creates the VO from any value understood by `CarbonImmutable::parse()` (without format validation).
+     * Creates the VO from the serialization format (`serializationFormat()`) or, otherwise, from any value
+     * understood by `CarbonImmutable::parse()` (without format validation).
      *
-     * Strings without timezone information are interpreted in `$tz` (default: application timezone).
+     * The serialization format is checked first with its exact format, so an object can always be rebuilt from its
+     * own `toArray()`/`jsonSerialize()` and ambiguous formats such as `d/m/Y` are never interpreted as `m/d/Y`.
+     * Strings in the serialization format without timezone information are interpreted in `$tz` or, by default,
+     * in the serialization timezone (`serializationTimezone()`). The rest of strings without timezone information
+     * are interpreted in `$tz` (default: application timezone).
      *
      * @param string|DateTimeInterface|null $value
      * @param DateTimeZone|string|null      $tz Timezone of the VO (default: application timezone)
@@ -114,6 +107,11 @@ abstract class AbstractDateVo extends AbstractValueObject
     {
         if (is_null($value) || $value instanceof DateTimeInterface) {
             return new static($value, $tz);
+        }
+
+        $serializationFormat = static::serializationFormat();
+        if (is_string($value) && DateHelper::matchesFormat($value, $serializationFormat)) {
+            return new static(DateHelper::createFromFormat($serializationFormat, $value, $tz ?? static::serializationTimezone()), $tz);
         }
 
         try {
@@ -247,7 +245,7 @@ abstract class AbstractDateVo extends AbstractValueObject
 
     /**
      * Serialization of the date (`serializationFormat()` in `serializationTimezone()`).
-     * `from()` always accepts it, so an object can be rebuilt from its own `toArray()`.
+     * `parse()` always accepts it, so an object can be rebuilt from its own `toArray()` with `resolveFromArray()`.
      */
     public function jsonSerialize(): mixed
     {
@@ -257,7 +255,7 @@ abstract class AbstractDateVo extends AbstractValueObject
     /**
      * Storage representation of the date: the first format of `static::$formats` in the timezone that `from()`
      * uses to read it back (the application timezone or `UTC` if the format contains `\Z`).
-     * It does not depend on the serialization config.
+     * It does not depend on the serialization config, so an object can be rebuilt from it with `fromArray()`.
      */
     public function toDb(): ?string
     {

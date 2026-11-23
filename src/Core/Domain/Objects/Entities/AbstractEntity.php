@@ -17,7 +17,6 @@ use Thehouseofel\Kalion\Core\Domain\Objects\Collections\Abstracts\AbstractCollec
 use Thehouseofel\Kalion\Core\Domain\Objects\DataObjects\SnapshotDiff;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\Computed;
 use Thehouseofel\Kalion\Core\Domain\Objects\Entities\Attributes\RelationOf;
-use Thehouseofel\Kalion\Core\Domain\Objects\ValueObjects\Primitives\Abstracts\Base\AbstractDateVo;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ComputedMetadata;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\Dto\ReflectionConfig;
 use Thehouseofel\Kalion\Core\Domain\Support\Reflection\ReflectionResolvable;
@@ -143,7 +142,7 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
 
     public function toArrayDb($keepId = false): array
     {
-        $array = $this->propsDb();
+        $array = $this->storageProps();
         if (! is_null(static::$fillable)) {
             return Arr::only($array, static::$fillable);
         }
@@ -151,22 +150,6 @@ abstract class AbstractEntity implements ArrayConvertible, ArrayResolvable, Json
         unset($array['created_at']);
         unset($array['updated_at']);
         unset($array['deleted_at']);
-        return $array;
-    }
-
-    /**
-     * Same as `props()`, but with the dates in their storage format (`AbstractDateVo::toDb()`)
-     * instead of the serialization one, so they do not depend on `kalion.dates.serialization_*`.
-     */
-    private function propsDb(): array
-    {
-        $array = $this->props();
-        foreach ($array as $key => $value) {
-            $property = property_exists($this, (string)$key) ? ($this->{$key} ?? null) : null;
-            if ($property instanceof AbstractDateVo) {
-                $array[$key] = $property->toDb();
-            }
-        }
         return $array;
     }
 

@@ -121,12 +121,13 @@ return [
     |                           "2026-03-29T04:30:00.000000+02:00" if
     |                           "serialize_to_local_tz" is true).
     |
-    |                           "from()" always accepts this format, so an
-    |                           entity or DTO can be rebuilt from its own
-    |                           "toArray()" (formats without some fields, like
-    |                           "d/m/Y", lose them). It does not affect
-    |                           "toArrayDb()", which uses the storage format of
-    |                           each VO.
+    |                           "parse()" (and therefore "resolveFromArray()")
+    |                           always accepts this format, so an entity or DTO
+    |                           can be rebuilt from its own "toArray()" (formats
+    |                           without some fields, like "d/m/Y", lose them).
+    |                           It does not affect "from()"/"fromArray()" nor
+    |                           "toArrayDb()"/"toMakeArray()", which use the
+    |                           storage formats of each VO.
     |
     | - "serialize_to_local_tz": Whether "jsonSerialize()" converts the date to
     |                          the "local_timezone" (true) or not (false)
@@ -136,13 +137,6 @@ return [
     |                          Laravel's "app.timezone" (like the Eloquent date
     |                          casts). Formats with the Zulu designator ("\Z")
     |                          are always in UTC.
-    |
-    |                          If it is true and "local_timezone" is not
-    |                          "app.timezone", use a "serialization_format" that
-    |                          is not one of the storage formats of the VOs (or
-    |                          that includes the offset, "P"), otherwise
-    |                          "from()" can not know in which timezone it is
-    |                          expressed.
     |
     */
 
