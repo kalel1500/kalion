@@ -167,16 +167,18 @@ class DateVoTest extends TestCase
         $this->assertSame('2026-11-18 00:00:00', DateVo::from('2026-11-18', [DateFormat::date_YMD->value])->toDatetimeYMD());
     }
 
-    public function test_from_custom_formats_extend_the_default_formats(): void
+    public function test_from_custom_formats_replace_the_default_formats(): void
     {
-        $this->assertSame('2026-11-05 10:00:00', DateNullVo::from('2026-11-05 10:00:00', [DateFormat::datetime_DMY_slash->value])->toDatetimeYMD());
+        $this->expectException(InvalidValueException::class);
+        $this->expectExceptionMessage('Needle formats: <d/m/Y H:i:s>');
+
+        DateNullVo::from('2026-11-05 10:00:00', [DateFormat::datetime_DMY_slash->value]);
     }
 
     public function test_from_rejects_values_with_other_formats(): void
     {
         $this->expectException(InvalidValueException::class);
-        $this->expectExceptionMessage('Needle formats: <Y-m-d H:i:s, d/m/Y H:i:s>');
-        DateNullVo::from('2026-11-05', [DateFormat::datetime_DMY_slash->value]);
+        DateNullVo::from('2026-11-05 10:00:00', [DateFormat::datetime_DMY_slash->value]);
     }
 
     public function test_from_rejects_values_not_matching_the_default_formats(): void

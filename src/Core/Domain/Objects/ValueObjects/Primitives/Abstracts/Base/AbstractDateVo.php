@@ -24,7 +24,7 @@ use Throwable;
  *   with `Europe/Madrid`).
  * - Storage representation (strict and independent of the config): `toDb()` (used by `toArrayDb()` of the entities
  *   and `toMakeArray()` of the DTOs) returns the first of `static::$formats`, and `from()` (used by `fromArray()`)
- *   only accepts `static::$formats` (plus the extra formats received). Use it to read from the database or to check
+ *   only accepts `static::$formats` (or the `$formats` received). Use it to read from the database or to check
  *   whether a string is a valid date.
  * - Serialization (configurable): `jsonSerialize()` (and therefore `toArray()` of entities, collections and DTOs)
  *   returns `serializationFormat()`, and `parse()` (used by `resolveFromArray()`) accepts it, as well as any value
@@ -61,14 +61,14 @@ abstract class AbstractDateVo extends AbstractValueObject
     }
 
     /**
-     * Creates the VO validating that the string matches one of the allowed formats (`static::$formats`
-     * and the extra `$formats`). It does not depend on the serialization config.
+     * Creates the VO validating that the string matches one of the allowed formats (`$formats` or, by default,
+     * `static::$formats`). It does not depend on the serialization config.
      *
      * Strings without timezone information are interpreted in `$tz` (default: application timezone),
      * and strings with the Zulu designator (`\Z`) in `UTC`.
      *
      * @param string|DateTimeInterface|null $value
-     * @param string[]|null                 $formats Extra allowed formats (added to `static::$formats`)
+     * @param string[]|null                 $formats Allowed formats (default: `static::$formats`)
      * @param DateTimeZone|string|null      $tz      Timezone of the VO (default: application timezone)
      * @throws InvalidValueException if the value is not a string matching one of the allowed formats
      */
@@ -78,12 +78,12 @@ abstract class AbstractDateVo extends AbstractValueObject
             return new static($value, $tz);
         }
 
-        $allowed = array_values(array_unique([...static::$formats, ...($formats ?? [])]));
-        $format  = is_string($value) ? DateHelper::firstMatchingFormat($value, $allowed) : null;
+        $formats = $formats ?? static::$formats;
+        $format  = is_string($value) ? DateHelper::firstMatchingFormat($value, $formats) : null;
 
         if (is_null($format)) {
             $printable = is_scalar($value) ? (string)$value : get_debug_type($value);
-            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $printable, implode(', ', $allowed)));
+            throw new InvalidValueException(sprintf('<%s> does not allow this format value <%s>. Needle formats: <%s>', class_basename(static::class), $printable, implode(', ', $formats)));
         }
 
         return new static(DateHelper::createFromFormat($format, $value, $tz), $tz);
