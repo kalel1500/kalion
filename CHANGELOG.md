@@ -1,6 +1,51 @@
 # Release Notes
 
-## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.64.0-beta.0...master)
+## [Unreleased](https://github.com/kalel1500/kalion/compare/v0.65.0-beta.0...master)
+
+## [v0.65.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.64.0-beta.0...v0.65.0-beta.0) - 2026-11-23
+
+### Added
+
+* Value Objects de fecha (`AbstractDateVo`):
+  * `toDb()`: devuelve la fecha en su formato de almacenamiento (el primero de `static::$formats`) y en la zona horaria con la que `from()` la vuelve a leer (la de la aplicación, o `UTC` si el formato contiene `\Z`). No depende de la configuración de serialización. Por ejemplo, `TimestampVo` => `2026-03-29 04:30:00.000000` y `TimeVo` => `04:30:00`.
+  * `serializationFormat()` y `serializationTimezone()` (estáticos): devuelven el formato y la zona horaria que usa `jsonSerialize()` según `kalion.dates.serialization_format` y `kalion.dates.serialize_to_local_tz`.
+  * Se puede acceder a las propiedades de Carbon directamente sobre el VO gracias a `__get()` (`$post->date->year`, `$post->date->timestamp`...). Devuelven `null` si el valor es `null`.
+* Nuevo método protegido `storageProps()` en `ReflectionResolvable` (entidades y DTO): igual que `props()`, pero con las fechas en su formato de almacenamiento (`toDb()`). Es lo que usan `toArrayDb()` y `toMakeArray()`.
+* Nuevo caso `DateFormat::datetime_iso_offset` (`Y-m-d\TH:i:s.uP`): ISO-8601 con offset. Es el formato por defecto de `jsonSerialize()` cuando `kalion.dates.serialize_to_local_tz` es `true`.
+
+### Changed
+
+* (breaking) Configuraciones renombradas, porque no solo afectan al JSON sino también a `toArray()` de las entidades, colecciones y DTO:
+  * `kalion.dates.json_format` => `kalion.dates.serialization_format` (env: `KALION_DATES_SERIALIZATION_FORMAT`, método de `KalionConfigReader`: `dateJsonFormat()` => `dateSerializationFormat()`).
+  * `kalion.dates.json_local` => `kalion.dates.serialize_to_local_tz` (env: `KALION_DATES_SERIALIZE_TO_LOCAL_TZ`, método de `KalionConfigReader`: `dateJsonLocal()` => `dateSerializeToLocalTz()`).
+* Value Objects de fecha (`AbstractDateVo`): ahora se distinguen dos representaciones de una fecha, cada una con su forma de salida y de entrada:
+  * **Almacenamiento** (estricta, no depende de la configuración): sale por `toDb()`, `toArrayDb()` y `toMakeArray()` y entra por `from()`/`fromArray()` (sin cambios en `from()`: solo acepta `static::$formats` o los `$formats` recibidos).
+  * **Serialización** (configurable con `kalion.dates.serialization_*`): sale por `jsonSerialize()` y `toArray()` y entra por `parse()`/`resolveFromArray()`.
+  * `parse()` comprueba primero si el valor coincide exactamente con el formato de serialización (`serializationFormat()`) y, si coincide, lo interpreta con ese formato, en `$tz` o, por defecto, en la zona horaria de serialización (`serializationTimezone()`). Si no coincide, usa `CarbonImmutable::parse()` como antes. Así `parse()` siempre entiende lo que devuelve `jsonSerialize()`, y los formatos ambiguos como `d/m/Y` no se interpretan como `m/d/Y`.
+  * (breaking) `jsonSerialize()` con un `serialization_format` personalizado: si `serialize_to_local_tz` es `false`, formatea la fecha en la zona horaria de la aplicación (`app.timezone`) en lugar de en `UTC` (igual que los casts de fecha con formato de Eloquent, `datetime:Y-m-d H:i`), y los formatos con el designador Zulu (`\Z`) se formatean siempre en `UTC` (antes, con `serialize_to_local_tz` a `true`, se formateaban en la zona local con una `Z` literal). Sin formato personalizado no cambia nada, y con `app.timezone` en `UTC` (el valor recomendado) tampoco.
+* (breaking) `toArrayDb()` de las entidades (y por tanto `toArrayDb()` de las colecciones de entidades y `toArrayWith()`/`toArrayWithout()` con `$fromArrayDb = true`) devuelve las fechas en su formato de almacenamiento (`AbstractDateVo::toDb()`) en lugar de en el de serialización. Así, lo que se guarda en la base de datos no depende de `kalion.dates.serialization_*` y no se mandan a la BD strings como `2026-03-29T02:30:00.000000Z`.
+* (breaking) `toMakeArray()` de los DTO (y de sus colecciones) devuelve las fechas en su formato de almacenamiento (`AbstractDateVo::toDb()`), ya que su objetivo es reconstruir el DTO con `fromArray()`. `toArray()` y `toJson()` siguen devolviendo el formato de serialización.
+
+### Fixed
+
+* Las entidades y los DTO con fechas ya se pueden reconstruir a partir de sus propios arrays, con cualquier configuración de serialización:
+  * `Entity::resolveFromArray($entity->toArray())` y `Dto::resolveFromArray($dto->toArray())` (o del JSON de `toJson()`).
+  * `Entity::fromArray($entity->toArrayDb(true))` y `Dto::fromArray($dto->toMakeArray())`.
+  * Antes, con un `serialization_format` personalizado no funcionaba ninguna de las opciones y, con la configuración por defecto, `fromArray()` sobre `toArray()`/`toMakeArray()` fallaba en `DateVo` y `TimeVo`, cuyos `$formats` no incluyen el ISO-8601.
+  * Si el formato de serialización pierde información (por ejemplo, `d/m/Y` no tiene la hora), la fecha reconstruida desde `toArray()` también la pierde.
+
+### Migration notes
+
+* Renombra las variables de entorno (`.env`):
+  * `KALION_DATES_JSON_FORMAT` => `KALION_DATES_SERIALIZATION_FORMAT`
+  * `KALION_DATES_JSON_LOCAL` => `KALION_DATES_SERIALIZE_TO_LOCAL_TZ`.
+* Si tienes publicado `config/kalion.php`, renombra las keys:
+  * `dates.json_format` => `dates.serialization_format`
+  * `dates.json_local` => `dates.serialize_to_local_tz`
+* En los tests, cambia las keys de `kalion()->config()->fake([...])` y las llamadas a `dateJsonFormat()`/`dateJsonLocal()` de `KalionConfigReader`.
+* Si usas un `serialization_format` personalizado con `serialize_to_local_tz` a `false` y un `app.timezone` distinto de `UTC`, las fechas se serializan ahora en `app.timezone`. Para mantenerlas en `UTC`, añade `\Z` al formato (por ejemplo, `Y-m-d H:i:s\Z`) o pon `app.timezone` en `UTC`.
+* Para reconstruir una entidad o un DTO a partir de su `toArray()` (o del JSON que has devuelto al front), usa `resolveFromArray()` y no `fromArray()`. `fromArray()` es estricto y solo acepta los formatos de almacenamiento: úsalo con `toArrayDb()`, `toMakeArray()` o los datos de la base de datos.
+* Si usabas `toArrayDb()` o `toMakeArray()` esperando fechas en ISO-8601, ahora las fechas vienen en el formato de almacenamiento de cada VO (por ejemplo, `2026-03-29 04:30:00.000000` en `TimestampVo`).
 
 ## [v0.64.0-beta.0](https://github.com/kalel1500/kalion/compare/v0.63.0-beta.0...v0.64.0-beta.0) - 2026-11-21
 
